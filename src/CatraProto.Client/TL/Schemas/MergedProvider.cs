@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas
@@ -2446,8 +2450,6 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.MTProto.NewSessionCreated();
 				case 1945237724:
 					return new CatraProto.Client.TL.Schemas.MTProto.MsgContainer();
-				case 0:
-					return new CatraProto.Client.TL.Schemas.MTProto.Message();
 				case -530561358:
 					return new CatraProto.Client.TL.Schemas.MTProto.MsgCopy();
 				case 812830625:

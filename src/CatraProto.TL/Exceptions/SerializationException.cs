@@ -7,7 +7,8 @@ namespace CatraProto.TL.Exceptions
         public enum SerializationErrors
         {
             BoolNull,
-            TypeNotFound
+            TypeNotFound,
+            BitSizeMismatch
         }
         
         public SerializationErrors ErrorCode { get; init; }

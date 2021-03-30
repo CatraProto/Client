@@ -5,6 +5,7 @@ namespace CatraProto.TL.Generator
 {
     internal static class StringTools
     {
+        public const string OneTabs = "\t";
         public const string TwoTabs = "\t\t";
         public const string ThreeTabs = "\t\t\t";
         public const string FourTabs = "\t\t\t\t";

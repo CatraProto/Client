@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Text;
 using CatraProto.TL.Generator.Objects.Types.Interfaces;
 
@@ -42,10 +43,14 @@ namespace CatraProto.TL.Generator.Objects.Types
         {
             WriteFlagStart(stringBuilder, out var spacing, parameter);
             var propertyValue = parameter.HasFlag && !parameter.IsVector ? parameter.Name + ".Value" : parameter.Name;
-
+            
             switch (BitSize)
             {
                 case > 64:
+                    stringBuilder.AppendLine($"{spacing}var size{parameter.Name} = {parameter.Name}.GetByteCount();");
+                    stringBuilder.AppendLine($"{spacing}if(size{parameter.Name} != {BitSize / 8}){{");
+                    stringBuilder.AppendLine($"{spacing}{StringTools.OneTabs}throw new CatraProto.TL.Exceptions.SerializationException($\"ByteSize mismatch, should be {BitSize / 8}bytes got {{size{parameter.Name}}}bytes\", CatraProto.TL.Exceptions.SerializationException.SerializationErrors.BitSizeMismatch);");
+                    stringBuilder.AppendLine($"{spacing}}}");
                     stringBuilder.AppendLine($"{spacing}writer.Write({parameter.Name});");
                     break;
                 default:
