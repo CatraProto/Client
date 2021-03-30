@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 using CatraProto.Extensions;
 
 namespace CatraProto.Client.Connections.Messages.Interfaces

@@ -11,7 +11,7 @@ namespace CatraProto.TL.UnitTests
         public int VectorId { get; init; } = 481674261;
         public IObject ResolveConstructorId(int constructorId)
         {
-            
+            return null;
         }
     }
 }

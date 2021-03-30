@@ -3,13 +3,11 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Security.Cryptography;
-using System.Threading.Tasks;
-using CatraProto.Client.TL;
 using RsaImplementation = System.Security.Cryptography.RSA;
 
-namespace CatraProto.Client.MTProtoCrypto
+namespace CatraProto.Crypto
 {
-    internal class Rsa : IDisposable
+    public class Rsa : IDisposable
     {
         private readonly RsaImplementation _rsaKey = RsaImplementation.Create();
         
@@ -31,7 +29,7 @@ namespace CatraProto.Client.MTProtoCrypto
         
         public long CalculateRsaFingerprint()
         {
-            using var writer = Utilities.CreateWriter();
+            using var writer = new TL.Writer(null, new MemoryStream());
             var rsaParameters = _rsaKey.ExportParameters(false);
             
             var modulus = new BigInteger(rsaParameters.Modulus);
@@ -88,13 +86,7 @@ namespace CatraProto.Client.MTProtoCrypto
 
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        ~Rsa()
-        {
-            Dispose(false);
+            _rsaKey?.Dispose();
         }
     }
 }

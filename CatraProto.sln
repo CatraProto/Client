@@ -26,6 +26,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatraProto.Extensions", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatraProto.Async", "src\CatraProto.Async\CatraProto.Async.csproj", "{50EF579D-F994-4225-A6D8-D475871BFD40}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatraProto.Crypto", "src\CatraProto.Crypto\CatraProto.Crypto.csproj", "{AD7C797C-422F-413D-BE75-AF4528AD78C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatraProto.Crypto.UnitTests", "tests\CatraProto.Crypto.UnitTests\CatraProto.Crypto.UnitTests.csproj", "{B54A7220-468B-4BD9-BC56-F140B8A237FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -64,6 +68,14 @@ Global
 		{50EF579D-F994-4225-A6D8-D475871BFD40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{50EF579D-F994-4225-A6D8-D475871BFD40}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{50EF579D-F994-4225-A6D8-D475871BFD40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD7C797C-422F-413D-BE75-AF4528AD78C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD7C797C-422F-413D-BE75-AF4528AD78C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD7C797C-422F-413D-BE75-AF4528AD78C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD7C797C-422F-413D-BE75-AF4528AD78C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B54A7220-468B-4BD9-BC56-F140B8A237FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B54A7220-468B-4BD9-BC56-F140B8A237FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B54A7220-468B-4BD9-BC56-F140B8A237FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B54A7220-468B-4BD9-BC56-F140B8A237FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -79,5 +91,7 @@ Global
 		{6C0762E4-7ADB-45C8-9E96-3CE3EC97A588} = {32061930-7649-4670-B1EB-AFE850FB8EDD}
 		{91F984AE-31C3-4E82-8497-6084F7125CB0} = {A9504A16-031C-45B4-9893-5EA88B5B61F5}
 		{50EF579D-F994-4225-A6D8-D475871BFD40} = {A9504A16-031C-45B4-9893-5EA88B5B61F5}
+		{AD7C797C-422F-413D-BE75-AF4528AD78C6} = {A9504A16-031C-45B4-9893-5EA88B5B61F5}
+		{B54A7220-468B-4BD9-BC56-F140B8A237FF} = {32061930-7649-4670-B1EB-AFE850FB8EDD}
 	EndGlobalSection
 EndGlobal

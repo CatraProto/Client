@@ -20,8 +20,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CatraProto.Async\CatraProto.Async.csproj" />
+    <ProjectReference Include="..\CatraProto.Crypto\CatraProto.Crypto.csproj" />
     <ProjectReference Include="..\CatraProto.Extensions\CatraProto.Extensions.csproj" />
     <ProjectReference Include="..\CatraProto.TL\CatraProto.TL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="MTProtoCrypto" />
   </ItemGroup>
 
 </Project>

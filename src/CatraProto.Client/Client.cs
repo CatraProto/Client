@@ -1,12 +1,14 @@
 using System;
 using System.Net;
 using System.Numerics;
+using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections;
 using CatraProto.Client.Connections.Messages;
 using CatraProto.Client.MTProto;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.Client.TL.Schemas.MTProto;
+using CatraProto.Crypto;
 using CatraProto.Extensions;
 using CatraProto.TL;
 using Serilog;
@@ -35,25 +37,23 @@ namespace CatraProto.Client
                 Port = 443
             });
         }
-
+        
         public async Task Test()
         {
-            var obj = new ReqPq
+            /*var obj = new ReqPq
             {
                 Nonce = CreateRandom()
             };
             var toArray = obj.ToArray(MergedProvider.DefaultInstance);
             var value = toArray.ToMemoryStream();
-            var unencryptedMessage = new UnencryptedMessage()
+            using var unencryptedMessage = new UnencryptedMessage()
             {
                 Message = value
             };
-            
             var response = await _connection.MessagesHandler.QueueUnencryptedMessage(unencryptedMessage).Unwrap();
             _logger.Debug("Sent Nonce {Nonce}", obj.Nonce);
             var message = response.Message.ToObject<ResPQ>(MergedProvider.DefaultInstance);
-            _logger.Debug("Received Nonce {Nonce}", message.Nonce);
-            await Task.Delay(100);
+            _logger.Debug("Received Nonce {Nonce}", message.Nonce);*/
         }
 
         public BigInteger CreateRandom()

@@ -4,11 +4,6 @@ namespace CatraProto.Client.Tools
 {
     static class MiscTools
     {
-        public static int GetUnixTimeNow()
-        {
-            return (int)DateTime.Now.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
-        }
-
         //https://github.com/UnigramDev/Unigram/blob/cd8ddb40bffd427fd9bc3fa6f2b99608e2118124/Unigram/Unigram.Api/Helpers/Utils.cs#L244
         public static Tuple<ulong, ulong> GetFastPQ(ulong pq)
         {

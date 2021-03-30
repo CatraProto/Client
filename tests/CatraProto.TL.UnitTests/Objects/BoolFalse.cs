@@ -1,4 +1,3 @@
-using CatraProto.TL.Attributes;
 using CatraProto.TL.Interfaces;
 
 namespace CatraProto.TL.UnitTests.Objects
