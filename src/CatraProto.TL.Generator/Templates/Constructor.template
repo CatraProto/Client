@@ -1,0 +1,27 @@
+^Usings^
+
+namespace ^Namespace^
+{
+	public partial class ^Class^ : ^Type^
+	{
+^FlagsEnums^
+
+        public static int ConstructorId { get; } = ^ConstructorId^;
+^Properties^
+		^MethodAccessibility^ void UpdateFlags() 
+		{
+^FlagsUpdate^
+		}
+
+		^MethodAccessibility^ void Serialize(Writer writer)
+		{
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
+^Serialization^
+		}
+
+		^MethodAccessibility^ void Deserialize(Reader reader)
+		{
+^Deserialization^
+		}
+	}
+}

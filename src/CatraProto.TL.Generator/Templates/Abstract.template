@@ -1,0 +1,12 @@
+﻿^Usings^
+
+namespace ^Namespace^
+{
+    public abstract class ^Type^ : IObject
+    {
+^Properties^
+        public abstract void UpdateFlags();
+        public abstract void Deserialize(Reader reader);
+        public abstract void Serialize(Writer writer);
+    }
+}

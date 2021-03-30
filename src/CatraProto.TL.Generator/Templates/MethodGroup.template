@@ -1,0 +1,25 @@
+using System;
+
+namespace ^Namespace^
+{
+	public partial class ^Class^
+	{
+	    
+
+^Properties^
+		public void UpdateFlags() 
+		{
+^FlagsUpdate^
+		}
+
+		public void Serialize(Writer writer)
+		{
+^Serialization^
+		}
+
+		public void Deserialize(Reader reader)
+		{
+^Deserialization^
+		}
+	}
+}

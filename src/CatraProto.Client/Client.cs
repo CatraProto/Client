@@ -1,0 +1,66 @@
+using System;
+using System.Net;
+using System.Numerics;
+using System.Threading.Tasks;
+using CatraProto.Client.Connections;
+using CatraProto.Client.Connections.Messages;
+using CatraProto.Client.MTProto;
+using CatraProto.Client.TL.Schemas;
+using CatraProto.Client.TL.Schemas.MTProto;
+using CatraProto.Extensions;
+using CatraProto.TL;
+using Serilog;
+
+namespace CatraProto.Client
+{
+    public class Client
+    {
+        public Api Api { get; init; }
+        private ILogger _logger;
+        private Connection _connection;
+        private Session _session;
+
+        public Client(Session session)
+        {
+            _session = session;
+            _logger = session.Logger.ForContext<Client>();
+        }
+
+        public async Task Start()
+        {
+            _logger.Information("Initializing CatraProto, the gayest MTProto client in the world");
+            _connection = await Connection.Create(_session, new ConnectionInfo
+            {
+                IPAddress = IPAddress.Parse("149.154.167.40"),
+                Port = 443
+            });
+        }
+
+        public async Task Test()
+        {
+            var obj = new ReqPq
+            {
+                Nonce = CreateRandom()
+            };
+            var toArray = obj.ToArray(MergedProvider.DefaultInstance);
+            var value = toArray.ToMemoryStream();
+            var unencryptedMessage = new UnencryptedMessage()
+            {
+                Message = value
+            };
+            
+            var response = await _connection.MessagesHandler.QueueUnencryptedMessage(unencryptedMessage).Unwrap();
+            _logger.Debug("Sent Nonce {Nonce}", obj.Nonce);
+            var message = response.Message.ToObject<ResPQ>(MergedProvider.DefaultInstance);
+            _logger.Debug("Received Nonce {Nonce}", message.Nonce);
+            await Task.Delay(100);
+        }
+
+        public BigInteger CreateRandom()
+        {
+            var byteArray = new byte[128 / 8];
+            new Random().NextBytes(byteArray);
+            return new BigInteger(byteArray);
+        }
+    }
+}

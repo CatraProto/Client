@@ -1,0 +1,18 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+
+namespace ^Namespace^
+{
+    partial class ^ProviderName^ : IObjectProvider
+    {
+        public IObject ResolveConstructorId(int constructorId)
+        {
+^Switch^
+            
+            return null;
+        }    
+    }
+}
