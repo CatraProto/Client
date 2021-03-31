@@ -7,7 +7,7 @@ using RsaImplementation = System.Security.Cryptography.RSA;
 
 namespace CatraProto.Crypto
 {
-    public class Rsa : IDisposable
+    public class RSA : IDisposable
     {
         private readonly RsaImplementation _rsaKey = RsaImplementation.Create();
         
@@ -22,7 +22,7 @@ namespace CatraProto.Crypto
             }
         }
         
-        public Rsa(string key)
+        public RSA(string key)
         {
             _rsaKey.ImportFromPem(key);
         }
@@ -44,12 +44,12 @@ namespace CatraProto.Crypto
             return BitConverter.ToInt64(lowerOrderBits, 0);
         }
 
-        public static Rsa FindByFingerprint(long fingerprint)
+        public static RSA FindByFingerprint(long fingerprint)
         {
             var keys = RsaKeys;
             foreach (var stringKey in keys)
             {
-                using var rsa = new Rsa(stringKey);
+                using var rsa = new RSA(stringKey);
                 if (fingerprint == rsa.CalculateRsaFingerprint())
                 {
                     return rsa;
