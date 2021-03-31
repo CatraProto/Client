@@ -34,7 +34,7 @@ namespace CatraProto.TL.Generator.UnitTests.WritingTests
             }
 
             var writer = await CodeGeneration.Writing.Writer.Create(analyzed);
-            writer.Write();
+            await writer.Write();
             _testOutputHelper.WriteLine(builder.ToString());
         }
     }

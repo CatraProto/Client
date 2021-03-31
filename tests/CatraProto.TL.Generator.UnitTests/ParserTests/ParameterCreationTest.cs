@@ -32,7 +32,7 @@ namespace CatraProto.TL.Generator.UnitTests.ParserTests
         [InlineData("test#123 parameterName:flags.1?Vector<double> = EtheriaType;", "ParameterName", false, true, typeof(DoubleType), true, "double", 1)]
         [InlineData("test#123 parameterName:# = EtheriaType;", "ParameterName", false, false, typeof(FlagType), true, "flag")]
         public void CreationTest(string testString, string expectedName, bool expectedIsNaked, bool expectedIsVector,
-            Type expectedType, bool expectedIsBare, string expectedTypeName, int? expectedFlagBit = null, string? expectedNamespace = null)
+            Type expectedType, bool expectedIsBare, string expectedTypeName, int? expectedFlagBit = null, string expectedNamespace = null)
         {
             var analyzer = new Parser(testString);
             var args = analyzer.FindParameters();
