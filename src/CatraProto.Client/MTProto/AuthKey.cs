@@ -76,7 +76,7 @@ namespace CatraProto.Client.MTProto
                 }
                 else
                 {
-                    //TODO: EXCEPTION THOWRING
+                    //TODO: EXCEPTION THROWING
                 }
             }
             */
