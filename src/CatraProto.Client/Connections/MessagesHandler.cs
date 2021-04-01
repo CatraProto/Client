@@ -19,7 +19,6 @@ namespace CatraProto.Client.Connections
         private Channel<EncryptedMessage> _encryptedMessages = Channel.CreateUnbounded<EncryptedMessage>();
         private ConcurrentDictionary<long, TaskCompletionSource<EncryptedMessage>> _encryptedCompletions = new ConcurrentDictionary<long, TaskCompletionSource<EncryptedMessage>>();
         private ConcurrentDictionary<long, CancellationTokenRegistration> _encryptedTokenRegistrations = new ConcurrentDictionary<long, CancellationTokenRegistration>();
-
         private TaskCompletionSource<UnencryptedMessage> _oldTask;
         private AsyncLock _unencryptedMessagesLock = new AsyncLock();
         private MessageIdsHandler _messageIdsHandler;
@@ -44,7 +43,7 @@ namespace CatraProto.Client.Connections
                 }
 
                 var completionSource = new TaskCompletionSource<UnencryptedMessage>(TaskCreationOptions.RunContinuationsAsynchronously);
-                await _unencryptedMessages.Writer.WriteAsync(message);
+                _unencryptedMessages.Writer.TryWrite(message);
                 _oldTask = completionSource;
                 return completionSource.Task;
             }
@@ -76,12 +75,12 @@ namespace CatraProto.Client.Connections
             return message;
         }
 
-        public async Task<Task<EncryptedMessage>> QueueEncryptedMessage(EncryptedMessage message)
+        public Task<EncryptedMessage> QueueEncryptedMessage(EncryptedMessage message)
         {
             var completionSource = new TaskCompletionSource<EncryptedMessage>(TaskCreationOptions.RunContinuationsAsynchronously);
             _encryptedCompletions.TryAdd(message.MessageId, completionSource);
             RegisterMessageCancellation(message);
-            await _encryptedMessages.Writer.WriteAsync(message);
+            _encryptedMessages.Writer.TryWrite(message);
             return completionSource.Task;
         }
 
@@ -120,12 +119,14 @@ namespace CatraProto.Client.Connections
             }
         }
 
-        private async Task ReassignEncryptedMessageId(EncryptedMessage message)
+        private void ReassignEncryptedMessageId(EncryptedMessage message)
         {
             _encryptedCompletions.Remove(message.MessageId, out var completionSource);
-            await DeleteCancellationRegistration(message);
+            DeleteCancellationRegistration(message);
+            
             var newMessageId = _messageIdsHandler.GenerateMessageId();
             message.MessageId = newMessageId;
+            
             RegisterMessageCancellation(message);
             _encryptedCompletions.TryAdd(newMessageId, completionSource);
         }
@@ -142,11 +143,11 @@ namespace CatraProto.Client.Connections
             });
         }
 
-        private async Task DeleteCancellationRegistration(EncryptedMessage message)
+        private void DeleteCancellationRegistration(EncryptedMessage message)
         {
             if (_encryptedTokenRegistrations.TryRemove(message.MessageId, out var toUnregister))
             {
-                await toUnregister.DisposeAsync();
+                toUnregister.Dispose();
             }
         }
 

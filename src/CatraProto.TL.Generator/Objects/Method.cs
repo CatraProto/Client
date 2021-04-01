@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using CatraProto.TL.Generator.CodeGeneration.Parsing;
 using CatraProto.TL.Generator.Objects.Interfaces;
 
 namespace CatraProto.TL.Generator.Objects
@@ -7,6 +8,12 @@ namespace CatraProto.TL.Generator.Objects
     internal class Method : Object
     {
         public bool ReturnsVector { get; set; }
+        public MethodType MethodType { get; }
+
+        public Method(MethodType methodType)
+        {
+            MethodType = methodType;
+        }
 
         public void WriteMethod(StringBuilder builder)
         {

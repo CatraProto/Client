@@ -14,7 +14,7 @@ namespace CatraProto.TL.Generator.CodeGeneration.Parsing
     internal class Parser
     {
         private string _line;
-
+        
         public Parser(string line)
         {
             _line = line;
@@ -25,6 +25,7 @@ namespace CatraProto.TL.Generator.CodeGeneration.Parsing
             var schema = schemaString ?? await File.ReadAllLinesAsync("schema.tl");
             var objects = new List<Object>();
             var readType = ReadType.ReadingConstructor;
+            var methodType = MethodType.ReturnsEncryptedRPCResult;
             for (var index = 0; index < schema.Length; index++)
             {
                 var line = schema[index];
@@ -42,6 +43,15 @@ namespace CatraProto.TL.Generator.CodeGeneration.Parsing
                         }
                         continue;
                     }
+                    case "-/-returnsRPCEncrypted-/-":
+                        methodType = MethodType.ReturnsEncryptedRPCResult;
+                        continue;
+                    case "-/-returnsEncrypted-/-":
+                        methodType = MethodType.ReturnsEncrypted;
+                        continue;
+                    case "-/-returnsUnecrypted":
+                        methodType = MethodType.ReturnsUnencrypted;
+                        continue;
                     case "---functions---":
                         readType = ReadType.ReadingMethod;
                         continue;
@@ -50,18 +60,12 @@ namespace CatraProto.TL.Generator.CodeGeneration.Parsing
                         continue;
                 }
 
-                Object type;
-                switch (readType)
+                Object type = readType switch
                 {
-                    case ReadType.ReadingConstructor:
-                        type = new Constructor();
-                        break;
-                    case ReadType.ReadingMethod:
-                        type = new Method();
-                        break;
-                    default:
-                        throw new Exception("Unrecognized type");
-                }
+                    ReadType.ReadingConstructor => new Constructor(),
+                    ReadType.ReadingMethod => new Method(methodType),
+                    _ => throw new Exception("Unrecognized type")
+                };
 
                 var analyzer = new Parser(line);
                 var id = analyzer.FindId();
@@ -162,10 +166,6 @@ namespace CatraProto.TL.Generator.CodeGeneration.Parsing
             return null;
         }
 
-        internal enum ReadType
-        {
-            ReadingConstructor,
-            ReadingMethod
-        }
+
     }
 }
