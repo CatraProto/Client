@@ -1,4 +1,6 @@
-﻿namespace CatraProto.TL.Generator.Settings
+﻿using System;
+
+namespace CatraProto.TL.Generator.Settings
 {
     internal static class Configuration
     {

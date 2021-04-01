@@ -24,7 +24,7 @@ namespace CatraProto.Client.MTProto
         }
         
         private DateTimeOffset _expiresIn;
-
+            
         public AuthKey(byte[] authkey, bool isPermanent)
         {
             IsPermanent = isPermanent;
