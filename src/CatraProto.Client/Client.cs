@@ -54,6 +54,20 @@ namespace CatraProto.Client
             _logger.Debug("Sent Nonce {Nonce}", obj.Nonce);
             var message = response.Message.ToObject<ResPQ>(MergedProvider.DefaultInstance);
             _logger.Debug("Received Nonce {Nonce}", message.Nonce);*/
+            /*var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(2));
+            var mammt = new EncryptedMessage()
+            {
+                Token = cancellationToken.Token
+            }; 
+            _connection.MessagesHandler.QueueEncryptedMessage(mammt, out var completion);
+            try
+            {
+                await completion;
+            }
+            catch (OperationCanceledException e)
+            {
+                _logger.Warning($"Operation canceled");
+            }*/
         }
 
         public BigInteger CreateRandom()

@@ -15,17 +15,27 @@ namespace CatraProto.Client.Connections
 {
     internal class MessagesHandler : IDisposable
     {
-        private Channel<UnencryptedMessage> _unencryptedMessages = Channel.CreateUnbounded<UnencryptedMessage>();
-        private Channel<EncryptedMessage> _encryptedMessages = Channel.CreateUnbounded<EncryptedMessage>();
-        private ConcurrentDictionary<long, TaskCompletionSource<EncryptedMessage>> _encryptedCompletions = new ConcurrentDictionary<long, TaskCompletionSource<EncryptedMessage>>();
-        private ConcurrentDictionary<long, CancellationTokenRegistration> _encryptedTokenRegistrations = new ConcurrentDictionary<long, CancellationTokenRegistration>();
-        private TaskCompletionSource<UnencryptedMessage> _oldTask;
+        private ConcurrentDictionary<long, (CancellationTokenRegistration, TaskCompletionSource<EncryptedMessage>)> _encryptedMessages = new ConcurrentDictionary<long, (CancellationTokenRegistration, TaskCompletionSource<EncryptedMessage>)>();
+        private Channel<UnencryptedMessage> _unencryptedChannel = Channel.CreateUnbounded<UnencryptedMessage>();
+        private Channel<EncryptedMessage> _encryptedChannel = Channel.CreateUnbounded<EncryptedMessage>();
         private AsyncLock _unencryptedMessagesLock = new AsyncLock();
+        private TaskCompletionSource<UnencryptedMessage> _oldTask;
         private MessageIdsHandler _messageIdsHandler;
 
         public MessagesHandler(MessageIdsHandler messageIdsHandler)
         {
             _messageIdsHandler = messageIdsHandler;
+        }
+
+        public async Task<UnencryptedMessage> ListenOutgoingUnencrypted(CancellationToken token)
+        {
+            var message = await _unencryptedChannel.Reader.ReadAsync(token);
+            if (message.MessageId == 0 || MessageIdsHandler.IsMessageIdOld(message.MessageId))
+            {
+                message.MessageId = _messageIdsHandler.GenerateMessageId();
+            }
+
+            return message;
         }
 
         public async Task<Task<UnencryptedMessage>> QueueUnencryptedMessage(UnencryptedMessage message)
@@ -43,7 +53,7 @@ namespace CatraProto.Client.Connections
                 }
 
                 var completionSource = new TaskCompletionSource<UnencryptedMessage>(TaskCreationOptions.RunContinuationsAsynchronously);
-                _unencryptedMessages.Writer.TryWrite(message);
+                _unencryptedChannel.Writer.TryWrite(message);
                 _oldTask = completionSource;
                 return completionSource.Task;
             }
@@ -64,40 +74,9 @@ namespace CatraProto.Client.Connections
             }
         }
 
-        public async Task<UnencryptedMessage> ListenOutgoingUnencrypted(CancellationToken token)
-        {
-            var message = await _unencryptedMessages.Reader.ReadAsync(token);
-            if (message.MessageId == 0 || MessageIdsHandler.IsMessageIdOld(message.MessageId))
-            {
-                message.MessageId = _messageIdsHandler.GenerateMessageId();
-            }
-
-            return message;
-        }
-
-        public Task<EncryptedMessage> QueueEncryptedMessage(EncryptedMessage message)
-        {
-            var completionSource = new TaskCompletionSource<EncryptedMessage>(TaskCreationOptions.RunContinuationsAsynchronously);
-            _encryptedCompletions.TryAdd(message.MessageId, completionSource);
-            RegisterMessageCancellation(message);
-            _encryptedMessages.Writer.TryWrite(message);
-            return completionSource.Task;
-        }
-
-        public bool CompleteEncryptedMessage(EncryptedMessage response, int messageId)
-        {
-            if (_encryptedCompletions.TryRemove(messageId, out var completionSource))
-            {
-                completionSource.TrySetResult(response);
-                return true;
-            }
-
-            return false;
-        }
-
         public async Task<EncryptedMessage> ListenOutgoingEncrypted(CancellationToken token)
         {
-            var message = await _encryptedMessages.Reader.ReadAsync(token);
+            var message = await _encryptedChannel.Reader.ReadAsync(token);
             if (MessageIdsHandler.IsMessageIdOld(message.MessageId))
             {
                 ReassignEncryptedMessageId(message);
@@ -106,50 +85,50 @@ namespace CatraProto.Client.Connections
             return message;
         }
 
-        public async Task RemoveEncryptedMessage(EncryptedMessage message)
+        public void QueueEncryptedMessage(EncryptedMessage message, out Task<EncryptedMessage> completion)
         {
-            if (_encryptedCompletions.TryRemove(message.MessageId, out var completionSource))
+            var completionSource = new TaskCompletionSource<EncryptedMessage>(TaskCreationOptions.RunContinuationsAsynchronously);
+            var registration = RegisterMessageCancellation(message);
+            _encryptedMessages.TryAdd(message.MessageId, (registration, completionSource));
+            _encryptedChannel.Writer.TryWrite(message);
+            completion = completionSource.Task;
+        }
+
+        public bool CompleteEncryptedMessage(EncryptedMessage response, int messageId)
+        {
+            if (_encryptedMessages.TryRemove(messageId, out var tuple))
             {
-                completionSource.TrySetCanceled();
+                tuple.Item1.Unregister();
+                tuple.Item2.TrySetResult(response);
+                return true;
             }
 
-            if (_encryptedTokenRegistrations.TryRemove(message.MessageId, out var cancellationTokenRegistration))
-            {
-                await cancellationTokenRegistration.DisposeAsync();
-            }
+            return false;
         }
 
         private void ReassignEncryptedMessageId(EncryptedMessage message)
         {
-            _encryptedCompletions.Remove(message.MessageId, out var completionSource);
-            DeleteCancellationRegistration(message);
-            
-            var newMessageId = _messageIdsHandler.GenerateMessageId();
-            message.MessageId = newMessageId;
-            
-            RegisterMessageCancellation(message);
-            _encryptedCompletions.TryAdd(newMessageId, completionSource);
+            if (_encryptedMessages.TryRemove(message.MessageId, out var tuple))
+            {
+                var newMessageId = _messageIdsHandler.GenerateMessageId();
+                tuple.Item1.Unregister();
+                message.MessageId = newMessageId;
+                var registration = RegisterMessageCancellation(message);
+                _encryptedMessages.TryAdd(message.MessageId, (registration, tuple.Item2));
+            }
         }
 
-        private void RegisterMessageCancellation(EncryptedMessage message)
+        private CancellationTokenRegistration RegisterMessageCancellation(EncryptedMessage message)
         {
-            message.Token.Register(async () =>
+            return message.Token.Register(() =>
             {
-                if (_encryptedCompletions.TryRemove(message.MessageId, out var taskCompletionSource))
+                if (_encryptedMessages.TryRemove(message.MessageId, out var tuple))
                 {
-                    taskCompletionSource.TrySetCanceled(message.Token);
-                    await RemoveEncryptedMessage(message);
+                    tuple.Item2.TrySetCanceled();
                 }
             });
         }
 
-        private void DeleteCancellationRegistration(EncryptedMessage message)
-        {
-            if (_encryptedTokenRegistrations.TryRemove(message.MessageId, out var toUnregister))
-            {
-                toUnregister.Dispose();
-            }
-        }
 
         public void Dispose()
         {
