@@ -22,7 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{32061930
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatraProto.TL.UnitTests", "tests\CatraProto.TL.UnitTests\CatraProto.TL.UnitTests.csproj", "{6C0762E4-7ADB-45C8-9E96-3CE3EC97A588}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatraProto.Crypto.UnitTests", "tests\CatraProto.Crypto.UnitTests\CatraProto.Crypto.UnitTests.csproj", "{4D17C95F-A94E-4760-94F0-E8AF40E844F1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatraProto.Client.UnitTests", "tests\CatraProto.Client.UnitTests\CatraProto.Client.UnitTests.csproj", "{4D17C95F-A94E-4760-94F0-E8AF40E844F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

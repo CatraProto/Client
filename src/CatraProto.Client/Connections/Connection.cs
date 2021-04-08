@@ -37,7 +37,7 @@ namespace CatraProto.Client.Connections
                     break;
             }
         }
-
+        
         public static async Task<Connection> Create(Session session, ConnectionInfo connectionInfo,
             ConnectionProtocol protocol = ConnectionProtocol.TcpAbridged)
         {
@@ -57,7 +57,7 @@ namespace CatraProto.Client.Connections
 
             _logger.Information("Connecting to {Connection}...", _connectionInfo);
 
-            //For the future: it would be a great a idea to pass a cancellation token here, so that if the clients gets closed
+            //For the future: it would be a great to pass a cancellation token here, so that if the clients gets closed
             //before establishing a connection it will stop instead of trying again and again
             while (true)
             {
@@ -85,8 +85,7 @@ namespace CatraProto.Client.Connections
             await _writeLoop.Start();
             await _readLoop.Start();
         }
-
-
+        
         public async ValueTask DisposeAsync()
         {
             if (_writeLoop != null)

@@ -19,14 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CatraProto.Async\CatraProto.Async.csproj" />
-    <ProjectReference Include="..\CatraProto.Crypto\CatraProto.Crypto.csproj" />
-    <ProjectReference Include="..\CatraProto.Extensions\CatraProto.Extensions.csproj" />
+    <InternalsVisibleTo Include="CatraProto.Client.UnitTests"/>
     <ProjectReference Include="..\CatraProto.TL\CatraProto.TL.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Async" />
   </ItemGroup>
 
 </Project>

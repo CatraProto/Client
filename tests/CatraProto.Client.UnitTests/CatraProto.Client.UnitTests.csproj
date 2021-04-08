@@ -20,7 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\CatraProto.Crypto\CatraProto.Crypto.csproj" />
+      <ProjectReference Include="..\..\src\CatraProto.Client\CatraProto.Client.csproj" />
     </ItemGroup>
 
 </Project>

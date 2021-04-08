@@ -7,7 +7,6 @@ using CatraProto.TL.Generator.CodeGeneration.Optimization;
 using CatraProto.TL.Generator.CodeGeneration.Parsing;
 using CatraProto.TL.Generator.CodeGeneration.Writing;
 
-[assembly: InternalsVisibleTo("CatraProto.TL.Generator.UnitTests")]
 namespace CatraProto.TL.Generator
 {
     internal class Start
