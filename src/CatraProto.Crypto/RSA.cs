@@ -38,7 +38,7 @@ namespace CatraProto.Crypto
             writer.Write(modulus.ToByteArray());
             writer.Write(exponent.ToByteArray());
             var data = ((MemoryStream)writer.Stream).ToArray();
-            
+
             var hashedData = SHA1.HashData(data);
             var lowerOrderBits = hashedData.TakeLast(8).ToArray();
             return BitConverter.ToInt64(lowerOrderBits, 0);

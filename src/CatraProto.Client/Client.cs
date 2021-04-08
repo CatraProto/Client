@@ -9,7 +9,6 @@ using CatraProto.Client.MTProto;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.Crypto;
-using CatraProto.Extensions;
 using CatraProto.TL;
 using Serilog;
 

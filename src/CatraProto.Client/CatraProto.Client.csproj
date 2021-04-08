@@ -25,4 +25,8 @@
     <ProjectReference Include="..\CatraProto.TL\CatraProto.TL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Async" />
+  </ItemGroup>
+
 </Project>

@@ -1,6 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
+using System.Reflection.Metadata;
 using System.Text;
 using CatraProto.TL.Exceptions;
 using CatraProto.TL.Interfaces;
@@ -16,15 +19,14 @@ namespace CatraProto.TL
         public Reader(IObjectProvider provider, Stream stream, bool leaveOpen = false) : this(provider, stream, Encoding.UTF8, leaveOpen)
         {
         }
-        
+
         public Reader(IObjectProvider provider, Stream stream, Encoding encoding, bool leaveOpen = false)
         {
             _provider = provider;
             _reader = new BinaryReader(stream, encoding, leaveOpen);
-            
         }
 
-        public T Read<T>(params object[] deserializationParams)
+        public T Read<T>(int? bitSize = null)
         {
             var typeOfT = typeof(T);
             if (typeOfT == typeof(int))
@@ -57,19 +59,11 @@ namespace CatraProto.TL
             }
             else if (typeOfT == typeof(System.Numerics.BigInteger))
             {
-                if (deserializationParams.Length == 0)
+                if (bitSize == null)
                 {
                     throw new DeserializationException("Missing parameter bitSize",
                         DeserializationException.DeserializationErrors.MissingParameter);
                 }
-
-                if (int.TryParse(deserializationParams[0].ToString(), out int bitSize))
-                {
-                    return (T)(object)BigInteger.ReadBytes(bitSize, this);
-                }
-
-                throw new DeserializationException($"{deserializationParams[0]} is not a valid int",
-                    DeserializationException.DeserializationErrors.ParameterMalformed);
             }
             else if (typeOfT.GetInterfaces()[^1] == typeof(IObject))
             {
@@ -84,7 +78,7 @@ namespace CatraProto.TL
                 instance.Deserialize(this);
                 return (T)instance;
             }
-            
+
             throw new DeserializationException($"The type {typeOfT} is not supported",
                 DeserializationException.DeserializationErrors.TypeNotFound);
         }
@@ -94,8 +88,6 @@ namespace CatraProto.TL
             var value = Read<IObject>().GetType();
             var boolTrue = _provider.BoolTrue;
 
-            // Io non userei un tipo per bool, il bool è nativo, semplicemente lui chiede al provider qual è l'id nel tl
-            // Mmh...
             if (boolTrue is null)
             {
                 throw new DeserializationException("The provided boolTrue type is null",

@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
-using CatraProto.Async.Locks;
+using CatraProto.Client.Async.Locks;
 using CatraProto.Client.Connections.Messages;
 using CatraProto.Client.MTProto;
-using CatraProto.Client.TL.Schemas.CloudChats;
 using Channel = System.Threading.Channels.Channel;
 using EncryptedMessage = CatraProto.Client.Connections.Messages.EncryptedMessage;
 

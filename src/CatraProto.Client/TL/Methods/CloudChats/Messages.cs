@@ -1,31 +1,64 @@
 using System;
+using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections;
+using CatraProto.Client.Extensions;
+using CatraProto.Client.MTProto.Rpc;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.Client.TL.Schemas.CloudChats;
 using CatraProto.Client.TL.Schemas.CloudChats.Messages;
+using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using EncryptedMessage = CatraProto.Client.Connections.Messages.EncryptedMessage;
 
 namespace CatraProto.Client.TL.Methods.CloudChats
 {
     public partial class Messages
     {
-        private Connection _connection;
+        private MessagesHandler _messagesHandler;
 
-        internal Messages(Connection connection)
+        internal Messages(MessagesHandler messagesHandler)
         {
-            _connection = connection;
+            _messagesHandler = messagesHandler;
         }
 
-        public async Task<UpdatesBase> SendMessage()
+        public async Task<byte[]> ExecuteMethod<T>(IMethod<T> method, CancellationToken token)
         {
-            var obj = new SendMessage()
+            var toStream = method.ToArray(MergedProvider.DefaultInstance);
+            var msg = new EncryptedMessage()
             {
-                //robe
-            }.ToArray(MergedProvider.DefaultInstance);
-            //var requestResult = await _connection.SendEncryptedRequest(obj);
-            //return requestResult.ToObject<UpdatesBase>(MergedProvider.DefaultInstance);
-            throw new NotImplementedException();
+                Token = token,
+                Message = toStream
+            };
+            
+            _messagesHandler.QueueEncryptedMessage(msg, out var completion);
+            return (await completion).Message;
+        }
+
+        public async Task<RpcMessage<UpdatesBase>> SendMessage(/*i parametri*/CancellationToken token = default)
+        {
+            var sendMessage = new SendMessage()
+            {
+                //bla bla i parametri
+            };
+            
+            var byteArray = await ExecuteMethod(sendMessage, token);
+            
+            RpcMessage<UpdatesBase> message;
+            if (RpcReadingTools.IsRpcError(byteArray, out RpcError error))
+            {
+                message = RpcMessage<UpdatesBase>.Create(error, null);
+            }
+            else
+            {
+                var stream = byteArray.ToMemoryStream();
+                using var reader = new Reader(MergedProvider.DefaultInstance, stream);
+                message = RpcMessage<UpdatesBase>.Create(null, reader.Read<UpdatesBase>());
+            }
+
+            return message;
         }
     }
 }

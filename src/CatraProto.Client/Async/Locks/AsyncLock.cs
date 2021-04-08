@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CatraProto.Async.Locks
+namespace CatraProto.Client.Async.Locks
 {
     public class AsyncLock : IDisposable
     {

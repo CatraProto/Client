@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace CatraProto.Extensions
+namespace CatraProto.Client.Extensions
 {
     public static class BytesExtensions
     {

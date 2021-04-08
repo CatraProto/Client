@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using CatraProto.Client.MTProto;
+using CatraProto.Crypto.AES;
 using Serilog.Core;
 using Serilog.Events;
 
@@ -13,9 +14,10 @@ namespace CatraProto.Client
         {
             var settings = new Settings("TestSession");
             var session = new Session(settings, Logger.CreateDefaultLogger(new LoggingLevelSwitch(LogEventLevel.Debug)));
-            var client = new Client(session);
-            await client.Start();
-            await client.Test();
+            //var client = new Client(session);
+            //await client.Start();
+            //await client.Test();
+            IGE.Decrypt();
             Console.ReadLine();
         }
     }

@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections.Messages.Interfaces;
 using CatraProto.Client.Connections.Protocols.Interfaces;
-using CatraProto.Extensions;
+using CatraProto.Client.Extensions;
 using Serilog;
 
 namespace CatraProto.Client.Connections.Protocols.TcpAbridged

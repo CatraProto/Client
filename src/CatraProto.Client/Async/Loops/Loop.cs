@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
-using CatraProto.Async.Locks;
+using CatraProto.Client.Async.Locks;
 
-namespace CatraProto.Async.Loops
+namespace CatraProto.Client.Async.Loops
 {
     public enum LoopState
     {

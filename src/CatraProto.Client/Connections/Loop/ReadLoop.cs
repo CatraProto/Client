@@ -1,10 +1,13 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections.Messages;
-using CatraProto.Client.Connections.Messages.Interfaces;
+using CatraProto.Client.MTProto.Rpc;
+using CatraProto.Client.TL.Schemas.CloudChats;
 using Serilog;
 using EncryptedMessage = CatraProto.Client.Connections.Messages.EncryptedMessage;
+using MessageBase = CatraProto.Client.Connections.Messages.Interfaces.MessageBase;
 
 namespace CatraProto.Client.Connections.Loop
 {
@@ -33,13 +36,16 @@ namespace CatraProto.Client.Connections.Loop
                     var message = await protocol.Reader.ReadIncomingMessage(_cancellationToken.Token);
                     if (MessageBase.IsMessageEncrypted(message))
                     {
-                        var encryptedMessage = new EncryptedMessage();
-                        encryptedMessage.Deserialize(message);
+                        var encryptedMessage = new EncryptedMessage(message);
+
+                        if (RpcReadingTools.GetRpcMessageResponseId(encryptedMessage.Message, out var messageId))
+                        {
+                            _messagesHandler.CompleteEncryptedMessage(encryptedMessage, messageId);
+                        }
                     }
                     else
                     {
-                        var plainMessage = new UnencryptedMessage();
-                        plainMessage.Deserialize(message);
+                        var plainMessage = new UnencryptedMessage(message);
                         if (!await _messagesHandler.CompleteUnencryptedMessage(plainMessage))
                         {
                             _logger.Warning("Received an unencrypted message with Id {Id} and length of {Length} bytes. The message wasn't expected, there's no task that can be completed", plainMessage.AuthKeyId, plainMessage.Length);

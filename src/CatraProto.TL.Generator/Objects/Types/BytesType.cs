@@ -27,7 +27,7 @@ namespace CatraProto.TL.Generator.Objects.Types
             WriteFlagEnd(stringBuilder, spacing, parameter);
         }
         
-        public override void WriteBaseParameters(StringBuilder stringBuilder, bool allowOverrides = true)
+        public override void WriteBaseParameters(StringBuilder stringBuilder, bool allowOverrides = false)
         {
             throw new NotSupportedException("Byte[] doesn't need a base type");
         }
