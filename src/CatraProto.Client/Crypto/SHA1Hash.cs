@@ -4,9 +4,9 @@ using System.Security.Cryptography;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-namespace CatraProto.Crypto
+namespace CatraProto.Client.Crypto
 {
-    public class SHA1Hash
+    class SHA1Hash
     {
         public static byte[] Compute(IObject obj, IObjectProvider provider, int length = 255)
         {

@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Security.Cryptography;
 
-namespace CatraProto.Crypto.AES
+namespace CatraProto.Client.Crypto.AES
 {
-    public class IGE
+    class IGE
     {
         public static void Decrypt()
         {

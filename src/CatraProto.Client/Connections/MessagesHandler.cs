@@ -30,7 +30,7 @@ namespace CatraProto.Client.Connections
             var message = await _unencryptedChannel.Reader.ReadAsync(token);
             if (message.MessageId == 0 || MessageIdsHandler.IsMessageIdOld(message.MessageId))
             {
-                message.MessageId = _messageIdsHandler.GenerateMessageId();
+                message.MessageId = _messageIdsHandler.ComputeMessageId();
             }
 
             return message;
@@ -108,7 +108,7 @@ namespace CatraProto.Client.Connections
         {
             if (_encryptedMessages.TryRemove(message.MessageId, out var tuple))
             {
-                var newMessageId = _messageIdsHandler.GenerateMessageId();
+                var newMessageId = _messageIdsHandler.ComputeMessageId();
                 tuple.Item1.Unregister();
                 message.MessageId = newMessageId;
                 var registration = RegisterMessageCancellation(message);

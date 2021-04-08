@@ -5,9 +5,9 @@ using System.Numerics;
 using System.Security.Cryptography;
 using RsaImplementation = System.Security.Cryptography.RSA;
 
-namespace CatraProto.Crypto
+namespace CatraProto.Client.Crypto
 {
-    public class RSA : IDisposable
+    class RSA : IDisposable
     {
         private readonly RsaImplementation _rsaKey = RsaImplementation.Create();
         
@@ -29,7 +29,7 @@ namespace CatraProto.Crypto
         
         public long CalculateRsaFingerprint()
         {
-            using var writer = new TL.Writer(null, new MemoryStream());
+            using var writer = new CatraProto.TL.Writer(null, new MemoryStream());
             var rsaParameters = _rsaKey.ExportParameters(false);
             
             var modulus = new BigInteger(rsaParameters.Modulus);
