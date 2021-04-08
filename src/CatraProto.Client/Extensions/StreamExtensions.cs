@@ -16,7 +16,7 @@ namespace CatraProto.Client.Extensions
                 return;
             }
 
-            throw new NotSupportedException("Non MemoryStream aren't currently supported");
+            throw new NotSupportedException("Non MemoryStream aren't supported");
         }
     }
 }
