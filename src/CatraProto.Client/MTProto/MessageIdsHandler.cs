@@ -14,7 +14,7 @@ namespace CatraProto.Client.MTProto
             _logger = logger.ForContext<MessageIdsHandler>();
         }
 
-        public long GenerateMessageId()
+        public long ComputeMessageId()
         {
             lock (_mutex)
             {

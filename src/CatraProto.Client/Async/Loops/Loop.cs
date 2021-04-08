@@ -63,6 +63,7 @@ namespace CatraProto.Client.Async.Loops
         public virtual void Dispose()
         {
             _lock?.Dispose();
+            _shutdownSource.TrySetCanceled();
             ShutdownTask?.Dispose();
         }
     }
