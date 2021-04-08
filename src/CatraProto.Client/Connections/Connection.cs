@@ -92,13 +92,11 @@ namespace CatraProto.Client.Connections
             if (_writeLoop != null)
             {
                 await _writeLoop.Stop();
-                _writeLoop.Dispose();
             }
 
             if (_readLoop != null)
             {
                 await _readLoop.Stop();
-                _readLoop.Dispose();
             }
 
             MessagesHandler?.Dispose();

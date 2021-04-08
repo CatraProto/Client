@@ -12,9 +12,8 @@ namespace CatraProto.Client.Async.Loops
         Running = 0
     }
 
-    public abstract class Loop : IDisposable
+    public abstract class Loop
     {
-        private AsyncLock _lock = new AsyncLock();
         public LoopState State { get; protected set; } = LoopState.Stopped;
         private TaskCompletionSource _shutdownSource { get; } = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         public Task ShutdownTask => _shutdownSource.Task;
