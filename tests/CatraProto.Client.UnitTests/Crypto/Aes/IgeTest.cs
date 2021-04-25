@@ -10,13 +10,6 @@ namespace CatraProto.Client.UnitTests.Crypto.Aes
 {
     public class IgeTest
     {
-        private readonly ITestOutputHelper _testOutputHelper;
-
-        public IgeTest(ITestOutputHelper testOutputHelper)
-        {
-            _testOutputHelper = testOutputHelper;
-        }
-
         [Theory]
         [InlineData(
             new byte[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -35,8 +28,6 @@ namespace CatraProto.Client.UnitTests.Crypto.Aes
             var encryptor = new IgeEncryptor(key, iv);
             var result = encryptor.Encrypt(plainText);
             Assert.True(expectedEncrypted.SequenceEqual(result));
-            var decrypted = encryptor.Decrypt(result);
-            Assert.True(plainText.SequenceEqual(decrypted));
         }
 
         [Theory]
