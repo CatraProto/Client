@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 using CatraProto.Client.Async.Locks;
 using CatraProto.Client.Connections.Messages;
 using CatraProto.Client.MTProto;
+using CatraProto.Client.MTProto.Rpc;
+using CatraProto.Client.TL.Schemas;
+using CatraProto.TL;
+using CatraProto.TL.Interfaces;
 using Channel = System.Threading.Channels.Channel;
 using EncryptedMessage = CatraProto.Client.Connections.Messages.EncryptedMessage;
 
@@ -83,6 +87,18 @@ namespace CatraProto.Client.Connections
             return message;
         }
 
+        private async Task<RpcMessage<T>> SendRpc<T>(IMethod<T> method)
+        {
+            var message = new RpcMessage<T>();
+            QueueEncryptedMessage(new EncryptedMessage()
+            {
+                Message = method.ToArray(MergedProvider.DefaultInstance)
+            }, out var completion);
+            var bytes = await completion;
+            message.FromBytes(bytes.Message);
+            return message;
+        }
+        
         public void QueueEncryptedMessage(EncryptedMessage message, out Task<EncryptedMessage> completion)
         {
             var completionSource = new TaskCompletionSource<EncryptedMessage>(TaskCreationOptions.RunContinuationsAsynchronously);

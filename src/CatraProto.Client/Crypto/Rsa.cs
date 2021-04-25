@@ -7,7 +7,7 @@ using RsaImplementation = System.Security.Cryptography.RSA;
 
 namespace CatraProto.Client.Crypto
 {
-    class RSA : IDisposable
+    class Rsa : IDisposable
     {
         private readonly RsaImplementation _rsaKey = RsaImplementation.Create();
         
@@ -17,12 +17,12 @@ namespace CatraProto.Client.Crypto
             get
             {
                 var keys = new string[1];
-                keys[0] = "-----BEGIN RSA PUBLIC KEY-----\nMIIBCgKCAQEAwVACPi9w23mF3tBkdZz+zwrzKOaaQdr01vAbU4E1pvkfj4sqDsm6\nlyDONS789sVoD/xCS9Y0hkkC3gtL1tSfTlgCMOOul9lcixlEKzwKENj1Yz/s7daS\nan9tqw3bfUV/nqgbhGX81v/+7RFAEd+RwFnK7a+XYl9sluzHRyVVaTTveB2GazTw\nEfzk2DWgkBluml8OREmvfraX3bkHZJTKX4EQSjBbbdJ2ZXIsRrYOXfaA+xayEGB+\n8hdlLmAjbCVfaigxX0CDqWeR1yFL9kwd9P0NsZRPsmoqVwMbMu7mStFai6aIhc3n\nSlv8kg9qv1m6XHVQY3PnEw+QQtqSIXklHwIDAQAB\n-----END RSA PUBLIC KEY-----";
+                keys[0] = @"-----BEGIN RSA PUBLIC KEY----- MIIBCgKCAQEAwVACPi9w23mF3tBkdZz+zwrzKOaaQdr01vAbU4E1pvkfj4sqDsm6lyDONS789sVoD/xCS9Y0hkkC3gtL1tSfTlgCMOOul9lcixlEKzwKENj1Yz/s7daSan9tqw3bfUV/nqgbhGX81v/+7RFAEd+RwFnK7a+XYl9sluzHRyVVaTTveB2GazTwEfzk2DWgkBluml8OREmvfraX3bkHZJTKX4EQSjBbbdJ2ZXIsRrYOXfaA+xayEGB+8hdlLmAjbCVfaigxX0CDqWeR1yFL9kwd9P0NsZRPsmoqVwMbMu7mStFai6aIhc3nSlv8kg9qv1m6XHVQY3PnEw+QQtqSIXklHwIDAQAB -----END RSA PUBLIC KEY-----";
                 return keys;
             }
         }
         
-        public RSA(string key)
+        public Rsa(string key)
         {
             _rsaKey.ImportFromPem(key);
         }
@@ -44,12 +44,12 @@ namespace CatraProto.Client.Crypto
             return BitConverter.ToInt64(lowerOrderBits, 0);
         }
 
-        public static RSA FindByFingerprint(long fingerprint)
+        public static Rsa FindByFingerprint(long fingerprint)
         {
             var keys = RsaKeys;
             foreach (var stringKey in keys)
             {
-                using var rsa = new RSA(stringKey);
+                using var rsa = new Rsa(stringKey);
                 if (fingerprint == rsa.CalculateRsaFingerprint())
                 {
                     return rsa;

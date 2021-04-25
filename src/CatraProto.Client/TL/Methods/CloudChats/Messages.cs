@@ -27,25 +27,25 @@ namespace CatraProto.Client.TL.Methods.CloudChats
         public async Task<byte[]> ExecuteMethod<T>(IMethod<T> method, CancellationToken token)
         {
             var toStream = method.ToArray(MergedProvider.DefaultInstance);
-            var msg = new EncryptedMessage()
+            var msg = new EncryptedMessage
             {
                 Token = token,
                 Message = toStream
             };
-            
+
             _messagesHandler.QueueEncryptedMessage(msg, out var completion);
             return (await completion).Message;
         }
 
-        public async Task<RpcMessage<UpdatesBase>> SendMessage(/*i parametri*/CancellationToken token = default)
+        public async Task<RpcMessage<UpdatesBase>> SendMessage( /*i parametri*/ CancellationToken token = default)
         {
             var sendMessage = new SendMessage()
             {
                 //bla bla i parametri
             };
-            
+
             var byteArray = await ExecuteMethod(sendMessage, token);
-            
+
             RpcMessage<UpdatesBase> message;
             if (RpcReadingTools.IsRpcError(byteArray, out RpcError error))
             {
@@ -53,9 +53,7 @@ namespace CatraProto.Client.TL.Methods.CloudChats
             }
             else
             {
-                var stream = byteArray.ToMemoryStream();
-                using var reader = new Reader(MergedProvider.DefaultInstance, stream);
-                message = RpcMessage<UpdatesBase>.Create(null, reader.Read<UpdatesBase>());
+                message = RpcMessage<UpdatesBase>.Create(null, byteArray.ToObject<UpdatesBase>(MergedProvider.DefaultInstance));
             }
 
             return message;

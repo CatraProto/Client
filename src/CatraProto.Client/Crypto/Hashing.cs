@@ -6,9 +6,9 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.Crypto
 {
-    class SHA1Hash
+    class Hashing
     {
-        public static byte[] Compute(IObject obj, IObjectProvider provider, int length = 255)
+        public static byte[] ComputeShaHash(IObject obj, IObjectProvider provider, int length = 255)
         {
             using var ms = new MemoryStream(length);
             var random = new Random();

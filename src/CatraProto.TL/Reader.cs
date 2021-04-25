@@ -28,36 +28,40 @@ namespace CatraProto.TL
 
         public T Read<T>(int? bitSize = null)
         {
-            var typeOfT = typeof(T);
-            if (typeOfT == typeof(int))
+            return (T)Read(typeof(T), bitSize);
+        }
+
+        public object Read(Type type, int? bitSize = null)
+        {
+            if (type == typeof(int))
             {
-                return (T)(object)_reader.ReadInt32();
+                return _reader.ReadInt32();
             }
-            else if (typeOfT == typeof(string))
+            else if (type == typeof(string))
             {
-                return (T)(object)Encoding.UTF8.GetString(ReadBytes());
+                return Encoding.UTF8.GetString(ReadBytes());
             }
-            else if (typeOfT == typeof(double))
+            else if (type == typeof(double))
             {
-                return (T)(object)_reader.ReadDouble();
+                return _reader.ReadDouble();
             }
-            else if (typeOfT == typeof(long))
+            else if (type == typeof(long))
             {
-                return (T)(object)_reader.ReadInt64();
+                return _reader.ReadInt64();
             }
-            else if (typeOfT == typeof(byte))
+            else if (type == typeof(byte))
             {
-                return (T)(object)_reader.ReadByte();
+                return _reader.ReadByte();
             }
-            else if (typeOfT == typeof(byte[]))
+            else if (type == typeof(byte[]))
             {
-                return (T)(object)ReadBytes();
+                return ReadBytes();
             }
-            else if (typeOfT == typeof(bool))
+            else if (type == typeof(bool))
             {
-                return (T)(object)ReadBool();
+                return ReadBool();
             }
-            else if (typeOfT == typeof(System.Numerics.BigInteger))
+            else if (type == typeof(System.Numerics.BigInteger))
             {
                 if (bitSize == null)
                 {
@@ -65,7 +69,7 @@ namespace CatraProto.TL
                         DeserializationException.DeserializationErrors.MissingParameter);
                 }
             }
-            else if (typeOfT.GetInterfaces()[^1] == typeof(IObject))
+            else if (type.GetInterfaces()[^1] == typeof(IObject))
             {
                 var id = _reader.ReadInt32();
                 var instance = _provider.ResolveConstructorId(id);
@@ -76,11 +80,23 @@ namespace CatraProto.TL
                 }
 
                 instance.Deserialize(this);
-                return (T)instance;
+                return instance;
             }
 
-            throw new DeserializationException($"The type {typeOfT} is not supported",
+            throw new DeserializationException($"The type {type} is not supported",
                 DeserializationException.DeserializationErrors.TypeNotFound);
+        }
+
+        public Type GetNextType()
+        {
+            var id = _reader.ReadInt32();
+            if (id == _provider.VectorId)
+            {
+                return typeof(IList<>);
+            }
+
+            var instance = _provider.ResolveConstructorId(id);
+            return instance?.GetType();
         }
 
         private bool ReadBool()

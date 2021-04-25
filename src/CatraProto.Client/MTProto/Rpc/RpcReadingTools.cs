@@ -34,7 +34,7 @@ namespace CatraProto.Client.MTProto.Rpc
             }
 
             error = null;
-            return true;
+            return false;
         }
     }
 }

@@ -11,6 +11,7 @@ namespace CatraProto.TL
     {
         private BinaryWriter _writer;
         private IObjectProvider _provider;
+
         public Stream Stream
         {
             get
@@ -19,11 +20,11 @@ namespace CatraProto.TL
                 return _writer.BaseStream;
             }
         }
-        
+
         public Writer(IObjectProvider provider, Stream stream, bool leaveOpen = false) : this(provider, stream, Encoding.UTF8, leaveOpen)
         {
         }
-        
+
         public Writer(IObjectProvider provider, Stream stream, Encoding encoding, bool leaveOpen = false)
         {
             _provider = provider;
@@ -66,19 +67,19 @@ namespace CatraProto.TL
                         SerializationException.SerializationErrors.TypeNotFound);
             }
         }
-        
+
         private void WriteBool(bool value)
         {
             var type = value ? _provider.BoolTrue : _provider.BoolFalse;
             if (type == null)
             {
-                throw new SerializationException("The provider returned a null value for BoolTrue or BoolFalse", 
+                throw new SerializationException("The provider returned a null value for BoolTrue or BoolFalse",
                     SerializationException.SerializationErrors.BoolNull);
             }
 
             ((IObject)Activator.CreateInstance(type))?.Serialize(this);
         }
-        
+
         private void WriteBytes(byte[] bytes)
         {
             var arrayLenght = bytes.Length;
@@ -118,7 +119,7 @@ namespace CatraProto.TL
                 Write(element);
             }
         }
-        
+
         public void Dispose()
         {
             _writer?.Dispose();

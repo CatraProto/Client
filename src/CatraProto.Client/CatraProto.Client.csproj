@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="CatraProto.Client.UnitTests"/>
+    <InternalsVisibleTo Include="CatraProto.Client.UnitTests" />
     <ProjectReference Include="..\CatraProto.TL\CatraProto.TL.csproj" />
   </ItemGroup>
 
