@@ -10,8 +10,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Resharper InspectCode
     - uses: nbadal/inspectcode-action@v1
+    - name: Resharper InspectCode
     
     - uses: actions/checkout@v2
     - name: Setup .NET
