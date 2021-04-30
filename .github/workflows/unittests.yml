@@ -7,6 +7,18 @@ on:
     branches: [ master ]
 
 jobs:
+
+  self-test:
+   runs-on: ubuntu-latest
+   name: Self Test
+   steps:
+     - name: Checkout
+       uses: actions/checkout@v2
+     - name: Inspect
+       uses: nbadal/inspectcode-action@v1
+       with:
+          solution: 'CatraProto.sln'
+          
   build:
     runs-on: ubuntu-latest
     steps:
