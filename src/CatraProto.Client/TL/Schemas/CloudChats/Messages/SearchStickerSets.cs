@@ -1,11 +1,10 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class SearchStickerSets : IMethod<CatraProto.Client.TL.Schemas.CloudChats.Messages.FoundStickerSetsBase>
+	public partial class SearchStickerSets : IMethod<FoundStickerSetsBase>
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,6 +14,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = -1028140917;
 
+		public Type Type { get; init; } = typeof(SearchStickerSets);
+		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool ExcludeFeatured { get; set; }
 		public string Q { get; set; }

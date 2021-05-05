@@ -1,12 +1,10 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class SendEncryptedFile : IMethod<CatraProto.Client.TL.Schemas.CloudChats.Messages.SentEncryptedMessageBase>
+	public partial class SendEncryptedFile : IMethod<SentEncryptedMessageBase>
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,6 +14,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = 1431914525;
 
+		public Type Type { get; init; } = typeof(SendEncryptedFile);
+		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Silent { get; set; }
 		public InputEncryptedChatBase Peer { get; set; }

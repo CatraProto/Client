@@ -1,20 +1,16 @@
 ﻿using System;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections.Messages;
-using CatraProto.Client.MTProto.Rpc;
-using CatraProto.Client.TL.Schemas.CloudChats;
+using CatraProto.Client.Connections.Messages.Interfaces;
 using Serilog;
-using EncryptedMessage = CatraProto.Client.Connections.Messages.EncryptedMessage;
-using MessageBase = CatraProto.Client.Connections.Messages.Interfaces.MessageBase;
 
 namespace CatraProto.Client.Connections.Loop
 {
     class ReadLoop : Async.Loops.Loop
     {
-        private readonly Connection _connection;
         private readonly CancellationTokenSource _cancellationToken = new CancellationTokenSource();
+        private readonly Connection _connection;
         private ILogger _logger;
         private MessagesHandler _messagesHandler;
 
@@ -34,21 +30,26 @@ namespace CatraProto.Client.Connections.Loop
                 try
                 {
                     var message = await protocol.Reader.ReadIncomingMessage(_cancellationToken.Token);
-                    if (MessageBase.IsMessageEncrypted(message))
+                    if (message.Length == 4)
+                    {
+                        //mtproto error code
+                    }
+
+                    if (Message.IsMessageEncrypted(message))
                     {
                         var encryptedMessage = new EncryptedMessage(message);
 
-                        if (RpcReadingTools.GetRpcMessageResponseId(encryptedMessage.Message, out var messageId))
+                        /*if (RpcReadingTools.GetRpcMessageResponseId(encryptedMessage.Message, out var messageId))
                         {
                             _messagesHandler.CompleteEncryptedMessage(encryptedMessage, messageId);
-                        }
+                        }*/
                     }
                     else
                     {
                         var plainMessage = new UnencryptedMessage(message);
                         if (!await _messagesHandler.CompleteUnencryptedMessage(plainMessage))
                         {
-                            _logger.Warning("Received an unencrypted message with Id {Id} and length of {Length} bytes. The message wasn't expected, there's no task that can be completed", plainMessage.AuthKeyId, plainMessage.Length);
+                            _logger.Warning("Received an unencrypted message with Id {Id} and length of bytes. The message wasn't expected, there's no task that can be completed", plainMessage.AuthKeyId /*plainMessage.Length*/);
                         }
                     }
                 }
@@ -58,7 +59,7 @@ namespace CatraProto.Client.Connections.Loop
                 }
             }
 
-            _logger.Information("ReadLoop shutdown...");
+            _logger.Information("ReadLoop shutdown");
             SetLoopStopped();
         }
 

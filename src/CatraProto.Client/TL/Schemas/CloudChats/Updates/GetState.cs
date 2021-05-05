@@ -1,15 +1,17 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 {
-	public partial class GetState : IMethod<CatraProto.Client.TL.Schemas.CloudChats.Updates.StateBase>
+	public partial class GetState : IMethod<StateBase>
 	{
 
 
         public static int ConstructorId { get; } = -304838614;
 
+		public Type Type { get; init; } = typeof(GetState);
+		public bool IsVector { get; init; } = false;
 
 		public void UpdateFlags() 
 		{

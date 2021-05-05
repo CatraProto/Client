@@ -1,15 +1,17 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class GetMaskStickers : IMethod<CatraProto.Client.TL.Schemas.CloudChats.Messages.AllStickersBase>
+	public partial class GetMaskStickers : IMethod<AllStickersBase>
 	{
 
 
         public static int ConstructorId { get; } = 1706608543;
 
+		public Type Type { get; init; } = typeof(GetMaskStickers);
+		public bool IsVector { get; init; } = false;
 		public int Hash { get; set; }
 
 		public void UpdateFlags() 

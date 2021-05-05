@@ -6,12 +6,17 @@ namespace CatraProto.Client.Async.Locks
 {
     public class AsyncLock : IDisposable
     {
-        private SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1, 1);
         private Releaser _releaser;
+        private SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1, 1);
 
         public AsyncLock()
         {
             _releaser = new Releaser(this);
+        }
+
+        public void Dispose()
+        {
+            _semaphoreSlim?.Dispose();
         }
 
         public async Task<IDisposable> LockAsync()
@@ -19,20 +24,16 @@ namespace CatraProto.Client.Async.Locks
             await _semaphoreSlim.WaitAsync().ConfigureAwait(false);
             return _releaser;
         }
-        
+
         private void ReleaseLock()
         {
             _semaphoreSlim.Release();
         }
-        
-        public void Dispose()
-        {
-            _semaphoreSlim?.Dispose();
-        }
-        
+
         private readonly struct Releaser : IDisposable
         {
             private readonly AsyncLock _asyncLock;
+
             internal Releaser(AsyncLock asyncLock)
             {
                 _asyncLock = asyncLock;

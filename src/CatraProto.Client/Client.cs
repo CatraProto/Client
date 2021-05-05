@@ -1,23 +1,18 @@
 using System;
 using System.Net;
 using System.Numerics;
-using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections;
-using CatraProto.Client.Connections.Messages;
 using CatraProto.Client.MTProto;
-using CatraProto.Client.TL.Schemas;
-using CatraProto.Client.TL.Schemas.MTProto;
-using CatraProto.TL;
 using Serilog;
 
 namespace CatraProto.Client
 {
     public class Client
     {
-        public Api Api { get; init; }
-        private ILogger _logger;
         private Connection _connection;
+        private ILogger _logger;
+        public Api Api { get; init; }
         private Session _session;
 
         public Client(Session session)
@@ -25,6 +20,7 @@ namespace CatraProto.Client
             _session = session;
             _logger = session.Logger.ForContext<Client>();
         }
+
 
         public async Task Start()
         {
@@ -35,7 +31,7 @@ namespace CatraProto.Client
                 Port = 443
             });
         }
-        
+
         public async Task Test()
         {
             /*var obj = new ReqPq

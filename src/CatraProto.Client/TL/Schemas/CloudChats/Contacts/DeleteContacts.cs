@@ -1,35 +1,31 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
-	public partial class DeleteContacts : IMethod<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>
-	{
-
-
+    public partial class DeleteContacts : IMethod<UpdatesBase>
+    {
         public static int ConstructorId { get; } = 157945344;
+        public IList<InputUserBase> Id { get; set; }
 
-		public IList<InputUserBase> Id { get; set; }
+        public Type Type { get; init; } = typeof(DeleteContacts);
+        public bool IsVector { get; init; } = false;
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0) writer.Write(ConstructorId);
+            writer.Write(Id);
+        }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Id);
-
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			Id = reader.ReadVector<InputUserBase>();
-
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Id = reader.ReadVector<InputUserBase>();
+        }
+    }
 }

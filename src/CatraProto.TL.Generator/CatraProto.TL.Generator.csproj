@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <InternalsVisibleTo Include="CatraProto.TL.Generator.UnitTests"/>
+        <InternalsVisibleTo Include="CatraProto.TL.Generator.UnitTests" />
     </ItemGroup>
   
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -15,12 +15,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Remove="Constructor.template"/>
-        <None Remove="Dictionary.template"/>
-        <None Remove="Method.template"/>
-        <None Remove="schema.tl"/>
-        <None Remove="Templates\Constructor.template"/>
-        <None Remove="TypeTemplate.template"/>
+        <None Remove="Constructor.template" />
+        <None Remove="Dictionary.template" />
+        <None Remove="Method.template" />
+        <None Remove="schema.tl" />
+        <None Remove="Templates\Constructor.template" />
+        <None Remove="TypeTemplate.template" />
     </ItemGroup>
 
     <ItemGroup>

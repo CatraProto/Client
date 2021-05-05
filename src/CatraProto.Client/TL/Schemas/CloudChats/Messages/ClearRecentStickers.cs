@@ -1,7 +1,6 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
@@ -15,6 +14,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = -1986437075;
 
+		public Type Type { get; init; } = typeof(ClearRecentStickers);
+		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Attached { get; set; }
 

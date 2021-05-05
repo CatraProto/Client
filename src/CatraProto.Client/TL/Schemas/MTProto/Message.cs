@@ -1,15 +1,17 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class Message : IMethod<CatraProto.Client.TL.Schemas.MTProto.MessageBase>
+	public partial class Message : IMethod<MessageBase>
 	{
 
 
         public static int ConstructorId { get; } = 0;
 
+		public Type Type { get; init; } = typeof(Message);
+		public bool IsVector { get; init; } = false;
 		public long MsgId { get; set; }
 		public int Seqno { get; set; }
 		public int Bytes { get; set; }

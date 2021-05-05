@@ -1,6 +1,4 @@
-using System;
 using System.Threading.Tasks;
-using CatraProto.Client.Async.Locks;
 
 namespace CatraProto.Client.Async.Loops
 {

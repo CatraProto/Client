@@ -1,13 +1,11 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using System.Collections.Generic;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class EditMessage : IMethod<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>
+	public partial class EditMessage : IMethod<UpdatesBase>
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -22,6 +20,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = 1224152952;
 
+		public Type Type { get; init; } = typeof(EditMessage);
+		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool NoWebpage { get; set; }
 		public InputPeerBase Peer { get; set; }

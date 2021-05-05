@@ -12,7 +12,7 @@ namespace CatraProto.Client.Extensions
             var bArray = new byte[1] {data};
             return stream.WriteAsync(bArray, cancellationToken);
         }
-        
+
         public static async Task<int> ReadInt32(this NetworkStream stream)
         {
             var bytes = await stream.ReadBytesAsync(4);

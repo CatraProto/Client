@@ -1,20 +1,14 @@
 using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Linq;
-using System.Reflection.Metadata;
 using System.Security.Cryptography;
-using System.Text;
-using CatraProto.Client.TL.Schemas.CloudChats.Contacts;
 
 namespace CatraProto.Client.Crypto.Aes
 {
     class IgeEncryptor : IDisposable
     {
         private AesManaged _aesManaged;
-        private ICryptoTransform _encryptor;
         private ICryptoTransform _decryptor;
+        private ICryptoTransform _encryptor;
         private byte[] _iv1;
         private byte[] _iv2;
 
@@ -34,15 +28,6 @@ namespace CatraProto.Client.Crypto.Aes
             _iv2 = iv.TakeLast(16).ToArray();
         }
 
-        public byte[] Encrypt(byte[] plainText)
-        {
-            return Process(plainText, true);
-        }
-
-        public byte[] Decrypt(byte[] encryptedText)
-        {
-            return Process(encryptedText, false);
-        }
 
         private byte[] Process(byte[] from, bool encrypt)
         {
@@ -54,7 +39,7 @@ namespace CatraProto.Client.Crypto.Aes
             GetParameters(encrypt, out var transformer, out var oldCleanBlock, out var oldProcessedBlock);
 
             var output = new byte[from.Length];
-            for (int i = 0; i < from.Length; i += 16)
+            for (var i = 0; i < from.Length; i += 16)
             {
                 var cleanBlock = new byte[16];
                 Array.Copy(from, i, cleanBlock, 0, 16);
@@ -64,7 +49,7 @@ namespace CatraProto.Client.Crypto.Aes
                 var xoredEncrypted = XorBlock(blockResult, oldCleanBlock);
 
                 var currentI = i;
-                for (int j = 0; j < xoredEncrypted.Length; j++)
+                for (var j = 0; j < xoredEncrypted.Length; j++)
                 {
                     output[currentI] = xoredEncrypted[j];
                     currentI++;
@@ -101,12 +86,23 @@ namespace CatraProto.Client.Crypto.Aes
             }
 
             var output = new byte[first.Length];
-            for (int i = 0; i < first.Length; i++)
+            for (var i = 0; i < first.Length; i++)
             {
                 output[i] = (byte)(first[i] ^ second[i]);
             }
 
             return output;
+        }
+
+
+        public byte[] Encrypt(byte[] plainText)
+        {
+            return Process(plainText, true);
+        }
+
+        public byte[] Decrypt(byte[] encryptedText)
+        {
+            return Process(encryptedText, false);
         }
 
         public void Dispose()

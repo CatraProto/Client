@@ -1,7 +1,6 @@
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public abstract class BotCallbackAnswerBase : IObject

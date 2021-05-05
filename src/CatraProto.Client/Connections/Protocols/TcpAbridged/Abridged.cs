@@ -10,10 +10,6 @@ namespace CatraProto.Client.Connections.Protocols.TcpAbridged
 {
     internal class Abridged : IProtocol, IDisposable
     {
-        public IProtocolWriter Writer { get; set; }
-        public IProtocolReader Reader { get; set; }
-        public ConnectionInfo ConnectionInfo { get; init; }
-        public bool IsConnected => _client.Connected;
         private TcpClient _client;
         private ILogger _logger;
 
@@ -23,6 +19,16 @@ namespace CatraProto.Client.Connections.Protocols.TcpAbridged
             ConnectionInfo = connectionInfo;
             _client = new TcpClient {NoDelay = true};
         }
+
+        public void Dispose()
+        {
+            _client?.Dispose();
+        }
+
+        public IProtocolWriter Writer { get; set; }
+        public IProtocolReader Reader { get; set; }
+        public ConnectionInfo ConnectionInfo { get; init; }
+        public bool IsConnected => _client.Connected;
 
 
         public async Task Connect(CancellationToken token = default)
@@ -50,11 +56,6 @@ namespace CatraProto.Client.Connections.Protocols.TcpAbridged
         {
             _client.Close();
             return Task.CompletedTask;
-        }
-
-        public void Dispose()
-        {
-            _client?.Dispose();
         }
 
         /*

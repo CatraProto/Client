@@ -1,12 +1,10 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 {
-	public partial class DiscardCall : IMethod<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>
+	public partial class DiscardCall : IMethod<UpdatesBase>
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,6 +14,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 
         public static int ConstructorId { get; } = -1295269440;
 
+		public Type Type { get; init; } = typeof(DiscardCall);
+		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Video { get; set; }
 		public InputPhoneCallBase Peer { get; set; }

@@ -1,7 +1,6 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 {
@@ -16,6 +15,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 
         public static int ConstructorId { get; } = -667062079;
 
+		public Type Type { get; init; } = typeof(ClearSavedInfo);
+		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Credentials { get; set; }
 		public bool Info { get; set; }

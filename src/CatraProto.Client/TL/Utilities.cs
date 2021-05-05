@@ -8,12 +8,12 @@ namespace CatraProto.Client.TL
     {
         public static Reader CreateReader(Stream stream)
         {
-            return new Reader(MergedProvider.DefaultInstance, stream);
+            return new Reader(MergedProvider.Singleton, stream);
         }
         
         public static Writer CreateWriter(Stream stream)
         {
-            return new Writer(MergedProvider.DefaultInstance, stream);
+            return new Writer(MergedProvider.Singleton, stream);
         }
         
         public static Reader CreateReader()

@@ -9,8 +9,8 @@ namespace CatraProto.Client.Connections.Protocols.TcpAbridged
 {
     class AbridgedReader : IProtocolReader
     {
-        private NetworkStream _networkStream;
         private ILogger _logger;
+        private NetworkStream _networkStream;
 
         public AbridgedReader(NetworkStream stream, ILogger logger)
         {

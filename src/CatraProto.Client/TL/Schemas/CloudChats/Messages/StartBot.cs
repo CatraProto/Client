@@ -1,16 +1,17 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class StartBot : IMethod<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>
+	public partial class StartBot : IMethod<UpdatesBase>
 	{
 
 
         public static int ConstructorId { get; } = -421563528;
 
+		public Type Type { get; init; } = typeof(StartBot);
+		public bool IsVector { get; init; } = false;
 		public InputUserBase Bot { get; set; }
 		public InputPeerBase Peer { get; set; }
 		public long RandomId { get; set; }

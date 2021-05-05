@@ -1,7 +1,6 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
@@ -16,6 +15,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = 163765653;
 
+		public Type Type { get; init; } = typeof(SetBotPrecheckoutResults);
+		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Success { get; set; }
 		public long QueryId { get; set; }

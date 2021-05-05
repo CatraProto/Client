@@ -1,15 +1,17 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class CheckChatInvite : IMethod<CatraProto.Client.TL.Schemas.CloudChats.ChatInviteBase>
+	public partial class CheckChatInvite : IMethod<ChatInviteBase>
 	{
 
 
         public static int ConstructorId { get; } = 1051570619;
 
+		public Type Type { get; init; } = typeof(CheckChatInvite);
+		public bool IsVector { get; init; } = false;
 		public string Hash { get; set; }
 
 		public void UpdateFlags() 

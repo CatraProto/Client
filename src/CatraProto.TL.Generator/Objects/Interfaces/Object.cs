@@ -21,7 +21,7 @@ namespace CatraProto.TL.Generator.Objects.Interfaces
             set => Namespace.FullNamespaceArray[^1] = value;
         }
 
-        public string GetMethodsAccessibility()
+        public virtual string GetMethodsAccessibility()
         {
             if (Type is RuntimeDefinedType)
             {
@@ -31,7 +31,7 @@ namespace CatraProto.TL.Generator.Objects.Interfaces
             return "public override";
         }
         
-        public void WriteFlagsUpdating(StringBuilder builder)
+        public virtual void WriteFlagsUpdating(StringBuilder builder)
         {
             foreach (var parameter in Parameters)
             {
@@ -39,7 +39,7 @@ namespace CatraProto.TL.Generator.Objects.Interfaces
             }
         }
 
-        public void WriteUsings(StringBuilder builder)
+        public virtual void WriteUsings(StringBuilder builder)
         {
             var importsList = new List<string>();
             builder.AppendLine($"using CatraProto.TL;");
@@ -64,7 +64,7 @@ namespace CatraProto.TL.Generator.Objects.Interfaces
             }
         }
 
-        public void WriteFlagsEnums(StringBuilder builder)
+        public virtual void WriteFlagsEnums(StringBuilder builder)
         {
             var getFlaggedParameters = Parameters.Where(x => x.HasFlag).ToList();
             var dictionary = new Dictionary<string, List<Parameter>>();
@@ -106,12 +106,12 @@ namespace CatraProto.TL.Generator.Objects.Interfaces
             }
         }
 
-        public void WriteParameters(StringBuilder builder)
+        public virtual void WriteParameters(StringBuilder builder)
         {
             foreach (var parameter in Parameters) parameter.Type.WriteParameter(builder, parameter);
         }
 
-        public void WriteSerializer(StringBuilder builder)
+        public virtual void WriteSerializer(StringBuilder builder)
         {
             foreach (var parameter in Parameters)
             {
@@ -119,7 +119,7 @@ namespace CatraProto.TL.Generator.Objects.Interfaces
             }
         }
 
-        public void WriteDeserializer(StringBuilder builder)
+        public virtual void WriteDeserializer(StringBuilder builder)
         {
             foreach (var parameter in Parameters)
             {

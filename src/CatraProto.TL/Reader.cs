@@ -1,9 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
-using System.Reflection.Metadata;
 using System.Text;
 using CatraProto.TL.Exceptions;
 using CatraProto.TL.Interfaces;
@@ -142,8 +139,18 @@ namespace CatraProto.TL
 
         public IList<T> ReadVector<T>(Func<T> action)
         {
+            return (IList<T>)ReadVector(() => (object)action);
+        }
+
+        public IList<T> ReadVector<T>()
+        {
+            return ReadVector(() => Read<T>());
+        }
+
+        public IList<object> ReadVector(Func<object> action)
+        {
             _reader.ReadInt32(); //Going past the vector's id
-            var list = new List<T>();
+            var list = new List<object>();
             var size = _reader.ReadInt32();
             for (var i = 0; i < size; i++)
             {
@@ -154,9 +161,9 @@ namespace CatraProto.TL
             return list;
         }
 
-        public IList<T> ReadVector<T>()
+        public IList<object> ReadVector(Type type)
         {
-            return ReadVector(() => Read<T>());
+            return ReadVector(() => Read(type));
         }
 
         public void Dispose()

@@ -1,17 +1,18 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class GetPeerDialogs : IMethod<CatraProto.Client.TL.Schemas.CloudChats.Messages.PeerDialogsBase>
+	public partial class GetPeerDialogs : IMethod<PeerDialogsBase>
 	{
 
 
         public static int ConstructorId { get; } = -462373635;
 
+		public Type Type { get; init; } = typeof(GetPeerDialogs);
+		public bool IsVector { get; init; } = false;
 		public IList<InputDialogPeerBase> Peers { get; set; }
 
 		public void UpdateFlags() 

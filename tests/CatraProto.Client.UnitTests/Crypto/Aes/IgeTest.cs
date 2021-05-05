@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using CatraProto.Client.Crypto.Aes;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace CatraProto.Client.UnitTests.Crypto.Aes
 {

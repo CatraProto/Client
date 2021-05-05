@@ -15,13 +15,11 @@ namespace CatraProto.Client.Connections
 
     class Connection : IAsyncDisposable
     {
-        public IProtocol Protocol { get; }
-        public MessagesHandler MessagesHandler { get; }
-        private Session _session;
-        private ReadLoop _readLoop;
-        private WriteLoop _writeLoop;
-        private ILogger _logger;
         private ConnectionInfo _connectionInfo;
+        private ILogger _logger;
+        private ReadLoop _readLoop;
+        private Session _session;
+        private WriteLoop _writeLoop;
 
         private Connection(Session session, ConnectionInfo connectionInfo, ConnectionProtocol protocol = ConnectionProtocol.TcpAbridged)
         {
@@ -37,7 +35,25 @@ namespace CatraProto.Client.Connections
                     break;
             }
         }
-        
+
+        public IProtocol Protocol { get; }
+        public MessagesHandler MessagesHandler { get; }
+
+        public async ValueTask DisposeAsync()
+        {
+            if (_writeLoop != null)
+            {
+                await _writeLoop.Stop();
+            }
+
+            if (_readLoop != null)
+            {
+                await _readLoop.Stop();
+            }
+
+            MessagesHandler?.Dispose();
+        }
+
         public static async Task<Connection> Create(Session session, ConnectionInfo connectionInfo,
             ConnectionProtocol protocol = ConnectionProtocol.TcpAbridged)
         {
@@ -84,21 +100,6 @@ namespace CatraProto.Client.Connections
 
             await _writeLoop.Start();
             await _readLoop.Start();
-        }
-        
-        public async ValueTask DisposeAsync()
-        {
-            if (_writeLoop != null)
-            {
-                await _writeLoop.Stop();
-            }
-
-            if (_readLoop != null)
-            {
-                await _readLoop.Stop();
-            }
-
-            MessagesHandler?.Dispose();
         }
     }
 }

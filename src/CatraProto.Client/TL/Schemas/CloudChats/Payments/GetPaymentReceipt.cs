@@ -1,15 +1,17 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 {
-	public partial class GetPaymentReceipt : IMethod<CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentReceiptBase>
+	public partial class GetPaymentReceipt : IMethod<PaymentReceiptBase>
 	{
 
 
         public static int ConstructorId { get; } = -1601001088;
 
+		public Type Type { get; init; } = typeof(GetPaymentReceipt);
+		public bool IsVector { get; init; } = false;
 		public int MsgId { get; set; }
 
 		public void UpdateFlags() 

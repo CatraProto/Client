@@ -1,16 +1,17 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 {
-	public partial class AcceptCall : IMethod<CatraProto.Client.TL.Schemas.CloudChats.Phone.PhoneCallBase>
+	public partial class AcceptCall : IMethod<PhoneCallBase>
 	{
 
 
         public static int ConstructorId { get; } = 1003664544;
 
+		public Type Type { get; init; } = typeof(AcceptCall);
+		public bool IsVector { get; init; } = false;
 		public InputPhoneCallBase Peer { get; set; }
 		public byte[] GB { get; set; }
 		public PhoneCallProtocolBase Protocol { get; set; }

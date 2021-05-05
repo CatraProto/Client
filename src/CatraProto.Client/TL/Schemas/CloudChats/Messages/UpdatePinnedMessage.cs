@@ -1,12 +1,10 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class UpdatePinnedMessage : IMethod<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>
+	public partial class UpdatePinnedMessage : IMethod<UpdatesBase>
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -18,6 +16,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = -760547348;
 
+		public Type Type { get; init; } = typeof(UpdatePinnedMessage);
+		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Silent { get; set; }
 		public bool Unpin { get; set; }

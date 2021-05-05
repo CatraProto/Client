@@ -1,15 +1,17 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class RpcAnswerUnknown : IMethod<CatraProto.Client.TL.Schemas.MTProto.RpcDropAnswerBase>
+	public partial class RpcAnswerUnknown : IMethod<RpcDropAnswerBase>
 	{
 
 
         public static int ConstructorId { get; } = 1579864942;
 
+		public Type Type { get; init; } = typeof(RpcAnswerUnknown);
+		public bool IsVector { get; init; } = false;
 
 		public void UpdateFlags() 
 		{

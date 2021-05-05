@@ -1,7 +1,6 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 {
@@ -11,6 +10,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 
         public static int ConstructorId { get; } = 662363518;
 
+		public Type Type { get; init; } = typeof(SaveCallDebug);
+		public bool IsVector { get; init; } = false;
 		public InputPhoneCallBase Peer { get; set; }
 		public DataJSONBase Debug { get; set; }
 

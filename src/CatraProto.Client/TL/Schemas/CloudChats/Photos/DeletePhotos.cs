@@ -1,8 +1,7 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 {
@@ -12,6 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 
         public static int ConstructorId { get; } = -2016444625;
 
+		public Type Type { get; init; } = typeof(DeletePhotos);
+		public bool IsVector { get; init; } = false;
 		public IList<InputPhotoBase> Id { get; set; }
 
 		public void UpdateFlags() 

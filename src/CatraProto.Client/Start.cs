@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
-using CatraProto.Client.Crypto.Aes;
 using CatraProto.Client.MTProto;
 using Serilog.Core;
 using Serilog.Events;
-
 
 namespace CatraProto.Client
 {

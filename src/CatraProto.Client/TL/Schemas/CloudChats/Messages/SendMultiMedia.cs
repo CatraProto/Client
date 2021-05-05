@@ -1,13 +1,11 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using System.Collections.Generic;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class SendMultiMedia : IMethod<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>
+	public partial class SendMultiMedia : IMethod<UpdatesBase>
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -21,6 +19,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = -872345397;
 
+		public Type Type { get; init; } = typeof(SendMultiMedia);
+		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Silent { get; set; }
 		public bool Background { get; set; }

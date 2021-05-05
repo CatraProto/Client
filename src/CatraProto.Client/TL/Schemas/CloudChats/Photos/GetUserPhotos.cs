@@ -1,16 +1,17 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 {
-	public partial class GetUserPhotos : IMethod<CatraProto.Client.TL.Schemas.CloudChats.Photos.PhotosBase>
+	public partial class GetUserPhotos : IMethod<PhotosBase>
 	{
 
 
         public static int ConstructorId { get; } = -1848823128;
 
+		public Type Type { get; init; } = typeof(GetUserPhotos);
+		public bool IsVector { get; init; } = false;
 		public InputUserBase UserId { get; set; }
 		public int Offset { get; set; }
 		public long MaxId { get; set; }

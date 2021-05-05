@@ -1,6 +1,6 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
@@ -10,6 +10,8 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
         public static int ConstructorId { get; } = 812830625;
 
+		public Type Type { get; init; } = typeof(GzipPacked);
+		public bool IsVector { get; init; } = false;
 		public byte[] PackedData { get; set; }
 
 		public void UpdateFlags() 

@@ -1,37 +1,33 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 {
-	public partial class ToggleSignatures : IMethod<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>
-	{
-
-
+    public partial class ToggleSignatures : IMethod<UpdatesBase>
+    {
         public static int ConstructorId { get; } = 527021574;
+        public InputChannelBase Channel { get; set; }
+        public bool Enabled { get; set; }
 
-		public InputChannelBase Channel { get; set; }
-		public bool Enabled { get; set; }
+        public Type Type { get; init; } = typeof(ToggleSignatures);
+        public bool IsVector { get; init; } = false;
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0) writer.Write(ConstructorId);
+            writer.Write(Channel);
+            writer.Write(Enabled);
+        }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Channel);
-			writer.Write(Enabled);
-
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			Channel = reader.Read<InputChannelBase>();
-			Enabled = reader.Read<bool>();
-
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Channel = reader.Read<InputChannelBase>();
+            Enabled = reader.Read<bool>();
+        }
+    }
 }

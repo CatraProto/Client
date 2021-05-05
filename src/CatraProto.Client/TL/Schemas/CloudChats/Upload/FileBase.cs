@@ -1,7 +1,6 @@
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 {
     public abstract class FileBase : IObject

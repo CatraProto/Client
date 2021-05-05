@@ -1,37 +1,33 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 {
-	public partial class DeleteHistory : IMethod<bool>
-	{
-
-
+    public partial class DeleteHistory : IMethod<bool>
+    {
         public static int ConstructorId { get; } = -1355375294;
+        public InputChannelBase Channel { get; set; }
+        public int MaxId { get; set; }
 
-		public InputChannelBase Channel { get; set; }
-		public int MaxId { get; set; }
+        public Type Type { get; init; } = typeof(DeleteHistory);
+        public bool IsVector { get; init; } = false;
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0) writer.Write(ConstructorId);
+            writer.Write(Channel);
+            writer.Write(MaxId);
+        }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Channel);
-			writer.Write(MaxId);
-
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			Channel = reader.Read<InputChannelBase>();
-			MaxId = reader.Read<int>();
-
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Channel = reader.Read<InputChannelBase>();
+            MaxId = reader.Read<int>();
+        }
+    }
 }

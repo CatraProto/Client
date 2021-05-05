@@ -1,15 +1,17 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 {
-	public partial class GetBankCardData : IMethod<CatraProto.Client.TL.Schemas.CloudChats.Payments.BankCardDataBase>
+	public partial class GetBankCardData : IMethod<BankCardDataBase>
 	{
 
 
         public static int ConstructorId { get; } = 779736953;
 
+		public Type Type { get; init; } = typeof(GetBankCardData);
+		public bool IsVector { get; init; } = false;
 		public string Number { get; set; }
 
 		public void UpdateFlags() 

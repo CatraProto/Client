@@ -7,22 +7,18 @@ using CatraProto.Client.Async.Locks;
 using CatraProto.Client.Connections.Messages;
 using CatraProto.Client.MTProto;
 using CatraProto.Client.MTProto.Rpc;
-using CatraProto.Client.TL.Schemas;
-using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Channel = System.Threading.Channels.Channel;
-using EncryptedMessage = CatraProto.Client.Connections.Messages.EncryptedMessage;
 
 namespace CatraProto.Client.Connections
 {
     internal class MessagesHandler : IDisposable
     {
-        private ConcurrentDictionary<long, (CancellationTokenRegistration, TaskCompletionSource<EncryptedMessage>)> _encryptedMessages = new ConcurrentDictionary<long, (CancellationTokenRegistration, TaskCompletionSource<EncryptedMessage>)>();
-        private Channel<UnencryptedMessage> _unencryptedChannel = Channel.CreateUnbounded<UnencryptedMessage>();
         private Channel<EncryptedMessage> _encryptedChannel = Channel.CreateUnbounded<EncryptedMessage>();
-        private AsyncLock _unencryptedMessagesLock = new AsyncLock();
-        private TaskCompletionSource<UnencryptedMessage> _oldTask;
+        private Channel<UnencryptedMessage> _unencryptedChannel = Channel.CreateUnbounded<UnencryptedMessage>();
+        private ConcurrentDictionary<long, (CancellationTokenRegistration cancellationTokenRegistration, TaskCompletionSource<EncryptedMessage> completionSource)> _encryptedMessages = new ConcurrentDictionary<long, (CancellationTokenRegistration, TaskCompletionSource<EncryptedMessage>)>();
         private MessageIdsHandler _messageIdsHandler;
+        private TaskCompletionSource<UnencryptedMessage> _oldTask;
+        private AsyncLock _unencryptedMessagesLock = new AsyncLock();
 
         public MessagesHandler(MessageIdsHandler messageIdsHandler)
         {
@@ -87,18 +83,17 @@ namespace CatraProto.Client.Connections
             return message;
         }
 
-        private async Task<RpcMessage<T>> SendRpc<T>(IMethod<T> method)
+        public async Task<RpcMessage<T>> SendRpc<T>(IMethod<T> method)
         {
             var message = new RpcMessage<T>();
-            QueueEncryptedMessage(new EncryptedMessage()
+            QueueEncryptedMessage(new EncryptedMessage
             {
-                Message = method.ToArray(MergedProvider.DefaultInstance)
+                Body = method
             }, out var completion);
             var bytes = await completion;
-            message.FromBytes(bytes.Message);
             return message;
         }
-        
+
         public void QueueEncryptedMessage(EncryptedMessage message, out Task<EncryptedMessage> completion)
         {
             var completionSource = new TaskCompletionSource<EncryptedMessage>(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -112,8 +107,8 @@ namespace CatraProto.Client.Connections
         {
             if (_encryptedMessages.TryRemove(messageId, out var tuple))
             {
-                tuple.Item1.Unregister();
-                tuple.Item2.TrySetResult(response);
+                tuple.cancellationTokenRegistration.Unregister();
+                tuple.completionSource.TrySetResult(response);
                 return true;
             }
 
@@ -125,10 +120,10 @@ namespace CatraProto.Client.Connections
             if (_encryptedMessages.TryRemove(message.MessageId, out var tuple))
             {
                 var newMessageId = _messageIdsHandler.ComputeMessageId();
-                tuple.Item1.Unregister();
+                tuple.cancellationTokenRegistration.Unregister();
                 message.MessageId = newMessageId;
                 var registration = RegisterMessageCancellation(message);
-                _encryptedMessages.TryAdd(message.MessageId, (registration, tuple.Item2));
+                _encryptedMessages.TryAdd(message.MessageId, (registration, tuple.completionSource));
             }
         }
 
@@ -138,12 +133,11 @@ namespace CatraProto.Client.Connections
             {
                 if (_encryptedMessages.TryRemove(message.MessageId, out var tuple))
                 {
-                    tuple.Item2.TrySetCanceled();
+                    tuple.completionSource.TrySetCanceled();
                 }
             });
         }
-
-
+        
         public void Dispose()
         {
             _unencryptedMessagesLock?.Dispose();

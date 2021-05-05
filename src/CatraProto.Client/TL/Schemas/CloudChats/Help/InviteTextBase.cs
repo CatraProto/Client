@@ -1,12 +1,11 @@
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
     public abstract class InviteTextBase : IObject
     {
-		public abstract string Message { get; set; }
+        public abstract string Message { get; set; }
 
         public abstract void UpdateFlags();
         public abstract void Deserialize(Reader reader);

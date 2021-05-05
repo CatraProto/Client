@@ -1,16 +1,17 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class GetAttachedStickers : IMethod<CatraProto.Client.TL.Schemas.CloudChats.StickerSetCoveredBase>
+	public partial class GetAttachedStickers : IMethod<StickerSetCoveredBase>
 	{
 
 
         public static int ConstructorId { get; } = -866424884;
 
+		public Type Type { get; init; } = typeof(GetAttachedStickers);
+		public bool IsVector { get; init; } = false;
 		public InputStickeredMediaBase Media { get; set; }
 
 		public void UpdateFlags() 

@@ -1,16 +1,17 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 {
-	public partial class GetFileHashes : IMethod<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>
+	public partial class GetFileHashes : IMethod<FileHashBase>
 	{
 
 
         public static int ConstructorId { get; } = -956147407;
 
+		public Type Type { get; init; } = typeof(GetFileHashes);
+		public bool IsVector { get; init; } = false;
 		public InputFileLocationBase Location { get; set; }
 		public int Offset { get; set; }
 

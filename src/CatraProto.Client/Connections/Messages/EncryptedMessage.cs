@@ -1,29 +1,61 @@
-﻿using System.Threading;
+﻿using System;
+using System.IO;
+using System.Numerics;
+using System.Threading;
 using CatraProto.Client.Connections.Messages.Interfaces;
+using CatraProto.Client.Crypto.Aes;
+using CatraProto.Client.Extensions;
 
 namespace CatraProto.Client.Connections.Messages
 {
-    internal sealed class EncryptedMessage : MessageBase
+    internal sealed class EncryptedMessage : IMessage
     {
-        public CancellationToken Token { get; set; } = default;
+        public long AuthKeyId { get; set; }
+        public BigInteger MsgKey { get; set; }
+        public long Salt { get; set; }
+        public long SessionId { get; set; }
+        public long MessageId { get; set; }
+        public int SeqNo { get; set; }
+        public int Length => Body.Length;
+        public byte[] Body { get; set; }
+        public CancellationToken Token { get; set; }
+        private IgeEncryptor _encryptor;
 
-        public EncryptedMessage()
+        public EncryptedMessage(IgeEncryptor encryptor)
         {
+            _encryptor = encryptor;
         }
 
-        public EncryptedMessage(byte[] message)
+        public EncryptedMessage(IgeEncryptor encryptor, byte[] message)
         {
-            Deserialize(message);
+            _encryptor = encryptor;
+            Import(message);
         }
 
-        public override void Deserialize(byte[] message)
+        public void Import(byte[] message)
         {
-            throw new System.NotImplementedException();
+            using(var reader = new BinaryReader(message.ToMemoryStream()))
+            {
+                AuthKeyId = reader.ReadInt64();
+                MsgKey = new BigInteger(reader.ReadBytes(128));
+                var encryptedBuffer = reader.ReadBytes((int)(reader.BaseStream.Length - reader.BaseStream.Position));
+                var decryptedText = _encryptor.Decrypt(encryptedBuffer);
+                using (var cleanReader = new BinaryReader(decryptedText.ToMemoryStream()))
+                {
+                    Salt = cleanReader.ReadInt64();
+                    SessionId = cleanReader.ReadInt64();
+                    MessageId = cleanReader.ReadInt64();
+                    SeqNo = cleanReader.ReadInt32();
+                    var length = cleanReader.ReadInt32();
+                    
+                }
+            }
+
         }
 
-        public override byte[] Serialize()
+        public byte[] Export()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

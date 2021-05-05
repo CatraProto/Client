@@ -1,11 +1,10 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class GetArchivedStickers : IMethod<CatraProto.Client.TL.Schemas.CloudChats.Messages.ArchivedStickersBase>
+	public partial class GetArchivedStickers : IMethod<ArchivedStickersBase>
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,6 +14,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = 1475442322;
 
+		public Type Type { get; init; } = typeof(GetArchivedStickers);
+		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Masks { get; set; }
 		public long OffsetId { get; set; }

@@ -1,8 +1,7 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
 using System.Collections.Generic;
-
+using CatraProto.TL;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
@@ -16,6 +15,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = 2016638777;
 
+		public Type Type { get; init; } = typeof(ReorderStickerSets);
+		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Masks { get; set; }
 		public IList<long> Order { get; set; }

@@ -1,15 +1,17 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class RpcResult : IMethod<CatraProto.Client.TL.Schemas.MTProto.RpcResultBase>
+	public partial class RpcResult : IMethod<RpcResultBase>
 	{
 
 
         public static int ConstructorId { get; } = -212046591;
 
+		public Type Type { get; init; } = typeof(RpcResult);
+		public bool IsVector { get; init; } = false;
 		public long ReqMsgId { get; set; }
 		public IObject Result { get; set; }
 

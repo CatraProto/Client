@@ -1,9 +1,7 @@
+using System.Collections.Generic;
+using CatraProto.Client.TL.Schemas.CloudChats.Updates;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using CatraProto.Client.TL.Schemas.CloudChats.Updates;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {

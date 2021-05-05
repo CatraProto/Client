@@ -1,8 +1,6 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
@@ -16,6 +14,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = -1489903017;
 
+		public Type Type { get; init; } = typeof(ToggleDialogPin);
+		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Pinned { get; set; }
 		public InputDialogPeerBase Peer { get; set; }

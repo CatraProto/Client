@@ -1,15 +1,17 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class GetOldFeaturedStickers : IMethod<CatraProto.Client.TL.Schemas.CloudChats.Messages.FeaturedStickersBase>
+	public partial class GetOldFeaturedStickers : IMethod<FeaturedStickersBase>
 	{
 
 
         public static int ConstructorId { get; } = 1608974939;
 
+		public Type Type { get; init; } = typeof(GetOldFeaturedStickers);
+		public bool IsVector { get; init; } = false;
 		public int Offset { get; set; }
 		public int Limit { get; set; }
 		public int Hash { get; set; }

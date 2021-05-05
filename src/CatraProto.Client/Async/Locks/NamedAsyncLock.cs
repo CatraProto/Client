@@ -8,6 +8,7 @@ namespace CatraProto.Client.Async.Locks
     public class NamedAsyncLock<T>
     {
         private Dictionary<T, Counter<SemaphoreSlim>> _semaphores = new Dictionary<T, Counter<SemaphoreSlim>>();
+
         private SemaphoreSlim GetLock(T key)
         {
             lock (_semaphores)
@@ -41,7 +42,7 @@ namespace CatraProto.Client.Async.Locks
                 }
             }
         }
-        
+
         public async ValueTask<IDisposable> LockAsync(T key)
         {
             await GetLock(key).WaitAsync().ConfigureAwait(false);
@@ -52,7 +53,7 @@ namespace CatraProto.Client.Async.Locks
         {
             private readonly R _releaseKey;
             private readonly NamedAsyncLock<R> _asyncLock;
-        
+
             internal Releaser(R releaseKey, NamedAsyncLock<R> asyncLock)
             {
                 _asyncLock = asyncLock;
@@ -64,18 +65,19 @@ namespace CatraProto.Client.Async.Locks
                 _asyncLock.ReleaseLock(_releaseKey);
             }
         }
-        
+
         private class Counter<I>
         {
             private readonly object _mutex = new object();
-            public int RequestedTimesLock { get; private set; }
-            public I Item { get; private set; }
 
             internal Counter(I item, int initialRequested = 0)
             {
                 Item = item;
                 RequestedTimesLock = initialRequested;
             }
+
+            public int RequestedTimesLock { get; private set; }
+            public I Item { get; private set; }
 
             public void IncreaseCount()
             {
@@ -84,7 +86,7 @@ namespace CatraProto.Client.Async.Locks
                     RequestedTimesLock++;
                 }
             }
-        
+
             public void DecreaseCount()
             {
                 lock (_mutex)

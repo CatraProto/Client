@@ -1,15 +1,17 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class GetDhConfig : IMethod<CatraProto.Client.TL.Schemas.CloudChats.Messages.DhConfigBase>
+	public partial class GetDhConfig : IMethod<DhConfigBase>
 	{
 
 
         public static int ConstructorId { get; } = 651135312;
 
+		public Type Type { get; init; } = typeof(GetDhConfig);
+		public bool IsVector { get; init; } = false;
 		public int Version { get; set; }
 		public int RandomLength { get; set; }
 

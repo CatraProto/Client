@@ -1,16 +1,18 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Collections.Generic;
-
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class MsgsAllInfo : IMethod<CatraProto.Client.TL.Schemas.MTProto.MsgsAllInfoBase>
+	public partial class MsgsAllInfo : IMethod<MsgsAllInfoBase>
 	{
 
 
         public static int ConstructorId { get; } = -1933520591;
 
+		public Type Type { get; init; } = typeof(MsgsAllInfo);
+		public bool IsVector { get; init; } = false;
 		public IList<long> MsgIds { get; set; }
 		public byte[] Info { get; set; }
 

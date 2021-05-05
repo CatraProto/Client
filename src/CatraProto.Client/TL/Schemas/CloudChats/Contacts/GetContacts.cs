@@ -1,33 +1,30 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
-	public partial class GetContacts : IMethod<CatraProto.Client.TL.Schemas.CloudChats.Contacts.ContactsBase>
-	{
-
-
+    public partial class GetContacts : IMethod<ContactsBase>
+    {
         public static int ConstructorId { get; } = -1071414113;
+        public int Hash { get; set; }
 
-		public int Hash { get; set; }
+        public Type Type { get; init; } = typeof(GetContacts);
+        public bool IsVector { get; init; } = false;
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0) writer.Write(ConstructorId);
+            writer.Write(Hash);
+        }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Hash);
-
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			Hash = reader.Read<int>();
-
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Hash = reader.Read<int>();
+        }
+    }
 }

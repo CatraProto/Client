@@ -1,32 +1,25 @@
-using CatraProto.Client.Extensions;
 using CatraProto.Client.MTProto.Rpc.RpcErrors;
 using CatraProto.Client.MTProto.Rpc.RpcErrors.Interfaces;
-using CatraProto.Client.TL.Schemas;
 using CatraProto.Client.TL.Schemas.MTProto;
-using CatraProto.TL;
 
 namespace CatraProto.Client.MTProto.Rpc
 {
-    public class RpcMessage<T>
+    public class RpcMessage<T> : IRpcMessage
     {
-        public IRpcError Error { get; }
-        public T Response { get; }
+        public IRpcError Error { get; private set; }
+        public T Response { get; private set; }
         public bool RpcCallFailed => Error != null;
 
-        public RpcMessage()
+        public void SetResponse(object o)
         {
-        }
-
-        private RpcMessage(IRpcError error, T response)
-        {
-            Error = error;
-            Response = response;
-        }
-
-        internal static RpcMessage<T> Create(RpcError error, T response)
-        {
-            var rpcMessage = new RpcMessage<T>(ParseError(error), response);
-            return rpcMessage;
+            if (o is RpcError error)
+            {
+                Error = ParseError(error);
+            }
+            else
+            {
+                Response = (T)o;
+            }
         }
 
         private static IRpcError ParseError(RpcError error)
@@ -37,18 +30,6 @@ namespace CatraProto.Client.MTProto.Rpc
                 default:
                     return new UnknownError(error.ErrorMessage, error.ErrorCode);
             }
-        }
-
-        internal bool FromBytes(byte[] message)
-        {
-            var ms = message.ToMemoryStream();
-            using var reader = new Reader(MergedProvider.DefaultInstance, ms);
-            if (reader.GetNextType() == typeof(RpcResult))
-            {
-                reader.Read<int>();
-            }
-
-            return false;
         }
     }
 }

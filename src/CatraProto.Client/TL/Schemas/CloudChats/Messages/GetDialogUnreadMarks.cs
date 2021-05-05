@@ -1,15 +1,17 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class GetDialogUnreadMarks : IMethod<CatraProto.Client.TL.Schemas.CloudChats.DialogPeerBase>
+	public partial class GetDialogUnreadMarks : IMethod<DialogPeerBase>
 	{
 
 
         public static int ConstructorId { get; } = 585256482;
 
+		public Type Type { get; init; } = typeof(GetDialogUnreadMarks);
+		public bool IsVector { get; init; } = false;
 
 		public void UpdateFlags() 
 		{

@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Security.Cryptography;
+using CatraProto.TL;
 using RsaImplementation = System.Security.Cryptography.RSA;
 
 namespace CatraProto.Client.Crypto
@@ -10,7 +11,12 @@ namespace CatraProto.Client.Crypto
     class Rsa : IDisposable
     {
         private readonly RsaImplementation _rsaKey = RsaImplementation.Create();
-        
+
+        public Rsa(string key)
+        {
+            _rsaKey.ImportFromPem(key);
+        }
+
         /// <value>List of known RSAKeys by CatraProto.</value>
         public static string[] RsaKeys
         {
@@ -21,20 +27,20 @@ namespace CatraProto.Client.Crypto
                 return keys;
             }
         }
-        
-        public Rsa(string key)
+
+        public void Dispose()
         {
-            _rsaKey.ImportFromPem(key);
+            _rsaKey?.Dispose();
         }
-        
+
         public long CalculateRsaFingerprint()
         {
-            using var writer = new CatraProto.TL.Writer(null, new MemoryStream());
+            using var writer = new Writer(null, new MemoryStream());
             var rsaParameters = _rsaKey.ExportParameters(false);
-            
+
             var modulus = new BigInteger(rsaParameters.Modulus);
             var exponent = new BigInteger(rsaParameters.Exponent);
-            
+
             writer.Write(modulus.ToByteArray());
             writer.Write(exponent.ToByteArray());
             var data = ((MemoryStream)writer.Stream).ToArray();
@@ -65,16 +71,17 @@ namespace CatraProto.Client.Crypto
             var value = new BigInteger(data.Reverse().ToArray(), true);
             var modulus = new BigInteger(parameters.Modulus.Reverse().ToArray(), true);
             var exponent = new BigInteger(parameters.Exponent);
-            
+
             var byteArray = BigInteger.ModPow(value, exponent, modulus).ToByteArray(isBigEndian: true);
             if (byteArray.Length > 256)
             {
                 var skip = byteArray.Length - 256;
                 return byteArray.Skip(skip).ToArray();
             }
+
             return byteArray;
         }
-        
+
 
         protected virtual void Dispose(bool disposing)
         {
@@ -82,11 +89,6 @@ namespace CatraProto.Client.Crypto
             {
                 _rsaKey?.Dispose();
             }
-        }
-
-        public void Dispose()
-        {
-            _rsaKey?.Dispose();
         }
     }
 }

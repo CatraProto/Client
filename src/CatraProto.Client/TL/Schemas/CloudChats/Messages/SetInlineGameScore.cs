@@ -1,8 +1,6 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
@@ -17,6 +15,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = 363700068;
 
+		public Type Type { get; init; } = typeof(SetInlineGameScore);
+		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool EditMessage { get; set; }
 		public bool Force { get; set; }

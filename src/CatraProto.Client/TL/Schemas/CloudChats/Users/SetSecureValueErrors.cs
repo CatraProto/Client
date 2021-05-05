@@ -1,8 +1,7 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using System.Collections.Generic;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Users
 {
@@ -12,6 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Users
 
         public static int ConstructorId { get; } = -1865902923;
 
+		public Type Type { get; init; } = typeof(SetSecureValueErrors);
+		public bool IsVector { get; init; } = false;
 		public InputUserBase Id { get; set; }
 		public IList<SecureValueErrorBase> Errors { get; set; }
 

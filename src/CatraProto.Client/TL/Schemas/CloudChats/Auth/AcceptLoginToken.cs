@@ -1,33 +1,30 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
-	public partial class AcceptLoginToken : IMethod<CatraProto.Client.TL.Schemas.CloudChats.AuthorizationBase>
-	{
-
-
+    public partial class AcceptLoginToken : IMethod<CloudChats.AuthorizationBase>
+    {
         public static int ConstructorId { get; } = -392909491;
+        public byte[] Token { get; set; }
 
-		public byte[] Token { get; set; }
+        public Type Type { get; init; } = typeof(AcceptLoginToken);
+        public bool IsVector { get; init; } = false;
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0) writer.Write(ConstructorId);
+            writer.Write(Token);
+        }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Token);
-
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			Token = reader.Read<byte[]>();
-
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Token = reader.Read<byte[]>();
+        }
+    }
 }

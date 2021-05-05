@@ -1,16 +1,18 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Collections.Generic;
-
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class MsgsAck : IMethod<CatraProto.Client.TL.Schemas.MTProto.MsgsAckBase>
+	public partial class MsgsAck : IMethod<MsgsAckBase>
 	{
 
 
         public static int ConstructorId { get; } = 1658238041;
 
+		public Type Type { get; init; } = typeof(MsgsAck);
+		public bool IsVector { get; init; } = false;
 		public IList<long> MsgIds { get; set; }
 
 		public void UpdateFlags() 

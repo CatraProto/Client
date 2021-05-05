@@ -1,15 +1,17 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 {
-	public partial class GetCallConfig : IMethod<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>
+	public partial class GetCallConfig : IMethod<DataJSONBase>
 	{
 
 
         public static int ConstructorId { get; } = 1430593449;
 
+		public Type Type { get; init; } = typeof(GetCallConfig);
+		public bool IsVector { get; init; } = false;
 
 		public void UpdateFlags() 
 		{

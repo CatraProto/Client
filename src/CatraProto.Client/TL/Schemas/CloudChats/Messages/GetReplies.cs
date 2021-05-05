@@ -1,16 +1,17 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class GetReplies : IMethod<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>
+	public partial class GetReplies : IMethod<MessagesBase>
 	{
 
 
         public static int ConstructorId { get; } = 615875002;
 
+		public Type Type { get; init; } = typeof(GetReplies);
+		public bool IsVector { get; init; } = false;
 		public InputPeerBase Peer { get; set; }
 		public int MsgId { get; set; }
 		public int OffsetId { get; set; }

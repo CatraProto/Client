@@ -18,15 +18,15 @@ namespace CatraProto.Client.MTProto.Rpc
                 messageId = binaryReader.ReadInt32();
                 return true;
             }
-            
+
             messageId = 0;
             return false;
         }
-        
+
         public static bool IsRpcError(byte[] array, out RpcError error)
         {
             var stream = array.ToMemoryStream();
-            using var reader = new Reader(MergedProvider.DefaultInstance, stream);
+            using var reader = new Reader(MergedProvider.Singleton, stream);
             if (reader.Read<int>() == RpcError.ConstructorId)
             {
                 error = reader.Read<RpcError>();

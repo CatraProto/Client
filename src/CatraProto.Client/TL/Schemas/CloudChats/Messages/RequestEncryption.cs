@@ -1,16 +1,17 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class RequestEncryption : IMethod<CatraProto.Client.TL.Schemas.CloudChats.EncryptedChatBase>
+	public partial class RequestEncryption : IMethod<EncryptedChatBase>
 	{
 
 
         public static int ConstructorId { get; } = -162681021;
 
+		public Type Type { get; init; } = typeof(RequestEncryption);
+		public bool IsVector { get; init; } = false;
 		public InputUserBase UserId { get; set; }
 		public int RandomId { get; set; }
 		public byte[] GA { get; set; }

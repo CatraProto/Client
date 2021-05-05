@@ -1,15 +1,17 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class GetSavedGifs : IMethod<CatraProto.Client.TL.Schemas.CloudChats.Messages.SavedGifsBase>
+	public partial class GetSavedGifs : IMethod<SavedGifsBase>
 	{
 
 
         public static int ConstructorId { get; } = -2084618926;
 
+		public Type Type { get; init; } = typeof(GetSavedGifs);
+		public bool IsVector { get; init; } = false;
 		public int Hash { get; set; }
 
 		public void UpdateFlags() 

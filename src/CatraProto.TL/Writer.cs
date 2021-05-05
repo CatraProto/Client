@@ -110,7 +110,7 @@ namespace CatraProto.TL
             }
         }
 
-        private void Write<T>(IList<T> list)
+        public void Write<T>(IList<T> list)
         {
             Write(_provider.VectorId);
             Write(list.Count);

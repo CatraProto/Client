@@ -1,6 +1,6 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
@@ -10,6 +10,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = 1436924774;
 
+		public Type Type { get; init; } = typeof(ReceivedQueue);
+		public bool IsVector { get; init; } = false;
 		public int MaxQts { get; set; }
 
 		public void UpdateFlags() 

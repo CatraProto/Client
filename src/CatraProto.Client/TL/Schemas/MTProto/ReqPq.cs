@@ -1,16 +1,19 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+using System;
 using System.Numerics;
-
+using CatraProto.TL;
+using CatraProto.TL.Exceptions;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class ReqPq : IMethod<CatraProto.Client.TL.Schemas.MTProto.ResPQBase>
+	public partial class ReqPq : IMethod<ResPQBase>
 	{
 
 
         public static int ConstructorId { get; } = 1615239032;
 
+		public Type Type { get; init; } = typeof(ReqPq);
+		public bool IsVector { get; init; } = false;
 		public BigInteger Nonce { get; set; }
 
 		public void UpdateFlags() 
@@ -23,7 +26,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
             if(ConstructorId != 0) writer.Write(ConstructorId);
 			var sizeNonce = Nonce.GetByteCount();
 			if(sizeNonce != 16){
-				throw new CatraProto.TL.Exceptions.SerializationException($"ByteSize mismatch, should be 16bytes got {sizeNonce}bytes", CatraProto.TL.Exceptions.SerializationException.SerializationErrors.BitSizeMismatch);
+				throw new SerializationException($"ByteSize mismatch, should be 16bytes got {sizeNonce}bytes", SerializationException.SerializationErrors.BitSizeMismatch);
 			}
 			writer.Write(Nonce);
 

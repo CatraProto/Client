@@ -1,7 +1,6 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
@@ -11,6 +10,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public static int ConstructorId { get; } = 911373810;
 
+		public Type Type { get; init; } = typeof(InvokeWithMessagesRange);
+		public bool IsVector { get; init; } = false;
 		public MessageRangeBase Range { get; set; }
 		public IObject Query { get; set; }
 

@@ -1,12 +1,10 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class GetStatsURL : IMethod<CatraProto.Client.TL.Schemas.CloudChats.StatsURLBase>
+	public partial class GetStatsURL : IMethod<StatsURLBase>
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,6 +14,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = -2127811866;
 
+		public Type Type { get; init; } = typeof(GetStatsURL);
+		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Dark { get; set; }
 		public InputPeerBase Peer { get; set; }

@@ -1,34 +1,30 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class GetPasswordSettings : IMethod<CatraProto.Client.TL.Schemas.CloudChats.Account.PasswordSettingsBase>
-	{
-
-
+    public partial class GetPasswordSettings : IMethod<PasswordSettingsBase>
+    {
         public static int ConstructorId { get; } = -1663767815;
+        public InputCheckPasswordSRPBase Password { get; set; }
 
-		public InputCheckPasswordSRPBase Password { get; set; }
+        public Type Type { get; init; } = typeof(GetPasswordSettings);
+        public bool IsVector { get; init; } = false;
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0) writer.Write(ConstructorId);
+            writer.Write(Password);
+        }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Password);
-
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			Password = reader.Read<InputCheckPasswordSRPBase>();
-
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Password = reader.Read<InputCheckPasswordSRPBase>();
+        }
+    }
 }

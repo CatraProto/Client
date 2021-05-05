@@ -1,9 +1,7 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using CatraProto.TL;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
@@ -17,6 +15,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = 991616823;
 
+		public Type Type { get; init; } = typeof(ReorderPinnedDialogs);
+		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Force { get; set; }
 		public int FolderId { get; set; }

@@ -1,16 +1,17 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class AcceptEncryption : IMethod<CatraProto.Client.TL.Schemas.CloudChats.EncryptedChatBase>
+	public partial class AcceptEncryption : IMethod<EncryptedChatBase>
 	{
 
 
         public static int ConstructorId { get; } = 1035731989;
 
+		public Type Type { get; init; } = typeof(AcceptEncryption);
+		public bool IsVector { get; init; } = false;
 		public InputEncryptedChatBase Peer { get; set; }
 		public byte[] GB { get; set; }
 		public long KeyFingerprint { get; set; }

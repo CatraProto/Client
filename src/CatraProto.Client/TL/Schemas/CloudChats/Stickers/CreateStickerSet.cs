@@ -1,13 +1,11 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using System.Collections.Generic;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 {
-	public partial class CreateStickerSet : IMethod<CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetBase>
+	public partial class CreateStickerSet : IMethod<Messages.StickerSetBase>
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -19,6 +17,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 
         public static int ConstructorId { get; } = -251435136;
 
+		public Type Type { get; init; } = typeof(CreateStickerSet);
+		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Masks { get; set; }
 		public bool Animated { get; set; }

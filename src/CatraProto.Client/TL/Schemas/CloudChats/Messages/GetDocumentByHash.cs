@@ -1,15 +1,17 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class GetDocumentByHash : IMethod<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>
+	public partial class GetDocumentByHash : IMethod<DocumentBase>
 	{
 
 
         public static int ConstructorId { get; } = 864953444;
 
+		public Type Type { get; init; } = typeof(GetDocumentByHash);
+		public bool IsVector { get; init; } = false;
 		public byte[] Sha256 { get; set; }
 		public int Size { get; set; }
 		public string MimeType { get; set; }

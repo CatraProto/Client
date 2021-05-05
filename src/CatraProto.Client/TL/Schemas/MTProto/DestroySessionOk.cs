@@ -1,15 +1,17 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class DestroySessionOk : IMethod<CatraProto.Client.TL.Schemas.MTProto.DestroySessionResBase>
+	public partial class DestroySessionOk : IMethod<DestroySessionResBase>
 	{
 
 
         public static int ConstructorId { get; } = -501201412;
 
+		public Type Type { get; init; } = typeof(DestroySessionOk);
+		public bool IsVector { get; init; } = false;
 		public long SessionId { get; set; }
 
 		public void UpdateFlags() 

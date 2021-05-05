@@ -1,16 +1,17 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 {
-	public partial class RemoveStickerFromSet : IMethod<CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetBase>
+	public partial class RemoveStickerFromSet : IMethod<Messages.StickerSetBase>
 	{
 
 
         public static int ConstructorId { get; } = -143257775;
 
+		public Type Type { get; init; } = typeof(RemoveStickerFromSet);
+		public bool IsVector { get; init; } = false;
 		public InputDocumentBase Sticker { get; set; }
 
 		public void UpdateFlags() 
