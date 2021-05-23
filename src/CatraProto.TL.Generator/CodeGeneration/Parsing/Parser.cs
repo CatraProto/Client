@@ -50,7 +50,7 @@ namespace CatraProto.TL.Generator.CodeGeneration.Parsing
                     case "-/-returnsEncrypted-/-":
                         methodType = MethodType.ReturnsEncrypted;
                         continue;
-                    case "-/-returnsUnecrypted":
+                    case "-/-returnsUnencrypted":
                         methodType = MethodType.ReturnsUnencrypted;
                         continue;
                     case "---functions---":
