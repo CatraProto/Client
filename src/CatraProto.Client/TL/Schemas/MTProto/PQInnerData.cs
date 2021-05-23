@@ -1,18 +1,17 @@
-using System;
-using System.Numerics;
 using CatraProto.TL;
-using CatraProto.TL.Exceptions;
 using CatraProto.TL.Interfaces;
+using System.Numerics;
+
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class PQInnerData : IMethod<PQInnerDataBase>
+	public partial class PQInnerData : IMethod
 	{
 
 
         public static int ConstructorId { get; } = -2083955988;
 
-		public Type Type { get; init; } = typeof(PQInnerData);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.PQInnerData);
 		public bool IsVector { get; init; } = false;
 		public byte[] Pq { get; set; }
 		public byte[] P { get; set; }
@@ -34,17 +33,17 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 			writer.Write(Q);
 			var sizeNonce = Nonce.GetByteCount();
 			if(sizeNonce != 16){
-				throw new SerializationException($"ByteSize mismatch, should be 16bytes got {sizeNonce}bytes", SerializationException.SerializationErrors.BitSizeMismatch);
+				throw new CatraProto.TL.Exceptions.SerializationException($"ByteSize mismatch, should be 16bytes got {sizeNonce}bytes", CatraProto.TL.Exceptions.SerializationException.SerializationErrors.BitSizeMismatch);
 			}
 			writer.Write(Nonce);
 			var sizeServerNonce = ServerNonce.GetByteCount();
 			if(sizeServerNonce != 16){
-				throw new SerializationException($"ByteSize mismatch, should be 16bytes got {sizeServerNonce}bytes", SerializationException.SerializationErrors.BitSizeMismatch);
+				throw new CatraProto.TL.Exceptions.SerializationException($"ByteSize mismatch, should be 16bytes got {sizeServerNonce}bytes", CatraProto.TL.Exceptions.SerializationException.SerializationErrors.BitSizeMismatch);
 			}
 			writer.Write(ServerNonce);
 			var sizeNewNonce = NewNonce.GetByteCount();
 			if(sizeNewNonce != 32){
-				throw new SerializationException($"ByteSize mismatch, should be 32bytes got {sizeNewNonce}bytes", SerializationException.SerializationErrors.BitSizeMismatch);
+				throw new CatraProto.TL.Exceptions.SerializationException($"ByteSize mismatch, should be 32bytes got {sizeNewNonce}bytes", CatraProto.TL.Exceptions.SerializationException.SerializationErrors.BitSizeMismatch);
 			}
 			writer.Write(NewNonce);
 

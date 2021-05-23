@@ -1,17 +1,17 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Collections.Generic;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Langpack
 {
-	public partial class GetStrings : IMethod<LangPackStringBase>
+	public partial class GetStrings : IMethod
 	{
 
 
         public static int ConstructorId { get; } = -269862909;
 
-		public Type Type { get; init; } = typeof(GetStrings);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Langpack.GetStrings);
 		public bool IsVector { get; init; } = false;
 		public string LangPack { get; set; }
 		public string LangCode { get; set; }

@@ -2,7 +2,7 @@
 
 namespace ^Namespace^
 {
-	public partial class ^Class^ : IMethod<^ResponseType^>
+	public partial class ^Class^ : IMethod
 	{
 ^FlagsEnums^
 

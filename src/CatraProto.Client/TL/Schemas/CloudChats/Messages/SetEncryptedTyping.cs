@@ -1,16 +1,17 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class SetEncryptedTyping : IMethod<bool>
+	public partial class SetEncryptedTyping : IMethod
 	{
 
 
         public static int ConstructorId { get; } = 2031374829;
 
-		public Type Type { get; init; } = typeof(SetEncryptedTyping);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.SetEncryptedTyping);
 		public bool IsVector { get; init; } = false;
 		public InputEncryptedChatBase Peer { get; set; }
 		public bool Typing { get; set; }

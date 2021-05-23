@@ -1,16 +1,17 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Users
 {
-	public partial class GetFullUser : IMethod<UserFullBase>
+	public partial class GetFullUser : IMethod
 	{
 
 
         public static int ConstructorId { get; } = -902781519;
 
-		public Type Type { get; init; } = typeof(GetFullUser);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Users.GetFullUser);
 		public bool IsVector { get; init; } = false;
 		public InputUserBase Id { get; set; }
 

@@ -1,16 +1,16 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
+
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class DestroySessionOk : IMethod<DestroySessionResBase>
+	public partial class DestroySessionOk : IMethod
 	{
 
 
         public static int ConstructorId { get; } = -501201412;
 
-		public Type Type { get; init; } = typeof(DestroySessionOk);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.DestroySessionOk);
 		public bool IsVector { get; init; } = false;
 		public long SessionId { get; set; }
 

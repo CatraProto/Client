@@ -1,16 +1,17 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class GetPeerSettings : IMethod<PeerSettingsBase>
+	public partial class GetPeerSettings : IMethod
 	{
 
 
         public static int ConstructorId { get; } = 913498268;
 
-		public Type Type { get; init; } = typeof(GetPeerSettings);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.GetPeerSettings);
 		public bool IsVector { get; init; } = false;
 		public InputPeerBase Peer { get; set; }
 

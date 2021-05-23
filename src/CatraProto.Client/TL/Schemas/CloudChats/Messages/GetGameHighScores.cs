@@ -1,16 +1,17 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class GetGameHighScores : IMethod<HighScoresBase>
+	public partial class GetGameHighScores : IMethod
 	{
 
 
         public static int ConstructorId { get; } = -400399203;
 
-		public Type Type { get; init; } = typeof(GetGameHighScores);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.GetGameHighScores);
 		public bool IsVector { get; init; } = false;
 		public InputPeerBase Peer { get; set; }
 		public int Id { get; set; }

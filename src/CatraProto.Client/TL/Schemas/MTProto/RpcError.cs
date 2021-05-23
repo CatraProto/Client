@@ -1,16 +1,16 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
+
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class RpcError : IMethod<RpcErrorBase>
+	public partial class RpcError : IMethod
 	{
 
 
         public static int ConstructorId { get; } = 558156313;
 
-		public Type Type { get; init; } = typeof(RpcError);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.RpcError);
 		public bool IsVector { get; init; } = false;
 		public int ErrorCode { get; set; }
 		public string ErrorMessage { get; set; }

@@ -1,16 +1,17 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class ReadMentions : IMethod<AffectedHistoryBase>
+	public partial class ReadMentions : IMethod
 	{
 
 
         public static int ConstructorId { get; } = 251759059;
 
-		public Type Type { get; init; } = typeof(ReadMentions);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.ReadMentions);
 		public bool IsVector { get; init; } = false;
 		public InputPeerBase Peer { get; set; }
 

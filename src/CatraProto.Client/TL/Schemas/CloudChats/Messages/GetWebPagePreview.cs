@@ -1,11 +1,13 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System;
+using System.Collections.Generic;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class GetWebPagePreview : IMethod<MessageMediaBase>
+	public partial class GetWebPagePreview : IMethod
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = -1956073268;
 
-		public Type Type { get; init; } = typeof(GetWebPagePreview);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.GetWebPagePreview);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public string Message { get; set; }

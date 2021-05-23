@@ -1,16 +1,16 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
+
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class PingDelayDisconnect : IMethod<PongBase>
+	public partial class PingDelayDisconnect : IMethod
 	{
 
 
         public static int ConstructorId { get; } = -213746804;
 
-		public Type Type { get; init; } = typeof(PingDelayDisconnect);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.PingDelayDisconnect);
 		public bool IsVector { get; init; } = false;
 		public long PingId { get; set; }
 		public int DisconnectDelay { get; set; }

@@ -1,17 +1,18 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.Client.TL.Schemas.CloudChats;
+using System.Collections.Generic;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class GetScheduledMessages : IMethod<MessagesBase>
+	public partial class GetScheduledMessages : IMethod
 	{
 
 
         public static int ConstructorId { get; } = -1111817116;
 
-		public Type Type { get; init; } = typeof(GetScheduledMessages);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.GetScheduledMessages);
 		public bool IsVector { get; init; } = false;
 		public InputPeerBase Peer { get; set; }
 		public IList<int> Id { get; set; }

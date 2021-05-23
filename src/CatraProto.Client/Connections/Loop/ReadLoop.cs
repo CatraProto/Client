@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using CatraProto.Client.Connections.Messages;
-using CatraProto.Client.Connections.Messages.Interfaces;
+using CatraProto.Client.Extensions;
+using CatraProto.Client.TL.Schemas;
+using CatraProto.Client.TL.Schemas.MTProto;
+using CatraProto.TL;
 using Serilog;
 
 namespace CatraProto.Client.Connections.Loop
@@ -30,26 +32,19 @@ namespace CatraProto.Client.Connections.Loop
                 try
                 {
                     var message = await protocol.Reader.ReadIncomingMessage(_cancellationToken.Token);
-                    if (message.Length == 4)
-                    {
-                        //mtproto error code
-                    }
+                    var reader = new Reader(MergedProvider.Singleton, message.ToMemoryStream());
+                    var authKey = reader.Read<long>();
 
-                    if (Message.IsMessageEncrypted(message))
+                    if (reader.GetNextType() == typeof(RpcResult))
                     {
-                        var encryptedMessage = new EncryptedMessage(message);
-
-                        /*if (RpcReadingTools.GetRpcMessageResponseId(encryptedMessage.Message, out var messageId))
+                        var response = new RpcReader
                         {
-                            _messagesHandler.CompleteEncryptedMessage(encryptedMessage, messageId);
-                        }*/
-                    }
-                    else
-                    {
-                        var plainMessage = new UnencryptedMessage(message);
-                        if (!await _messagesHandler.CompleteUnencryptedMessage(plainMessage))
+                            MessageId = reader.Read<long>()
+                        };
+                        
+                        if (_messagesHandler.GetMessageMethod(response.MessageId, out var method))
                         {
-                            _logger.Warning("Received an unencrypted message with Id {Id} and length of bytes. The message wasn't expected, there's no task that can be completed", plainMessage.AuthKeyId /*plainMessage.Length*/);
+                            response.ReadObject(method, reader);
                         }
                     }
                 }

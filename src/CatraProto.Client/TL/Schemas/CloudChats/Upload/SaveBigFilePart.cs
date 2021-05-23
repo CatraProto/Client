@@ -1,16 +1,16 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
+
 namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 {
-	public partial class SaveBigFilePart : IMethod<bool>
+	public partial class SaveBigFilePart : IMethod
 	{
 
 
         public static int ConstructorId { get; } = -562337987;
 
-		public Type Type { get; init; } = typeof(SaveBigFilePart);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Upload.SaveBigFilePart);
 		public bool IsVector { get; init; } = false;
 		public long FileId { get; set; }
 		public int FilePart { get; set; }

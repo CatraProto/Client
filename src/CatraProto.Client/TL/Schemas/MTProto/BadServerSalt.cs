@@ -1,16 +1,16 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
+
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class BadServerSalt : IMethod<BadMsgNotificationBase>
+	public partial class BadServerSalt : IMethod
 	{
 
 
         public static int ConstructorId { get; } = -307542917;
 
-		public Type Type { get; init; } = typeof(BadServerSalt);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.BadServerSalt);
 		public bool IsVector { get; init; } = false;
 		public long BadMsgId { get; set; }
 		public int BadMsgSeqno { get; set; }

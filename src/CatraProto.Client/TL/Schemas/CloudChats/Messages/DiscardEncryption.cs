@@ -1,16 +1,16 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
+
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class DiscardEncryption : IMethod<bool>
+	public partial class DiscardEncryption : IMethod
 	{
 
 
         public static int ConstructorId { get; } = -304536635;
 
-		public Type Type { get; init; } = typeof(DiscardEncryption);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.DiscardEncryption);
 		public bool IsVector { get; init; } = false;
 		public int ChatId { get; set; }
 

@@ -10,7 +10,6 @@ namespace CatraProto.Client.Connections.Messages
         public long AuthKeyId { get; set; }
         public long MessageId { get; set; }
         public byte[] Body { get; set; }
-        public CancellationToken Token { get; set; }
 
         public UnencryptedMessage()
         {

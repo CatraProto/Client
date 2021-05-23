@@ -1,16 +1,16 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
+
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InvokeAfterMsg : IMethod<IObject>
+	public partial class InvokeAfterMsg : IMethod
 	{
 
 
         public static int ConstructorId { get; } = -878758099;
 
-		public Type Type { get; init; } = typeof(InvokeAfterMsg);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.InvokeAfterMsg);
 		public bool IsVector { get; init; } = false;
 		public long MsgId { get; set; }
 		public IObject Query { get; set; }

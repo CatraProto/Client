@@ -1,7 +1,12 @@
+using System.Threading;
+using CatraProto.Client.MTProto.Messages.Interfaces;
+using CatraProto.TL.Interfaces;
+
 namespace CatraProto.Client.MTProto.Messages
 {
-    class IncomingMessage
+    class IncomingMessage : IMessage
     {
-        public byte[] Body { get; set; }
+        public bool IsEncrypted { get; set; }
+        public IObject Body { get; set; }
     }
 }

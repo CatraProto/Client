@@ -1,16 +1,16 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
+
 namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 {
-	public partial class GetPaymentForm : IMethod<PaymentFormBase>
+	public partial class GetPaymentForm : IMethod
 	{
 
 
         public static int ConstructorId { get; } = -1712285883;
 
-		public Type Type { get; init; } = typeof(GetPaymentForm);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Payments.GetPaymentForm);
 		public bool IsVector { get; init; } = false;
 		public int MsgId { get; set; }
 

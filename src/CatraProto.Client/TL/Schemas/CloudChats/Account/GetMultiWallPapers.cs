@@ -1,31 +1,37 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Collections.Generic;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public partial class GetMultiWallPapers : IMethod<WallPaperBase>
-    {
+	public partial class GetMultiWallPapers : IMethod
+	{
+
+
         public static int ConstructorId { get; } = 1705865692;
-        public IList<InputWallPaperBase> Wallpapers { get; set; }
 
-        public Type Type { get; init; } = typeof(GetMultiWallPapers);
-        public bool IsVector { get; init; } = false;
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Account.GetMultiWallPapers);
+		public bool IsVector { get; init; } = false;
+		public IList<InputWallPaperBase> Wallpapers { get; set; }
 
-        public void UpdateFlags()
-        {
-        }
+		public void UpdateFlags() 
+		{
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
-            writer.Write(Wallpapers);
-        }
+		}
 
-        public void Deserialize(Reader reader)
-        {
-            Wallpapers = reader.ReadVector<InputWallPaperBase>();
-        }
-    }
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(Wallpapers);
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			Wallpapers = reader.ReadVector<InputWallPaperBase>();
+
+		}
+	}
 }

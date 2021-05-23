@@ -1,19 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.Numerics;
 using CatraProto.TL;
-using CatraProto.TL.Exceptions;
 using CatraProto.TL.Interfaces;
+using System.Numerics;
+using System.Collections.Generic;
+
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class ResPQ : IMethod<ResPQBase>
+	public partial class ResPQ : IMethod
 	{
 
 
         public static int ConstructorId { get; } = 85337187;
 
-		public Type Type { get; init; } = typeof(ResPQ);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.ResPQ);
 		public bool IsVector { get; init; } = false;
 		public BigInteger Nonce { get; set; }
 		public BigInteger ServerNonce { get; set; }
@@ -30,12 +29,12 @@ namespace CatraProto.Client.TL.Schemas.MTProto
             if(ConstructorId != 0) writer.Write(ConstructorId);
 			var sizeNonce = Nonce.GetByteCount();
 			if(sizeNonce != 16){
-				throw new SerializationException($"ByteSize mismatch, should be 16bytes got {sizeNonce}bytes", SerializationException.SerializationErrors.BitSizeMismatch);
+				throw new CatraProto.TL.Exceptions.SerializationException($"ByteSize mismatch, should be 16bytes got {sizeNonce}bytes", CatraProto.TL.Exceptions.SerializationException.SerializationErrors.BitSizeMismatch);
 			}
 			writer.Write(Nonce);
 			var sizeServerNonce = ServerNonce.GetByteCount();
 			if(sizeServerNonce != 16){
-				throw new SerializationException($"ByteSize mismatch, should be 16bytes got {sizeServerNonce}bytes", SerializationException.SerializationErrors.BitSizeMismatch);
+				throw new CatraProto.TL.Exceptions.SerializationException($"ByteSize mismatch, should be 16bytes got {sizeServerNonce}bytes", CatraProto.TL.Exceptions.SerializationException.SerializationErrors.BitSizeMismatch);
 			}
 			writer.Write(ServerNonce);
 			writer.Write(Pq);

@@ -13,20 +13,22 @@ namespace CatraProto.Client.Connections
         TcpAbridged
     }
 
-    class Connection : IAsyncDisposable
+    class Connection : IDisposable
     {
+        public IProtocol Protocol { get; }
+        public MessagesHandler MessagesHandler { get; }
         private ConnectionInfo _connectionInfo;
         private ILogger _logger;
         private ReadLoop _readLoop;
         private Session _session;
         private WriteLoop _writeLoop;
 
-        private Connection(Session session, ConnectionInfo connectionInfo, ConnectionProtocol protocol = ConnectionProtocol.TcpAbridged)
+        public Connection(Session session, ConnectionInfo connectionInfo, ConnectionProtocol protocol = ConnectionProtocol.TcpAbridged)
         {
             _logger = session.Logger.ForContext<Connection>();
             _session = session;
             _connectionInfo = connectionInfo;
-            MessagesHandler = new MessagesHandler(_session.MessageIdsHandler);
+            MessagesHandler = new MessagesHandler(_logger);
             var authkey = new AuthKey(new byte[] {1}, false);
             switch (protocol)
             {
@@ -34,33 +36,6 @@ namespace CatraProto.Client.Connections
                     Protocol = new Abridged(connectionInfo, _logger);
                     break;
             }
-        }
-
-        public IProtocol Protocol { get; }
-        public MessagesHandler MessagesHandler { get; }
-
-        public async ValueTask DisposeAsync()
-        {
-            if (_writeLoop != null)
-            {
-                await _writeLoop.Stop();
-            }
-
-            if (_readLoop != null)
-            {
-                await _readLoop.Stop();
-            }
-
-            MessagesHandler?.Dispose();
-        }
-
-        public static async Task<Connection> Create(Session session, ConnectionInfo connectionInfo,
-            ConnectionProtocol protocol = ConnectionProtocol.TcpAbridged)
-        {
-            var connection = new Connection(session, connectionInfo, protocol);
-            await connection.Connect();
-            await connection.StartLoops();
-            return connection;
         }
 
         public async Task Connect()
@@ -100,6 +75,12 @@ namespace CatraProto.Client.Connections
 
             await _writeLoop.Start();
             await _readLoop.Start();
+        }
+        
+        
+        public void Dispose()
+        {
+            MessagesHandler?.Dispose();
         }
     }
 }

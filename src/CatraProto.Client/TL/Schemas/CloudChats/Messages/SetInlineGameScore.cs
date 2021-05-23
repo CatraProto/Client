@@ -1,10 +1,12 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class SetInlineGameScore : IMethod<bool>
+	public partial class SetInlineGameScore : IMethod
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = 363700068;
 
-		public Type Type { get; init; } = typeof(SetInlineGameScore);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.SetInlineGameScore);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool EditMessage { get; set; }

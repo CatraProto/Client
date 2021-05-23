@@ -1,16 +1,17 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 {
-	public partial class GetWebFile : IMethod<WebFileBase>
+	public partial class GetWebFile : IMethod
 	{
 
 
         public static int ConstructorId { get; } = 619086221;
 
-		public Type Type { get; init; } = typeof(GetWebFile);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Upload.GetWebFile);
 		public bool IsVector { get; init; } = false;
 		public InputWebFileLocationBase Location { get; set; }
 		public int Offset { get; set; }

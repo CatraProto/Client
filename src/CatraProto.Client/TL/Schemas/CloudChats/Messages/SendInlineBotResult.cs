@@ -1,10 +1,12 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class SendInlineBotResult : IMethod<UpdatesBase>
+	public partial class SendInlineBotResult : IMethod
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -19,7 +21,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = 570955184;
 
-		public Type Type { get; init; } = typeof(SendInlineBotResult);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.SendInlineBotResult);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Silent { get; set; }

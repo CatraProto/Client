@@ -1,10 +1,11 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 {
-	public partial class LoadAsyncGraph : IMethod<StatsGraphBase>
+	public partial class LoadAsyncGraph : IMethod
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,7 +15,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 
         public static int ConstructorId { get; } = 1646092192;
 
-		public Type Type { get; init; } = typeof(LoadAsyncGraph);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Stats.LoadAsyncGraph);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public string Token { get; set; }

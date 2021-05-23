@@ -1,10 +1,11 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 {
-	public partial class GetDifference : IMethod<DifferenceBase>
+	public partial class GetDifference : IMethod
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,7 +15,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 
         public static int ConstructorId { get; } = 630429265;
 
-		public Type Type { get; init; } = typeof(GetDifference);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Updates.GetDifference);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public int Pts { get; set; }

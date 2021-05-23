@@ -1,11 +1,13 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System;
+using System.Collections.Generic;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class SetBotShippingResults : IMethod<bool>
+	public partial class SetBotShippingResults : IMethod
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,7 +18,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = -436833542;
 
-		public Type Type { get; init; } = typeof(SetBotShippingResults);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.SetBotShippingResults);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public long QueryId { get; set; }

@@ -1,11 +1,13 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System;
+using CatraProto.Client.TL.Schemas.CloudChats;
+using System.Collections.Generic;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class EditInlineBotMessage : IMethod<bool>
+	public partial class EditInlineBotMessage : IMethod
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -19,7 +21,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = -2091549254;
 
-		public Type Type { get; init; } = typeof(EditInlineBotMessage);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.EditInlineBotMessage);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool NoWebpage { get; set; }

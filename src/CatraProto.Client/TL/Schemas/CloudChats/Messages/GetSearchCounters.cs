@@ -1,17 +1,18 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.Client.TL.Schemas.CloudChats;
+using System.Collections.Generic;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class GetSearchCounters : IMethod<SearchCounterBase>
+	public partial class GetSearchCounters : IMethod
 	{
 
 
         public static int ConstructorId { get; } = 1932455680;
 
-		public Type Type { get; init; } = typeof(GetSearchCounters);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.GetSearchCounters);
 		public bool IsVector { get; init; } = false;
 		public InputPeerBase Peer { get; set; }
 		public IList<MessagesFilterBase> Filters { get; set; }

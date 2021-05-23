@@ -1,16 +1,17 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class UninstallStickerSet : IMethod<bool>
+	public partial class UninstallStickerSet : IMethod
 	{
 
 
         public static int ConstructorId { get; } = -110209570;
 
-		public Type Type { get; init; } = typeof(UninstallStickerSet);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.UninstallStickerSet);
 		public bool IsVector { get; init; } = false;
 		public InputStickerSetBase Stickerset { get; set; }
 

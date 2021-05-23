@@ -1,16 +1,17 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class ReportSpam : IMethod<bool>
+	public partial class ReportSpam : IMethod
 	{
 
 
         public static int ConstructorId { get; } = -820669733;
 
-		public Type Type { get; init; } = typeof(ReportSpam);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.ReportSpam);
 		public bool IsVector { get; init; } = false;
 		public InputPeerBase Peer { get; set; }
 

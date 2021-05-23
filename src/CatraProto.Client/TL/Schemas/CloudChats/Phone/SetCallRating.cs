@@ -1,10 +1,12 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 {
-	public partial class SetCallRating : IMethod<UpdatesBase>
+	public partial class SetCallRating : IMethod
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,7 +16,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 
         public static int ConstructorId { get; } = 1508562471;
 
-		public Type Type { get; init; } = typeof(SetCallRating);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Phone.SetCallRating);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool UserInitiative { get; set; }

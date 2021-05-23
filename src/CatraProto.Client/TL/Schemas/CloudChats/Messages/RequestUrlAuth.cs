@@ -1,16 +1,17 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class RequestUrlAuth : IMethod<UrlAuthResultBase>
+	public partial class RequestUrlAuth : IMethod
 	{
 
 
         public static int ConstructorId { get; } = -482388461;
 
-		public Type Type { get; init; } = typeof(RequestUrlAuth);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.RequestUrlAuth);
 		public bool IsVector { get; init; } = false;
 		public InputPeerBase Peer { get; set; }
 		public int MsgId { get; set; }

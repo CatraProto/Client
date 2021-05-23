@@ -1,16 +1,16 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
+
 namespace CatraProto.Client.TL.Schemas.CloudChats.Langpack
 {
-	public partial class GetDifference : IMethod<LangPackDifferenceBase>
+	public partial class GetDifference : IMethod
 	{
 
 
         public static int ConstructorId { get; } = -845657435;
 
-		public Type Type { get; init; } = typeof(GetDifference);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Langpack.GetDifference);
 		public bool IsVector { get; init; } = false;
 		public string LangPack { get; set; }
 		public string LangCode { get; set; }

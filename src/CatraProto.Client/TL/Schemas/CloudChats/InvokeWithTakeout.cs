@@ -1,16 +1,16 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
+
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InvokeWithTakeout : IMethod<IObject>
+	public partial class InvokeWithTakeout : IMethod
 	{
 
 
         public static int ConstructorId { get; } = -1398145746;
 
-		public Type Type { get; init; } = typeof(InvokeWithTakeout);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.InvokeWithTakeout);
 		public bool IsVector { get; init; } = false;
 		public long TakeoutId { get; set; }
 		public IObject Query { get; set; }

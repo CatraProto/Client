@@ -1,16 +1,16 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
+
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class GetAllDrafts : IMethod<UpdatesBase>
+	public partial class GetAllDrafts : IMethod
 	{
 
 
         public static int ConstructorId { get; } = 1782549861;
 
-		public Type Type { get; init; } = typeof(GetAllDrafts);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.GetAllDrafts);
 		public bool IsVector { get; init; } = false;
 
 		public void UpdateFlags() 

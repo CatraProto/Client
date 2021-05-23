@@ -1,5 +1,7 @@
-using System;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 {

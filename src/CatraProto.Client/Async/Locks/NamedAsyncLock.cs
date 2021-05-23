@@ -68,6 +68,8 @@ namespace CatraProto.Client.Async.Locks
 
         private class Counter<I>
         {
+            public int RequestedTimesLock { get; private set; }
+            public I Item { get; private set; }
             private readonly object _mutex = new object();
 
             internal Counter(I item, int initialRequested = 0)
@@ -75,9 +77,6 @@ namespace CatraProto.Client.Async.Locks
                 Item = item;
                 RequestedTimesLock = initialRequested;
             }
-
-            public int RequestedTimesLock { get; private set; }
-            public I Item { get; private set; }
 
             public void IncreaseCount()
             {

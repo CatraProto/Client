@@ -1,16 +1,17 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class SendScreenshotNotification : IMethod<UpdatesBase>
+	public partial class SendScreenshotNotification : IMethod
 	{
 
 
         public static int ConstructorId { get; } = -914493408;
 
-		public Type Type { get; init; } = typeof(SendScreenshotNotification);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.SendScreenshotNotification);
 		public bool IsVector { get; init; } = false;
 		public InputPeerBase Peer { get; set; }
 		public int ReplyToMsgId { get; set; }

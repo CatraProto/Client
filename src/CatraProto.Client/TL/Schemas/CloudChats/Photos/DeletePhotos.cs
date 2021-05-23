@@ -1,17 +1,18 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Collections.Generic;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 {
-	public partial class DeletePhotos : IMethod<long>
+	public partial class DeletePhotos : IMethod
 	{
 
 
         public static int ConstructorId { get; } = -2016444625;
 
-		public Type Type { get; init; } = typeof(DeletePhotos);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Photos.DeletePhotos);
 		public bool IsVector { get; init; } = false;
 		public IList<InputPhotoBase> Id { get; set; }
 

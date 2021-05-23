@@ -1,16 +1,16 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
+
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class GetFutureSalts : IMethod<FutureSaltsBase>
+	public partial class GetFutureSalts : IMethod
 	{
 
 
         public static int ConstructorId { get; } = -1188971260;
 
-		public Type Type { get; init; } = typeof(GetFutureSalts);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.GetFutureSalts);
 		public bool IsVector { get; init; } = false;
 		public int Num { get; set; }
 

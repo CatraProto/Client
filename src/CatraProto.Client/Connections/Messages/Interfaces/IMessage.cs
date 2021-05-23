@@ -12,7 +12,6 @@ namespace CatraProto.Client.Connections.Messages.Interfaces
         public long AuthKeyId { get; set; }
         public long MessageId { get; set; }
         public byte[] Body { get; set; }
-        public CancellationToken Token { get; set; }
 
         public void Import(byte[] message);
         public byte[] Export();

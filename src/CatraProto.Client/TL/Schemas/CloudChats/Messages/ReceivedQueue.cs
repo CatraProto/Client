@@ -1,16 +1,16 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
+
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class ReceivedQueue : IMethod<long>
+	public partial class ReceivedQueue : IMethod
 	{
 
 
         public static int ConstructorId { get; } = 1436924774;
 
-		public Type Type { get; init; } = typeof(ReceivedQueue);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.ReceivedQueue);
 		public bool IsVector { get; init; } = false;
 		public int MaxQts { get; set; }
 

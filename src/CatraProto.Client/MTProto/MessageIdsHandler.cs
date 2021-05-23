@@ -3,7 +3,7 @@ using Serilog;
 
 namespace CatraProto.Client.MTProto
 {
-    public class MessageIdsHandler
+    class MessageIdsHandler
     {
         private long _lastGeneratedId;
         private ILogger _logger;

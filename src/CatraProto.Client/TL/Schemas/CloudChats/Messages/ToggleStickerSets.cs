@@ -1,11 +1,13 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System;
+using System.Collections.Generic;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class ToggleStickerSets : IMethod<bool>
+	public partial class ToggleStickerSets : IMethod
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -17,7 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = -1257951254;
 
-		public Type Type { get; init; } = typeof(ToggleStickerSets);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.ToggleStickerSets);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Uninstall { get; set; }

@@ -18,7 +18,6 @@ namespace CatraProto.Client.Connections.Messages
         public int SeqNo { get; set; }
         public int Length => Body.Length;
         public byte[] Body { get; set; }
-        public CancellationToken Token { get; set; }
         private IgeEncryptor _encryptor;
 
         public EncryptedMessage(IgeEncryptor encryptor)

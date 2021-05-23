@@ -38,7 +38,7 @@ namespace CatraProto.Client.Connections.Protocols.TcpAbridged
                 _logger.Information("Establishing connection using Tcp Abridged. IpAddress: {Address}",
                     ConnectionInfo);
 
-                await _client.ConnectAsync(ConnectionInfo.IPAddress, ConnectionInfo.Port, token);
+                await _client.ConnectAsync(ConnectionInfo.IpAddress, ConnectionInfo.Port, token);
 
                 var stream = _client.GetStream();
                 await stream.WriteAsync(0xef, token);

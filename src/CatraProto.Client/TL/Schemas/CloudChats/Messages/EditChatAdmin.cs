@@ -1,16 +1,17 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class EditChatAdmin : IMethod<bool>
+	public partial class EditChatAdmin : IMethod
 	{
 
 
         public static int ConstructorId { get; } = -1444503762;
 
-		public Type Type { get; init; } = typeof(EditChatAdmin);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.EditChatAdmin);
 		public bool IsVector { get; init; } = false;
 		public int ChatId { get; set; }
 		public InputUserBase UserId { get; set; }

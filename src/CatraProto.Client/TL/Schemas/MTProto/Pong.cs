@@ -1,16 +1,16 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
+
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class Pong : IMethod<PongBase>
+	public partial class Pong : IMethod
 	{
 
 
         public static int ConstructorId { get; } = 880243653;
 
-		public Type Type { get; init; } = typeof(Pong);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.Pong);
 		public bool IsVector { get; init; } = false;
 		public long MsgId { get; set; }
 		public long PingId { get; set; }

@@ -1,17 +1,17 @@
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats.Messages;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 {
-	public partial class GetMessagePublicForwards : IMethod<MessagesBase>
+	public partial class GetMessagePublicForwards : IMethod
 	{
 
 
         public static int ConstructorId { get; } = 1445996571;
 
-		public Type Type { get; init; } = typeof(GetMessagePublicForwards);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Stats.GetMessagePublicForwards);
 		public bool IsVector { get; init; } = false;
 		public InputChannelBase Channel { get; set; }
 		public int MsgId { get; set; }

@@ -1,4 +1,6 @@
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 {

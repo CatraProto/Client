@@ -1,10 +1,12 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class GetDialogs : IMethod<DialogsBase>
+	public partial class GetDialogs : IMethod
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = -1594999949;
 
-		public Type Type { get; init; } = typeof(GetDialogs);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.GetDialogs);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool ExcludePinned { get; set; }

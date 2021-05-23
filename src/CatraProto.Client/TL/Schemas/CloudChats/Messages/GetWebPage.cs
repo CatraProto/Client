@@ -1,16 +1,16 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
+
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class GetWebPage : IMethod<WebPageBase>
+	public partial class GetWebPage : IMethod
 	{
 
 
         public static int ConstructorId { get; } = 852135825;
 
-		public Type Type { get; init; } = typeof(GetWebPage);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.GetWebPage);
 		public bool IsVector { get; init; } = false;
 		public string Url { get; set; }
 		public int Hash { get; set; }

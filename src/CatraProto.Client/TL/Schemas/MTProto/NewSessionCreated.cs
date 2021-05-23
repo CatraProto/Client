@@ -1,16 +1,16 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
+
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class NewSessionCreated : IMethod<NewSessionBase>
+	public partial class NewSessionCreated : IMethod
 	{
 
 
         public static int ConstructorId { get; } = -1631450872;
 
-		public Type Type { get; init; } = typeof(NewSessionCreated);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.NewSessionCreated);
 		public bool IsVector { get; init; } = false;
 		public long FirstMsgId { get; set; }
 		public long UniqueId { get; set; }

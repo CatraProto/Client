@@ -1,10 +1,12 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 {
-	public partial class ValidateRequestedInfo : IMethod<ValidatedRequestedInfoBase>
+	public partial class ValidateRequestedInfo : IMethod
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,7 +16,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 
         public static int ConstructorId { get; } = 1997180532;
 
-		public Type Type { get; init; } = typeof(ValidateRequestedInfo);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Payments.ValidateRequestedInfo);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Save { get; set; }

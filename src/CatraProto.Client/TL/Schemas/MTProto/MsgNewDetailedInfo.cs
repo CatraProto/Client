@@ -1,16 +1,16 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
+
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class MsgNewDetailedInfo : IMethod<MsgDetailedInfoBase>
+	public partial class MsgNewDetailedInfo : IMethod
 	{
 
 
         public static int ConstructorId { get; } = -2137147681;
 
-		public Type Type { get; init; } = typeof(MsgNewDetailedInfo);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.MsgNewDetailedInfo);
 		public bool IsVector { get; init; } = false;
 		public long AnswerMsgId { get; set; }
 		public int Bytes { get; set; }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO.Compression;
 using System.Threading;
 using System.Threading.Tasks;
 using Serilog;
@@ -26,9 +27,9 @@ namespace CatraProto.Client.Connections.Loop
             {
                 try
                 {
-                    var message = await _messagesHandler.ListenOutgoingUnencrypted(_cancellationToken.Token);
-                    _logger.Information("Sending message with Id {Id} as unencryptedMessage, length {Length}", message.MessageId /*, message.Length*/);
-                    await _connection.Protocol.Writer.SendMessage(message.Export().AsMemory());
+                    // var message = await _messagesHandler.ListenOutgoingUnencrypted(_cancellationToken.Token);
+                    // _logger.Information("Sending message with Id {Id} as unencryptedMessage, length {Length}", message.MessageId /*, message.Length*/);
+                    // await _connection.Protocol.Writer.SendMessage(message.Export());
                 }
                 catch (OperationCanceledException)
                 {

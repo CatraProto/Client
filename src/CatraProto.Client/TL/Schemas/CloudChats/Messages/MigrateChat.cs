@@ -1,16 +1,16 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
+
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class MigrateChat : IMethod<UpdatesBase>
+	public partial class MigrateChat : IMethod
 	{
 
 
         public static int ConstructorId { get; } = 363051235;
 
-		public Type Type { get; init; } = typeof(MigrateChat);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.MigrateChat);
 		public bool IsVector { get; init; } = false;
 		public int ChatId { get; set; }
 

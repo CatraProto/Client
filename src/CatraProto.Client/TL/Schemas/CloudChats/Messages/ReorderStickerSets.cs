@@ -1,11 +1,12 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System;
+using System.Collections.Generic;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class ReorderStickerSets : IMethod<bool>
+	public partial class ReorderStickerSets : IMethod
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,7 +16,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = 2016638777;
 
-		public Type Type { get; init; } = typeof(ReorderStickerSets);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.ReorderStickerSets);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Masks { get; set; }

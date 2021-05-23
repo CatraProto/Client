@@ -1,27 +1,32 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
+
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public partial class GetWebAuthorizations : IMethod<WebAuthorizationsBase>
-    {
+	public partial class GetWebAuthorizations : IMethod
+	{
+
+
         public static int ConstructorId { get; } = 405695855;
 
-        public Type Type { get; init; } = typeof(GetWebAuthorizations);
-        public bool IsVector { get; init; } = false;
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Account.GetWebAuthorizations);
+		public bool IsVector { get; init; } = false;
 
-        public void UpdateFlags()
-        {
-        }
+		public void UpdateFlags() 
+		{
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
-        }
+		}
 
-        public void Deserialize(Reader reader)
-        {
-        }
-    }
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+
+		}
+	}
 }

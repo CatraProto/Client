@@ -1,16 +1,16 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
+
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class HttpWait : IMethod<HttpWaitBase>
+	public partial class HttpWait : IMethod
 	{
 
 
         public static int ConstructorId { get; } = -1835453025;
 
-		public Type Type { get; init; } = typeof(HttpWait);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.HttpWait);
 		public bool IsVector { get; init; } = false;
 		public int MaxDelay { get; set; }
 		public int WaitAfter { get; set; }

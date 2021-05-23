@@ -1,16 +1,17 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class UnpinAllMessages : IMethod<AffectedHistoryBase>
+	public partial class UnpinAllMessages : IMethod
 	{
 
 
         public static int ConstructorId { get; } = -265962357;
 
-		public Type Type { get; init; } = typeof(UnpinAllMessages);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.UnpinAllMessages);
 		public bool IsVector { get; init; } = false;
 		public InputPeerBase Peer { get; set; }
 

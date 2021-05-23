@@ -1,14 +1,16 @@
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.Client.TL.Schemas.CloudChats.Auth;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
     public abstract class SentCodeBase : IObject
     {
-        public abstract SentCodeTypeBase Type { get; set; }
-        public abstract string PhoneCodeHash { get; set; }
-        public abstract CodeTypeBase NextType { get; set; }
-        public abstract int? Timeout { get; set; }
+		public abstract SentCodeTypeBase Type { get; set; }
+		public abstract string PhoneCodeHash { get; set; }
+		public abstract CodeTypeBase NextType { get; set; }
+		public abstract int? Timeout { get; set; }
 
         public abstract void UpdateFlags();
         public abstract void Deserialize(Reader reader);

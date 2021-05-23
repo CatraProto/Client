@@ -1,16 +1,17 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 {
-	public partial class ChangeStickerPosition : IMethod<Messages.StickerSetBase>
+	public partial class ChangeStickerPosition : IMethod
 	{
 
 
         public static int ConstructorId { get; } = -4795190;
 
-		public Type Type { get; init; } = typeof(ChangeStickerPosition);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Stickers.ChangeStickerPosition);
 		public bool IsVector { get; init; } = false;
 		public InputDocumentBase Sticker { get; set; }
 		public int Position { get; set; }

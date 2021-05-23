@@ -1,16 +1,17 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class HidePeerSettingsBar : IMethod<bool>
+	public partial class HidePeerSettingsBar : IMethod
 	{
 
 
         public static int ConstructorId { get; } = 1336717624;
 
-		public Type Type { get; init; } = typeof(HidePeerSettingsBar);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.HidePeerSettingsBar);
 		public bool IsVector { get; init; } = false;
 		public InputPeerBase Peer { get; set; }
 

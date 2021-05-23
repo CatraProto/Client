@@ -25,11 +25,11 @@ namespace CatraProto.Client
         public async Task Start()
         {
             _logger.Information("Initializing CatraProto, the gayest MTProto client in the world");
-            _connection = await Connection.Create(_session, new ConnectionInfo
+            /*_connection = await Connection.Create(_session, new ConnectionInfo
             {
-                IPAddress = IPAddress.Parse("149.154.167.40"),
+                IpAddress = IPAddress.Parse("149.154.167.40"),
                 Port = 443
-            });
+            });*/
         }
 
         public async Task Test()

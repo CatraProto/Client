@@ -1,16 +1,16 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
+
 namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 {
-	public partial class ReuploadCdnFile : IMethod<FileHashBase>
+	public partial class ReuploadCdnFile : IMethod
 	{
 
 
         public static int ConstructorId { get; } = -1691921240;
 
-		public Type Type { get; init; } = typeof(ReuploadCdnFile);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Upload.ReuploadCdnFile);
 		public bool IsVector { get; init; } = false;
 		public byte[] FileToken { get; set; }
 		public byte[] RequestToken { get; set; }

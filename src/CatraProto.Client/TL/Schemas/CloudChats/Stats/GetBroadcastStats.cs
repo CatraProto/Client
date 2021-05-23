@@ -1,10 +1,12 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 {
-	public partial class GetBroadcastStats : IMethod<BroadcastStatsBase>
+	public partial class GetBroadcastStats : IMethod
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,7 +16,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 
         public static int ConstructorId { get; } = -1421720550;
 
-		public Type Type { get; init; } = typeof(GetBroadcastStats);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Stats.GetBroadcastStats);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Dark { get; set; }

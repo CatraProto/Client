@@ -1,10 +1,12 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 {
-	public partial class SendPaymentForm : IMethod<PaymentResultBase>
+	public partial class SendPaymentForm : IMethod
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 
         public static int ConstructorId { get; } = 730364339;
 
-		public Type Type { get; init; } = typeof(SendPaymentForm);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Payments.SendPaymentForm);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public int MsgId { get; set; }

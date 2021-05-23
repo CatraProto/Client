@@ -1,10 +1,11 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class GetRecentStickers : IMethod<RecentStickersBase>
+	public partial class GetRecentStickers : IMethod
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,7 +15,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = 1587647177;
 
-		public Type Type { get; init; } = typeof(GetRecentStickers);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.GetRecentStickers);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Attached { get; set; }

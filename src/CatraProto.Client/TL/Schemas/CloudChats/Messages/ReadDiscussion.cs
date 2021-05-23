@@ -1,16 +1,17 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class ReadDiscussion : IMethod<bool>
+	public partial class ReadDiscussion : IMethod
 	{
 
 
         public static int ConstructorId { get; } = -147740172;
 
-		public Type Type { get; init; } = typeof(ReadDiscussion);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.ReadDiscussion);
 		public bool IsVector { get; init; } = false;
 		public InputPeerBase Peer { get; set; }
 		public int MsgId { get; set; }

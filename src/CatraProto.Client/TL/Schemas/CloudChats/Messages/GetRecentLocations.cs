@@ -1,16 +1,17 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class GetRecentLocations : IMethod<MessagesBase>
+	public partial class GetRecentLocations : IMethod
 	{
 
 
         public static int ConstructorId { get; } = -1144759543;
 
-		public Type Type { get; init; } = typeof(GetRecentLocations);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.GetRecentLocations);
 		public bool IsVector { get; init; } = false;
 		public InputPeerBase Peer { get; set; }
 		public int Limit { get; set; }
