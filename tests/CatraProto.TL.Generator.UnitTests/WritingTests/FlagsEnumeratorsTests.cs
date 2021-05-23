@@ -4,7 +4,7 @@ using Xunit;
 
 namespace CatraProto.TL.Generator.UnitTests.WritingTests
 {
-    public class FlagsEnumatorsTests
+    public class FlagsEnumeratorsTests
     {
         [Fact]
         public async Task MultipleFlagsTest()
