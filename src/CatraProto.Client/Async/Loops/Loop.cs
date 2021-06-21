@@ -17,8 +17,8 @@ namespace CatraProto.Client.Async.Loops
             get => _shutdownSource.Task;
         }
 
-        public LoopState State { get; protected set; } = LoopState.Stopped;
         private TaskCompletionSource _shutdownSource { get; } = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        public LoopState State { get; protected set; } = LoopState.Stopped;
 
         protected abstract void StopSignal();
         protected abstract Task StartSignal();

@@ -28,12 +28,16 @@ namespace CatraProto.Client.Connections.Protocols.TcpAbridged
             _client = new TcpClient { NoDelay = true };
         }
 
+        public void Dispose()
+        {
+            _client?.Dispose();
+        }
+
         public async Task ConnectAsync(CancellationToken token = default)
         {
             if (!IsConnected)
             {
-                _logger.Information("Establishing connection using Tcp Abridged. IpAddress: {Address}",
-                    ConnectionInfo);
+                _logger.Information("Establishing connection using Tcp Abridged. IpAddress: {Address}", ConnectionInfo);
 
                 await _client.ConnectAsync(ConnectionInfo.IpAddress, ConnectionInfo.Port, token);
 
@@ -54,18 +58,5 @@ namespace CatraProto.Client.Connections.Protocols.TcpAbridged
             _client.Close();
             return Task.CompletedTask;
         }
-
-        public void Dispose()
-        {
-            _client?.Dispose();
-        }
-
-        /*
-        public async Task<Task<UnencryptedMessage>> SendUnencryptedMessage(UnencryptedMessage message) 
-        {
-            var task = await _readLoop.WaitUnencryptedMessage();
-            await _writeLoop.QueueMessage(message, task);
-            return task;
-        }*/
     }
 }
