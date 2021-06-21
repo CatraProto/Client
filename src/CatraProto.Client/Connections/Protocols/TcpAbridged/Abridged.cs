@@ -9,7 +9,15 @@ using Serilog;
 namespace CatraProto.Client.Connections.Protocols.TcpAbridged
 {
 	internal class Abridged : IProtocol, IDisposable
-	{
+	{		
+		public bool IsConnected
+    	{
+    		get => _client.Connected;
+    	}
+	
+	    public IProtocolWriter Writer { get; set; }
+     	public IProtocolReader Reader { get; set; }
+        public ConnectionInfo ConnectionInfo { get; init; }
 		private TcpClient _client;
 		private ILogger _logger;
 
@@ -19,22 +27,7 @@ namespace CatraProto.Client.Connections.Protocols.TcpAbridged
 			ConnectionInfo = connectionInfo;
 			_client = new TcpClient { NoDelay = true };
 		}
-
-		public void Dispose()
-		{
-			_client?.Dispose();
-		}
-
-		public IProtocolWriter Writer { get; set; }
-		public IProtocolReader Reader { get; set; }
-		public ConnectionInfo ConnectionInfo { get; init; }
-
-		public bool IsConnected
-		{
-			get => _client.Connected;
-		}
-
-
+	
 		public async Task ConnectAsync(CancellationToken token = default)
 		{
 			if (!IsConnected)
@@ -61,6 +54,11 @@ namespace CatraProto.Client.Connections.Protocols.TcpAbridged
 			_client.Close();
 			return Task.CompletedTask;
 		}
+		
+		public void Dispose()
+        {
+        	_client?.Dispose();
+        }
 
 		/*
 		public async Task<Task<UnencryptedMessage>> SendUnencryptedMessage(UnencryptedMessage message) 
