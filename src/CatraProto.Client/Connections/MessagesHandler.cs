@@ -13,28 +13,20 @@ namespace CatraProto.Client.Connections
 {
 	internal class MessagesHandler : IDisposable
 	{
+		public int OutgoingCount
+		{
+			get => _outgoingMessages.Reader.Count;
+		}
+		
 		private readonly ILogger _logger;
-		private ConcurrentDictionary<OutgoingMessage, MessageContainer> _completions = new ConcurrentDictionary<OutgoingMessage, MessageContainer>();
 		private MessageContainer _oldMessage;
 		private Channel<MessageContainer> _outgoingMessages = Channel.CreateUnbounded<MessageContainer>();
-
 		private ConcurrentDictionary<long, MessageContainer> _sentMessages = new ConcurrentDictionary<long, MessageContainer>();
 		private AsyncLock _unencryptedMessagesLock = new AsyncLock();
-
 
 		public MessagesHandler(ILogger logger)
 		{
 			_logger = logger.ForContext<MessagesHandler>();
-		}
-
-		public int OutgoingCount
-		{
-			get => _completions.Count;
-		}
-
-		public void Dispose()
-		{
-			_unencryptedMessagesLock?.Dispose();
 		}
 
 		public Task<MessageContainer> ListenAsync(CancellationToken cancellationToken)
@@ -51,16 +43,8 @@ namespace CatraProto.Client.Connections
 				CompletionSource = completionSource,
 				RpcContainer = rpcContainer
 			};
-
-			if (message.IsEncrypted)
-			{
-				if (!_completions.TryAdd(message, messageContainer) && message.MessageOptions.ExpectsResponse)
-				{
-					_logger.Warning("Encrypted message was already queued, throwing...");
-					throw new InvalidOperationException("Can't enqueue the same message several times");
-				}
-			}
-			else
+			
+			if(!message.IsEncrypted)
 			{
 				//This deserves an explanation:
 				//UnencryptedMessages aren't identifiable by their MessageId since it is not persistent,
@@ -177,6 +161,11 @@ namespace CatraProto.Client.Connections
 
 			method = null;
 			return false;
+		}
+		
+		public void Dispose()
+		{
+			_unencryptedMessagesLock?.Dispose();
 		}
 	}
 }

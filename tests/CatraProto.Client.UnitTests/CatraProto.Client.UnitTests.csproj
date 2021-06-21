@@ -24,4 +24,8 @@
       <ProjectReference Include="..\..\src\CatraProto.Client\CatraProto.Client.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Connections" />
+    </ItemGroup>
+
 </Project>
