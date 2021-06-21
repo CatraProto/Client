@@ -24,9 +24,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override bool Rtl { get; set; }
 		public override bool V2 { get; set; }
 		public override string Url { get; set; }
-		public override IList<PageBlockBase> Blocks { get; set; }
-		public override IList<PhotoBase> Photos { get; set; }
-		public override IList<DocumentBase> Documents { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase> Blocks { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase> Photos { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase> Documents { get; set; }
 		public override int? Views { get; set; }
 
 		public override void UpdateFlags() 
@@ -62,9 +62,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Rtl = FlagsHelper.IsFlagSet(Flags, 1);
 			V2 = FlagsHelper.IsFlagSet(Flags, 2);
 			Url = reader.Read<string>();
-			Blocks = reader.ReadVector<PageBlockBase>();
-			Photos = reader.ReadVector<PhotoBase>();
-			Documents = reader.ReadVector<DocumentBase>();
+			Blocks = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase>();
+			Photos = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
+			Documents = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
 				Views = reader.Read<int>();

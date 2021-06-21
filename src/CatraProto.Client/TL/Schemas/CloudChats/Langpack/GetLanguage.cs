@@ -10,7 +10,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Langpack
 
         public static int ConstructorId { get; } = 1784243458;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Langpack.GetLanguage);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.LangPackLanguageBase);
 		public bool IsVector { get; init; } = false;
 		public string LangPack { get; set; }
 		public string LangCode { get; set; }

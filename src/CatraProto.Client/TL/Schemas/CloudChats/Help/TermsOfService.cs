@@ -19,9 +19,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
         public static int ConstructorId { get; } = 2013922064;
 		public int Flags { get; set; }
 		public override bool Popup { get; set; }
-		public override DataJSONBase Id { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase Id { get; set; }
 		public override string Text { get; set; }
-		public override IList<MessageEntityBase> Entities { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
 		public override int? MinAgeConfirm { get; set; }
 
 		public override void UpdateFlags() 
@@ -51,9 +51,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 		{
 			Flags = reader.Read<int>();
 			Popup = FlagsHelper.IsFlagSet(Flags, 0);
-			Id = reader.Read<DataJSONBase>();
+			Id = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
 			Text = reader.Read<string>();
-			Entities = reader.ReadVector<MessageEntityBase>();
+			Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
 				MinAgeConfirm = reader.Read<int>();

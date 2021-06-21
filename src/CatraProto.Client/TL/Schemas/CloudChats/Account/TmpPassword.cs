@@ -9,7 +9,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 
         public static int ConstructorId { get; } = -614138572;
-		public override byte[] PTmpPassword { get; set; }
+		public override byte[] TmpPassword_ { get; set; }
 		public override int ValidUntil { get; set; }
 
 		public override void UpdateFlags() 
@@ -20,14 +20,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		public override void Serialize(Writer writer)
 		{
 		    if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(PTmpPassword);
+			writer.Write(TmpPassword_);
 			writer.Write(ValidUntil);
 
 		}
 
 		public override void Deserialize(Reader reader)
 		{
-			PTmpPassword = reader.Read<byte[]>();
+			TmpPassword_ = reader.Read<byte[]>();
 			ValidUntil = reader.Read<int>();
 
 		}

@@ -19,8 +19,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Flags { get; set; }
 		public bool Mask { get; set; }
 		public string Alt { get; set; }
-		public InputStickerSetBase Stickerset { get; set; }
-		public MaskCoordsBase MaskCoords { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase Stickerset { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.MaskCoordsBase MaskCoords { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -49,10 +49,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = reader.Read<int>();
 			Mask = FlagsHelper.IsFlagSet(Flags, 1);
 			Alt = reader.Read<string>();
-			Stickerset = reader.Read<InputStickerSetBase>();
+			Stickerset = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				MaskCoords = reader.Read<MaskCoordsBase>();
+				MaskCoords = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MaskCoordsBase>();
 			}
 
 

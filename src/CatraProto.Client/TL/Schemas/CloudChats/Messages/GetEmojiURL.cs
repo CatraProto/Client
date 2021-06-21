@@ -10,7 +10,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = -709817306;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.GetEmojiURL);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.EmojiURLBase);
 		public bool IsVector { get; init; } = false;
 		public string LangCode { get; set; }
 

@@ -19,7 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Flags { get; set; }
 		public long QueryId { get; set; }
 		public int UserId { get; set; }
-		public PeerBase Peer { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
 		public int MsgId { get; set; }
 		public long ChatInstance { get; set; }
 		public byte[] Data { get; set; }
@@ -60,7 +60,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = reader.Read<int>();
 			QueryId = reader.Read<long>();
 			UserId = reader.Read<int>();
-			Peer = reader.Read<PeerBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
 			MsgId = reader.Read<int>();
 			ChatInstance = reader.Read<long>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))

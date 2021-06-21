@@ -11,9 +11,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 
         public static int ConstructorId { get; } = -1848823128;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Photos.GetUserPhotos);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Photos.PhotosBase);
 		public bool IsVector { get; init; } = false;
-		public InputUserBase UserId { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase UserId { get; set; }
 		public int Offset { get; set; }
 		public long MaxId { get; set; }
 		public int Limit { get; set; }
@@ -35,7 +35,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 
 		public void Deserialize(Reader reader)
 		{
-			UserId = reader.Read<InputUserBase>();
+			UserId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
 			Offset = reader.Read<int>();
 			MaxId = reader.Read<long>();
 			Limit = reader.Read<int>();

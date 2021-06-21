@@ -16,11 +16,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = 1157265941;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.SendEncrypted);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.SentEncryptedMessageBase);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Silent { get; set; }
-		public InputEncryptedChatBase Peer { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedChatBase Peer { get; set; }
 		public long RandomId { get; set; }
 		public byte[] Data { get; set; }
 
@@ -45,7 +45,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		{
 			Flags = reader.Read<int>();
 			Silent = FlagsHelper.IsFlagSet(Flags, 0);
-			Peer = reader.Read<InputEncryptedChatBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedChatBase>();
 			RandomId = reader.Read<long>();
 			Data = reader.Read<byte[]>();
 

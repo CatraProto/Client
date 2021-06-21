@@ -17,9 +17,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 
         public static int ConstructorId { get; } = 1577067778;
 		public int Flags { get; set; }
-		public override SentCodeTypeBase Type { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeTypeBase Type { get; set; }
 		public override string PhoneCodeHash { get; set; }
-		public override CodeTypeBase NextType { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.Auth.CodeTypeBase NextType { get; set; }
 		public override int? Timeout { get; set; }
 
 		public override void UpdateFlags() 
@@ -52,11 +52,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			Type = reader.Read<SentCodeTypeBase>();
+			Type = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeTypeBase>();
 			PhoneCodeHash = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				NextType = reader.Read<CodeTypeBase>();
+				NextType = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.Auth.CodeTypeBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))

@@ -25,8 +25,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override long AccessHash { get; set; }
 		public override string Slug { get; set; }
 		public override string Title { get; set; }
-		public override DocumentBase Document { get; set; }
-		public override ThemeSettingsBase Settings { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.DocumentBase Document { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.ThemeSettingsBase Settings { get; set; }
 		public override int InstallsCount { get; set; }
 
 		public override void UpdateFlags() 
@@ -72,12 +72,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Title = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				Document = reader.Read<DocumentBase>();
+				Document = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				Settings = reader.Read<ThemeSettingsBase>();
+				Settings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ThemeSettingsBase>();
 			}
 
 			InstallsCount = reader.Read<int>();

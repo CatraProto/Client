@@ -12,7 +12,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 
         public static int ConstructorId { get; } = 32192344;
 		public string Message { get; set; }
-		public IList<MessageEntityBase> Entities { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
 		public string Author { get; set; }
 		public int Date { get; set; }
 
@@ -34,7 +34,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 		public override void Deserialize(Reader reader)
 		{
 			Message = reader.Read<string>();
-			Entities = reader.ReadVector<MessageEntityBase>();
+			Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
 			Author = reader.Read<string>();
 			Date = reader.Read<int>();
 

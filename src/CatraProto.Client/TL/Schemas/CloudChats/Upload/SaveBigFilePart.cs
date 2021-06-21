@@ -10,7 +10,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 
         public static int ConstructorId { get; } = -562337987;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Upload.SaveBigFilePart);
+		public System.Type Type { get; init; } = typeof(bool);
 		public bool IsVector { get; init; } = false;
 		public long FileId { get; set; }
 		public int FilePart { get; set; }

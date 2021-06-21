@@ -11,9 +11,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = -162681021;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.RequestEncryption);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.EncryptedChatBase);
 		public bool IsVector { get; init; } = false;
-		public InputUserBase UserId { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase UserId { get; set; }
 		public int RandomId { get; set; }
 		public byte[] GA { get; set; }
 
@@ -33,7 +33,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 		public void Deserialize(Reader reader)
 		{
-			UserId = reader.Read<InputUserBase>();
+			UserId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
 			RandomId = reader.Read<int>();
 			GA = reader.Read<byte[]>();
 

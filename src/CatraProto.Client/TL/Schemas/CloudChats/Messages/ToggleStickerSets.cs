@@ -19,13 +19,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = -1257951254;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.ToggleStickerSets);
+		public System.Type Type { get; init; } = typeof(bool);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Uninstall { get; set; }
 		public bool Archive { get; set; }
 		public bool Unarchive { get; set; }
-		public IList<InputStickerSetBase> Stickersets { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase> Stickersets { get; set; }
 
 		public void UpdateFlags() 
 		{
@@ -50,7 +50,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Uninstall = FlagsHelper.IsFlagSet(Flags, 0);
 			Archive = FlagsHelper.IsFlagSet(Flags, 1);
 			Unarchive = FlagsHelper.IsFlagSet(Flags, 2);
-			Stickersets = reader.ReadVector<InputStickerSetBase>();
+			Stickersets = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase>();
 
 		}
 	}

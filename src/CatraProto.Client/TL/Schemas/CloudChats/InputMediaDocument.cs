@@ -16,7 +16,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public static int ConstructorId { get; } = 598418386;
 		public int Flags { get; set; }
-		public InputDocumentBase Id { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase Id { get; set; }
 		public int? TtlSeconds { get; set; }
 
 		public override void UpdateFlags() 
@@ -42,7 +42,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			Id = reader.Read<InputDocumentBase>();
+			Id = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				TtlSeconds = reader.Read<int>();

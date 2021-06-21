@@ -23,11 +23,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Flags { get; set; }
 		public bool NosoundVideo { get; set; }
 		public bool ForceFile { get; set; }
-		public InputFileBase File { get; set; }
-		public InputFileBase Thumb { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase File { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase Thumb { get; set; }
 		public string MimeType { get; set; }
-		public IList<DocumentAttributeBase> Attributes { get; set; }
-		public IList<InputDocumentBase> Stickers { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase> Attributes { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase> Stickers { get; set; }
 		public int? TtlSeconds { get; set; }
 
 		public override void UpdateFlags() 
@@ -71,17 +71,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = reader.Read<int>();
 			NosoundVideo = FlagsHelper.IsFlagSet(Flags, 3);
 			ForceFile = FlagsHelper.IsFlagSet(Flags, 4);
-			File = reader.Read<InputFileBase>();
+			File = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				Thumb = reader.Read<InputFileBase>();
+				Thumb = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
 			}
 
 			MimeType = reader.Read<string>();
-			Attributes = reader.ReadVector<DocumentAttributeBase>();
+			Attributes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Stickers = reader.ReadVector<InputDocumentBase>();
+				Stickers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))

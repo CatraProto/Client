@@ -7,7 +7,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public abstract class SecureValueHashBase : IObject
     {
-		public abstract SecureValueTypeBase Type { get; set; }
+		public abstract CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase Type { get; set; }
 		public abstract byte[] Hash { get; set; }
 
         public abstract void UpdateFlags();

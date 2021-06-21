@@ -11,7 +11,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
         public static int ConstructorId { get; } = 878931416;
-		public override SecureValueTypeBase Type { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase Type { get; set; }
 		public IList<byte[]> FileHash { get; set; }
 		public override string Text { get; set; }
 
@@ -31,7 +31,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Type = reader.Read<SecureValueTypeBase>();
+			Type = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase>();
 			FileHash = reader.ReadVector<byte[]>();
 			Text = reader.Read<string>();
 

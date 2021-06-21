@@ -13,7 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override double Time { get; set; }
 		public override string Type { get; set; }
 		public override long Peer { get; set; }
-		public override JSONValueBase Data { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.JSONValueBase Data { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -35,7 +35,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Time = reader.Read<double>();
 			Type = reader.Read<string>();
 			Peer = reader.Read<long>();
-			Data = reader.Read<JSONValueBase>();
+			Data = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.JSONValueBase>();
 
 		}
 	}

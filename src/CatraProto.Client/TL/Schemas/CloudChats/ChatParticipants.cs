@@ -12,7 +12,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public static int ConstructorId { get; } = 1061556205;
 		public override int ChatId { get; set; }
-		public IList<ChatParticipantBase> Participants { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantBase> Participants { get; set; }
 		public int Version { get; set; }
 
 		public override void UpdateFlags() 
@@ -32,7 +32,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			ChatId = reader.Read<int>();
-			Participants = reader.ReadVector<ChatParticipantBase>();
+			Participants = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantBase>();
 			Version = reader.Read<int>();
 
 		}

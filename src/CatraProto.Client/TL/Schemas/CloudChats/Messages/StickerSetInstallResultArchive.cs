@@ -11,7 +11,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 
         public static int ConstructorId { get; } = 904138920;
-		public IList<StickerSetCoveredBase> Sets { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.StickerSetCoveredBase> Sets { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -27,7 +27,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 		public override void Deserialize(Reader reader)
 		{
-			Sets = reader.ReadVector<StickerSetCoveredBase>();
+			Sets = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.StickerSetCoveredBase>();
 
 		}
 	}

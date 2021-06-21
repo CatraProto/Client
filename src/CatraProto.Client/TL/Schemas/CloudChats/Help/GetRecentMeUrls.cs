@@ -10,7 +10,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 
         public static int ConstructorId { get; } = 1036054804;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Help.GetRecentMeUrls);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Help.RecentMeUrlsBase);
 		public bool IsVector { get; init; } = false;
 		public string Referer { get; set; }
 

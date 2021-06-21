@@ -11,7 +11,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
         public static int ConstructorId { get; } = -1263546448;
-		public IList<PeerLocatedBase> Peers { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.PeerLocatedBase> Peers { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -27,7 +27,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Peers = reader.ReadVector<PeerLocatedBase>();
+			Peers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PeerLocatedBase>();
 
 		}
 	}

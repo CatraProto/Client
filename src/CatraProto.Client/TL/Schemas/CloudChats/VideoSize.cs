@@ -17,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get; } = -399391402;
 		public int Flags { get; set; }
 		public override string Type { get; set; }
-		public override FileLocationBase Location { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.FileLocationBase Location { get; set; }
 		public override int W { get; set; }
 		public override int H { get; set; }
 		public override int Size { get; set; }
@@ -51,7 +51,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Flags = reader.Read<int>();
 			Type = reader.Read<string>();
-			Location = reader.Read<FileLocationBase>();
+			Location = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.FileLocationBase>();
 			W = reader.Read<int>();
 			H = reader.Read<int>();
 			Size = reader.Read<int>();

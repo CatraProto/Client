@@ -10,7 +10,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
         public static int ConstructorId { get; } = 784356159;
-		public GeoPointBase Geo { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase Geo { get; set; }
 		public string Title { get; set; }
 		public string Address { get; set; }
 		public string Provider { get; set; }
@@ -36,7 +36,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Geo = reader.Read<GeoPointBase>();
+			Geo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase>();
 			Title = reader.Read<string>();
 			Address = reader.Read<string>();
 			Provider = reader.Read<string>();

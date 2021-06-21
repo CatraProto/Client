@@ -15,7 +15,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = 1587647177;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.GetRecentStickers);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.RecentStickersBase);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Attached { get; set; }

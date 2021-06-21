@@ -21,11 +21,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Flags { get; set; }
 		public override string Id { get; set; }
 		public override string Type { get; set; }
-		public PhotoBase Photo { get; set; }
-		public DocumentBase Document { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PhotoBase Photo { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.DocumentBase Document { get; set; }
 		public override string Title { get; set; }
 		public override string Description { get; set; }
-		public override BotInlineMessageBase SendMessage { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.BotInlineMessageBase SendMessage { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -74,12 +74,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Type = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Photo = reader.Read<PhotoBase>();
+				Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Document = reader.Read<DocumentBase>();
+				Document = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
@@ -92,7 +92,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 				Description = reader.Read<string>();
 			}
 
-			SendMessage = reader.Read<BotInlineMessageBase>();
+			SendMessage = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.BotInlineMessageBase>();
 
 		}
 	}

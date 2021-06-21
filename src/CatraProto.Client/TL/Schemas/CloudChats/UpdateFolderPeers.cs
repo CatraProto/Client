@@ -11,7 +11,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
         public static int ConstructorId { get; } = 422972864;
-		public IList<FolderPeerBase> FolderPeers { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.FolderPeerBase> FolderPeers { get; set; }
 		public int Pts { get; set; }
 		public int PtsCount { get; set; }
 
@@ -31,7 +31,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			FolderPeers = reader.ReadVector<FolderPeerBase>();
+			FolderPeers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.FolderPeerBase>();
 			Pts = reader.Read<int>();
 			PtsCount = reader.Read<int>();
 

@@ -11,11 +11,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public static int ConstructorId { get; } = -578472351;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Account.UploadWallPaper);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase);
 		public bool IsVector { get; init; } = false;
-		public InputFileBase File { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase File { get; set; }
 		public string MimeType { get; set; }
-		public WallPaperSettingsBase Settings { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase Settings { get; set; }
 
 		public void UpdateFlags() 
 		{
@@ -33,9 +33,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 		public void Deserialize(Reader reader)
 		{
-			File = reader.Read<InputFileBase>();
+			File = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
 			MimeType = reader.Read<string>();
-			Settings = reader.Read<WallPaperSettingsBase>();
+			Settings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase>();
 
 		}
 	}

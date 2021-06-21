@@ -11,9 +11,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 
         public static int ConstructorId { get; } = 399855457;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Phone.ReceivedCall);
+		public System.Type Type { get; init; } = typeof(bool);
 		public bool IsVector { get; init; } = false;
-		public InputPhoneCallBase Peer { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPhoneCallBase Peer { get; set; }
 
 		public void UpdateFlags() 
 		{
@@ -29,7 +29,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 
 		public void Deserialize(Reader reader)
 		{
-			Peer = reader.Read<InputPhoneCallBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPhoneCallBase>();
 
 		}
 	}

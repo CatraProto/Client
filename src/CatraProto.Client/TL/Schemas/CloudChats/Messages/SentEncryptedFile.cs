@@ -11,7 +11,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = -1802240206;
 		public override int Date { get; set; }
-		public EncryptedFileBase File { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.EncryptedFileBase File { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -29,7 +29,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public override void Deserialize(Reader reader)
 		{
 			Date = reader.Read<int>();
-			File = reader.Read<EncryptedFileBase>();
+			File = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.EncryptedFileBase>();
 
 		}
 	}

@@ -12,7 +12,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 		public abstract string Iso2 { get; set; }
 		public abstract string DefaultName { get; set; }
 		public abstract string Name { get; set; }
-		public abstract IList<CountryCodeBase> CountryCodes { get; set; }
+		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.Help.CountryCodeBase> CountryCodes { get; set; }
 
         public abstract void UpdateFlags();
         public abstract void Deserialize(Reader reader);

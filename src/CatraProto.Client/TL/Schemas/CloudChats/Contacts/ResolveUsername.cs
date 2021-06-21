@@ -10,7 +10,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 
         public static int ConstructorId { get; } = -113456221;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Contacts.ResolveUsername);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Contacts.ResolvedPeerBase);
 		public bool IsVector { get; init; } = false;
 		public string Username { get; set; }
 

@@ -15,7 +15,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 
         public static int ConstructorId { get; } = 630429265;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Updates.GetDifference);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Updates.DifferenceBase);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public int Pts { get; set; }

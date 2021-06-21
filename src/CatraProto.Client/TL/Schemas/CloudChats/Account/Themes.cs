@@ -12,7 +12,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public static int ConstructorId { get; } = 2137482273;
 		public int Hash { get; set; }
-		public IList<ThemeBase> PThemes { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.ThemeBase> Themes_ { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -23,14 +23,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		{
 		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(Hash);
-			writer.Write(PThemes);
+			writer.Write(Themes_);
 
 		}
 
 		public override void Deserialize(Reader reader)
 		{
 			Hash = reader.Read<int>();
-			PThemes = reader.ReadVector<ThemeBase>();
+			Themes_ = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ThemeBase>();
 
 		}
 	}

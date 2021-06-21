@@ -17,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get; } = 668375447;
 		public int Flags { get; set; }
 		public bool Big { get; set; }
-		public InputPeerBase Peer { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
 		public long VolumeId { get; set; }
 		public int LocalId { get; set; }
 
@@ -42,7 +42,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Flags = reader.Read<int>();
 			Big = FlagsHelper.IsFlagSet(Flags, 0);
-			Peer = reader.Read<InputPeerBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
 			VolumeId = reader.Read<long>();
 			LocalId = reader.Read<int>();
 

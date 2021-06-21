@@ -10,7 +10,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 
         public static int ConstructorId { get; } = -1783866140;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Auth.ImportLoginToken);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Auth.LoginTokenBase);
 		public bool IsVector { get; init; } = false;
 		public byte[] Token { get; set; }
 

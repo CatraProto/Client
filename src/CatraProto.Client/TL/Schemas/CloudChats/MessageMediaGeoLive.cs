@@ -17,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public static int ConstructorId { get; } = -1186937242;
 		public int Flags { get; set; }
-		public GeoPointBase Geo { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase Geo { get; set; }
 		public int? Heading { get; set; }
 		public int Period { get; set; }
 		public int? ProximityNotificationRadius { get; set; }
@@ -52,7 +52,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			Geo = reader.Read<GeoPointBase>();
+			Geo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				Heading = reader.Read<int>();

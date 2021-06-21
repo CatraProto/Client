@@ -10,7 +10,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public static int ConstructorId { get; } = 1880182943;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Account.SendVerifyEmailCode);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Account.SentEmailCodeBase);
 		public bool IsVector { get; init; } = false;
 		public string Email { get; set; }
 

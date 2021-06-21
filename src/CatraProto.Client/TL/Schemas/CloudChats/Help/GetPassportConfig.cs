@@ -10,7 +10,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 
         public static int ConstructorId { get; } = -966677240;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Help.GetPassportConfig);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Help.PassportConfigBase);
 		public bool IsVector { get; init; } = false;
 		public int Hash { get; set; }
 

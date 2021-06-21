@@ -18,12 +18,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public static int ConstructorId { get; } = 2061776695;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Account.InstallTheme);
+		public System.Type Type { get; init; } = typeof(bool);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Dark { get; set; }
 		public string Format { get; set; }
-		public InputThemeBase Theme { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputThemeBase Theme { get; set; }
 
 		public void UpdateFlags() 
 		{
@@ -62,7 +62,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Theme = reader.Read<InputThemeBase>();
+				Theme = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputThemeBase>();
 			}
 
 

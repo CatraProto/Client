@@ -20,7 +20,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public long QueryId { get; set; }
 		public int UserId { get; set; }
 		public byte[] Payload { get; set; }
-		public PaymentRequestedInfoBase Info { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase Info { get; set; }
 		public string ShippingOptionId { get; set; }
 		public string Currency { get; set; }
 		public long TotalAmount { get; set; }
@@ -63,7 +63,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Payload = reader.Read<byte[]>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Info = reader.Read<PaymentRequestedInfoBase>();
+				Info = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))

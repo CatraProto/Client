@@ -10,7 +10,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
         public static int ConstructorId { get; } = -1835453025;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.HttpWait);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.HttpWaitBase);
 		public bool IsVector { get; init; } = false;
 		public int MaxDelay { get; set; }
 		public int WaitAfter { get; set; }

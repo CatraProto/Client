@@ -10,7 +10,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 
 
         public static int ConstructorId { get; } = -1986399595;
-		public override StatsGraphBase ViewsGraph { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase ViewsGraph { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -26,7 +26,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 
 		public override void Deserialize(Reader reader)
 		{
-			ViewsGraph = reader.Read<StatsGraphBase>();
+			ViewsGraph = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
 
 		}
 	}

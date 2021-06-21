@@ -12,7 +12,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
         public static int ConstructorId { get; } = 568808380;
 		public override int Size { get; set; }
 		public override string MimeType { get; set; }
-		public override FileTypeBase FileType { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.Storage.FileTypeBase FileType { get; set; }
 		public override int Mtime { get; set; }
 		public override byte[] Bytes { get; set; }
 
@@ -36,7 +36,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 		{
 			Size = reader.Read<int>();
 			MimeType = reader.Read<string>();
-			FileType = reader.Read<FileTypeBase>();
+			FileType = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.Storage.FileTypeBase>();
 			Mtime = reader.Read<int>();
 			Bytes = reader.Read<byte[]>();
 

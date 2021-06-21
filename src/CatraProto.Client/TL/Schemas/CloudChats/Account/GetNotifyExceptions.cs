@@ -17,11 +17,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public static int ConstructorId { get; } = 1398240377;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Account.GetNotifyExceptions);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool CompareSound { get; set; }
-		public InputNotifyPeerBase Peer { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputNotifyPeerBase Peer { get; set; }
 
 		public void UpdateFlags() 
 		{
@@ -49,7 +49,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 			CompareSound = FlagsHelper.IsFlagSet(Flags, 1);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Peer = reader.Read<InputNotifyPeerBase>();
+				Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputNotifyPeerBase>();
 			}
 
 

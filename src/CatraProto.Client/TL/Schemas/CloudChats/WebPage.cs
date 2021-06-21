@@ -38,16 +38,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public string SiteName { get; set; }
 		public string Title { get; set; }
 		public string Description { get; set; }
-		public PhotoBase Photo { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PhotoBase Photo { get; set; }
 		public string EmbedUrl { get; set; }
 		public string EmbedType { get; set; }
 		public int? EmbedWidth { get; set; }
 		public int? EmbedHeight { get; set; }
 		public int? Duration { get; set; }
 		public string Author { get; set; }
-		public DocumentBase Document { get; set; }
-		public PageBase CachedPage { get; set; }
-		public IList<WebPageAttributeBase> Attributes { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.DocumentBase Document { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PageBase CachedPage { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.WebPageAttributeBase> Attributes { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -179,7 +179,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				Photo = reader.Read<PhotoBase>();
+				Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
@@ -214,17 +214,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 9))
 			{
-				Document = reader.Read<DocumentBase>();
+				Document = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 10))
 			{
-				CachedPage = reader.Read<PageBase>();
+				CachedPage = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PageBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 12))
 			{
-				Attributes = reader.ReadVector<WebPageAttributeBase>();
+				Attributes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.WebPageAttributeBase>();
 			}
 
 

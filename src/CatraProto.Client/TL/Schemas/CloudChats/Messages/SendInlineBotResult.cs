@@ -21,14 +21,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = 570955184;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.SendInlineBotResult);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Silent { get; set; }
 		public bool Background { get; set; }
 		public bool ClearDraft { get; set; }
 		public bool HideVia { get; set; }
-		public InputPeerBase Peer { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
 		public int? ReplyToMsgId { get; set; }
 		public long RandomId { get; set; }
 		public long QueryId { get; set; }
@@ -75,7 +75,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Background = FlagsHelper.IsFlagSet(Flags, 6);
 			ClearDraft = FlagsHelper.IsFlagSet(Flags, 7);
 			HideVia = FlagsHelper.IsFlagSet(Flags, 11);
-			Peer = reader.Read<InputPeerBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				ReplyToMsgId = reader.Read<int>();

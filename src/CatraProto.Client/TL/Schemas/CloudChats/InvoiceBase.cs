@@ -17,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public abstract bool PhoneToProvider { get; set; }
 		public abstract bool EmailToProvider { get; set; }
 		public abstract string Currency { get; set; }
-		public abstract IList<LabeledPriceBase> Prices { get; set; }
+		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase> Prices { get; set; }
 
         public abstract void UpdateFlags();
         public abstract void Deserialize(Reader reader);

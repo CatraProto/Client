@@ -20,7 +20,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get; } = -1759532989;
 		public int Flags { get; set; }
 		public bool Stopped { get; set; }
-		public InputGeoPointBase GeoPoint { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase GeoPoint { get; set; }
 		public int? Heading { get; set; }
 		public int? Period { get; set; }
 		public int? ProximityNotificationRadius { get; set; }
@@ -62,7 +62,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Flags = reader.Read<int>();
 			Stopped = FlagsHelper.IsFlagSet(Flags, 0);
-			GeoPoint = reader.Read<InputGeoPointBase>();
+			GeoPoint = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
 				Heading = reader.Read<int>();

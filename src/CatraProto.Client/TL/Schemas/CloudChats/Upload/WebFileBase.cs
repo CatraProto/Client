@@ -9,7 +9,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
     {
 		public abstract int Size { get; set; }
 		public abstract string MimeType { get; set; }
-		public abstract FileTypeBase FileType { get; set; }
+		public abstract CatraProto.Client.TL.Schemas.CloudChats.Storage.FileTypeBase FileType { get; set; }
 		public abstract int Mtime { get; set; }
 		public abstract byte[] Bytes { get; set; }
 

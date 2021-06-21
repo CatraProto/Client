@@ -12,18 +12,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 		public enum FlagsEnum 
 		{
 			HasSavedCredentials = 1 << 1,
-			PSavedInfo = 1 << 0
+			SavedInfo_ = 1 << 0
 		}
 
         public static int ConstructorId { get; } = -74456004;
 		public int Flags { get; set; }
 		public override bool HasSavedCredentials { get; set; }
-		public override PaymentRequestedInfoBase PSavedInfo { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase SavedInfo_ { get; set; }
 
 		public override void UpdateFlags() 
 		{
 			Flags = HasSavedCredentials ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
-			Flags = PSavedInfo == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
+			Flags = SavedInfo_ == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
 
 		}
 
@@ -34,7 +34,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 			writer.Write(Flags);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(PSavedInfo);
+				writer.Write(SavedInfo_);
 			}
 
 
@@ -46,7 +46,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 			HasSavedCredentials = FlagsHelper.IsFlagSet(Flags, 1);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				PSavedInfo = reader.Read<PaymentRequestedInfoBase>();
+				SavedInfo_ = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase>();
 			}
 
 

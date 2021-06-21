@@ -11,8 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 
 
         public static int ConstructorId { get; } = 539045032;
-		public override PhotoBase PPhoto { get; set; }
-		public override IList<UserBase> Users { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.PhotoBase Photo_ { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -22,15 +22,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 		public override void Serialize(Writer writer)
 		{
 		    if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(PPhoto);
+			writer.Write(Photo_);
 			writer.Write(Users);
 
 		}
 
 		public override void Deserialize(Reader reader)
 		{
-			PPhoto = reader.Read<PhotoBase>();
-			Users = reader.ReadVector<UserBase>();
+			Photo_ = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
+			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 
 		}
 	}

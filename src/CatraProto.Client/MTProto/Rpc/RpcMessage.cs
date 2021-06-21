@@ -6,9 +6,12 @@ namespace CatraProto.Client.MTProto.Rpc
 {
     public class RpcMessage<T> : IRpcMessage
     {
+        public bool RpcCallFailed
+        {
+            get => Error != null;
+        }
         public IRpcError Error { get; private set; }
         public T Response { get; private set; }
-        public bool RpcCallFailed => Error != null;
 
         public void SetResponse(object o)
         {
@@ -24,7 +27,6 @@ namespace CatraProto.Client.MTProto.Rpc
 
         private static IRpcError ParseError(RpcError error)
         {
-            if (error == null) return null;
             switch (error)
             {
                 default:

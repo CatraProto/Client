@@ -25,14 +25,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 		public override bool CanSaveCredentials { get; set; }
 		public override bool PasswordMissing { get; set; }
 		public override int BotId { get; set; }
-		public override InvoiceBase Invoice { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.InvoiceBase Invoice { get; set; }
 		public override int ProviderId { get; set; }
 		public override string Url { get; set; }
 		public override string NativeProvider { get; set; }
-		public override DataJSONBase NativeParams { get; set; }
-		public override PaymentRequestedInfoBase SavedInfo { get; set; }
-		public override PaymentSavedCredentialsBase SavedCredentials { get; set; }
-		public override IList<UserBase> Users { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase NativeParams { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase SavedInfo { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.PaymentSavedCredentialsBase SavedCredentials { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -84,7 +84,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 			CanSaveCredentials = FlagsHelper.IsFlagSet(Flags, 2);
 			PasswordMissing = FlagsHelper.IsFlagSet(Flags, 3);
 			BotId = reader.Read<int>();
-			Invoice = reader.Read<InvoiceBase>();
+			Invoice = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InvoiceBase>();
 			ProviderId = reader.Read<int>();
 			Url = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 4))
@@ -94,20 +94,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				NativeParams = reader.Read<DataJSONBase>();
+				NativeParams = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				SavedInfo = reader.Read<PaymentRequestedInfoBase>();
+				SavedInfo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				SavedCredentials = reader.Read<PaymentSavedCredentialsBase>();
+				SavedCredentials = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PaymentSavedCredentialsBase>();
 			}
 
-			Users = reader.ReadVector<UserBase>();
+			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 
 		}
 	}

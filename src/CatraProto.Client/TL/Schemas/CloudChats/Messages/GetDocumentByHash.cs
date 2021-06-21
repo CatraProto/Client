@@ -10,7 +10,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = 864953444;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.GetDocumentByHash);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.DocumentBase);
 		public bool IsVector { get; init; } = false;
 		public byte[] Sha256 { get; set; }
 		public int Size { get; set; }

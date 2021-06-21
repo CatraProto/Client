@@ -19,12 +19,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = -170029155;
 		public int Flags { get; set; }
-		public override IList<MessageBase> Messages { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.MessageBase> Messages { get; set; }
 		public override int? MaxId { get; set; }
 		public override int? ReadInboxMaxId { get; set; }
 		public override int? ReadOutboxMaxId { get; set; }
-		public override IList<ChatBase> Chats { get; set; }
-		public override IList<UserBase> Users { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -63,7 +63,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			Messages = reader.ReadVector<MessageBase>();
+			Messages = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				MaxId = reader.Read<int>();
@@ -79,8 +79,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 				ReadOutboxMaxId = reader.Read<int>();
 			}
 
-			Chats = reader.ReadVector<ChatBase>();
-			Users = reader.ReadVector<UserBase>();
+			Chats = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
+			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 
 		}
 	}

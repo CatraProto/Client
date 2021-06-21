@@ -12,9 +12,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public abstract bool Rtl { get; set; }
 		public abstract bool V2 { get; set; }
 		public abstract string Url { get; set; }
-		public abstract IList<PageBlockBase> Blocks { get; set; }
-		public abstract IList<PhotoBase> Photos { get; set; }
-		public abstract IList<DocumentBase> Documents { get; set; }
+		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase> Blocks { get; set; }
+		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase> Photos { get; set; }
+		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase> Documents { get; set; }
 		public abstract int? Views { get; set; }
 
         public abstract void UpdateFlags();

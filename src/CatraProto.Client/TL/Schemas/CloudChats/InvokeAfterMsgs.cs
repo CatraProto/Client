@@ -11,7 +11,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public static int ConstructorId { get; } = 1036301552;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.InvokeAfterMsgs);
+		public System.Type Type { get; init; } = typeof(IObject);
 		public bool IsVector { get; init; } = false;
 		public IList<long> MsgIds { get; set; }
 		public IObject Query { get; set; }

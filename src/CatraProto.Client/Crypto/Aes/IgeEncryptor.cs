@@ -31,9 +31,15 @@ namespace CatraProto.Client.Crypto.Aes
 
         private byte[] Process(byte[] from, bool encrypt)
         {
+            var modulo = from.Length % 16;
             if (from.Length % 16 != 0)
             {
-                throw new ArgumentException("Plaintext must be divisible by 16");
+                var paddingBytes = new byte[modulo];
+                new Random().NextBytes(paddingBytes);
+                for (var i = 0; i < paddingBytes.Length; i++)
+                {
+                    from[from.Length + 1 + i] = paddingBytes[i];
+                }
             }
 
             GetParameters(encrypt, out var transformer, out var oldCleanBlock, out var oldProcessedBlock);

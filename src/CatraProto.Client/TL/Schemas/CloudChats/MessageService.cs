@@ -30,11 +30,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public bool Post { get; set; }
 		public bool Legacy { get; set; }
 		public override int Id { get; set; }
-		public PeerBase FromId { get; set; }
-		public PeerBase PeerId { get; set; }
-		public MessageReplyHeaderBase ReplyTo { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase FromId { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase PeerId { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.MessageReplyHeaderBase ReplyTo { get; set; }
 		public int Date { get; set; }
-		public MessageActionBase Action { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.MessageActionBase Action { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -83,17 +83,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Id = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 8))
 			{
-				FromId = reader.Read<PeerBase>();
+				FromId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
 			}
 
-			PeerId = reader.Read<PeerBase>();
+			PeerId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				ReplyTo = reader.Read<MessageReplyHeaderBase>();
+				ReplyTo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageReplyHeaderBase>();
 			}
 
 			Date = reader.Read<int>();
-			Action = reader.Read<MessageActionBase>();
+			Action = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageActionBase>();
 
 		}
 	}

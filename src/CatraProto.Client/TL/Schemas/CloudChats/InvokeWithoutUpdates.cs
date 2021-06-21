@@ -10,7 +10,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public static int ConstructorId { get; } = -1080796745;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.InvokeWithoutUpdates);
+		public System.Type Type { get; init; } = typeof(IObject);
 		public bool IsVector { get; init; } = false;
 		public IObject Query { get; set; }
 

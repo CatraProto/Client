@@ -20,16 +20,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = -637606386;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.ForwardMessages);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Silent { get; set; }
 		public bool Background { get; set; }
 		public bool WithMyScore { get; set; }
-		public InputPeerBase FromPeer { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase FromPeer { get; set; }
 		public IList<int> Id { get; set; }
 		public IList<long> RandomId { get; set; }
-		public InputPeerBase ToPeer { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase ToPeer { get; set; }
 		public int? ScheduleDate { get; set; }
 
 		public void UpdateFlags() 
@@ -64,10 +64,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Silent = FlagsHelper.IsFlagSet(Flags, 5);
 			Background = FlagsHelper.IsFlagSet(Flags, 6);
 			WithMyScore = FlagsHelper.IsFlagSet(Flags, 8);
-			FromPeer = reader.Read<InputPeerBase>();
+			FromPeer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
 			Id = reader.ReadVector<int>();
 			RandomId = reader.ReadVector<long>();
-			ToPeer = reader.Read<InputPeerBase>();
+			ToPeer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 10))
 			{
 				ScheduleDate = reader.Read<int>();

@@ -17,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get; } = -57668565;
 		public int Flags { get; set; }
 		public override int ChatId { get; set; }
-		public ChatParticipantBase SelfParticipant { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantBase SelfParticipant { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -45,7 +45,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ChatId = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				SelfParticipant = reader.Read<ChatParticipantBase>();
+				SelfParticipant = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantBase>();
 			}
 
 

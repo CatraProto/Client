@@ -23,8 +23,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public long AccessHash { get; set; }
 		public byte[] FileReference { get; set; }
 		public int Date { get; set; }
-		public IList<PhotoSizeBase> Sizes { get; set; }
-		public IList<VideoSizeBase> VideoSizes { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase> Sizes { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.VideoSizeBase> VideoSizes { get; set; }
 		public int DcId { get; set; }
 
 		public override void UpdateFlags() 
@@ -61,10 +61,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			AccessHash = reader.Read<long>();
 			FileReference = reader.Read<byte[]>();
 			Date = reader.Read<int>();
-			Sizes = reader.ReadVector<PhotoSizeBase>();
+			Sizes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				VideoSizes = reader.ReadVector<VideoSizeBase>();
+				VideoSizes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.VideoSizeBase>();
 			}
 
 			DcId = reader.Read<int>();

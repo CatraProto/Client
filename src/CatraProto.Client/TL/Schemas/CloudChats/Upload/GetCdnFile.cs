@@ -10,7 +10,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 
         public static int ConstructorId { get; } = 536919235;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Upload.GetCdnFile);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Upload.CdnFileBase);
 		public bool IsVector { get; init; } = false;
 		public byte[] FileToken { get; set; }
 		public int Offset { get; set; }

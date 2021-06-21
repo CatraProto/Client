@@ -22,7 +22,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override string Name { get; set; }
 		public override string Phone { get; set; }
 		public override string Email { get; set; }
-		public override PostAddressBase ShippingAddress { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.PostAddressBase ShippingAddress { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -81,7 +81,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				ShippingAddress = reader.Read<PostAddressBase>();
+				ShippingAddress = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PostAddressBase>();
 			}
 
 

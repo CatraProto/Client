@@ -5,27 +5,24 @@ using System.Numerics;
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class ClientDHInnerData : IMethod
+	public partial class ClientDHInnerData : ClientDHInnerDataBase
 	{
 
 
         public static int ConstructorId { get; } = 1715713620;
+		public override BigInteger Nonce { get; set; }
+		public override BigInteger ServerNonce { get; set; }
+		public override long RetryId { get; set; }
+		public override byte[] GB { get; set; }
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.ClientDHInnerData);
-		public bool IsVector { get; init; } = false;
-		public BigInteger Nonce { get; set; }
-		public BigInteger ServerNonce { get; set; }
-		public long RetryId { get; set; }
-		public byte[] GB { get; set; }
-
-		public void UpdateFlags() 
+		public override void UpdateFlags() 
 		{
 
 		}
 
-		public void Serialize(Writer writer)
+		public override void Serialize(Writer writer)
 		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			var sizeNonce = Nonce.GetByteCount();
 			if(sizeNonce != 16){
 				throw new CatraProto.TL.Exceptions.SerializationException($"ByteSize mismatch, should be 16bytes got {sizeNonce}bytes", CatraProto.TL.Exceptions.SerializationException.SerializationErrors.BitSizeMismatch);
@@ -41,7 +38,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
 		}
 
-		public void Deserialize(Reader reader)
+		public override void Deserialize(Reader reader)
 		{
 			Nonce = reader.Read<BigInteger>(128);
 			ServerNonce = reader.Read<BigInteger>(128);

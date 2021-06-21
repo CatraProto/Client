@@ -18,7 +18,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get; } = 391759200;
 		public int Flags { get; set; }
 		public long PhotoId { get; set; }
-		public PageCaptionBase Caption { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase Caption { get; set; }
 		public string Url { get; set; }
 		public long? WebpageId { get; set; }
 
@@ -53,7 +53,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Flags = reader.Read<int>();
 			PhotoId = reader.Read<long>();
-			Caption = reader.Read<PageCaptionBase>();
+			Caption = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				Url = reader.Read<string>();

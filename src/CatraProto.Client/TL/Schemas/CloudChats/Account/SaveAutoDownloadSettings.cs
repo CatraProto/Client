@@ -17,12 +17,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public static int ConstructorId { get; } = 1995661875;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Account.SaveAutoDownloadSettings);
+		public System.Type Type { get; init; } = typeof(bool);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Low { get; set; }
 		public bool High { get; set; }
-		public AutoDownloadSettingsBase Settings { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase Settings { get; set; }
 
 		public void UpdateFlags() 
 		{
@@ -45,7 +45,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 			Flags = reader.Read<int>();
 			Low = FlagsHelper.IsFlagSet(Flags, 0);
 			High = FlagsHelper.IsFlagSet(Flags, 1);
-			Settings = reader.Read<AutoDownloadSettingsBase>();
+			Settings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase>();
 
 		}
 	}

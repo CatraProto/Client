@@ -21,7 +21,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override string Text { get; set; }
 		public string FwdText { get; set; }
 		public string Url { get; set; }
-		public InputUserBase Bot { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase Bot { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -57,7 +57,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			}
 
 			Url = reader.Read<string>();
-			Bot = reader.Read<InputUserBase>();
+			Bot = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
 
 		}
 	}

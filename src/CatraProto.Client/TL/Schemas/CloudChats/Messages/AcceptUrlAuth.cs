@@ -16,11 +16,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = -148247912;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.AcceptUrlAuth);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UrlAuthResultBase);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool WriteAllowed { get; set; }
-		public InputPeerBase Peer { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
 		public int MsgId { get; set; }
 		public int ButtonId { get; set; }
 
@@ -45,7 +45,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		{
 			Flags = reader.Read<int>();
 			WriteAllowed = FlagsHelper.IsFlagSet(Flags, 0);
-			Peer = reader.Read<InputPeerBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
 			MsgId = reader.Read<int>();
 			ButtonId = reader.Read<int>();
 

@@ -33,7 +33,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override bool PhoneToProvider { get; set; }
 		public override bool EmailToProvider { get; set; }
 		public override string Currency { get; set; }
-		public override IList<LabeledPriceBase> Prices { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase> Prices { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -70,7 +70,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			PhoneToProvider = FlagsHelper.IsFlagSet(Flags, 6);
 			EmailToProvider = FlagsHelper.IsFlagSet(Flags, 7);
 			Currency = reader.Read<string>();
-			Prices = reader.ReadVector<LabeledPriceBase>();
+			Prices = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase>();
 
 		}
 	}

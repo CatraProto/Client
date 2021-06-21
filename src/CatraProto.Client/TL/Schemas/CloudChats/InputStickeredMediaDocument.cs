@@ -10,7 +10,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
         public static int ConstructorId { get; } = 70813275;
-		public InputDocumentBase Id { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase Id { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -26,7 +26,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Id = reader.Read<InputDocumentBase>();
+			Id = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
 
 		}
 	}

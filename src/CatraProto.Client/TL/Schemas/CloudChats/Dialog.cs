@@ -22,15 +22,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Flags { get; set; }
 		public override bool Pinned { get; set; }
 		public bool UnreadMark { get; set; }
-		public override PeerBase Peer { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
 		public override int TopMessage { get; set; }
 		public int ReadInboxMaxId { get; set; }
 		public int ReadOutboxMaxId { get; set; }
 		public int UnreadCount { get; set; }
 		public int UnreadMentionsCount { get; set; }
-		public PeerNotifySettingsBase NotifySettings { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase NotifySettings { get; set; }
 		public int? Pts { get; set; }
-		public DraftMessageBase Draft { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.DraftMessageBase Draft { get; set; }
 		public int? FolderId { get; set; }
 
 		public override void UpdateFlags() 
@@ -78,13 +78,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = reader.Read<int>();
 			Pinned = FlagsHelper.IsFlagSet(Flags, 2);
 			UnreadMark = FlagsHelper.IsFlagSet(Flags, 3);
-			Peer = reader.Read<PeerBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
 			TopMessage = reader.Read<int>();
 			ReadInboxMaxId = reader.Read<int>();
 			ReadOutboxMaxId = reader.Read<int>();
 			UnreadCount = reader.Read<int>();
 			UnreadMentionsCount = reader.Read<int>();
-			NotifySettings = reader.Read<PeerNotifySettingsBase>();
+			NotifySettings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				Pts = reader.Read<int>();
@@ -92,7 +92,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Draft = reader.Read<DraftMessageBase>();
+				Draft = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DraftMessageBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))

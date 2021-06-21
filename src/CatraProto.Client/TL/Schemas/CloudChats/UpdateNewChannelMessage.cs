@@ -10,7 +10,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
         public static int ConstructorId { get; } = 1656358105;
-		public MessageBase Message { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.MessageBase Message { get; set; }
 		public int Pts { get; set; }
 		public int PtsCount { get; set; }
 
@@ -30,7 +30,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Message = reader.Read<MessageBase>();
+			Message = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageBase>();
 			Pts = reader.Read<int>();
 			PtsCount = reader.Read<int>();
 

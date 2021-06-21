@@ -14,7 +14,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override string LangCode { get; set; }
 		public override int FromVersion { get; set; }
 		public override int Version { get; set; }
-		public override IList<EmojiKeywordBase> Keywords { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.EmojiKeywordBase> Keywords { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -36,7 +36,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			LangCode = reader.Read<string>();
 			FromVersion = reader.Read<int>();
 			Version = reader.Read<int>();
-			Keywords = reader.ReadVector<EmojiKeywordBase>();
+			Keywords = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.EmojiKeywordBase>();
 
 		}
 	}

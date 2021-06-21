@@ -16,7 +16,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 
         public static int ConstructorId { get; } = 1148485274;
 		public int Flags { get; set; }
-		public TermsOfServiceBase TermsOfService { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.Help.TermsOfServiceBase TermsOfService { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -42,7 +42,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 			Flags = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				TermsOfService = reader.Read<TermsOfServiceBase>();
+				TermsOfService = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.Help.TermsOfServiceBase>();
 			}
 
 

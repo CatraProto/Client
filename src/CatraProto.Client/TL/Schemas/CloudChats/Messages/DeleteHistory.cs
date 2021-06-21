@@ -17,12 +17,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = 469850889;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.DeleteHistory);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedHistoryBase);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool JustClear { get; set; }
 		public bool Revoke { get; set; }
-		public InputPeerBase Peer { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
 		public int MaxId { get; set; }
 
 		public void UpdateFlags() 
@@ -47,7 +47,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Flags = reader.Read<int>();
 			JustClear = FlagsHelper.IsFlagSet(Flags, 0);
 			Revoke = FlagsHelper.IsFlagSet(Flags, 1);
-			Peer = reader.Read<InputPeerBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
 			MaxId = reader.Read<int>();
 
 		}

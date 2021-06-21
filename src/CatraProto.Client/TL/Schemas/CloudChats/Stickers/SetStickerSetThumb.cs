@@ -11,10 +11,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 
         public static int ConstructorId { get; } = -1707717072;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Stickers.SetStickerSetThumb);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetBase);
 		public bool IsVector { get; init; } = false;
-		public InputStickerSetBase Stickerset { get; set; }
-		public InputDocumentBase Thumb { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase Stickerset { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase Thumb { get; set; }
 
 		public void UpdateFlags() 
 		{
@@ -31,8 +31,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 
 		public void Deserialize(Reader reader)
 		{
-			Stickerset = reader.Read<InputStickerSetBase>();
-			Thumb = reader.Read<InputDocumentBase>();
+			Stickerset = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase>();
+			Thumb = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
 
 		}
 	}

@@ -11,7 +11,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 
         public static int ConstructorId { get; } = 686618977;
 		public override int Expires { get; set; }
-		public TermsOfServiceBase TermsOfService { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.Help.TermsOfServiceBase TermsOfService { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -29,7 +29,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 		public override void Deserialize(Reader reader)
 		{
 			Expires = reader.Read<int>();
-			TermsOfService = reader.Read<TermsOfServiceBase>();
+			TermsOfService = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.Help.TermsOfServiceBase>();
 
 		}
 	}

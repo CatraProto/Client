@@ -16,12 +16,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = 1486110434;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.SetTyping);
+		public System.Type Type { get; init; } = typeof(bool);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
-		public InputPeerBase Peer { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
 		public int? TopMsgId { get; set; }
-		public SendMessageActionBase Action { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.SendMessageActionBase Action { get; set; }
 
 		public void UpdateFlags() 
 		{
@@ -47,13 +47,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			Peer = reader.Read<InputPeerBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				TopMsgId = reader.Read<int>();
 			}
 
-			Action = reader.Read<SendMessageActionBase>();
+			Action = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SendMessageActionBase>();
 
 		}
 	}

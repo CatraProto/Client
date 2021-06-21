@@ -18,7 +18,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get; } = -1495959709;
 		public int Flags { get; set; }
 		public override int ReplyToMsgId { get; set; }
-		public override PeerBase ReplyToPeerId { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.PeerBase ReplyToPeerId { get; set; }
 		public override int? ReplyToTopId { get; set; }
 
 		public override void UpdateFlags() 
@@ -53,7 +53,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ReplyToMsgId = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				ReplyToPeerId = reader.Read<PeerBase>();
+				ReplyToPeerId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))

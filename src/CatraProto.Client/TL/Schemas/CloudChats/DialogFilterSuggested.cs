@@ -10,7 +10,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
         public static int ConstructorId { get; } = 2004110666;
-		public override DialogFilterBase Filter { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.DialogFilterBase Filter { get; set; }
 		public override string Description { get; set; }
 
 		public override void UpdateFlags() 
@@ -28,7 +28,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Filter = reader.Read<DialogFilterBase>();
+			Filter = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DialogFilterBase>();
 			Description = reader.Read<string>();
 
 		}

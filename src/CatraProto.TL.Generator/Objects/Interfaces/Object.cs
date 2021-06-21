@@ -11,14 +11,13 @@ namespace CatraProto.TL.Generator.Objects.Interfaces
         public int Id { get; set; }
         public Namespace Namespace { get; set; }
         public List<Parameter> Parameters { get; set; }
-        private List<Namespace> _requiredNamespaces { get; set; } = new List<Namespace>();
         public TypeBase Type { get; set; }
         public bool IsNaked { get; set; }
 
         public string Name
         {
             get => Namespace.Class;
-            set => Namespace.FullNamespaceArray[^1] = value;
+            set => Namespace[^1] = value;
         }
 
         public virtual string GetMethodsAccessibility()

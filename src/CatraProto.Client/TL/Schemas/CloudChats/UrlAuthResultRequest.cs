@@ -17,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get; } = -1831650802;
 		public int Flags { get; set; }
 		public bool RequestWriteAccess { get; set; }
-		public UserBase Bot { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.UserBase Bot { get; set; }
 		public string Domain { get; set; }
 
 		public override void UpdateFlags() 
@@ -40,7 +40,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Flags = reader.Read<int>();
 			RequestWriteAccess = FlagsHelper.IsFlagSet(Flags, 0);
-			Bot = reader.Read<UserBase>();
+			Bot = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 			Domain = reader.Read<string>();
 
 		}

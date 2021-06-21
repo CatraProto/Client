@@ -18,11 +18,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 
         public static int ConstructorId { get; } = -1980559511;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Photos.UploadProfilePhoto);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Photos.PhotoBase);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
-		public InputFileBase File { get; set; }
-		public InputFileBase Video { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase File { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase Video { get; set; }
 		public double? VideoStartTs { get; set; }
 
 		public void UpdateFlags() 
@@ -61,12 +61,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 			Flags = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				File = reader.Read<InputFileBase>();
+				File = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Video = reader.Read<InputFileBase>();
+				Video = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))

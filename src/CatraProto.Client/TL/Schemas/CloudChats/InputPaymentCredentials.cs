@@ -17,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get; } = 873977640;
 		public int Flags { get; set; }
 		public bool Save { get; set; }
-		public DataJSONBase Data { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase Data { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -38,7 +38,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Flags = reader.Read<int>();
 			Save = FlagsHelper.IsFlagSet(Flags, 0);
-			Data = reader.Read<DataJSONBase>();
+			Data = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
 
 		}
 	}

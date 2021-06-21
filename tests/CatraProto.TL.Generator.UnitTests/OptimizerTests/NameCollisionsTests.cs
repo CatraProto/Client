@@ -22,7 +22,7 @@ namespace CatraProto.TL.Generator.UnitTests.OptimizerTests
             var parser = await Parser.StartAnalyzing(schema);
             var optimizer = new Optimizer(parser);
 
-            optimizer.FixNamesCollission();
+            optimizer.FixNamesCollision();
             Assert.Equal("PPeer", optimizer.Objects[2].Parameters[0].Name);
         }
         
@@ -37,7 +37,7 @@ namespace CatraProto.TL.Generator.UnitTests.OptimizerTests
             var parser = await Parser.StartAnalyzing(schema);
             var optimizer = new Optimizer(parser);
             
-            optimizer.FixNamesCollission();
+            optimizer.FixNamesCollision();
             Assert.Equal("OUpdates", optimizer.Objects[0].Name);
             Assert.Equal("OUpdates", optimizer.Objects[1].Name);
         }

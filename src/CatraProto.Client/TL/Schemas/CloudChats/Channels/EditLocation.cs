@@ -11,10 +11,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 
         public static int ConstructorId { get; } = 1491484525;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Channels.EditLocation);
+		public System.Type Type { get; init; } = typeof(bool);
 		public bool IsVector { get; init; } = false;
-		public InputChannelBase Channel { get; set; }
-		public InputGeoPointBase GeoPoint { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase Channel { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase GeoPoint { get; set; }
 		public string Address { get; set; }
 
 		public void UpdateFlags() 
@@ -33,8 +33,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 
 		public void Deserialize(Reader reader)
 		{
-			Channel = reader.Read<InputChannelBase>();
-			GeoPoint = reader.Read<InputGeoPointBase>();
+			Channel = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
+			GeoPoint = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase>();
 			Address = reader.Read<string>();
 
 		}

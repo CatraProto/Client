@@ -16,8 +16,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public long AuthorPhotoId { get; set; }
 		public string Author { get; set; }
 		public int Date { get; set; }
-		public IList<PageBlockBase> Blocks { get; set; }
-		public PageCaptionBase Caption { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase> Blocks { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase Caption { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -44,8 +44,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			AuthorPhotoId = reader.Read<long>();
 			Author = reader.Read<string>();
 			Date = reader.Read<int>();
-			Blocks = reader.ReadVector<PageBlockBase>();
-			Caption = reader.Read<PageCaptionBase>();
+			Blocks = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase>();
+			Caption = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase>();
 
 		}
 	}

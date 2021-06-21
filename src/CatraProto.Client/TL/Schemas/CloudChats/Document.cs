@@ -24,10 +24,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Date { get; set; }
 		public string MimeType { get; set; }
 		public int Size { get; set; }
-		public IList<PhotoSizeBase> Thumbs { get; set; }
-		public IList<VideoSizeBase> VideoThumbs { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase> Thumbs { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.VideoSizeBase> VideoThumbs { get; set; }
 		public int DcId { get; set; }
-		public IList<DocumentAttributeBase> Attributes { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase> Attributes { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -73,16 +73,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Size = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Thumbs = reader.ReadVector<PhotoSizeBase>();
+				Thumbs = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				VideoThumbs = reader.ReadVector<VideoSizeBase>();
+				VideoThumbs = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.VideoSizeBase>();
 			}
 
 			DcId = reader.Read<int>();
-			Attributes = reader.ReadVector<DocumentAttributeBase>();
+			Attributes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase>();
 
 		}
 	}

@@ -23,7 +23,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int AdminId { get; set; }
 		public int ParticipantId { get; set; }
 		public byte[] GB { get; set; }
-		public PhoneCallProtocolBase Protocol { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase Protocol { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -56,7 +56,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			AdminId = reader.Read<int>();
 			ParticipantId = reader.Read<int>();
 			GB = reader.Read<byte[]>();
-			Protocol = reader.Read<PhoneCallProtocolBase>();
+			Protocol = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase>();
 
 		}
 	}

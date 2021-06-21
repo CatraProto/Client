@@ -16,16 +16,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = 1271290010;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchGlobal);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public int? FolderId { get; set; }
 		public string Q { get; set; }
-		public MessagesFilterBase Filter { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase Filter { get; set; }
 		public int MinDate { get; set; }
 		public int MaxDate { get; set; }
 		public int OffsetRate { get; set; }
-		public InputPeerBase OffsetPeer { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase OffsetPeer { get; set; }
 		public int OffsetId { get; set; }
 		public int Limit { get; set; }
 
@@ -65,11 +65,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			}
 
 			Q = reader.Read<string>();
-			Filter = reader.Read<MessagesFilterBase>();
+			Filter = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase>();
 			MinDate = reader.Read<int>();
 			MaxDate = reader.Read<int>();
 			OffsetRate = reader.Read<int>();
-			OffsetPeer = reader.Read<InputPeerBase>();
+			OffsetPeer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
 			OffsetId = reader.Read<int>();
 			Limit = reader.Read<int>();
 

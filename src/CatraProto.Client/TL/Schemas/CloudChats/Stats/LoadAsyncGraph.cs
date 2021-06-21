@@ -15,7 +15,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 
         public static int ConstructorId { get; } = 1646092192;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Stats.LoadAsyncGraph);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public string Token { get; set; }

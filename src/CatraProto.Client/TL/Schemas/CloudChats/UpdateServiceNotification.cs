@@ -22,8 +22,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int? InboxDate { get; set; }
 		public string Type { get; set; }
 		public string Message { get; set; }
-		public MessageMediaBase Media { get; set; }
-		public IList<MessageEntityBase> Entities { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase Media { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -60,8 +60,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			Type = reader.Read<string>();
 			Message = reader.Read<string>();
-			Media = reader.Read<MessageMediaBase>();
-			Entities = reader.ReadVector<MessageEntityBase>();
+			Media = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase>();
+			Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
 
 		}
 	}

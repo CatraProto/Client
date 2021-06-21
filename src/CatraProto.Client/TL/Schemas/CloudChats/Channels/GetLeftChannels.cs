@@ -10,7 +10,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 
         public static int ConstructorId { get; } = -2092831552;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Channels.GetLeftChannels);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.ChatsBase);
 		public bool IsVector { get; init; } = false;
 		public int Offset { get; set; }
 

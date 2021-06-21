@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using CatraProto.TL.Generator.CodeGeneration.Optimization;
@@ -22,13 +23,16 @@ namespace CatraProto.TL.Generator
             Console.WriteLine("[Optimizer] Optimizing schema, this shouldn't take long.");
             
             var optimizedObjects = Optimizer.Optimize(analyzed);
-            
             var writer = await Writer.Create(Optimizer.Optimize(optimizedObjects));
-            await writer.Write();
-            
             var dictionaryWriter = await DictionaryWriter.Create(optimizedObjects);
-            await dictionaryWriter.WriteDictionary();
-
+            var taskList = new List<Task>
+            {
+                writer.Write(), 
+                writer.WriteMethods(), 
+                dictionaryWriter.WriteDictionary()
+            };
+            
+            await Task.WhenAll(taskList);
             stopwatch.Stop();
                 
             Console.WriteLine($"Done! {stopwatch.Elapsed.Seconds.ToString()}s");

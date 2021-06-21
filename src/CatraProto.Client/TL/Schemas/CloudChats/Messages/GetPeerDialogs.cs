@@ -12,9 +12,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = -462373635;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.GetPeerDialogs);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.PeerDialogsBase);
 		public bool IsVector { get; init; } = false;
-		public IList<InputDialogPeerBase> Peers { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputDialogPeerBase> Peers { get; set; }
 
 		public void UpdateFlags() 
 		{
@@ -30,7 +30,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 		public void Deserialize(Reader reader)
 		{
-			Peers = reader.ReadVector<InputDialogPeerBase>();
+			Peers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputDialogPeerBase>();
 
 		}
 	}

@@ -12,7 +12,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = 1359533640;
 		public int Hash { get; set; }
-		public IList<StickerSetCoveredBase> Sets { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.StickerSetCoveredBase> Sets { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -30,7 +30,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public override void Deserialize(Reader reader)
 		{
 			Hash = reader.Read<int>();
-			Sets = reader.ReadVector<StickerSetCoveredBase>();
+			Sets = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.StickerSetCoveredBase>();
 
 		}
 	}

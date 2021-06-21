@@ -12,7 +12,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public abstract bool AlignRight { get; set; }
 		public abstract bool ValignMiddle { get; set; }
 		public abstract bool ValignBottom { get; set; }
-		public abstract RichTextBase Text { get; set; }
+		public abstract CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Text { get; set; }
 		public abstract int? Colspan { get; set; }
 		public abstract int? Rowspan { get; set; }
 

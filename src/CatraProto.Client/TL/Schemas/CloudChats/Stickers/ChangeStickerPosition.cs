@@ -11,9 +11,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 
         public static int ConstructorId { get; } = -4795190;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Stickers.ChangeStickerPosition);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetBase);
 		public bool IsVector { get; init; } = false;
-		public InputDocumentBase Sticker { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase Sticker { get; set; }
 		public int Position { get; set; }
 
 		public void UpdateFlags() 
@@ -31,7 +31,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 
 		public void Deserialize(Reader reader)
 		{
-			Sticker = reader.Read<InputDocumentBase>();
+			Sticker = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
 			Position = reader.Read<int>();
 
 		}

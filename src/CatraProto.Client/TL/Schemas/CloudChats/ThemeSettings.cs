@@ -18,11 +18,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public static int ConstructorId { get; } = -1676371894;
 		public int Flags { get; set; }
-		public override BaseThemeBase BaseTheme { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.BaseThemeBase BaseTheme { get; set; }
 		public override int AccentColor { get; set; }
 		public override int? MessageTopColor { get; set; }
 		public override int? MessageBottomColor { get; set; }
-		public override WallPaperBase Wallpaper { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase Wallpaper { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -60,7 +60,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			BaseTheme = reader.Read<BaseThemeBase>();
+			BaseTheme = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.BaseThemeBase>();
 			AccentColor = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
@@ -74,7 +74,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Wallpaper = reader.Read<WallPaperBase>();
+				Wallpaper = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase>();
 			}
 
 

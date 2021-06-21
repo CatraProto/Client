@@ -18,7 +18,7 @@ namespace CatraProto.Client.Connections.Protocols.TcpAbridged
             _networkStream = stream;
         }
 
-        public async Task<byte[]> ReadIncomingMessage(CancellationToken token = default)
+        public async Task<byte[]> ReadMessageAsync(CancellationToken token = default)
         {
             var firstByte = await _networkStream.ReadByte(0, token);
             var length = await GetMessageLength(firstByte, token);

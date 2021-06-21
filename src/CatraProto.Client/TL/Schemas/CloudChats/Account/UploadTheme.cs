@@ -16,11 +16,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public static int ConstructorId { get; } = 473805619;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Account.UploadTheme);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.DocumentBase);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
-		public InputFileBase File { get; set; }
-		public InputFileBase Thumb { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase File { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase Thumb { get; set; }
 		public string FileName { get; set; }
 		public string MimeType { get; set; }
 
@@ -49,10 +49,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		public void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			File = reader.Read<InputFileBase>();
+			File = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Thumb = reader.Read<InputFileBase>();
+				Thumb = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
 			}
 
 			FileName = reader.Read<string>();

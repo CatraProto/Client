@@ -36,9 +36,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override int Id { get; set; }
 		public override string Title { get; set; }
 		public override string Emoticon { get; set; }
-		public override IList<InputPeerBase> PinnedPeers { get; set; }
-		public override IList<InputPeerBase> IncludePeers { get; set; }
-		public override IList<InputPeerBase> ExcludePeers { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> PinnedPeers { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> IncludePeers { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> ExcludePeers { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -90,9 +90,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 				Emoticon = reader.Read<string>();
 			}
 
-			PinnedPeers = reader.ReadVector<InputPeerBase>();
-			IncludePeers = reader.ReadVector<InputPeerBase>();
-			ExcludePeers = reader.ReadVector<InputPeerBase>();
+			PinnedPeers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+			IncludePeers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+			ExcludePeers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
 
 		}
 	}

@@ -11,10 +11,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = -1444503762;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.EditChatAdmin);
+		public System.Type Type { get; init; } = typeof(bool);
 		public bool IsVector { get; init; } = false;
 		public int ChatId { get; set; }
-		public InputUserBase UserId { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase UserId { get; set; }
 		public bool IsAdmin { get; set; }
 
 		public void UpdateFlags() 
@@ -34,7 +34,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public void Deserialize(Reader reader)
 		{
 			ChatId = reader.Read<int>();
-			UserId = reader.Read<InputUserBase>();
+			UserId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
 			IsAdmin = reader.Read<bool>();
 
 		}

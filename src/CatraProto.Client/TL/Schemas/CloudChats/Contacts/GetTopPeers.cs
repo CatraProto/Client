@@ -22,7 +22,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 
         public static int ConstructorId { get; } = -728224331;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Contacts.GetTopPeers);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Contacts.TopPeersBase);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Correspondents { get; set; }

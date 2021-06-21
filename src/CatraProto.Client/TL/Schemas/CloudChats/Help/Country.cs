@@ -22,7 +22,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 		public override string Iso2 { get; set; }
 		public override string DefaultName { get; set; }
 		public override string Name { get; set; }
-		public override IList<CountryCodeBase> CountryCodes { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.Help.CountryCodeBase> CountryCodes { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -58,7 +58,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 				Name = reader.Read<string>();
 			}
 
-			CountryCodes = reader.ReadVector<CountryCodeBase>();
+			CountryCodes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.Help.CountryCodeBase>();
 
 		}
 	}

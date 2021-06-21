@@ -20,7 +20,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override int UserId { get; set; }
 		public int KickedBy { get; set; }
 		public int Date { get; set; }
-		public ChatBannedRightsBase BannedRights { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase BannedRights { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -47,7 +47,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			UserId = reader.Read<int>();
 			KickedBy = reader.Read<int>();
 			Date = reader.Read<int>();
-			BannedRights = reader.Read<ChatBannedRightsBase>();
+			BannedRights = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase>();
 
 		}
 	}

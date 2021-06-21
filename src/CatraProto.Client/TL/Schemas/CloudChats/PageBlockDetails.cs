@@ -18,8 +18,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get; } = 1987480557;
 		public int Flags { get; set; }
 		public bool Open { get; set; }
-		public IList<PageBlockBase> Blocks { get; set; }
-		public RichTextBase Title { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase> Blocks { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Title { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -41,8 +41,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Flags = reader.Read<int>();
 			Open = FlagsHelper.IsFlagSet(Flags, 0);
-			Blocks = reader.ReadVector<PageBlockBase>();
-			Title = reader.Read<RichTextBase>();
+			Blocks = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase>();
+			Title = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
 
 		}
 	}

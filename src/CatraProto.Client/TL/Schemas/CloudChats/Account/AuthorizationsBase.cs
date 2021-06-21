@@ -8,7 +8,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
     public abstract class AuthorizationsBase : IObject
     {
-		public abstract IList<AuthorizationBase> PAuthorizations { get; set; }
+		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.AuthorizationBase> Authorizations_ { get; set; }
 
         public abstract void UpdateFlags();
         public abstract void Deserialize(Reader reader);

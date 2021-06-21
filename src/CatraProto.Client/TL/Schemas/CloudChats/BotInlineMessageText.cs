@@ -21,8 +21,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Flags { get; set; }
 		public bool NoWebpage { get; set; }
 		public string Message { get; set; }
-		public IList<MessageEntityBase> Entities { get; set; }
-		public override ReplyMarkupBase ReplyMarkup { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase ReplyMarkup { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -58,12 +58,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Message = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Entities = reader.ReadVector<MessageEntityBase>();
+				Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				ReplyMarkup = reader.Read<ReplyMarkupBase>();
+				ReplyMarkup = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase>();
 			}
 
 

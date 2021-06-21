@@ -7,7 +7,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public abstract class StickerSetCoveredBase : IObject
     {
-		public abstract StickerSetBase Set { get; set; }
+		public abstract CatraProto.Client.TL.Schemas.CloudChats.StickerSetBase Set { get; set; }
 
         public abstract void UpdateFlags();
         public abstract void Deserialize(Reader reader);

@@ -17,10 +17,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public static int ConstructorId { get; } = -1389486888;
 		public int Flags { get; set; }
-		public override IList<SecureRequiredTypeBase> RequiredTypes { get; set; }
-		public override IList<SecureValueBase> Values { get; set; }
-		public override IList<SecureValueErrorBase> Errors { get; set; }
-		public override IList<UserBase> Users { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.SecureRequiredTypeBase> RequiredTypes { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase> Values { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase> Errors { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 		public override string PrivacyPolicyUrl { get; set; }
 
 		public override void UpdateFlags() 
@@ -49,10 +49,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			RequiredTypes = reader.ReadVector<SecureRequiredTypeBase>();
-			Values = reader.ReadVector<SecureValueBase>();
-			Errors = reader.ReadVector<SecureValueErrorBase>();
-			Users = reader.ReadVector<UserBase>();
+			RequiredTypes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SecureRequiredTypeBase>();
+			Values = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase>();
+			Errors = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase>();
+			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				PrivacyPolicyUrl = reader.Read<string>();

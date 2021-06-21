@@ -19,12 +19,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public static int ConstructorId { get; } = -1118798639;
 		public int Flags { get; set; }
-		public override BaseThemeBase BaseTheme { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.BaseThemeBase BaseTheme { get; set; }
 		public override int AccentColor { get; set; }
 		public override int? MessageTopColor { get; set; }
 		public override int? MessageBottomColor { get; set; }
-		public override InputWallPaperBase Wallpaper { get; set; }
-		public override WallPaperSettingsBase WallpaperSettings { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase Wallpaper { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase WallpaperSettings { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -68,7 +68,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			BaseTheme = reader.Read<BaseThemeBase>();
+			BaseTheme = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.BaseThemeBase>();
 			AccentColor = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
@@ -82,12 +82,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Wallpaper = reader.Read<InputWallPaperBase>();
+				Wallpaper = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				WallpaperSettings = reader.Read<WallPaperSettingsBase>();
+				WallpaperSettings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase>();
 			}
 
 

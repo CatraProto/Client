@@ -8,7 +8,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public abstract class PageTableRowBase : IObject
     {
-		public abstract IList<PageTableCellBase> Cells { get; set; }
+		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.PageTableCellBase> Cells { get; set; }
 
         public abstract void UpdateFlags();
         public abstract void Deserialize(Reader reader);

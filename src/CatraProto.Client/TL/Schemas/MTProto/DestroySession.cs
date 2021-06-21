@@ -10,7 +10,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
         public static int ConstructorId { get; } = -414113498;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.DestroySession);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.DestroySessionResBase);
 		public bool IsVector { get; init; } = false;
 		public long SessionId { get; set; }
 

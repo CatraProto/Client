@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using CatraProto.TL.Exceptions;
 using CatraProto.TL.Interfaces;
@@ -9,9 +10,13 @@ namespace CatraProto.TL
 {
     public class Reader : IDisposable
     {
+        public Stream Stream
+        {
+            get => _reader.BaseStream;
+        }
+
         private BinaryReader _reader;
         private IObjectProvider _provider;
-        public Stream Stream => _reader.BaseStream;
 
         public Reader(IObjectProvider provider, Stream stream, bool leaveOpen = false) : this(provider, stream, Encoding.UTF8, leaveOpen)
         {
@@ -65,6 +70,8 @@ namespace CatraProto.TL
                     throw new DeserializationException("Missing parameter bitSize",
                         DeserializationException.DeserializationErrors.MissingParameter);
                 }
+
+                return BigInteger.ReadBytes(bitSize.Value, this);
             }
             else if (type.GetInterfaces()[^1] == typeof(IObject))
             {
@@ -72,7 +79,7 @@ namespace CatraProto.TL
                 var instance = _provider.ResolveConstructorId(id);
                 if (instance == null)
                 {
-                    throw new DeserializationException($"The current provider can't provide an instance for {id}",
+                    throw new DeserializationException($"The provider couldn't provide an instance for {id}",
                         DeserializationException.DeserializationErrors.ProviderReturnedNull);
                 }
 
@@ -87,6 +94,7 @@ namespace CatraProto.TL
         public Type GetNextType()
         {
             var id = _reader.ReadInt32();
+            _reader.BaseStream.Position -= 4;
             if (id == _provider.VectorId)
             {
                 return typeof(IList<>);
@@ -137,19 +145,28 @@ namespace CatraProto.TL
             return data;
         }
 
-        public IList<T> ReadVector<T>(Func<T> action)
+        public IList<object> ReadVector(Type type)
         {
-            return (IList<T>)ReadVector(() => (object)action);
+            return ReadVector(() => Read(type));
         }
 
         public IList<T> ReadVector<T>()
         {
-            return ReadVector(() => Read<T>());
+            var vector = ReadVector(typeof(T));
+            var cast = vector.Cast<T>().ToList();
+            return cast;
+        }
+
+        public IList<T> ReadVector<T>(Func<T> action)
+        {
+            var vector = ReadVector(() => (object)action);
+            var cast = vector.Cast<T>().ToList();
+            return cast;
         }
 
         public IList<object> ReadVector(Func<object> action)
         {
-            _reader.ReadInt32(); //Going past the vector's id
+            _reader.BaseStream.Position += 4; //Going past the vector's id
             var list = new List<object>();
             var size = _reader.ReadInt32();
             for (var i = 0; i < size; i++)
@@ -159,11 +176,6 @@ namespace CatraProto.TL
             }
 
             return list;
-        }
-
-        public IList<object> ReadVector(Type type)
-        {
-            return ReadVector(() => Read(type));
         }
 
         public void Dispose()

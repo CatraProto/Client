@@ -23,11 +23,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get; } = -1159937629;
 		public int Flags { get; set; }
 		public override bool Min { get; set; }
-		public override IList<PollAnswerVotersBase> Results { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.PollAnswerVotersBase> Results { get; set; }
 		public override int? TotalVoters { get; set; }
 		public override IList<int> RecentVoters { get; set; }
 		public override string Solution { get; set; }
-		public override IList<MessageEntityBase> SolutionEntities { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> SolutionEntities { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -79,7 +79,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Min = FlagsHelper.IsFlagSet(Flags, 0);
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Results = reader.ReadVector<PollAnswerVotersBase>();
+				Results = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PollAnswerVotersBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
@@ -99,7 +99,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				SolutionEntities = reader.ReadVector<MessageEntityBase>();
+				SolutionEntities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
 			}
 
 

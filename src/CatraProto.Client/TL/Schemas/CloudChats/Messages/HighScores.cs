@@ -11,8 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 
         public static int ConstructorId { get; } = -1707344487;
-		public override IList<HighScoreBase> Scores { get; set; }
-		public override IList<UserBase> Users { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.HighScoreBase> Scores { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -29,8 +29,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 		public override void Deserialize(Reader reader)
 		{
-			Scores = reader.ReadVector<HighScoreBase>();
-			Users = reader.ReadVector<UserBase>();
+			Scores = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.HighScoreBase>();
+			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 
 		}
 	}

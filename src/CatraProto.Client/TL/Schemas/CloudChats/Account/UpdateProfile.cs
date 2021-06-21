@@ -17,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public static int ConstructorId { get; } = 2018596725;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Account.UpdateProfile);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UserBase);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public string FirstName { get; set; }

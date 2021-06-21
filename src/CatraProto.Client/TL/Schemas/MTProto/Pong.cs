@@ -4,31 +4,28 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class Pong : IMethod
+	public partial class Pong : PongBase
 	{
 
 
         public static int ConstructorId { get; } = 880243653;
+		public override long MsgId { get; set; }
+		public override long PingId { get; set; }
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.Pong);
-		public bool IsVector { get; init; } = false;
-		public long MsgId { get; set; }
-		public long PingId { get; set; }
-
-		public void UpdateFlags() 
+		public override void UpdateFlags() 
 		{
 
 		}
 
-		public void Serialize(Writer writer)
+		public override void Serialize(Writer writer)
 		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(MsgId);
 			writer.Write(PingId);
 
 		}
 
-		public void Deserialize(Reader reader)
+		public override void Deserialize(Reader reader)
 		{
 			MsgId = reader.Read<long>();
 			PingId = reader.Read<long>();

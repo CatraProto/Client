@@ -10,7 +10,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Folders
 
         public static int ConstructorId { get; } = 472471681;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Folders.DeleteFolder);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
 		public bool IsVector { get; init; } = false;
 		public int FolderId { get; set; }
 

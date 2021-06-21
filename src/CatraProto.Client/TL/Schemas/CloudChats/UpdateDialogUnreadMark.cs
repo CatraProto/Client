@@ -17,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get; } = -513517117;
 		public int Flags { get; set; }
 		public bool Unread { get; set; }
-		public DialogPeerBase Peer { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.DialogPeerBase Peer { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -38,7 +38,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Flags = reader.Read<int>();
 			Unread = FlagsHelper.IsFlagSet(Flags, 0);
-			Peer = reader.Read<DialogPeerBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DialogPeerBase>();
 
 		}
 	}

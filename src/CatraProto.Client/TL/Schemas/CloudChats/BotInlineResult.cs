@@ -25,9 +25,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override string Title { get; set; }
 		public override string Description { get; set; }
 		public string Url { get; set; }
-		public WebDocumentBase Thumb { get; set; }
-		public WebDocumentBase Content { get; set; }
-		public override BotInlineMessageBase SendMessage { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase Thumb { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase Content { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.BotInlineMessageBase SendMessage { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -97,15 +97,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				Thumb = reader.Read<WebDocumentBase>();
+				Thumb = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				Content = reader.Read<WebDocumentBase>();
+				Content = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase>();
 			}
 
-			SendMessage = reader.Read<BotInlineMessageBase>();
+			SendMessage = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.BotInlineMessageBase>();
 
 		}
 	}

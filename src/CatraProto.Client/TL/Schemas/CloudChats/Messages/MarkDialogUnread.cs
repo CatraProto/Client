@@ -16,11 +16,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = -1031349873;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.MarkDialogUnread);
+		public System.Type Type { get; init; } = typeof(bool);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Unread { get; set; }
-		public InputDialogPeerBase Peer { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputDialogPeerBase Peer { get; set; }
 
 		public void UpdateFlags() 
 		{
@@ -41,7 +41,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		{
 			Flags = reader.Read<int>();
 			Unread = FlagsHelper.IsFlagSet(Flags, 0);
-			Peer = reader.Read<InputDialogPeerBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputDialogPeerBase>();
 
 		}
 	}

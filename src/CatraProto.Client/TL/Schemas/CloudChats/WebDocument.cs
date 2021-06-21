@@ -15,7 +15,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public long AccessHash { get; set; }
 		public override int Size { get; set; }
 		public override string MimeType { get; set; }
-		public override IList<DocumentAttributeBase> Attributes { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase> Attributes { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -39,7 +39,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			AccessHash = reader.Read<long>();
 			Size = reader.Read<int>();
 			MimeType = reader.Read<string>();
-			Attributes = reader.ReadVector<DocumentAttributeBase>();
+			Attributes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase>();
 
 		}
 	}

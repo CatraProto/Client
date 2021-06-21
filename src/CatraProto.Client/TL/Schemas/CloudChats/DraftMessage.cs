@@ -23,7 +23,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public bool NoWebpage { get; set; }
 		public int? ReplyToMsgId { get; set; }
 		public string Message { get; set; }
-		public IList<MessageEntityBase> Entities { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
 		public override int? Date { get; set; }
 
 		public override void UpdateFlags() 
@@ -71,7 +71,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Message = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				Entities = reader.ReadVector<MessageEntityBase>();
+				Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 0))

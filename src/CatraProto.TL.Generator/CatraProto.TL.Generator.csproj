@@ -33,6 +33,10 @@
         <Content Include="Templates\Abstract.template">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
+        <None Remove="Templates\Request.template" />
+        <Content Include="Templates\Request.template">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>

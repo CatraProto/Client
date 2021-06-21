@@ -7,7 +7,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public abstract class SecureSecretSettingsBase : IObject
     {
-		public abstract SecurePasswordKdfAlgoBase SecureAlgo { get; set; }
+		public abstract CatraProto.Client.TL.Schemas.CloudChats.SecurePasswordKdfAlgoBase SecureAlgo { get; set; }
 		public abstract byte[] SecureSecret { get; set; }
 		public abstract long SecureSecretId { get; set; }
 

@@ -9,7 +9,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     {
 		public abstract bool Default { get; set; }
 		public abstract bool Dark { get; set; }
-		public abstract WallPaperSettingsBase Settings { get; set; }
+		public abstract CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase Settings { get; set; }
 
         public abstract void UpdateFlags();
         public abstract void Deserialize(Reader reader);

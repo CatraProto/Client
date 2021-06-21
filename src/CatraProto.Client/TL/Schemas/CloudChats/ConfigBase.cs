@@ -19,7 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public abstract int Expires { get; set; }
 		public abstract bool TestMode { get; set; }
 		public abstract int ThisDc { get; set; }
-		public abstract IList<DcOptionBase> DcOptions { get; set; }
+		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase> DcOptions { get; set; }
 		public abstract string DcTxtDomainName { get; set; }
 		public abstract int ChatSizeMax { get; set; }
 		public abstract int MegagroupSizeMax { get; set; }

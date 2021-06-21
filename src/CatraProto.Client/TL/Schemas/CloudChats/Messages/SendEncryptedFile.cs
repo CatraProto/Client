@@ -16,14 +16,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = 1431914525;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.SendEncryptedFile);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.SentEncryptedMessageBase);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Silent { get; set; }
-		public InputEncryptedChatBase Peer { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedChatBase Peer { get; set; }
 		public long RandomId { get; set; }
 		public byte[] Data { get; set; }
-		public InputEncryptedFileBase File { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedFileBase File { get; set; }
 
 		public void UpdateFlags() 
 		{
@@ -47,10 +47,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		{
 			Flags = reader.Read<int>();
 			Silent = FlagsHelper.IsFlagSet(Flags, 0);
-			Peer = reader.Read<InputEncryptedChatBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedChatBase>();
 			RandomId = reader.Read<long>();
 			Data = reader.Read<byte[]>();
-			File = reader.Read<InputEncryptedFileBase>();
+			File = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedFileBase>();
 
 		}
 	}

@@ -31,7 +31,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override long AccessHash { get; set; }
 		public override string Title { get; set; }
 		public override string ShortName { get; set; }
-		public override PhotoSizeBase Thumb { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase Thumb { get; set; }
 		public override int? ThumbDcId { get; set; }
 		public override int Count { get; set; }
 		public override int Hash { get; set; }
@@ -95,7 +95,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ShortName = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				Thumb = reader.Read<PhotoSizeBase>();
+				Thumb = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))

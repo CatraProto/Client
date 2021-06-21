@@ -10,7 +10,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
         public static int ConstructorId { get; } = 230353641;
-		public InputStickerSetBase Stickerset { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase Stickerset { get; set; }
 		public long VolumeId { get; set; }
 		public int LocalId { get; set; }
 
@@ -30,7 +30,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Stickerset = reader.Read<InputStickerSetBase>();
+			Stickerset = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase>();
 			VolumeId = reader.Read<long>();
 			LocalId = reader.Read<int>();
 

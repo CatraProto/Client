@@ -29,7 +29,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public long? PosterPhotoId { get; set; }
 		public int? W { get; set; }
 		public int? H { get; set; }
-		public PageCaptionBase Caption { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase Caption { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -107,7 +107,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 				H = reader.Read<int>();
 			}
 
-			Caption = reader.Read<PageCaptionBase>();
+			Caption = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase>();
 
 		}
 	}

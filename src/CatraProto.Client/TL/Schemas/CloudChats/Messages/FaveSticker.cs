@@ -11,9 +11,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = -1174420133;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.FaveSticker);
+		public System.Type Type { get; init; } = typeof(bool);
 		public bool IsVector { get; init; } = false;
-		public InputDocumentBase Id { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase Id { get; set; }
 		public bool Unfave { get; set; }
 
 		public void UpdateFlags() 
@@ -31,7 +31,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 		public void Deserialize(Reader reader)
 		{
-			Id = reader.Read<InputDocumentBase>();
+			Id = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
 			Unfave = reader.Read<bool>();
 
 		}

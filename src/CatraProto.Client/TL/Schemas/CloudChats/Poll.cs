@@ -28,7 +28,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override bool MultipleChoice { get; set; }
 		public override bool Quiz { get; set; }
 		public override string Question { get; set; }
-		public override IList<PollAnswerBase> Answers { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.PollAnswerBase> Answers { get; set; }
 		public override int? ClosePeriod { get; set; }
 		public override int? CloseDate { get; set; }
 
@@ -73,7 +73,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			MultipleChoice = FlagsHelper.IsFlagSet(Flags, 2);
 			Quiz = FlagsHelper.IsFlagSet(Flags, 3);
 			Question = reader.Read<string>();
-			Answers = reader.ReadVector<PollAnswerBase>();
+			Answers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PollAnswerBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
 				ClosePeriod = reader.Read<int>();

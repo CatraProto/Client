@@ -13,7 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public long QueryId { get; set; }
 		public int UserId { get; set; }
 		public byte[] Payload { get; set; }
-		public PostAddressBase ShippingAddress { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PostAddressBase ShippingAddress { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -35,7 +35,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			QueryId = reader.Read<long>();
 			UserId = reader.Read<int>();
 			Payload = reader.Read<byte[]>();
-			ShippingAddress = reader.Read<PostAddressBase>();
+			ShippingAddress = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PostAddressBase>();
 
 		}
 	}

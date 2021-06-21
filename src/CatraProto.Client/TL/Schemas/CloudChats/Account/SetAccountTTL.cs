@@ -11,9 +11,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public static int ConstructorId { get; } = 608323678;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Account.SetAccountTTL);
+		public System.Type Type { get; init; } = typeof(bool);
 		public bool IsVector { get; init; } = false;
-		public AccountDaysTTLBase Ttl { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.AccountDaysTTLBase Ttl { get; set; }
 
 		public void UpdateFlags() 
 		{
@@ -29,7 +29,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 		public void Deserialize(Reader reader)
 		{
-			Ttl = reader.Read<AccountDaysTTLBase>();
+			Ttl = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.AccountDaysTTLBase>();
 
 		}
 	}

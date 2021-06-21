@@ -37,6 +37,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
+			writer.Write(ShowPreviews.Value);
+			writer.Write(Silent.Value);
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
 				writer.Write(MuteUntil.Value);

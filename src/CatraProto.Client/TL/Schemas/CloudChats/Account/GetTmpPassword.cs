@@ -11,9 +11,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public static int ConstructorId { get; } = 1151208273;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Account.GetTmpPassword);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Account.TmpPasswordBase);
 		public bool IsVector { get; init; } = false;
-		public InputCheckPasswordSRPBase Password { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputCheckPasswordSRPBase Password { get; set; }
 		public int Period { get; set; }
 
 		public void UpdateFlags() 
@@ -31,7 +31,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 		public void Deserialize(Reader reader)
 		{
-			Password = reader.Read<InputCheckPasswordSRPBase>();
+			Password = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputCheckPasswordSRPBase>();
 			Period = reader.Read<int>();
 
 		}

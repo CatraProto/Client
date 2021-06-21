@@ -11,9 +11,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public static int ConstructorId { get; } = 911373810;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.InvokeWithMessagesRange);
+		public System.Type Type { get; init; } = typeof(IObject);
 		public bool IsVector { get; init; } = false;
-		public MessageRangeBase Range { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.MessageRangeBase Range { get; set; }
 		public IObject Query { get; set; }
 
 		public void UpdateFlags() 
@@ -31,7 +31,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public void Deserialize(Reader reader)
 		{
-			Range = reader.Read<MessageRangeBase>();
+			Range = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageRangeBase>();
 			Query = reader.Read<IObject>();
 
 		}

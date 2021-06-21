@@ -26,11 +26,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override bool HasScheduled { get; set; }
 		public override int Id { get; set; }
 		public override string About { get; set; }
-		public ChatParticipantsBase Participants { get; set; }
-		public override PhotoBase ChatPhoto { get; set; }
-		public override PeerNotifySettingsBase NotifySettings { get; set; }
-		public override ExportedChatInviteBase ExportedInvite { get; set; }
-		public override IList<BotInfoBase> BotInfo { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantsBase Participants { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.PhotoBase ChatPhoto { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase NotifySettings { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.ExportedChatInviteBase ExportedInvite { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase> BotInfo { get; set; }
 		public override int? PinnedMsgId { get; set; }
 		public override int? FolderId { get; set; }
 
@@ -85,17 +85,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			HasScheduled = FlagsHelper.IsFlagSet(Flags, 8);
 			Id = reader.Read<int>();
 			About = reader.Read<string>();
-			Participants = reader.Read<ChatParticipantsBase>();
+			Participants = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantsBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				ChatPhoto = reader.Read<PhotoBase>();
+				ChatPhoto = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
 			}
 
-			NotifySettings = reader.Read<PeerNotifySettingsBase>();
-			ExportedInvite = reader.Read<ExportedChatInviteBase>();
+			NotifySettings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase>();
+			ExportedInvite = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ExportedChatInviteBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				BotInfo = reader.ReadVector<BotInfoBase>();
+				BotInfo = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 6))

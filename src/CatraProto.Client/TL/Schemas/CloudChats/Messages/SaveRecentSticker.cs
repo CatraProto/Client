@@ -16,11 +16,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = 958863608;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.SaveRecentSticker);
+		public System.Type Type { get; init; } = typeof(bool);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Attached { get; set; }
-		public InputDocumentBase Id { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase Id { get; set; }
 		public bool Unsave { get; set; }
 
 		public void UpdateFlags() 
@@ -43,7 +43,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		{
 			Flags = reader.Read<int>();
 			Attached = FlagsHelper.IsFlagSet(Flags, 0);
-			Id = reader.Read<InputDocumentBase>();
+			Id = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
 			Unsave = reader.Read<bool>();
 
 		}

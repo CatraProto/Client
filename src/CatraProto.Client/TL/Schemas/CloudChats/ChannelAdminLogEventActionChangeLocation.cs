@@ -10,8 +10,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
         public static int ConstructorId { get; } = 241923758;
-		public ChannelLocationBase PrevValue { get; set; }
-		public ChannelLocationBase NewValue { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.ChannelLocationBase PrevValue { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.ChannelLocationBase NewValue { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -28,8 +28,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			PrevValue = reader.Read<ChannelLocationBase>();
-			NewValue = reader.Read<ChannelLocationBase>();
+			PrevValue = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChannelLocationBase>();
+			NewValue = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChannelLocationBase>();
 
 		}
 	}

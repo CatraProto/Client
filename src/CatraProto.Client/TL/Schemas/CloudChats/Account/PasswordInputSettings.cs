@@ -20,11 +20,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public static int ConstructorId { get; } = -1036572727;
 		public int Flags { get; set; }
-		public override PasswordKdfAlgoBase NewAlgo { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase NewAlgo { get; set; }
 		public override byte[] NewPasswordHash { get; set; }
 		public override string Hint { get; set; }
 		public override string Email { get; set; }
-		public override SecureSecretSettingsBase NewSecureSettings { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.SecureSecretSettingsBase NewSecureSettings { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -74,7 +74,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 			Flags = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				NewAlgo = reader.Read<PasswordKdfAlgoBase>();
+				NewAlgo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 0))
@@ -94,7 +94,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				NewSecureSettings = reader.Read<SecureSecretSettingsBase>();
+				NewSecureSettings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SecureSecretSettingsBase>();
 			}
 
 

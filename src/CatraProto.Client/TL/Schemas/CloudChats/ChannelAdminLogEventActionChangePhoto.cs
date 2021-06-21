@@ -10,8 +10,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
         public static int ConstructorId { get; } = 1129042607;
-		public PhotoBase PrevPhoto { get; set; }
-		public PhotoBase NewPhoto { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PhotoBase PrevPhoto { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PhotoBase NewPhoto { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -28,8 +28,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			PrevPhoto = reader.Read<PhotoBase>();
-			NewPhoto = reader.Read<PhotoBase>();
+			PrevPhoto = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
+			NewPhoto = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
 
 		}
 	}

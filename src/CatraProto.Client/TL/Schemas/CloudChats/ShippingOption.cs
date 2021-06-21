@@ -13,7 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get; } = -1239335713;
 		public override string Id { get; set; }
 		public override string Title { get; set; }
-		public override IList<LabeledPriceBase> Prices { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase> Prices { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -33,7 +33,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Id = reader.Read<string>();
 			Title = reader.Read<string>();
-			Prices = reader.ReadVector<LabeledPriceBase>();
+			Prices = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase>();
 
 		}
 	}

@@ -11,9 +11,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 
         public static int ConstructorId { get; } = -294455398;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Help.AcceptTermsOfService);
+		public System.Type Type { get; init; } = typeof(bool);
 		public bool IsVector { get; init; } = false;
-		public DataJSONBase Id { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase Id { get; set; }
 
 		public void UpdateFlags() 
 		{
@@ -29,7 +29,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 
 		public void Deserialize(Reader reader)
 		{
-			Id = reader.Read<DataJSONBase>();
+			Id = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
 
 		}
 	}

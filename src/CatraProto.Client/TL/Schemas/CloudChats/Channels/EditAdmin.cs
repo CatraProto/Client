@@ -11,11 +11,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 
         public static int ConstructorId { get; } = -751007486;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Channels.EditAdmin);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
 		public bool IsVector { get; init; } = false;
-		public InputChannelBase Channel { get; set; }
-		public InputUserBase UserId { get; set; }
-		public ChatAdminRightsBase AdminRights { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase Channel { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase UserId { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase AdminRights { get; set; }
 		public string Rank { get; set; }
 
 		public void UpdateFlags() 
@@ -35,9 +35,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 
 		public void Deserialize(Reader reader)
 		{
-			Channel = reader.Read<InputChannelBase>();
-			UserId = reader.Read<InputUserBase>();
-			AdminRights = reader.Read<ChatAdminRightsBase>();
+			Channel = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
+			UserId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
+			AdminRights = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase>();
 			Rank = reader.Read<string>();
 
 		}

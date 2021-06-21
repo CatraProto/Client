@@ -11,9 +11,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 
 
         public static int ConstructorId { get; } = -309659827;
-		public override IList<ChannelAdminLogEventBase> Events { get; set; }
-		public override IList<ChatBase> Chats { get; set; }
-		public override IList<UserBase> Users { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventBase> Events { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -31,9 +31,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 
 		public override void Deserialize(Reader reader)
 		{
-			Events = reader.ReadVector<ChannelAdminLogEventBase>();
-			Chats = reader.ReadVector<ChatBase>();
-			Users = reader.ReadVector<UserBase>();
+			Events = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventBase>();
+			Chats = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
+			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 
 		}
 	}

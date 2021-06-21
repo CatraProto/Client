@@ -16,12 +16,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 
         public static int ConstructorId { get; } = 1997180532;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Payments.ValidateRequestedInfo);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Payments.ValidatedRequestedInfoBase);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Save { get; set; }
 		public int MsgId { get; set; }
-		public PaymentRequestedInfoBase Info { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase Info { get; set; }
 
 		public void UpdateFlags() 
 		{
@@ -44,7 +44,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 			Flags = reader.Read<int>();
 			Save = FlagsHelper.IsFlagSet(Flags, 0);
 			MsgId = reader.Read<int>();
-			Info = reader.Read<PaymentRequestedInfoBase>();
+			Info = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase>();
 
 		}
 	}

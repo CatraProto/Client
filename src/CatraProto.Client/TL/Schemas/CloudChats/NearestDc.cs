@@ -11,7 +11,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get; } = -1910892683;
 		public override string Country { get; set; }
 		public override int ThisDc { get; set; }
-		public override int PNearestDc { get; set; }
+		public override int NearestDc_ { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -23,7 +23,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(Country);
 			writer.Write(ThisDc);
-			writer.Write(PNearestDc);
+			writer.Write(NearestDc_);
 
 		}
 
@@ -31,7 +31,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Country = reader.Read<string>();
 			ThisDc = reader.Read<int>();
-			PNearestDc = reader.Read<int>();
+			NearestDc_ = reader.Read<int>();
 
 		}
 	}

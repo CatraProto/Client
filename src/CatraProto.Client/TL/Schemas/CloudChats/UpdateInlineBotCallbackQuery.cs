@@ -19,7 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Flags { get; set; }
 		public long QueryId { get; set; }
 		public int UserId { get; set; }
-		public InputBotInlineMessageIDBase MsgId { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageIDBase MsgId { get; set; }
 		public long ChatInstance { get; set; }
 		public byte[] Data { get; set; }
 		public string GameShortName { get; set; }
@@ -58,7 +58,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = reader.Read<int>();
 			QueryId = reader.Read<long>();
 			UserId = reader.Read<int>();
-			MsgId = reader.Read<InputBotInlineMessageIDBase>();
+			MsgId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageIDBase>();
 			ChatInstance = reader.Read<long>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{

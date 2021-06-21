@@ -24,12 +24,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get; } = 1601666510;
 		public int Flags { get; set; }
 		public override bool Imported { get; set; }
-		public override PeerBase FromId { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.PeerBase FromId { get; set; }
 		public override string FromName { get; set; }
 		public override int Date { get; set; }
 		public override int? ChannelPost { get; set; }
 		public override string PostAuthor { get; set; }
-		public override PeerBase SavedFromPeer { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.PeerBase SavedFromPeer { get; set; }
 		public override int? SavedFromMsgId { get; set; }
 		public override string PsaType { get; set; }
 
@@ -96,7 +96,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Imported = FlagsHelper.IsFlagSet(Flags, 7);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				FromId = reader.Read<PeerBase>();
+				FromId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
@@ -117,7 +117,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				SavedFromPeer = reader.Read<PeerBase>();
+				SavedFromPeer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))

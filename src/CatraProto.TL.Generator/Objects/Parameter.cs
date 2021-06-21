@@ -9,7 +9,16 @@ namespace CatraProto.TL.Generator.Objects
     {
         private Flag _flag;
         public string Name { get; set; }
-        public string InMethodName { get; set; }
+        public string InMethodName
+        {
+            get
+            {
+                var name = Name;
+                var toLower = Name[0].ToString().ToLower();
+                return StringTools.FixLanguageWord(toLower + name[1..]);
+            }
+        }
+
         public TypeBase Type { get; set; }
         public bool HasFlag { get; set; }
         public bool IsNaked { get; set; }
@@ -32,7 +41,6 @@ namespace CatraProto.TL.Generator.Objects
             var instance = new Parameter();
             var split = parameter.Split(":");
             instance.Name = StringTools.PascalCase(split[0]);
-            instance.InMethodName = instance.Name;
             if (FindFlag(split[1], out split[1], out var flag))
                 instance.Flag = flag;
 

@@ -12,10 +12,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Users
 
         public static int ConstructorId { get; } = -1865902923;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Users.SetSecureValueErrors);
+		public System.Type Type { get; init; } = typeof(bool);
 		public bool IsVector { get; init; } = false;
-		public InputUserBase Id { get; set; }
-		public IList<SecureValueErrorBase> Errors { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase Id { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase> Errors { get; set; }
 
 		public void UpdateFlags() 
 		{
@@ -32,8 +32,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Users
 
 		public void Deserialize(Reader reader)
 		{
-			Id = reader.Read<InputUserBase>();
-			Errors = reader.ReadVector<SecureValueErrorBase>();
+			Id = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
+			Errors = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase>();
 
 		}
 	}

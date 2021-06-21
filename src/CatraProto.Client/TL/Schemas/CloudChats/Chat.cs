@@ -32,13 +32,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public bool CallNotEmpty { get; set; }
 		public override int Id { get; set; }
 		public string Title { get; set; }
-		public ChatPhotoBase Photo { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.ChatPhotoBase Photo { get; set; }
 		public int ParticipantsCount { get; set; }
 		public int Date { get; set; }
 		public int Version { get; set; }
-		public InputChannelBase MigratedTo { get; set; }
-		public ChatAdminRightsBase AdminRights { get; set; }
-		public ChatBannedRightsBase DefaultBannedRights { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase MigratedTo { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase AdminRights { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase DefaultBannedRights { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -94,23 +94,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			CallNotEmpty = FlagsHelper.IsFlagSet(Flags, 24);
 			Id = reader.Read<int>();
 			Title = reader.Read<string>();
-			Photo = reader.Read<ChatPhotoBase>();
+			Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatPhotoBase>();
 			ParticipantsCount = reader.Read<int>();
 			Date = reader.Read<int>();
 			Version = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
-				MigratedTo = reader.Read<InputChannelBase>();
+				MigratedTo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 14))
 			{
-				AdminRights = reader.Read<ChatAdminRightsBase>();
+				AdminRights = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 18))
 			{
-				DefaultBannedRights = reader.Read<ChatBannedRightsBase>();
+				DefaultBannedRights = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase>();
 			}
 
 

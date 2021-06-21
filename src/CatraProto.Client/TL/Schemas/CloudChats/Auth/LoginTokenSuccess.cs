@@ -10,7 +10,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 
 
         public static int ConstructorId { get; } = 957176926;
-		public AuthorizationBase Authorization { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase Authorization { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -26,7 +26,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 
 		public override void Deserialize(Reader reader)
 		{
-			Authorization = reader.Read<AuthorizationBase>();
+			Authorization = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>();
 
 		}
 	}

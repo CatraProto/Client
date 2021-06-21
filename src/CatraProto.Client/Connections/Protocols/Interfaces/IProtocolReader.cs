@@ -5,6 +5,6 @@ namespace CatraProto.Client.Connections.Protocols.Interfaces
 {
     interface IProtocolReader
     {
-        public Task<byte[]> ReadIncomingMessage(CancellationToken token = default);
+        public Task<byte[]> ReadMessageAsync(CancellationToken token = default);
     }
 }

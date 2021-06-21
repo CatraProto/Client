@@ -11,7 +11,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
         public static int ConstructorId { get; } = 1218642516;
-		public IList<KeyboardButtonRowBase> Rows { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonRowBase> Rows { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -27,7 +27,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Rows = reader.ReadVector<KeyboardButtonRowBase>();
+			Rows = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonRowBase>();
 
 		}
 	}

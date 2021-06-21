@@ -20,16 +20,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = -346119674;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.SetInlineBotResults);
+		public System.Type Type { get; init; } = typeof(bool);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Gallery { get; set; }
 		public bool Private { get; set; }
 		public long QueryId { get; set; }
-		public IList<InputBotInlineResultBase> Results { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineResultBase> Results { get; set; }
 		public int CacheTime { get; set; }
 		public string NextOffset { get; set; }
-		public InlineBotSwitchPMBase SwitchPm { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InlineBotSwitchPMBase SwitchPm { get; set; }
 
 		public void UpdateFlags() 
 		{
@@ -67,7 +67,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Gallery = FlagsHelper.IsFlagSet(Flags, 0);
 			Private = FlagsHelper.IsFlagSet(Flags, 1);
 			QueryId = reader.Read<long>();
-			Results = reader.ReadVector<InputBotInlineResultBase>();
+			Results = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineResultBase>();
 			CacheTime = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
@@ -76,7 +76,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				SwitchPm = reader.Read<InlineBotSwitchPMBase>();
+				SwitchPm = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InlineBotSwitchPMBase>();
 			}
 
 

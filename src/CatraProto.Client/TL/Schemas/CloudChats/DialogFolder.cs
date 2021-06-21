@@ -17,8 +17,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get; } = 1908216652;
 		public int Flags { get; set; }
 		public override bool Pinned { get; set; }
-		public FolderBase Folder { get; set; }
-		public override PeerBase Peer { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.FolderBase Folder { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
 		public override int TopMessage { get; set; }
 		public int UnreadMutedPeersCount { get; set; }
 		public int UnreadUnmutedPeersCount { get; set; }
@@ -50,8 +50,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Flags = reader.Read<int>();
 			Pinned = FlagsHelper.IsFlagSet(Flags, 2);
-			Folder = reader.Read<FolderBase>();
-			Peer = reader.Read<PeerBase>();
+			Folder = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.FolderBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
 			TopMessage = reader.Read<int>();
 			UnreadMutedPeersCount = reader.Read<int>();
 			UnreadUnmutedPeersCount = reader.Read<int>();

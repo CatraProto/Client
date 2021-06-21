@@ -8,14 +8,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public abstract class SecureValueBase : IObject
     {
-		public abstract SecureValueTypeBase Type { get; set; }
-		public abstract SecureDataBase Data { get; set; }
-		public abstract SecureFileBase FrontSide { get; set; }
-		public abstract SecureFileBase ReverseSide { get; set; }
-		public abstract SecureFileBase Selfie { get; set; }
-		public abstract IList<SecureFileBase> Translation { get; set; }
-		public abstract IList<SecureFileBase> Files { get; set; }
-		public abstract SecurePlainDataBase PlainData { get; set; }
+		public abstract CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase Type { get; set; }
+		public abstract CatraProto.Client.TL.Schemas.CloudChats.SecureDataBase Data { get; set; }
+		public abstract CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase FrontSide { get; set; }
+		public abstract CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase ReverseSide { get; set; }
+		public abstract CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase Selfie { get; set; }
+		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase> Translation { get; set; }
+		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase> Files { get; set; }
+		public abstract CatraProto.Client.TL.Schemas.CloudChats.SecurePlainDataBase PlainData { get; set; }
 		public abstract byte[] Hash { get; set; }
 
         public abstract void UpdateFlags();

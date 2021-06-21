@@ -11,7 +11,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
         public static int ConstructorId { get; } = -454524911;
-		public IList<PageListItemBase> Items { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.PageListItemBase> Items { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -27,7 +27,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Items = reader.ReadVector<PageListItemBase>();
+			Items = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PageListItemBase>();
 
 		}
 	}

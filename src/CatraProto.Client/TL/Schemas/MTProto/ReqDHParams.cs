@@ -11,7 +11,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
         public static int ConstructorId { get; } = -686627650;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.ReqDHParams);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.ServerDHParamsBase);
 		public bool IsVector { get; init; } = false;
 		public BigInteger Nonce { get; set; }
 		public BigInteger ServerNonce { get; set; }

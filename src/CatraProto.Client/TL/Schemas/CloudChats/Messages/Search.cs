@@ -17,14 +17,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = 204812012;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.Search);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
-		public InputPeerBase Peer { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
 		public string Q { get; set; }
-		public InputPeerBase FromId { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase FromId { get; set; }
 		public int? TopMsgId { get; set; }
-		public MessagesFilterBase Filter { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase Filter { get; set; }
 		public int MinDate { get; set; }
 		public int MaxDate { get; set; }
 		public int OffsetId { get; set; }
@@ -73,11 +73,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			Peer = reader.Read<InputPeerBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
 			Q = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				FromId = reader.Read<InputPeerBase>();
+				FromId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
@@ -85,7 +85,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 				TopMsgId = reader.Read<int>();
 			}
 
-			Filter = reader.Read<MessagesFilterBase>();
+			Filter = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase>();
 			MinDate = reader.Read<int>();
 			MaxDate = reader.Read<int>();
 			OffsetId = reader.Read<int>();

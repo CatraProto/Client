@@ -4,29 +4,26 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class DestroySessionNone : IMethod
+	public partial class DestroySessionNone : DestroySessionResBase
 	{
 
 
         public static int ConstructorId { get; } = 1658015945;
+		public override long SessionId { get; set; }
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.DestroySessionNone);
-		public bool IsVector { get; init; } = false;
-		public long SessionId { get; set; }
-
-		public void UpdateFlags() 
+		public override void UpdateFlags() 
 		{
 
 		}
 
-		public void Serialize(Writer writer)
+		public override void Serialize(Writer writer)
 		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(SessionId);
 
 		}
 
-		public void Deserialize(Reader reader)
+		public override void Deserialize(Reader reader)
 		{
 			SessionId = reader.Read<long>();
 

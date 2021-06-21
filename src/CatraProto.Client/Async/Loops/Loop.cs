@@ -12,14 +12,18 @@ namespace CatraProto.Client.Async.Loops
 
     public abstract class Loop
     {
+        public Task ShutdownTask
+        {
+            get => _shutdownSource.Task;
+        }
+
         public LoopState State { get; protected set; } = LoopState.Stopped;
         private TaskCompletionSource _shutdownSource { get; } = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
-        public Task ShutdownTask => _shutdownSource.Task;
 
         protected abstract void StopSignal();
         protected abstract Task StartSignal();
 
-        public async Task Stop()
+        public async Task StopAsync()
         {
             if (State == LoopState.Running)
             {
@@ -30,7 +34,7 @@ namespace CatraProto.Client.Async.Loops
             }
         }
 
-        public async Task Start()
+        public async Task StartAsync()
         {
             if (State == LoopState.Stopped)
             {

@@ -1,5 +1,7 @@
-﻿using System.Threading;
+﻿using System.IO;
+using System.Threading;
 using CatraProto.Client.Connections.Messages.Interfaces;
+using CatraProto.Client.Extensions;
 
 namespace CatraProto.Client.Connections.Messages
 {
@@ -22,12 +24,25 @@ namespace CatraProto.Client.Connections.Messages
 
         public void Import(byte[] message)
         {
-            throw new System.NotImplementedException();
+            using (var reader = new BinaryReader(message.ToMemoryStream()))
+            {
+                AuthKeyId = reader.ReadInt64();
+                MessageId = reader.ReadInt64();
+                var length = reader.ReadInt32();
+                Body = reader.ReadBytes(length);
+            }
         }
 
         public byte[] Export()
         {
-            throw new System.NotImplementedException();
+            using (var writer = new BinaryWriter(new MemoryStream()))
+            {
+                writer.Write(AuthKeyId);
+                writer.Write(MessageId);
+                writer.Write(Body.Length);
+                writer.Write(Body);
+                return ((MemoryStream)writer.BaseStream).ToArray();
+            }
         }
     }
 }

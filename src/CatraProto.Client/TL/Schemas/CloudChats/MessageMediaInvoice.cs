@@ -23,7 +23,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public bool Test { get; set; }
 		public string Title { get; set; }
 		public string Description { get; set; }
-		public WebDocumentBase Photo { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase Photo { get; set; }
 		public int? ReceiptMsgId { get; set; }
 		public string Currency { get; set; }
 		public long TotalAmount { get; set; }
@@ -70,7 +70,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Description = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Photo = reader.Read<WebDocumentBase>();
+				Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))

@@ -7,9 +7,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
     public abstract class AutoDownloadSettingsBase : IObject
     {
-		public abstract AutoDownloadSettingsBase Low { get; set; }
-		public abstract AutoDownloadSettingsBase Medium { get; set; }
-		public abstract AutoDownloadSettingsBase High { get; set; }
+		public abstract CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase Low { get; set; }
+		public abstract CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase Medium { get; set; }
+		public abstract CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase High { get; set; }
 
         public abstract void UpdateFlags();
         public abstract void Deserialize(Reader reader);

@@ -11,9 +11,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
         public static int ConstructorId { get; } = -75283823;
-		public override TopPeerCategoryBase Category { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.TopPeerCategoryBase Category { get; set; }
 		public override int Count { get; set; }
-		public override IList<TopPeerBase> Peers { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.TopPeerBase> Peers { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -31,9 +31,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Category = reader.Read<TopPeerCategoryBase>();
+			Category = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.TopPeerCategoryBase>();
 			Count = reader.Read<int>();
-			Peers = reader.ReadVector<TopPeerBase>();
+			Peers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.TopPeerBase>();
 
 		}
 	}

@@ -16,13 +16,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 
         public static int ConstructorId { get; } = -1295269440;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Phone.DiscardCall);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Video { get; set; }
-		public InputPhoneCallBase Peer { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPhoneCallBase Peer { get; set; }
 		public int Duration { get; set; }
-		public PhoneCallDiscardReasonBase Reason { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PhoneCallDiscardReasonBase Reason { get; set; }
 		public long ConnectionId { get; set; }
 
 		public void UpdateFlags() 
@@ -47,9 +47,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 		{
 			Flags = reader.Read<int>();
 			Video = FlagsHelper.IsFlagSet(Flags, 0);
-			Peer = reader.Read<InputPhoneCallBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPhoneCallBase>();
 			Duration = reader.Read<int>();
-			Reason = reader.Read<PhoneCallDiscardReasonBase>();
+			Reason = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhoneCallDiscardReasonBase>();
 			ConnectionId = reader.Read<long>();
 
 		}

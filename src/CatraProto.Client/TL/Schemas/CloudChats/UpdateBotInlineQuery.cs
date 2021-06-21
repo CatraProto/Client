@@ -19,7 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public long QueryId { get; set; }
 		public int UserId { get; set; }
 		public string Query { get; set; }
-		public GeoPointBase Geo { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase Geo { get; set; }
 		public string Offset { get; set; }
 
 		public override void UpdateFlags() 
@@ -53,7 +53,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Query = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Geo = reader.Read<GeoPointBase>();
+				Geo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase>();
 			}
 
 			Offset = reader.Read<string>();

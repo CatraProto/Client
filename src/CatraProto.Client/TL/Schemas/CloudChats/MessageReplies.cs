@@ -24,7 +24,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override bool Comments { get; set; }
 		public override int Replies { get; set; }
 		public override int RepliesPts { get; set; }
-		public override IList<PeerBase> RecentRepliers { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.PeerBase> RecentRepliers { get; set; }
 		public override int? ChannelId { get; set; }
 		public override int? MaxId { get; set; }
 		public override int? ReadMaxId { get; set; }
@@ -77,7 +77,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			RepliesPts = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				RecentRepliers = reader.ReadVector<PeerBase>();
+				RecentRepliers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 0))

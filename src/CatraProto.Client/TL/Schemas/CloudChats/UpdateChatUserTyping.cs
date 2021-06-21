@@ -12,7 +12,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get; } = -1704596961;
 		public int ChatId { get; set; }
 		public int UserId { get; set; }
-		public SendMessageActionBase Action { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.SendMessageActionBase Action { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -32,7 +32,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			ChatId = reader.Read<int>();
 			UserId = reader.Read<int>();
-			Action = reader.Read<SendMessageActionBase>();
+			Action = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SendMessageActionBase>();
 
 		}
 	}

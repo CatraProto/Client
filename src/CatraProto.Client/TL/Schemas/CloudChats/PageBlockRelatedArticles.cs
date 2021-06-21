@@ -11,8 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
         public static int ConstructorId { get; } = 370236054;
-		public RichTextBase Title { get; set; }
-		public IList<PageRelatedArticleBase> Articles { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Title { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.PageRelatedArticleBase> Articles { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -29,8 +29,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Title = reader.Read<RichTextBase>();
-			Articles = reader.ReadVector<PageRelatedArticleBase>();
+			Title = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
+			Articles = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PageRelatedArticleBase>();
 
 		}
 	}

@@ -17,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 
         public static int ConstructorId { get; } = 1107543535;
 		public int Flags { get; set; }
-		public override string PCountryCode { get; set; }
+		public override string CountryCode_ { get; set; }
 		public override IList<string> Prefixes { get; set; }
 		public override IList<string> Patterns { get; set; }
 
@@ -33,7 +33,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
-			writer.Write(PCountryCode);
+			writer.Write(CountryCode_);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				writer.Write(Prefixes);
@@ -50,7 +50,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			PCountryCode = reader.Read<string>();
+			CountryCode_ = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				Prefixes = reader.ReadVector<string>();

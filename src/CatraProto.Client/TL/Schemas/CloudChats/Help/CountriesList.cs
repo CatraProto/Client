@@ -11,7 +11,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 
 
         public static int ConstructorId { get; } = -2016381538;
-		public IList<CountryBase> Countries { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.Help.CountryBase> Countries { get; set; }
 		public int Hash { get; set; }
 
 		public override void UpdateFlags() 
@@ -29,7 +29,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 
 		public override void Deserialize(Reader reader)
 		{
-			Countries = reader.ReadVector<CountryBase>();
+			Countries = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.Help.CountryBase>();
 			Hash = reader.Read<int>();
 
 		}

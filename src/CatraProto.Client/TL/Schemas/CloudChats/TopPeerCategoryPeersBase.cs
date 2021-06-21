@@ -8,9 +8,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public abstract class TopPeerCategoryPeersBase : IObject
     {
-		public abstract TopPeerCategoryBase Category { get; set; }
+		public abstract CatraProto.Client.TL.Schemas.CloudChats.TopPeerCategoryBase Category { get; set; }
 		public abstract int Count { get; set; }
-		public abstract IList<TopPeerBase> Peers { get; set; }
+		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.TopPeerBase> Peers { get; set; }
 
         public abstract void UpdateFlags();
         public abstract void Deserialize(Reader reader);

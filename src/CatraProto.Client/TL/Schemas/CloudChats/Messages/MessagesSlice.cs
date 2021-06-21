@@ -23,9 +23,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public int Count { get; set; }
 		public int? NextRate { get; set; }
 		public int? OffsetIdOffset { get; set; }
-		public IList<MessageBase> Messages { get; set; }
-		public IList<ChatBase> Chats { get; set; }
-		public IList<UserBase> Users { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageBase> Messages { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -72,9 +72,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 				OffsetIdOffset = reader.Read<int>();
 			}
 
-			Messages = reader.ReadVector<MessageBase>();
-			Chats = reader.ReadVector<ChatBase>();
-			Users = reader.ReadVector<UserBase>();
+			Messages = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageBase>();
+			Chats = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
+			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 
 		}
 	}

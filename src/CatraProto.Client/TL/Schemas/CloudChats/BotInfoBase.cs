@@ -10,7 +10,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     {
 		public abstract int UserId { get; set; }
 		public abstract string Description { get; set; }
-		public abstract IList<BotCommandBase> Commands { get; set; }
+		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.BotCommandBase> Commands { get; set; }
 
         public abstract void UpdateFlags();
         public abstract void Deserialize(Reader reader);

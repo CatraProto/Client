@@ -10,13 +10,17 @@ namespace CatraProto.Client.Connections.Messages
 {
     internal sealed class EncryptedMessage : IMessage
     {
+        public int Length
+        {
+            get => Body.Length;
+        }
+        
         public long AuthKeyId { get; set; }
         public BigInteger MsgKey { get; set; }
         public long Salt { get; set; }
         public long SessionId { get; set; }
         public long MessageId { get; set; }
         public int SeqNo { get; set; }
-        public int Length => Body.Length;
         public byte[] Body { get; set; }
         private IgeEncryptor _encryptor;
 
@@ -33,7 +37,7 @@ namespace CatraProto.Client.Connections.Messages
 
         public void Import(byte[] message)
         {
-            using(var reader = new BinaryReader(message.ToMemoryStream()))
+            using (var reader = new BinaryReader(message.ToMemoryStream()))
             {
                 AuthKeyId = reader.ReadInt64();
                 MsgKey = new BigInteger(reader.ReadBytes(128));
@@ -46,10 +50,8 @@ namespace CatraProto.Client.Connections.Messages
                     MessageId = cleanReader.ReadInt64();
                     SeqNo = cleanReader.ReadInt32();
                     var length = cleanReader.ReadInt32();
-                    
                 }
             }
-
         }
 
         public byte[] Export()

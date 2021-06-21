@@ -18,8 +18,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Flags { get; set; }
 		public bool HasVideo { get; set; }
 		public long PhotoId { get; set; }
-		public FileLocationBase PhotoSmall { get; set; }
-		public FileLocationBase PhotoBig { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.FileLocationBase PhotoSmall { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.FileLocationBase PhotoBig { get; set; }
 		public int DcId { get; set; }
 
 		public override void UpdateFlags() 
@@ -45,8 +45,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = reader.Read<int>();
 			HasVideo = FlagsHelper.IsFlagSet(Flags, 0);
 			PhotoId = reader.Read<long>();
-			PhotoSmall = reader.Read<FileLocationBase>();
-			PhotoBig = reader.Read<FileLocationBase>();
+			PhotoSmall = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.FileLocationBase>();
+			PhotoBig = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.FileLocationBase>();
 			DcId = reader.Read<int>();
 
 		}

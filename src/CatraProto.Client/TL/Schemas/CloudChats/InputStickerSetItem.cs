@@ -16,9 +16,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public static int ConstructorId { get; } = -6249322;
 		public int Flags { get; set; }
-		public override InputDocumentBase Document { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase Document { get; set; }
 		public override string Emoji { get; set; }
-		public override MaskCoordsBase MaskCoords { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.MaskCoordsBase MaskCoords { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -44,11 +44,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			Document = reader.Read<InputDocumentBase>();
+			Document = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
 			Emoji = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				MaskCoords = reader.Read<MaskCoordsBase>();
+				MaskCoords = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MaskCoordsBase>();
 			}
 
 

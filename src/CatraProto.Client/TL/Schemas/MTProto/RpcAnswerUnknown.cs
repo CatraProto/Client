@@ -4,27 +4,24 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class RpcAnswerUnknown : IMethod
+	public partial class RpcAnswerUnknown : RpcDropAnswerBase
 	{
 
 
         public static int ConstructorId { get; } = 1579864942;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.RpcAnswerUnknown);
-		public bool IsVector { get; init; } = false;
-
-		public void UpdateFlags() 
+		public override void UpdateFlags() 
 		{
 
 		}
 
-		public void Serialize(Writer writer)
+		public override void Serialize(Writer writer)
 		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 
 		}
 
-		public void Deserialize(Reader reader)
+		public override void Deserialize(Reader reader)
 		{
 
 		}

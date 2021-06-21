@@ -17,13 +17,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 
         public static int ConstructorId { get; } = 730364339;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Payments.SendPaymentForm);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentResultBase);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public int MsgId { get; set; }
 		public string RequestedInfoId { get; set; }
 		public string ShippingOptionId { get; set; }
-		public InputPaymentCredentialsBase Credentials { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPaymentCredentialsBase Credentials { get; set; }
 
 		public void UpdateFlags() 
 		{
@@ -66,7 +66,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 				ShippingOptionId = reader.Read<string>();
 			}
 
-			Credentials = reader.Read<InputPaymentCredentialsBase>();
+			Credentials = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPaymentCredentialsBase>();
 
 		}
 	}

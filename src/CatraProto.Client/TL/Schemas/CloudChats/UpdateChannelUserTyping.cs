@@ -19,7 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int ChannelId { get; set; }
 		public int? TopMsgId { get; set; }
 		public int UserId { get; set; }
-		public SendMessageActionBase Action { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.SendMessageActionBase Action { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -53,7 +53,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			}
 
 			UserId = reader.Read<int>();
-			Action = reader.Read<SendMessageActionBase>();
+			Action = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SendMessageActionBase>();
 
 		}
 	}

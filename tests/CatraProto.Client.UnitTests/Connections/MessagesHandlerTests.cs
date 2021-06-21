@@ -70,7 +70,7 @@ namespace CatraProto.Client.UnitTests.Connections
                 
                     try
                     {
-                        var message = await messagesHandler.Listen(timeoutToken.Token);
+                        var message = await messagesHandler.ListenAsync(timeoutToken.Token);
                         Assert.Same(outgoingMessages[i + 1], message);
                     }
                     catch (OperationCanceledException e)

@@ -10,7 +10,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
         public static int ConstructorId { get; } = 972174080;
-		public PageBlockBase Cover { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase Cover { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -26,7 +26,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Cover = reader.Read<PageBlockBase>();
+			Cover = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase>();
 
 		}
 	}

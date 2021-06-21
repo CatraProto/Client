@@ -61,10 +61,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public string LastName { get; set; }
 		public string Username { get; set; }
 		public string Phone { get; set; }
-		public UserProfilePhotoBase Photo { get; set; }
-		public UserStatusBase Status { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.UserProfilePhotoBase Photo { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.UserStatusBase Status { get; set; }
 		public int? BotInfoVersion { get; set; }
-		public IList<RestrictionReasonBase> RestrictionReason { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase> RestrictionReason { get; set; }
 		public string BotInlinePlaceholder { get; set; }
 		public string LangCode { get; set; }
 
@@ -207,12 +207,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				Photo = reader.Read<UserProfilePhotoBase>();
+				Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.UserProfilePhotoBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
-				Status = reader.Read<UserStatusBase>();
+				Status = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.UserStatusBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 14))
@@ -222,7 +222,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 18))
 			{
-				RestrictionReason = reader.ReadVector<RestrictionReasonBase>();
+				RestrictionReason = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 19))

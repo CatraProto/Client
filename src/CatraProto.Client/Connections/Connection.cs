@@ -4,41 +4,47 @@ using CatraProto.Client.Connections.Loop;
 using CatraProto.Client.Connections.Protocols.Interfaces;
 using CatraProto.Client.Connections.Protocols.TcpAbridged;
 using CatraProto.Client.MTProto;
+using CatraProto.Client.MTProto.Messages;
+using CatraProto.Client.MTProto.Rpc;
+using CatraProto.TL.Interfaces;
 using Serilog;
 
 namespace CatraProto.Client.Connections
 {
-    public enum ConnectionProtocol
-    {
-        TcpAbridged
-    }
-
     class Connection : IDisposable
     {
-        public IProtocol Protocol { get; }
+        public MessageIdsHandler MessageIdsHandler
+        {
+            get => _session.MessageIdsHandler;
+        }
+
+        public MessagesDispatcher MessagesDispatcher { get; }
+        public ConnectionInfo ConnectionInfo { get; }
         public MessagesHandler MessagesHandler { get; }
-        private ConnectionInfo _connectionInfo;
-        private ILogger _logger;
-        private ReadLoop _readLoop;
+        public IProtocol Protocol { get; }
         private Session _session;
+        private ReadLoop _readLoop;
         private WriteLoop _writeLoop;
+        private ILogger _logger;
 
         public Connection(Session session, ConnectionInfo connectionInfo, ConnectionProtocol protocol = ConnectionProtocol.TcpAbridged)
         {
             _logger = session.Logger.ForContext<Connection>();
             _session = session;
-            _connectionInfo = connectionInfo;
             MessagesHandler = new MessagesHandler(_logger);
-            var authkey = new AuthKey(new byte[] {1}, false);
+            MessagesDispatcher = new MessagesDispatcher(MessagesHandler, _logger);
+            ConnectionInfo = connectionInfo;
             switch (protocol)
             {
                 case ConnectionProtocol.TcpAbridged:
                     Protocol = new Abridged(connectionInfo, _logger);
                     break;
+                default:
+                    throw new NotSupportedException("Protocol not supported");
             }
         }
 
-        public async Task Connect()
+        public async Task ConnectAsync()
         {
             if (Protocol.IsConnected)
             {
@@ -46,7 +52,7 @@ namespace CatraProto.Client.Connections
                 return;
             }
 
-            _logger.Information("Connecting to {Connection}...", _connectionInfo);
+            _logger.Information("Connecting to {Connection}...", ConnectionInfo);
 
             //For the future: it would be a great to pass a cancellation token here, so that if the clients gets closed
             //before establishing a connection it will stop instead of trying again and again
@@ -54,7 +60,8 @@ namespace CatraProto.Client.Connections
             {
                 try
                 {
-                    await Protocol.Connect();
+                    await Protocol.ConnectAsync();
+                    await StartLoops();
                     break;
                 }
                 catch (Exception e)
@@ -65,7 +72,12 @@ namespace CatraProto.Client.Connections
                 }
             }
 
-            _logger.Information("Connected to {Connection}", _connectionInfo);
+            _logger.Information("Connected to {Connection}", ConnectionInfo);
+        }
+
+        public Task<Task> SendObjectAsync(OutgoingMessage message, IRpcMessage rpcResponse)
+        {
+            return MessagesHandler.EnqueueMessage(message, rpcResponse);
         }
 
         private async Task StartLoops()
@@ -73,11 +85,10 @@ namespace CatraProto.Client.Connections
             _writeLoop ??= new WriteLoop(this, MessagesHandler, _logger);
             _readLoop ??= new ReadLoop(this, MessagesHandler, _logger);
 
-            await _writeLoop.Start();
-            await _readLoop.Start();
+            await _writeLoop.StartAsync();
+            await _readLoop.StartAsync();
         }
-        
-        
+
         public void Dispose()
         {
             MessagesHandler?.Dispose();

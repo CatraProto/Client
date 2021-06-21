@@ -26,9 +26,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public bool Public { get; set; }
 		public bool Megagroup { get; set; }
 		public string Title { get; set; }
-		public PhotoBase Photo { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PhotoBase Photo { get; set; }
 		public int ParticipantsCount { get; set; }
-		public IList<UserBase> Participants { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Participants { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -64,11 +64,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Public = FlagsHelper.IsFlagSet(Flags, 2);
 			Megagroup = FlagsHelper.IsFlagSet(Flags, 3);
 			Title = reader.Read<string>();
-			Photo = reader.Read<PhotoBase>();
+			Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
 			ParticipantsCount = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				Participants = reader.ReadVector<UserBase>();
+				Participants = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 			}
 
 

@@ -11,8 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 
         public static int ConstructorId { get; } = -313079300;
-		public override IList<WebAuthorizationBase> Authorizations { get; set; }
-		public override IList<UserBase> Users { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.WebAuthorizationBase> Authorizations { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -29,8 +29,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 		public override void Deserialize(Reader reader)
 		{
-			Authorizations = reader.ReadVector<WebAuthorizationBase>();
-			Users = reader.ReadVector<UserBase>();
+			Authorizations = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.WebAuthorizationBase>();
+			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 
 		}
 	}

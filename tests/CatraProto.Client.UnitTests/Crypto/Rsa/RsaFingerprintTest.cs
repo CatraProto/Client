@@ -9,7 +9,7 @@ namespace CatraProto.Client.UnitTests.Crypto.RSA
         public void ComputeFingerprintTest(string key, long expected)
         {
             using var rsa = new CatraProto.Client.Crypto.Rsa(key);
-            var fingerprint = rsa.CalculateRsaFingerprint();
+            var fingerprint = rsa.ComputeFingerprint();
             Assert.Equal(expected, fingerprint);
         }
     }

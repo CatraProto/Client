@@ -5,29 +5,26 @@ using System.Collections.Generic;
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class MsgsStateReq : IMethod
+	public partial class MsgsStateReq : MsgsStateReqBase
 	{
 
 
         public static int ConstructorId { get; } = -630588590;
+		public override IList<long> MsgIds { get; set; }
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.MsgsStateReq);
-		public bool IsVector { get; init; } = false;
-		public IList<long> MsgIds { get; set; }
-
-		public void UpdateFlags() 
+		public override void UpdateFlags() 
 		{
 
 		}
 
-		public void Serialize(Writer writer)
+		public override void Serialize(Writer writer)
 		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(MsgIds);
 
 		}
 
-		public void Deserialize(Reader reader)
+		public override void Deserialize(Reader reader)
 		{
 			MsgIds = reader.ReadVector<long>();
 

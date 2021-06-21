@@ -10,7 +10,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
         public static int ConstructorId { get; } = 354925740;
-		public override SecurePasswordKdfAlgoBase SecureAlgo { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.SecurePasswordKdfAlgoBase SecureAlgo { get; set; }
 		public override byte[] SecureSecret { get; set; }
 		public override long SecureSecretId { get; set; }
 
@@ -30,7 +30,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			SecureAlgo = reader.Read<SecurePasswordKdfAlgoBase>();
+			SecureAlgo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SecurePasswordKdfAlgoBase>();
 			SecureSecret = reader.Read<byte[]>();
 			SecureSecretId = reader.Read<long>();
 

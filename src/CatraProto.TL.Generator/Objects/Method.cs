@@ -1,5 +1,8 @@
-﻿using System.Text;
+﻿using System;
+using System.Linq;
+using System.Text;
 using CatraProto.TL.Generator.CodeGeneration.Parsing;
+using CatraProto.TL.Generator.Objects.Types;
 using Object = CatraProto.TL.Generator.Objects.Interfaces.Object;
 
 namespace CatraProto.TL.Generator.Objects
@@ -16,8 +19,9 @@ namespace CatraProto.TL.Generator.Objects
 
         public override void WriteParameters(StringBuilder builder)
         {
-            builder.AppendLine(Parameters.Exists(x => x.Name == "Type") ? $"{StringTools.TwoTabs}public System.Type IMethod<{MethodType}>.Type {{ get; init; }} = typeof({Namespace.FullNamespace});" : $"{StringTools.TwoTabs}public System.Type Type {{ get; init; }} = typeof({Namespace.FullNamespace});");
-            builder.AppendLine(Parameters.Exists(x => x.Name == "IsVector") ? $"{StringTools.TwoTabs}public bool IMethod<{MethodType}>.IsVector {{ get; init; }} = {ReturnsVector.ToString().ToLower()};" : $"{StringTools.TwoTabs}public bool IsVector {{ get; init; }} = {ReturnsVector.ToString().ToLower()};");
+            var type = Type is RuntimeDefinedType ? "IObject" : Type.IsBare ? Type.Name : Type.Namespace.FullNamespace;
+            builder.AppendLine($"{StringTools.TwoTabs}public System.Type " + (Parameters.Exists(x => x.Name == "Type") ? "IMethod." : "") + $"Type {{ get; init; }} = typeof({type});");
+            builder.AppendLine($"{StringTools.TwoTabs}public bool " + (Parameters.Exists(x => x.Name == "IsVector") ? "IMethod." : "") + $"IsVector {{ get; init; }} = {ReturnsVector.ToString().ToLower()};");
             base.WriteParameters(builder);
         }
 
@@ -33,27 +37,37 @@ namespace CatraProto.TL.Generator.Objects
             {
                 returnType = ReturnsVector ? "IList<" + Type.Namespace.FullNamespace + ">" : Type.Namespace.FullNamespace;
             }
+            
+            var parametersOrdered = Parameters
+                .Where(x => x.Type is not FlagType)
+                .Where(x => !x.HasFlag)
+                .Concat(Parameters.Where(x => x.HasFlag))
+                .ToList();
 
-            for (var index = 0; index < Parameters.Count; index++)
+            for (var index = 0; index < parametersOrdered.Count; index++)
             {
-                var parameter = Parameters[index];
+                var parameter = parametersOrdered[index];
                 parameter.Type.WriteMethodParameter(args, parameter);
-                if (index < Parameters.Count - 1)
+                if (index < parametersOrdered.Count - 1)
                 {
-                    args.Append(',');
+                    args.Append(", ");
                 }
             }
 
-            builder.AppendLine($"{StringTools.TwoTabs}public async Task<{returnType}> {Name}({args})\n{StringTools.TwoTabs}{{");
-            builder.AppendLine($"{StringTools.ThreeTabs}var request = new {Namespace.FullNamespace}()\n{StringTools.ThreeTabs}{{");
-            foreach (var parameter in Parameters)
+            var comma = args.Length == 0 ? "" : ",";
+            builder.AppendLine($"{StringTools.TwoTabs}public async Task<RpcMessage<{returnType}>> {Name}({args}{comma} CancellationToken cancellationToken = default)\n{StringTools.TwoTabs}{{");
+            builder.AppendLine($"{StringTools.ThreeTabs}var rpcResponse = new RpcMessage<{returnType}>();");
+            builder.AppendLine($"{StringTools.ThreeTabs}var methodBody = new {Namespace.FullNamespace}()\n{StringTools.ThreeTabs}{{");
+            foreach (var parameter in parametersOrdered)
             {
                 builder.AppendLine($"{StringTools.FourTabs}{parameter.Name} = {parameter.InMethodName},");
             }
 
-            builder.AppendLine($"{StringTools.ThreeTabs}}}");
-            builder.AppendLine($"{StringTools.ThreeTabs}BLA BLA send Request");
-            builder.AppendLine("}");
+            builder.AppendLine($"{StringTools.ThreeTabs}}};");
+            builder.AppendLine();
+            builder.AppendLine($"{StringTools.ThreeTabs}await await _messagesHandler.EnqueueMessage(new OutgoingMessage\n{StringTools.FourTabs}{{\n{StringTools.FiveTabs}Body = methodBody,\n{StringTools.FiveTabs}CancellationToken = cancellationToken,\n{StringTools.FiveTabs}IsEncrypted = {(MethodType == MethodType.ReturnsUnencrypted ? "false" : "true")}\n{StringTools.FourTabs}}}, rpcResponse);");
+            builder.AppendLine($"{StringTools.ThreeTabs}return rpcResponse;");
+            builder.AppendLine($"{StringTools.TwoTabs}}}");
         }
     }
 }

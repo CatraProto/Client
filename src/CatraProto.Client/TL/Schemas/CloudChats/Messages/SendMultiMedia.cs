@@ -21,15 +21,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = -872345397;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.SendMultiMedia);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Silent { get; set; }
 		public bool Background { get; set; }
 		public bool ClearDraft { get; set; }
-		public InputPeerBase Peer { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
 		public int? ReplyToMsgId { get; set; }
-		public IList<InputSingleMediaBase> MultiMedia { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputSingleMediaBase> MultiMedia { get; set; }
 		public int? ScheduleDate { get; set; }
 
 		public void UpdateFlags() 
@@ -68,13 +68,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Silent = FlagsHelper.IsFlagSet(Flags, 5);
 			Background = FlagsHelper.IsFlagSet(Flags, 6);
 			ClearDraft = FlagsHelper.IsFlagSet(Flags, 7);
-			Peer = reader.Read<InputPeerBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				ReplyToMsgId = reader.Read<int>();
 			}
 
-			MultiMedia = reader.ReadVector<InputSingleMediaBase>();
+			MultiMedia = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputSingleMediaBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 10))
 			{
 				ScheduleDate = reader.Read<int>();

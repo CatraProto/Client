@@ -10,7 +10,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 
         public static int ConstructorId { get; } = 578650699;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Payments.GetSavedInfo);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Payments.SavedInfoBase);
 		public bool IsVector { get; init; } = false;
 
 		public void UpdateFlags() 

@@ -11,10 +11,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = -900957736;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.EditChatPhoto);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
 		public bool IsVector { get; init; } = false;
 		public int ChatId { get; set; }
-		public InputChatPhotoBase Photo { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputChatPhotoBase Photo { get; set; }
 
 		public void UpdateFlags() 
 		{
@@ -32,7 +32,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public void Deserialize(Reader reader)
 		{
 			ChatId = reader.Read<int>();
-			Photo = reader.Read<InputChatPhotoBase>();
+			Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputChatPhotoBase>();
 
 		}
 	}

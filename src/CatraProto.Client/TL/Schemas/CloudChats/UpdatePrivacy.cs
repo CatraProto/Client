@@ -11,8 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
         public static int ConstructorId { get; } = -298113238;
-		public PrivacyKeyBase Key { get; set; }
-		public IList<PrivacyRuleBase> Rules { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PrivacyKeyBase Key { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.PrivacyRuleBase> Rules { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -29,8 +29,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Key = reader.Read<PrivacyKeyBase>();
-			Rules = reader.ReadVector<PrivacyRuleBase>();
+			Key = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PrivacyKeyBase>();
+			Rules = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PrivacyRuleBase>();
 
 		}
 	}

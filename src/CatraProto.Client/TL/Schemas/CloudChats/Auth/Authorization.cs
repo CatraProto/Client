@@ -17,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
         public static int ConstructorId { get; } = -855308010;
 		public int Flags { get; set; }
 		public int? TmpSessions { get; set; }
-		public UserBase User { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.UserBase User { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -47,7 +47,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 				TmpSessions = reader.Read<int>();
 			}
 
-			User = reader.Read<UserBase>();
+			User = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 
 		}
 	}

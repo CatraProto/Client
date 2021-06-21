@@ -17,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get; } = 1149094475;
 		public int Flags { get; set; }
 		public override int UserId { get; set; }
-		public ChatAdminRightsBase AdminRights { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase AdminRights { get; set; }
 		public string Rank { get; set; }
 
 		public override void UpdateFlags() 
@@ -45,7 +45,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Flags = reader.Read<int>();
 			UserId = reader.Read<int>();
-			AdminRights = reader.Read<ChatAdminRightsBase>();
+			AdminRights = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				Rank = reader.Read<string>();

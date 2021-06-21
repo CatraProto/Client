@@ -12,7 +12,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get; } = 1336154098;
 		public override string Id { get; set; }
 		public string ShortName { get; set; }
-		public override InputBotInlineMessageBase SendMessage { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageBase SendMessage { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -32,7 +32,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Id = reader.Read<string>();
 			ShortName = reader.Read<string>();
-			SendMessage = reader.Read<InputBotInlineMessageBase>();
+			SendMessage = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageBase>();
 
 		}
 	}

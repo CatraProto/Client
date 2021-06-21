@@ -18,11 +18,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Flags { get; set; }
 		public string Title { get; set; }
 		public string Description { get; set; }
-		public InputWebDocumentBase Photo { get; set; }
-		public InvoiceBase Invoice { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputWebDocumentBase Photo { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InvoiceBase Invoice { get; set; }
 		public byte[] Payload { get; set; }
 		public string Provider { get; set; }
-		public DataJSONBase ProviderData { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase ProviderData { get; set; }
 		public string StartParam { get; set; }
 
 		public override void UpdateFlags() 
@@ -58,13 +58,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Description = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Photo = reader.Read<InputWebDocumentBase>();
+				Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputWebDocumentBase>();
 			}
 
-			Invoice = reader.Read<InvoiceBase>();
+			Invoice = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InvoiceBase>();
 			Payload = reader.Read<byte[]>();
 			Provider = reader.Read<string>();
-			ProviderData = reader.Read<DataJSONBase>();
+			ProviderData = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
 			StartParam = reader.Read<string>();
 
 		}

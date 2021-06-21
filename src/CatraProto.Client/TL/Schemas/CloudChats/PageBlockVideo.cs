@@ -20,7 +20,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public bool Autoplay { get; set; }
 		public bool Loop { get; set; }
 		public long VideoId { get; set; }
-		public PageCaptionBase Caption { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase Caption { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -45,7 +45,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Autoplay = FlagsHelper.IsFlagSet(Flags, 0);
 			Loop = FlagsHelper.IsFlagSet(Flags, 1);
 			VideoId = reader.Read<long>();
-			Caption = reader.Read<PageCaptionBase>();
+			Caption = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase>();
 
 		}
 	}

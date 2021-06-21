@@ -23,7 +23,7 @@ namespace CatraProto.TL.Generator.CodeGeneration
                 case "true":
                 case "false":
                 case "Bool":
-                    return new Bool(type);
+                    return new BoolType(type);
                 case "long":
                     return new IntegerType(64);
                 case "bytes":

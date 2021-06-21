@@ -10,7 +10,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public static int ConstructorId { get; } = -1398145746;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.InvokeWithTakeout);
+		public System.Type Type { get; init; } = typeof(IObject);
 		public bool IsVector { get; init; } = false;
 		public long TakeoutId { get; set; }
 		public IObject Query { get; set; }

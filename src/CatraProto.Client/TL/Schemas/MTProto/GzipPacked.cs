@@ -4,14 +4,11 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class GzipPacked : IMethod
+	public partial class GzipPacked : IObject
 	{
 
 
         public static int ConstructorId { get; } = 812830625;
-
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.GzipPacked);
-		public bool IsVector { get; init; } = false;
 		public byte[] PackedData { get; set; }
 
 		public void UpdateFlags() 
@@ -21,7 +18,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
 		public void Serialize(Writer writer)
 		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(PackedData);
 
 		}

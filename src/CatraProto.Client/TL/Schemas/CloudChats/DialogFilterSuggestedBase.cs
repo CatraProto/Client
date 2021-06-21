@@ -7,7 +7,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public abstract class DialogFilterSuggestedBase : IObject
     {
-		public abstract DialogFilterBase Filter { get; set; }
+		public abstract CatraProto.Client.TL.Schemas.CloudChats.DialogFilterBase Filter { get; set; }
 		public abstract string Description { get; set; }
 
         public abstract void UpdateFlags();

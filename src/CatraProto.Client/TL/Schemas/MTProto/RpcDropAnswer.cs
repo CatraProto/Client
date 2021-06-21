@@ -10,7 +10,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
         public static int ConstructorId { get; } = 1491380032;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.RpcDropAnswer);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.RpcDropAnswerBase);
 		public bool IsVector { get; init; } = false;
 		public long ReqMsgId { get; set; }
 

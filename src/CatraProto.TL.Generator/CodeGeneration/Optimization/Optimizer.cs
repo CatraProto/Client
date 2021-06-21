@@ -28,7 +28,7 @@ namespace CatraProto.TL.Generator.CodeGeneration.Optimization
             optimizer.BindObjects();
             optimizer.BindParameters();
             optimizer.FindCommonParameters();
-            optimizer.FixNamesCollission();
+            optimizer.FixNamesCollision();
             return optimizer.Objects;
         }
 
@@ -66,33 +66,38 @@ namespace CatraProto.TL.Generator.CodeGeneration.Optimization
         /// 
         /// </summary>
         /// <remarks>
-        /// Calling this method will result in calling <see cref="BindObjects"/> if types aren't already binded to their objects.
+        /// Calling this method will result in calling <see cref="BindObjects"/> if types aren't already bound to their objects.
         /// </remarks>
         public void BindParameters()
         {
             if (!_areObjectsBind) BindObjects();
 
             foreach (var obj in _objects)
+            {
                 foreach (var parameter in obj.Parameters)
                 {
-                    if (parameter.Type.IsBare) continue;
+                    if (parameter.Type.IsBare || parameter.Type.IsNaked) continue;
 
                     //It won't pick different objects because they all have already been bound to one unique type
                     TypeBase type = null;
                     foreach (var f in _objects)
+                    {
                         if (f.Type == parameter.Type)
                         {
                             type = f.Type;
                             break;
                         }
+                    }
 
                     if (type is null)
-                        throw new Exception("The type " + parameter.Type.Name + " inside object" + obj.Name +
-                                            " has not been found anywhere."
-                                            + "This might cause problems during compilation, since the type has no definition.");
+                    {
+                        throw new Exception("The type " + parameter.Type.Name + " inside object" + obj.Name + " has not been found anywhere.");
+                    }
+
                     type.ReferencedParameters.Add(parameter);
                     parameter.Type = type;
                 }
+            }
 
             _areParametersBind = true;
         }
@@ -105,6 +110,7 @@ namespace CatraProto.TL.Generator.CodeGeneration.Optimization
             if (!_areParametersBind) BindParameters();
 
             foreach (var currentObject in _objects.Where(x => x is not Method))
+            {
                 foreach (var currentObjectParameter in currentObject.Parameters)
                 {
                     //We don't want to commonize flags since it may cause confusion
@@ -136,26 +142,33 @@ namespace CatraProto.TL.Generator.CodeGeneration.Optimization
                         });
                     }
                 }
+            }
 
             _areParametersCommonized = true;
         }
 
-        public void FixNamesCollission()
+        public void FixNamesCollision()
         {
-            if (!_areParametersCommonized) FindCommonParameters();
+            if (!_areParametersCommonized)
+            {
+                FindCommonParameters();
+            }
 
             foreach (var obj in _objects)
             {
-                if (obj.Namespace.PartialNamespaceArray[^1] == obj.Namespace.Class) obj.Name = "O" + obj.Name;
-
-                var findConflictingNamespace = _objects.Find(x =>
-                    x.Namespace.PartialNamespace != null &&
-                    x.Namespace.PartialNamespace == obj.Namespace.FullNamespace);
-                if (findConflictingNamespace is not null) obj.Name = "O" + obj.Name;
+                var findConflictingNamespace = _objects.Find(x => x.Namespace.PartialNamespace != null && x.Namespace.PartialNamespace == obj.Namespace.FullNamespace);
+                if (findConflictingNamespace is not null || obj.Namespace.PartialNamespaceArray[^1] == obj.Namespace.Class)
+                {
+                    obj.Name = obj.Name[0] + obj.Name;
+                }
 
                 foreach (var objParameter in obj.Parameters)
+                {
                     if (objParameter.Name == obj.Name)
-                        objParameter.Name = "P" + objParameter.Name;
+                    {
+                        objParameter.Name += "_";
+                    }
+                }
             }
         }
     }

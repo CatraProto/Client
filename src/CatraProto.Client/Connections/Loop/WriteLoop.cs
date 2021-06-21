@@ -2,6 +2,10 @@
 using System.IO.Compression;
 using System.Threading;
 using System.Threading.Tasks;
+using CatraProto.Client.Connections.Messages;
+using CatraProto.Client.Connections.Messages.Interfaces;
+using CatraProto.Client.TL.Schemas;
+using CatraProto.TL;
 using Serilog;
 
 namespace CatraProto.Client.Connections.Loop
@@ -20,16 +24,40 @@ namespace CatraProto.Client.Connections.Loop
             _logger = logger.ForContext<WriteLoop>();
         }
 
-        private async Task UnencryptedLoop()
+        private async Task Loop()
         {
             _logger.Information("Listening for outgoing messages...");
             while (!_cancellationToken.IsCancellationRequested)
             {
                 try
                 {
-                    // var message = await _messagesHandler.ListenOutgoingUnencrypted(_cancellationToken.Token);
-                    // _logger.Information("Sending message with Id {Id} as unencryptedMessage, length {Length}", message.MessageId /*, message.Length*/);
-                    // await _connection.Protocol.Writer.SendMessage(message.Export());
+                    var container = await _messagesHandler.ListenAsync(_cancellationToken.Token);
+                    var message = container.OutgoingMessage;
+                    if (message.CancellationToken.IsCancellationRequested)
+                    {
+                        _logger.Information("Ignoring message because cancellation is requested");
+                        continue;
+                    }
+
+                    IMessage preparedMessage = null;
+                    if (message.IsEncrypted)
+                    {
+                    }
+                    else
+                    {
+                        _logger.Information("Serializing unencrypted message of type {MessageType}", message.Body);
+                        preparedMessage = new UnencryptedMessage
+                        {
+                            Body = message.Body.ToArray(MergedProvider.Singleton), 
+                            MessageId = _connection.MessageIdsHandler.ComputeMessageId()
+                        };
+                        var exported = preparedMessage!.Export();
+                        await _connection.Protocol.Writer.SendAsync(exported);
+                        _messagesHandler.AddSentMessage(0, container);
+                        _logger.Information("Message sent");
+                    }
+
+                    //_logger.Information("Sending message with Id {Id} as unencryptedMessage, length {Length}", message.MessageId /*, message.Length*/);
                 }
                 catch (OperationCanceledException)
                 {
@@ -52,7 +80,7 @@ namespace CatraProto.Client.Connections.Loop
 
         protected override Task StartSignal()
         {
-            _ = UnencryptedLoop();
+            _ = Loop();
             return Task.CompletedTask;
         }
     }

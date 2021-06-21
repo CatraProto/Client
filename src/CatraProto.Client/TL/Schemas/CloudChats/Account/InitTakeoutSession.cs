@@ -21,7 +21,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public static int ConstructorId { get; } = -262453244;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Account.InitTakeoutSession);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Account.TakeoutBase);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Contacts { get; set; }

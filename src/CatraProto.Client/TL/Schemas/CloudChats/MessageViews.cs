@@ -20,7 +20,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Flags { get; set; }
 		public override int? Views { get; set; }
 		public override int? Forwards { get; set; }
-		public override MessageRepliesBase Replies { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.MessageRepliesBase Replies { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -68,7 +68,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				Replies = reader.Read<MessageRepliesBase>();
+				Replies = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageRepliesBase>();
 			}
 
 

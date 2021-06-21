@@ -13,8 +13,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public abstract long AccessHash { get; set; }
 		public abstract string Slug { get; set; }
 		public abstract string Title { get; set; }
-		public abstract DocumentBase Document { get; set; }
-		public abstract ThemeSettingsBase Settings { get; set; }
+		public abstract CatraProto.Client.TL.Schemas.CloudChats.DocumentBase Document { get; set; }
+		public abstract CatraProto.Client.TL.Schemas.CloudChats.ThemeSettingsBase Settings { get; set; }
 		public abstract int InstallsCount { get; set; }
 
         public abstract void UpdateFlags();

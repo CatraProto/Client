@@ -4,6 +4,5 @@ namespace CatraProto.TL.Generator.CodeGeneration.Parsing
     {
         ReturnsEncryptedRPCResult,
         ReturnsUnencrypted,
-        ReturnsEncrypted
     }
 }

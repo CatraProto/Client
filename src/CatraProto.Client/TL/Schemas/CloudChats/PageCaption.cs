@@ -10,8 +10,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
         public static int ConstructorId { get; } = 1869903447;
-		public override RichTextBase Text { get; set; }
-		public override RichTextBase Credit { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Text { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Credit { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -28,8 +28,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Text = reader.Read<RichTextBase>();
-			Credit = reader.Read<RichTextBase>();
+			Text = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
+			Credit = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
 
 		}
 	}

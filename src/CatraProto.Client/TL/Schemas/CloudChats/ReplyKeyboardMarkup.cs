@@ -22,7 +22,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public bool Resize { get; set; }
 		public bool SingleUse { get; set; }
 		public bool Selective { get; set; }
-		public IList<KeyboardButtonRowBase> Rows { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonRowBase> Rows { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -47,7 +47,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Resize = FlagsHelper.IsFlagSet(Flags, 0);
 			SingleUse = FlagsHelper.IsFlagSet(Flags, 1);
 			Selective = FlagsHelper.IsFlagSet(Flags, 2);
-			Rows = reader.ReadVector<KeyboardButtonRowBase>();
+			Rows = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonRowBase>();
 
 		}
 	}

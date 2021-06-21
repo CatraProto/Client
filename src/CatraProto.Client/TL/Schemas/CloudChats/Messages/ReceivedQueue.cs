@@ -10,7 +10,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = 1436924774;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.ReceivedQueue);
+		public System.Type Type { get; init; } = typeof(long);
 		public bool IsVector { get; init; } = false;
 		public int MaxQts { get; set; }
 

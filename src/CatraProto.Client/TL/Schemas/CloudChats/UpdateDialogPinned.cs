@@ -19,7 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Flags { get; set; }
 		public bool Pinned { get; set; }
 		public int? FolderId { get; set; }
-		public DialogPeerBase Peer { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.DialogPeerBase Peer { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -51,7 +51,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 				FolderId = reader.Read<int>();
 			}
 
-			Peer = reader.Read<DialogPeerBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DialogPeerBase>();
 
 		}
 	}

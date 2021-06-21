@@ -11,7 +11,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public static int ConstructorId { get; } = 2009052699;
 		public override string Type { get; set; }
-		public FileLocationBase Location { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.FileLocationBase Location { get; set; }
 		public int W { get; set; }
 		public int H { get; set; }
 		public int Size { get; set; }
@@ -35,7 +35,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Type = reader.Read<string>();
-			Location = reader.Read<FileLocationBase>();
+			Location = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.FileLocationBase>();
 			W = reader.Read<int>();
 			H = reader.Read<int>();
 			Size = reader.Read<int>();

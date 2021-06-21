@@ -24,7 +24,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override bool AutofillNewCorrespondents { get; set; }
 		public override int Id { get; set; }
 		public override string Title { get; set; }
-		public override ChatPhotoBase Photo { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.ChatPhotoBase Photo { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -60,7 +60,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Title = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				Photo = reader.Read<ChatPhotoBase>();
+				Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatPhotoBase>();
 			}
 
 

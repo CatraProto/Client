@@ -21,15 +21,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = -2091549254;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.EditInlineBotMessage);
+		public System.Type Type { get; init; } = typeof(bool);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool NoWebpage { get; set; }
-		public InputBotInlineMessageIDBase Id { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageIDBase Id { get; set; }
 		public string Message { get; set; }
-		public InputMediaBase Media { get; set; }
-		public ReplyMarkupBase ReplyMarkup { get; set; }
-		public IList<MessageEntityBase> Entities { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase Media { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase ReplyMarkup { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
 
 		public void UpdateFlags() 
 		{
@@ -74,7 +74,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		{
 			Flags = reader.Read<int>();
 			NoWebpage = FlagsHelper.IsFlagSet(Flags, 1);
-			Id = reader.Read<InputBotInlineMessageIDBase>();
+			Id = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageIDBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 11))
 			{
 				Message = reader.Read<string>();
@@ -82,17 +82,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 			if(FlagsHelper.IsFlagSet(Flags, 14))
 			{
-				Media = reader.Read<InputMediaBase>();
+				Media = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				ReplyMarkup = reader.Read<ReplyMarkupBase>();
+				ReplyMarkup = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				Entities = reader.ReadVector<MessageEntityBase>();
+				Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
 			}
 
 

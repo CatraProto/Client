@@ -10,7 +10,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
         public static int ConstructorId { get; } = 1009288385;
-		public RichTextBase Text { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Text { get; set; }
 		public string Url { get; set; }
 		public long WebpageId { get; set; }
 
@@ -30,7 +30,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Text = reader.Read<RichTextBase>();
+			Text = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
 			Url = reader.Read<string>();
 			WebpageId = reader.Read<long>();
 

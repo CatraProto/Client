@@ -15,7 +15,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 		public byte[] FileToken { get; set; }
 		public byte[] EncryptionKey { get; set; }
 		public byte[] EncryptionIv { get; set; }
-		public IList<FileHashBase> FileHashes { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase> FileHashes { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -39,7 +39,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 			FileToken = reader.Read<byte[]>();
 			EncryptionKey = reader.Read<byte[]>();
 			EncryptionIv = reader.Read<byte[]>();
-			FileHashes = reader.ReadVector<FileHashBase>();
+			FileHashes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>();
 
 		}
 	}

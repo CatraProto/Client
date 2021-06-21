@@ -18,13 +18,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 
         public static int ConstructorId { get; } = 870184064;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Channels.GetAdminLog);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Channels.AdminLogResultsBase);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
-		public InputChannelBase Channel { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase Channel { get; set; }
 		public string Q { get; set; }
-		public ChannelAdminLogEventsFilterBase EventsFilter { get; set; }
-		public IList<InputUserBase> Admins { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventsFilterBase EventsFilter { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase> Admins { get; set; }
 		public long MaxId { get; set; }
 		public long MinId { get; set; }
 		public int Limit { get; set; }
@@ -62,16 +62,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 		public void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			Channel = reader.Read<InputChannelBase>();
+			Channel = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
 			Q = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				EventsFilter = reader.Read<ChannelAdminLogEventsFilterBase>();
+				EventsFilter = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventsFilterBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Admins = reader.ReadVector<InputUserBase>();
+				Admins = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
 			}
 
 			MaxId = reader.Read<long>();

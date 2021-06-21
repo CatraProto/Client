@@ -5,31 +5,28 @@ using CatraProto.Client.TL.Schemas.MTProto;
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class MsgCopy : IMethod
+	public partial class MsgCopy : MessageCopyBase
 	{
 
 
         public static int ConstructorId { get; } = -530561358;
+		public override CatraProto.Client.TL.Schemas.MTProto.MessageBase OrigMessage { get; set; }
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.MsgCopy);
-		public bool IsVector { get; init; } = false;
-		public MessageBase OrigMessage { get; set; }
-
-		public void UpdateFlags() 
+		public override void UpdateFlags() 
 		{
 
 		}
 
-		public void Serialize(Writer writer)
+		public override void Serialize(Writer writer)
 		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(OrigMessage);
 
 		}
 
-		public void Deserialize(Reader reader)
+		public override void Deserialize(Reader reader)
 		{
-			OrigMessage = reader.Read<MessageBase>();
+			OrigMessage = reader.Read<CatraProto.Client.TL.Schemas.MTProto.MessageBase>();
 
 		}
 	}

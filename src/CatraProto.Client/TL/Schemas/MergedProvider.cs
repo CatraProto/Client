@@ -337,7 +337,7 @@ namespace CatraProto.Client.TL.Schemas
 				case -1219778094:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Contacts.ContactsNotModified();
 				case -353862078:
-					return new CatraProto.Client.TL.Schemas.CloudChats.Contacts.OContacts();
+					return new CatraProto.Client.TL.Schemas.CloudChats.Contacts.CContacts();
 				case 2010127419:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Contacts.ImportedContacts();
 				case 182326673:
@@ -351,7 +351,7 @@ namespace CatraProto.Client.TL.Schemas
 				case -253500010:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.DialogsNotModified();
 				case -1938715001:
-					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.OMessages();
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.MMessages();
 				case 978610270:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesSlice();
 				case 1682413576:
@@ -591,11 +591,11 @@ namespace CatraProto.Client.TL.Schemas
 				case 1918567619:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdatesCombined();
 				case 1957577280:
-					return new CatraProto.Client.TL.Schemas.CloudChats.OOUpdates();
+					return new CatraProto.Client.TL.Schemas.CloudChats.UUpdates();
 				case 301019932:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateShortSentMessage();
 				case -1916114267:
-					return new CatraProto.Client.TL.Schemas.CloudChats.Photos.OPhotos();
+					return new CatraProto.Client.TL.Schemas.CloudChats.Photos.PPhotos();
 				case 352657236:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Photos.PhotosSlice();
 				case 539045032:

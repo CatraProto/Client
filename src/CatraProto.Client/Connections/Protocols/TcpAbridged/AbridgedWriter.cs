@@ -20,7 +20,7 @@ namespace CatraProto.Client.Connections.Protocols.TcpAbridged
             _stream = stream;
         }
 
-        public Task SendMessage(byte[] message, CancellationToken cancellationToken = default)
+        public Task SendAsync(byte[] message, CancellationToken cancellationToken = default)
         {
             using var toStream = message.ToMemoryStream();
             using var headedMessage = SetProtocolHeaders(toStream);

@@ -28,7 +28,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override bool AlignRight { get; set; }
 		public override bool ValignMiddle { get; set; }
 		public override bool ValignBottom { get; set; }
-		public override RichTextBase Text { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Text { get; set; }
 		public override int? Colspan { get; set; }
 		public override int? Rowspan { get; set; }
 
@@ -78,7 +78,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ValignBottom = FlagsHelper.IsFlagSet(Flags, 6);
 			if(FlagsHelper.IsFlagSet(Flags, 7))
 			{
-				Text = reader.Read<RichTextBase>();
+				Text = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))

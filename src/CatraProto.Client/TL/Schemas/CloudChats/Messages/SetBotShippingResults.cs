@@ -18,12 +18,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = -436833542;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.SetBotShippingResults);
+		public System.Type Type { get; init; } = typeof(bool);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public long QueryId { get; set; }
 		public string Error { get; set; }
-		public IList<ShippingOptionBase> ShippingOptions { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.ShippingOptionBase> ShippingOptions { get; set; }
 
 		public void UpdateFlags() 
 		{
@@ -62,7 +62,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				ShippingOptions = reader.ReadVector<ShippingOptionBase>();
+				ShippingOptions = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ShippingOptionBase>();
 			}
 
 

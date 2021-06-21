@@ -5,29 +5,26 @@ using System.Numerics;
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class PQInnerData : IMethod
+	public partial class PQInnerData : PQInnerDataBase
 	{
 
 
         public static int ConstructorId { get; } = -2083955988;
+		public override byte[] Pq { get; set; }
+		public override byte[] P { get; set; }
+		public override byte[] Q { get; set; }
+		public override BigInteger Nonce { get; set; }
+		public override BigInteger ServerNonce { get; set; }
+		public override BigInteger NewNonce { get; set; }
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.PQInnerData);
-		public bool IsVector { get; init; } = false;
-		public byte[] Pq { get; set; }
-		public byte[] P { get; set; }
-		public byte[] Q { get; set; }
-		public BigInteger Nonce { get; set; }
-		public BigInteger ServerNonce { get; set; }
-		public BigInteger NewNonce { get; set; }
-
-		public void UpdateFlags() 
+		public override void UpdateFlags() 
 		{
 
 		}
 
-		public void Serialize(Writer writer)
+		public override void Serialize(Writer writer)
 		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(Pq);
 			writer.Write(P);
 			writer.Write(Q);
@@ -49,7 +46,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
 		}
 
-		public void Deserialize(Reader reader)
+		public override void Deserialize(Reader reader)
 		{
 			Pq = reader.Read<byte[]>();
 			P = reader.Read<byte[]>();

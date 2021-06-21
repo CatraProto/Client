@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Linq;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
@@ -7,9 +8,11 @@ using CatraProto.Client.Async.Locks;
 using CatraProto.Client.MTProto;
 using CatraProto.Client.MTProto.Messages;
 using CatraProto.Client.MTProto.Rpc;
+using CatraProto.Client.TL.Schemas.CloudChats;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL.Interfaces;
 using Serilog;
+using Channel = System.Threading.Channels.Channel;
 
 namespace CatraProto.Client.Connections
 {
@@ -22,7 +25,7 @@ namespace CatraProto.Client.Connections
 
         private ConcurrentDictionary<long, MessageContainer> _sentMessages = new ConcurrentDictionary<long, MessageContainer>();
         private ConcurrentDictionary<OutgoingMessage, MessageContainer> _completions = new ConcurrentDictionary<OutgoingMessage, MessageContainer>();
-        private Channel<OutgoingMessage> _outgoingMessages = Channel.CreateUnbounded<OutgoingMessage>();
+        private Channel<MessageContainer> _outgoingMessages = Channel.CreateUnbounded<MessageContainer>();
         private AsyncLock _unencryptedMessagesLock = new AsyncLock();
         private MessageContainer _oldMessage;
         private readonly ILogger _logger;
@@ -33,24 +36,13 @@ namespace CatraProto.Client.Connections
             _logger = logger.ForContext<MessagesHandler>();
         }
 
-        public async Task<OutgoingMessage> Listen(CancellationToken cancellationToken)
+        public Task<MessageContainer> ListenAsync(CancellationToken cancellationToken)
         {
-            var message = await _outgoingMessages.Reader.ReadAsync(cancellationToken);
-
-            //This is because channels don't allow to remove items, I'll probably work on a better implementation in the future
-            //so that I can avoid using them.
-            if (message.CancellationToken.IsCancellationRequested)
-            {
-                _logger.Information("Cancellation of the message is requested, picking another item...");
-                return await Listen(cancellationToken);
-            }
-
-            return message;
+            return _outgoingMessages.Reader.ReadAsync(cancellationToken).AsTask();
         }
 
         public async Task<Task> EnqueueMessage(OutgoingMessage message, IRpcMessage rpcContainer)
         {
-            _logger.Information("Enqueueing message, encrypted: {Encrypted}", message.IsEncrypted);
             var completionSource = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
             var messageContainer = new MessageContainer
             {
@@ -61,102 +53,98 @@ namespace CatraProto.Client.Connections
 
             if (message.IsEncrypted)
             {
-                if (!_completions.TryAdd(message, messageContainer))
+                if (!_completions.TryAdd(message, messageContainer) && message.MessageOptions.ExpectsResponse)
                 {
                     _logger.Warning("Encrypted message was already queued, throwing...");
-                    throw new InvalidOperationException("Can't schedule the same message several times");
+                    throw new InvalidOperationException("Can't enqueue the same message several times");
                 }
             }
             else
             {
-                //This deserves an explanation.
+                //This deserves an explanation:
                 //UnencryptedMessages aren't identifiable by their MessageId since it is not persistent,
                 //therefore, the best way to complete the correct task is to send one message after the previous one received a response
-                _logger.Information("Acquiring lock for unencrypted message");
+                _logger.Information("Enqueuing unencrypted message, acquiring lock...");
                 using (await _unencryptedMessagesLock.LockAsync())
                 {
                     _logger.Information("Lock acquired for unencrypted message");
                     if (_oldMessage != null)
                     {
-                        _logger.Information("An old unencrypted message hasn't yet received a response, waiting before queueing");
+                        _logger.Information("An old unencrypted message hasn't yet received a response, waiting before enqueueing this one...");
                         try
                         {
                             await _oldMessage.CompletionSource.Task;
                         }
-                        catch (OperationCanceledException)
+                        finally
                         {
-                            _logger.Information("Old unencrypted task was cancelled while waiting, this is not an error but it's worth logging");
+                            _logger.Information("The old message received a response or got cancelled, proceeding to enqueue...");
                         }
                     }
 
-                    _outgoingMessages.Writer.TryWrite(message);
-                    _oldMessage = messageContainer;
-                    _logger.Information("Unencrypted enqueued successfully");
+                    if (message.MessageOptions.ExpectsResponse)
+                    {
+                        _oldMessage = messageContainer;
+                    }
                 }
             }
 
-            //I'm not sure if it's going to happen, but I want to prevent having DequeueMessage called while we are still scheduling
-            messageContainer.CancellationTokenRegistration = message.CancellationToken.Register(() => DequeueMessage(message));
-            _outgoingMessages.Writer.TryWrite(message);
+            if (message.CancellationToken.IsCancellationRequested)
+            {
+                //This is because the registration doesn't get called if the token is already cancelled
+                _logger.Information("Cancellation of the message got requested just before registering a callback, cancelling...");
+                DequeueMessage(messageContainer, message.CancellationToken);
+                return Task.FromCanceled(message.CancellationToken);
+            }
 
-            _logger.Information("Message successfully enqueued");
+            messageContainer.CancellationTokenRegistration = message.CancellationToken.Register(() => DequeueMessage(messageContainer, message.CancellationToken));
+            _outgoingMessages.Writer.TryWrite(messageContainer);
+            _logger.Information("{Type} message enqueued successfully", message.IsEncrypted ? "Encrypted" : "Unencrypted");
             return completionSource.Task;
         }
 
-        public void DequeueMessage(OutgoingMessage message)
+        public void DequeueMessage(MessageContainer message, CancellationToken? token = null)
         {
-            if (message.IsEncrypted)
+            _logger.Information("Dequeuing message {Message}, IsEncrypted: {Encrypted}, CancellationRequested: {Requested}", message.OutgoingMessage.Body, message.OutgoingMessage.IsEncrypted, token != null);
+            if (token != null)
             {
-                _logger.Information("Dequeuing encrypted message");
-                if (_completions.TryRemove(message, out var container))
-                {
-                    container.CompletionSource.TrySetCanceled();
-                }
+                message.CompletionSource.TrySetCanceled(token.Value);
             }
             else
             {
-                _logger.Information("Dequeuing unencrypted message");
-                if (_completions.TryRemove(message, out var container))
-                {
-                    container.CompletionSource.TrySetCanceled();
-                    container.CancellationTokenRegistration.Unregister();
-                }
+                message.CompletionSource.TrySetCanceled();
             }
+            message.CancellationTokenRegistration.Unregister();
         }
 
-        public void CompleteMessage(IncomingMessage message)
+        public void SetMessageCompletion(long messageId, object response)
         {
-            if (message.IsEncrypted)
+            var isEncrypted = messageId != 0;
+            if (isEncrypted)
             {
-                if (message.Body is RpcResult result)
+                if (_sentMessages.TryGetValue(messageId, out var container))
                 {
-                    if (_sentMessages.TryGetValue(result.ReqMsgId, out var container))
-                    {
-                        container.CompletionSource.TrySetResult();
-                        container.CancellationTokenRegistration.Unregister();
-                    }
-                    else
-                    {
-                        _logger.Warning("Message id {Id} not found while trying to complete", result.ReqMsgId);
-                    }
+                    container.RpcContainer.SetResponse(response);
+                    container.CancellationTokenRegistration.Unregister();
+                    container.CompletionSource.TrySetResult();
+                    _logger.Information("Completed task for message {Id}. Received: {Type}", messageId, response.ToString());
                 }
                 else
                 {
-                    _logger.Warning("Trying to complete an encrypted message which is not RpcResult");
+                    _logger.Warning("Can't complete messageId {Id}. Message not found", messageId);
                 }
             }
             else
             {
                 if (_oldMessage != null)
                 {
+                    _oldMessage.RpcContainer.SetResponse(response);
                     _oldMessage.CompletionSource.TrySetResult();
-                    _oldMessage.RpcContainer.SetResponse(message.Body);
                     _oldMessage.CancellationTokenRegistration.Unregister();
-                    _logger.Information("Completed task for unencryptedMessage, received: {Type}", message.Body.ToString());
+                    _logger.Information("Completed task for unencryptedMessage, received: {Type}", response.ToString());
                 }
                 else
                 {
-                    _logger.Warning("Received unencryptedMessage to complete but not message was set, received type: {Type}", message.Body.ToString());
+                    _logger.Warning("Can't complete unencrypted task, no old task was found. Received type: {Type}", response.ToString());
                 }
             }
         }
@@ -166,7 +154,7 @@ namespace CatraProto.Client.Connections
             return _sentMessages.TryAdd(messageId, message);
         }
 
-        public bool GetMessageMethod(long messageId, out IMethod method)
+        public bool GetMethod(long messageId, out IMethod method)
         {
             if (_sentMessages.TryGetValue(messageId, out var container))
             {

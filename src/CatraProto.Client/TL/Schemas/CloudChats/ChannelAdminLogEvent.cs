@@ -13,7 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override long Id { get; set; }
 		public override int Date { get; set; }
 		public override int UserId { get; set; }
-		public override ChannelAdminLogEventActionBase Action { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionBase Action { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -35,7 +35,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Id = reader.Read<long>();
 			Date = reader.Read<int>();
 			UserId = reader.Read<int>();
-			Action = reader.Read<ChannelAdminLogEventActionBase>();
+			Action = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionBase>();
 
 		}
 	}

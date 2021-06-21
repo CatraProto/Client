@@ -1,10 +1,17 @@
-﻿using System.Text;
+﻿using System.Linq;
+using System.Text;
 using CatraProto.TL.Generator.Settings.Objects;
 
 namespace CatraProto.TL.Generator
 {
     internal static class StringTools
     {
+        private static string[] _bannedKeywords = {
+            "params",
+            "object",
+            "private",
+            "async"
+        };
         public const string OneTabs = "\t";
         public const string TwoTabs = "\t\t";
         public const string ThreeTabs = "\t\t\t";
@@ -75,6 +82,16 @@ namespace CatraProto.TL.Generator
         public static string NamespaceToDirectory(string ns)
         {
             return ns.Replace(".", "/");
+        }
+
+        public static string FixLanguageWord(string word)
+        {
+            if (_bannedKeywords.Contains(word))
+            {
+                return word[0] + word;
+            }
+
+            return word;
         }
     }
 }

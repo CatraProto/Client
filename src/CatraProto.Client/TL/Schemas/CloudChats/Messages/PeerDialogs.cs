@@ -12,11 +12,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 
         public static int ConstructorId { get; } = 863093588;
-		public override IList<DialogBase> Dialogs { get; set; }
-		public override IList<MessageBase> Messages { get; set; }
-		public override IList<ChatBase> Chats { get; set; }
-		public override IList<UserBase> Users { get; set; }
-		public override StateBase State { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.DialogBase> Dialogs { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.MessageBase> Messages { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.Updates.StateBase State { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -36,11 +36,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 		public override void Deserialize(Reader reader)
 		{
-			Dialogs = reader.ReadVector<DialogBase>();
-			Messages = reader.ReadVector<MessageBase>();
-			Chats = reader.ReadVector<ChatBase>();
-			Users = reader.ReadVector<UserBase>();
-			State = reader.Read<StateBase>();
+			Dialogs = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DialogBase>();
+			Messages = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageBase>();
+			Chats = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
+			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+			State = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.Updates.StateBase>();
 
 		}
 	}

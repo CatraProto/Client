@@ -17,12 +17,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 
         public static int ConstructorId { get; } = -432034325;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Channels.ExportMessageLink);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.ExportedMessageLinkBase);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Grouped { get; set; }
 		public bool Thread { get; set; }
-		public InputChannelBase Channel { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase Channel { get; set; }
 		public int Id { get; set; }
 
 		public void UpdateFlags() 
@@ -47,7 +47,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 			Flags = reader.Read<int>();
 			Grouped = FlagsHelper.IsFlagSet(Flags, 0);
 			Thread = FlagsHelper.IsFlagSet(Flags, 1);
-			Channel = reader.Read<InputChannelBase>();
+			Channel = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
 			Id = reader.Read<int>();
 
 		}

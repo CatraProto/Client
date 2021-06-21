@@ -11,7 +11,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public abstract string Url { get; set; }
 		public abstract int Size { get; set; }
 		public abstract string MimeType { get; set; }
-		public abstract IList<DocumentAttributeBase> Attributes { get; set; }
+		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase> Attributes { get; set; }
 
         public abstract void UpdateFlags();
         public abstract void Deserialize(Reader reader);

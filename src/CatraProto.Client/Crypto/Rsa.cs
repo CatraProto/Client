@@ -28,12 +28,7 @@ namespace CatraProto.Client.Crypto
             }
         }
 
-        public void Dispose()
-        {
-            _rsaKey?.Dispose();
-        }
-
-        public long CalculateRsaFingerprint()
+        public long ComputeFingerprint()
         {
             using var writer = new Writer(null, new MemoryStream());
             var rsaParameters = _rsaKey.ExportParameters(false);
@@ -56,7 +51,7 @@ namespace CatraProto.Client.Crypto
             foreach (var stringKey in keys)
             {
                 using var rsa = new Rsa(stringKey);
-                if (fingerprint == rsa.CalculateRsaFingerprint())
+                if (fingerprint == rsa.ComputeFingerprint())
                 {
                     return rsa;
                 }
@@ -81,14 +76,10 @@ namespace CatraProto.Client.Crypto
 
             return byteArray;
         }
-
-
-        protected virtual void Dispose(bool disposing)
+        
+        public void Dispose()
         {
-            if (disposing)
-            {
-                _rsaKey?.Dispose();
-            }
+            _rsaKey?.Dispose();
         }
     }
 }

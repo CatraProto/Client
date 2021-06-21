@@ -8,8 +8,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 {
     public abstract class PhoneCallBase : IObject
     {
-		public abstract PhoneCallBase PPhoneCall { get; set; }
-		public abstract IList<UserBase> Users { get; set; }
+		public abstract CatraProto.Client.TL.Schemas.CloudChats.PhoneCallBase PhoneCall_ { get; set; }
+		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
         public abstract void UpdateFlags();
         public abstract void Deserialize(Reader reader);

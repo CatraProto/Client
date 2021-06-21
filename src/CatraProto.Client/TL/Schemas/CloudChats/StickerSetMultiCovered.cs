@@ -11,8 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
         public static int ConstructorId { get; } = 872932635;
-		public override StickerSetBase Set { get; set; }
-		public IList<DocumentBase> Covers { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.StickerSetBase Set { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase> Covers { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -29,8 +29,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Set = reader.Read<StickerSetBase>();
-			Covers = reader.ReadVector<DocumentBase>();
+			Set = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StickerSetBase>();
+			Covers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
 
 		}
 	}

@@ -18,7 +18,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public static int ConstructorId { get; } = -1705233435;
 		public int Flags { get; set; }
 		public override string Email { get; set; }
-		public override SecureSecretSettingsBase SecureSettings { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.SecureSecretSettingsBase SecureSettings { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -55,7 +55,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				SecureSettings = reader.Read<SecureSecretSettingsBase>();
+				SecureSettings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SecureSecretSettingsBase>();
 			}
 
 

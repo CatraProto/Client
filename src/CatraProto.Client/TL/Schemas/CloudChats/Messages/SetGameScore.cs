@@ -17,14 +17,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = -1896289088;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.SetGameScore);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool EditMessage { get; set; }
 		public bool Force { get; set; }
-		public InputPeerBase Peer { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
 		public int Id { get; set; }
-		public InputUserBase UserId { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase UserId { get; set; }
 		public int Score { get; set; }
 
 		public void UpdateFlags() 
@@ -51,9 +51,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Flags = reader.Read<int>();
 			EditMessage = FlagsHelper.IsFlagSet(Flags, 0);
 			Force = FlagsHelper.IsFlagSet(Flags, 1);
-			Peer = reader.Read<InputPeerBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
 			Id = reader.Read<int>();
-			UserId = reader.Read<InputUserBase>();
+			UserId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
 			Score = reader.Read<int>();
 
 		}

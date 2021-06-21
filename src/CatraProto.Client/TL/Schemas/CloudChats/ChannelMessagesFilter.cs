@@ -18,7 +18,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get; } = -847783593;
 		public int Flags { get; set; }
 		public bool ExcludeNewMessages { get; set; }
-		public IList<MessageRangeBase> Ranges { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageRangeBase> Ranges { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -39,7 +39,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Flags = reader.Read<int>();
 			ExcludeNewMessages = FlagsHelper.IsFlagSet(Flags, 1);
-			Ranges = reader.ReadVector<MessageRangeBase>();
+			Ranges = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageRangeBase>();
 
 		}
 	}

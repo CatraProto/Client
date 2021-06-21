@@ -21,8 +21,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public string Type { get; set; }
 		public string Title { get; set; }
 		public string Description { get; set; }
-		public InputDocumentBase Document { get; set; }
-		public override InputBotInlineMessageBase SendMessage { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase Document { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageBase SendMessage { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -68,8 +68,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 				Description = reader.Read<string>();
 			}
 
-			Document = reader.Read<InputDocumentBase>();
-			SendMessage = reader.Read<InputBotInlineMessageBase>();
+			Document = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
+			SendMessage = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageBase>();
 
 		}
 	}

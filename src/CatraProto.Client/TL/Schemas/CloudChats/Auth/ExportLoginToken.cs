@@ -11,7 +11,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 
         public static int ConstructorId { get; } = -1313598185;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Auth.ExportLoginToken);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Auth.LoginTokenBase);
 		public bool IsVector { get; init; } = false;
 		public int ApiId { get; set; }
 		public string ApiHash { get; set; }

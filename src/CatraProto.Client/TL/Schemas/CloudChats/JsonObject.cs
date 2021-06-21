@@ -11,7 +11,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
         public static int ConstructorId { get; } = -1715350371;
-		public IList<JSONObjectValueBase> Value { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.JSONObjectValueBase> Value { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -27,7 +27,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Value = reader.ReadVector<JSONObjectValueBase>();
+			Value = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.JSONObjectValueBase>();
 
 		}
 	}

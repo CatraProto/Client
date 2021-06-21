@@ -19,7 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
         public static int ConstructorId { get; } = -784000893;
 		public int Flags { get; set; }
 		public override string Id { get; set; }
-		public override IList<ShippingOptionBase> ShippingOptions { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.ShippingOptionBase> ShippingOptions { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -56,7 +56,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				ShippingOptions = reader.ReadVector<ShippingOptionBase>();
+				ShippingOptions = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ShippingOptionBase>();
 			}
 
 

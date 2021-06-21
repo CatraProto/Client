@@ -11,12 +11,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 
         public static int ConstructorId { get; } = -1502141361;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Auth.SendCode);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeBase);
 		public bool IsVector { get; init; } = false;
 		public string PhoneNumber { get; set; }
 		public int ApiId { get; set; }
 		public string ApiHash { get; set; }
-		public CodeSettingsBase Settings { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.CodeSettingsBase Settings { get; set; }
 
 		public void UpdateFlags() 
 		{
@@ -38,7 +38,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 			PhoneNumber = reader.Read<string>();
 			ApiId = reader.Read<int>();
 			ApiHash = reader.Read<string>();
-			Settings = reader.Read<CodeSettingsBase>();
+			Settings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.CodeSettingsBase>();
 
 		}
 	}

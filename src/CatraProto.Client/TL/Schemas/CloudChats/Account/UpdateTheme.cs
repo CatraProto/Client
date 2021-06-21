@@ -19,15 +19,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public static int ConstructorId { get; } = 1555261397;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Account.UpdateTheme);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.ThemeBase);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public string Format { get; set; }
-		public InputThemeBase Theme { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputThemeBase Theme { get; set; }
 		public string Slug { get; set; }
 		public string Title { get; set; }
-		public InputDocumentBase Document { get; set; }
-		public InputThemeSettingsBase Settings { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase Document { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputThemeSettingsBase Settings { get; set; }
 
 		public void UpdateFlags() 
 		{
@@ -72,7 +72,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		{
 			Flags = reader.Read<int>();
 			Format = reader.Read<string>();
-			Theme = reader.Read<InputThemeBase>();
+			Theme = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputThemeBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				Slug = reader.Read<string>();
@@ -85,12 +85,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				Document = reader.Read<InputDocumentBase>();
+				Document = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				Settings = reader.Read<InputThemeSettingsBase>();
+				Settings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputThemeSettingsBase>();
 			}
 
 

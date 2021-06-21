@@ -10,7 +10,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
         public static int ConstructorId { get; } = -1557277184;
-		public WebPageBase Webpage { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.WebPageBase Webpage { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -26,7 +26,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Webpage = reader.Read<WebPageBase>();
+			Webpage = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.WebPageBase>();
 
 		}
 	}

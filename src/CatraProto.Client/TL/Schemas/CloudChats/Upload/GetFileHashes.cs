@@ -11,9 +11,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 
         public static int ConstructorId { get; } = -956147407;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Upload.GetFileHashes);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.FileHashBase);
 		public bool IsVector { get; init; } = false;
-		public InputFileLocationBase Location { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputFileLocationBase Location { get; set; }
 		public int Offset { get; set; }
 
 		public void UpdateFlags() 
@@ -31,7 +31,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 
 		public void Deserialize(Reader reader)
 		{
-			Location = reader.Read<InputFileLocationBase>();
+			Location = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputFileLocationBase>();
 			Offset = reader.Read<int>();
 
 		}

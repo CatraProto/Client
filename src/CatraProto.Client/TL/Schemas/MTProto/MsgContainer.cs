@@ -6,31 +6,28 @@ using CatraProto.Client.TL.Schemas.MTProto;
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class MsgContainer : IMethod
+	public partial class MsgContainer : MessageContainerBase
 	{
 
 
         public static int ConstructorId { get; } = 1945237724;
+		public override IList<CatraProto.Client.TL.Schemas.MTProto.MessageBase> Messages { get; set; }
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.MsgContainer);
-		public bool IsVector { get; init; } = false;
-		public IList<MessageBase> Messages { get; set; }
-
-		public void UpdateFlags() 
+		public override void UpdateFlags() 
 		{
 
 		}
 
-		public void Serialize(Writer writer)
+		public override void Serialize(Writer writer)
 		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(Messages);
 
 		}
 
-		public void Deserialize(Reader reader)
+		public override void Deserialize(Reader reader)
 		{
-			Messages = reader.ReadVector<MessageBase>();
+			Messages = reader.ReadVector<CatraProto.Client.TL.Schemas.MTProto.MessageBase>(() => {var instance = (CatraProto.Client.TL.Schemas.MTProto.MessageBase)new CatraProto.Client.TL.Schemas.MTProto.Message(); instance.Deserialize(reader); return instance;});
 
 		}
 	}

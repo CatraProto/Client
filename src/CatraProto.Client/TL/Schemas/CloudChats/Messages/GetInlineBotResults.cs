@@ -16,12 +16,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = 1364105629;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.GetInlineBotResults);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.BotResultsBase);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
-		public InputUserBase Bot { get; set; }
-		public InputPeerBase Peer { get; set; }
-		public InputGeoPointBase GeoPoint { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase Bot { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase GeoPoint { get; set; }
 		public string Query { get; set; }
 		public string Offset { get; set; }
 
@@ -51,11 +51,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			Bot = reader.Read<InputUserBase>();
-			Peer = reader.Read<InputPeerBase>();
+			Bot = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				GeoPoint = reader.Read<InputGeoPointBase>();
+				GeoPoint = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase>();
 			}
 
 			Query = reader.Read<string>();

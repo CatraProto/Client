@@ -8,7 +8,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class MessageReplyHeaderBase : IObject
     {
 		public abstract int ReplyToMsgId { get; set; }
-		public abstract PeerBase ReplyToPeerId { get; set; }
+		public abstract CatraProto.Client.TL.Schemas.CloudChats.PeerBase ReplyToPeerId { get; set; }
 		public abstract int? ReplyToTopId { get; set; }
 
         public abstract void UpdateFlags();

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using CatraProto.Client.Connections.Messages;
 using CatraProto.Client.Extensions;
+using CatraProto.Client.MTProto;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL;
@@ -12,40 +14,37 @@ namespace CatraProto.Client.Connections.Loop
     class ReadLoop : Async.Loops.Loop
     {
         private readonly CancellationTokenSource _cancellationToken = new CancellationTokenSource();
+        private MessagesHandler _messagesHandler;
         private readonly Connection _connection;
         private ILogger _logger;
-        private MessagesHandler _messagesHandler;
 
         public ReadLoop(Connection connection, MessagesHandler messagesHandler, ILogger logger)
         {
-            _connection = connection;
             _logger = logger.ForContext<ReadLoop>();
+            _connection = connection;
             _messagesHandler = messagesHandler;
         }
 
         private async Task Loop()
         {
-            _logger.Information("Listening for incoming messages");
+            _logger.Information("Listening for incoming messages from {Connection}...", _connection.ConnectionInfo);
             var protocol = _connection.Protocol;
             while (!_cancellationToken.IsCancellationRequested)
             {
                 try
                 {
-                    var message = await protocol.Reader.ReadIncomingMessage(_cancellationToken.Token);
-                    var reader = new Reader(MergedProvider.Singleton, message.ToMemoryStream());
+                    var message = await protocol.Reader.ReadMessageAsync(_cancellationToken.Token);
+                    using var reader = new Reader(MergedProvider.Singleton, message.ToMemoryStream());
                     var authKey = reader.Read<long>();
-
-                    if (reader.GetNextType() == typeof(RpcResult))
+                    if (authKey == 0)
                     {
-                        var response = new RpcReader
-                        {
-                            MessageId = reader.Read<long>()
-                        };
+                        var imported = new UnencryptedMessage(message);
+                        _logger.Information("Received an unencrypted message from Telegram, dispatching... Id: {MessageId}, Body Length: {Length}", imported.MessageId, imported.Body.Length);
+                        _connection.MessagesDispatcher.DispatchMessage(imported.Body);
+                    }
+                    else
+                    {
                         
-                        if (_messagesHandler.GetMessageMethod(response.MessageId, out var method))
-                        {
-                            response.ReadObject(method, reader);
-                        }
                     }
                 }
                 catch (Exception e)
@@ -53,7 +52,7 @@ namespace CatraProto.Client.Connections.Loop
                     _logger.Error(e, "Unexpected exception thrown, please report this on the github issues page");
                 }
             }
-
+            
             _logger.Information("ReadLoop shutdown");
             SetLoopStopped();
         }

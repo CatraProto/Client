@@ -10,9 +10,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 
         public static int ConstructorId { get; } = 1674235686;
-		public override AutoDownloadSettingsBase Low { get; set; }
-		public override AutoDownloadSettingsBase Medium { get; set; }
-		public override AutoDownloadSettingsBase High { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase Low { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase Medium { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase High { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -30,9 +30,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 		public override void Deserialize(Reader reader)
 		{
-			Low = reader.Read<AutoDownloadSettingsBase>();
-			Medium = reader.Read<AutoDownloadSettingsBase>();
-			High = reader.Read<AutoDownloadSettingsBase>();
+			Low = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase>();
+			Medium = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase>();
+			High = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase>();
 
 		}
 	}

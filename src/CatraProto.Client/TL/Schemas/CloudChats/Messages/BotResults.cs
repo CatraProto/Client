@@ -22,10 +22,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public override bool Gallery { get; set; }
 		public override long QueryId { get; set; }
 		public override string NextOffset { get; set; }
-		public override InlineBotSwitchPMBase SwitchPm { get; set; }
-		public override IList<BotInlineResultBase> Results { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.InlineBotSwitchPMBase SwitchPm { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.BotInlineResultBase> Results { get; set; }
 		public override int CacheTime { get; set; }
-		public override IList<UserBase> Users { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -69,12 +69,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				SwitchPm = reader.Read<InlineBotSwitchPMBase>();
+				SwitchPm = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InlineBotSwitchPMBase>();
 			}
 
-			Results = reader.ReadVector<BotInlineResultBase>();
+			Results = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.BotInlineResultBase>();
 			CacheTime = reader.Read<int>();
-			Users = reader.ReadVector<UserBase>();
+			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 
 		}
 	}

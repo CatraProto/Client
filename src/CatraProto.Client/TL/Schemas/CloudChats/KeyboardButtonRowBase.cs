@@ -8,7 +8,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public abstract class KeyboardButtonRowBase : IObject
     {
-		public abstract IList<KeyboardButtonBase> Buttons { get; set; }
+		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonBase> Buttons { get; set; }
 
         public abstract void UpdateFlags();
         public abstract void Deserialize(Reader reader);

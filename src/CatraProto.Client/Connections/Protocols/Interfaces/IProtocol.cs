@@ -10,7 +10,7 @@ namespace CatraProto.Client.Connections.Protocols.Interfaces
         public IProtocolWriter Writer { get; }
         public IProtocolReader Reader { get; }
 
-        public Task Connect(CancellationToken token = default);
-        public Task Close();
+        public Task ConnectAsync(CancellationToken token = default);
+        public Task CloseAsync();
     }
 }

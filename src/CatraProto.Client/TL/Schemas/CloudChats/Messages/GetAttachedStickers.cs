@@ -11,9 +11,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = -866424884;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.GetAttachedStickers);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.StickerSetCoveredBase);
 		public bool IsVector { get; init; } = false;
-		public InputStickeredMediaBase Media { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputStickeredMediaBase Media { get; set; }
 
 		public void UpdateFlags() 
 		{
@@ -29,7 +29,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 		public void Deserialize(Reader reader)
 		{
-			Media = reader.Read<InputStickeredMediaBase>();
+			Media = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputStickeredMediaBase>();
 
 		}
 	}

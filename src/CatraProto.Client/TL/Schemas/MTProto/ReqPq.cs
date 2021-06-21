@@ -11,7 +11,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
         public static int ConstructorId { get; } = 1615239032;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.ReqPq);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.ResPQBase);
 		public bool IsVector { get; init; } = false;
 		public BigInteger Nonce { get; set; }
 

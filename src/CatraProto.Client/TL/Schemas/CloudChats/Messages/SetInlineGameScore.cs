@@ -17,13 +17,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = 363700068;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.SetInlineGameScore);
+		public System.Type Type { get; init; } = typeof(bool);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool EditMessage { get; set; }
 		public bool Force { get; set; }
-		public InputBotInlineMessageIDBase Id { get; set; }
-		public InputUserBase UserId { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageIDBase Id { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase UserId { get; set; }
 		public int Score { get; set; }
 
 		public void UpdateFlags() 
@@ -49,8 +49,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Flags = reader.Read<int>();
 			EditMessage = FlagsHelper.IsFlagSet(Flags, 0);
 			Force = FlagsHelper.IsFlagSet(Flags, 1);
-			Id = reader.Read<InputBotInlineMessageIDBase>();
-			UserId = reader.Read<InputUserBase>();
+			Id = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageIDBase>();
+			UserId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
 			Score = reader.Read<int>();
 
 		}

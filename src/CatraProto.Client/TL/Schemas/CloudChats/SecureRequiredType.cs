@@ -21,7 +21,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public bool NativeNames { get; set; }
 		public bool SelfieRequired { get; set; }
 		public bool TranslationRequired { get; set; }
-		public SecureValueTypeBase Type { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase Type { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -46,7 +46,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			NativeNames = FlagsHelper.IsFlagSet(Flags, 0);
 			SelfieRequired = FlagsHelper.IsFlagSet(Flags, 1);
 			TranslationRequired = FlagsHelper.IsFlagSet(Flags, 2);
-			Type = reader.Read<SecureValueTypeBase>();
+			Type = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase>();
 
 		}
 	}

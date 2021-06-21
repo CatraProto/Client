@@ -4,27 +4,24 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class MsgDetailedInfo : IMethod
+	public partial class MsgDetailedInfo : MsgDetailedInfoBase
 	{
 
 
         public static int ConstructorId { get; } = 661470918;
-
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.MsgDetailedInfo);
-		public bool IsVector { get; init; } = false;
 		public long MsgId { get; set; }
-		public long AnswerMsgId { get; set; }
-		public int Bytes { get; set; }
-		public int Status { get; set; }
+		public override long AnswerMsgId { get; set; }
+		public override int Bytes { get; set; }
+		public override int Status { get; set; }
 
-		public void UpdateFlags() 
+		public override void UpdateFlags() 
 		{
 
 		}
 
-		public void Serialize(Writer writer)
+		public override void Serialize(Writer writer)
 		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(MsgId);
 			writer.Write(AnswerMsgId);
 			writer.Write(Bytes);
@@ -32,7 +29,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
 		}
 
-		public void Deserialize(Reader reader)
+		public override void Deserialize(Reader reader)
 		{
 			MsgId = reader.Read<long>();
 			AnswerMsgId = reader.Read<long>();

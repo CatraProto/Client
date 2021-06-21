@@ -16,11 +16,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = 450142282;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.UpdateDialogFilter);
+		public System.Type Type { get; init; } = typeof(bool);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public int Id { get; set; }
-		public DialogFilterBase Filter { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.DialogFilterBase Filter { get; set; }
 
 		public void UpdateFlags() 
 		{
@@ -48,7 +48,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Id = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Filter = reader.Read<DialogFilterBase>();
+				Filter = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DialogFilterBase>();
 			}
 
 

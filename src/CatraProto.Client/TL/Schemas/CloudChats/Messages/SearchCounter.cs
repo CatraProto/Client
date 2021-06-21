@@ -17,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int ConstructorId { get; } = -398136321;
 		public int Flags { get; set; }
 		public override bool Inexact { get; set; }
-		public override MessagesFilterBase Filter { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase Filter { get; set; }
 		public override int Count { get; set; }
 
 		public override void UpdateFlags() 
@@ -40,7 +40,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		{
 			Flags = reader.Read<int>();
 			Inexact = FlagsHelper.IsFlagSet(Flags, 1);
-			Filter = reader.Read<MessagesFilterBase>();
+			Filter = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase>();
 			Count = reader.Read<int>();
 
 		}

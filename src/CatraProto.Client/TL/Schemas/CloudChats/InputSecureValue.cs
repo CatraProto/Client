@@ -23,14 +23,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public static int ConstructorId { get; } = -618540889;
 		public int Flags { get; set; }
-		public override SecureValueTypeBase Type { get; set; }
-		public override SecureDataBase Data { get; set; }
-		public override InputSecureFileBase FrontSide { get; set; }
-		public override InputSecureFileBase ReverseSide { get; set; }
-		public override InputSecureFileBase Selfie { get; set; }
-		public override IList<InputSecureFileBase> Translation { get; set; }
-		public override IList<InputSecureFileBase> Files { get; set; }
-		public override SecurePlainDataBase PlainData { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase Type { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.SecureDataBase Data { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.InputSecureFileBase FrontSide { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.InputSecureFileBase ReverseSide { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.InputSecureFileBase Selfie { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.InputSecureFileBase> Translation { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.InputSecureFileBase> Files { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.SecurePlainDataBase PlainData { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -91,40 +91,40 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			Type = reader.Read<SecureValueTypeBase>();
+			Type = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Data = reader.Read<SecureDataBase>();
+				Data = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SecureDataBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				FrontSide = reader.Read<InputSecureFileBase>();
+				FrontSide = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputSecureFileBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				ReverseSide = reader.Read<InputSecureFileBase>();
+				ReverseSide = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputSecureFileBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				Selfie = reader.Read<InputSecureFileBase>();
+				Selfie = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputSecureFileBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
-				Translation = reader.ReadVector<InputSecureFileBase>();
+				Translation = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputSecureFileBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				Files = reader.ReadVector<InputSecureFileBase>();
+				Files = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputSecureFileBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				PlainData = reader.Read<SecurePlainDataBase>();
+				PlainData = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SecurePlainDataBase>();
 			}
 
 

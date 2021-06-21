@@ -10,8 +10,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
         public static int ConstructorId { get; } = -1094555409;
-		public NotifyPeerBase Peer { get; set; }
-		public PeerNotifySettingsBase NotifySettings { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.NotifyPeerBase Peer { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase NotifySettings { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -28,8 +28,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Peer = reader.Read<NotifyPeerBase>();
-			NotifySettings = reader.Read<PeerNotifySettingsBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.NotifyPeerBase>();
+			NotifySettings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase>();
 
 		}
 	}

@@ -5,6 +5,6 @@ namespace CatraProto.Client.Connections.Protocols.Interfaces
 {
     interface IProtocolWriter
     {
-        public Task SendMessage(byte[] message, CancellationToken token = default);
+        public Task SendAsync(byte[] message, CancellationToken token = default);
     }
 }

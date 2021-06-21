@@ -29,6 +29,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
+			writer.Write(Quiz.Value);
 			writer.Write(Text);
 
 		}

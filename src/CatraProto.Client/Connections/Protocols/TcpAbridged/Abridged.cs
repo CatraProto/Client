@@ -31,7 +31,7 @@ namespace CatraProto.Client.Connections.Protocols.TcpAbridged
         public bool IsConnected => _client.Connected;
 
 
-        public async Task Connect(CancellationToken token = default)
+        public async Task ConnectAsync(CancellationToken token = default)
         {
             if (!IsConnected)
             {
@@ -52,7 +52,7 @@ namespace CatraProto.Client.Connections.Protocols.TcpAbridged
             }
         }
 
-        public Task Close()
+        public Task CloseAsync()
         {
             _client.Close();
             return Task.CompletedTask;

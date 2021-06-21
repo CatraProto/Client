@@ -43,7 +43,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override int Expires { get; set; }
 		public override bool TestMode { get; set; }
 		public override int ThisDc { get; set; }
-		public override IList<DcOptionBase> DcOptions { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase> DcOptions { get; set; }
 		public override string DcTxtDomainName { get; set; }
 		public override int ChatSizeMax { get; set; }
 		public override int MegagroupSizeMax { get; set; }
@@ -207,7 +207,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Expires = reader.Read<int>();
 			TestMode = reader.Read<bool>();
 			ThisDc = reader.Read<int>();
-			DcOptions = reader.ReadVector<DcOptionBase>();
+			DcOptions = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase>();
 			DcTxtDomainName = reader.Read<string>();
 			ChatSizeMax = reader.Read<int>();
 			MegagroupSizeMax = reader.Read<int>();

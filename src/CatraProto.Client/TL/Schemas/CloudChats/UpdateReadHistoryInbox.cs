@@ -17,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get; } = -1667805217;
 		public int Flags { get; set; }
 		public int? FolderId { get; set; }
-		public PeerBase Peer { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
 		public int MaxId { get; set; }
 		public int StillUnreadCount { get; set; }
 		public int Pts { get; set; }
@@ -55,7 +55,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 				FolderId = reader.Read<int>();
 			}
 
-			Peer = reader.Read<PeerBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
 			MaxId = reader.Read<int>();
 			StillUnreadCount = reader.Read<int>();
 			Pts = reader.Read<int>();

@@ -21,8 +21,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override string ShortName { get; set; }
 		public override string Title { get; set; }
 		public override string Description { get; set; }
-		public override PhotoBase Photo { get; set; }
-		public override DocumentBase Document { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.PhotoBase Photo { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.DocumentBase Document { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -57,10 +57,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ShortName = reader.Read<string>();
 			Title = reader.Read<string>();
 			Description = reader.Read<string>();
-			Photo = reader.Read<PhotoBase>();
+			Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Document = reader.Read<DocumentBase>();
+				Document = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
 			}
 
 

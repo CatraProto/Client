@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using CatraProto.TL.Generator.Objects;
@@ -16,6 +18,7 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
         private string _methodTemplate;
         private List<Object> _objects;
         private string _typeTemplate;
+        private string _apiTemplated;
         private List<Type> _writtenTypes = new List<Type>();
 
         private Writer(List<Object> objects)
@@ -29,7 +32,8 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
             {
                 _typeTemplate = await File.ReadAllTextAsync(Configuration.AbstractTemplatePath),
                 _methodTemplate = await File.ReadAllTextAsync(Configuration.MethodTemplatePath),
-                _constructorTemplate = await File.ReadAllTextAsync(Configuration.ConstructorTemplatePath)
+                _constructorTemplate = await File.ReadAllTextAsync(Configuration.ConstructorTemplatePath),
+                _apiTemplated = await File.ReadAllTextAsync(Configuration.ApiTemplatePath)
             };
         }
 
@@ -48,6 +52,81 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
             }
 
             await Task.WhenAll(tasks);
+        }
+
+        //This code is awful, I know
+        public async Task WriteMethods()
+        {
+            var files = new Dictionary<string, string[]>();
+            var writtenNamespaces = new List<string>();
+            foreach (var o in _objects.Where(x => x is Method))
+            {
+                var method = (Method)o;
+                var stringBuilder = new StringBuilder();
+                method.WriteMethod(stringBuilder);
+                
+                var fixedNamespace = new Namespace(method.Namespace.FullNamespace, false)
+                {
+                    [3] = "Requests"
+                };
+                
+                if (fixedNamespace.PartialNamespaceArray.Length == 5)
+                {
+                    fixedNamespace[4] += "Api";
+                }
+                
+                if (files.TryGetValue(fixedNamespace.PartialNamespace, out var file))
+                {
+                    file[1] += stringBuilder.ToString();
+                }
+                else
+                {
+                    files.Add(fixedNamespace.PartialNamespace, new[] {"", stringBuilder.ToString(), ""});
+                }
+
+                if (fixedNamespace.PartialNamespaceArray.Length > 5)
+                {
+                    var ns = Namespace.ArrayToString(fixedNamespace.PartialNamespaceArray[..6]);
+                    var writtenProp = $"\npublic {fixedNamespace.PartialNamespace} {fixedNamespace.PartialNamespaceArray[^1]} {{ get; }}";
+                    var writtenInit = $"\n{fixedNamespace.PartialNamespaceArray[^1]} = new {fixedNamespace.PartialNamespace}(messagesHandler);";
+                    if (writtenNamespaces.Contains(ns))
+                    {
+                        continue;
+                    }
+
+                    if (files.TryGetValue(Namespace.ArrayToString(fixedNamespace.PartialNamespaceArray[..5]) + "Api", out var filee))
+                    {
+                        filee[0] += writtenProp;
+                        filee[2] += writtenInit;
+                    }
+                    else
+                    {
+                        files.Add(Namespace.ArrayToString(fixedNamespace.PartialNamespaceArray[..5]) + "Api", new[] {writtenProp, "", writtenInit});
+                    }
+
+                    writtenNamespaces.Add(ns);
+                }
+            }
+
+            var taskList = new List<Task>();
+            foreach (var pair in files)
+            {
+                var template = _apiTemplated;
+                var ns = new Namespace(pair.Key, false)
+                {
+                    [3] = "Requests"
+                };
+                
+                Directory.CreateDirectory(StringTools.NamespaceToDirectory(ns.PartialNamespace).Replace(".", "/"));
+                taskList.Add(File.WriteAllTextAsync(ns.FullNamespace.Replace(".", "/") + ".cs", template
+                    .Replace("^Namespace^", ns.PartialNamespace)
+                    .Replace("^Class^", ns.Class)
+                    .Replace("^Other^", pair.Value[0])
+                    .Replace("^Methods^", pair.Value[1])
+                    .Replace("^Inits^", pair.Value[2])
+                ));
+            }
+            await Task.WhenAll(taskList);
         }
 
         private Task WriteObject(Object obj)
@@ -86,7 +165,9 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
                 method.WriteMethod(builder);
                 //File.WriteAllTextAsync(StringTools.NamespaceToDirectory(obj.Namespace.FullNamespace) + "_Method.cs", builder.ToString()));
             }
-            return File.WriteAllTextAsync(StringTools.NamespaceToDirectory(obj.Namespace.FullNamespace) + ".cs", copy);        }
+
+            return File.WriteAllTextAsync(StringTools.NamespaceToDirectory(obj.Namespace.FullNamespace) + ".cs", copy);
+        }
 
         private Task WriteType(Type type)
         {

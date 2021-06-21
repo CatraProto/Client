@@ -27,8 +27,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int ParticipantId { get; set; }
 		public byte[] GAOrB { get; set; }
 		public long KeyFingerprint { get; set; }
-		public PhoneCallProtocolBase Protocol { get; set; }
-		public IList<PhoneConnectionBase> Connections { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase Protocol { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.PhoneConnectionBase> Connections { get; set; }
 		public int StartDate { get; set; }
 
 		public override void UpdateFlags() 
@@ -68,8 +68,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ParticipantId = reader.Read<int>();
 			GAOrB = reader.Read<byte[]>();
 			KeyFingerprint = reader.Read<long>();
-			Protocol = reader.Read<PhoneCallProtocolBase>();
-			Connections = reader.ReadVector<PhoneConnectionBase>();
+			Protocol = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase>();
+			Connections = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PhoneConnectionBase>();
 			StartDate = reader.Read<int>();
 
 		}

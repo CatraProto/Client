@@ -17,10 +17,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public static int ConstructorId { get; } = 482797855;
 		public int Flags { get; set; }
-		public override InputMediaBase Media { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase Media { get; set; }
 		public override long RandomId { get; set; }
 		public override string Message { get; set; }
-		public override IList<MessageEntityBase> Entities { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -47,12 +47,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			Media = reader.Read<InputMediaBase>();
+			Media = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase>();
 			RandomId = reader.Read<long>();
 			Message = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Entities = reader.ReadVector<MessageEntityBase>();
+				Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
 			}
 
 

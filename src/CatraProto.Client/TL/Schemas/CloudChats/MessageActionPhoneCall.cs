@@ -20,7 +20,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Flags { get; set; }
 		public bool Video { get; set; }
 		public long CallId { get; set; }
-		public PhoneCallDiscardReasonBase Reason { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PhoneCallDiscardReasonBase Reason { get; set; }
 		public int? Duration { get; set; }
 
 		public override void UpdateFlags() 
@@ -57,7 +57,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			CallId = reader.Read<long>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Reason = reader.Read<PhoneCallDiscardReasonBase>();
+				Reason = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhoneCallDiscardReasonBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))

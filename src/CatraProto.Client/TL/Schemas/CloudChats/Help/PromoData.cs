@@ -21,9 +21,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 		public int Flags { get; set; }
 		public bool Proxy { get; set; }
 		public override int Expires { get; set; }
-		public PeerBase Peer { get; set; }
-		public IList<ChatBase> Chats { get; set; }
-		public IList<UserBase> Users { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 		public string PsaType { get; set; }
 		public string PsaMessage { get; set; }
 
@@ -62,9 +62,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 			Flags = reader.Read<int>();
 			Proxy = FlagsHelper.IsFlagSet(Flags, 0);
 			Expires = reader.Read<int>();
-			Peer = reader.Read<PeerBase>();
-			Chats = reader.ReadVector<ChatBase>();
-			Users = reader.ReadVector<UserBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+			Chats = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
+			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
 				PsaType = reader.Read<string>();

@@ -4,33 +4,30 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class NewSessionCreated : IMethod
+	public partial class NewSessionCreated : NewSessionBase
 	{
 
 
         public static int ConstructorId { get; } = -1631450872;
+		public override long FirstMsgId { get; set; }
+		public override long UniqueId { get; set; }
+		public override long ServerSalt { get; set; }
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.NewSessionCreated);
-		public bool IsVector { get; init; } = false;
-		public long FirstMsgId { get; set; }
-		public long UniqueId { get; set; }
-		public long ServerSalt { get; set; }
-
-		public void UpdateFlags() 
+		public override void UpdateFlags() 
 		{
 
 		}
 
-		public void Serialize(Writer writer)
+		public override void Serialize(Writer writer)
 		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(FirstMsgId);
 			writer.Write(UniqueId);
 			writer.Write(ServerSalt);
 
 		}
 
-		public void Deserialize(Reader reader)
+		public override void Deserialize(Reader reader)
 		{
 			FirstMsgId = reader.Read<long>();
 			UniqueId = reader.Read<long>();

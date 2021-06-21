@@ -18,8 +18,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int ConstructorId { get; } = 136574537;
 		public int Flags { get; set; }
 		public override int Count { get; set; }
-		public override IList<MessageUserVoteBase> Votes { get; set; }
-		public override IList<UserBase> Users { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.MessageUserVoteBase> Votes { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 		public override string NextOffset { get; set; }
 
 		public override void UpdateFlags() 
@@ -48,8 +48,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		{
 			Flags = reader.Read<int>();
 			Count = reader.Read<int>();
-			Votes = reader.ReadVector<MessageUserVoteBase>();
-			Users = reader.ReadVector<UserBase>();
+			Votes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageUserVoteBase>();
+			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				NextOffset = reader.Read<string>();

@@ -17,11 +17,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 
         public static int ConstructorId { get; } = -750207932;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Contacts.GetLocated);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Background { get; set; }
-		public InputGeoPointBase GeoPoint { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase GeoPoint { get; set; }
 		public int? SelfExpires { get; set; }
 
 		public void UpdateFlags() 
@@ -49,7 +49,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 		{
 			Flags = reader.Read<int>();
 			Background = FlagsHelper.IsFlagSet(Flags, 1);
-			GeoPoint = reader.Read<InputGeoPointBase>();
+			GeoPoint = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				SelfExpires = reader.Read<int>();

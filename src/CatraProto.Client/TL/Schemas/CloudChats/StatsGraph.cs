@@ -16,7 +16,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public static int ConstructorId { get; } = -1901828938;
 		public int Flags { get; set; }
-		public DataJSONBase Json { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase Json { get; set; }
 		public string ZoomToken { get; set; }
 
 		public override void UpdateFlags() 
@@ -42,7 +42,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			Json = reader.Read<DataJSONBase>();
+			Json = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				ZoomToken = reader.Read<string>();

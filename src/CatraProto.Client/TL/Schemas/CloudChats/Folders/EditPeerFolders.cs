@@ -12,9 +12,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Folders
 
         public static int ConstructorId { get; } = 1749536939;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Folders.EditPeerFolders);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
 		public bool IsVector { get; init; } = false;
-		public IList<InputFolderPeerBase> FolderPeers { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputFolderPeerBase> FolderPeers { get; set; }
 
 		public void UpdateFlags() 
 		{
@@ -30,7 +30,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Folders
 
 		public void Deserialize(Reader reader)
 		{
-			FolderPeers = reader.ReadVector<InputFolderPeerBase>();
+			FolderPeers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputFolderPeerBase>();
 
 		}
 	}

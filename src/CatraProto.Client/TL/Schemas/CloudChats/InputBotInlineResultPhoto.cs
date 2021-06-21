@@ -12,8 +12,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get; } = -1462213465;
 		public override string Id { get; set; }
 		public string Type { get; set; }
-		public InputPhotoBase Photo { get; set; }
-		public override InputBotInlineMessageBase SendMessage { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPhotoBase Photo { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageBase SendMessage { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -34,8 +34,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Id = reader.Read<string>();
 			Type = reader.Read<string>();
-			Photo = reader.Read<InputPhotoBase>();
-			SendMessage = reader.Read<InputBotInlineMessageBase>();
+			Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPhotoBase>();
+			SendMessage = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageBase>();
 
 		}
 	}

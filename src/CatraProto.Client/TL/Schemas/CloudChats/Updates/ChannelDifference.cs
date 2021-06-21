@@ -21,10 +21,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 		public override bool Final { get; set; }
 		public int Pts { get; set; }
 		public override int? Timeout { get; set; }
-		public IList<MessageBase> NewMessages { get; set; }
-		public IList<UpdateBase> OtherUpdates { get; set; }
-		public IList<ChatBase> Chats { get; set; }
-		public IList<UserBase> Users { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageBase> NewMessages { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.UpdateBase> OtherUpdates { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -61,10 +61,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 				Timeout = reader.Read<int>();
 			}
 
-			NewMessages = reader.ReadVector<MessageBase>();
-			OtherUpdates = reader.ReadVector<UpdateBase>();
-			Chats = reader.ReadVector<ChatBase>();
-			Users = reader.ReadVector<UserBase>();
+			NewMessages = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageBase>();
+			OtherUpdates = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UpdateBase>();
+			Chats = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
+			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 
 		}
 	}

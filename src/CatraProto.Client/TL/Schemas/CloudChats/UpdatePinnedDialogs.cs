@@ -19,7 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get; } = -99664734;
 		public int Flags { get; set; }
 		public int? FolderId { get; set; }
-		public IList<DialogPeerBase> Order { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.DialogPeerBase> Order { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -56,7 +56,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Order = reader.ReadVector<DialogPeerBase>();
+				Order = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DialogPeerBase>();
 			}
 
 

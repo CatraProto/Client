@@ -17,14 +17,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = -1594999949;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.GetDialogs);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.DialogsBase);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool ExcludePinned { get; set; }
 		public int? FolderId { get; set; }
 		public int OffsetDate { get; set; }
 		public int OffsetId { get; set; }
-		public InputPeerBase OffsetPeer { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase OffsetPeer { get; set; }
 		public int Limit { get; set; }
 		public int Hash { get; set; }
 
@@ -64,7 +64,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 			OffsetDate = reader.Read<int>();
 			OffsetId = reader.Read<int>();
-			OffsetPeer = reader.Read<InputPeerBase>();
+			OffsetPeer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
 			Limit = reader.Read<int>();
 			Hash = reader.Read<int>();
 

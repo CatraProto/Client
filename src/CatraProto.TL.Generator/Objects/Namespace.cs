@@ -7,36 +7,21 @@ namespace CatraProto.TL.Generator.Objects
     public class Namespace
     {
         private string[] _arrayNamespace = Array.Empty<string>();
-        private string _fullNamespace = "";
-        public string Class => _arrayNamespace[^1];
+        public string Class
+        {
+            get => _arrayNamespace[^1];
+        }
+
         public string FullNamespace
         {
-            get => _fullNamespace;
-
-            set
-            {
-                _arrayNamespace = value.Split('.');
-                _fullNamespace = value;
-            }
+            get => ArrayToString(_arrayNamespace);
+            set => _arrayNamespace = value.Split('.');
         }
         
         public string[] FullNamespaceArray
         {
             get => _arrayNamespace;
-
-            set
-            {
-                var temp = "";
-                for (var i = 0; i < _arrayNamespace.Length; i++)
-                {
-                    var item = _arrayNamespace[i];
-                    temp += item;
-                    if (i < _arrayNamespace.Length - 1) temp += ".";
-                }
-
-                _arrayNamespace = value;
-                _fullNamespace = temp;
-            }
+            set => _arrayNamespace = value;
         }
         
         public string PartialNamespace
@@ -85,6 +70,22 @@ namespace CatraProto.TL.Generator.Objects
             return Equals((Namespace) obj);
         }
 
+        public static string ArrayToString(string[] array)
+        {
+            var final = "";
+            for (var index = 0; index < array.Length; index++)
+            {
+                var s = array[index];
+                if (index != 0)
+                {
+                    final += ".";
+                }
+                final += s;
+            }
+
+            return final;
+        }
+        
         public static bool operator ==(Namespace ns1, Namespace ns2)
         {
             return ns2 is not null && ns1 is not null && ns1.FullNamespace == ns2.FullNamespace;
@@ -93,6 +94,12 @@ namespace CatraProto.TL.Generator.Objects
         public static bool operator !=(Namespace ns1, Namespace ns2)
         {
             return ns2 is not null && ns1 is not null && ns1.FullNamespace != ns2.FullNamespace;
+        }
+
+        public string this[Index index]
+        {
+            get => _arrayNamespace[index];
+            set => _arrayNamespace[index] = value;
         }
     }
 }

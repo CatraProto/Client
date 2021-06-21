@@ -17,12 +17,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public static int ConstructorId { get; } = 991616823;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.ReorderPinnedDialogs);
+		public System.Type Type { get; init; } = typeof(bool);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Force { get; set; }
 		public int FolderId { get; set; }
-		public IList<InputDialogPeerBase> Order { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputDialogPeerBase> Order { get; set; }
 
 		public void UpdateFlags() 
 		{
@@ -45,7 +45,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Flags = reader.Read<int>();
 			Force = FlagsHelper.IsFlagSet(Flags, 0);
 			FolderId = reader.Read<int>();
-			Order = reader.ReadVector<InputDialogPeerBase>();
+			Order = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputDialogPeerBase>();
 
 		}
 	}

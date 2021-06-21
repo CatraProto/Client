@@ -26,13 +26,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		public override bool HasRecovery { get; set; }
 		public override bool HasSecureValues { get; set; }
 		public override bool HasPassword { get; set; }
-		public override PasswordKdfAlgoBase CurrentAlgo { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase CurrentAlgo { get; set; }
 		public override byte[] SrpB { get; set; }
 		public override long? SrpId { get; set; }
 		public override string Hint { get; set; }
 		public override string EmailUnconfirmedPattern { get; set; }
-		public override PasswordKdfAlgoBase NewAlgo { get; set; }
-		public override SecurePasswordKdfAlgoBase NewSecureAlgo { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase NewAlgo { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.SecurePasswordKdfAlgoBase NewSecureAlgo { get; set; }
 		public override byte[] SecureRandom { get; set; }
 
 		public override void UpdateFlags() 
@@ -92,7 +92,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 			HasPassword = FlagsHelper.IsFlagSet(Flags, 2);
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				CurrentAlgo = reader.Read<PasswordKdfAlgoBase>();
+				CurrentAlgo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
@@ -115,8 +115,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 				EmailUnconfirmedPattern = reader.Read<string>();
 			}
 
-			NewAlgo = reader.Read<PasswordKdfAlgoBase>();
-			NewSecureAlgo = reader.Read<SecurePasswordKdfAlgoBase>();
+			NewAlgo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase>();
+			NewSecureAlgo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SecurePasswordKdfAlgoBase>();
 			SecureRandom = reader.Read<byte[]>();
 
 		}

@@ -16,12 +16,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 
         public static int ConstructorId { get; } = 51854712;
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Updates.GetChannelDifference);
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Updates.ChannelDifferenceBase);
 		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Force { get; set; }
-		public InputChannelBase Channel { get; set; }
-		public ChannelMessagesFilterBase Filter { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase Channel { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.ChannelMessagesFilterBase Filter { get; set; }
 		public int Pts { get; set; }
 		public int Limit { get; set; }
 
@@ -47,8 +47,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 		{
 			Flags = reader.Read<int>();
 			Force = FlagsHelper.IsFlagSet(Flags, 0);
-			Channel = reader.Read<InputChannelBase>();
-			Filter = reader.Read<ChannelMessagesFilterBase>();
+			Channel = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
+			Filter = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChannelMessagesFilterBase>();
 			Pts = reader.Read<int>();
 			Limit = reader.Read<int>();
 

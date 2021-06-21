@@ -10,7 +10,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
         public static int ConstructorId { get; } = -905587442;
-		public DataJSONBase PaymentToken { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase PaymentToken { get; set; }
 		public string GoogleTransactionId { get; set; }
 
 		public override void UpdateFlags() 
@@ -28,7 +28,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			PaymentToken = reader.Read<DataJSONBase>();
+			PaymentToken = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
 			GoogleTransactionId = reader.Read<string>();
 
 		}

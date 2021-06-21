@@ -10,7 +10,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
         public static int ConstructorId { get; } = -1162877472;
-		public RichTextBase Author { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Author { get; set; }
 		public int PublishedDate { get; set; }
 
 		public override void UpdateFlags() 
@@ -28,7 +28,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Author = reader.Read<RichTextBase>();
+			Author = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
 			PublishedDate = reader.Read<int>();
 
 		}

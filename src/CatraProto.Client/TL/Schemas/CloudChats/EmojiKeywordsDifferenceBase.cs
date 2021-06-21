@@ -11,7 +11,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public abstract string LangCode { get; set; }
 		public abstract int FromVersion { get; set; }
 		public abstract int Version { get; set; }
-		public abstract IList<EmojiKeywordBase> Keywords { get; set; }
+		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.EmojiKeywordBase> Keywords { get; set; }
 
         public abstract void UpdateFlags();
         public abstract void Deserialize(Reader reader);

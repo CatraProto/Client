@@ -7,7 +7,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public abstract class FolderPeerBase : IObject
     {
-		public abstract PeerBase Peer { get; set; }
+		public abstract CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
 		public abstract int FolderId { get; set; }
 
         public abstract void UpdateFlags();

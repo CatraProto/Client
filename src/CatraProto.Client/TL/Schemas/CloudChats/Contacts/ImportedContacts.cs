@@ -11,10 +11,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 
 
         public static int ConstructorId { get; } = 2010127419;
-		public override IList<ImportedContactBase> Imported { get; set; }
-		public override IList<PopularContactBase> PopularInvites { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.ImportedContactBase> Imported { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.PopularContactBase> PopularInvites { get; set; }
 		public override IList<long> RetryContacts { get; set; }
-		public override IList<UserBase> Users { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -33,10 +33,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 
 		public override void Deserialize(Reader reader)
 		{
-			Imported = reader.ReadVector<ImportedContactBase>();
-			PopularInvites = reader.ReadVector<PopularContactBase>();
+			Imported = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ImportedContactBase>();
+			PopularInvites = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PopularContactBase>();
 			RetryContacts = reader.ReadVector<long>();
-			Users = reader.ReadVector<UserBase>();
+			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 
 		}
 	}

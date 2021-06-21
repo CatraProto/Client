@@ -47,9 +47,6 @@ namespace CatraProto.TL.Generator.CodeGeneration.Parsing
                     case "-/-returnsRPCEncrypted-/-":
                         methodType = MethodType.ReturnsEncryptedRPCResult;
                         continue;
-                    case "-/-returnsEncrypted-/-":
-                        methodType = MethodType.ReturnsEncrypted;
-                        continue;
                     case "-/-returnsUnencrypted-/-":
                         methodType = MethodType.ReturnsUnencrypted;
                         continue;
@@ -57,11 +54,11 @@ namespace CatraProto.TL.Generator.CodeGeneration.Parsing
                         readType = ReadType.ReadingMethod;
                         continue;
                     case "---constructors---":
-                        readType = ReadType.ReadingMethod;
+                        readType = ReadType.ReadingConstructor;
                         continue;
                 }
 
-                Object type = readType switch
+                Object constructor = readType switch
                 {
                     ReadType.ReadingConstructor => new Constructor(),
                     ReadType.ReadingMethod => new Method(methodType),
@@ -71,23 +68,30 @@ namespace CatraProto.TL.Generator.CodeGeneration.Parsing
                 var analyzer = new Parser(line);
                 var id = analyzer.FindId();
                 if (id == null)
-                    type.IsNaked = true;
+                {
+                    constructor.IsNaked = true;
+                }
                 else
-                    type.Id = id.Value;
-
+                {
+                    constructor.Id = id.Value;
+                }
+                
                 var parameters = analyzer.FindParameters().Select(Parameter.Create).ToList();
-                type.Parameters = parameters;
-                type.Namespace = new Namespace(analyzer.FindName());
-                var foundType = analyzer.FindType() ?? type.Name;
+                constructor.Parameters = parameters;
+                constructor.Namespace = new Namespace(analyzer.FindName());
+                var foundType = analyzer.FindType() ?? constructor.Name;
                 var isVector = FindVector(foundType, out foundType);
-                type.Type = Tools.CreateType(foundType, true);
-                type.Type.IsVector = isVector;
-                objects.Add(type);
+                constructor.Type = Tools.CreateType(foundType, true);
+                constructor.Type.IsVector = isVector;
+                constructor.Type.IsNaked = constructor.IsNaked;
+                
+                objects.Add(constructor);
             }
 
             return objects;
         }
 
+        
         public static bool FindVector(string type, out string newType)
         {
             var found = Regex.IsMatch(type, @"\w+<.+>") ? type.Split("<") : new[] {type};

@@ -20,7 +20,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Flags { get; set; }
 		public override bool Default { get; set; }
 		public override bool Dark { get; set; }
-		public override WallPaperSettingsBase Settings { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase Settings { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -50,7 +50,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Dark = FlagsHelper.IsFlagSet(Flags, 4);
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				Settings = reader.Read<WallPaperSettingsBase>();
+				Settings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase>();
 			}
 
 
