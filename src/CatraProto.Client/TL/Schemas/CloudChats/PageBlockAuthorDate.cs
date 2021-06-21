@@ -1,36 +1,28 @@
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class PageBlockAuthorDate : PageBlockBase
 	{
-
-
-        public static int ConstructorId { get; } = -1162877472;
-		public CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Author { get; set; }
+		public static int ConstructorId { get; } = -1162877472;
+		public RichTextBase Author { get; set; }
 		public int PublishedDate { get; set; }
 
-		public override void UpdateFlags() 
+		public override void UpdateFlags()
 		{
-
 		}
 
 		public override void Serialize(Writer writer)
 		{
-		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			if (ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(Author);
 			writer.Write(PublishedDate);
-
 		}
 
 		public override void Deserialize(Reader reader)
 		{
-			Author = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
+			Author = reader.Read<RichTextBase>();
 			PublishedDate = reader.Read<int>();
-
 		}
 	}
 }

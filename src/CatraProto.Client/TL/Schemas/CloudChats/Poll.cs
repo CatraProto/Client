@@ -1,16 +1,13 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class Poll : PollBase
 	{
 		[Flags]
-		public enum FlagsEnum 
+		public enum FlagsEnum
 		{
 			Closed = 1 << 0,
 			PublicVoters = 1 << 1,
@@ -20,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			CloseDate = 1 << 5
 		}
 
-        public static int ConstructorId { get; } = -2032041631;
+		public static int ConstructorId { get; } = -2032041631;
 		public override long Id { get; set; }
 		public int Flags { get; set; }
 		public override bool Closed { get; set; }
@@ -28,11 +25,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override bool MultipleChoice { get; set; }
 		public override bool Quiz { get; set; }
 		public override string Question { get; set; }
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.PollAnswerBase> Answers { get; set; }
+		public override IList<PollAnswerBase> Answers { get; set; }
 		public override int? ClosePeriod { get; set; }
 		public override int? CloseDate { get; set; }
 
-		public override void UpdateFlags() 
+		public override void UpdateFlags()
 		{
 			Flags = Closed ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
 			Flags = PublicVoters ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
@@ -40,28 +37,25 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = Quiz ? FlagsHelper.SetFlag(Flags, 3) : FlagsHelper.UnsetFlag(Flags, 3);
 			Flags = ClosePeriod == null ? FlagsHelper.UnsetFlag(Flags, 4) : FlagsHelper.SetFlag(Flags, 4);
 			Flags = CloseDate == null ? FlagsHelper.UnsetFlag(Flags, 5) : FlagsHelper.SetFlag(Flags, 5);
-
 		}
 
 		public override void Serialize(Writer writer)
 		{
-		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			if (ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(Id);
 			UpdateFlags();
 			writer.Write(Flags);
 			writer.Write(Question);
 			writer.Write(Answers);
-			if(FlagsHelper.IsFlagSet(Flags, 4))
+			if (FlagsHelper.IsFlagSet(Flags, 4))
 			{
 				writer.Write(ClosePeriod.Value);
 			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 5))
+			if (FlagsHelper.IsFlagSet(Flags, 5))
 			{
 				writer.Write(CloseDate.Value);
 			}
-
-
 		}
 
 		public override void Deserialize(Reader reader)
@@ -73,18 +67,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			MultipleChoice = FlagsHelper.IsFlagSet(Flags, 2);
 			Quiz = FlagsHelper.IsFlagSet(Flags, 3);
 			Question = reader.Read<string>();
-			Answers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PollAnswerBase>();
-			if(FlagsHelper.IsFlagSet(Flags, 4))
+			Answers = reader.ReadVector<PollAnswerBase>();
+			if (FlagsHelper.IsFlagSet(Flags, 4))
 			{
 				ClosePeriod = reader.Read<int>();
 			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 5))
+			if (FlagsHelper.IsFlagSet(Flags, 5))
 			{
 				CloseDate = reader.Read<int>();
 			}
-
-
 		}
 	}
 }

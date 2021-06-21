@@ -1,14 +1,10 @@
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class SecureFile : SecureFileBase
 	{
-
-
-        public static int ConstructorId { get; } = -534283678;
+		public static int ConstructorId { get; } = -534283678;
 		public long Id { get; set; }
 		public long AccessHash { get; set; }
 		public int Size { get; set; }
@@ -17,14 +13,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public byte[] FileHash { get; set; }
 		public byte[] Secret { get; set; }
 
-		public override void UpdateFlags() 
+		public override void UpdateFlags()
 		{
-
 		}
 
 		public override void Serialize(Writer writer)
 		{
-		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			if (ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(Id);
 			writer.Write(AccessHash);
 			writer.Write(Size);
@@ -32,7 +27,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			writer.Write(Date);
 			writer.Write(FileHash);
 			writer.Write(Secret);
-
 		}
 
 		public override void Deserialize(Reader reader)
@@ -44,7 +38,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Date = reader.Read<int>();
 			FileHash = reader.Read<byte[]>();
 			Secret = reader.Read<byte[]>();
-
 		}
 	}
 }

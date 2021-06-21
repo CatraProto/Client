@@ -1,16 +1,13 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
 using System.Collections.Generic;
-
+using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class UpdateShortMessage : UpdatesBase
 	{
 		[Flags]
-		public enum FlagsEnum 
+		public enum FlagsEnum
 		{
 			Out = 1 << 1,
 			Mentioned = 1 << 4,
@@ -22,7 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Entities = 1 << 7
 		}
 
-        public static int ConstructorId { get; } = 580309704;
+		public static int ConstructorId { get; } = 580309704;
 		public int Flags { get; set; }
 		public bool Out { get; set; }
 		public bool Mentioned { get; set; }
@@ -34,12 +31,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Pts { get; set; }
 		public int PtsCount { get; set; }
 		public int Date { get; set; }
-		public CatraProto.Client.TL.Schemas.CloudChats.MessageFwdHeaderBase FwdFrom { get; set; }
+		public MessageFwdHeaderBase FwdFrom { get; set; }
 		public int? ViaBotId { get; set; }
-		public CatraProto.Client.TL.Schemas.CloudChats.MessageReplyHeaderBase ReplyTo { get; set; }
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
+		public MessageReplyHeaderBase ReplyTo { get; set; }
+		public IList<MessageEntityBase> Entities { get; set; }
 
-		public override void UpdateFlags() 
+		public override void UpdateFlags()
 		{
 			Flags = Out ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
 			Flags = Mentioned ? FlagsHelper.SetFlag(Flags, 4) : FlagsHelper.UnsetFlag(Flags, 4);
@@ -49,12 +46,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = ViaBotId == null ? FlagsHelper.UnsetFlag(Flags, 11) : FlagsHelper.SetFlag(Flags, 11);
 			Flags = ReplyTo == null ? FlagsHelper.UnsetFlag(Flags, 3) : FlagsHelper.SetFlag(Flags, 3);
 			Flags = Entities == null ? FlagsHelper.UnsetFlag(Flags, 7) : FlagsHelper.SetFlag(Flags, 7);
-
 		}
 
 		public override void Serialize(Writer writer)
 		{
-		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			if (ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
 			writer.Write(Id);
@@ -63,27 +59,25 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			writer.Write(Pts);
 			writer.Write(PtsCount);
 			writer.Write(Date);
-			if(FlagsHelper.IsFlagSet(Flags, 2))
+			if (FlagsHelper.IsFlagSet(Flags, 2))
 			{
 				writer.Write(FwdFrom);
 			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 11))
+			if (FlagsHelper.IsFlagSet(Flags, 11))
 			{
 				writer.Write(ViaBotId.Value);
 			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 3))
+			if (FlagsHelper.IsFlagSet(Flags, 3))
 			{
 				writer.Write(ReplyTo);
 			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 7))
+			if (FlagsHelper.IsFlagSet(Flags, 7))
 			{
 				writer.Write(Entities);
 			}
-
-
 		}
 
 		public override void Deserialize(Reader reader)
@@ -99,27 +93,25 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Pts = reader.Read<int>();
 			PtsCount = reader.Read<int>();
 			Date = reader.Read<int>();
-			if(FlagsHelper.IsFlagSet(Flags, 2))
+			if (FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				FwdFrom = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageFwdHeaderBase>();
+				FwdFrom = reader.Read<MessageFwdHeaderBase>();
 			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 11))
+			if (FlagsHelper.IsFlagSet(Flags, 11))
 			{
 				ViaBotId = reader.Read<int>();
 			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 3))
+			if (FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				ReplyTo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageReplyHeaderBase>();
+				ReplyTo = reader.Read<MessageReplyHeaderBase>();
 			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 7))
+			if (FlagsHelper.IsFlagSet(Flags, 7))
 			{
-				Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
+				Entities = reader.ReadVector<MessageEntityBase>();
 			}
-
-
 		}
 	}
 }

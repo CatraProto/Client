@@ -1,15 +1,12 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
 	public partial class Password : PasswordBase
 	{
 		[Flags]
-		public enum FlagsEnum 
+		public enum FlagsEnum
 		{
 			HasRecovery = 1 << 0,
 			HasSecureValues = 1 << 1,
@@ -21,21 +18,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 			EmailUnconfirmedPattern = 1 << 4
 		}
 
-        public static int ConstructorId { get; } = -1390001672;
+		public static int ConstructorId { get; } = -1390001672;
 		public int Flags { get; set; }
 		public override bool HasRecovery { get; set; }
 		public override bool HasSecureValues { get; set; }
 		public override bool HasPassword { get; set; }
-		public override CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase CurrentAlgo { get; set; }
+		public override PasswordKdfAlgoBase CurrentAlgo { get; set; }
 		public override byte[] SrpB { get; set; }
 		public override long? SrpId { get; set; }
 		public override string Hint { get; set; }
 		public override string EmailUnconfirmedPattern { get; set; }
-		public override CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase NewAlgo { get; set; }
-		public override CatraProto.Client.TL.Schemas.CloudChats.SecurePasswordKdfAlgoBase NewSecureAlgo { get; set; }
+		public override PasswordKdfAlgoBase NewAlgo { get; set; }
+		public override SecurePasswordKdfAlgoBase NewSecureAlgo { get; set; }
 		public override byte[] SecureRandom { get; set; }
 
-		public override void UpdateFlags() 
+		public override void UpdateFlags()
 		{
 			Flags = HasRecovery ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
 			Flags = HasSecureValues ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
@@ -45,35 +42,34 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 			Flags = SrpId == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
 			Flags = Hint == null ? FlagsHelper.UnsetFlag(Flags, 3) : FlagsHelper.SetFlag(Flags, 3);
 			Flags = EmailUnconfirmedPattern == null ? FlagsHelper.UnsetFlag(Flags, 4) : FlagsHelper.SetFlag(Flags, 4);
-
 		}
 
 		public override void Serialize(Writer writer)
 		{
-		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			if (ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
-			if(FlagsHelper.IsFlagSet(Flags, 2))
+			if (FlagsHelper.IsFlagSet(Flags, 2))
 			{
 				writer.Write(CurrentAlgo);
 			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 2))
+			if (FlagsHelper.IsFlagSet(Flags, 2))
 			{
 				writer.Write(SrpB);
 			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 2))
+			if (FlagsHelper.IsFlagSet(Flags, 2))
 			{
 				writer.Write(SrpId.Value);
 			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 3))
+			if (FlagsHelper.IsFlagSet(Flags, 3))
 			{
 				writer.Write(Hint);
 			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 4))
+			if (FlagsHelper.IsFlagSet(Flags, 4))
 			{
 				writer.Write(EmailUnconfirmedPattern);
 			}
@@ -81,7 +77,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 			writer.Write(NewAlgo);
 			writer.Write(NewSecureAlgo);
 			writer.Write(SecureRandom);
-
 		}
 
 		public override void Deserialize(Reader reader)
@@ -90,35 +85,34 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 			HasRecovery = FlagsHelper.IsFlagSet(Flags, 0);
 			HasSecureValues = FlagsHelper.IsFlagSet(Flags, 1);
 			HasPassword = FlagsHelper.IsFlagSet(Flags, 2);
-			if(FlagsHelper.IsFlagSet(Flags, 2))
+			if (FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				CurrentAlgo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase>();
+				CurrentAlgo = reader.Read<PasswordKdfAlgoBase>();
 			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 2))
+			if (FlagsHelper.IsFlagSet(Flags, 2))
 			{
 				SrpB = reader.Read<byte[]>();
 			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 2))
+			if (FlagsHelper.IsFlagSet(Flags, 2))
 			{
 				SrpId = reader.Read<long>();
 			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 3))
+			if (FlagsHelper.IsFlagSet(Flags, 3))
 			{
 				Hint = reader.Read<string>();
 			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 4))
+			if (FlagsHelper.IsFlagSet(Flags, 4))
 			{
 				EmailUnconfirmedPattern = reader.Read<string>();
 			}
 
-			NewAlgo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase>();
-			NewSecureAlgo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SecurePasswordKdfAlgoBase>();
+			NewAlgo = reader.Read<PasswordKdfAlgoBase>();
+			NewSecureAlgo = reader.Read<SecurePasswordKdfAlgoBase>();
 			SecureRandom = reader.Read<byte[]>();
-
 		}
 	}
 }

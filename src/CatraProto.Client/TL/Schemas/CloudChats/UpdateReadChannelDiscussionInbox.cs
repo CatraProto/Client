@@ -1,20 +1,18 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-
+using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class UpdateReadChannelDiscussionInbox : UpdateBase
 	{
 		[Flags]
-		public enum FlagsEnum 
+		public enum FlagsEnum
 		{
 			BroadcastId = 1 << 0,
 			BroadcastPost = 1 << 0
 		}
 
-        public static int ConstructorId { get; } = 482860628;
+		public static int ConstructorId { get; } = 482860628;
 		public int Flags { get; set; }
 		public int ChannelId { get; set; }
 		public int TopMsgId { get; set; }
@@ -22,32 +20,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int? BroadcastId { get; set; }
 		public int? BroadcastPost { get; set; }
 
-		public override void UpdateFlags() 
+		public override void UpdateFlags()
 		{
 			Flags = BroadcastId == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
 			Flags = BroadcastPost == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
-
 		}
 
 		public override void Serialize(Writer writer)
 		{
-		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			if (ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
 			writer.Write(ChannelId);
 			writer.Write(TopMsgId);
 			writer.Write(ReadMaxId);
-			if(FlagsHelper.IsFlagSet(Flags, 0))
+			if (FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				writer.Write(BroadcastId.Value);
 			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 0))
+			if (FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				writer.Write(BroadcastPost.Value);
 			}
-
-
 		}
 
 		public override void Deserialize(Reader reader)
@@ -56,17 +51,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ChannelId = reader.Read<int>();
 			TopMsgId = reader.Read<int>();
 			ReadMaxId = reader.Read<int>();
-			if(FlagsHelper.IsFlagSet(Flags, 0))
+			if (FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				BroadcastId = reader.Read<int>();
 			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 0))
+			if (FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				BroadcastPost = reader.Read<int>();
 			}
-
-
 		}
 	}
 }

@@ -1,60 +1,54 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
 using System.Collections.Generic;
-
+using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class UpdateShortSentMessage : UpdatesBase
 	{
 		[Flags]
-		public enum FlagsEnum 
+		public enum FlagsEnum
 		{
 			Out = 1 << 1,
 			Media = 1 << 9,
 			Entities = 1 << 7
 		}
 
-        public static int ConstructorId { get; } = 301019932;
+		public static int ConstructorId { get; } = 301019932;
 		public int Flags { get; set; }
 		public bool Out { get; set; }
 		public int Id { get; set; }
 		public int Pts { get; set; }
 		public int PtsCount { get; set; }
 		public int Date { get; set; }
-		public CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase Media { get; set; }
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
+		public MessageMediaBase Media { get; set; }
+		public IList<MessageEntityBase> Entities { get; set; }
 
-		public override void UpdateFlags() 
+		public override void UpdateFlags()
 		{
 			Flags = Out ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
 			Flags = Media == null ? FlagsHelper.UnsetFlag(Flags, 9) : FlagsHelper.SetFlag(Flags, 9);
 			Flags = Entities == null ? FlagsHelper.UnsetFlag(Flags, 7) : FlagsHelper.SetFlag(Flags, 7);
-
 		}
 
 		public override void Serialize(Writer writer)
 		{
-		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			if (ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
 			writer.Write(Id);
 			writer.Write(Pts);
 			writer.Write(PtsCount);
 			writer.Write(Date);
-			if(FlagsHelper.IsFlagSet(Flags, 9))
+			if (FlagsHelper.IsFlagSet(Flags, 9))
 			{
 				writer.Write(Media);
 			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 7))
+			if (FlagsHelper.IsFlagSet(Flags, 7))
 			{
 				writer.Write(Entities);
 			}
-
-
 		}
 
 		public override void Deserialize(Reader reader)
@@ -65,17 +59,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Pts = reader.Read<int>();
 			PtsCount = reader.Read<int>();
 			Date = reader.Read<int>();
-			if(FlagsHelper.IsFlagSet(Flags, 9))
+			if (FlagsHelper.IsFlagSet(Flags, 9))
 			{
-				Media = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase>();
+				Media = reader.Read<MessageMediaBase>();
 			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 7))
+			if (FlagsHelper.IsFlagSet(Flags, 7))
 			{
-				Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
+				Entities = reader.ReadVector<MessageEntityBase>();
 			}
-
-
 		}
 	}
 }

@@ -1,30 +1,24 @@
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class ChatParticipantAdmin : ChatParticipantBase
 	{
-
-
-        public static int ConstructorId { get; } = -489233354;
+		public static int ConstructorId { get; } = -489233354;
 		public override int UserId { get; set; }
 		public int InviterId { get; set; }
 		public int Date { get; set; }
 
-		public override void UpdateFlags() 
+		public override void UpdateFlags()
 		{
-
 		}
 
 		public override void Serialize(Writer writer)
 		{
-		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			if (ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(UserId);
 			writer.Write(InviterId);
 			writer.Write(Date);
-
 		}
 
 		public override void Deserialize(Reader reader)
@@ -32,7 +26,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			UserId = reader.Read<int>();
 			InviterId = reader.Read<int>();
 			Date = reader.Read<int>();
-
 		}
 	}
 }

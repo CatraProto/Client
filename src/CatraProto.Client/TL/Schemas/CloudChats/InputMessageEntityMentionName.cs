@@ -1,39 +1,31 @@
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class InputMessageEntityMentionName : MessageEntityBase
 	{
-
-
-        public static int ConstructorId { get; } = 546203849;
+		public static int ConstructorId { get; } = 546203849;
 		public override int Offset { get; set; }
 		public override int Length { get; set; }
-		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase UserId { get; set; }
+		public InputUserBase UserId { get; set; }
 
-		public override void UpdateFlags() 
+		public override void UpdateFlags()
 		{
-
 		}
 
 		public override void Serialize(Writer writer)
 		{
-		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			if (ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(Offset);
 			writer.Write(Length);
 			writer.Write(UserId);
-
 		}
 
 		public override void Deserialize(Reader reader)
 		{
 			Offset = reader.Read<int>();
 			Length = reader.Read<int>();
-			UserId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
-
+			UserId = reader.Read<InputUserBase>();
 		}
 	}
 }

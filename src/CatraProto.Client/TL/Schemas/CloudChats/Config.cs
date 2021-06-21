@@ -1,16 +1,13 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class Config : ConfigBase
 	{
 		[Flags]
-		public enum FlagsEnum 
+		public enum FlagsEnum
 		{
 			PhonecallsEnabled = 1 << 1,
 			DefaultP2pContacts = 1 << 3,
@@ -30,7 +27,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			BaseLangPackVersion = 1 << 2
 		}
 
-        public static int ConstructorId { get; } = 856375399;
+		public static int ConstructorId { get; } = 856375399;
 		public int Flags { get; set; }
 		public override bool PhonecallsEnabled { get; set; }
 		public override bool DefaultP2pContacts { get; set; }
@@ -43,7 +40,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override int Expires { get; set; }
 		public override bool TestMode { get; set; }
 		public override int ThisDc { get; set; }
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase> DcOptions { get; set; }
+		public override IList<DcOptionBase> DcOptions { get; set; }
 		public override string DcTxtDomainName { get; set; }
 		public override int ChatSizeMax { get; set; }
 		public override int MegagroupSizeMax { get; set; }
@@ -84,7 +81,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override int? LangPackVersion { get; set; }
 		public override int? BaseLangPackVersion { get; set; }
 
-		public override void UpdateFlags() 
+		public override void UpdateFlags()
 		{
 			Flags = PhonecallsEnabled ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
 			Flags = DefaultP2pContacts ? FlagsHelper.SetFlag(Flags, 3) : FlagsHelper.UnsetFlag(Flags, 3);
@@ -102,12 +99,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = SuggestedLangCode == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
 			Flags = LangPackVersion == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
 			Flags = BaseLangPackVersion == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
-
 		}
 
 		public override void Serialize(Writer writer)
 		{
-		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			if (ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
 			writer.Write(Date);
@@ -135,7 +131,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			writer.Write(StickersRecentLimit);
 			writer.Write(StickersFavedLimit);
 			writer.Write(ChannelsReadMediaPeriod);
-			if(FlagsHelper.IsFlagSet(Flags, 0))
+			if (FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				writer.Write(TmpSessions.Value);
 			}
@@ -147,27 +143,27 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			writer.Write(CallConnectTimeoutMs);
 			writer.Write(CallPacketTimeoutMs);
 			writer.Write(MeUrlPrefix);
-			if(FlagsHelper.IsFlagSet(Flags, 7))
+			if (FlagsHelper.IsFlagSet(Flags, 7))
 			{
 				writer.Write(AutoupdateUrlPrefix);
 			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 9))
+			if (FlagsHelper.IsFlagSet(Flags, 9))
 			{
 				writer.Write(GifSearchUsername);
 			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 10))
+			if (FlagsHelper.IsFlagSet(Flags, 10))
 			{
 				writer.Write(VenueSearchUsername);
 			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 11))
+			if (FlagsHelper.IsFlagSet(Flags, 11))
 			{
 				writer.Write(ImgSearchUsername);
 			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 12))
+			if (FlagsHelper.IsFlagSet(Flags, 12))
 			{
 				writer.Write(StaticMapsProvider);
 			}
@@ -175,22 +171,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			writer.Write(CaptionLengthMax);
 			writer.Write(MessageLengthMax);
 			writer.Write(WebfileDcId);
-			if(FlagsHelper.IsFlagSet(Flags, 2))
+			if (FlagsHelper.IsFlagSet(Flags, 2))
 			{
 				writer.Write(SuggestedLangCode);
 			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 2))
+			if (FlagsHelper.IsFlagSet(Flags, 2))
 			{
 				writer.Write(LangPackVersion.Value);
 			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 2))
+			if (FlagsHelper.IsFlagSet(Flags, 2))
 			{
 				writer.Write(BaseLangPackVersion.Value);
 			}
-
-
 		}
 
 		public override void Deserialize(Reader reader)
@@ -207,7 +201,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Expires = reader.Read<int>();
 			TestMode = reader.Read<bool>();
 			ThisDc = reader.Read<int>();
-			DcOptions = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase>();
+			DcOptions = reader.ReadVector<DcOptionBase>();
 			DcTxtDomainName = reader.Read<string>();
 			ChatSizeMax = reader.Read<int>();
 			MegagroupSizeMax = reader.Read<int>();
@@ -228,7 +222,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			StickersRecentLimit = reader.Read<int>();
 			StickersFavedLimit = reader.Read<int>();
 			ChannelsReadMediaPeriod = reader.Read<int>();
-			if(FlagsHelper.IsFlagSet(Flags, 0))
+			if (FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				TmpSessions = reader.Read<int>();
 			}
@@ -240,27 +234,27 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			CallConnectTimeoutMs = reader.Read<int>();
 			CallPacketTimeoutMs = reader.Read<int>();
 			MeUrlPrefix = reader.Read<string>();
-			if(FlagsHelper.IsFlagSet(Flags, 7))
+			if (FlagsHelper.IsFlagSet(Flags, 7))
 			{
 				AutoupdateUrlPrefix = reader.Read<string>();
 			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 9))
+			if (FlagsHelper.IsFlagSet(Flags, 9))
 			{
 				GifSearchUsername = reader.Read<string>();
 			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 10))
+			if (FlagsHelper.IsFlagSet(Flags, 10))
 			{
 				VenueSearchUsername = reader.Read<string>();
 			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 11))
+			if (FlagsHelper.IsFlagSet(Flags, 11))
 			{
 				ImgSearchUsername = reader.Read<string>();
 			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 12))
+			if (FlagsHelper.IsFlagSet(Flags, 12))
 			{
 				StaticMapsProvider = reader.Read<string>();
 			}
@@ -268,22 +262,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			CaptionLengthMax = reader.Read<int>();
 			MessageLengthMax = reader.Read<int>();
 			WebfileDcId = reader.Read<int>();
-			if(FlagsHelper.IsFlagSet(Flags, 2))
+			if (FlagsHelper.IsFlagSet(Flags, 2))
 			{
 				SuggestedLangCode = reader.Read<string>();
 			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 2))
+			if (FlagsHelper.IsFlagSet(Flags, 2))
 			{
 				LangPackVersion = reader.Read<int>();
 			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 2))
+			if (FlagsHelper.IsFlagSet(Flags, 2))
 			{
 				BaseLangPackVersion = reader.Read<int>();
 			}
-
-
 		}
 	}
 }

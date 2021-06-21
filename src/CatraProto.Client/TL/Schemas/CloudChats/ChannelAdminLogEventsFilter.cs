@@ -1,14 +1,12 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-
+using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class ChannelAdminLogEventsFilter : ChannelAdminLogEventsFilterBase
 	{
 		[Flags]
-		public enum FlagsEnum 
+		public enum FlagsEnum
 		{
 			Join = 1 << 0,
 			Leave = 1 << 1,
@@ -28,7 +26,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Invites = 1 << 15
 		}
 
-        public static int ConstructorId { get; } = -368018716;
+		public static int ConstructorId { get; } = -368018716;
 		public int Flags { get; set; }
 		public override bool Join { get; set; }
 		public override bool Leave { get; set; }
@@ -47,7 +45,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override bool GroupCall { get; set; }
 		public override bool Invites { get; set; }
 
-		public override void UpdateFlags() 
+		public override void UpdateFlags()
 		{
 			Flags = Join ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
 			Flags = Leave ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
@@ -65,15 +63,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = Delete ? FlagsHelper.SetFlag(Flags, 13) : FlagsHelper.UnsetFlag(Flags, 13);
 			Flags = GroupCall ? FlagsHelper.SetFlag(Flags, 14) : FlagsHelper.UnsetFlag(Flags, 14);
 			Flags = Invites ? FlagsHelper.SetFlag(Flags, 15) : FlagsHelper.UnsetFlag(Flags, 15);
-
 		}
 
 		public override void Serialize(Writer writer)
 		{
-		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			if (ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
-
 		}
 
 		public override void Deserialize(Reader reader)
@@ -95,7 +91,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Delete = FlagsHelper.IsFlagSet(Flags, 13);
 			GroupCall = FlagsHelper.IsFlagSet(Flags, 14);
 			Invites = FlagsHelper.IsFlagSet(Flags, 15);
-
 		}
 	}
 }

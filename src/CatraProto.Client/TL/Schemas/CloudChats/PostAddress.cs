@@ -1,14 +1,10 @@
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class PostAddress : PostAddressBase
 	{
-
-
-        public static int ConstructorId { get; } = 512535275;
+		public static int ConstructorId { get; } = 512535275;
 		public override string StreetLine1 { get; set; }
 		public override string StreetLine2 { get; set; }
 		public override string City { get; set; }
@@ -16,21 +12,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override string CountryIso2 { get; set; }
 		public override string PostCode { get; set; }
 
-		public override void UpdateFlags() 
+		public override void UpdateFlags()
 		{
-
 		}
 
 		public override void Serialize(Writer writer)
 		{
-		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			if (ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(StreetLine1);
 			writer.Write(StreetLine2);
 			writer.Write(City);
 			writer.Write(State);
 			writer.Write(CountryIso2);
 			writer.Write(PostCode);
-
 		}
 
 		public override void Deserialize(Reader reader)
@@ -41,7 +35,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			State = reader.Read<string>();
 			CountryIso2 = reader.Read<string>();
 			PostCode = reader.Read<string>();
-
 		}
 	}
 }

@@ -1,14 +1,12 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-
+using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class ChatAdminRights : ChatAdminRightsBase
 	{
 		[Flags]
-		public enum FlagsEnum 
+		public enum FlagsEnum
 		{
 			ChangeInfo = 1 << 0,
 			PostMessages = 1 << 1,
@@ -22,7 +20,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ManageCall = 1 << 11
 		}
 
-        public static int ConstructorId { get; } = 1605510357;
+		public static int ConstructorId { get; } = 1605510357;
 		public int Flags { get; set; }
 		public override bool ChangeInfo { get; set; }
 		public override bool PostMessages { get; set; }
@@ -35,7 +33,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override bool Anonymous { get; set; }
 		public override bool ManageCall { get; set; }
 
-		public override void UpdateFlags() 
+		public override void UpdateFlags()
 		{
 			Flags = ChangeInfo ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
 			Flags = PostMessages ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
@@ -47,15 +45,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = AddAdmins ? FlagsHelper.SetFlag(Flags, 9) : FlagsHelper.UnsetFlag(Flags, 9);
 			Flags = Anonymous ? FlagsHelper.SetFlag(Flags, 10) : FlagsHelper.UnsetFlag(Flags, 10);
 			Flags = ManageCall ? FlagsHelper.SetFlag(Flags, 11) : FlagsHelper.UnsetFlag(Flags, 11);
-
 		}
 
 		public override void Serialize(Writer writer)
 		{
-		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			if (ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
-
 		}
 
 		public override void Deserialize(Reader reader)
@@ -71,7 +67,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			AddAdmins = FlagsHelper.IsFlagSet(Flags, 9);
 			Anonymous = FlagsHelper.IsFlagSet(Flags, 10);
 			ManageCall = FlagsHelper.IsFlagSet(Flags, 11);
-
 		}
 	}
 }

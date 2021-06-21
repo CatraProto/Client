@@ -9,42 +9,42 @@ using Serilog;
 
 namespace CatraProto.Client.Connections.Protocols.TcpAbridged
 {
-    class AbridgedWriter : IProtocolWriter
-    {
-        private readonly NetworkStream _stream;
-        private ILogger _logger;
+	class AbridgedWriter : IProtocolWriter
+	{
+		private readonly NetworkStream _stream;
+		private ILogger _logger;
 
-        public AbridgedWriter(NetworkStream stream, ILogger logger)
-        {
-            _logger = logger.ForContext<AbridgedWriter>();
-            _stream = stream;
-        }
+		public AbridgedWriter(NetworkStream stream, ILogger logger)
+		{
+			_logger = logger.ForContext<AbridgedWriter>();
+			_stream = stream;
+		}
 
-        public Task SendAsync(byte[] message, CancellationToken cancellationToken = default)
-        {
-            using var toStream = message.ToMemoryStream();
-            using var headedMessage = SetProtocolHeaders(toStream);
-            return _stream.WriteAsync(headedMessage.ToArray(), cancellationToken).AsTask();
-        }
+		public Task SendAsync(byte[] message, CancellationToken cancellationToken = default)
+		{
+			using var toStream = message.ToMemoryStream();
+			using var headedMessage = SetProtocolHeaders(toStream);
+			return _stream.WriteAsync(headedMessage.ToArray(), cancellationToken).AsTask();
+		}
 
-        private MemoryStream SetProtocolHeaders(MemoryStream stream)
-        {
-            var streamLenght = stream.Length / 4;
-            using var streamWriter = new BinaryWriter(new MemoryStream(), Encoding.Default, true);
-            if (streamLenght >= 127)
-            {
-                streamWriter.Write((byte)127);
-                streamWriter.Write((byte)streamLenght);
-                streamWriter.Write((byte)streamLenght >> 8);
-                streamWriter.Write((byte)streamLenght >> 16);
-            }
-            else
-            {
-                streamWriter.Write((byte)streamLenght);
-            }
+		private MemoryStream SetProtocolHeaders(MemoryStream stream)
+		{
+			var streamLenght = stream.Length / 4;
+			using var streamWriter = new BinaryWriter(new MemoryStream(), Encoding.Default, true);
+			if (streamLenght >= 127)
+			{
+				streamWriter.Write((byte)127);
+				streamWriter.Write((byte)streamLenght);
+				streamWriter.Write((byte)streamLenght >> 8);
+				streamWriter.Write((byte)streamLenght >> 16);
+			}
+			else
+			{
+				streamWriter.Write((byte)streamLenght);
+			}
 
-            streamWriter.Write(stream.ToArray());
-            return (MemoryStream)streamWriter.BaseStream;
-        }
-    }
+			streamWriter.Write(stream.ToArray());
+			return (MemoryStream)streamWriter.BaseStream;
+		}
+	}
 }

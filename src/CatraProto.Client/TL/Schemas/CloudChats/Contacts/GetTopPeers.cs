@@ -1,14 +1,13 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
 	public partial class GetTopPeers : IMethod
 	{
 		[Flags]
-		public enum FlagsEnum 
+		public enum FlagsEnum
 		{
 			Correspondents = 1 << 0,
 			BotsPm = 1 << 1,
@@ -20,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 			Channels = 1 << 15
 		}
 
-        public static int ConstructorId { get; } = -728224331;
-
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Contacts.TopPeersBase);
-		public bool IsVector { get; init; } = false;
+		public static int ConstructorId { get; } = -728224331;
 		public int Flags { get; set; }
 		public bool Correspondents { get; set; }
 		public bool BotsPm { get; set; }
@@ -37,7 +33,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 		public int Limit { get; set; }
 		public int Hash { get; set; }
 
-		public void UpdateFlags() 
+		public Type Type { get; init; } = typeof(TopPeersBase);
+		public bool IsVector { get; init; } = false;
+
+		public void UpdateFlags()
 		{
 			Flags = Correspondents ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
 			Flags = BotsPm ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
@@ -47,18 +46,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 			Flags = ForwardChats ? FlagsHelper.SetFlag(Flags, 5) : FlagsHelper.UnsetFlag(Flags, 5);
 			Flags = Groups ? FlagsHelper.SetFlag(Flags, 10) : FlagsHelper.UnsetFlag(Flags, 10);
 			Flags = Channels ? FlagsHelper.SetFlag(Flags, 15) : FlagsHelper.UnsetFlag(Flags, 15);
-
 		}
 
 		public void Serialize(Writer writer)
 		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
+			if (ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
 			writer.Write(Offset);
 			writer.Write(Limit);
 			writer.Write(Hash);
-
 		}
 
 		public void Deserialize(Reader reader)
@@ -75,7 +72,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 			Offset = reader.Read<int>();
 			Limit = reader.Read<int>();
 			Hash = reader.Read<int>();
-
 		}
 	}
 }

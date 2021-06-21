@@ -1,11 +1,10 @@
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public abstract class ChannelAdminLogEventsFilterBase : IObject
-    {
+	public abstract class ChannelAdminLogEventsFilterBase : IObject
+	{
 		public abstract bool Join { get; set; }
 		public abstract bool Leave { get; set; }
 		public abstract bool Invite { get; set; }
@@ -23,8 +22,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public abstract bool GroupCall { get; set; }
 		public abstract bool Invites { get; set; }
 
-        public abstract void UpdateFlags();
-        public abstract void Deserialize(Reader reader);
-        public abstract void Serialize(Writer writer);
-    }
+		public abstract void UpdateFlags();
+		public abstract void Deserialize(Reader reader);
+		public abstract void Serialize(Writer writer);
+	}
 }

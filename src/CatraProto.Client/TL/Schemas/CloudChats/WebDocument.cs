@@ -1,36 +1,29 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class WebDocument : WebDocumentBase
 	{
-
-
-        public static int ConstructorId { get; } = 475467473;
+		public static int ConstructorId { get; } = 475467473;
 		public override string Url { get; set; }
 		public long AccessHash { get; set; }
 		public override int Size { get; set; }
 		public override string MimeType { get; set; }
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase> Attributes { get; set; }
+		public override IList<DocumentAttributeBase> Attributes { get; set; }
 
-		public override void UpdateFlags() 
+		public override void UpdateFlags()
 		{
-
 		}
 
 		public override void Serialize(Writer writer)
 		{
-		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			if (ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(Url);
 			writer.Write(AccessHash);
 			writer.Write(Size);
 			writer.Write(MimeType);
 			writer.Write(Attributes);
-
 		}
 
 		public override void Deserialize(Reader reader)
@@ -39,8 +32,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			AccessHash = reader.Read<long>();
 			Size = reader.Read<int>();
 			MimeType = reader.Read<string>();
-			Attributes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase>();
-
+			Attributes = reader.ReadVector<DocumentAttributeBase>();
 		}
 	}
 }

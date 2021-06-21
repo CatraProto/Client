@@ -1,29 +1,22 @@
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class PrivacyValueDisallowAll : PrivacyRuleBase
 	{
+		public static int ConstructorId { get; } = -1955338397;
 
-
-        public static int ConstructorId { get; } = -1955338397;
-
-		public override void UpdateFlags() 
+		public override void UpdateFlags()
 		{
-
 		}
 
 		public override void Serialize(Writer writer)
 		{
-		    if(ConstructorId != 0) writer.Write(ConstructorId);
-
+			if (ConstructorId != 0) writer.Write(ConstructorId);
 		}
 
 		public override void Deserialize(Reader reader)
 		{
-
 		}
 	}
 }

@@ -1,30 +1,24 @@
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class UpdateEncryptedMessagesRead : UpdateBase
 	{
-
-
-        public static int ConstructorId { get; } = 956179895;
+		public static int ConstructorId { get; } = 956179895;
 		public int ChatId { get; set; }
 		public int MaxDate { get; set; }
 		public int Date { get; set; }
 
-		public override void UpdateFlags() 
+		public override void UpdateFlags()
 		{
-
 		}
 
 		public override void Serialize(Writer writer)
 		{
-		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			if (ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(ChatId);
 			writer.Write(MaxDate);
 			writer.Write(Date);
-
 		}
 
 		public override void Deserialize(Reader reader)
@@ -32,7 +26,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ChatId = reader.Read<int>();
 			MaxDate = reader.Read<int>();
 			Date = reader.Read<int>();
-
 		}
 	}
 }

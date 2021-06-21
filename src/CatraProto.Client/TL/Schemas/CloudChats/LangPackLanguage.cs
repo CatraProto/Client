@@ -1,14 +1,12 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-
+using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class LangPackLanguage : LangPackLanguageBase
 	{
 		[Flags]
-		public enum FlagsEnum 
+		public enum FlagsEnum
 		{
 			Official = 1 << 0,
 			Rtl = 1 << 2,
@@ -16,7 +14,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			BaseLangCode = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = -288727837;
+		public static int ConstructorId { get; } = -288727837;
 		public int Flags { get; set; }
 		public override bool Official { get; set; }
 		public override bool Rtl { get; set; }
@@ -30,24 +28,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override int TranslatedCount { get; set; }
 		public override string TranslationsUrl { get; set; }
 
-		public override void UpdateFlags() 
+		public override void UpdateFlags()
 		{
 			Flags = Official ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
 			Flags = Rtl ? FlagsHelper.SetFlag(Flags, 2) : FlagsHelper.UnsetFlag(Flags, 2);
 			Flags = Beta ? FlagsHelper.SetFlag(Flags, 3) : FlagsHelper.UnsetFlag(Flags, 3);
 			Flags = BaseLangCode == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
-
 		}
 
 		public override void Serialize(Writer writer)
 		{
-		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			if (ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
 			writer.Write(Name);
 			writer.Write(NativeName);
 			writer.Write(LangCode);
-			if(FlagsHelper.IsFlagSet(Flags, 1))
+			if (FlagsHelper.IsFlagSet(Flags, 1))
 			{
 				writer.Write(BaseLangCode);
 			}
@@ -56,7 +53,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			writer.Write(StringsCount);
 			writer.Write(TranslatedCount);
 			writer.Write(TranslationsUrl);
-
 		}
 
 		public override void Deserialize(Reader reader)
@@ -68,7 +64,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Name = reader.Read<string>();
 			NativeName = reader.Read<string>();
 			LangCode = reader.Read<string>();
-			if(FlagsHelper.IsFlagSet(Flags, 1))
+			if (FlagsHelper.IsFlagSet(Flags, 1))
 			{
 				BaseLangCode = reader.Read<string>();
 			}
@@ -77,7 +73,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			StringsCount = reader.Read<int>();
 			TranslatedCount = reader.Read<int>();
 			TranslationsUrl = reader.Read<string>();
-
 		}
 	}
 }

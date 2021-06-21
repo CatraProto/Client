@@ -1,20 +1,18 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
 using System.Collections.Generic;
-
+using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class UpdatePinnedChannelMessages : UpdateBase
 	{
 		[Flags]
-		public enum FlagsEnum 
+		public enum FlagsEnum
 		{
 			Pinned = 1 << 0
 		}
 
-        public static int ConstructorId { get; } = -2054649973;
+		public static int ConstructorId { get; } = -2054649973;
 		public int Flags { get; set; }
 		public bool Pinned { get; set; }
 		public int ChannelId { get; set; }
@@ -22,22 +20,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Pts { get; set; }
 		public int PtsCount { get; set; }
 
-		public override void UpdateFlags() 
+		public override void UpdateFlags()
 		{
 			Flags = Pinned ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
-
 		}
 
 		public override void Serialize(Writer writer)
 		{
-		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			if (ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
 			writer.Write(ChannelId);
 			writer.Write(Messages);
 			writer.Write(Pts);
 			writer.Write(PtsCount);
-
 		}
 
 		public override void Deserialize(Reader reader)
@@ -48,7 +44,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Messages = reader.ReadVector<int>();
 			Pts = reader.Read<int>();
 			PtsCount = reader.Read<int>();
-
 		}
 	}
 }

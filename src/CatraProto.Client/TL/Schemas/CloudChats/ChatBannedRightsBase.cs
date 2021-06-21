@@ -1,11 +1,10 @@
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public abstract class ChatBannedRightsBase : IObject
-    {
+	public abstract class ChatBannedRightsBase : IObject
+	{
 		public abstract bool ViewMessages { get; set; }
 		public abstract bool SendMessages { get; set; }
 		public abstract bool SendMedia { get; set; }
@@ -20,8 +19,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public abstract bool PinMessages { get; set; }
 		public abstract int UntilDate { get; set; }
 
-        public abstract void UpdateFlags();
-        public abstract void Deserialize(Reader reader);
-        public abstract void Serialize(Writer writer);
-    }
+		public abstract void UpdateFlags();
+		public abstract void Deserialize(Reader reader);
+		public abstract void Serialize(Writer writer);
+	}
 }

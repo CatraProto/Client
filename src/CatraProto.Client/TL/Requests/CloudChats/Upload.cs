@@ -1,29 +1,26 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections;
 using CatraProto.Client.MTProto.Messages;
 using CatraProto.Client.MTProto.Rpc;
-using CatraProto.TL.Interfaces;
-using System.Collections.Generic;
-using System.Numerics;
+using CatraProto.Client.TL.Schemas.CloudChats;
+using CatraProto.Client.TL.Schemas.CloudChats.Upload;
 
 namespace CatraProto.Client.TL.Requests.CloudChats
 {
 	public partial class Upload
 	{
-		
-	    private MessagesHandler _messagesHandler;
-	    internal Upload(MessagesHandler messagesHandler)
-	    {
-	        _messagesHandler = messagesHandler;
-	        
-	    }
-	    
-	    		public async Task<RpcMessage<bool>> SaveFilePart(long fileId, int filePart, byte[] bytes, CancellationToken cancellationToken = default)
+		private MessagesHandler _messagesHandler;
+
+		internal Upload(MessagesHandler messagesHandler)
+		{
+			_messagesHandler = messagesHandler;
+		}
+
+		public async Task<RpcMessage<bool>> SaveFilePart(long fileId, int filePart, byte[] bytes, CancellationToken cancellationToken = default)
 		{
 			var rpcResponse = new RpcMessage<bool>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Upload.SaveFilePart()
+			var methodBody = new SaveFilePart
 			{
 				FileId = fileId,
 				FilePart = filePart,
@@ -31,17 +28,18 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 			};
 
 			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-				}, rpcResponse);
+			{
+				Body = methodBody,
+				CancellationToken = cancellationToken,
+				IsEncrypted = true
+			}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Upload.FileBase>> GetFile(CatraProto.Client.TL.Schemas.CloudChats.InputFileLocationBase location, int offset, int limit, bool precise = true, bool cdnSupported = true, CancellationToken cancellationToken = default)
+
+		public async Task<RpcMessage<FileBase>> GetFile(InputFileLocationBase location, int offset, int limit, bool precise = true, bool cdnSupported = true, CancellationToken cancellationToken = default)
 		{
-			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Upload.FileBase>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Upload.GetFile()
+			var rpcResponse = new RpcMessage<FileBase>();
+			var methodBody = new GetFile
 			{
 				Location = location,
 				Offset = offset,
@@ -51,17 +49,18 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 			};
 
 			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-				}, rpcResponse);
+			{
+				Body = methodBody,
+				CancellationToken = cancellationToken,
+				IsEncrypted = true
+			}, rpcResponse);
 			return rpcResponse;
 		}
+
 		public async Task<RpcMessage<bool>> SaveBigFilePart(long fileId, int filePart, int fileTotalParts, byte[] bytes, CancellationToken cancellationToken = default)
 		{
 			var rpcResponse = new RpcMessage<bool>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Upload.SaveBigFilePart()
+			var methodBody = new SaveBigFilePart
 			{
 				FileId = fileId,
 				FilePart = filePart,
@@ -70,17 +69,18 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 			};
 
 			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-				}, rpcResponse);
+			{
+				Body = methodBody,
+				CancellationToken = cancellationToken,
+				IsEncrypted = true
+			}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Upload.WebFileBase>> GetWebFile(CatraProto.Client.TL.Schemas.CloudChats.InputWebFileLocationBase location, int offset, int limit, CancellationToken cancellationToken = default)
+
+		public async Task<RpcMessage<WebFileBase>> GetWebFile(InputWebFileLocationBase location, int offset, int limit, CancellationToken cancellationToken = default)
 		{
-			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Upload.WebFileBase>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Upload.GetWebFile()
+			var rpcResponse = new RpcMessage<WebFileBase>();
+			var methodBody = new GetWebFile
 			{
 				Location = location,
 				Offset = offset,
@@ -88,17 +88,18 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 			};
 
 			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-				}, rpcResponse);
+			{
+				Body = methodBody,
+				CancellationToken = cancellationToken,
+				IsEncrypted = true
+			}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Upload.CdnFileBase>> GetCdnFile(byte[] fileToken, int offset, int limit, CancellationToken cancellationToken = default)
+
+		public async Task<RpcMessage<CdnFileBase>> GetCdnFile(byte[] fileToken, int offset, int limit, CancellationToken cancellationToken = default)
 		{
-			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Upload.CdnFileBase>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Upload.GetCdnFile()
+			var rpcResponse = new RpcMessage<CdnFileBase>();
+			var methodBody = new GetCdnFile
 			{
 				FileToken = fileToken,
 				Offset = offset,
@@ -106,64 +107,66 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 			};
 
 			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-				}, rpcResponse);
+			{
+				Body = methodBody,
+				CancellationToken = cancellationToken,
+				IsEncrypted = true
+			}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>> ReuploadCdnFile(byte[] fileToken, byte[] requestToken, CancellationToken cancellationToken = default)
+
+		public async Task<RpcMessage<FileHashBase>> ReuploadCdnFile(byte[] fileToken, byte[] requestToken, CancellationToken cancellationToken = default)
 		{
-			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Upload.ReuploadCdnFile()
+			var rpcResponse = new RpcMessage<FileHashBase>();
+			var methodBody = new ReuploadCdnFile
 			{
 				FileToken = fileToken,
 				RequestToken = requestToken,
 			};
 
 			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-				}, rpcResponse);
+			{
+				Body = methodBody,
+				CancellationToken = cancellationToken,
+				IsEncrypted = true
+			}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>> GetCdnFileHashes(byte[] fileToken, int offset, CancellationToken cancellationToken = default)
+
+		public async Task<RpcMessage<FileHashBase>> GetCdnFileHashes(byte[] fileToken, int offset, CancellationToken cancellationToken = default)
 		{
-			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Upload.GetCdnFileHashes()
+			var rpcResponse = new RpcMessage<FileHashBase>();
+			var methodBody = new GetCdnFileHashes
 			{
 				FileToken = fileToken,
 				Offset = offset,
 			};
 
 			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-				}, rpcResponse);
+			{
+				Body = methodBody,
+				CancellationToken = cancellationToken,
+				IsEncrypted = true
+			}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>> GetFileHashes(CatraProto.Client.TL.Schemas.CloudChats.InputFileLocationBase location, int offset, CancellationToken cancellationToken = default)
+
+		public async Task<RpcMessage<FileHashBase>> GetFileHashes(InputFileLocationBase location, int offset, CancellationToken cancellationToken = default)
 		{
-			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Upload.GetFileHashes()
+			var rpcResponse = new RpcMessage<FileHashBase>();
+			var methodBody = new GetFileHashes
 			{
 				Location = location,
 				Offset = offset,
 			};
 
 			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-				}, rpcResponse);
+			{
+				Body = methodBody,
+				CancellationToken = cancellationToken,
+				IsEncrypted = true
+			}, rpcResponse);
 			return rpcResponse;
 		}
-
 	}
 }

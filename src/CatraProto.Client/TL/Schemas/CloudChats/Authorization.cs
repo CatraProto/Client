@@ -1,21 +1,19 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-
+using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class Authorization : AuthorizationBase
 	{
 		[Flags]
-		public enum FlagsEnum 
+		public enum FlagsEnum
 		{
 			Current = 1 << 0,
 			OfficialApp = 1 << 1,
 			PasswordPending = 1 << 2
 		}
 
-        public static int ConstructorId { get; } = -1392388579;
+		public static int ConstructorId { get; } = -1392388579;
 		public int Flags { get; set; }
 		public override bool Current { get; set; }
 		public override bool OfficialApp { get; set; }
@@ -33,17 +31,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override string Country { get; set; }
 		public override string Region { get; set; }
 
-		public override void UpdateFlags() 
+		public override void UpdateFlags()
 		{
 			Flags = Current ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
 			Flags = OfficialApp ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
 			Flags = PasswordPending ? FlagsHelper.SetFlag(Flags, 2) : FlagsHelper.UnsetFlag(Flags, 2);
-
 		}
 
 		public override void Serialize(Writer writer)
 		{
-		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			if (ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
 			writer.Write(Hash);
@@ -58,7 +55,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			writer.Write(Ip);
 			writer.Write(Country);
 			writer.Write(Region);
-
 		}
 
 		public override void Deserialize(Reader reader)
@@ -79,7 +75,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Ip = reader.Read<string>();
 			Country = reader.Read<string>();
 			Region = reader.Read<string>();
-
 		}
 	}
 }

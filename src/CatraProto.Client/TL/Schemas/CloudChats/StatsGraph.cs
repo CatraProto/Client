@@ -1,54 +1,46 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class StatsGraph : StatsGraphBase
 	{
 		[Flags]
-		public enum FlagsEnum 
+		public enum FlagsEnum
 		{
 			ZoomToken = 1 << 0
 		}
 
-        public static int ConstructorId { get; } = -1901828938;
+		public static int ConstructorId { get; } = -1901828938;
 		public int Flags { get; set; }
-		public CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase Json { get; set; }
+		public DataJSONBase Json { get; set; }
 		public string ZoomToken { get; set; }
 
-		public override void UpdateFlags() 
+		public override void UpdateFlags()
 		{
 			Flags = ZoomToken == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
-
 		}
 
 		public override void Serialize(Writer writer)
 		{
-		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			if (ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
 			writer.Write(Json);
-			if(FlagsHelper.IsFlagSet(Flags, 0))
+			if (FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				writer.Write(ZoomToken);
 			}
-
-
 		}
 
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			Json = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
-			if(FlagsHelper.IsFlagSet(Flags, 0))
+			Json = reader.Read<DataJSONBase>();
+			if (FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				ZoomToken = reader.Read<string>();
 			}
-
-
 		}
 	}
 }

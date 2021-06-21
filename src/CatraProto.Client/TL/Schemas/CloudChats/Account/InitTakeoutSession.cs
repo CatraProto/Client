@@ -1,14 +1,13 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
 	public partial class InitTakeoutSession : IMethod
 	{
 		[Flags]
-		public enum FlagsEnum 
+		public enum FlagsEnum
 		{
 			Contacts = 1 << 0,
 			MessageUsers = 1 << 1,
@@ -19,10 +18,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 			FileMaxSize = 1 << 5
 		}
 
-        public static int ConstructorId { get; } = -262453244;
-
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Account.TakeoutBase);
-		public bool IsVector { get; init; } = false;
+		public static int ConstructorId { get; } = -262453244;
 		public int Flags { get; set; }
 		public bool Contacts { get; set; }
 		public bool MessageUsers { get; set; }
@@ -32,7 +28,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		public bool Files { get; set; }
 		public int? FileMaxSize { get; set; }
 
-		public void UpdateFlags() 
+		public Type Type { get; init; } = typeof(TakeoutBase);
+		public bool IsVector { get; init; } = false;
+
+		public void UpdateFlags()
 		{
 			Flags = Contacts ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
 			Flags = MessageUsers ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
@@ -41,20 +40,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 			Flags = MessageChannels ? FlagsHelper.SetFlag(Flags, 4) : FlagsHelper.UnsetFlag(Flags, 4);
 			Flags = Files ? FlagsHelper.SetFlag(Flags, 5) : FlagsHelper.UnsetFlag(Flags, 5);
 			Flags = FileMaxSize == null ? FlagsHelper.UnsetFlag(Flags, 5) : FlagsHelper.SetFlag(Flags, 5);
-
 		}
 
 		public void Serialize(Writer writer)
 		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
+			if (ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
-			if(FlagsHelper.IsFlagSet(Flags, 5))
+			if (FlagsHelper.IsFlagSet(Flags, 5))
 			{
 				writer.Write(FileMaxSize.Value);
 			}
-
-
 		}
 
 		public void Deserialize(Reader reader)
@@ -66,12 +62,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 			MessageMegagroups = FlagsHelper.IsFlagSet(Flags, 3);
 			MessageChannels = FlagsHelper.IsFlagSet(Flags, 4);
 			Files = FlagsHelper.IsFlagSet(Flags, 5);
-			if(FlagsHelper.IsFlagSet(Flags, 5))
+			if (FlagsHelper.IsFlagSet(Flags, 5))
 			{
 				FileMaxSize = reader.Read<int>();
 			}
-
-
 		}
 	}
 }

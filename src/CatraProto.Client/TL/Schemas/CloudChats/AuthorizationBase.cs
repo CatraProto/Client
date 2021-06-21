@@ -1,11 +1,10 @@
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public abstract class AuthorizationBase : IObject
-    {
+	public abstract class AuthorizationBase : IObject
+	{
 		public abstract bool Current { get; set; }
 		public abstract bool OfficialApp { get; set; }
 		public abstract bool PasswordPending { get; set; }
@@ -22,8 +21,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public abstract string Country { get; set; }
 		public abstract string Region { get; set; }
 
-        public abstract void UpdateFlags();
-        public abstract void Deserialize(Reader reader);
-        public abstract void Serialize(Writer writer);
-    }
+		public abstract void UpdateFlags();
+		public abstract void Deserialize(Reader reader);
+		public abstract void Serialize(Writer writer);
+	}
 }

@@ -1,44 +1,40 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections;
 using CatraProto.Client.MTProto.Messages;
 using CatraProto.Client.MTProto.Rpc;
-using CatraProto.TL.Interfaces;
-using System.Collections.Generic;
-using System.Numerics;
+using CatraProto.Client.TL.Schemas.CloudChats;
+using CatraProto.Client.TL.Schemas.CloudChats.Updates;
 
 namespace CatraProto.Client.TL.Requests.CloudChats
 {
 	public partial class Updates
 	{
-		
-	    private MessagesHandler _messagesHandler;
-	    internal Updates(MessagesHandler messagesHandler)
-	    {
-	        _messagesHandler = messagesHandler;
-	        
-	    }
-	    
-	    		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Updates.StateBase>> GetState( CancellationToken cancellationToken = default)
+		private MessagesHandler _messagesHandler;
+
+		internal Updates(MessagesHandler messagesHandler)
 		{
-			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Updates.StateBase>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Updates.GetState()
-			{
-			};
+			_messagesHandler = messagesHandler;
+		}
+
+		public async Task<RpcMessage<StateBase>> GetState(CancellationToken cancellationToken = default)
+		{
+			var rpcResponse = new RpcMessage<StateBase>();
+			var methodBody = new GetState();
 
 			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-				}, rpcResponse);
+			{
+				Body = methodBody,
+				CancellationToken = cancellationToken,
+				IsEncrypted = true
+			}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Updates.DifferenceBase>> GetDifference(int pts, int date, int qts, int? ptsTotalLimit = null, CancellationToken cancellationToken = default)
+
+		public async Task<RpcMessage<DifferenceBase>> GetDifference(int pts, int date, int qts, int? ptsTotalLimit = null, CancellationToken cancellationToken = default)
 		{
-			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Updates.DifferenceBase>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Updates.GetDifference()
+			var rpcResponse = new RpcMessage<DifferenceBase>();
+			var methodBody = new GetDifference
 			{
 				Pts = pts,
 				Date = date,
@@ -47,17 +43,18 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 			};
 
 			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-				}, rpcResponse);
+			{
+				Body = methodBody,
+				CancellationToken = cancellationToken,
+				IsEncrypted = true
+			}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Updates.ChannelDifferenceBase>> GetChannelDifference(CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase channel, CatraProto.Client.TL.Schemas.CloudChats.ChannelMessagesFilterBase filter, int pts, int limit, bool force = true, CancellationToken cancellationToken = default)
+
+		public async Task<RpcMessage<ChannelDifferenceBase>> GetChannelDifference(InputChannelBase channel, ChannelMessagesFilterBase filter, int pts, int limit, bool force = true, CancellationToken cancellationToken = default)
 		{
-			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Updates.ChannelDifferenceBase>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Updates.GetChannelDifference()
+			var rpcResponse = new RpcMessage<ChannelDifferenceBase>();
+			var methodBody = new GetChannelDifference
 			{
 				Channel = channel,
 				Filter = filter,
@@ -67,13 +64,12 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 			};
 
 			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-				}, rpcResponse);
+			{
+				Body = methodBody,
+				CancellationToken = cancellationToken,
+				IsEncrypted = true
+			}, rpcResponse);
 			return rpcResponse;
 		}
-
 	}
 }

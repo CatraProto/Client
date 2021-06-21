@@ -1,13 +1,11 @@
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public abstract class ConfigBase : IObject
-    {
+	public abstract class ConfigBase : IObject
+	{
 		public abstract bool PhonecallsEnabled { get; set; }
 		public abstract bool DefaultP2pContacts { get; set; }
 		public abstract bool PreloadFeaturedStickers { get; set; }
@@ -19,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public abstract int Expires { get; set; }
 		public abstract bool TestMode { get; set; }
 		public abstract int ThisDc { get; set; }
-		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase> DcOptions { get; set; }
+		public abstract IList<DcOptionBase> DcOptions { get; set; }
 		public abstract string DcTxtDomainName { get; set; }
 		public abstract int ChatSizeMax { get; set; }
 		public abstract int MegagroupSizeMax { get; set; }
@@ -60,8 +58,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public abstract int? LangPackVersion { get; set; }
 		public abstract int? BaseLangPackVersion { get; set; }
 
-        public abstract void UpdateFlags();
-        public abstract void Deserialize(Reader reader);
-        public abstract void Serialize(Writer writer);
-    }
+		public abstract void UpdateFlags();
+		public abstract void Deserialize(Reader reader);
+		public abstract void Serialize(Writer writer);
+	}
 }

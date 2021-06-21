@@ -1,32 +1,25 @@
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class DataJSON : DataJSONBase
 	{
-
-
-        public static int ConstructorId { get; } = 2104790276;
+		public static int ConstructorId { get; } = 2104790276;
 		public override string Data { get; set; }
 
-		public override void UpdateFlags() 
+		public override void UpdateFlags()
 		{
-
 		}
 
 		public override void Serialize(Writer writer)
 		{
-		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			if (ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(Data);
-
 		}
 
 		public override void Deserialize(Reader reader)
 		{
 			Data = reader.Read<string>();
-
 		}
 	}
 }
