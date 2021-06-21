@@ -11,7 +11,7 @@ namespace CatraProto.TL.Generator.Objects.Types
             Name = "byte[]";
             IsBare = true;
         }
-        
+
         public override void WriteParameter(StringBuilder stringBuilder, Parameter parameter,
             string customTypeName = null, bool isAbstract = false)
         {
@@ -19,14 +19,14 @@ namespace CatraProto.TL.Generator.Objects.Types
             stringBuilder.AppendLine(
                 $"{StringTools.TwoTabs}{GetParameterAccessibility(parameter, isAbstract)} {type} {parameter.Name} {{ get; set; }}");
         }
-        
+
         public override void WriteSerializer(StringBuilder stringBuilder, Parameter parameter)
         {
             WriteFlagStart(stringBuilder, out var spacing, parameter);
             stringBuilder.AppendLine($"{spacing}writer.Write({parameter.Name});");
             WriteFlagEnd(stringBuilder, spacing, parameter);
         }
-        
+
         public override void WriteBaseParameters(StringBuilder stringBuilder, bool allowOverrides = false)
         {
             throw new NotSupportedException("Byte[] doesn't need a base type");

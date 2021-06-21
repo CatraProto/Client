@@ -4,7 +4,7 @@
     {
         public string Name { get; set; }
         public int Bit { get; set; }
-        
+
         public Flag(string name, int bit)
         {
             Name = name;

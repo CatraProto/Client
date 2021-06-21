@@ -9,6 +9,7 @@ namespace CatraProto.TL.Generator.Objects
     {
         private Flag _flag;
         public string Name { get; set; }
+
         public string InMethodName
         {
             get
@@ -69,7 +70,7 @@ namespace CatraProto.TL.Generator.Objects
 
         public TypeBase FindTypes(string type)
         {
-            var found = Regex.IsMatch(type, @"\w+<.+>") ? type.Split("<") : new[] {type};
+            var found = Regex.IsMatch(type, @"\w+<.+>") ? type.Split("<") : new[] { type };
             if (found.Length == 2)
             {
                 found[^1] = found[^1].TrimEnd('>');
@@ -128,7 +129,7 @@ namespace CatraProto.TL.Generator.Objects
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != GetType()) return false;
-            return Equals((Parameter) obj);
+            return Equals((Parameter)obj);
         }
     }
 }

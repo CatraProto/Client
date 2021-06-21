@@ -11,7 +11,7 @@ namespace CatraProto.TL.Generator.UnitTests.ParserTests
         {
             var analyzer = new Parser("test#123 flags:# = auth.EtheriaType;");
             var type = analyzer.FindType();
-            
+
             var createdType = Tools.CreateType(type, true);
             Assert.Equal("EtheriaTypeBase", createdType.Name);
             Assert.Equal("CatraProto.Client.TL.Schemas.CloudChats.Auth.EtheriaTypeBase", createdType.Namespace.FullNamespace);

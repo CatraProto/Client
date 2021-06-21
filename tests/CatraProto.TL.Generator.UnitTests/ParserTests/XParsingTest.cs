@@ -13,7 +13,6 @@ namespace CatraProto.TL.Generator.UnitTests.ParserTests
             Assert.NotEmpty(found);
             Assert.Equal("X:Type", found[0]);
             Assert.Equal("X:#", found[1]);
-
         }
     }
 }

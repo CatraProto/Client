@@ -4,27 +4,27 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class DeleteAccount : IMethod
-	{
-		public static int ConstructorId { get; } = 1099779595;
-		public string Reason { get; set; }
+    public partial class DeleteAccount : IMethod
+    {
+        public static int ConstructorId { get; } = 1099779595;
+        public string Reason { get; set; }
 
-		public Type Type { get; init; } = typeof(bool);
-		public bool IsVector { get; init; } = false;
+        public Type Type { get; init; } = typeof(bool);
+        public bool IsVector { get; init; } = false;
 
-		public void UpdateFlags()
-		{
-		}
+        public void UpdateFlags()
+        {
+        }
 
-		public void Serialize(Writer writer)
-		{
-			if (ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Reason);
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0) writer.Write(ConstructorId);
+            writer.Write(Reason);
+        }
 
-		public void Deserialize(Reader reader)
-		{
-			Reason = reader.Read<string>();
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Reason = reader.Read<string>();
+        }
+    }
 }

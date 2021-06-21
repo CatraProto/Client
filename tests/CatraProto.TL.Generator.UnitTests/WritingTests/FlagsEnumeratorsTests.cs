@@ -9,7 +9,8 @@ namespace CatraProto.TL.Generator.UnitTests.WritingTests
         [Fact]
         public async Task MultipleFlagsTest()
         {
-            string[] schema = {
+            string[] schema =
+            {
                 "message_gay#2 flags:# pony:# message:flags.1?string mammt:flags.2?int sorreta:pony.1?int = int;",
             };
             var analyzed = await CodeGeneration.Parsing.Parser.StartAnalyzing(schema);

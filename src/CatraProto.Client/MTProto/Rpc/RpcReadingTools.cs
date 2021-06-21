@@ -7,34 +7,34 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.MTProto.Rpc
 {
-	static class RpcReadingTools
-	{
-		public static bool GetRpcMessageResponseId(byte[] array, out int messageId)
-		{
-			var message = array.ToMemoryStream();
-			using var binaryReader = new BinaryReader(message, Encoding.Default);
-			if (binaryReader.ReadInt32() == RpcResult.ConstructorId)
-			{
-				messageId = binaryReader.ReadInt32();
-				return true;
-			}
+    static class RpcReadingTools
+    {
+        public static bool GetRpcMessageResponseId(byte[] array, out int messageId)
+        {
+            var message = array.ToMemoryStream();
+            using var binaryReader = new BinaryReader(message, Encoding.Default);
+            if (binaryReader.ReadInt32() == RpcResult.ConstructorId)
+            {
+                messageId = binaryReader.ReadInt32();
+                return true;
+            }
 
-			messageId = 0;
-			return false;
-		}
+            messageId = 0;
+            return false;
+        }
 
-		public static bool IsRpcError(byte[] array, out RpcError error)
-		{
-			var stream = array.ToMemoryStream();
-			using var reader = new Reader(MergedProvider.Singleton, stream);
-			if (reader.Read<int>() == RpcError.ConstructorId)
-			{
-				error = reader.Read<RpcError>();
-				return true;
-			}
+        public static bool IsRpcError(byte[] array, out RpcError error)
+        {
+            var stream = array.ToMemoryStream();
+            using var reader = new Reader(MergedProvider.Singleton, stream);
+            if (reader.Read<int>() == RpcError.ConstructorId)
+            {
+                error = reader.Read<RpcError>();
+                return true;
+            }
 
-			error = null;
-			return false;
-		}
-	}
+            error = null;
+            return false;
+        }
+    }
 }

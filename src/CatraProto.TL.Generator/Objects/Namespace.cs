@@ -7,6 +7,7 @@ namespace CatraProto.TL.Generator.Objects
     public class Namespace
     {
         private string[] _arrayNamespace = Array.Empty<string>();
+
         public string Class
         {
             get => _arrayNamespace[^1];
@@ -17,13 +18,13 @@ namespace CatraProto.TL.Generator.Objects
             get => ArrayToString(_arrayNamespace);
             set => _arrayNamespace = value.Split('.');
         }
-        
+
         public string[] FullNamespaceArray
         {
             get => _arrayNamespace;
             set => _arrayNamespace = value;
         }
-        
+
         public string PartialNamespace
         {
             get
@@ -39,18 +40,18 @@ namespace CatraProto.TL.Generator.Objects
                 return temp;
             }
         }
-        
+
         public string[] PartialNamespaceArray
         {
             get
             {
-                var clone = (string[]) _arrayNamespace.Clone();
+                var clone = (string[])_arrayNamespace.Clone();
                 var list = clone.ToList();
                 list.RemoveAt(clone.Length - 1);
                 return list.ToArray();
             }
         }
-        
+
         public Namespace(string fullNamespace, bool addDefault = true)
         {
             var ns = addDefault ? Configuration.Namespace + "." + fullNamespace : fullNamespace;
@@ -67,7 +68,7 @@ namespace CatraProto.TL.Generator.Objects
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != GetType()) return false;
-            return Equals((Namespace) obj);
+            return Equals((Namespace)obj);
         }
 
         public static string ArrayToString(string[] array)
@@ -80,12 +81,13 @@ namespace CatraProto.TL.Generator.Objects
                 {
                     final += ".";
                 }
+
                 final += s;
             }
 
             return final;
         }
-        
+
         public static bool operator ==(Namespace ns1, Namespace ns2)
         {
             return ns2 is not null && ns1 is not null && ns1.FullNamespace == ns2.FullNamespace;

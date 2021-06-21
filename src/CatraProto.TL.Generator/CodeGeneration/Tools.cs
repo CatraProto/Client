@@ -31,7 +31,7 @@ namespace CatraProto.TL.Generator.CodeGeneration
                 case "double":
                     return new DoubleType();
                 case "!X":
-                case "Object":    
+                case "Object":
                 case "X":
                     return new RuntimeDefinedType();
             }

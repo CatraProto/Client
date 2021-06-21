@@ -12,22 +12,22 @@ namespace CatraProto.TL.Generator.UnitTests.ParserTests
             var analyzer = new Parser("test#7B");
             var id = analyzer.FindId();
             var name = analyzer.FindName();
-            
+
             Assert.Equal(123, id);
             Assert.Equal("test", name);
         }
-        
+
         [Fact]
         public void NakedObjectTest()
         {
             var analyzer = new Parser("test");
             var id = analyzer.FindId();
             var name = analyzer.FindName();
-            
+
             Assert.Null(id);
             Assert.Equal("test", name);
         }
-        
+
         [Fact]
         public void ParametersTest()
         {
@@ -36,10 +36,10 @@ namespace CatraProto.TL.Generator.UnitTests.ParserTests
 
             var statuses = new Dictionary<int, string>
             {
-                {0, "flags:#"},
-                {1, "flaggedVector:flags.1?Vector<int>"},
-                {2, "vector:Vector<int>"},
-                {3, "int:int"}
+                { 0, "flags:#" },
+                { 1, "flaggedVector:flags.1?Vector<int>" },
+                { 2, "vector:Vector<int>" },
+                { 3, "int:int" }
             };
 
             for (int i = 0; i < args.Length; i++)

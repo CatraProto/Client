@@ -6,12 +6,14 @@ namespace CatraProto.TL.Generator
 {
     internal static class StringTools
     {
-        private static string[] _bannedKeywords = {
+        private static string[] _bannedKeywords =
+        {
             "params",
             "object",
             "private",
             "async"
         };
+
         public const string OneTabs = "\t";
         public const string TwoTabs = "\t\t";
         public const string ThreeTabs = "\t\t\t";
@@ -21,9 +23,9 @@ namespace CatraProto.TL.Generator
         static StringTools()
         {
             SplitValues = new Character[3];
-            SplitValues[0] = new Character {Char = ' ', Delete = true};
-            SplitValues[1] = new Character {Char = '_', Delete = true};
-            SplitValues[2] = new Character {Char = '.', Delete = false};
+            SplitValues[0] = new Character { Char = ' ', Delete = true };
+            SplitValues[1] = new Character { Char = '_', Delete = true };
+            SplitValues[2] = new Character { Char = '.', Delete = false };
         }
 
         public static Character[] SplitValues { get; set; }

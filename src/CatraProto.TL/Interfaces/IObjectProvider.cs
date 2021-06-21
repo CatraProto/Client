@@ -7,7 +7,7 @@ namespace CatraProto.TL.Interfaces
         public Type BoolTrue { get; init; }
         public Type BoolFalse { get; init; }
         public int VectorId { get; init; }
-        
+
         /// <summary>
         /// Provides an instance of the class assigned to its constructorId
         /// </summary>

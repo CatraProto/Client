@@ -17,7 +17,8 @@ namespace CatraProto.TL.Generator.UnitTests.WritingTests
         [Fact]
         public async Task Test()
         {
-            string[] schema = {
+            string[] schema =
+            {
                 "message_gay#2 first:Mammt second:Vector<Mammt> third:flags.1?Mammt fourth:flags.1?Vector<Mammt> = int;",
                 "Mammt#1 flags:int = Mammt;"
             };

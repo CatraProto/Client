@@ -3,24 +3,24 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PageBlockOrderedList : PageBlockBase
-	{
-		public static int ConstructorId { get; } = -1702174239;
-		public IList<PageListOrderedItemBase> Items { get; set; }
+    public partial class PageBlockOrderedList : PageBlockBase
+    {
+        public static int ConstructorId { get; } = -1702174239;
+        public IList<PageListOrderedItemBase> Items { get; set; }
 
-		public override void UpdateFlags()
-		{
-		}
+        public override void UpdateFlags()
+        {
+        }
 
-		public override void Serialize(Writer writer)
-		{
-			if (ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Items);
-		}
+        public override void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0) writer.Write(ConstructorId);
+            writer.Write(Items);
+        }
 
-		public override void Deserialize(Reader reader)
-		{
-			Items = reader.ReadVector<PageListOrderedItemBase>();
-		}
-	}
+        public override void Deserialize(Reader reader)
+        {
+            Items = reader.ReadVector<PageListOrderedItemBase>();
+        }
+    }
 }

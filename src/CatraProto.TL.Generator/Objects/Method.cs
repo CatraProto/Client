@@ -37,7 +37,7 @@ namespace CatraProto.TL.Generator.Objects
             {
                 returnType = ReturnsVector ? "IList<" + Type.Namespace.FullNamespace + ">" : Type.Namespace.FullNamespace;
             }
-            
+
             var parametersOrdered = Parameters
                 .Where(x => x.Type is not FlagType)
                 .Where(x => !x.HasFlag)

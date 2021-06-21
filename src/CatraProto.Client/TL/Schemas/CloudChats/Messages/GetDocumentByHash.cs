@@ -4,33 +4,33 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class GetDocumentByHash : IMethod
-	{
-		public static int ConstructorId { get; } = 864953444;
-		public byte[] Sha256 { get; set; }
-		public int Size { get; set; }
-		public string MimeType { get; set; }
+    public partial class GetDocumentByHash : IMethod
+    {
+        public static int ConstructorId { get; } = 864953444;
+        public byte[] Sha256 { get; set; }
+        public int Size { get; set; }
+        public string MimeType { get; set; }
 
-		public Type Type { get; init; } = typeof(DocumentBase);
-		public bool IsVector { get; init; } = false;
+        public Type Type { get; init; } = typeof(DocumentBase);
+        public bool IsVector { get; init; } = false;
 
-		public void UpdateFlags()
-		{
-		}
+        public void UpdateFlags()
+        {
+        }
 
-		public void Serialize(Writer writer)
-		{
-			if (ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Sha256);
-			writer.Write(Size);
-			writer.Write(MimeType);
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0) writer.Write(ConstructorId);
+            writer.Write(Sha256);
+            writer.Write(Size);
+            writer.Write(MimeType);
+        }
 
-		public void Deserialize(Reader reader)
-		{
-			Sha256 = reader.Read<byte[]>();
-			Size = reader.Read<int>();
-			MimeType = reader.Read<string>();
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Sha256 = reader.Read<byte[]>();
+            Size = reader.Read<int>();
+            MimeType = reader.Read<string>();
+        }
+    }
 }

@@ -42,7 +42,7 @@ namespace CatraProto.TL.Generator.Objects.Types
         {
             WriteFlagStart(stringBuilder, out var spacing, parameter);
             var propertyValue = parameter.HasFlag && !parameter.IsVector ? parameter.Name + ".Value" : parameter.Name;
-            
+
             switch (BitSize)
             {
                 case > 64:
@@ -68,7 +68,7 @@ namespace CatraProto.TL.Generator.Objects.Types
             stringBuilder.Append($"{StringTools.TwoTabs}{GetParameterAccessibility(parameter, isAbstract)} {type}");
             stringBuilder.AppendLine($" {parameter.Name} {{ get; set; }}");
         }
-        
+
         public override void WriteBaseParameters(StringBuilder stringBuilder, bool isAbstract = false)
         {
             throw new NotSupportedException("Bare types don't have a Base implementation.");

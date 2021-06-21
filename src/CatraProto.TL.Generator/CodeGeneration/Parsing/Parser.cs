@@ -15,7 +15,7 @@ namespace CatraProto.TL.Generator.CodeGeneration.Parsing
     internal class Parser
     {
         private string _line;
-        
+
         public Parser(string line)
         {
             _line = line;
@@ -42,6 +42,7 @@ namespace CatraProto.TL.Generator.CodeGeneration.Parsing
                             Configuration.Namespace = schema[index + 1];
                             index++;
                         }
+
                         continue;
                     }
                     case "-/-returnsRPCEncrypted-/-":
@@ -75,7 +76,7 @@ namespace CatraProto.TL.Generator.CodeGeneration.Parsing
                 {
                     constructor.Id = id.Value;
                 }
-                
+
                 var parameters = analyzer.FindParameters().Select(Parameter.Create).ToList();
                 constructor.Parameters = parameters;
                 constructor.Namespace = new Namespace(analyzer.FindName());
@@ -84,17 +85,17 @@ namespace CatraProto.TL.Generator.CodeGeneration.Parsing
                 constructor.Type = Tools.CreateType(foundType, true);
                 constructor.Type.IsVector = isVector;
                 constructor.Type.IsNaked = constructor.IsNaked;
-                
+
                 objects.Add(constructor);
             }
 
             return objects;
         }
 
-        
+
         public static bool FindVector(string type, out string newType)
         {
-            var found = Regex.IsMatch(type, @"\w+<.+>") ? type.Split("<") : new[] {type};
+            var found = Regex.IsMatch(type, @"\w+<.+>") ? type.Split("<") : new[] { type };
             if (found.Length == 2) found[^1] = found[^1].TrimEnd('>');
 
             newType = found.Length == 2 ? found[1] : found[0];
@@ -126,7 +127,7 @@ namespace CatraProto.TL.Generator.CodeGeneration.Parsing
             var list = new List<string>();
             foreach (var param in split)
             {
-                if(param[0] == '{') continue;
+                if (param[0] == '{') continue;
                 if (param == "=") break;
                 var match = Regex.Match(param, @"\w+:(.+)? ", RegexOptions.IgnorePatternWhitespace);
                 if (match.Success)
@@ -135,9 +136,10 @@ namespace CatraProto.TL.Generator.CodeGeneration.Parsing
                     list.Add(found);
                 }
             }
+
             return list.ToArray();
         }
-        
+
         //Obviously there is a better way to do this (aka making a new regex)
         //TODO
         public string[] FindPolymorphicTypes()
@@ -146,7 +148,7 @@ namespace CatraProto.TL.Generator.CodeGeneration.Parsing
             var list = new List<string>();
             foreach (var param in split)
             {
-                if(param[0] != '{') continue;
+                if (param[0] != '{') continue;
                 if (param == "=") break;
                 var match = Regex.Match(param, @"\w+:(.+)? ", RegexOptions.IgnorePatternWhitespace);
                 if (match.Success)

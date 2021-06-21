@@ -9,6 +9,7 @@ namespace CatraProto.TL.UnitTests
         public Type BoolTrue { get; init; } = typeof(Objects.BoolFalse);
         public Type BoolFalse { get; init; } = typeof(Objects.BoolFalse);
         public int VectorId { get; init; } = 481674261;
+
         public IObject ResolveConstructorId(int constructorId)
         {
             return null;

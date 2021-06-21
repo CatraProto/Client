@@ -64,24 +64,24 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
                 var method = (Method)o;
                 var stringBuilder = new StringBuilder();
                 method.WriteMethod(stringBuilder);
-                
+
                 var fixedNamespace = new Namespace(method.Namespace.FullNamespace, false)
                 {
                     [3] = "Requests"
                 };
-                
+
                 if (fixedNamespace.PartialNamespaceArray.Length == 5)
                 {
                     fixedNamespace[4] += "Api";
                 }
-                
+
                 if (files.TryGetValue(fixedNamespace.PartialNamespace, out var file))
                 {
                     file[1] += stringBuilder.ToString();
                 }
                 else
                 {
-                    files.Add(fixedNamespace.PartialNamespace, new[] {"", stringBuilder.ToString(), ""});
+                    files.Add(fixedNamespace.PartialNamespace, new[] { "", stringBuilder.ToString(), "" });
                 }
 
                 if (fixedNamespace.PartialNamespaceArray.Length > 5)
@@ -101,7 +101,7 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
                     }
                     else
                     {
-                        files.Add(Namespace.ArrayToString(fixedNamespace.PartialNamespaceArray[..5]) + "Api", new[] {writtenProp, "", writtenInit});
+                        files.Add(Namespace.ArrayToString(fixedNamespace.PartialNamespaceArray[..5]) + "Api", new[] { writtenProp, "", writtenInit });
                     }
 
                     writtenNamespaces.Add(ns);
@@ -116,7 +116,7 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
                 {
                     [3] = "Requests"
                 };
-                
+
                 Directory.CreateDirectory(StringTools.NamespaceToDirectory(ns.PartialNamespace).Replace(".", "/"));
                 taskList.Add(File.WriteAllTextAsync(ns.FullNamespace.Replace(".", "/") + ".cs", template
                     .Replace("^Namespace^", ns.PartialNamespace)
@@ -126,6 +126,7 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
                     .Replace("^Inits^", pair.Value[2])
                 ));
             }
+
             await Task.WhenAll(taskList);
         }
 

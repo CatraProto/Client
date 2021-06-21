@@ -2,21 +2,21 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateRecentStickers : UpdateBase
-	{
-		public static int ConstructorId { get; } = -1706939360;
+    public partial class UpdateRecentStickers : UpdateBase
+    {
+        public static int ConstructorId { get; } = -1706939360;
 
-		public override void UpdateFlags()
-		{
-		}
+        public override void UpdateFlags()
+        {
+        }
 
-		public override void Serialize(Writer writer)
-		{
-			if (ConstructorId != 0) writer.Write(ConstructorId);
-		}
+        public override void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0) writer.Write(ConstructorId);
+        }
 
-		public override void Deserialize(Reader reader)
-		{
-		}
-	}
+        public override void Deserialize(Reader reader)
+        {
+        }
+    }
 }

@@ -11,7 +11,7 @@ namespace CatraProto.TL.Generator.Objects.Types
             Name = "double";
             IsBare = true;
         }
-        
+
         public override void WriteBaseParameters(StringBuilder stringBuilder, bool isAbstract = false)
         {
             throw new NotSupportedException("Double doesn't need a base type");

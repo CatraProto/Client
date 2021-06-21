@@ -18,7 +18,7 @@ namespace CatraProto.TL.Generator.Objects.Types
         {
             stringBuilder.AppendLine($"{StringTools.TwoTabs}{GetParameterAccessibility(parameter, isAbstract)} int {parameter.Name} {{ get; set; }}");
         }
-        
+
         public override void WriteDeserializer(StringBuilder stringBuilder, Parameter parameter)
         {
             stringBuilder.AppendLine($"{StringTools.ThreeTabs}{parameter.Name} = reader.Read<int>();");

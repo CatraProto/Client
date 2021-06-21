@@ -14,21 +14,22 @@ namespace CatraProto.TL.Generator.Objects.Types
             IsBare = true;
             Name = "bool";
         }
-        
+
         public override void WriteMethodParameter(StringBuilder stringBuilder, Parameter parameter)
         {
             var writtenType = parameter.Type.Name;
             string after = "";
-            
+
             if (InitialTypeName == "true")
             {
                 after += " = true";
-            }else if (InitialTypeName != "true" && parameter.HasFlag)
+            }
+            else if (InitialTypeName != "true" && parameter.HasFlag)
             {
                 writtenType += "?";
                 after = " = null";
             }
-            
+
             stringBuilder.Append(writtenType + " " + parameter.InMethodName + after);
         }
 
@@ -40,7 +41,7 @@ namespace CatraProto.TL.Generator.Objects.Types
             {
                 type += '?';
             }
-            
+
             stringBuilder.AppendLine(
                 $"{StringTools.TwoTabs}{GetParameterAccessibility(parameter, allowOverride)} {type} {parameter.Name} {{ get; set; }}");
         }
@@ -68,13 +69,13 @@ namespace CatraProto.TL.Generator.Objects.Types
 
         public override void WriteFlagUpdate(StringBuilder stringBuilder, Parameter parameter)
         {
-            if(!parameter.HasFlag) return;
+            if (!parameter.HasFlag) return;
             if (InitialTypeName == "true")
             {
                 stringBuilder.AppendLine($"{StringTools.ThreeTabs}{parameter.Flag.Name} = {parameter.Name} ? FlagsHelper.SetFlag({parameter.Flag.Name}, {parameter.Flag.Bit}) : FlagsHelper.UnsetFlag({parameter.Flag.Name}, {parameter.Flag.Bit});");
                 return;
             }
-            
+
             base.WriteFlagUpdate(stringBuilder, parameter);
         }
 
@@ -89,6 +90,7 @@ namespace CatraProto.TL.Generator.Objects.Types
             {
                 return InitialTypeName == type.InitialTypeName;
             }
+
             return base.Equals(obj);
         }
 

@@ -14,27 +14,27 @@ namespace CatraProto.TL.Generator
         {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            
+
             Console.WriteLine("Please follow the instruction below and provide the requested data");
             Console.WriteLine("[Analyzer] Analyzing the schema, this shouldn't take long.");
-            
+
             var analyzed = await Parser.StartAnalyzing();
-            
+
             Console.WriteLine("[Optimizer] Optimizing schema, this shouldn't take long.");
-            
+
             var optimizedObjects = Optimizer.Optimize(analyzed);
             var writer = await Writer.Create(Optimizer.Optimize(optimizedObjects));
             var dictionaryWriter = await DictionaryWriter.Create(optimizedObjects);
             var taskList = new List<Task>
             {
-                writer.Write(), 
-                writer.WriteMethods(), 
+                writer.Write(),
+                writer.WriteMethods(),
                 dictionaryWriter.WriteDictionary()
             };
-            
+
             await Task.WhenAll(taskList);
             stopwatch.Stop();
-                
+
             Console.WriteLine($"Done! {stopwatch.Elapsed.Seconds.ToString()}s");
         }
     }

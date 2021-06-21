@@ -9,7 +9,7 @@ namespace CatraProto.Client.UnitTests
         public static ILogger CreateLogger(ITestOutputHelper helper)
         {
             return new LoggerConfiguration()
-                .WriteTo.TestOutput(helper, LogEventLevel.Debug,  "[{Timestamp:HH:mm:ss} {Level:u3}][{Session}][{SourceContext}] {Message:lj}{NewLine}{Exception}")
+                .WriteTo.TestOutput(helper, LogEventLevel.Debug, "[{Timestamp:HH:mm:ss} {Level:u3}][{Session}][{SourceContext}] {Message:lj}{NewLine}{Exception}")
                 .MinimumLevel.Debug()
                 .CreateLogger();
         }

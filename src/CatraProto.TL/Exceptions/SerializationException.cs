@@ -10,9 +10,9 @@ namespace CatraProto.TL.Exceptions
             TypeNotFound,
             BitSizeMismatch
         }
-        
+
         public SerializationErrors ErrorCode { get; init; }
-        
+
         public SerializationException(string message, SerializationErrors errorCode) : base(message)
         {
             ErrorCode = errorCode;

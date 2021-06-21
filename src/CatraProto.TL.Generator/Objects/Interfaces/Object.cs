@@ -29,7 +29,7 @@ namespace CatraProto.TL.Generator.Objects.Interfaces
 
             return "public override";
         }
-        
+
         public virtual void WriteFlagsUpdating(StringBuilder builder)
         {
             foreach (var parameter in Parameters)
@@ -75,7 +75,7 @@ namespace CatraProto.TL.Generator.Objects.Interfaces
                 }
                 else
                 {
-                    var list = new List<Parameter> {flaggedParameter};
+                    var list = new List<Parameter> { flaggedParameter };
                     dictionary.Add(flaggedParameter.Flag.Name, list);
                 }
 

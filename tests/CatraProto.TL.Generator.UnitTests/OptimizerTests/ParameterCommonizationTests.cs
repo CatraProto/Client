@@ -17,18 +17,18 @@ namespace CatraProto.TL.Generator.UnitTests.OptimizerTests
         }
 
         [Theory]
-        [InlineData(new []
+        [InlineData(new[]
         {
             "PoniesDummy#5 flags:# mammt:int = Ponies;",
-            
+
             "Peer#3 flags:# message:string mammt:int dummyParameter:Ponies = Peer;",
             "EmptyPeer#4 flags:# message:string mammt:int = Peer;",
             "---functions---",
             "MethodPeer#5 flags:# message:string mammt:int = Peer;"
         }, new[]
         {
-           "Mammt",
-           "Message"
+            "Mammt",
+            "Message"
         })]
         public async Task CommonizationTest(string[] schema, string[] expectedCommon)
         {
@@ -51,7 +51,7 @@ namespace CatraProto.TL.Generator.UnitTests.OptimizerTests
                     }
                 }
             }
-            
+
             Assert.Equal(expectedCommon.Length, mergedCommonParameters.Count);
             foreach (var typeName in expectedCommon)
             {

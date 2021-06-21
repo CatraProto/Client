@@ -10,7 +10,8 @@ namespace CatraProto.TL.Generator.UnitTests.OptimizerTests
         [Fact]
         public async Task ParameterNameCollision()
         {
-            string[] schema = {
+            string[] schema =
+            {
                 "message#1 flags:# message:string mammt:int = int;",
                 "message_gay#2 flags:# message:string mammt:int = int;",
                 "Peer#3 Peer:string mammt:int = Peer;",
@@ -25,18 +26,19 @@ namespace CatraProto.TL.Generator.UnitTests.OptimizerTests
             optimizer.FixNamesCollision();
             Assert.Equal("PPeer", optimizer.Objects[2].Parameters[0].Name);
         }
-        
+
         [Fact]
         public async Task NamespaceCollissionTest()
         {
-            string[] schema = {
+            string[] schema =
+            {
                 "Updates.Updates#1 flags:# message:string mammt:int = int;",
                 "Updates#2 flags:# message:string mammt:int = int;"
             };
 
             var parser = await Parser.StartAnalyzing(schema);
             var optimizer = new Optimizer(parser);
-            
+
             optimizer.FixNamesCollision();
             Assert.Equal("OUpdates", optimizer.Objects[0].Name);
             Assert.Equal("OUpdates", optimizer.Objects[1].Name);

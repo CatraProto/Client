@@ -9,6 +9,7 @@ namespace CatraProto.TL.Generator.UnitTests.ParserTests
     public class ParameterCreationTest
     {
         private const string DefaultNamespace = "CatraProto.Client.TL.Schemas.CloudChats.PonyBase";
+
         [Theory]
         [InlineData("test#123 parameterName:Bool = EtheriaType;", "ParameterName", false, false, typeof(BoolType), true, "bool")]
         [InlineData("test#123 parameterName:true = EtheriaType;", "ParameterName", false, false, typeof(BoolType), true, "bool")]
@@ -36,7 +37,7 @@ namespace CatraProto.TL.Generator.UnitTests.ParserTests
         {
             var analyzer = new Parser(testString);
             var args = analyzer.FindParameters();
-            
+
             Assert.Single(args);
             var parameter = Parameter.Create(args[0]);
             Assert.Equal(expectedName, parameter.Name);
@@ -54,7 +55,7 @@ namespace CatraProto.TL.Generator.UnitTests.ParserTests
             {
                 Assert.Equal(expectedNamespace, parameter.Type.Namespace.FullNamespace);
             }
-            
+
             if (expectedFlagBit != null)
             {
                 Assert.True(parameter.HasFlag);
@@ -78,7 +79,7 @@ namespace CatraProto.TL.Generator.UnitTests.ParserTests
         [InlineData("test#123 parameterName:Vector<int> = EtheriaType;", 32, true, "int")]
         [InlineData("test#123 parameterName:flags.1?Vector<int> = EtheriaType;", 32, true, "int", 1)]
         [InlineData("test#123 parameterName:long = EtheriaType;", 64, false, "long")]
-        [InlineData("test#123 parameterName:flags.1?long = EtheriaType;", 64, false,"long", 1)]
+        [InlineData("test#123 parameterName:flags.1?long = EtheriaType;", 64, false, "long", 1)]
         [InlineData("test#123 parameterName:Vector<long> = EtheriaType;", 64, true, "long")]
         [InlineData("test#123 parameterName:flags.1?Vector<long> = EtheriaType;", 64, true, "long", 1)]
         [InlineData("test#123 parameterName:int128 = EtheriaType;", 128, false, "BigInteger")]
@@ -90,7 +91,7 @@ namespace CatraProto.TL.Generator.UnitTests.ParserTests
         {
             var analyzer = new Parser(testString);
             var args = analyzer.FindParameters();
-            
+
             Assert.Single(args);
             var parameter = Parameter.Create(args[0]);
             Assert.Equal("ParameterName", parameter.Name);

@@ -65,13 +65,14 @@ namespace CatraProto.TL.Generator.Objects.Types.Interfaces
             {
                 writtenType = "List<" + writtenType + ">";
             }
+
             if (parameter.HasFlag && this is not StringType)
             {
                 writtenType += "?";
             }
 
             writtenType = $"{writtenType} {parameter.InMethodName}";
-            
+
             if (parameter.HasFlag)
             {
                 writtenType += " = null";

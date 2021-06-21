@@ -19,7 +19,7 @@ namespace CatraProto.TL.Generator.UnitTests.ParserTests
                 Assert.False(result);
                 return;
             }
-            
+
             Assert.Equal(expected, result);
             Assert.Equal(expectedCleanType, cleanType);
             Assert.Equal(flagName, flag.Name);
