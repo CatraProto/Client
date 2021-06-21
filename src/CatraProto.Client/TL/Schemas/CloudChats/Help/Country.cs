@@ -6,13 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
     public partial class Country : CountryBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Hidden = 1 << 0,
-            Name = 1 << 1
-        }
-
         public static int ConstructorId { get; } = -1014526429;
         public int Flags { get; set; }
         public override bool Hidden { get; set; }
@@ -20,6 +13,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
         public override string DefaultName { get; set; }
         public override string Name { get; set; }
         public override IList<CountryCodeBase> CountryCodes { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Hidden = 1 << 0,
+            Name = 1 << 1
+        }
 
         public override void UpdateFlags()
         {

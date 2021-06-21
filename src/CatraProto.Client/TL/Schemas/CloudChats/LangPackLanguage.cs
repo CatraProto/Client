@@ -5,15 +5,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class LangPackLanguage : LangPackLanguageBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Official = 1 << 0,
-            Rtl = 1 << 2,
-            Beta = 1 << 3,
-            BaseLangCode = 1 << 1
-        }
-
         public static int ConstructorId { get; } = -288727837;
         public int Flags { get; set; }
         public override bool Official { get; set; }
@@ -27,6 +18,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override int StringsCount { get; set; }
         public override int TranslatedCount { get; set; }
         public override string TranslationsUrl { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Official = 1 << 0,
+            Rtl = 1 << 2,
+            Beta = 1 << 3,
+            BaseLangCode = 1 << 1
+        }
 
         public override void UpdateFlags()
         {

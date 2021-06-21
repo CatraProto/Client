@@ -5,6 +5,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class CodeSettings : CodeSettingsBase
     {
+        public static int ConstructorId { get; } = -557924733;
+        public int Flags { get; set; }
+        public override bool AllowFlashcall { get; set; }
+        public override bool CurrentNumber { get; set; }
+        public override bool AllowAppHash { get; set; }
+
         [Flags]
         public enum FlagsEnum
         {
@@ -12,12 +18,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             CurrentNumber = 1 << 1,
             AllowAppHash = 1 << 4
         }
-
-        public static int ConstructorId { get; } = -557924733;
-        public int Flags { get; set; }
-        public override bool AllowFlashcall { get; set; }
-        public override bool CurrentNumber { get; set; }
-        public override bool AllowAppHash { get; set; }
 
         public override void UpdateFlags()
         {

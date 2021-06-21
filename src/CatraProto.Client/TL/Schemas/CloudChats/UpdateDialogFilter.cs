@@ -5,16 +5,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class UpdateDialogFilter : UpdateBase
     {
+        public static int ConstructorId { get; } = 654302845;
+        public int Flags { get; set; }
+        public int Id { get; set; }
+        public DialogFilterBase Filter { get; set; }
+
         [Flags]
         public enum FlagsEnum
         {
             Filter = 1 << 0
         }
-
-        public static int ConstructorId { get; } = 654302845;
-        public int Flags { get; set; }
-        public int Id { get; set; }
-        public DialogFilterBase Filter { get; set; }
 
         public override void UpdateFlags()
         {

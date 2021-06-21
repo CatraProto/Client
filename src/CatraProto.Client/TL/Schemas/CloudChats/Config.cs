@@ -6,27 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class Config : ConfigBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            PhonecallsEnabled = 1 << 1,
-            DefaultP2pContacts = 1 << 3,
-            PreloadFeaturedStickers = 1 << 4,
-            IgnorePhoneEntities = 1 << 5,
-            RevokePmInbox = 1 << 6,
-            BlockedMode = 1 << 8,
-            PfsEnabled = 1 << 13,
-            TmpSessions = 1 << 0,
-            AutoupdateUrlPrefix = 1 << 7,
-            GifSearchUsername = 1 << 9,
-            VenueSearchUsername = 1 << 10,
-            ImgSearchUsername = 1 << 11,
-            StaticMapsProvider = 1 << 12,
-            SuggestedLangCode = 1 << 2,
-            LangPackVersion = 1 << 2,
-            BaseLangPackVersion = 1 << 2
-        }
-
         public static int ConstructorId { get; } = 856375399;
         public int Flags { get; set; }
         public override bool PhonecallsEnabled { get; set; }
@@ -80,6 +59,27 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override string SuggestedLangCode { get; set; }
         public override int? LangPackVersion { get; set; }
         public override int? BaseLangPackVersion { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            PhonecallsEnabled = 1 << 1,
+            DefaultP2pContacts = 1 << 3,
+            PreloadFeaturedStickers = 1 << 4,
+            IgnorePhoneEntities = 1 << 5,
+            RevokePmInbox = 1 << 6,
+            BlockedMode = 1 << 8,
+            PfsEnabled = 1 << 13,
+            TmpSessions = 1 << 0,
+            AutoupdateUrlPrefix = 1 << 7,
+            GifSearchUsername = 1 << 9,
+            VenueSearchUsername = 1 << 10,
+            ImgSearchUsername = 1 << 11,
+            StaticMapsProvider = 1 << 12,
+            SuggestedLangCode = 1 << 2,
+            LangPackVersion = 1 << 2,
+            BaseLangPackVersion = 1 << 2
+        }
 
         public override void UpdateFlags()
         {

@@ -6,12 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public partial class GetRecentStickers : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Attached = 1 << 0
-        }
-
         public static int ConstructorId { get; } = 1587647177;
         public int Flags { get; set; }
         public bool Attached { get; set; }
@@ -19,6 +13,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public Type Type { get; init; } = typeof(RecentStickersBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Attached = 1 << 0
+        }
 
         public void UpdateFlags()
         {

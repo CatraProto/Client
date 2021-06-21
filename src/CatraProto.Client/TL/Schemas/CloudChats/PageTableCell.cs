@@ -5,6 +5,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class PageTableCell : PageTableCellBase
     {
+        public static int ConstructorId { get; } = 878078826;
+        public int Flags { get; set; }
+        public override bool Header { get; set; }
+        public override bool AlignCenter { get; set; }
+        public override bool AlignRight { get; set; }
+        public override bool ValignMiddle { get; set; }
+        public override bool ValignBottom { get; set; }
+        public override RichTextBase Text { get; set; }
+        public override int? Colspan { get; set; }
+        public override int? Rowspan { get; set; }
+
         [Flags]
         public enum FlagsEnum
         {
@@ -17,17 +28,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Colspan = 1 << 1,
             Rowspan = 1 << 2
         }
-
-        public static int ConstructorId { get; } = 878078826;
-        public int Flags { get; set; }
-        public override bool Header { get; set; }
-        public override bool AlignCenter { get; set; }
-        public override bool AlignRight { get; set; }
-        public override bool ValignMiddle { get; set; }
-        public override bool ValignBottom { get; set; }
-        public override RichTextBase Text { get; set; }
-        public override int? Colspan { get; set; }
-        public override int? Rowspan { get; set; }
 
         public override void UpdateFlags()
         {

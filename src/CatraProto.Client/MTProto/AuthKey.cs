@@ -5,13 +5,6 @@ namespace CatraProto.Client.MTProto
 {
     internal class AuthKey
     {
-        private DateTimeOffset _expiresIn;
-
-        public AuthKey(byte[] authkey, bool isPermanent)
-        {
-            IsPermanent = isPermanent;
-        }
-
         /// <summary>
         ///     Whether this AuthKey is permanent or temporary
         /// </summary>
@@ -29,6 +22,13 @@ namespace CatraProto.Client.MTProto
                     throw new InvalidOperationException("This AuthKey is not temporary, therefore it has no expire date");
                 return _expiresIn;
             }
+        }
+
+        private DateTimeOffset _expiresIn;
+
+        public AuthKey(byte[] authkey, bool isPermanent)
+        {
+            IsPermanent = isPermanent;
         }
 
 

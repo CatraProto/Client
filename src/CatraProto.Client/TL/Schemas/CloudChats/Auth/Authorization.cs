@@ -5,16 +5,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
     public partial class Authorization : AuthorizationBase
     {
+        public static int ConstructorId { get; } = -855308010;
+        public int Flags { get; set; }
+        public int? TmpSessions { get; set; }
+        public UserBase User { get; set; }
+
         [Flags]
         public enum FlagsEnum
         {
             TmpSessions = 1 << 0
         }
-
-        public static int ConstructorId { get; } = -855308010;
-        public int Flags { get; set; }
-        public int? TmpSessions { get; set; }
-        public UserBase User { get; set; }
 
         public override void UpdateFlags()
         {

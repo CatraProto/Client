@@ -6,14 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public partial class BotResults : BotResultsBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Gallery = 1 << 0,
-            NextOffset = 1 << 1,
-            SwitchPm = 1 << 2
-        }
-
         public static int ConstructorId { get; } = -1803769784;
         public int Flags { get; set; }
         public override bool Gallery { get; set; }
@@ -23,6 +15,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public override IList<BotInlineResultBase> Results { get; set; }
         public override int CacheTime { get; set; }
         public override IList<UserBase> Users { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Gallery = 1 << 0,
+            NextOffset = 1 << 1,
+            SwitchPm = 1 << 2
+        }
 
         public override void UpdateFlags()
         {

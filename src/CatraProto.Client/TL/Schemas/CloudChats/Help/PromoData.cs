@@ -6,14 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
     public partial class PromoData : PromoDataBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Proxy = 1 << 0,
-            PsaType = 1 << 1,
-            PsaMessage = 1 << 2
-        }
-
         public static int ConstructorId { get; } = -1942390465;
         public int Flags { get; set; }
         public bool Proxy { get; set; }
@@ -23,6 +15,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
         public IList<UserBase> Users { get; set; }
         public string PsaType { get; set; }
         public string PsaMessage { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Proxy = 1 << 0,
+            PsaType = 1 << 1,
+            PsaMessage = 1 << 2
+        }
 
         public override void UpdateFlags()
         {

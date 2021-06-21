@@ -4,6 +4,8 @@ namespace CatraProto.TL.Exceptions
 {
     public class DeserializationException : Exception
     {
+        public DeserializationErrors ErrorCode { get; init; }
+
         public enum DeserializationErrors
         {
             TypeNotFound,
@@ -12,8 +14,6 @@ namespace CatraProto.TL.Exceptions
             ParameterMalformed,
             BoolTrueNull
         }
-
-        public DeserializationErrors ErrorCode { get; init; }
 
         public DeserializationException(string message, DeserializationErrors errorCode) : base(message)
         {

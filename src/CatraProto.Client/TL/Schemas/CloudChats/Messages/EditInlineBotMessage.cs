@@ -7,16 +7,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public partial class EditInlineBotMessage : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            NoWebpage = 1 << 1,
-            Message = 1 << 11,
-            Media = 1 << 14,
-            ReplyMarkup = 1 << 2,
-            Entities = 1 << 3
-        }
-
         public static int ConstructorId { get; } = -2091549254;
         public int Flags { get; set; }
         public bool NoWebpage { get; set; }
@@ -28,6 +18,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public Type Type { get; init; } = typeof(bool);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            NoWebpage = 1 << 1,
+            Message = 1 << 11,
+            Media = 1 << 14,
+            ReplyMarkup = 1 << 2,
+            Entities = 1 << 3
+        }
 
         public void UpdateFlags()
         {

@@ -18,13 +18,6 @@ namespace CatraProto.Client.Connections.Protocols.TcpAbridged
             _networkStream = stream;
         }
 
-        public async Task<byte[]> ReadMessageAsync(CancellationToken token = default)
-        {
-            var firstByte = await _networkStream.ReadByte(0, token);
-            var length = await GetMessageLength(firstByte, token);
-            return await _networkStream.ReadBytesAsync(length, cancellationToken: token);
-        }
-
         private async Task<int> GetMessageLength(int firstByte, CancellationToken token = default)
         {
             var length = firstByte;
@@ -38,6 +31,13 @@ namespace CatraProto.Client.Connections.Protocols.TcpAbridged
             length *= 4;
             _logger.Debug("Length is {Length}. First byte {Byte}", length, firstByte);
             return length;
+        }
+
+        public async Task<byte[]> ReadMessageAsync(CancellationToken token = default)
+        {
+            var firstByte = await _networkStream.ReadByte(0, token);
+            var length = await GetMessageLength(firstByte, token);
+            return await _networkStream.ReadBytesAsync(length, cancellationToken: token);
         }
     }
 }

@@ -5,6 +5,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class ChatBannedRights : ChatBannedRightsBase
     {
+        public static int ConstructorId { get; } = -1626209256;
+        public int Flags { get; set; }
+        public override bool ViewMessages { get; set; }
+        public override bool SendMessages { get; set; }
+        public override bool SendMedia { get; set; }
+        public override bool SendStickers { get; set; }
+        public override bool SendGifs { get; set; }
+        public override bool SendGames { get; set; }
+        public override bool SendInline { get; set; }
+        public override bool EmbedLinks { get; set; }
+        public override bool SendPolls { get; set; }
+        public override bool ChangeInfo { get; set; }
+        public override bool InviteUsers { get; set; }
+        public override bool PinMessages { get; set; }
+        public override int UntilDate { get; set; }
+
         [Flags]
         public enum FlagsEnum
         {
@@ -21,22 +37,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             InviteUsers = 1 << 15,
             PinMessages = 1 << 17
         }
-
-        public static int ConstructorId { get; } = -1626209256;
-        public int Flags { get; set; }
-        public override bool ViewMessages { get; set; }
-        public override bool SendMessages { get; set; }
-        public override bool SendMedia { get; set; }
-        public override bool SendStickers { get; set; }
-        public override bool SendGifs { get; set; }
-        public override bool SendGames { get; set; }
-        public override bool SendInline { get; set; }
-        public override bool EmbedLinks { get; set; }
-        public override bool SendPolls { get; set; }
-        public override bool ChangeInfo { get; set; }
-        public override bool InviteUsers { get; set; }
-        public override bool PinMessages { get; set; }
-        public override int UntilDate { get; set; }
 
         public override void UpdateFlags()
         {

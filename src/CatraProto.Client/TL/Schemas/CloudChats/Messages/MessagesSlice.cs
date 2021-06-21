@@ -6,14 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public partial class MessagesSlice : MessagesBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Inexact = 1 << 1,
-            NextRate = 1 << 0,
-            OffsetIdOffset = 1 << 2
-        }
-
         public static int ConstructorId { get; } = 978610270;
         public int Flags { get; set; }
         public bool Inexact { get; set; }
@@ -23,6 +15,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public IList<MessageBase> Messages { get; set; }
         public IList<ChatBase> Chats { get; set; }
         public IList<UserBase> Users { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Inexact = 1 << 1,
+            NextRate = 1 << 0,
+            OffsetIdOffset = 1 << 2
+        }
 
         public override void UpdateFlags()
         {

@@ -6,18 +6,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class BotInlineMessageMediaAuto : BotInlineMessageBase
     {
+        public static int ConstructorId { get; } = 1984755728;
+        public int Flags { get; set; }
+        public string Message { get; set; }
+        public IList<MessageEntityBase> Entities { get; set; }
+        public override ReplyMarkupBase ReplyMarkup { get; set; }
+
         [Flags]
         public enum FlagsEnum
         {
             Entities = 1 << 1,
             ReplyMarkup = 1 << 2
         }
-
-        public static int ConstructorId { get; } = 1984755728;
-        public int Flags { get; set; }
-        public string Message { get; set; }
-        public IList<MessageEntityBase> Entities { get; set; }
-        public override ReplyMarkupBase ReplyMarkup { get; set; }
 
         public override void UpdateFlags()
         {

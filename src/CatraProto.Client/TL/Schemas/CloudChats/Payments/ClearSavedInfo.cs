@@ -6,13 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 {
     public partial class ClearSavedInfo : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Credentials = 1 << 0,
-            Info = 1 << 1
-        }
-
         public static int ConstructorId { get; } = -667062079;
         public int Flags { get; set; }
         public bool Credentials { get; set; }
@@ -20,6 +13,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 
         public Type Type { get; init; } = typeof(bool);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Credentials = 1 << 0,
+            Info = 1 << 1
+        }
 
         public void UpdateFlags()
         {

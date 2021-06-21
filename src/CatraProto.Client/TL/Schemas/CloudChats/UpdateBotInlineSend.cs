@@ -5,13 +5,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class UpdateBotInlineSend : UpdateBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Geo = 1 << 0,
-            MsgId = 1 << 1
-        }
-
         public static int ConstructorId { get; } = 239663460;
         public int Flags { get; set; }
         public int UserId { get; set; }
@@ -19,6 +12,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public GeoPointBase Geo { get; set; }
         public string Id { get; set; }
         public InputBotInlineMessageIDBase MsgId { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Geo = 1 << 0,
+            MsgId = 1 << 1
+        }
 
         public override void UpdateFlags()
         {

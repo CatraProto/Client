@@ -6,14 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
     public partial class BlockFromReplies : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            DeleteMessage = 1 << 0,
-            DeleteHistory = 1 << 1,
-            ReportSpam = 1 << 2
-        }
-
         public static int ConstructorId { get; } = 698914348;
         public int Flags { get; set; }
         public bool DeleteMessage { get; set; }
@@ -23,6 +15,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 
         public Type Type { get; init; } = typeof(UpdatesBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            DeleteMessage = 1 << 0,
+            DeleteHistory = 1 << 1,
+            ReportSpam = 1 << 2
+        }
 
         public void UpdateFlags()
         {

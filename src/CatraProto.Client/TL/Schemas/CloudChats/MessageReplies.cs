@@ -6,16 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class MessageReplies : MessageRepliesBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Comments = 1 << 0,
-            RecentRepliers = 1 << 1,
-            ChannelId = 1 << 0,
-            MaxId = 1 << 2,
-            ReadMaxId = 1 << 3
-        }
-
         public static int ConstructorId { get; } = 1093204652;
         public int Flags { get; set; }
         public override bool Comments { get; set; }
@@ -25,6 +15,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override int? ChannelId { get; set; }
         public override int? MaxId { get; set; }
         public override int? ReadMaxId { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Comments = 1 << 0,
+            RecentRepliers = 1 << 1,
+            ChannelId = 1 << 0,
+            MaxId = 1 << 2,
+            ReadMaxId = 1 << 3
+        }
 
         public override void UpdateFlags()
         {

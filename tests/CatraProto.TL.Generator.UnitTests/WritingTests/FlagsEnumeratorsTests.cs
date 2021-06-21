@@ -1,5 +1,6 @@
 using System.Text;
 using System.Threading.Tasks;
+using CatraProto.TL.Generator.CodeGeneration.Parsing;
 using Xunit;
 
 namespace CatraProto.TL.Generator.UnitTests.WritingTests
@@ -13,7 +14,7 @@ namespace CatraProto.TL.Generator.UnitTests.WritingTests
             {
                 "message_gay#2 flags:# pony:# message:flags.1?string mammt:flags.2?int sorreta:pony.1?int = int;",
             };
-            var analyzed = await CodeGeneration.Parsing.Parser.StartAnalyzing(schema);
+            var analyzed = await Parser.StartAnalyzing(schema);
 
             var builder = new StringBuilder();
             analyzed[0].WriteFlagsEnums(builder);

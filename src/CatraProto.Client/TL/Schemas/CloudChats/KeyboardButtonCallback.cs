@@ -5,17 +5,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class KeyboardButtonCallback : KeyboardButtonBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            RequiresPassword = 1 << 0
-        }
-
         public static int ConstructorId { get; } = 901503851;
         public int Flags { get; set; }
         public bool RequiresPassword { get; set; }
         public override string Text { get; set; }
         public byte[] Data { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            RequiresPassword = 1 << 0
+        }
 
         public override void UpdateFlags()
         {

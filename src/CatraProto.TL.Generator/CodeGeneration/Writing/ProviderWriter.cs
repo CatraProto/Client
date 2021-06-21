@@ -3,8 +3,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CatraProto.TL.Generator.Objects.Interfaces;
 using CatraProto.TL.Generator.Settings;
-using Object = CatraProto.TL.Generator.Objects.Interfaces.Object;
 
 namespace CatraProto.TL.Generator.CodeGeneration.Writing
 {

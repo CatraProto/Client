@@ -5,12 +5,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class EncryptedChatRequested : EncryptedChatBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            FolderId = 1 << 0
-        }
-
         public static int ConstructorId { get; } = 1651608194;
         public int Flags { get; set; }
         public int? FolderId { get; set; }
@@ -20,6 +14,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int AdminId { get; set; }
         public int ParticipantId { get; set; }
         public byte[] GA { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            FolderId = 1 << 0
+        }
 
         public override void UpdateFlags()
         {

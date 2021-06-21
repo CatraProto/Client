@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Text;
-using Object = CatraProto.TL.Generator.Objects.Interfaces.Object;
+using CatraProto.TL.Generator.Objects.Interfaces;
 
 namespace CatraProto.TL.Generator.Objects.Types.Interfaces
 {
@@ -111,8 +111,8 @@ namespace CatraProto.TL.Generator.Objects.Types.Interfaces
         public void WriteUsings(StringBuilder builder)
         {
             var importsList = new List<string>();
-            builder.AppendLine($"using CatraProto.TL;");
-            builder.AppendLine($"using CatraProto.TL.Interfaces;");
+            builder.AppendLine("using CatraProto.TL;");
+            builder.AppendLine("using CatraProto.TL.Interfaces;");
 
             foreach (var obReferencedObject in ReferencedObjects)
             {

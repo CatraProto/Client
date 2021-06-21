@@ -7,13 +7,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 {
     public partial class GetAdminLog : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            EventsFilter = 1 << 0,
-            Admins = 1 << 1
-        }
-
         public static int ConstructorId { get; } = 870184064;
         public int Flags { get; set; }
         public InputChannelBase Channel { get; set; }
@@ -26,6 +19,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 
         public Type Type { get; init; } = typeof(AdminLogResultsBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            EventsFilter = 1 << 0,
+            Admins = 1 << 1
+        }
 
         public void UpdateFlags()
         {

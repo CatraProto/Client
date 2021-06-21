@@ -6,16 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class ChatInvite : ChatInviteBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Channel = 1 << 0,
-            Broadcast = 1 << 1,
-            Public = 1 << 2,
-            Megagroup = 1 << 3,
-            Participants = 1 << 4
-        }
-
         public static int ConstructorId { get; } = -540871282;
         public int Flags { get; set; }
         public bool Channel { get; set; }
@@ -26,6 +16,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public PhotoBase Photo { get; set; }
         public int ParticipantsCount { get; set; }
         public IList<UserBase> Participants { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Channel = 1 << 0,
+            Broadcast = 1 << 1,
+            Public = 1 << 2,
+            Megagroup = 1 << 3,
+            Participants = 1 << 4
+        }
 
         public override void UpdateFlags()
         {

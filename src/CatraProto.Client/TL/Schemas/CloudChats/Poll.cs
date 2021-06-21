@@ -6,17 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class Poll : PollBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Closed = 1 << 0,
-            PublicVoters = 1 << 1,
-            MultipleChoice = 1 << 2,
-            Quiz = 1 << 3,
-            ClosePeriod = 1 << 4,
-            CloseDate = 1 << 5
-        }
-
         public static int ConstructorId { get; } = -2032041631;
         public override long Id { get; set; }
         public int Flags { get; set; }
@@ -28,6 +17,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override IList<PollAnswerBase> Answers { get; set; }
         public override int? ClosePeriod { get; set; }
         public override int? CloseDate { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Closed = 1 << 0,
+            PublicVoters = 1 << 1,
+            MultipleChoice = 1 << 2,
+            Quiz = 1 << 3,
+            ClosePeriod = 1 << 4,
+            CloseDate = 1 << 5
+        }
 
         public override void UpdateFlags()
         {

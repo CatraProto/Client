@@ -10,6 +10,11 @@ namespace CatraProto.TL.Generator.CodeGeneration.Optimization
 {
     internal class Optimizer
     {
+        public List<Object> Objects
+        {
+            get => _objects.ToList();
+        }
+
         private bool _areObjectsBind;
         private bool _areParametersBind;
         private bool _areParametersCommonized;
@@ -19,8 +24,6 @@ namespace CatraProto.TL.Generator.CodeGeneration.Optimization
         {
             _objects = objects.ToList();
         }
-
-        public List<Object> Objects => _objects.ToList();
 
         public static List<Object> Optimize(IEnumerable<Object> objects)
         {
@@ -33,10 +36,10 @@ namespace CatraProto.TL.Generator.CodeGeneration.Optimization
         }
 
         /// <summary>
-        /// Binds each object to one unique type and adds them to the type's "ReferencedObjects" List 
+        ///     Binds each object to one unique type and adds them to the type's "ReferencedObjects" List
         /// </summary>
         /// <returns>
-        /// Void. The types are updated inside the class' field instead of being recreated.
+        ///     Void. The types are updated inside the class' field instead of being recreated.
         /// </returns>
         public void BindObjects()
         {
@@ -63,10 +66,10 @@ namespace CatraProto.TL.Generator.CodeGeneration.Optimization
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <remarks>
-        /// Calling this method will result in calling <see cref="BindObjects"/> if types aren't already bound to their objects.
+        ///     Calling this method will result in calling <see cref="BindObjects" /> if types aren't already bound to their
+        ///     objects.
         /// </remarks>
         public void BindParameters()
         {
@@ -103,7 +106,8 @@ namespace CatraProto.TL.Generator.CodeGeneration.Optimization
         }
 
         /// <summary>
-        /// Calling this method will result in calling <see cref="BindParameters"/> if types aren't already bound to their types.
+        ///     Calling this method will result in calling <see cref="BindParameters" /> if types aren't already bound to their
+        ///     types.
         /// </summary>
         public void FindCommonParameters()
         {

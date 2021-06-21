@@ -6,13 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class PhoneCall : PhoneCallBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            P2pAllowed = 1 << 5,
-            Video = 1 << 6
-        }
-
         public static int ConstructorId { get; } = -2025673089;
         public int Flags { get; set; }
         public bool P2pAllowed { get; set; }
@@ -27,6 +20,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public PhoneCallProtocolBase Protocol { get; set; }
         public IList<PhoneConnectionBase> Connections { get; set; }
         public int StartDate { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            P2pAllowed = 1 << 5,
+            Video = 1 << 6
+        }
 
         public override void UpdateFlags()
         {

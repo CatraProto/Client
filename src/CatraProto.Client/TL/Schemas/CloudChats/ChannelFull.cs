@@ -6,37 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class ChannelFull : ChatFullBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            CanViewParticipants = 1 << 3,
-            CanSetUsername = 1 << 7,
-            CanSetStickers = 1 << 7,
-            HiddenPrehistory = 1 << 10,
-            CanSetLocation = 1 << 16,
-            HasScheduled = 1 << 8,
-            CanViewStats = 1 << 20,
-            Blocked = 1 << 22,
-            ParticipantsCount = 1 << 0,
-            AdminsCount = 1 << 1,
-            KickedCount = 1 << 2,
-            BannedCount = 1 << 2,
-            OnlineCount = 1 << 13,
-            ChatPhoto = 1 << 2,
-            BotInfo = 1 << 3,
-            MigratedFromChatId = 1 << 4,
-            MigratedFromMaxId = 1 << 4,
-            PinnedMsgId = 1 << 6,
-            Stickerset = 1 << 8,
-            AvailableMinId = 1 << 9,
-            FolderId = 1 << 11,
-            LinkedChatId = 1 << 14,
-            Location = 1 << 15,
-            SlowmodeSeconds = 1 << 17,
-            SlowmodeNextSendDate = 1 << 18,
-            StatsDc = 1 << 12
-        }
-
         public static int ConstructorId { get; } = -253335766;
         public int Flags { get; set; }
         public bool CanViewParticipants { get; set; }
@@ -73,6 +42,37 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int? SlowmodeNextSendDate { get; set; }
         public int? StatsDc { get; set; }
         public int Pts { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            CanViewParticipants = 1 << 3,
+            CanSetUsername = 1 << 7,
+            CanSetStickers = 1 << 7,
+            HiddenPrehistory = 1 << 10,
+            CanSetLocation = 1 << 16,
+            HasScheduled = 1 << 8,
+            CanViewStats = 1 << 20,
+            Blocked = 1 << 22,
+            ParticipantsCount = 1 << 0,
+            AdminsCount = 1 << 1,
+            KickedCount = 1 << 2,
+            BannedCount = 1 << 2,
+            OnlineCount = 1 << 13,
+            ChatPhoto = 1 << 2,
+            BotInfo = 1 << 3,
+            MigratedFromChatId = 1 << 4,
+            MigratedFromMaxId = 1 << 4,
+            PinnedMsgId = 1 << 6,
+            Stickerset = 1 << 8,
+            AvailableMinId = 1 << 9,
+            FolderId = 1 << 11,
+            LinkedChatId = 1 << 14,
+            Location = 1 << 15,
+            SlowmodeSeconds = 1 << 17,
+            SlowmodeNextSendDate = 1 << 18,
+            StatsDc = 1 << 12
+        }
 
         public override void UpdateFlags()
         {

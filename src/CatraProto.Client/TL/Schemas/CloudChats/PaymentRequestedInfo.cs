@@ -5,6 +5,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class PaymentRequestedInfo : PaymentRequestedInfoBase
     {
+        public static int ConstructorId { get; } = -1868808300;
+        public int Flags { get; set; }
+        public override string Name { get; set; }
+        public override string Phone { get; set; }
+        public override string Email { get; set; }
+        public override PostAddressBase ShippingAddress { get; set; }
+
         [Flags]
         public enum FlagsEnum
         {
@@ -13,13 +20,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Email = 1 << 2,
             ShippingAddress = 1 << 3
         }
-
-        public static int ConstructorId { get; } = -1868808300;
-        public int Flags { get; set; }
-        public override string Name { get; set; }
-        public override string Phone { get; set; }
-        public override string Email { get; set; }
-        public override PostAddressBase ShippingAddress { get; set; }
 
         public override void UpdateFlags()
         {

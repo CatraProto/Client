@@ -6,17 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 {
     public partial class PaymentForm : PaymentFormBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            CanSaveCredentials = 1 << 2,
-            PasswordMissing = 1 << 3,
-            NativeProvider = 1 << 4,
-            NativeParams = 1 << 4,
-            SavedInfo = 1 << 0,
-            SavedCredentials = 1 << 1
-        }
-
         public static int ConstructorId { get; } = 1062645411;
         public int Flags { get; set; }
         public override bool CanSaveCredentials { get; set; }
@@ -30,6 +19,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
         public override PaymentRequestedInfoBase SavedInfo { get; set; }
         public override PaymentSavedCredentialsBase SavedCredentials { get; set; }
         public override IList<UserBase> Users { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            CanSaveCredentials = 1 << 2,
+            PasswordMissing = 1 << 3,
+            NativeProvider = 1 << 4,
+            NativeParams = 1 << 4,
+            SavedInfo = 1 << 0,
+            SavedCredentials = 1 << 1
+        }
 
         public override void UpdateFlags()
         {

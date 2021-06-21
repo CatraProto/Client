@@ -5,13 +5,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class PhoneConnectionWebrtc : PhoneConnectionBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Turn = 1 << 0,
-            Stun = 1 << 1
-        }
-
         public static int ConstructorId { get; } = 1667228533;
         public int Flags { get; set; }
         public bool Turn { get; set; }
@@ -22,6 +15,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override int Port { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Turn = 1 << 0,
+            Stun = 1 << 1
+        }
 
         public override void UpdateFlags()
         {

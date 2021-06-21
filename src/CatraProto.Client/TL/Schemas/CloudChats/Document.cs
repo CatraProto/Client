@@ -6,13 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class Document : DocumentBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Thumbs = 1 << 0,
-            VideoThumbs = 1 << 1
-        }
-
         public static int ConstructorId { get; } = 512177195;
         public int Flags { get; set; }
         public override long Id { get; set; }
@@ -25,6 +18,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public IList<VideoSizeBase> VideoThumbs { get; set; }
         public int DcId { get; set; }
         public IList<DocumentAttributeBase> Attributes { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Thumbs = 1 << 0,
+            VideoThumbs = 1 << 1
+        }
 
         public override void UpdateFlags()
         {

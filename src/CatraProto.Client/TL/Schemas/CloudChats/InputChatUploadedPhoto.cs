@@ -5,6 +5,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class InputChatUploadedPhoto : InputChatPhotoBase
     {
+        public static int ConstructorId { get; } = -968723890;
+        public int Flags { get; set; }
+        public InputFileBase File { get; set; }
+        public InputFileBase Video { get; set; }
+        public double? VideoStartTs { get; set; }
+
         [Flags]
         public enum FlagsEnum
         {
@@ -12,12 +18,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Video = 1 << 1,
             VideoStartTs = 1 << 2
         }
-
-        public static int ConstructorId { get; } = -968723890;
-        public int Flags { get; set; }
-        public InputFileBase File { get; set; }
-        public InputFileBase Video { get; set; }
-        public double? VideoStartTs { get; set; }
 
         public override void UpdateFlags()
         {

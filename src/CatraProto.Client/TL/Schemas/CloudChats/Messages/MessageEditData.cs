@@ -5,15 +5,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public partial class MessageEditData : MessageEditDataBase
     {
+        public static int ConstructorId { get; } = 649453030;
+        public int Flags { get; set; }
+        public override bool Caption { get; set; }
+
         [Flags]
         public enum FlagsEnum
         {
             Caption = 1 << 0
         }
-
-        public static int ConstructorId { get; } = 649453030;
-        public int Flags { get; set; }
-        public override bool Caption { get; set; }
 
         public override void UpdateFlags()
         {

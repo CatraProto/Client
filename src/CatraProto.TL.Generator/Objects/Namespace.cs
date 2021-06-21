@@ -6,8 +6,6 @@ namespace CatraProto.TL.Generator.Objects
 {
     public class Namespace
     {
-        private string[] _arrayNamespace = Array.Empty<string>();
-
         public string Class
         {
             get => _arrayNamespace[^1];
@@ -51,6 +49,8 @@ namespace CatraProto.TL.Generator.Objects
                 return list.ToArray();
             }
         }
+
+        private string[] _arrayNamespace = Array.Empty<string>();
 
         public Namespace(string fullNamespace, bool addDefault = true)
         {

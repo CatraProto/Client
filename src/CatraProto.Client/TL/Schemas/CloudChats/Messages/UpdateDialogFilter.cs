@@ -6,12 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public partial class UpdateDialogFilter : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Filter = 1 << 0
-        }
-
         public static int ConstructorId { get; } = 450142282;
         public int Flags { get; set; }
         public int Id { get; set; }
@@ -19,6 +13,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public Type Type { get; init; } = typeof(bool);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Filter = 1 << 0
+        }
 
         public void UpdateFlags()
         {

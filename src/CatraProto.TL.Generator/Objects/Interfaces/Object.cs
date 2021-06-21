@@ -41,8 +41,8 @@ namespace CatraProto.TL.Generator.Objects.Interfaces
         public virtual void WriteUsings(StringBuilder builder)
         {
             var importsList = new List<string>();
-            builder.AppendLine($"using CatraProto.TL;");
-            builder.AppendLine($"using CatraProto.TL.Interfaces;");
+            builder.AppendLine("using CatraProto.TL;");
+            builder.AppendLine("using CatraProto.TL.Interfaces;");
 
             if (this is Method && Type.Namespace != null)
             {

@@ -5,12 +5,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class DialogFolder : DialogBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Pinned = 1 << 2
-        }
-
         public static int ConstructorId { get; } = 1908216652;
         public int Flags { get; set; }
         public override bool Pinned { get; set; }
@@ -21,6 +15,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int UnreadUnmutedPeersCount { get; set; }
         public int UnreadMutedMessagesCount { get; set; }
         public int UnreadUnmutedMessagesCount { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Pinned = 1 << 2
+        }
 
         public override void UpdateFlags()
         {

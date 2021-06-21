@@ -6,6 +6,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class InputSecureValue : InputSecureValueBase
     {
+        public static int ConstructorId { get; } = -618540889;
+        public int Flags { get; set; }
+        public override SecureValueTypeBase Type { get; set; }
+        public override SecureDataBase Data { get; set; }
+        public override InputSecureFileBase FrontSide { get; set; }
+        public override InputSecureFileBase ReverseSide { get; set; }
+        public override InputSecureFileBase Selfie { get; set; }
+        public override IList<InputSecureFileBase> Translation { get; set; }
+        public override IList<InputSecureFileBase> Files { get; set; }
+        public override SecurePlainDataBase PlainData { get; set; }
+
         [Flags]
         public enum FlagsEnum
         {
@@ -17,17 +28,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Files = 1 << 4,
             PlainData = 1 << 5
         }
-
-        public static int ConstructorId { get; } = -618540889;
-        public int Flags { get; set; }
-        public override SecureValueTypeBase Type { get; set; }
-        public override SecureDataBase Data { get; set; }
-        public override InputSecureFileBase FrontSide { get; set; }
-        public override InputSecureFileBase ReverseSide { get; set; }
-        public override InputSecureFileBase Selfie { get; set; }
-        public override IList<InputSecureFileBase> Translation { get; set; }
-        public override IList<InputSecureFileBase> Files { get; set; }
-        public override SecurePlainDataBase PlainData { get; set; }
 
         public override void UpdateFlags()
         {

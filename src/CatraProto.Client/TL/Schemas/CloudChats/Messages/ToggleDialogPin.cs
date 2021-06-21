@@ -6,12 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public partial class ToggleDialogPin : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Pinned = 1 << 0
-        }
-
         public static int ConstructorId { get; } = -1489903017;
         public int Flags { get; set; }
         public bool Pinned { get; set; }
@@ -19,6 +13,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public Type Type { get; init; } = typeof(bool);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Pinned = 1 << 0
+        }
 
         public void UpdateFlags()
         {

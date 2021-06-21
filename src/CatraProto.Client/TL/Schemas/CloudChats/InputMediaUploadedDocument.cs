@@ -6,16 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class InputMediaUploadedDocument : InputMediaBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            NosoundVideo = 1 << 3,
-            ForceFile = 1 << 4,
-            Thumb = 1 << 2,
-            Stickers = 1 << 0,
-            TtlSeconds = 1 << 1
-        }
-
         public static int ConstructorId { get; } = 1530447553;
         public int Flags { get; set; }
         public bool NosoundVideo { get; set; }
@@ -26,6 +16,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public IList<DocumentAttributeBase> Attributes { get; set; }
         public IList<InputDocumentBase> Stickers { get; set; }
         public int? TtlSeconds { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            NosoundVideo = 1 << 3,
+            ForceFile = 1 << 4,
+            Thumb = 1 << 2,
+            Stickers = 1 << 0,
+            TtlSeconds = 1 << 1
+        }
 
         public override void UpdateFlags()
         {

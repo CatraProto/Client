@@ -5,19 +5,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class PageBlockPhoto : PageBlockBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Url = 1 << 0,
-            WebpageId = 1 << 0
-        }
-
         public static int ConstructorId { get; } = 391759200;
         public int Flags { get; set; }
         public long PhotoId { get; set; }
         public PageCaptionBase Caption { get; set; }
         public string Url { get; set; }
         public long? WebpageId { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Url = 1 << 0,
+            WebpageId = 1 << 0
+        }
 
         public override void UpdateFlags()
         {

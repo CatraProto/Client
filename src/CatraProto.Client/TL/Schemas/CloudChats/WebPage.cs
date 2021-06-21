@@ -6,25 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class WebPage : WebPageBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Type = 1 << 0,
-            SiteName = 1 << 1,
-            Title = 1 << 2,
-            Description = 1 << 3,
-            Photo = 1 << 4,
-            EmbedUrl = 1 << 5,
-            EmbedType = 1 << 5,
-            EmbedWidth = 1 << 6,
-            EmbedHeight = 1 << 6,
-            Duration = 1 << 7,
-            Author = 1 << 8,
-            Document = 1 << 9,
-            CachedPage = 1 << 10,
-            Attributes = 1 << 12
-        }
-
         public static int ConstructorId { get; } = -392411726;
         public int Flags { get; set; }
         public long Id { get; set; }
@@ -45,6 +26,25 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public DocumentBase Document { get; set; }
         public PageBase CachedPage { get; set; }
         public IList<WebPageAttributeBase> Attributes { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Type = 1 << 0,
+            SiteName = 1 << 1,
+            Title = 1 << 2,
+            Description = 1 << 3,
+            Photo = 1 << 4,
+            EmbedUrl = 1 << 5,
+            EmbedType = 1 << 5,
+            EmbedWidth = 1 << 6,
+            EmbedHeight = 1 << 6,
+            Duration = 1 << 7,
+            Author = 1 << 8,
+            Document = 1 << 9,
+            CachedPage = 1 << 10,
+            Attributes = 1 << 12
+        }
 
         public override void UpdateFlags()
         {

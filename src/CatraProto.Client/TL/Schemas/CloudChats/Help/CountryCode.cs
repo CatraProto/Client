@@ -6,18 +6,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
     public partial class CountryCode : CountryCodeBase
     {
+        public static int ConstructorId { get; } = 1107543535;
+        public int Flags { get; set; }
+        public override string CountryCode_ { get; set; }
+        public override IList<string> Prefixes { get; set; }
+        public override IList<string> Patterns { get; set; }
+
         [Flags]
         public enum FlagsEnum
         {
             Prefixes = 1 << 0,
             Patterns = 1 << 1
         }
-
-        public static int ConstructorId { get; } = 1107543535;
-        public int Flags { get; set; }
-        public override string CountryCode_ { get; set; }
-        public override IList<string> Prefixes { get; set; }
-        public override IList<string> Patterns { get; set; }
 
         public override void UpdateFlags()
         {

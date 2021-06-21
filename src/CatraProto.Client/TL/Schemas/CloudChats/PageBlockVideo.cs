@@ -5,19 +5,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class PageBlockVideo : PageBlockBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Autoplay = 1 << 0,
-            Loop = 1 << 1
-        }
-
         public static int ConstructorId { get; } = 2089805750;
         public int Flags { get; set; }
         public bool Autoplay { get; set; }
         public bool Loop { get; set; }
         public long VideoId { get; set; }
         public PageCaptionBase Caption { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Autoplay = 1 << 0,
+            Loop = 1 << 1
+        }
 
         public override void UpdateFlags()
         {

@@ -6,12 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 {
     public partial class SetCallRating : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            UserInitiative = 1 << 0
-        }
-
         public static int ConstructorId { get; } = 1508562471;
         public int Flags { get; set; }
         public bool UserInitiative { get; set; }
@@ -21,6 +15,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 
         public Type Type { get; init; } = typeof(UpdatesBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            UserInitiative = 1 << 0
+        }
 
         public void UpdateFlags()
         {

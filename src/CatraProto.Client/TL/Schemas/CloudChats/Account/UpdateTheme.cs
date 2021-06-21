@@ -6,15 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
     public partial class UpdateTheme : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Slug = 1 << 0,
-            Title = 1 << 1,
-            Document = 1 << 2,
-            Settings = 1 << 3
-        }
-
         public static int ConstructorId { get; } = 1555261397;
         public int Flags { get; set; }
         public string Format { get; set; }
@@ -26,6 +17,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public Type Type { get; init; } = typeof(ThemeBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Slug = 1 << 0,
+            Title = 1 << 1,
+            Document = 1 << 2,
+            Settings = 1 << 3
+        }
 
         public void UpdateFlags()
         {

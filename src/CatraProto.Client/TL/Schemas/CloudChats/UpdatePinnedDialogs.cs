@@ -6,17 +6,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class UpdatePinnedDialogs : UpdateBase
     {
+        public static int ConstructorId { get; } = -99664734;
+        public int Flags { get; set; }
+        public int? FolderId { get; set; }
+        public IList<DialogPeerBase> Order { get; set; }
+
         [Flags]
         public enum FlagsEnum
         {
             FolderId = 1 << 1,
             Order = 1 << 0
         }
-
-        public static int ConstructorId { get; } = -99664734;
-        public int Flags { get; set; }
-        public int? FolderId { get; set; }
-        public IList<DialogPeerBase> Order { get; set; }
 
         public override void UpdateFlags()
         {

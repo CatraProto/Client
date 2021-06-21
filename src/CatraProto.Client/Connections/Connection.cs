@@ -12,6 +12,15 @@ namespace CatraProto.Client.Connections
 {
     class Connection : IDisposable
     {
+        public MessageIdsHandler MessageIdsHandler
+        {
+            get => _session.MessageIdsHandler;
+        }
+
+        public MessagesDispatcher MessagesDispatcher { get; }
+        public ConnectionInfo ConnectionInfo { get; }
+        public MessagesHandler MessagesHandler { get; }
+        public IProtocol Protocol { get; }
         private ILogger _logger;
         private ReadLoop _readLoop;
         private Session _session;
@@ -32,21 +41,6 @@ namespace CatraProto.Client.Connections
                 default:
                     throw new NotSupportedException("Protocol not supported");
             }
-        }
-
-        public MessageIdsHandler MessageIdsHandler
-        {
-            get => _session.MessageIdsHandler;
-        }
-
-        public MessagesDispatcher MessagesDispatcher { get; }
-        public ConnectionInfo ConnectionInfo { get; }
-        public MessagesHandler MessagesHandler { get; }
-        public IProtocol Protocol { get; }
-
-        public void Dispose()
-        {
-            MessagesHandler?.Dispose();
         }
 
         public async Task ConnectAsync()
@@ -92,6 +86,11 @@ namespace CatraProto.Client.Connections
 
             await _writeLoop.StartAsync();
             await _readLoop.StartAsync();
+        }
+
+        public void Dispose()
+        {
+            MessagesHandler?.Dispose();
         }
     }
 }

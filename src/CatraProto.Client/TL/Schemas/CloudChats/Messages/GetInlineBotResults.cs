@@ -6,12 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public partial class GetInlineBotResults : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            GeoPoint = 1 << 0
-        }
-
         public static int ConstructorId { get; } = 1364105629;
         public int Flags { get; set; }
         public InputUserBase Bot { get; set; }
@@ -22,6 +16,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public Type Type { get; init; } = typeof(BotResultsBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            GeoPoint = 1 << 0
+        }
 
         public void UpdateFlags()
         {

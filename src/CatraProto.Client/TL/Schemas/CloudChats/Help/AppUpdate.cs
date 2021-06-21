@@ -6,14 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
     public partial class AppUpdate : AppUpdateBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            CanNotSkip = 1 << 0,
-            Document = 1 << 1,
-            Url = 1 << 2
-        }
-
         public static int ConstructorId { get; } = 497489295;
         public int Flags { get; set; }
         public bool CanNotSkip { get; set; }
@@ -23,6 +15,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
         public IList<MessageEntityBase> Entities { get; set; }
         public DocumentBase Document { get; set; }
         public string Url { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            CanNotSkip = 1 << 0,
+            Document = 1 << 1,
+            Url = 1 << 2
+        }
 
         public override void UpdateFlags()
         {

@@ -5,17 +5,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class InputStickerSetItem : InputStickerSetItemBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            MaskCoords = 1 << 0
-        }
-
         public static int ConstructorId { get; } = -6249322;
         public int Flags { get; set; }
         public override InputDocumentBase Document { get; set; }
         public override string Emoji { get; set; }
         public override MaskCoordsBase MaskCoords { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            MaskCoords = 1 << 0
+        }
 
         public override void UpdateFlags()
         {

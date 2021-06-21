@@ -6,13 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public partial class DeleteHistory : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            JustClear = 1 << 0,
-            Revoke = 1 << 1
-        }
-
         public static int ConstructorId { get; } = 469850889;
         public int Flags { get; set; }
         public bool JustClear { get; set; }
@@ -22,6 +15,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public Type Type { get; init; } = typeof(AffectedHistoryBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            JustClear = 1 << 0,
+            Revoke = 1 << 1
+        }
 
         public void UpdateFlags()
         {

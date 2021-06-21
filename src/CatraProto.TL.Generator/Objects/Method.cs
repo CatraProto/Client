@@ -1,9 +1,8 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 using CatraProto.TL.Generator.CodeGeneration.Parsing;
+using CatraProto.TL.Generator.Objects.Interfaces;
 using CatraProto.TL.Generator.Objects.Types;
-using Object = CatraProto.TL.Generator.Objects.Interfaces.Object;
 
 namespace CatraProto.TL.Generator.Objects
 {

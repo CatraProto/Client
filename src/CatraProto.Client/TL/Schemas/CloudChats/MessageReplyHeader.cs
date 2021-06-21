@@ -5,18 +5,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class MessageReplyHeader : MessageReplyHeaderBase
     {
+        public static int ConstructorId { get; } = -1495959709;
+        public int Flags { get; set; }
+        public override int ReplyToMsgId { get; set; }
+        public override PeerBase ReplyToPeerId { get; set; }
+        public override int? ReplyToTopId { get; set; }
+
         [Flags]
         public enum FlagsEnum
         {
             ReplyToPeerId = 1 << 0,
             ReplyToTopId = 1 << 1
         }
-
-        public static int ConstructorId { get; } = -1495959709;
-        public int Flags { get; set; }
-        public override int ReplyToMsgId { get; set; }
-        public override PeerBase ReplyToPeerId { get; set; }
-        public override int? ReplyToTopId { get; set; }
 
         public override void UpdateFlags()
         {

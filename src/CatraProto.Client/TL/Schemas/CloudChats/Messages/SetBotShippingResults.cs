@@ -7,13 +7,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public partial class SetBotShippingResults : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Error = 1 << 0,
-            ShippingOptions = 1 << 1
-        }
-
         public static int ConstructorId { get; } = -436833542;
         public int Flags { get; set; }
         public long QueryId { get; set; }
@@ -22,6 +15,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public Type Type { get; init; } = typeof(bool);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Error = 1 << 0,
+            ShippingOptions = 1 << 1
+        }
 
         public void UpdateFlags()
         {

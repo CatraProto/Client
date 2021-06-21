@@ -5,6 +5,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class PhoneCallDiscarded : PhoneCallBase
     {
+        public static int ConstructorId { get; } = 1355435489;
+        public int Flags { get; set; }
+        public bool NeedRating { get; set; }
+        public bool NeedDebug { get; set; }
+        public bool Video { get; set; }
+        public override long Id { get; set; }
+        public PhoneCallDiscardReasonBase Reason { get; set; }
+        public int? Duration { get; set; }
+
         [Flags]
         public enum FlagsEnum
         {
@@ -14,15 +23,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Reason = 1 << 0,
             Duration = 1 << 1
         }
-
-        public static int ConstructorId { get; } = 1355435489;
-        public int Flags { get; set; }
-        public bool NeedRating { get; set; }
-        public bool NeedDebug { get; set; }
-        public bool Video { get; set; }
-        public override long Id { get; set; }
-        public PhoneCallDiscardReasonBase Reason { get; set; }
-        public int? Duration { get; set; }
 
         public override void UpdateFlags()
         {

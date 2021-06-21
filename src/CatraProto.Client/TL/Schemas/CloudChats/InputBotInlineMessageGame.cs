@@ -5,15 +5,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class InputBotInlineMessageGame : InputBotInlineMessageBase
     {
+        public static int ConstructorId { get; } = 1262639204;
+        public int Flags { get; set; }
+        public override ReplyMarkupBase ReplyMarkup { get; set; }
+
         [Flags]
         public enum FlagsEnum
         {
             ReplyMarkup = 1 << 2
         }
-
-        public static int ConstructorId { get; } = 1262639204;
-        public int Flags { get; set; }
-        public override ReplyMarkupBase ReplyMarkup { get; set; }
 
         public override void UpdateFlags()
         {

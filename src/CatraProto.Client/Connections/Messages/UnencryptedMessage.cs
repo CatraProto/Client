@@ -8,6 +8,10 @@ namespace CatraProto.Client.Connections.Messages
     // | int64 auth_key_id = 0 | int64 message_id | int32 message_data_length | bytes message_data |
     internal sealed class UnencryptedMessage : IMessage
     {
+        public long AuthKeyId { get; set; }
+        public long MessageId { get; set; }
+        public byte[] Body { get; set; }
+
         public UnencryptedMessage()
         {
         }
@@ -16,10 +20,6 @@ namespace CatraProto.Client.Connections.Messages
         {
             Import(message);
         }
-
-        public long AuthKeyId { get; set; }
-        public long MessageId { get; set; }
-        public byte[] Body { get; set; }
 
         public void Import(byte[] message)
         {

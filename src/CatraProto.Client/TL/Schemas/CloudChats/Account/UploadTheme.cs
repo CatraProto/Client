@@ -6,12 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
     public partial class UploadTheme : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Thumb = 1 << 0
-        }
-
         public static int ConstructorId { get; } = 473805619;
         public int Flags { get; set; }
         public InputFileBase File { get; set; }
@@ -21,6 +15,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public Type Type { get; init; } = typeof(DocumentBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Thumb = 1 << 0
+        }
 
         public void UpdateFlags()
         {

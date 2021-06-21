@@ -5,12 +5,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class VideoSize : VideoSizeBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            VideoStartTs = 1 << 0
-        }
-
         public static int ConstructorId { get; } = -399391402;
         public int Flags { get; set; }
         public override string Type { get; set; }
@@ -19,6 +13,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override int H { get; set; }
         public override int Size { get; set; }
         public override double? VideoStartTs { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            VideoStartTs = 1 << 0
+        }
 
         public override void UpdateFlags()
         {

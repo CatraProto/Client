@@ -7,6 +7,60 @@ namespace CatraProto.Client.Async.Locks
 {
     public class NamedAsyncLock<T>
     {
+        private readonly struct Releaser<R> : IDisposable
+        {
+            private readonly R _releaseKey;
+            private readonly NamedAsyncLock<R> _asyncLock;
+
+            internal Releaser(R releaseKey, NamedAsyncLock<R> asyncLock)
+            {
+                _asyncLock = asyncLock;
+                _releaseKey = releaseKey;
+            }
+
+            public void Dispose()
+            {
+                _asyncLock.ReleaseLock(_releaseKey);
+            }
+        }
+
+        private class Counter<I>
+        {
+            public int RequestedTimesLock { get; private set; }
+            public I Item { get; private set; }
+            private readonly object _mutex = new object();
+
+            internal Counter(I item, int initialRequested = 0)
+            {
+                Item = item;
+                RequestedTimesLock = initialRequested;
+            }
+
+            public void IncreaseCount()
+            {
+                lock (_mutex)
+                {
+                    RequestedTimesLock++;
+                }
+            }
+
+            public void DecreaseCount()
+            {
+                lock (_mutex)
+                {
+                    RequestedTimesLock--;
+                }
+            }
+
+            public void SetCount(int count)
+            {
+                lock (_mutex)
+                {
+                    RequestedTimesLock = count;
+                }
+            }
+        }
+
         private Dictionary<T, Counter<SemaphoreSlim>> _semaphores = new Dictionary<T, Counter<SemaphoreSlim>>();
 
         private SemaphoreSlim GetLock(T key)
@@ -47,61 +101,6 @@ namespace CatraProto.Client.Async.Locks
         {
             await GetLock(key).WaitAsync().ConfigureAwait(false);
             return new Releaser<T>(key, this);
-        }
-
-        private readonly struct Releaser<R> : IDisposable
-        {
-            private readonly R _releaseKey;
-            private readonly NamedAsyncLock<R> _asyncLock;
-
-            internal Releaser(R releaseKey, NamedAsyncLock<R> asyncLock)
-            {
-                _asyncLock = asyncLock;
-                _releaseKey = releaseKey;
-            }
-
-            public void Dispose()
-            {
-                _asyncLock.ReleaseLock(_releaseKey);
-            }
-        }
-
-        private class Counter<I>
-        {
-            private readonly object _mutex = new object();
-
-            internal Counter(I item, int initialRequested = 0)
-            {
-                Item = item;
-                RequestedTimesLock = initialRequested;
-            }
-
-            public int RequestedTimesLock { get; private set; }
-            public I Item { get; private set; }
-
-            public void IncreaseCount()
-            {
-                lock (_mutex)
-                {
-                    RequestedTimesLock++;
-                }
-            }
-
-            public void DecreaseCount()
-            {
-                lock (_mutex)
-                {
-                    RequestedTimesLock--;
-                }
-            }
-
-            public void SetCount(int count)
-            {
-                lock (_mutex)
-                {
-                    RequestedTimesLock = count;
-                }
-            }
         }
     }
 }

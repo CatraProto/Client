@@ -7,13 +7,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 {
     public partial class GetAdminedPublicChannels : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            ByLocation = 1 << 0,
-            CheckLimit = 1 << 1
-        }
-
         public static int ConstructorId { get; } = -122669393;
         public int Flags { get; set; }
         public bool ByLocation { get; set; }
@@ -21,6 +14,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 
         public Type Type { get; init; } = typeof(ChatsBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            ByLocation = 1 << 0,
+            CheckLimit = 1 << 1
+        }
 
         public void UpdateFlags()
         {

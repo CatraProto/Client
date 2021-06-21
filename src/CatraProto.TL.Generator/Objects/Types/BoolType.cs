@@ -18,7 +18,7 @@ namespace CatraProto.TL.Generator.Objects.Types
         public override void WriteMethodParameter(StringBuilder stringBuilder, Parameter parameter)
         {
             var writtenType = parameter.Type.Name;
-            string after = "";
+            var after = "";
 
             if (InitialTypeName == "true")
             {

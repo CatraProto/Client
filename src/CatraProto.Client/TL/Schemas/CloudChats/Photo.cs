@@ -6,13 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class Photo : PhotoBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            HasStickers = 1 << 0,
-            VideoSizes = 1 << 1
-        }
-
         public static int ConstructorId { get; } = -82216347;
         public int Flags { get; set; }
         public bool HasStickers { get; set; }
@@ -23,6 +16,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public IList<PhotoSizeBase> Sizes { get; set; }
         public IList<VideoSizeBase> VideoSizes { get; set; }
         public int DcId { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            HasStickers = 1 << 0,
+            VideoSizes = 1 << 1
+        }
 
         public override void UpdateFlags()
         {

@@ -42,7 +42,7 @@ namespace CatraProto.TL.Generator.UnitTests.ParserTests
                 { 3, "int:int" }
             };
 
-            for (int i = 0; i < args.Length; i++)
+            for (var i = 0; i < args.Length; i++)
             {
                 var p = args[i];
                 Assert.Equal(p, statuses[i]);

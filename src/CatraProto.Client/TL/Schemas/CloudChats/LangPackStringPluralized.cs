@@ -5,16 +5,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class LangPackStringPluralized : LangPackStringBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            ZeroValue = 1 << 0,
-            OneValue = 1 << 1,
-            TwoValue = 1 << 2,
-            FewValue = 1 << 3,
-            ManyValue = 1 << 4
-        }
-
         public static int ConstructorId { get; } = 1816636575;
         public int Flags { get; set; }
         public override string Key { get; set; }
@@ -24,6 +14,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public string FewValue { get; set; }
         public string ManyValue { get; set; }
         public string OtherValue { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            ZeroValue = 1 << 0,
+            OneValue = 1 << 1,
+            TwoValue = 1 << 2,
+            FewValue = 1 << 3,
+            ManyValue = 1 << 4
+        }
 
         public override void UpdateFlags()
         {

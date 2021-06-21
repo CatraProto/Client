@@ -5,15 +5,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class WebPageNotModified : WebPageBase
     {
+        public static int ConstructorId { get; } = 1930545681;
+        public int Flags { get; set; }
+        public int? CachedPageViews { get; set; }
+
         [Flags]
         public enum FlagsEnum
         {
             CachedPageViews = 1 << 0
         }
-
-        public static int ConstructorId { get; } = 1930545681;
-        public int Flags { get; set; }
-        public int? CachedPageViews { get; set; }
 
         public override void UpdateFlags()
         {

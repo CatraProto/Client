@@ -7,12 +7,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public partial class DeleteMessages : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Revoke = 1 << 0
-        }
-
         public static int ConstructorId { get; } = -443640366;
         public int Flags { get; set; }
         public bool Revoke { get; set; }
@@ -20,6 +14,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public Type Type { get; init; } = typeof(AffectedMessagesBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Revoke = 1 << 0
+        }
 
         public void UpdateFlags()
         {

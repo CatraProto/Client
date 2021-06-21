@@ -5,17 +5,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class InputGeoPoint : InputGeoPointBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            AccuracyRadius = 1 << 0
-        }
-
         public static int ConstructorId { get; } = 1210199983;
         public int Flags { get; set; }
         public double Lat { get; set; }
         public double Long { get; set; }
         public int? AccuracyRadius { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            AccuracyRadius = 1 << 0
+        }
 
         public override void UpdateFlags()
         {

@@ -6,13 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
     public partial class GetLocated : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Background = 1 << 1,
-            SelfExpires = 1 << 0
-        }
-
         public static int ConstructorId { get; } = -750207932;
         public int Flags { get; set; }
         public bool Background { get; set; }
@@ -21,6 +14,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 
         public Type Type { get; init; } = typeof(UpdatesBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Background = 1 << 1,
+            SelfExpires = 1 << 0
+        }
 
         public void UpdateFlags()
         {

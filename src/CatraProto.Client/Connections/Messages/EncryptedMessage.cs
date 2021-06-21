@@ -9,19 +9,6 @@ namespace CatraProto.Client.Connections.Messages
 {
     internal sealed class EncryptedMessage : IMessage
     {
-        private IgeEncryptor _encryptor;
-
-        public EncryptedMessage(IgeEncryptor encryptor)
-        {
-            _encryptor = encryptor;
-        }
-
-        public EncryptedMessage(IgeEncryptor encryptor, byte[] message)
-        {
-            _encryptor = encryptor;
-            Import(message);
-        }
-
         public int Length
         {
             get => Body.Length;
@@ -35,6 +22,18 @@ namespace CatraProto.Client.Connections.Messages
         public long AuthKeyId { get; set; }
         public long MessageId { get; set; }
         public byte[] Body { get; set; }
+        private IgeEncryptor _encryptor;
+
+        public EncryptedMessage(IgeEncryptor encryptor)
+        {
+            _encryptor = encryptor;
+        }
+
+        public EncryptedMessage(IgeEncryptor encryptor, byte[] message)
+        {
+            _encryptor = encryptor;
+            Import(message);
+        }
 
         public void Import(byte[] message)
         {

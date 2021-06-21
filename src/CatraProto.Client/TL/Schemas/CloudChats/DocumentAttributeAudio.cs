@@ -5,6 +5,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class DocumentAttributeAudio : DocumentAttributeBase
     {
+        public static int ConstructorId { get; } = -1739392570;
+        public int Flags { get; set; }
+        public bool Voice { get; set; }
+        public int Duration { get; set; }
+        public string Title { get; set; }
+        public string Performer { get; set; }
+        public byte[] Waveform { get; set; }
+
         [Flags]
         public enum FlagsEnum
         {
@@ -13,14 +21,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Performer = 1 << 1,
             Waveform = 1 << 2
         }
-
-        public static int ConstructorId { get; } = -1739392570;
-        public int Flags { get; set; }
-        public bool Voice { get; set; }
-        public int Duration { get; set; }
-        public string Title { get; set; }
-        public string Performer { get; set; }
-        public byte[] Waveform { get; set; }
 
         public override void UpdateFlags()
         {

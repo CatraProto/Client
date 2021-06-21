@@ -6,18 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
     public partial class InitTakeoutSession : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Contacts = 1 << 0,
-            MessageUsers = 1 << 1,
-            MessageChats = 1 << 2,
-            MessageMegagroups = 1 << 3,
-            MessageChannels = 1 << 4,
-            Files = 1 << 5,
-            FileMaxSize = 1 << 5
-        }
-
         public static int ConstructorId { get; } = -262453244;
         public int Flags { get; set; }
         public bool Contacts { get; set; }
@@ -30,6 +18,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public Type Type { get; init; } = typeof(TakeoutBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Contacts = 1 << 0,
+            MessageUsers = 1 << 1,
+            MessageChats = 1 << 2,
+            MessageMegagroups = 1 << 3,
+            MessageChannels = 1 << 4,
+            Files = 1 << 5,
+            FileMaxSize = 1 << 5
+        }
 
         public void UpdateFlags()
         {

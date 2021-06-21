@@ -5,13 +5,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class InputBotInlineResultDocument : InputBotInlineResultBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Title = 1 << 1,
-            Description = 1 << 2
-        }
-
         public static int ConstructorId { get; } = -459324;
         public int Flags { get; set; }
         public override string Id { get; set; }
@@ -20,6 +13,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public string Description { get; set; }
         public InputDocumentBase Document { get; set; }
         public override InputBotInlineMessageBase SendMessage { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Title = 1 << 1,
+            Description = 1 << 2
+        }
 
         public override void UpdateFlags()
         {

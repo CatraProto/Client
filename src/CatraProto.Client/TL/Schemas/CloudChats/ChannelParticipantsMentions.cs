@@ -5,17 +5,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class ChannelParticipantsMentions : ChannelParticipantsFilterBase
     {
+        public static int ConstructorId { get; } = -531931925;
+        public int Flags { get; set; }
+        public string Q { get; set; }
+        public int? TopMsgId { get; set; }
+
         [Flags]
         public enum FlagsEnum
         {
             Q = 1 << 0,
             TopMsgId = 1 << 1
         }
-
-        public static int ConstructorId { get; } = -531931925;
-        public int Flags { get; set; }
-        public string Q { get; set; }
-        public int? TopMsgId { get; set; }
 
         public override void UpdateFlags()
         {

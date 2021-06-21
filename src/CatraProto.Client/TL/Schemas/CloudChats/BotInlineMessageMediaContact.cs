@@ -5,12 +5,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class BotInlineMessageMediaContact : BotInlineMessageBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            ReplyMarkup = 1 << 2
-        }
-
         public static int ConstructorId { get; } = 416402882;
         public int Flags { get; set; }
         public string PhoneNumber { get; set; }
@@ -18,6 +12,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public string LastName { get; set; }
         public string Vcard { get; set; }
         public override ReplyMarkupBase ReplyMarkup { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            ReplyMarkup = 1 << 2
+        }
 
         public override void UpdateFlags()
         {

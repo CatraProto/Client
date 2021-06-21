@@ -7,14 +7,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public partial class SaveDraft : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            NoWebpage = 1 << 1,
-            ReplyToMsgId = 1 << 0,
-            Entities = 1 << 3
-        }
-
         public static int ConstructorId { get; } = -1137057461;
         public int Flags { get; set; }
         public bool NoWebpage { get; set; }
@@ -25,6 +17,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public Type Type { get; init; } = typeof(bool);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            NoWebpage = 1 << 1,
+            ReplyToMsgId = 1 << 0,
+            Entities = 1 << 3
+        }
 
         public void UpdateFlags()
         {

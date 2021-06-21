@@ -5,12 +5,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class UpdateReadHistoryInbox : UpdateBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            FolderId = 1 << 0
-        }
-
         public static int ConstructorId { get; } = -1667805217;
         public int Flags { get; set; }
         public int? FolderId { get; set; }
@@ -19,6 +13,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int StillUnreadCount { get; set; }
         public int Pts { get; set; }
         public int PtsCount { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            FolderId = 1 << 0
+        }
 
         public override void UpdateFlags()
         {

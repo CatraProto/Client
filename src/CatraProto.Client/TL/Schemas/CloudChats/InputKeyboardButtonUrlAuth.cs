@@ -5,13 +5,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class InputKeyboardButtonUrlAuth : KeyboardButtonBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            RequestWriteAccess = 1 << 0,
-            FwdText = 1 << 1
-        }
-
         public static int ConstructorId { get; } = -802258988;
         public int Flags { get; set; }
         public bool RequestWriteAccess { get; set; }
@@ -19,6 +12,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public string FwdText { get; set; }
         public string Url { get; set; }
         public InputUserBase Bot { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            RequestWriteAccess = 1 << 0,
+            FwdText = 1 << 1
+        }
 
         public override void UpdateFlags()
         {

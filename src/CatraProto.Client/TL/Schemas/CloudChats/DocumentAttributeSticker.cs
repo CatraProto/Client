@@ -5,19 +5,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class DocumentAttributeSticker : DocumentAttributeBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Mask = 1 << 1,
-            MaskCoords = 1 << 0
-        }
-
         public static int ConstructorId { get; } = 1662637586;
         public int Flags { get; set; }
         public bool Mask { get; set; }
         public string Alt { get; set; }
         public InputStickerSetBase Stickerset { get; set; }
         public MaskCoordsBase MaskCoords { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Mask = 1 << 1,
+            MaskCoords = 1 << 0
+        }
 
         public override void UpdateFlags()
         {

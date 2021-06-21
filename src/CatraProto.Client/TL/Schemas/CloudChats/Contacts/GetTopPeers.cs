@@ -6,19 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
     public partial class GetTopPeers : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Correspondents = 1 << 0,
-            BotsPm = 1 << 1,
-            BotsInline = 1 << 2,
-            PhoneCalls = 1 << 3,
-            ForwardUsers = 1 << 4,
-            ForwardChats = 1 << 5,
-            Groups = 1 << 10,
-            Channels = 1 << 15
-        }
-
         public static int ConstructorId { get; } = -728224331;
         public int Flags { get; set; }
         public bool Correspondents { get; set; }
@@ -35,6 +22,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 
         public Type Type { get; init; } = typeof(TopPeersBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Correspondents = 1 << 0,
+            BotsPm = 1 << 1,
+            BotsInline = 1 << 2,
+            PhoneCalls = 1 << 3,
+            ForwardUsers = 1 << 4,
+            ForwardChats = 1 << 5,
+            Groups = 1 << 10,
+            Channels = 1 << 15
+        }
 
         public void UpdateFlags()
         {

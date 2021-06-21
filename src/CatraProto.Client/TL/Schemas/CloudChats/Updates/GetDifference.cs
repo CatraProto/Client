@@ -6,12 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 {
     public partial class GetDifference : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            PtsTotalLimit = 1 << 0
-        }
-
         public static int ConstructorId { get; } = 630429265;
         public int Flags { get; set; }
         public int Pts { get; set; }
@@ -21,6 +15,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 
         public Type Type { get; init; } = typeof(DifferenceBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            PtsTotalLimit = 1 << 0
+        }
 
         public void UpdateFlags()
         {

@@ -5,17 +5,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public partial class SearchCounter : SearchCounterBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Inexact = 1 << 1
-        }
-
         public static int ConstructorId { get; } = -398136321;
         public int Flags { get; set; }
         public override bool Inexact { get; set; }
         public override MessagesFilterBase Filter { get; set; }
         public override int Count { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Inexact = 1 << 1
+        }
 
         public override void UpdateFlags()
         {

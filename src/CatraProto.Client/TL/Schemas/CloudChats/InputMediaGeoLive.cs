@@ -5,6 +5,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class InputMediaGeoLive : InputMediaBase
     {
+        public static int ConstructorId { get; } = -1759532989;
+        public int Flags { get; set; }
+        public bool Stopped { get; set; }
+        public InputGeoPointBase GeoPoint { get; set; }
+        public int? Heading { get; set; }
+        public int? Period { get; set; }
+        public int? ProximityNotificationRadius { get; set; }
+
         [Flags]
         public enum FlagsEnum
         {
@@ -13,14 +21,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Period = 1 << 1,
             ProximityNotificationRadius = 1 << 3
         }
-
-        public static int ConstructorId { get; } = -1759532989;
-        public int Flags { get; set; }
-        public bool Stopped { get; set; }
-        public InputGeoPointBase GeoPoint { get; set; }
-        public int? Heading { get; set; }
-        public int? Period { get; set; }
-        public int? ProximityNotificationRadius { get; set; }
 
         public override void UpdateFlags()
         {

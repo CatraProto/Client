@@ -6,14 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 {
     public partial class UploadProfilePhoto : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            File = 1 << 0,
-            Video = 1 << 1,
-            VideoStartTs = 1 << 2
-        }
-
         public static int ConstructorId { get; } = -1980559511;
         public int Flags { get; set; }
         public InputFileBase File { get; set; }
@@ -22,6 +14,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 
         public Type Type { get; init; } = typeof(PhotoBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            File = 1 << 0,
+            Video = 1 << 1,
+            VideoStartTs = 1 << 2
+        }
 
         public void UpdateFlags()
         {

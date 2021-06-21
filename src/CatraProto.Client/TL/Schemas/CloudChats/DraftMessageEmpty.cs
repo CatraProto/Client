@@ -5,15 +5,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class DraftMessageEmpty : DraftMessageBase
     {
+        public static int ConstructorId { get; } = 453805082;
+        public int Flags { get; set; }
+        public override int? Date { get; set; }
+
         [Flags]
         public enum FlagsEnum
         {
             Date = 1 << 0
         }
-
-        public static int ConstructorId { get; } = 453805082;
-        public int Flags { get; set; }
-        public override int? Date { get; set; }
 
         public override void UpdateFlags()
         {

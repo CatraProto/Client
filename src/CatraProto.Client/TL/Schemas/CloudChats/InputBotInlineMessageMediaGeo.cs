@@ -5,6 +5,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class InputBotInlineMessageMediaGeo : InputBotInlineMessageBase
     {
+        public static int ConstructorId { get; } = -1768777083;
+        public int Flags { get; set; }
+        public InputGeoPointBase GeoPoint { get; set; }
+        public int? Heading { get; set; }
+        public int? Period { get; set; }
+        public int? ProximityNotificationRadius { get; set; }
+        public override ReplyMarkupBase ReplyMarkup { get; set; }
+
         [Flags]
         public enum FlagsEnum
         {
@@ -13,14 +21,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             ProximityNotificationRadius = 1 << 3,
             ReplyMarkup = 1 << 2
         }
-
-        public static int ConstructorId { get; } = -1768777083;
-        public int Flags { get; set; }
-        public InputGeoPointBase GeoPoint { get; set; }
-        public int? Heading { get; set; }
-        public int? Period { get; set; }
-        public int? ProximityNotificationRadius { get; set; }
-        public override ReplyMarkupBase ReplyMarkup { get; set; }
 
         public override void UpdateFlags()
         {

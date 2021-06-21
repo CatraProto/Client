@@ -6,12 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class UpdatePinnedChannelMessages : UpdateBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Pinned = 1 << 0
-        }
-
         public static int ConstructorId { get; } = -2054649973;
         public int Flags { get; set; }
         public bool Pinned { get; set; }
@@ -19,6 +13,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public IList<int> Messages { get; set; }
         public int Pts { get; set; }
         public int PtsCount { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Pinned = 1 << 0
+        }
 
         public override void UpdateFlags()
         {

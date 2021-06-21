@@ -6,13 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public partial class GetPollVotes : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Option = 1 << 0,
-            Offset = 1 << 1
-        }
-
         public static int ConstructorId { get; } = -1200736242;
         public int Flags { get; set; }
         public InputPeerBase Peer { get; set; }
@@ -23,6 +16,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public Type Type { get; init; } = typeof(VotesListBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Option = 1 << 0,
+            Offset = 1 << 1
+        }
 
         public void UpdateFlags()
         {

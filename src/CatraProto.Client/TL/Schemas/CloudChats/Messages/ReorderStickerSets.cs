@@ -7,12 +7,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public partial class ReorderStickerSets : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Masks = 1 << 0
-        }
-
         public static int ConstructorId { get; } = 2016638777;
         public int Flags { get; set; }
         public bool Masks { get; set; }
@@ -20,6 +14,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public Type Type { get; init; } = typeof(bool);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Masks = 1 << 0
+        }
 
         public void UpdateFlags()
         {

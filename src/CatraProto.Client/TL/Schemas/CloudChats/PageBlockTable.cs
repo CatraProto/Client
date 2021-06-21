@@ -6,19 +6,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class PageBlockTable : PageBlockBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Bordered = 1 << 0,
-            Striped = 1 << 1
-        }
-
         public static int ConstructorId { get; } = -1085412734;
         public int Flags { get; set; }
         public bool Bordered { get; set; }
         public bool Striped { get; set; }
         public RichTextBase Title { get; set; }
         public IList<PageTableRowBase> Rows { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Bordered = 1 << 0,
+            Striped = 1 << 1
+        }
 
         public override void UpdateFlags()
         {

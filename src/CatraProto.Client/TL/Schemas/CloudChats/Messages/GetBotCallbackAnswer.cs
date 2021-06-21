@@ -6,14 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public partial class GetBotCallbackAnswer : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Game = 1 << 1,
-            Data = 1 << 0,
-            Password = 1 << 2
-        }
-
         public static int ConstructorId { get; } = -1824339449;
         public int Flags { get; set; }
         public bool Game { get; set; }
@@ -24,6 +16,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public Type Type { get; init; } = typeof(BotCallbackAnswerBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Game = 1 << 1,
+            Data = 1 << 0,
+            Password = 1 << 2
+        }
 
         public void UpdateFlags()
         {

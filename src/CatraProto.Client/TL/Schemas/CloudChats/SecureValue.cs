@@ -6,18 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class SecureValue : SecureValueBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Data = 1 << 0,
-            FrontSide = 1 << 1,
-            ReverseSide = 1 << 2,
-            Selfie = 1 << 3,
-            Translation = 1 << 6,
-            Files = 1 << 4,
-            PlainData = 1 << 5
-        }
-
         public static int ConstructorId { get; } = 411017418;
         public int Flags { get; set; }
         public override SecureValueTypeBase Type { get; set; }
@@ -29,6 +17,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override IList<SecureFileBase> Files { get; set; }
         public override SecurePlainDataBase PlainData { get; set; }
         public override byte[] Hash { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Data = 1 << 0,
+            FrontSide = 1 << 1,
+            ReverseSide = 1 << 2,
+            Selfie = 1 << 3,
+            Translation = 1 << 6,
+            Files = 1 << 4,
+            PlainData = 1 << 5
+        }
 
         public override void UpdateFlags()
         {

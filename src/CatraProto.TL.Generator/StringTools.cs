@@ -6,6 +6,8 @@ namespace CatraProto.TL.Generator
 {
     internal static class StringTools
     {
+        public static Character[] SplitValues { get; set; }
+
         private static string[] _bannedKeywords =
         {
             "params",
@@ -27,8 +29,6 @@ namespace CatraProto.TL.Generator
             SplitValues[1] = new Character { Char = '_', Delete = true };
             SplitValues[2] = new Character { Char = '.', Delete = false };
         }
-
-        public static Character[] SplitValues { get; set; }
 
         public static string PascalCase(string name)
         {

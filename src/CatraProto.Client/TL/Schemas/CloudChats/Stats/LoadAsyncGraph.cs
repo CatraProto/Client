@@ -6,12 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 {
     public partial class LoadAsyncGraph : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            X = 1 << 0
-        }
-
         public static int ConstructorId { get; } = 1646092192;
         public int Flags { get; set; }
         public string Token { get; set; }
@@ -19,6 +13,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 
         public Type Type { get; init; } = typeof(StatsGraphBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            X = 1 << 0
+        }
 
         public void UpdateFlags()
         {

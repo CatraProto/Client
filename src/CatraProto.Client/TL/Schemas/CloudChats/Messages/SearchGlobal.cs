@@ -6,12 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public partial class SearchGlobal : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            FolderId = 1 << 0
-        }
-
         public static int ConstructorId { get; } = 1271290010;
         public int Flags { get; set; }
         public int? FolderId { get; set; }
@@ -26,6 +20,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public Type Type { get; init; } = typeof(MessagesBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            FolderId = 1 << 0
+        }
 
         public void UpdateFlags()
         {

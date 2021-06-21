@@ -5,18 +5,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class StickerSet : StickerSetBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Archived = 1 << 1,
-            Official = 1 << 2,
-            Masks = 1 << 3,
-            Animated = 1 << 5,
-            InstalledDate = 1 << 0,
-            Thumb = 1 << 4,
-            ThumbDcId = 1 << 4
-        }
-
         public static int ConstructorId { get; } = -290164953;
         public int Flags { get; set; }
         public override bool Archived { get; set; }
@@ -32,6 +20,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override int? ThumbDcId { get; set; }
         public override int Count { get; set; }
         public override int Hash { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Archived = 1 << 1,
+            Official = 1 << 2,
+            Masks = 1 << 3,
+            Animated = 1 << 5,
+            InstalledDate = 1 << 0,
+            Thumb = 1 << 4,
+            ThumbDcId = 1 << 4
+        }
 
         public override void UpdateFlags()
         {

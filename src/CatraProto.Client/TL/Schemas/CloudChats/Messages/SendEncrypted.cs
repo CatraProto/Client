@@ -6,12 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public partial class SendEncrypted : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Silent = 1 << 0
-        }
-
         public static int ConstructorId { get; } = 1157265941;
         public int Flags { get; set; }
         public bool Silent { get; set; }
@@ -21,6 +15,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public Type Type { get; init; } = typeof(SentEncryptedMessageBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Silent = 1 << 0
+        }
 
         public void UpdateFlags()
         {

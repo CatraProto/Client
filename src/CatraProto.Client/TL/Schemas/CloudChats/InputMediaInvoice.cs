@@ -5,12 +5,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class InputMediaInvoice : InputMediaBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Photo = 1 << 0
-        }
-
         public static int ConstructorId { get; } = -186607933;
         public int Flags { get; set; }
         public string Title { get; set; }
@@ -21,6 +15,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public string Provider { get; set; }
         public DataJSONBase ProviderData { get; set; }
         public string StartParam { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Photo = 1 << 0
+        }
 
         public override void UpdateFlags()
         {

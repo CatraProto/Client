@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
-using CatraProto.TL.Generator.CodeGeneration.Parsing;
 using CatraProto.TL.Generator.CodeGeneration.Optimization;
+using CatraProto.TL.Generator.CodeGeneration.Parsing;
 using CatraProto.TL.Generator.Objects.Interfaces;
 using CatraProto.TL.Generator.Objects.Types.Interfaces;
 using Xunit;
@@ -9,10 +9,18 @@ namespace CatraProto.TL.Generator.UnitTests.OptimizerTests
 {
     public class TypeBindingTest
     {
+        private void AreAllReferenced(TypeBase mainType, params Object[] objects)
+        {
+            foreach (var obj in objects)
+            {
+                Assert.Contains(mainType.ReferencedObjects, x => x == obj);
+            }
+        }
+
         [Fact]
         public async Task ObjectBindingTest()
         {
-            string[] schema = new[]
+            string[] schema =
             {
                 "message#1 flags:# message:string mammt:int = int;",
                 "message_gay#2 flags:# message:string mammt:int = int;",
@@ -49,14 +57,6 @@ namespace CatraProto.TL.Generator.UnitTests.OptimizerTests
             Assert.Equal(firstPeerType, secondBoundPeerType);
             Assert.Equal(firstPeerType, thirdBoundPeerType);
             AreAllReferenced(parser[2].Type, objs[2], objs[3], objs[4]);
-        }
-
-        private void AreAllReferenced(TypeBase mainType, params Object[] objects)
-        {
-            foreach (var obj in objects)
-            {
-                Assert.Contains(mainType.ReferencedObjects, x => x == obj);
-            }
         }
     }
 }

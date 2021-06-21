@@ -7,12 +7,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public partial class GetWebPagePreview : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Entities = 1 << 3
-        }
-
         public static int ConstructorId { get; } = -1956073268;
         public int Flags { get; set; }
         public string Message { get; set; }
@@ -20,6 +14,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public Type Type { get; init; } = typeof(MessageMediaBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Entities = 1 << 3
+        }
 
         public void UpdateFlags()
         {

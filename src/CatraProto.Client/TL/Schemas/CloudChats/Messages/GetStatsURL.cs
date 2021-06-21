@@ -6,12 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public partial class GetStatsURL : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Dark = 1 << 0
-        }
-
         public static int ConstructorId { get; } = -2127811866;
         public int Flags { get; set; }
         public bool Dark { get; set; }
@@ -20,6 +14,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public Type Type { get; init; } = typeof(StatsURLBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Dark = 1 << 0
+        }
 
         public void UpdateFlags()
         {

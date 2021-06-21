@@ -6,13 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class UpdateServiceNotification : UpdateBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Popup = 1 << 0,
-            InboxDate = 1 << 1
-        }
-
         public static int ConstructorId { get; } = -337352679;
         public int Flags { get; set; }
         public bool Popup { get; set; }
@@ -21,6 +14,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public string Message { get; set; }
         public MessageMediaBase Media { get; set; }
         public IList<MessageEntityBase> Entities { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Popup = 1 << 0,
+            InboxDate = 1 << 1
+        }
 
         public override void UpdateFlags()
         {

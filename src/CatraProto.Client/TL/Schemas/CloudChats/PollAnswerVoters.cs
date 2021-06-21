@@ -5,19 +5,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class PollAnswerVoters : PollAnswerVotersBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Chosen = 1 << 0,
-            Correct = 1 << 1
-        }
-
         public static int ConstructorId { get; } = 997055186;
         public int Flags { get; set; }
         public override bool Chosen { get; set; }
         public override bool Correct { get; set; }
         public override byte[] Option { get; set; }
         public override int Voters { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Chosen = 1 << 0,
+            Correct = 1 << 1
+        }
 
         public override void UpdateFlags()
         {

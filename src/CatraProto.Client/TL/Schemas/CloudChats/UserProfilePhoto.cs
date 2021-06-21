@@ -5,12 +5,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class UserProfilePhoto : UserProfilePhotoBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            HasVideo = 1 << 0
-        }
-
         public static int ConstructorId { get; } = 1775479590;
         public int Flags { get; set; }
         public bool HasVideo { get; set; }
@@ -18,6 +12,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public FileLocationBase PhotoSmall { get; set; }
         public FileLocationBase PhotoBig { get; set; }
         public int DcId { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            HasVideo = 1 << 0
+        }
 
         public override void UpdateFlags()
         {

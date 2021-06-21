@@ -5,9 +5,9 @@
         internal static System.Numerics.BigInteger ReadBytes(int bitSize, Reader reader)
         {
             var byteCount = bitSize / 8;
-            byte[] bytes = new byte[byteCount];
+            var bytes = new byte[byteCount];
 
-            for (int i = 0; i < byteCount; i++)
+            for (var i = 0; i < byteCount; i++)
             {
                 bytes[i] = reader.Read<byte>();
             }

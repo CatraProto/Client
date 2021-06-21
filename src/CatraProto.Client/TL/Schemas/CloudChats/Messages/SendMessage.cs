@@ -7,19 +7,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public partial class SendMessage : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            NoWebpage = 1 << 1,
-            Silent = 1 << 5,
-            Background = 1 << 6,
-            ClearDraft = 1 << 7,
-            ReplyToMsgId = 1 << 0,
-            ReplyMarkup = 1 << 2,
-            Entities = 1 << 3,
-            ScheduleDate = 1 << 10
-        }
-
         public static int ConstructorId { get; } = 1376532592;
         public int Flags { get; set; }
         public bool NoWebpage { get; set; }
@@ -36,6 +23,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public Type Type { get; init; } = typeof(UpdatesBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            NoWebpage = 1 << 1,
+            Silent = 1 << 5,
+            Background = 1 << 6,
+            ClearDraft = 1 << 7,
+            ReplyToMsgId = 1 << 0,
+            ReplyMarkup = 1 << 2,
+            Entities = 1 << 3,
+            ScheduleDate = 1 << 10
+        }
 
         public void UpdateFlags()
         {

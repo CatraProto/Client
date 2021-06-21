@@ -5,20 +5,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class Chat : ChatBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Creator = 1 << 0,
-            Kicked = 1 << 1,
-            Left = 1 << 2,
-            Deactivated = 1 << 5,
-            CallActive = 1 << 23,
-            CallNotEmpty = 1 << 24,
-            MigratedTo = 1 << 6,
-            AdminRights = 1 << 14,
-            DefaultBannedRights = 1 << 18
-        }
-
         public static int ConstructorId { get; } = 1004149726;
         public int Flags { get; set; }
         public bool Creator { get; set; }
@@ -36,6 +22,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public InputChannelBase MigratedTo { get; set; }
         public ChatAdminRightsBase AdminRights { get; set; }
         public ChatBannedRightsBase DefaultBannedRights { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Creator = 1 << 0,
+            Kicked = 1 << 1,
+            Left = 1 << 2,
+            Deactivated = 1 << 5,
+            CallActive = 1 << 23,
+            CallNotEmpty = 1 << 24,
+            MigratedTo = 1 << 6,
+            AdminRights = 1 << 14,
+            DefaultBannedRights = 1 << 18
+        }
 
         public override void UpdateFlags()
         {

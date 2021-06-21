@@ -7,14 +7,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public partial class ToggleStickerSets : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Uninstall = 1 << 0,
-            Archive = 1 << 1,
-            Unarchive = 1 << 2
-        }
-
         public static int ConstructorId { get; } = -1257951254;
         public int Flags { get; set; }
         public bool Uninstall { get; set; }
@@ -24,6 +16,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public Type Type { get; init; } = typeof(bool);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Uninstall = 1 << 0,
+            Archive = 1 << 1,
+            Unarchive = 1 << 2
+        }
 
         public void UpdateFlags()
         {

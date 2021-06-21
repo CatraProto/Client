@@ -5,13 +5,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class UpdateChannelParticipant : UpdateBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            PrevParticipant = 1 << 0,
-            NewParticipant = 1 << 1
-        }
-
         public static int ConstructorId { get; } = 1708307556;
         public int Flags { get; set; }
         public int ChannelId { get; set; }
@@ -20,6 +13,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public ChannelParticipantBase PrevParticipant { get; set; }
         public ChannelParticipantBase NewParticipant { get; set; }
         public int Qts { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            PrevParticipant = 1 << 0,
+            NewParticipant = 1 << 1
+        }
 
         public override void UpdateFlags()
         {

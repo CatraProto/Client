@@ -7,15 +7,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public partial class SetInlineBotResults : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Gallery = 1 << 0,
-            Private = 1 << 1,
-            NextOffset = 1 << 2,
-            SwitchPm = 1 << 3
-        }
-
         public static int ConstructorId { get; } = -346119674;
         public int Flags { get; set; }
         public bool Gallery { get; set; }
@@ -28,6 +19,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public Type Type { get; init; } = typeof(bool);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Gallery = 1 << 0,
+            Private = 1 << 1,
+            NextOffset = 1 << 2,
+            SwitchPm = 1 << 3
+        }
 
         public void UpdateFlags()
         {

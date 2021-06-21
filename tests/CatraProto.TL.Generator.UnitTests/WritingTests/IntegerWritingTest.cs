@@ -1,5 +1,8 @@
 using System.Text;
 using System.Threading.Tasks;
+using CatraProto.TL.Generator.CodeGeneration.Optimization;
+using CatraProto.TL.Generator.CodeGeneration.Parsing;
+using CatraProto.TL.Generator.CodeGeneration.Writing;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -7,12 +10,12 @@ namespace CatraProto.TL.Generator.UnitTests.WritingTests
 {
     public class IntegerWritingTest
     {
-        private readonly ITestOutputHelper _testOutputHelper;
-
         public IntegerWritingTest(ITestOutputHelper testOutputHelper)
         {
             _testOutputHelper = testOutputHelper;
         }
+
+        private readonly ITestOutputHelper _testOutputHelper;
 
         [Fact]
         public async Task Test()
@@ -22,8 +25,8 @@ namespace CatraProto.TL.Generator.UnitTests.WritingTests
                 "message_gay#2 first:Mammt second:Vector<Mammt> third:flags.1?Mammt fourth:flags.1?Vector<Mammt> = int;",
                 "Mammt#1 flags:int = Mammt;"
             };
-            var analyzed = await CodeGeneration.Parsing.Parser.StartAnalyzing(schema);
-            analyzed = CodeGeneration.Optimization.Optimizer.Optimize(analyzed);
+            var analyzed = await Parser.StartAnalyzing(schema);
+            analyzed = Optimizer.Optimize(analyzed);
             var builder = new StringBuilder();
             foreach (var para in analyzed[0].Parameters)
             {
@@ -34,7 +37,7 @@ namespace CatraProto.TL.Generator.UnitTests.WritingTests
                 para.Type.WriteBaseParameters(builder);
             }
 
-            var writer = await CodeGeneration.Writing.Writer.Create(analyzed);
+            var writer = await Writer.Create(analyzed);
             await writer.Write();
             _testOutputHelper.WriteLine(builder.ToString());
         }

@@ -5,6 +5,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class MessageViews : MessageViewsBase
     {
+        public static int ConstructorId { get; } = 1163625789;
+        public int Flags { get; set; }
+        public override int? Views { get; set; }
+        public override int? Forwards { get; set; }
+        public override MessageRepliesBase Replies { get; set; }
+
         [Flags]
         public enum FlagsEnum
         {
@@ -12,12 +18,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Forwards = 1 << 1,
             Replies = 1 << 2
         }
-
-        public static int ConstructorId { get; } = 1163625789;
-        public int Flags { get; set; }
-        public override int? Views { get; set; }
-        public override int? Forwards { get; set; }
-        public override MessageRepliesBase Replies { get; set; }
 
         public override void UpdateFlags()
         {

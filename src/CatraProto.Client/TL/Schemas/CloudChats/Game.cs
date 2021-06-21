@@ -5,12 +5,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class Game : GameBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Document = 1 << 0
-        }
-
         public static int ConstructorId { get; } = -1107729093;
         public int Flags { get; set; }
         public override long Id { get; set; }
@@ -20,6 +14,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override string Description { get; set; }
         public override PhotoBase Photo { get; set; }
         public override DocumentBase Document { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Document = 1 << 0
+        }
 
         public override void UpdateFlags()
         {

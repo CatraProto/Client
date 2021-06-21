@@ -5,15 +5,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class GlobalPrivacySettings : GlobalPrivacySettingsBase
     {
+        public static int ConstructorId { get; } = -1096616924;
+        public int Flags { get; set; }
+        public override bool? ArchiveAndMuteNewNoncontactPeers { get; set; }
+
         [Flags]
         public enum FlagsEnum
         {
             ArchiveAndMuteNewNoncontactPeers = 1 << 0
         }
-
-        public static int ConstructorId { get; } = -1096616924;
-        public int Flags { get; set; }
-        public override bool? ArchiveAndMuteNewNoncontactPeers { get; set; }
 
         public override void UpdateFlags()
         {

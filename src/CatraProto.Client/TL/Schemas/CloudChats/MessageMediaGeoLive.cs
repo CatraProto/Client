@@ -5,19 +5,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class MessageMediaGeoLive : MessageMediaBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Heading = 1 << 0,
-            ProximityNotificationRadius = 1 << 1
-        }
-
         public static int ConstructorId { get; } = -1186937242;
         public int Flags { get; set; }
         public GeoPointBase Geo { get; set; }
         public int? Heading { get; set; }
         public int Period { get; set; }
         public int? ProximityNotificationRadius { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Heading = 1 << 0,
+            ProximityNotificationRadius = 1 << 1
+        }
 
         public override void UpdateFlags()
         {

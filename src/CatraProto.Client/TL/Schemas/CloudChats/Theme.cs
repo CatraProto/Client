@@ -5,15 +5,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class Theme : ThemeBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Creator = 1 << 0,
-            Default = 1 << 1,
-            Document = 1 << 2,
-            Settings = 1 << 3
-        }
-
         public static int ConstructorId { get; } = 42930452;
         public int Flags { get; set; }
         public override bool Creator { get; set; }
@@ -25,6 +16,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override DocumentBase Document { get; set; }
         public override ThemeSettingsBase Settings { get; set; }
         public override int InstallsCount { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Creator = 1 << 0,
+            Default = 1 << 1,
+            Document = 1 << 2,
+            Settings = 1 << 3
+        }
 
         public override void UpdateFlags()
         {

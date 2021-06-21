@@ -5,15 +5,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class AutoDownloadSettings : AutoDownloadSettingsBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Disabled = 1 << 0,
-            VideoPreloadLarge = 1 << 1,
-            AudioPreloadNext = 1 << 2,
-            PhonecallsLessData = 1 << 3
-        }
-
         public static int ConstructorId { get; } = -532532493;
         public int Flags { get; set; }
         public override bool Disabled { get; set; }
@@ -24,6 +15,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override int VideoSizeMax { get; set; }
         public override int FileSizeMax { get; set; }
         public override int VideoUploadMaxbitrate { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Disabled = 1 << 0,
+            VideoPreloadLarge = 1 << 1,
+            AudioPreloadNext = 1 << 2,
+            PhonecallsLessData = 1 << 3
+        }
 
         public override void UpdateFlags()
         {

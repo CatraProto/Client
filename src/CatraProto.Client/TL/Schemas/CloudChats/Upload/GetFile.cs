@@ -6,13 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 {
     public partial class GetFile : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Precise = 1 << 0,
-            CdnSupported = 1 << 1
-        }
-
         public static int ConstructorId { get; } = -1319462148;
         public int Flags { get; set; }
         public bool Precise { get; set; }
@@ -23,6 +16,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 
         public Type Type { get; init; } = typeof(FileBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Precise = 1 << 0,
+            CdnSupported = 1 << 1
+        }
 
         public void UpdateFlags()
         {

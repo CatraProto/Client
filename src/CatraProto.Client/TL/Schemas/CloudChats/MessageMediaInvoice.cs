@@ -5,15 +5,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class MessageMediaInvoice : MessageMediaBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            ShippingAddressRequested = 1 << 1,
-            Test = 1 << 3,
-            Photo = 1 << 0,
-            ReceiptMsgId = 1 << 2
-        }
-
         public static int ConstructorId { get; } = -2074799289;
         public int Flags { get; set; }
         public bool ShippingAddressRequested { get; set; }
@@ -25,6 +16,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public string Currency { get; set; }
         public long TotalAmount { get; set; }
         public string StartParam { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            ShippingAddressRequested = 1 << 1,
+            Test = 1 << 3,
+            Photo = 1 << 0,
+            ReceiptMsgId = 1 << 2
+        }
 
         public override void UpdateFlags()
         {

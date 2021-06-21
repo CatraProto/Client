@@ -5,22 +5,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class UserFull : UserFullBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Blocked = 1 << 0,
-            PhoneCallsAvailable = 1 << 4,
-            PhoneCallsPrivate = 1 << 5,
-            CanPinMessage = 1 << 7,
-            HasScheduled = 1 << 12,
-            VideoCallsAvailable = 1 << 13,
-            About = 1 << 1,
-            ProfilePhoto = 1 << 2,
-            BotInfo = 1 << 3,
-            PinnedMsgId = 1 << 6,
-            FolderId = 1 << 11
-        }
-
         public static int ConstructorId { get; } = -302941166;
         public int Flags { get; set; }
         public override bool Blocked { get; set; }
@@ -38,6 +22,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override int? PinnedMsgId { get; set; }
         public override int CommonChatsCount { get; set; }
         public override int? FolderId { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Blocked = 1 << 0,
+            PhoneCallsAvailable = 1 << 4,
+            PhoneCallsPrivate = 1 << 5,
+            CanPinMessage = 1 << 7,
+            HasScheduled = 1 << 12,
+            VideoCallsAvailable = 1 << 13,
+            About = 1 << 1,
+            ProfilePhoto = 1 << 2,
+            BotInfo = 1 << 3,
+            PinnedMsgId = 1 << 6,
+            FolderId = 1 << 11
+        }
 
         public override void UpdateFlags()
         {

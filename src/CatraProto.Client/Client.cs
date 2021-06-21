@@ -11,6 +11,7 @@ namespace CatraProto.Client
 {
     public class Client
     {
+        public Api Api { get; private set; }
         private Connection _connection;
         private ILogger _logger;
         private Session _session;
@@ -20,8 +21,6 @@ namespace CatraProto.Client
             _logger = session.Logger.ForContext<Client>();
             _session = session;
         }
-
-        public Api Api { get; private set; }
 
         public async Task StartAsync()
         {

@@ -6,12 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 {
     public partial class GetMegagroupStats : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Dark = 1 << 0
-        }
-
         public static int ConstructorId { get; } = -589330937;
         public int Flags { get; set; }
         public bool Dark { get; set; }
@@ -19,6 +13,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 
         public Type Type { get; init; } = typeof(MegagroupStatsBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Dark = 1 << 0
+        }
 
         public void UpdateFlags()
         {

@@ -5,6 +5,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class WallPaperSettings : WallPaperSettingsBase
     {
+        public static int ConstructorId { get; } = 84438264;
+        public int Flags { get; set; }
+        public override bool Blur { get; set; }
+        public override bool Motion { get; set; }
+        public override int? BackgroundColor { get; set; }
+        public override int? SecondBackgroundColor { get; set; }
+        public override int? Intensity { get; set; }
+        public override int? Rotation { get; set; }
+
         [Flags]
         public enum FlagsEnum
         {
@@ -15,15 +24,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Intensity = 1 << 3,
             Rotation = 1 << 4
         }
-
-        public static int ConstructorId { get; } = 84438264;
-        public int Flags { get; set; }
-        public override bool Blur { get; set; }
-        public override bool Motion { get; set; }
-        public override int? BackgroundColor { get; set; }
-        public override int? SecondBackgroundColor { get; set; }
-        public override int? Intensity { get; set; }
-        public override int? Rotation { get; set; }
 
         public override void UpdateFlags()
         {

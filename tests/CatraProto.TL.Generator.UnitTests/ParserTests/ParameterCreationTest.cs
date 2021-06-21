@@ -70,8 +70,7 @@ namespace CatraProto.TL.Generator.UnitTests.ParserTests
         }
 
         /// <remarks>
-        /// Integers can have different BitSizes, therefore, a different approach for testing is required.
-        ///
+        ///     Integers can have different BitSizes, therefore, a different approach for testing is required.
         /// </remarks>
         [Theory]
         [InlineData("test#123 parameterName:int = EtheriaType;", 32, false, "int")]

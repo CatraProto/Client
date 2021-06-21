@@ -5,16 +5,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class BotInlineResult : BotInlineResultBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Title = 1 << 1,
-            Description = 1 << 2,
-            Url = 1 << 3,
-            Thumb = 1 << 4,
-            Content = 1 << 5
-        }
-
         public static int ConstructorId { get; } = 295067450;
         public int Flags { get; set; }
         public override string Id { get; set; }
@@ -25,6 +15,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public WebDocumentBase Thumb { get; set; }
         public WebDocumentBase Content { get; set; }
         public override BotInlineMessageBase SendMessage { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Title = 1 << 1,
+            Description = 1 << 2,
+            Url = 1 << 3,
+            Thumb = 1 << 4,
+            Content = 1 << 5
+        }
 
         public override void UpdateFlags()
         {

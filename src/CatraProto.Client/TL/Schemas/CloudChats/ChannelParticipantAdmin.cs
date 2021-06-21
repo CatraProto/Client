@@ -5,15 +5,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class ChannelParticipantAdmin : ChannelParticipantBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            CanEdit = 1 << 0,
-            Self = 1 << 1,
-            InviterId = 1 << 1,
-            Rank = 1 << 2
-        }
-
         public static int ConstructorId { get; } = -859915345;
         public int Flags { get; set; }
         public bool CanEdit { get; set; }
@@ -24,6 +15,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int Date { get; set; }
         public ChatAdminRightsBase AdminRights { get; set; }
         public string Rank { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            CanEdit = 1 << 0,
+            Self = 1 << 1,
+            InviterId = 1 << 1,
+            Rank = 1 << 2
+        }
 
         public override void UpdateFlags()
         {

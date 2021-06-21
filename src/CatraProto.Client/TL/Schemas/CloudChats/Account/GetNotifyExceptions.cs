@@ -6,13 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
     public partial class GetNotifyExceptions : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            CompareSound = 1 << 1,
-            Peer = 1 << 0
-        }
-
         public static int ConstructorId { get; } = 1398240377;
         public int Flags { get; set; }
         public bool CompareSound { get; set; }
@@ -20,6 +13,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public Type Type { get; init; } = typeof(UpdatesBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            CompareSound = 1 << 1,
+            Peer = 1 << 0
+        }
 
         public void UpdateFlags()
         {

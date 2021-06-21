@@ -13,7 +13,7 @@ namespace CatraProto.TL.Generator.UnitTests.ParserTests
         [InlineData("Type", false, "Type", "Flags", 1)]
         public void FindFlag(string input, bool expected, string expectedCleanType, string flagName, int flagBit)
         {
-            var result = Parameter.FindFlag(input, out var cleanType, out Flag flag);
+            var result = Parameter.FindFlag(input, out var cleanType, out var flag);
             if (!result && !expected)
             {
                 Assert.False(result);

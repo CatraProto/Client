@@ -6,13 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 {
     public partial class PaymentReceipt : PaymentReceiptBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Info = 1 << 0,
-            Shipping = 1 << 1
-        }
-
         public static int ConstructorId { get; } = 1342771681;
         public int Flags { get; set; }
         public override int Date { get; set; }
@@ -25,6 +18,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
         public override long TotalAmount { get; set; }
         public override string CredentialsTitle { get; set; }
         public override IList<UserBase> Users { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Info = 1 << 0,
+            Shipping = 1 << 1
+        }
 
         public override void UpdateFlags()
         {

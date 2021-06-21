@@ -5,15 +5,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class Folder : FolderBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            AutofillNewBroadcasts = 1 << 0,
-            AutofillPublicGroups = 1 << 1,
-            AutofillNewCorrespondents = 1 << 2,
-            Photo = 1 << 3
-        }
-
         public static int ConstructorId { get; } = -11252123;
         public int Flags { get; set; }
         public override bool AutofillNewBroadcasts { get; set; }
@@ -22,6 +13,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override int Id { get; set; }
         public override string Title { get; set; }
         public override ChatPhotoBase Photo { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            AutofillNewBroadcasts = 1 << 0,
+            AutofillPublicGroups = 1 << 1,
+            AutofillNewCorrespondents = 1 << 2,
+            Photo = 1 << 3
+        }
 
         public override void UpdateFlags()
         {

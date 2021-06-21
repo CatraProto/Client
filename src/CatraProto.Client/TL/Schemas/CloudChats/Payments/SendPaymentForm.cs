@@ -6,13 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 {
     public partial class SendPaymentForm : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            RequestedInfoId = 1 << 0,
-            ShippingOptionId = 1 << 1
-        }
-
         public static int ConstructorId { get; } = 730364339;
         public int Flags { get; set; }
         public int MsgId { get; set; }
@@ -22,6 +15,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 
         public Type Type { get; init; } = typeof(PaymentResultBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            RequestedInfoId = 1 << 0,
+            ShippingOptionId = 1 << 1
+        }
 
         public void UpdateFlags()
         {

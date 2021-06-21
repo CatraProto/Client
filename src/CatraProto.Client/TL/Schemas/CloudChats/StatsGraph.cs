@@ -5,16 +5,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class StatsGraph : StatsGraphBase
     {
+        public static int ConstructorId { get; } = -1901828938;
+        public int Flags { get; set; }
+        public DataJSONBase Json { get; set; }
+        public string ZoomToken { get; set; }
+
         [Flags]
         public enum FlagsEnum
         {
             ZoomToken = 1 << 0
         }
-
-        public static int ConstructorId { get; } = -1901828938;
-        public int Flags { get; set; }
-        public DataJSONBase Json { get; set; }
-        public string ZoomToken { get; set; }
 
         public override void UpdateFlags()
         {

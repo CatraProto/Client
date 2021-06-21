@@ -6,12 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 {
     public partial class RequestCall : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Video = 1 << 0
-        }
-
         public static int ConstructorId { get; } = 1124046573;
         public int Flags { get; set; }
         public bool Video { get; set; }
@@ -22,6 +16,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 
         public Type Type { get; init; } = typeof(PhoneCallBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Video = 1 << 0
+        }
 
         public void UpdateFlags()
         {

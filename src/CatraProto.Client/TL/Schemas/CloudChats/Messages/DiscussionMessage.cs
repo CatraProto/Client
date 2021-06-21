@@ -6,14 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public partial class DiscussionMessage : DiscussionMessageBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            MaxId = 1 << 0,
-            ReadInboxMaxId = 1 << 1,
-            ReadOutboxMaxId = 1 << 2
-        }
-
         public static int ConstructorId { get; } = -170029155;
         public int Flags { get; set; }
         public override IList<MessageBase> Messages { get; set; }
@@ -22,6 +14,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public override int? ReadOutboxMaxId { get; set; }
         public override IList<ChatBase> Chats { get; set; }
         public override IList<UserBase> Users { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            MaxId = 1 << 0,
+            ReadInboxMaxId = 1 << 1,
+            ReadOutboxMaxId = 1 << 2
+        }
 
         public override void UpdateFlags()
         {

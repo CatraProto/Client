@@ -6,13 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 {
     public partial class ExportMessageLink : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Grouped = 1 << 0,
-            Thread = 1 << 1
-        }
-
         public static int ConstructorId { get; } = -432034325;
         public int Flags { get; set; }
         public bool Grouped { get; set; }
@@ -22,6 +15,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 
         public Type Type { get; init; } = typeof(ExportedMessageLinkBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Grouped = 1 << 0,
+            Thread = 1 << 1
+        }
 
         public void UpdateFlags()
         {

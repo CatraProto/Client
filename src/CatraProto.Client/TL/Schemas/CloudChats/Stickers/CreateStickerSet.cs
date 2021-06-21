@@ -7,14 +7,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 {
     public partial class CreateStickerSet : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Masks = 1 << 0,
-            Animated = 1 << 1,
-            Thumb = 1 << 2
-        }
-
         public static int ConstructorId { get; } = -251435136;
         public int Flags { get; set; }
         public bool Masks { get; set; }
@@ -27,6 +19,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 
         public Type Type { get; init; } = typeof(Messages.StickerSetBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Masks = 1 << 0,
+            Animated = 1 << 1,
+            Thumb = 1 << 2
+        }
 
         public void UpdateFlags()
         {

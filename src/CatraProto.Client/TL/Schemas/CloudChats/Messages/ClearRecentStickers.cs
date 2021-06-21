@@ -6,18 +6,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public partial class ClearRecentStickers : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Attached = 1 << 0
-        }
-
         public static int ConstructorId { get; } = -1986437075;
         public int Flags { get; set; }
         public bool Attached { get; set; }
 
         public Type Type { get; init; } = typeof(bool);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Attached = 1 << 0
+        }
 
         public void UpdateFlags()
         {

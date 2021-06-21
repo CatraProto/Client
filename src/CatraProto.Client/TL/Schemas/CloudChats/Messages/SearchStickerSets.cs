@@ -6,12 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public partial class SearchStickerSets : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            ExcludeFeatured = 1 << 0
-        }
-
         public static int ConstructorId { get; } = -1028140917;
         public int Flags { get; set; }
         public bool ExcludeFeatured { get; set; }
@@ -20,6 +14,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public Type Type { get; init; } = typeof(FoundStickerSetsBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            ExcludeFeatured = 1 << 0
+        }
 
         public void UpdateFlags()
         {

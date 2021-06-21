@@ -5,13 +5,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class UpdateInlineBotCallbackQuery : UpdateBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Data = 1 << 0,
-            GameShortName = 1 << 1
-        }
-
         public static int ConstructorId { get; } = -103646630;
         public int Flags { get; set; }
         public long QueryId { get; set; }
@@ -20,6 +13,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public long ChatInstance { get; set; }
         public byte[] Data { get; set; }
         public string GameShortName { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Data = 1 << 0,
+            GameShortName = 1 << 1
+        }
 
         public override void UpdateFlags()
         {

@@ -6,13 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class InitConnection : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Proxy = 1 << 0,
-            Params = 1 << 1
-        }
-
         public static int ConstructorId { get; } = -1043505495;
         public int Flags { get; set; }
         public int ApiId { get; set; }
@@ -28,6 +21,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public Type Type { get; init; } = typeof(IObject);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Proxy = 1 << 0,
+            Params = 1 << 1
+        }
 
         public void UpdateFlags()
         {

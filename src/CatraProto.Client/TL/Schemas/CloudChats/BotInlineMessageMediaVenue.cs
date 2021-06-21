@@ -5,12 +5,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class BotInlineMessageMediaVenue : BotInlineMessageBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            ReplyMarkup = 1 << 2
-        }
-
         public static int ConstructorId { get; } = -1970903652;
         public int Flags { get; set; }
         public GeoPointBase Geo { get; set; }
@@ -20,6 +14,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public string VenueId { get; set; }
         public string VenueType { get; set; }
         public override ReplyMarkupBase ReplyMarkup { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            ReplyMarkup = 1 << 2
+        }
 
         public override void UpdateFlags()
         {

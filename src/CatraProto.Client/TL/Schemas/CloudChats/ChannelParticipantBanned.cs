@@ -5,12 +5,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class ChannelParticipantBanned : ChannelParticipantBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Left = 1 << 0
-        }
-
         public static int ConstructorId { get; } = 470789295;
         public int Flags { get; set; }
         public bool Left { get; set; }
@@ -18,6 +12,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int KickedBy { get; set; }
         public int Date { get; set; }
         public ChatBannedRightsBase BannedRights { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Left = 1 << 0
+        }
 
         public override void UpdateFlags()
         {

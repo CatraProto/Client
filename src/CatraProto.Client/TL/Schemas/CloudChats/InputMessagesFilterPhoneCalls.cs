@@ -5,15 +5,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class InputMessagesFilterPhoneCalls : MessagesFilterBase
     {
+        public static int ConstructorId { get; } = -2134272152;
+        public int Flags { get; set; }
+        public bool Missed { get; set; }
+
         [Flags]
         public enum FlagsEnum
         {
             Missed = 1 << 0
         }
-
-        public static int ConstructorId { get; } = -2134272152;
-        public int Flags { get; set; }
-        public bool Missed { get; set; }
 
         public override void UpdateFlags()
         {

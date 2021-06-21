@@ -6,13 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 {
     public partial class ChannelDifferenceTooLong : ChannelDifferenceBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Final = 1 << 0,
-            Timeout = 1 << 1
-        }
-
         public static int ConstructorId { get; } = -1531132162;
         public int Flags { get; set; }
         public override bool Final { get; set; }
@@ -21,6 +14,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
         public IList<MessageBase> Messages { get; set; }
         public IList<ChatBase> Chats { get; set; }
         public IList<UserBase> Users { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Final = 1 << 0,
+            Timeout = 1 << 1
+        }
 
         public override void UpdateFlags()
         {

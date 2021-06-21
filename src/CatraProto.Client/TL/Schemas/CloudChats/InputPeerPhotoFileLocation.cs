@@ -5,18 +5,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class InputPeerPhotoFileLocation : InputFileLocationBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Big = 1 << 0
-        }
-
         public static int ConstructorId { get; } = 668375447;
         public int Flags { get; set; }
         public bool Big { get; set; }
         public InputPeerBase Peer { get; set; }
         public long VolumeId { get; set; }
         public int LocalId { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Big = 1 << 0
+        }
 
         public override void UpdateFlags()
         {

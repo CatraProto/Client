@@ -5,13 +5,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class UpdateReadChannelDiscussionInbox : UpdateBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            BroadcastId = 1 << 0,
-            BroadcastPost = 1 << 0
-        }
-
         public static int ConstructorId { get; } = 482860628;
         public int Flags { get; set; }
         public int ChannelId { get; set; }
@@ -19,6 +12,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ReadMaxId { get; set; }
         public int? BroadcastId { get; set; }
         public int? BroadcastPost { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            BroadcastId = 1 << 0,
+            BroadcastPost = 1 << 0
+        }
 
         public override void UpdateFlags()
         {

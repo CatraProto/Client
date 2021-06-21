@@ -7,15 +7,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public partial class ForwardMessages : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Silent = 1 << 5,
-            Background = 1 << 6,
-            WithMyScore = 1 << 8,
-            ScheduleDate = 1 << 10
-        }
-
         public static int ConstructorId { get; } = -637606386;
         public int Flags { get; set; }
         public bool Silent { get; set; }
@@ -29,6 +20,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public Type Type { get; init; } = typeof(UpdatesBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Silent = 1 << 5,
+            Background = 1 << 6,
+            WithMyScore = 1 << 8,
+            ScheduleDate = 1 << 10
+        }
 
         public void UpdateFlags()
         {

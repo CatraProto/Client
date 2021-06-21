@@ -6,16 +6,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class ChannelMessagesFilter : ChannelMessagesFilterBase
     {
+        public static int ConstructorId { get; } = -847783593;
+        public int Flags { get; set; }
+        public bool ExcludeNewMessages { get; set; }
+        public IList<MessageRangeBase> Ranges { get; set; }
+
         [Flags]
         public enum FlagsEnum
         {
             ExcludeNewMessages = 1 << 1
         }
-
-        public static int ConstructorId { get; } = -847783593;
-        public int Flags { get; set; }
-        public bool ExcludeNewMessages { get; set; }
-        public IList<MessageRangeBase> Ranges { get; set; }
 
         public override void UpdateFlags()
         {

@@ -5,6 +5,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public partial class BotCallbackAnswer : BotCallbackAnswerBase
     {
+        public static int ConstructorId { get; } = 911761060;
+        public int Flags { get; set; }
+        public override bool Alert { get; set; }
+        public override bool HasUrl { get; set; }
+        public override bool NativeUi { get; set; }
+        public override string Message { get; set; }
+        public override string Url { get; set; }
+        public override int CacheTime { get; set; }
+
         [Flags]
         public enum FlagsEnum
         {
@@ -14,15 +23,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             Message = 1 << 0,
             Url = 1 << 2
         }
-
-        public static int ConstructorId { get; } = 911761060;
-        public int Flags { get; set; }
-        public override bool Alert { get; set; }
-        public override bool HasUrl { get; set; }
-        public override bool NativeUi { get; set; }
-        public override string Message { get; set; }
-        public override string Url { get; set; }
-        public override int CacheTime { get; set; }
 
         public override void UpdateFlags()
         {

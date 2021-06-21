@@ -6,19 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class UpdateShortChatMessage : UpdatesBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Out = 1 << 1,
-            Mentioned = 1 << 4,
-            MediaUnread = 1 << 5,
-            Silent = 1 << 13,
-            FwdFrom = 1 << 2,
-            ViaBotId = 1 << 11,
-            ReplyTo = 1 << 3,
-            Entities = 1 << 7
-        }
-
         public static int ConstructorId { get; } = 1076714939;
         public int Flags { get; set; }
         public bool Out { get; set; }
@@ -36,6 +23,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int? ViaBotId { get; set; }
         public MessageReplyHeaderBase ReplyTo { get; set; }
         public IList<MessageEntityBase> Entities { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Out = 1 << 1,
+            Mentioned = 1 << 4,
+            MediaUnread = 1 << 5,
+            Silent = 1 << 13,
+            FwdFrom = 1 << 2,
+            ViaBotId = 1 << 11,
+            ReplyTo = 1 << 3,
+            Entities = 1 << 7
+        }
 
         public override void UpdateFlags()
         {

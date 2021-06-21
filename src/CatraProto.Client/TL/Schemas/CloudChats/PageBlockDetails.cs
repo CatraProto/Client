@@ -6,17 +6,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class PageBlockDetails : PageBlockBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Open = 1 << 0
-        }
-
         public static int ConstructorId { get; } = 1987480557;
         public int Flags { get; set; }
         public bool Open { get; set; }
         public IList<PageBlockBase> Blocks { get; set; }
         public RichTextBase Title { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Open = 1 << 0
+        }
 
         public override void UpdateFlags()
         {

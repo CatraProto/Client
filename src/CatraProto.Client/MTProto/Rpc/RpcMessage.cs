@@ -14,6 +14,15 @@ namespace CatraProto.Client.MTProto.Rpc
         public IRpcError Error { get; private set; }
         public T Response { get; private set; }
 
+        private static IRpcError ParseError(RpcError error)
+        {
+            switch (error)
+            {
+                default:
+                    return new UnknownError(error.ErrorMessage, error.ErrorCode);
+            }
+        }
+
         public void SetResponse(object o)
         {
             if (o is RpcError error)
@@ -23,15 +32,6 @@ namespace CatraProto.Client.MTProto.Rpc
             else
             {
                 Response = (T)o;
-            }
-        }
-
-        private static IRpcError ParseError(RpcError error)
-        {
-            switch (error)
-            {
-                default:
-                    return new UnknownError(error.ErrorMessage, error.ErrorCode);
             }
         }
     }

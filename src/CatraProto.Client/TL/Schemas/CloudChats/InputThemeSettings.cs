@@ -5,15 +5,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class InputThemeSettings : InputThemeSettingsBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            MessageTopColor = 1 << 0,
-            MessageBottomColor = 1 << 0,
-            Wallpaper = 1 << 1,
-            WallpaperSettings = 1 << 1
-        }
-
         public static int ConstructorId { get; } = -1118798639;
         public int Flags { get; set; }
         public override BaseThemeBase BaseTheme { get; set; }
@@ -22,6 +13,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override int? MessageBottomColor { get; set; }
         public override InputWallPaperBase Wallpaper { get; set; }
         public override WallPaperSettingsBase WallpaperSettings { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            MessageTopColor = 1 << 0,
+            MessageBottomColor = 1 << 0,
+            Wallpaper = 1 << 1,
+            WallpaperSettings = 1 << 1
+        }
 
         public override void UpdateFlags()
         {

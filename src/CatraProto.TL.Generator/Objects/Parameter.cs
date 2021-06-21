@@ -7,7 +7,6 @@ namespace CatraProto.TL.Generator.Objects
 {
     public class Parameter
     {
-        private Flag _flag;
         public string Name { get; set; }
 
         public string InMethodName
@@ -36,6 +35,8 @@ namespace CatraProto.TL.Generator.Objects
                 HasFlag = true;
             }
         }
+
+        private Flag _flag;
 
         public static Parameter Create(string parameter)
         {

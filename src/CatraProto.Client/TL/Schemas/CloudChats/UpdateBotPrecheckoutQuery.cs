@@ -5,13 +5,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class UpdateBotPrecheckoutQuery : UpdateBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Info = 1 << 0,
-            ShippingOptionId = 1 << 1
-        }
-
         public static int ConstructorId { get; } = 1563376297;
         public int Flags { get; set; }
         public long QueryId { get; set; }
@@ -21,6 +14,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public string ShippingOptionId { get; set; }
         public string Currency { get; set; }
         public long TotalAmount { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Info = 1 << 0,
+            ShippingOptionId = 1 << 1
+        }
 
         public override void UpdateFlags()
         {

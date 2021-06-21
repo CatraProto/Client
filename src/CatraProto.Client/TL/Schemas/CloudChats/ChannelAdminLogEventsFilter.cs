@@ -5,6 +5,25 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class ChannelAdminLogEventsFilter : ChannelAdminLogEventsFilterBase
     {
+        public static int ConstructorId { get; } = -368018716;
+        public int Flags { get; set; }
+        public override bool Join { get; set; }
+        public override bool Leave { get; set; }
+        public override bool Invite { get; set; }
+        public override bool Ban { get; set; }
+        public override bool Unban { get; set; }
+        public override bool Kick { get; set; }
+        public override bool Unkick { get; set; }
+        public override bool Promote { get; set; }
+        public override bool Demote { get; set; }
+        public override bool Info { get; set; }
+        public override bool Settings { get; set; }
+        public override bool Pinned { get; set; }
+        public override bool Edit { get; set; }
+        public override bool Delete { get; set; }
+        public override bool GroupCall { get; set; }
+        public override bool Invites { get; set; }
+
         [Flags]
         public enum FlagsEnum
         {
@@ -25,25 +44,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             GroupCall = 1 << 14,
             Invites = 1 << 15
         }
-
-        public static int ConstructorId { get; } = -368018716;
-        public int Flags { get; set; }
-        public override bool Join { get; set; }
-        public override bool Leave { get; set; }
-        public override bool Invite { get; set; }
-        public override bool Ban { get; set; }
-        public override bool Unban { get; set; }
-        public override bool Kick { get; set; }
-        public override bool Unkick { get; set; }
-        public override bool Promote { get; set; }
-        public override bool Demote { get; set; }
-        public override bool Info { get; set; }
-        public override bool Settings { get; set; }
-        public override bool Pinned { get; set; }
-        public override bool Edit { get; set; }
-        public override bool Delete { get; set; }
-        public override bool GroupCall { get; set; }
-        public override bool Invites { get; set; }
 
         public override void UpdateFlags()
         {

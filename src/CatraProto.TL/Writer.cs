@@ -9,9 +9,6 @@ namespace CatraProto.TL
 {
     public class Writer : IDisposable
     {
-        private BinaryWriter _writer;
-        private IObjectProvider _provider;
-
         public Stream Stream
         {
             get
@@ -20,6 +17,9 @@ namespace CatraProto.TL
                 return _writer.BaseStream;
             }
         }
+
+        private BinaryWriter _writer;
+        private IObjectProvider _provider;
 
         public Writer(IObjectProvider provider, Stream stream, bool leaveOpen = false) : this(provider, stream, Encoding.UTF8, leaveOpen)
         {

@@ -6,12 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 {
     public partial class GetChannelDifference : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Force = 1 << 0
-        }
-
         public static int ConstructorId { get; } = 51854712;
         public int Flags { get; set; }
         public bool Force { get; set; }
@@ -22,6 +16,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 
         public Type Type { get; init; } = typeof(ChannelDifferenceBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Force = 1 << 0
+        }
 
         public void UpdateFlags()
         {

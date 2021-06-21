@@ -6,32 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class Channel : ChatBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Creator = 1 << 0,
-            Left = 1 << 2,
-            Broadcast = 1 << 5,
-            Verified = 1 << 7,
-            Megagroup = 1 << 8,
-            Restricted = 1 << 9,
-            Signatures = 1 << 11,
-            Min = 1 << 12,
-            Scam = 1 << 19,
-            HasLink = 1 << 20,
-            HasGeo = 1 << 21,
-            SlowmodeEnabled = 1 << 22,
-            CallActive = 1 << 23,
-            CallNotEmpty = 1 << 24,
-            AccessHash = 1 << 13,
-            Username = 1 << 6,
-            RestrictionReason = 1 << 9,
-            AdminRights = 1 << 14,
-            BannedRights = 1 << 15,
-            DefaultBannedRights = 1 << 18,
-            ParticipantsCount = 1 << 17
-        }
-
         public static int ConstructorId { get; } = -753232354;
         public int Flags { get; set; }
         public bool Creator { get; set; }
@@ -60,6 +34,32 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public ChatBannedRightsBase BannedRights { get; set; }
         public ChatBannedRightsBase DefaultBannedRights { get; set; }
         public int? ParticipantsCount { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Creator = 1 << 0,
+            Left = 1 << 2,
+            Broadcast = 1 << 5,
+            Verified = 1 << 7,
+            Megagroup = 1 << 8,
+            Restricted = 1 << 9,
+            Signatures = 1 << 11,
+            Min = 1 << 12,
+            Scam = 1 << 19,
+            HasLink = 1 << 20,
+            HasGeo = 1 << 21,
+            SlowmodeEnabled = 1 << 22,
+            CallActive = 1 << 23,
+            CallNotEmpty = 1 << 24,
+            AccessHash = 1 << 13,
+            Username = 1 << 6,
+            RestrictionReason = 1 << 9,
+            AdminRights = 1 << 14,
+            BannedRights = 1 << 15,
+            DefaultBannedRights = 1 << 18,
+            ParticipantsCount = 1 << 17
+        }
 
         public override void UpdateFlags()
         {

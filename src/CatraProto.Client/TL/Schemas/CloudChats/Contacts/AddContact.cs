@@ -6,12 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
     public partial class AddContact : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            AddPhonePrivacyException = 1 << 0
-        }
-
         public static int ConstructorId { get; } = -386636848;
         public int Flags { get; set; }
         public bool AddPhonePrivacyException { get; set; }
@@ -22,6 +16,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 
         public Type Type { get; init; } = typeof(UpdatesBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            AddPhonePrivacyException = 1 << 0
+        }
 
         public void UpdateFlags()
         {

@@ -6,19 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class Invoice : InvoiceBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Test = 1 << 0,
-            NameRequested = 1 << 1,
-            PhoneRequested = 1 << 2,
-            EmailRequested = 1 << 3,
-            ShippingAddressRequested = 1 << 4,
-            Flexible = 1 << 5,
-            PhoneToProvider = 1 << 6,
-            EmailToProvider = 1 << 7
-        }
-
         public static int ConstructorId { get; } = -1022713000;
         public int Flags { get; set; }
         public override bool Test { get; set; }
@@ -31,6 +18,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override bool EmailToProvider { get; set; }
         public override string Currency { get; set; }
         public override IList<LabeledPriceBase> Prices { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Test = 1 << 0,
+            NameRequested = 1 << 1,
+            PhoneRequested = 1 << 2,
+            EmailRequested = 1 << 3,
+            ShippingAddressRequested = 1 << 4,
+            Flexible = 1 << 5,
+            PhoneToProvider = 1 << 6,
+            EmailToProvider = 1 << 7
+        }
 
         public override void UpdateFlags()
         {

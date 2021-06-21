@@ -6,18 +6,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class InputSingleMedia : InputSingleMediaBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Entities = 1 << 0
-        }
-
         public static int ConstructorId { get; } = 482797855;
         public int Flags { get; set; }
         public override InputMediaBase Media { get; set; }
         public override long RandomId { get; set; }
         public override string Message { get; set; }
         public override IList<MessageEntityBase> Entities { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Entities = 1 << 0
+        }
 
         public override void UpdateFlags()
         {

@@ -5,14 +5,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class Authorization : AuthorizationBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Current = 1 << 0,
-            OfficialApp = 1 << 1,
-            PasswordPending = 1 << 2
-        }
-
         public static int ConstructorId { get; } = -1392388579;
         public int Flags { get; set; }
         public override bool Current { get; set; }
@@ -30,6 +22,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override string Ip { get; set; }
         public override string Country { get; set; }
         public override string Region { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Current = 1 << 0,
+            OfficialApp = 1 << 1,
+            PasswordPending = 1 << 2
+        }
 
         public override void UpdateFlags()
         {

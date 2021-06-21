@@ -6,13 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public partial class SetGameScore : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            EditMessage = 1 << 0,
-            Force = 1 << 1
-        }
-
         public static int ConstructorId { get; } = -1896289088;
         public int Flags { get; set; }
         public bool EditMessage { get; set; }
@@ -24,6 +17,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public Type Type { get; init; } = typeof(UpdatesBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            EditMessage = 1 << 0,
+            Force = 1 << 1
+        }
 
         public void UpdateFlags()
         {

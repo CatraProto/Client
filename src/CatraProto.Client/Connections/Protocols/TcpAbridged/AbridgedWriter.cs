@@ -20,13 +20,6 @@ namespace CatraProto.Client.Connections.Protocols.TcpAbridged
             _stream = stream;
         }
 
-        public Task SendAsync(byte[] message, CancellationToken cancellationToken = default)
-        {
-            using var toStream = message.ToMemoryStream();
-            using var headedMessage = SetProtocolHeaders(toStream);
-            return _stream.WriteAsync(headedMessage.ToArray(), cancellationToken).AsTask();
-        }
-
         private MemoryStream SetProtocolHeaders(MemoryStream stream)
         {
             var streamLenght = stream.Length / 4;
@@ -45,6 +38,13 @@ namespace CatraProto.Client.Connections.Protocols.TcpAbridged
 
             streamWriter.Write(stream.ToArray());
             return (MemoryStream)streamWriter.BaseStream;
+        }
+
+        public Task SendAsync(byte[] message, CancellationToken cancellationToken = default)
+        {
+            using var toStream = message.ToMemoryStream();
+            using var headedMessage = SetProtocolHeaders(toStream);
+            return _stream.WriteAsync(headedMessage.ToArray(), cancellationToken).AsTask();
         }
     }
 }

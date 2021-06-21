@@ -6,12 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public partial class AcceptUrlAuth : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            WriteAllowed = 1 << 0
-        }
-
         public static int ConstructorId { get; } = -148247912;
         public int Flags { get; set; }
         public bool WriteAllowed { get; set; }
@@ -21,6 +15,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public Type Type { get; init; } = typeof(UrlAuthResultBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            WriteAllowed = 1 << 0
+        }
 
         public void UpdateFlags()
         {

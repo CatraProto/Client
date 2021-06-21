@@ -6,16 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 {
     public partial class CreateChannel : IMethod
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Broadcast = 1 << 0,
-            Megagroup = 1 << 1,
-            ForImport = 1 << 3,
-            GeoPoint = 1 << 2,
-            Address = 1 << 2
-        }
-
         public static int ConstructorId { get; } = 1029681423;
         public int Flags { get; set; }
         public bool Broadcast { get; set; }
@@ -28,6 +18,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 
         public Type Type { get; init; } = typeof(UpdatesBase);
         public bool IsVector { get; init; } = false;
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Broadcast = 1 << 0,
+            Megagroup = 1 << 1,
+            ForImport = 1 << 3,
+            GeoPoint = 1 << 2,
+            Address = 1 << 2
+        }
 
         public void UpdateFlags()
         {

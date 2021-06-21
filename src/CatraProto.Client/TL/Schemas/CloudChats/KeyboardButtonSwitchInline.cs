@@ -5,17 +5,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class KeyboardButtonSwitchInline : KeyboardButtonBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            SamePeer = 1 << 0
-        }
-
         public static int ConstructorId { get; } = 90744648;
         public int Flags { get; set; }
         public bool SamePeer { get; set; }
         public override string Text { get; set; }
         public string Query { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            SamePeer = 1 << 0
+        }
 
         public override void UpdateFlags()
         {

@@ -6,6 +6,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class PollResults : PollResultsBase
     {
+        public static int ConstructorId { get; } = -1159937629;
+        public int Flags { get; set; }
+        public override bool Min { get; set; }
+        public override IList<PollAnswerVotersBase> Results { get; set; }
+        public override int? TotalVoters { get; set; }
+        public override IList<int> RecentVoters { get; set; }
+        public override string Solution { get; set; }
+        public override IList<MessageEntityBase> SolutionEntities { get; set; }
+
         [Flags]
         public enum FlagsEnum
         {
@@ -16,15 +25,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Solution = 1 << 4,
             SolutionEntities = 1 << 4
         }
-
-        public static int ConstructorId { get; } = -1159937629;
-        public int Flags { get; set; }
-        public override bool Min { get; set; }
-        public override IList<PollAnswerVotersBase> Results { get; set; }
-        public override int? TotalVoters { get; set; }
-        public override IList<int> RecentVoters { get; set; }
-        public override string Solution { get; set; }
-        public override IList<MessageEntityBase> SolutionEntities { get; set; }
 
         public override void UpdateFlags()
         {

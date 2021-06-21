@@ -5,18 +5,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class UpdateChannelUserTyping : UpdateBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            TopMsgId = 1 << 0
-        }
-
         public static int ConstructorId { get; } = -13975905;
         public int Flags { get; set; }
         public int ChannelId { get; set; }
         public int? TopMsgId { get; set; }
         public int UserId { get; set; }
         public SendMessageActionBase Action { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            TopMsgId = 1 << 0
+        }
 
         public override void UpdateFlags()
         {

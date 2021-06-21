@@ -28,13 +28,6 @@ namespace CatraProto.Client.Crypto.Aes
             _iv2 = iv.TakeLast(16).ToArray();
         }
 
-        public void Dispose()
-        {
-            _aesManaged?.Dispose();
-            _encryptor?.Dispose();
-            _decryptor?.Dispose();
-        }
-
 
         private byte[] Process(byte[] from, bool encrypt)
         {
@@ -116,6 +109,13 @@ namespace CatraProto.Client.Crypto.Aes
         public byte[] Decrypt(byte[] encryptedText)
         {
             return Process(encryptedText, false);
+        }
+
+        public void Dispose()
+        {
+            _aesManaged?.Dispose();
+            _encryptor?.Dispose();
+            _decryptor?.Dispose();
         }
     }
 }

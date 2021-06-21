@@ -5,16 +5,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class PageRelatedArticle : PageRelatedArticleBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Title = 1 << 0,
-            Description = 1 << 1,
-            PhotoId = 1 << 2,
-            Author = 1 << 3,
-            PublishedDate = 1 << 4
-        }
-
         public static int ConstructorId { get; } = -1282352120;
         public int Flags { get; set; }
         public override string Url { get; set; }
@@ -24,6 +14,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override long? PhotoId { get; set; }
         public override string Author { get; set; }
         public override int? PublishedDate { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Title = 1 << 0,
+            Description = 1 << 1,
+            PhotoId = 1 << 2,
+            Author = 1 << 3,
+            PublishedDate = 1 << 4
+        }
 
         public override void UpdateFlags()
         {

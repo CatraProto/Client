@@ -5,18 +5,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class KeyboardButtonUrlAuth : KeyboardButtonBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            FwdText = 1 << 0
-        }
-
         public static int ConstructorId { get; } = 280464681;
         public int Flags { get; set; }
         public override string Text { get; set; }
         public string FwdText { get; set; }
         public string Url { get; set; }
         public int ButtonId { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            FwdText = 1 << 0
+        }
 
         public override void UpdateFlags()
         {

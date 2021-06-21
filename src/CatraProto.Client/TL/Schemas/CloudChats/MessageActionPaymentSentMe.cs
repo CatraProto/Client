@@ -5,13 +5,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class MessageActionPaymentSentMe : MessageActionBase
     {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Info = 1 << 0,
-            ShippingOptionId = 1 << 1
-        }
-
         public static int ConstructorId { get; } = -1892568281;
         public int Flags { get; set; }
         public string Currency { get; set; }
@@ -20,6 +13,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public PaymentRequestedInfoBase Info { get; set; }
         public string ShippingOptionId { get; set; }
         public PaymentChargeBase Charge { get; set; }
+
+        [Flags]
+        public enum FlagsEnum
+        {
+            Info = 1 << 0,
+            ShippingOptionId = 1 << 1
+        }
 
         public override void UpdateFlags()
         {
