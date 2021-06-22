@@ -91,6 +91,7 @@ namespace CatraProto.Client.Connections
         public void DequeueMessage(MessageContainer message, CancellationToken? token = null)
         {
             _logger.Information("Dequeuing message {Message}, IsEncrypted: {Encrypted}, CancellationRequested: {Requested}", message.OutgoingMessage.Body, message.OutgoingMessage.IsEncrypted, token != null);
+            message.CancellationTokenRegistration.Unregister();
             if (token != null)
             {
                 message.CompletionSource.TrySetCanceled(token.Value);
@@ -102,7 +103,6 @@ namespace CatraProto.Client.Connections
 
             var messageKey = _sentMessages.FirstOrDefault(x => x.Value == message).Key;
             _sentMessages.TryRemove(messageKey, out _);
-            message.CancellationTokenRegistration.Unregister();
         }
 
         public bool SetMessageCompletion(long messageId, object response)
