@@ -29,7 +29,7 @@ namespace CatraProto.Client.MTProto
                 var rpcError = new RpcError
                 {
                     ErrorCode = reader.Read<int>(),
-                    ErrorMessage = "Error from Telegram server"
+                    ErrorMessage = "Unencrypted message error"
                 };
                 
                 if (!_handler.SetMessageCompletion(0, rpcError))

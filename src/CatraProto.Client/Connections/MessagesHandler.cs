@@ -110,7 +110,7 @@ namespace CatraProto.Client.Connections
             var isEncrypted = messageId != 0;
             if (isEncrypted)
             {
-                if (_sentMessages.TryGetValue(messageId, out var container))
+                if (_sentMessages.TryRemove(messageId, out var container))
                 {
                     container.RpcContainer.SetResponse(response);
                     container.CancellationTokenRegistration.Unregister();
@@ -149,6 +149,18 @@ namespace CatraProto.Client.Connections
 
         public bool GetMethod(long messageId, out IMethod method)
         {
+            if (messageId == 0)
+            {
+                if (_oldMessage != null)
+                {
+                    method = _oldMessage.OutgoingMessage.Body as IMethod;
+                    return true;
+                }
+
+                method = null;
+                return false;
+            }
+            
             if (_sentMessages.TryGetValue(messageId, out var container))
             {
                 if (container.OutgoingMessage.Body is IMethod outMethod)

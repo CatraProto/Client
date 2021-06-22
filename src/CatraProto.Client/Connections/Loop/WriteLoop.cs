@@ -52,7 +52,6 @@ namespace CatraProto.Client.Connections.Loop
                         };
                         var exported = preparedMessage!.Export();
                         await _connection.Protocol.Writer.SendAsync(exported);
-                        _messagesHandler.AddSentMessage(0, container);
                         _logger.Information("Message sent");
                     }
 

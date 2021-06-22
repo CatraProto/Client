@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
@@ -50,10 +51,26 @@ namespace CatraProto.Client.Crypto
             var keys = RsaKeys;
             foreach (var stringKey in keys)
             {
-                using var rsa = new Rsa(stringKey);
+                var rsa = new Rsa(stringKey);
                 if (fingerprint == rsa.ComputeFingerprint())
                 {
                     return rsa;
+                }
+            }
+
+            return null;
+        }
+        
+        
+        public static Tuple<long, Rsa> FindByFingerprints(IList<long> fingerprints)
+        {
+            for (var index = 0; index < fingerprints.Count; index++)
+            {
+                var fingerprint = fingerprints[index];
+                var tryFind = FindByFingerprint(fingerprint);
+                if (tryFind != null)
+                {
+                    return Tuple.Create(fingerprint, tryFind);
                 }
             }
 
