@@ -33,6 +33,15 @@ namespace CatraProto.Client.Connections.Loop
                 {
                     var message = await protocol.Reader.ReadMessageAsync(_cancellationToken.Token);
                     using var reader = new Reader(MergedProvider.Singleton, message.ToMemoryStream());
+                    if (message.Length == 4)
+                    {
+                        _connection.MessagesDispatcher.DispatchMessage(new UnencryptedMessage
+                        {
+                            Body = message
+                        });
+                        continue;
+                    }
+                    
                     var authKey = reader.Read<long>();
                     if (authKey == 0)
                     {

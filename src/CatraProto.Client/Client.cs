@@ -32,7 +32,9 @@ namespace CatraProto.Client
 
         public async Task Test()
         {
-            var result = await Api.MtProtoApi.ReqPq(CreateRandom());
+            //var result = await Api.MtProtoApi.ReqPq(CreateRandom());
+            var result = await Api.MtProtoApi.ReqDHParams(CreateRandom(), CreateRandom(), new byte[] { 4, 4, 4, 4, 4, 4 }, new byte[] { 3, 3, 3, 3, 3, 3 }, Int64.MaxValue, new byte[]{3,3,3,3});
+            _logger.Information(JsonSerializer.Serialize(result));
         }
 
         public BigInteger CreateRandom()
