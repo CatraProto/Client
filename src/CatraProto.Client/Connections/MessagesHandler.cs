@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Linq;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
@@ -99,6 +100,8 @@ namespace CatraProto.Client.Connections
                 message.CompletionSource.TrySetCanceled();
             }
 
+            var messageKey = _sentMessages.FirstOrDefault(x => x.Value == message).Key;
+            _sentMessages.TryRemove(messageKey, out _);
             message.CancellationTokenRegistration.Unregister();
         }
 

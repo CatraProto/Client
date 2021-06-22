@@ -18,7 +18,6 @@ namespace CatraProto.Client.Connections.Messages
         public long Salt { get; set; }
         public long SessionId { get; set; }
         public int SeqNo { get; set; }
-
         public long AuthKeyId { get; set; }
         public long MessageId { get; set; }
         public byte[] Body { get; set; }
