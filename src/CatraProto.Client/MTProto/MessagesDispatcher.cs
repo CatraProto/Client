@@ -67,18 +67,19 @@ namespace CatraProto.Client.MTProto
             }
             else
             {
-                if (_handler.GetMethod(0, out var method))
+                if (message.AuthKeyId == 0)
                 {
-                    if (nextType == typeof(IList<>) && method.IsVector || nextType == method.Type || nextType.IsSubclassOf(method.Type))
+                    if (_handler.GetMethod(0, out var method))
                     {
-                        var response = method.IsVector ? reader.ReadVector(method.Type) : reader.Read(method.Type);
-                        _handler.SetMessageCompletion(0, response);
-                    }
-                    else
-                    {
-                        //TODO
+                        if (nextType == typeof(IList<>) && method.IsVector || nextType == method.Type || nextType.IsSubclassOf(method.Type))
+                        {
+                            var response = method.IsVector ? reader.ReadVector(method.Type) : reader.Read(method.Type);
+                            _handler.SetMessageCompletion(0, response);
+                            return;
+                        }
                     }
                 }
+                //TODO: Dispatch somewhere
             }
         }
     }
