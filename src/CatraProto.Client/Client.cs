@@ -33,7 +33,6 @@ namespace CatraProto.Client
         public async Task Test()
         {
             var result = await Api.MtProtoApi.ReqPq(CreateRandom());
-            _logger.Information(JsonSerializer.Serialize(result));
         }
 
         public BigInteger CreateRandom()

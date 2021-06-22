@@ -38,7 +38,7 @@ namespace CatraProto.Client.Connections.Loop
                     {
                         var imported = new UnencryptedMessage(message);
                         _logger.Information("Received an unencrypted message from Telegram, dispatching... Id: {MessageId}, Body Length: {Length}", imported.MessageId, imported.Body.Length);
-                        _connection.MessagesDispatcher.DispatchMessage(imported.Body);
+                        _connection.MessagesDispatcher.DispatchMessage(imported);
                     }
                     else
                     {

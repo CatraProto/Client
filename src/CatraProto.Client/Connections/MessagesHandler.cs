@@ -102,7 +102,7 @@ namespace CatraProto.Client.Connections
             message.CancellationTokenRegistration.Unregister();
         }
 
-        public void SetMessageCompletion(long messageId, object response)
+        public bool SetMessageCompletion(long messageId, object response)
         {
             var isEncrypted = messageId != 0;
             if (isEncrypted)
@@ -117,6 +117,7 @@ namespace CatraProto.Client.Connections
                 else
                 {
                     _logger.Warning("Can't complete messageId {Id}. Message not found", messageId);
+                    return false;
                 }
             }
             else
@@ -131,8 +132,11 @@ namespace CatraProto.Client.Connections
                 else
                 {
                     _logger.Warning("Can't complete unencrypted task, no old task was found. Received type: {Type}", response.ToString());
+                    return false;
                 }
             }
+
+            return true;
         }
 
         public bool AddSentMessage(long messageId, MessageContainer message)

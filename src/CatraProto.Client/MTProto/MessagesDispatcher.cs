@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using CatraProto.Client.Connections;
+using CatraProto.Client.Connections.Messages.Interfaces;
 using CatraProto.Client.Extensions;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.Client.TL.Schemas.MTProto;
@@ -20,11 +21,26 @@ namespace CatraProto.Client.MTProto
             _handler = messagesHandler;
         }
 
-        public void DispatchMessage(byte[] message)
+        public void DispatchMessage(IMessage message)
         {
-            using var reader = new Reader(MergedProvider.Singleton, message.ToMemoryStream());
-            var nextType = reader.GetNextType();
+            using var reader = new Reader(MergedProvider.Singleton, message.Body.ToMemoryStream());
+            if (message.Body.Length == 4)
+            {
+                var rpcError = new RpcError
+                {
+                    ErrorCode = reader.Read<int>(),
+                    ErrorMessage = "Error from Telegram server"
+                };
+                
+                if (!_handler.SetMessageCompletion(0, rpcError))
+                {
+                    _logger.Warning($"Couldn't find a message to complete with error {rpcError.ErrorCode}");
+                }
 
+                return;
+            }
+            
+            var nextType = reader.GetNextType();
             if (nextType == typeof(GzipPacked))
             {
                 throw new NotImplementedException("Gzip stream are not implemented yet");
