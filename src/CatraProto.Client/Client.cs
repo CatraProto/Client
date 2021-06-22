@@ -108,9 +108,13 @@ namespace CatraProto.Client
                         {
                             if (setDhClient.Response is DhGenOk dhGenOk)
                             {
+                                _logger.Information("Received dhGenOk checking ({SSNonce} == {Nonce}) and serverNonce ({SSSNonce} == {SNonce})",dhGenOk.Nonce, nonce, dhGenOk.ServerNonce, serverNonce);
+                                KeyExchangeChecks.CheckNonce(dhGenOk.Nonce, nonce);
+                                KeyExchangeChecks.CheckNonce(dhGenOk.ServerNonce, serverNonce);               
+                                
                                 var authKey = BigInteger.ModPow(new BigInteger(serverDhInnerData.GA), b, dhPrime).ToByteArray();
                                 var authKeyId = SHA1.HashData(authKey).TakeLast(8).ToArray();
-                                _logger.Information("DhGen ok, AuthKey successfully generated, AuthKeyId: {Id}", authKeyId);
+                                _logger.Information("Nonce and serverNonce match, AuthKey successfully generated, AuthKeyId: {Id}", authKeyId);
                             }
                         }
                         igeEncryptor.Dispose();
