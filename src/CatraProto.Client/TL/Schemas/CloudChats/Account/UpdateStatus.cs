@@ -4,31 +4,31 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public class UpdateStatus : IMethod
-    {
-        public static int ConstructorId { get; } = 1713919532;
+	public partial class UpdateStatus : IMethod
+	{
+		public static int ConstructorId { get; } = 1713919532;
+		public bool Offline { get; set; }
 
-        public Type Type { get; init; } = typeof(bool);
-        public bool IsVector { get; init; } = false;
-        public bool Offline { get; set; }
+		public Type Type { get; init; } = typeof(bool);
+		public bool IsVector { get; init; } = false;
 
-        public void UpdateFlags()
-        {
-        }
+		public void UpdateFlags()
+		{
+		}
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+		public void Serialize(Writer writer)
+		{
+			if (ConstructorId != 0)
+			{
+				writer.Write(ConstructorId);
+			}
 
-            writer.Write(Offline);
-        }
+			writer.Write(Offline);
+		}
 
-        public void Deserialize(Reader reader)
-        {
-            Offline = reader.Read<bool>();
-        }
-    }
+		public void Deserialize(Reader reader)
+		{
+			Offline = reader.Read<bool>();
+		}
+	}
 }

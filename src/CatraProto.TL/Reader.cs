@@ -8,179 +8,180 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.TL
 {
-    public class Reader : IDisposable
-    {
-        public Stream Stream
-        {
-            get => _reader.BaseStream;
-        }
+	public class Reader : IDisposable
+	{
+		private IObjectProvider _provider;
 
-        private BinaryReader _reader;
-        private IObjectProvider _provider;
+		private BinaryReader _reader;
 
-        public Reader(IObjectProvider provider, Stream stream, bool leaveOpen = false) : this(provider, stream, Encoding.UTF8, leaveOpen)
-        {
-        }
+		public Reader(IObjectProvider provider, Stream stream, bool leaveOpen = false) : this(provider, stream, Encoding.UTF8, leaveOpen)
+		{
+		}
 
-        public Reader(IObjectProvider provider, Stream stream, Encoding encoding, bool leaveOpen = false)
-        {
-            _provider = provider;
-            _reader = new BinaryReader(stream, encoding, leaveOpen);
-        }
+		public Reader(IObjectProvider provider, Stream stream, Encoding encoding, bool leaveOpen = false)
+		{
+			_provider = provider;
+			_reader = new BinaryReader(stream, encoding, leaveOpen);
+		}
 
-        public T Read<T>(int? bitSize = null)
-        {
-            return (T)Read(typeof(T), bitSize);
-        }
+		public Stream Stream
+		{
+			get => _reader.BaseStream;
+		}
 
-        public object Read(Type type, int? bitSize = null)
-        {
-            if (type == typeof(int))
-            {
-                return _reader.ReadInt32();
-            }
-            else if (type == typeof(string))
-            {
-                return Encoding.UTF8.GetString(ReadBytes());
-            }
-            else if (type == typeof(double))
-            {
-                return _reader.ReadDouble();
-            }
-            else if (type == typeof(long))
-            {
-                return _reader.ReadInt64();
-            }
-            else if (type == typeof(byte))
-            {
-                return _reader.ReadByte();
-            }
-            else if (type == typeof(byte[]))
-            {
-                return ReadBytes();
-            }
-            else if (type == typeof(bool))
-            {
-                return ReadBool();
-            }
-            else if (type == typeof(System.Numerics.BigInteger))
-            {
-                if (bitSize == null)
-                {
-                    throw new DeserializationException("Missing parameter bitSize",
-                        DeserializationException.DeserializationErrors.MissingParameter);
-                }
+		public void Dispose()
+		{
+			_reader?.Dispose();
+		}
 
-                return BigInteger.ReadBytes(bitSize.Value, this);
-            }
-            else if (type.GetInterfaces()[^1] == typeof(IObject))
-            {
-                var id = _reader.ReadInt32();
-                var instance = _provider.ResolveConstructorId(id);
-                if (instance == null)
-                {
-                    throw new DeserializationException($"The provider couldn't provide an instance for {id}",
-                        DeserializationException.DeserializationErrors.ProviderReturnedNull);
-                }
+		public T Read<T>(int? bitSize = null)
+		{
+			return (T)Read(typeof(T), bitSize);
+		}
 
-                instance.Deserialize(this);
-                return instance;
-            }
+		public object Read(Type type, int? bitSize = null)
+		{
+			if (type == typeof(int))
+			{
+				return _reader.ReadInt32();
+			}
+			else if (type == typeof(string))
+			{
+				return Encoding.UTF8.GetString(ReadBytes());
+			}
+			else if (type == typeof(double))
+			{
+				return _reader.ReadDouble();
+			}
+			else if (type == typeof(long))
+			{
+				return _reader.ReadInt64();
+			}
+			else if (type == typeof(byte))
+			{
+				return _reader.ReadByte();
+			}
+			else if (type == typeof(byte[]))
+			{
+				return ReadBytes();
+			}
+			else if (type == typeof(bool))
+			{
+				return ReadBool();
+			}
+			else if (type == typeof(System.Numerics.BigInteger))
+			{
+				if (bitSize == null)
+				{
+					throw new DeserializationException("Missing parameter bitSize",
+						DeserializationException.DeserializationErrors.MissingParameter);
+				}
 
-            throw new DeserializationException($"The type {type} is not supported",
-                DeserializationException.DeserializationErrors.TypeNotFound);
-        }
+				return BigInteger.ReadBytes(bitSize.Value, this);
+			}
+			else if (type.GetInterfaces()[^1] == typeof(IObject))
+			{
+				var id = _reader.ReadInt32();
+				var instance = _provider.ResolveConstructorId(id);
+				if (instance == null)
+				{
+					throw new DeserializationException($"The provider couldn't provide an instance for {id}",
+						DeserializationException.DeserializationErrors.ProviderReturnedNull);
+				}
 
-        public Type GetNextType()
-        {
-            var id = _reader.ReadInt32();
-            _reader.BaseStream.Position -= 4;
-            if (id == _provider.VectorId)
-            {
-                return typeof(IList<>);
-            }
+				instance.Deserialize(this);
+				return instance;
+			}
 
-            var instance = _provider.ResolveConstructorId(id);
-            return instance?.GetType();
-        }
+			throw new DeserializationException($"The type {type} is not supported",
+				DeserializationException.DeserializationErrors.TypeNotFound);
+		}
 
-        private bool ReadBool()
-        {
-            var value = Read<IObject>().GetType();
-            var boolTrue = _provider.BoolTrue;
+		public Type GetNextType()
+		{
+			var id = _reader.ReadInt32();
+			_reader.BaseStream.Position -= 4;
+			if (id == _provider.VectorId)
+			{
+				return typeof(IList<>);
+			}
 
-            if (boolTrue is null)
-            {
-                throw new DeserializationException("The provided boolTrue type is null",
-                    DeserializationException.DeserializationErrors.BoolTrueNull);
-            }
+			var instance = _provider.ResolveConstructorId(id);
+			return instance?.GetType();
+		}
 
-            return _provider.BoolTrue == value;
-        }
+		private bool ReadBool()
+		{
+			var value = Read<IObject>().GetType();
+			var boolTrue = _provider.BoolTrue;
 
-        private byte[] ReadBytes()
-        {
-            int lenght = _reader.ReadByte();
-            var totalLenght = lenght;
-            byte[] data;
-            if (lenght <= 253)
-            {
-                data = _reader.ReadBytes(lenght);
-                totalLenght++;
-            }
-            else
-            {
-                lenght = _reader.ReadByte() | _reader.ReadByte() << 8 | _reader.ReadByte() << 16;
-                totalLenght = lenght + 4;
-                data = _reader.ReadBytes(lenght);
-            }
+			if (boolTrue is null)
+			{
+				throw new DeserializationException("The provided boolTrue type is null",
+					DeserializationException.DeserializationErrors.BoolTrueNull);
+			}
 
-            var i = 0;
-            while ((totalLenght + i) % 4 != 0)
-            {
-                i++;
-                _reader.ReadByte();
-            }
+			return _provider.BoolTrue == value;
+		}
 
-            return data;
-        }
+		private byte[] ReadBytes()
+		{
+			int lenght = _reader.ReadByte();
+			var totalLenght = lenght;
+			byte[] data;
+			if (lenght <= 253)
+			{
+				data = _reader.ReadBytes(lenght);
+				totalLenght++;
+			}
+			else
+			{
+				lenght = _reader.ReadByte() | _reader.ReadByte() << 8 | _reader.ReadByte() << 16;
+				totalLenght = lenght + 4;
+				data = _reader.ReadBytes(lenght);
+			}
 
-        public IList<object> ReadVector(Type type)
-        {
-            return ReadVector(() => Read(type));
-        }
+			var i = 0;
+			while ((totalLenght + i) % 4 != 0)
+			{
+				i++;
+				_reader.ReadByte();
+			}
 
-        public IList<T> ReadVector<T>()
-        {
-            var vector = ReadVector(typeof(T));
-            var cast = vector.Cast<T>().ToList();
-            return cast;
-        }
+			return data;
+		}
 
-        public IList<T> ReadVector<T>(Func<T> action)
-        {
-            var vector = ReadVector(() => (object)action);
-            var cast = vector.Cast<T>().ToList();
-            return cast;
-        }
+		public IList<object> ReadVector(Type type)
+		{
+			return ReadVector(() => Read(type));
+		}
 
-        public IList<object> ReadVector(Func<object> action)
-        {
-            _reader.BaseStream.Position += 4; //Going past the vector's id
-            var list = new List<object>();
-            var size = _reader.ReadInt32();
-            for (var i = 0; i < size; i++)
-            {
-                var deserialized = action();
-                list.Add(deserialized);
-            }
+		public IList<T> ReadVector<T>()
+		{
+			var vector = ReadVector(typeof(T));
+			var cast = vector.Cast<T>().ToList();
+			return cast;
+		}
 
-            return list;
-        }
+		public IList<T> ReadVector<T>(Func<T> action)
+		{
+			var vector = ReadVector(() => (object)action);
+			var cast = vector.Cast<T>().ToList();
+			return cast;
+		}
 
-        public void Dispose()
-        {
-            _reader?.Dispose();
-        }
-    }
+		public IList<object> ReadVector(Func<object> action)
+		{
+			_reader.BaseStream.Position += 4; //Going past the vector's id
+			var list = new List<object>();
+			var size = _reader.ReadInt32();
+			for (var i = 0; i < size; i++)
+			{
+				var deserialized = action();
+				list.Add(deserialized);
+			}
+
+			return list;
+		}
+	}
 }

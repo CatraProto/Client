@@ -3,12 +3,12 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-    public abstract class TermsOfServiceUpdateBase : IObject
-    {
-        public abstract int Expires { get; set; }
+	public abstract class TermsOfServiceUpdateBase : IObject
+	{
+		public abstract int Expires { get; set; }
 
-        public abstract void UpdateFlags();
-        public abstract void Deserialize(Reader reader);
-        public abstract void Serialize(Writer writer);
-    }
+		public abstract void UpdateFlags();
+		public abstract void Deserialize(Reader reader);
+		public abstract void Serialize(Writer writer);
+	}
 }

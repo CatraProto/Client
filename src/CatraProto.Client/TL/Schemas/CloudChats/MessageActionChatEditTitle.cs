@@ -2,28 +2,28 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public class MessageActionChatEditTitle : MessageActionBase
-    {
-        public static int ConstructorId { get; } = -1247687078;
-        public string Title { get; set; }
+	public partial class MessageActionChatEditTitle : MessageActionBase
+	{
+		public static int ConstructorId { get; } = -1247687078;
+		public string Title { get; set; }
 
-        public override void UpdateFlags()
-        {
-        }
+		public override void UpdateFlags()
+		{
+		}
 
-        public override void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+		public override void Serialize(Writer writer)
+		{
+			if (ConstructorId != 0)
+			{
+				writer.Write(ConstructorId);
+			}
 
-            writer.Write(Title);
-        }
+			writer.Write(Title);
+		}
 
-        public override void Deserialize(Reader reader)
-        {
-            Title = reader.Read<string>();
-        }
-    }
+		public override void Deserialize(Reader reader)
+		{
+			Title = reader.Read<string>();
+		}
+	}
 }

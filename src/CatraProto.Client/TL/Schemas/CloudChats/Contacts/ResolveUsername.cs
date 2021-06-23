@@ -1,33 +1,34 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
-    public class ResolveUsername : IMethod
-    {
-        public static int ConstructorId { get; } = -113456221;
+	public partial class ResolveUsername : IMethod
+	{
+		public static int ConstructorId { get; } = -113456221;
+		public string Username { get; set; }
 
-        public System.Type Type { get; init; } = typeof(ResolvedPeerBase);
-        public bool IsVector { get; init; } = false;
-        public string Username { get; set; }
+		public Type Type { get; init; } = typeof(ResolvedPeerBase);
+		public bool IsVector { get; init; } = false;
 
-        public void UpdateFlags()
-        {
-        }
+		public void UpdateFlags()
+		{
+		}
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+		public void Serialize(Writer writer)
+		{
+			if (ConstructorId != 0)
+			{
+				writer.Write(ConstructorId);
+			}
 
-            writer.Write(Username);
-        }
+			writer.Write(Username);
+		}
 
-        public void Deserialize(Reader reader)
-        {
-            Username = reader.Read<string>();
-        }
-    }
+		public void Deserialize(Reader reader)
+		{
+			Username = reader.Read<string>();
+		}
+	}
 }

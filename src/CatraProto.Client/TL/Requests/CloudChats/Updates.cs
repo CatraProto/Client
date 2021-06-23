@@ -9,81 +9,80 @@ using CatraProto.Client.TL.Schemas.CloudChats.Updates;
 
 namespace CatraProto.Client.TL.Requests.CloudChats
 {
-    public class Updates
-    {
-        private MessagesHandler _messagesHandler;
+	public partial class Updates
+	{
+		private MessagesHandler _messagesHandler;
 
-        internal Updates(MessagesHandler messagesHandler)
-        {
-            _messagesHandler = messagesHandler;
-        }
+		internal Updates(MessagesHandler messagesHandler)
+		{
+			_messagesHandler = messagesHandler;
+		}
 
-        public async Task<RpcMessage<StateBase>> GetStateAsync(CancellationToken cancellationToken = default)
-        {
-            var rpcResponse = new RpcMessage<StateBase>();
-            var methodBody = new GetState();
+		public async Task<RpcMessage<StateBase>> GetStateAsync(CancellationToken cancellationToken = default)
+		{
+			var rpcResponse = new RpcMessage<StateBase>();
+			var methodBody = new GetState();
 
-            await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-            {
-                Body = methodBody,
-                CancellationToken = cancellationToken,
-                IsEncrypted = true
-            }, rpcResponse);
-            return rpcResponse;
-        }
+			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
+			{
+				Body = methodBody,
+				CancellationToken = cancellationToken,
+				IsEncrypted = true
+			}, rpcResponse);
+			return rpcResponse;
+		}
 
-        public async Task<RpcMessage<DifferenceBase>> GetDifferenceAsync(int pts, int date, int qts,
-            int? ptsTotalLimit = null, CancellationToken cancellationToken = default)
-        {
-            var rpcResponse = new RpcMessage<DifferenceBase>();
-            var methodBody = new GetDifference
-            {
-                Pts = pts,
-                Date = date,
-                Qts = qts,
-                PtsTotalLimit = ptsTotalLimit
-            };
+		public async Task<RpcMessage<DifferenceBase>> GetDifferenceAsync(int pts, int date, int qts, int? ptsTotalLimit = null,
+			CancellationToken cancellationToken = default)
+		{
+			var rpcResponse = new RpcMessage<DifferenceBase>();
+			var methodBody = new GetDifference
+			{
+				Pts = pts,
+				Date = date,
+				Qts = qts,
+				PtsTotalLimit = ptsTotalLimit
+			};
 
-            await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-            {
-                Body = methodBody,
-                CancellationToken = cancellationToken,
-                IsEncrypted = true
-            }, rpcResponse);
-            return rpcResponse;
-        }
+			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
+			{
+				Body = methodBody,
+				CancellationToken = cancellationToken,
+				IsEncrypted = true
+			}, rpcResponse);
+			return rpcResponse;
+		}
 
-        public async Task<RpcMessage<ChannelDifferenceBase>> GetChannelDifferenceAsync(InputChannelBase channel,
-            ChannelMessagesFilterBase filter, int pts, int limit, bool force = true,
-            CancellationToken cancellationToken = default)
-        {
-            if (channel is null)
-            {
-                throw new ArgumentNullException(nameof(channel));
-            }
+		public async Task<RpcMessage<ChannelDifferenceBase>> GetChannelDifferenceAsync(InputChannelBase channel, ChannelMessagesFilterBase filter,
+			int pts, int limit, bool force = true, CancellationToken cancellationToken = default)
+		{
+			if (channel is null)
+			{
+				throw new ArgumentNullException(nameof(channel));
+			}
 
-            if (filter is null)
-            {
-                throw new ArgumentNullException(nameof(filter));
-            }
+			if (filter is null)
+			{
+				throw new ArgumentNullException(nameof(filter));
+			}
 
-            var rpcResponse = new RpcMessage<ChannelDifferenceBase>();
-            var methodBody = new GetChannelDifference
-            {
-                Channel = channel,
-                Filter = filter,
-                Pts = pts,
-                Limit = limit,
-                Force = force
-            };
+			var rpcResponse = new RpcMessage<ChannelDifferenceBase>();
+			var methodBody = new GetChannelDifference
+			{
+				Channel = channel,
+				Filter = filter,
+				Pts = pts,
+				Limit = limit,
+				Force = force
+			};
 
-            await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-            {
-                Body = methodBody,
-                CancellationToken = cancellationToken,
-                IsEncrypted = true
-            }, rpcResponse);
-            return rpcResponse;
-        }
-    }
+			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
+			{
+				Body = methodBody,
+				CancellationToken = cancellationToken,
+				IsEncrypted = true
+			}, rpcResponse);
+			return rpcResponse;
+		}
+	}
 }

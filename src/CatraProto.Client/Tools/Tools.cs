@@ -1,9 +1,6 @@
-﻿using System;
-
-namespace CatraProto.Client.Tools
+﻿namespace CatraProto.Client.Tools
 {
-    static class MiscTools
-    {
-        
-    }
+	static class MiscTools
+	{
+	}
 }

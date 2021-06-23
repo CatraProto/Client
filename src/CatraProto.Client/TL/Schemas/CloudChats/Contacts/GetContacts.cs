@@ -4,31 +4,31 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
-    public class GetContacts : IMethod
-    {
-        public static int ConstructorId { get; } = -1071414113;
+	public partial class GetContacts : IMethod
+	{
+		public static int ConstructorId { get; } = -1071414113;
+		public int Hash { get; set; }
 
-        public Type Type { get; init; } = typeof(ContactsBase);
-        public bool IsVector { get; init; } = false;
-        public int Hash { get; set; }
+		public Type Type { get; init; } = typeof(ContactsBase);
+		public bool IsVector { get; init; } = false;
 
-        public void UpdateFlags()
-        {
-        }
+		public void UpdateFlags()
+		{
+		}
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+		public void Serialize(Writer writer)
+		{
+			if (ConstructorId != 0)
+			{
+				writer.Write(ConstructorId);
+			}
 
-            writer.Write(Hash);
-        }
+			writer.Write(Hash);
+		}
 
-        public void Deserialize(Reader reader)
-        {
-            Hash = reader.Read<int>();
-        }
-    }
+		public void Deserialize(Reader reader)
+		{
+			Hash = reader.Read<int>();
+		}
+	}
 }

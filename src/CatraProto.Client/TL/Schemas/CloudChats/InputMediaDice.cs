@@ -2,28 +2,28 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public class InputMediaDice : InputMediaBase
-    {
-        public static int ConstructorId { get; } = -428884101;
-        public string Emoticon { get; set; }
+	public partial class InputMediaDice : InputMediaBase
+	{
+		public static int ConstructorId { get; } = -428884101;
+		public string Emoticon { get; set; }
 
-        public override void UpdateFlags()
-        {
-        }
+		public override void UpdateFlags()
+		{
+		}
 
-        public override void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+		public override void Serialize(Writer writer)
+		{
+			if (ConstructorId != 0)
+			{
+				writer.Write(ConstructorId);
+			}
 
-            writer.Write(Emoticon);
-        }
+			writer.Write(Emoticon);
+		}
 
-        public override void Deserialize(Reader reader)
-        {
-            Emoticon = reader.Read<string>();
-        }
-    }
+		public override void Deserialize(Reader reader)
+		{
+			Emoticon = reader.Read<string>();
+		}
+	}
 }

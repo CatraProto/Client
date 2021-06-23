@@ -2,24 +2,24 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public class ChannelMessagesFilterEmpty : ChannelMessagesFilterBase
-    {
-        public static int ConstructorId { get; } = -1798033689;
+	public partial class ChannelMessagesFilterEmpty : ChannelMessagesFilterBase
+	{
+		public static int ConstructorId { get; } = -1798033689;
 
-        public override void UpdateFlags()
-        {
-        }
+		public override void UpdateFlags()
+		{
+		}
 
-        public override void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
-        }
+		public override void Serialize(Writer writer)
+		{
+			if (ConstructorId != 0)
+			{
+				writer.Write(ConstructorId);
+			}
+		}
 
-        public override void Deserialize(Reader reader)
-        {
-        }
-    }
+		public override void Deserialize(Reader reader)
+		{
+		}
+	}
 }

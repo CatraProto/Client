@@ -3,31 +3,31 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public class UpdateDeleteScheduledMessages : UpdateBase
-    {
-        public static int ConstructorId { get; } = -1870238482;
-        public PeerBase Peer { get; set; }
-        public IList<int> Messages { get; set; }
+	public partial class UpdateDeleteScheduledMessages : UpdateBase
+	{
+		public static int ConstructorId { get; } = -1870238482;
+		public PeerBase Peer { get; set; }
+		public IList<int> Messages { get; set; }
 
-        public override void UpdateFlags()
-        {
-        }
+		public override void UpdateFlags()
+		{
+		}
 
-        public override void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+		public override void Serialize(Writer writer)
+		{
+			if (ConstructorId != 0)
+			{
+				writer.Write(ConstructorId);
+			}
 
-            writer.Write(Peer);
-            writer.Write(Messages);
-        }
+			writer.Write(Peer);
+			writer.Write(Messages);
+		}
 
-        public override void Deserialize(Reader reader)
-        {
-            Peer = reader.Read<PeerBase>();
-            Messages = reader.ReadVector<int>();
-        }
-    }
+		public override void Deserialize(Reader reader)
+		{
+			Peer = reader.Read<PeerBase>();
+			Messages = reader.ReadVector<int>();
+		}
+	}
 }

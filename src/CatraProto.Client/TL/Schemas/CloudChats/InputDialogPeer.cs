@@ -2,28 +2,28 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public class InputDialogPeer : InputDialogPeerBase
-    {
-        public static int ConstructorId { get; } = -55902537;
-        public InputPeerBase Peer { get; set; }
+	public partial class InputDialogPeer : InputDialogPeerBase
+	{
+		public static int ConstructorId { get; } = -55902537;
+		public InputPeerBase Peer { get; set; }
 
-        public override void UpdateFlags()
-        {
-        }
+		public override void UpdateFlags()
+		{
+		}
 
-        public override void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+		public override void Serialize(Writer writer)
+		{
+			if (ConstructorId != 0)
+			{
+				writer.Write(ConstructorId);
+			}
 
-            writer.Write(Peer);
-        }
+			writer.Write(Peer);
+		}
 
-        public override void Deserialize(Reader reader)
-        {
-            Peer = reader.Read<InputPeerBase>();
-        }
-    }
+		public override void Deserialize(Reader reader)
+		{
+			Peer = reader.Read<InputPeerBase>();
+		}
+	}
 }

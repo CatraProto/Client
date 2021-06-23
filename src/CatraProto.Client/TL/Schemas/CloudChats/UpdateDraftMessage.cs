@@ -2,31 +2,31 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public class UpdateDraftMessage : UpdateBase
-    {
-        public static int ConstructorId { get; } = -299124375;
-        public PeerBase Peer { get; set; }
-        public DraftMessageBase Draft { get; set; }
+	public partial class UpdateDraftMessage : UpdateBase
+	{
+		public static int ConstructorId { get; } = -299124375;
+		public PeerBase Peer { get; set; }
+		public DraftMessageBase Draft { get; set; }
 
-        public override void UpdateFlags()
-        {
-        }
+		public override void UpdateFlags()
+		{
+		}
 
-        public override void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+		public override void Serialize(Writer writer)
+		{
+			if (ConstructorId != 0)
+			{
+				writer.Write(ConstructorId);
+			}
 
-            writer.Write(Peer);
-            writer.Write(Draft);
-        }
+			writer.Write(Peer);
+			writer.Write(Draft);
+		}
 
-        public override void Deserialize(Reader reader)
-        {
-            Peer = reader.Read<PeerBase>();
-            Draft = reader.Read<DraftMessageBase>();
-        }
-    }
+		public override void Deserialize(Reader reader)
+		{
+			Peer = reader.Read<PeerBase>();
+			Draft = reader.Read<DraftMessageBase>();
+		}
+	}
 }

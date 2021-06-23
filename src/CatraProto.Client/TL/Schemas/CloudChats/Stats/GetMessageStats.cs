@@ -4,47 +4,47 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 {
-    public class GetMessageStats : IMethod
-    {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Dark = 1 << 0
-        }
+	public partial class GetMessageStats : IMethod
+	{
+		[Flags]
+		public enum FlagsEnum
+		{
+			Dark = 1 << 0
+		}
 
-        public static int ConstructorId { get; } = -1226791947;
+		public static int ConstructorId { get; } = -1226791947;
+		public int Flags { get; set; }
+		public bool Dark { get; set; }
+		public InputChannelBase Channel { get; set; }
+		public int MsgId { get; set; }
 
-        public System.Type Type { get; init; } = typeof(MessageStatsBase);
-        public bool IsVector { get; init; } = false;
-        public int Flags { get; set; }
-        public bool Dark { get; set; }
-        public InputChannelBase Channel { get; set; }
-        public int MsgId { get; set; }
+		public Type Type { get; init; } = typeof(MessageStatsBase);
+		public bool IsVector { get; init; } = false;
 
-        public void UpdateFlags()
-        {
-            Flags = Dark ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
-        }
+		public void UpdateFlags()
+		{
+			Flags = Dark ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
+		}
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+		public void Serialize(Writer writer)
+		{
+			if (ConstructorId != 0)
+			{
+				writer.Write(ConstructorId);
+			}
 
-            UpdateFlags();
-            writer.Write(Flags);
-            writer.Write(Channel);
-            writer.Write(MsgId);
-        }
+			UpdateFlags();
+			writer.Write(Flags);
+			writer.Write(Channel);
+			writer.Write(MsgId);
+		}
 
-        public void Deserialize(Reader reader)
-        {
-            Flags = reader.Read<int>();
-            Dark = FlagsHelper.IsFlagSet(Flags, 0);
-            Channel = reader.Read<InputChannelBase>();
-            MsgId = reader.Read<int>();
-        }
-    }
+		public void Deserialize(Reader reader)
+		{
+			Flags = reader.Read<int>();
+			Dark = FlagsHelper.IsFlagSet(Flags, 0);
+			Channel = reader.Read<InputChannelBase>();
+			MsgId = reader.Read<int>();
+		}
+	}
 }

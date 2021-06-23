@@ -4,16 +4,16 @@ using CatraProto.TL.UnitTests.Objects;
 
 namespace CatraProto.TL.UnitTests
 {
-    class MergedProvider : IObjectProvider
-    {
-        public Type BoolTrue { get; init; } = typeof(BoolFalse);
-        public Type BoolFalse { get; init; } = typeof(BoolFalse);
-        public int VectorId { get; init; } = 481674261;
-        public static readonly MergedProvider DefaultInstance = new MergedProvider();
+	class MergedProvider : IObjectProvider
+	{
+		public static readonly MergedProvider DefaultInstance = new MergedProvider();
+		public Type BoolTrue { get; init; } = typeof(BoolFalse);
+		public Type BoolFalse { get; init; } = typeof(BoolFalse);
+		public int VectorId { get; init; } = 481674261;
 
-        public IObject ResolveConstructorId(int constructorId)
-        {
-            return null;
-        }
-    }
+		public IObject ResolveConstructorId(int constructorId)
+		{
+			return null;
+		}
+	}
 }

@@ -2,31 +2,31 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public class InputWallPaper : InputWallPaperBase
-    {
-        public static int ConstructorId { get; } = -433014407;
-        public long Id { get; set; }
-        public long AccessHash { get; set; }
+	public partial class InputWallPaper : InputWallPaperBase
+	{
+		public static int ConstructorId { get; } = -433014407;
+		public long Id { get; set; }
+		public long AccessHash { get; set; }
 
-        public override void UpdateFlags()
-        {
-        }
+		public override void UpdateFlags()
+		{
+		}
 
-        public override void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+		public override void Serialize(Writer writer)
+		{
+			if (ConstructorId != 0)
+			{
+				writer.Write(ConstructorId);
+			}
 
-            writer.Write(Id);
-            writer.Write(AccessHash);
-        }
+			writer.Write(Id);
+			writer.Write(AccessHash);
+		}
 
-        public override void Deserialize(Reader reader)
-        {
-            Id = reader.Read<long>();
-            AccessHash = reader.Read<long>();
-        }
-    }
+		public override void Deserialize(Reader reader)
+		{
+			Id = reader.Read<long>();
+			AccessHash = reader.Read<long>();
+		}
+	}
 }

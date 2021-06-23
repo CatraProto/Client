@@ -4,34 +4,34 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 {
-    public class TogglePreHistoryHidden : IMethod
-    {
-        public static int ConstructorId { get; } = -356796084;
+	public partial class TogglePreHistoryHidden : IMethod
+	{
+		public static int ConstructorId { get; } = -356796084;
+		public InputChannelBase Channel { get; set; }
+		public bool Enabled { get; set; }
 
-        public Type Type { get; init; } = typeof(UpdatesBase);
-        public bool IsVector { get; init; } = false;
-        public InputChannelBase Channel { get; set; }
-        public bool Enabled { get; set; }
+		public Type Type { get; init; } = typeof(UpdatesBase);
+		public bool IsVector { get; init; } = false;
 
-        public void UpdateFlags()
-        {
-        }
+		public void UpdateFlags()
+		{
+		}
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+		public void Serialize(Writer writer)
+		{
+			if (ConstructorId != 0)
+			{
+				writer.Write(ConstructorId);
+			}
 
-            writer.Write(Channel);
-            writer.Write(Enabled);
-        }
+			writer.Write(Channel);
+			writer.Write(Enabled);
+		}
 
-        public void Deserialize(Reader reader)
-        {
-            Channel = reader.Read<InputChannelBase>();
-            Enabled = reader.Read<bool>();
-        }
-    }
+		public void Deserialize(Reader reader)
+		{
+			Channel = reader.Read<InputChannelBase>();
+			Enabled = reader.Read<bool>();
+		}
+	}
 }

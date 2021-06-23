@@ -6,34 +6,34 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 {
-    public class GetMessages : IMethod
-    {
-        public static int ConstructorId { get; } = -1383294429;
+	public partial class GetMessages : IMethod
+	{
+		public static int ConstructorId { get; } = -1383294429;
+		public InputChannelBase Channel { get; set; }
+		public IList<InputMessageBase> Id { get; set; }
 
-        public Type Type { get; init; } = typeof(MessagesBase);
-        public bool IsVector { get; init; } = false;
-        public InputChannelBase Channel { get; set; }
-        public IList<InputMessageBase> Id { get; set; }
+		public Type Type { get; init; } = typeof(MessagesBase);
+		public bool IsVector { get; init; } = false;
 
-        public void UpdateFlags()
-        {
-        }
+		public void UpdateFlags()
+		{
+		}
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+		public void Serialize(Writer writer)
+		{
+			if (ConstructorId != 0)
+			{
+				writer.Write(ConstructorId);
+			}
 
-            writer.Write(Channel);
-            writer.Write(Id);
-        }
+			writer.Write(Channel);
+			writer.Write(Id);
+		}
 
-        public void Deserialize(Reader reader)
-        {
-            Channel = reader.Read<InputChannelBase>();
-            Id = reader.ReadVector<InputMessageBase>();
-        }
-    }
+		public void Deserialize(Reader reader)
+		{
+			Channel = reader.Read<InputChannelBase>();
+			Id = reader.ReadVector<InputMessageBase>();
+		}
+	}
 }

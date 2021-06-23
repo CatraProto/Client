@@ -10,54 +10,53 @@ using CatraProto.Client.TL.Schemas.CloudChats.Folders;
 
 namespace CatraProto.Client.TL.Requests.CloudChats
 {
-    public class Folders
-    {
-        private MessagesHandler _messagesHandler;
+	public partial class Folders
+	{
+		private MessagesHandler _messagesHandler;
 
-        internal Folders(MessagesHandler messagesHandler)
-        {
-            _messagesHandler = messagesHandler;
-        }
+		internal Folders(MessagesHandler messagesHandler)
+		{
+			_messagesHandler = messagesHandler;
+		}
 
-        public async Task<RpcMessage<UpdatesBase>> EditPeerFoldersAsync(List<InputFolderPeerBase> folderPeers,
-            CancellationToken cancellationToken = default)
-        {
-            if (folderPeers is null)
-            {
-                throw new ArgumentNullException(nameof(folderPeers));
-            }
+		public async Task<RpcMessage<UpdatesBase>> EditPeerFoldersAsync(List<InputFolderPeerBase> folderPeers,
+			CancellationToken cancellationToken = default)
+		{
+			if (folderPeers is null)
+			{
+				throw new ArgumentNullException(nameof(folderPeers));
+			}
 
-            var rpcResponse = new RpcMessage<UpdatesBase>();
-            var methodBody = new EditPeerFolders
-            {
-                FolderPeers = folderPeers
-            };
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			var methodBody = new EditPeerFolders
+			{
+				FolderPeers = folderPeers
+			};
 
-            await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-            {
-                Body = methodBody,
-                CancellationToken = cancellationToken,
-                IsEncrypted = true
-            }, rpcResponse);
-            return rpcResponse;
-        }
+			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
+			{
+				Body = methodBody,
+				CancellationToken = cancellationToken,
+				IsEncrypted = true
+			}, rpcResponse);
+			return rpcResponse;
+		}
 
-        public async Task<RpcMessage<UpdatesBase>> DeleteFolderAsync(int folderId,
-            CancellationToken cancellationToken = default)
-        {
-            var rpcResponse = new RpcMessage<UpdatesBase>();
-            var methodBody = new DeleteFolder
-            {
-                FolderId = folderId
-            };
+		public async Task<RpcMessage<UpdatesBase>> DeleteFolderAsync(int folderId, CancellationToken cancellationToken = default)
+		{
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			var methodBody = new DeleteFolder
+			{
+				FolderId = folderId
+			};
 
-            await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-            {
-                Body = methodBody,
-                CancellationToken = cancellationToken,
-                IsEncrypted = true
-            }, rpcResponse);
-            return rpcResponse;
-        }
-    }
+			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
+			{
+				Body = methodBody,
+				CancellationToken = cancellationToken,
+				IsEncrypted = true
+			}, rpcResponse);
+			return rpcResponse;
+		}
+	}
 }

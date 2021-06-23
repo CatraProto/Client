@@ -1,36 +1,37 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public class GetWebPage : IMethod
-    {
-        public static int ConstructorId { get; } = 852135825;
+	public partial class GetWebPage : IMethod
+	{
+		public static int ConstructorId { get; } = 852135825;
+		public string Url { get; set; }
+		public int Hash { get; set; }
 
-        public System.Type Type { get; init; } = typeof(WebPageBase);
-        public bool IsVector { get; init; } = false;
-        public string Url { get; set; }
-        public int Hash { get; set; }
+		public Type Type { get; init; } = typeof(WebPageBase);
+		public bool IsVector { get; init; } = false;
 
-        public void UpdateFlags()
-        {
-        }
+		public void UpdateFlags()
+		{
+		}
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+		public void Serialize(Writer writer)
+		{
+			if (ConstructorId != 0)
+			{
+				writer.Write(ConstructorId);
+			}
 
-            writer.Write(Url);
-            writer.Write(Hash);
-        }
+			writer.Write(Url);
+			writer.Write(Hash);
+		}
 
-        public void Deserialize(Reader reader)
-        {
-            Url = reader.Read<string>();
-            Hash = reader.Read<int>();
-        }
-    }
+		public void Deserialize(Reader reader)
+		{
+			Url = reader.Read<string>();
+			Hash = reader.Read<int>();
+		}
+	}
 }

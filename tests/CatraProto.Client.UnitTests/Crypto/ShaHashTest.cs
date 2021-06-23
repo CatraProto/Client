@@ -1,9 +1,9 @@
 namespace CatraProto.Client.UnitTests.Crypto
 {
-    public class ShaHashTest
-    {
-        public void ComputeHashTest()
-        {
-        }
-    }
+	public class ShaHashTest
+	{
+		public void ComputeHashTest()
+		{
+		}
+	}
 }

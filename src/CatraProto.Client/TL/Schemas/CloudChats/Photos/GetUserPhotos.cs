@@ -1,42 +1,43 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 {
-    public class GetUserPhotos : IMethod
-    {
-        public static int ConstructorId { get; } = -1848823128;
+	public partial class GetUserPhotos : IMethod
+	{
+		public static int ConstructorId { get; } = -1848823128;
+		public InputUserBase UserId { get; set; }
+		public int Offset { get; set; }
+		public long MaxId { get; set; }
+		public int Limit { get; set; }
 
-        public System.Type Type { get; init; } = typeof(PhotosBase);
-        public bool IsVector { get; init; } = false;
-        public InputUserBase UserId { get; set; }
-        public int Offset { get; set; }
-        public long MaxId { get; set; }
-        public int Limit { get; set; }
+		public Type Type { get; init; } = typeof(PhotosBase);
+		public bool IsVector { get; init; } = false;
 
-        public void UpdateFlags()
-        {
-        }
+		public void UpdateFlags()
+		{
+		}
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+		public void Serialize(Writer writer)
+		{
+			if (ConstructorId != 0)
+			{
+				writer.Write(ConstructorId);
+			}
 
-            writer.Write(UserId);
-            writer.Write(Offset);
-            writer.Write(MaxId);
-            writer.Write(Limit);
-        }
+			writer.Write(UserId);
+			writer.Write(Offset);
+			writer.Write(MaxId);
+			writer.Write(Limit);
+		}
 
-        public void Deserialize(Reader reader)
-        {
-            UserId = reader.Read<InputUserBase>();
-            Offset = reader.Read<int>();
-            MaxId = reader.Read<long>();
-            Limit = reader.Read<int>();
-        }
-    }
+		public void Deserialize(Reader reader)
+		{
+			UserId = reader.Read<InputUserBase>();
+			Offset = reader.Read<int>();
+			MaxId = reader.Read<long>();
+			Limit = reader.Read<int>();
+		}
+	}
 }

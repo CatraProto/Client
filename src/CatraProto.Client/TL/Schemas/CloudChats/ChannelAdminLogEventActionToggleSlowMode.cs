@@ -2,31 +2,31 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public class ChannelAdminLogEventActionToggleSlowMode : ChannelAdminLogEventActionBase
-    {
-        public static int ConstructorId { get; } = 1401984889;
-        public int PrevValue { get; set; }
-        public int NewValue { get; set; }
+	public partial class ChannelAdminLogEventActionToggleSlowMode : ChannelAdminLogEventActionBase
+	{
+		public static int ConstructorId { get; } = 1401984889;
+		public int PrevValue { get; set; }
+		public int NewValue { get; set; }
 
-        public override void UpdateFlags()
-        {
-        }
+		public override void UpdateFlags()
+		{
+		}
 
-        public override void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+		public override void Serialize(Writer writer)
+		{
+			if (ConstructorId != 0)
+			{
+				writer.Write(ConstructorId);
+			}
 
-            writer.Write(PrevValue);
-            writer.Write(NewValue);
-        }
+			writer.Write(PrevValue);
+			writer.Write(NewValue);
+		}
 
-        public override void Deserialize(Reader reader)
-        {
-            PrevValue = reader.Read<int>();
-            NewValue = reader.Read<int>();
-        }
-    }
+		public override void Deserialize(Reader reader)
+		{
+			PrevValue = reader.Read<int>();
+			NewValue = reader.Read<int>();
+		}
+	}
 }

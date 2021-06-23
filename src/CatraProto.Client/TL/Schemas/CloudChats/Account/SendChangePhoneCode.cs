@@ -5,34 +5,34 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public class SendChangePhoneCode : IMethod
-    {
-        public static int ConstructorId { get; } = -2108208411;
+	public partial class SendChangePhoneCode : IMethod
+	{
+		public static int ConstructorId { get; } = -2108208411;
+		public string PhoneNumber { get; set; }
+		public CodeSettingsBase Settings { get; set; }
 
-        public Type Type { get; init; } = typeof(SentCodeBase);
-        public bool IsVector { get; init; } = false;
-        public string PhoneNumber { get; set; }
-        public CodeSettingsBase Settings { get; set; }
+		public Type Type { get; init; } = typeof(SentCodeBase);
+		public bool IsVector { get; init; } = false;
 
-        public void UpdateFlags()
-        {
-        }
+		public void UpdateFlags()
+		{
+		}
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+		public void Serialize(Writer writer)
+		{
+			if (ConstructorId != 0)
+			{
+				writer.Write(ConstructorId);
+			}
 
-            writer.Write(PhoneNumber);
-            writer.Write(Settings);
-        }
+			writer.Write(PhoneNumber);
+			writer.Write(Settings);
+		}
 
-        public void Deserialize(Reader reader)
-        {
-            PhoneNumber = reader.Read<string>();
-            Settings = reader.Read<CodeSettingsBase>();
-        }
-    }
+		public void Deserialize(Reader reader)
+		{
+			PhoneNumber = reader.Read<string>();
+			Settings = reader.Read<CodeSettingsBase>();
+		}
+	}
 }

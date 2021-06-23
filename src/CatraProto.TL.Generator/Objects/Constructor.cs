@@ -2,7 +2,7 @@
 
 namespace CatraProto.TL.Generator.Objects
 {
-    internal class Constructor : Object
-    {
-    }
+	class Constructor : Object
+	{
+	}
 }

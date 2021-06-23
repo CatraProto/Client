@@ -3,31 +3,31 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-    public class CountriesList : CountriesListBase
-    {
-        public static int ConstructorId { get; } = -2016381538;
-        public IList<CountryBase> Countries { get; set; }
-        public int Hash { get; set; }
+	public partial class CountriesList : CountriesListBase
+	{
+		public static int ConstructorId { get; } = -2016381538;
+		public IList<CountryBase> Countries { get; set; }
+		public int Hash { get; set; }
 
-        public override void UpdateFlags()
-        {
-        }
+		public override void UpdateFlags()
+		{
+		}
 
-        public override void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+		public override void Serialize(Writer writer)
+		{
+			if (ConstructorId != 0)
+			{
+				writer.Write(ConstructorId);
+			}
 
-            writer.Write(Countries);
-            writer.Write(Hash);
-        }
+			writer.Write(Countries);
+			writer.Write(Hash);
+		}
 
-        public override void Deserialize(Reader reader)
-        {
-            Countries = reader.ReadVector<CountryBase>();
-            Hash = reader.Read<int>();
-        }
-    }
+		public override void Deserialize(Reader reader)
+		{
+			Countries = reader.ReadVector<CountryBase>();
+			Hash = reader.Read<int>();
+		}
+	}
 }

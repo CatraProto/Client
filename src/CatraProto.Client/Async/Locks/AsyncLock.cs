@@ -4,50 +4,50 @@ using System.Threading.Tasks;
 
 namespace CatraProto.Client.Async.Locks
 {
-    public class AsyncLock : IDisposable
-    {
-        private readonly struct Releaser : IDisposable
-        {
-            private readonly AsyncLock _asyncLock;
+	public class AsyncLock : IDisposable
+	{
+		private Releaser _releaser;
+		private SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1, 1);
 
-            internal Releaser(AsyncLock asyncLock)
-            {
-                _asyncLock = asyncLock;
-            }
+		public AsyncLock()
+		{
+			_releaser = new Releaser(this);
+		}
 
-            public void Dispose()
-            {
-                _asyncLock.ReleaseLock();
-            }
-        }
+		public bool IsTaken
+		{
+			get => _semaphoreSlim.CurrentCount == 0;
+		}
 
-        public bool IsTaken
-        {
-            get => _semaphoreSlim.CurrentCount == 0;
-        }
+		public void Dispose()
+		{
+			_semaphoreSlim?.Dispose();
+		}
 
-        private Releaser _releaser;
-        private SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1, 1);
+		public async Task<IDisposable> LockAsync()
+		{
+			await _semaphoreSlim.WaitAsync().ConfigureAwait(false);
+			return _releaser;
+		}
 
-        public AsyncLock()
-        {
-            _releaser = new Releaser(this);
-        }
+		private void ReleaseLock()
+		{
+			_semaphoreSlim.Release();
+		}
 
-        public async Task<IDisposable> LockAsync()
-        {
-            await _semaphoreSlim.WaitAsync().ConfigureAwait(false);
-            return _releaser;
-        }
+		private readonly struct Releaser : IDisposable
+		{
+			private readonly AsyncLock _asyncLock;
 
-        private void ReleaseLock()
-        {
-            _semaphoreSlim.Release();
-        }
+			internal Releaser(AsyncLock asyncLock)
+			{
+				_asyncLock = asyncLock;
+			}
 
-        public void Dispose()
-        {
-            _semaphoreSlim?.Dispose();
-        }
-    }
+			public void Dispose()
+			{
+				_asyncLock.ReleaseLock();
+			}
+		}
+	}
 }

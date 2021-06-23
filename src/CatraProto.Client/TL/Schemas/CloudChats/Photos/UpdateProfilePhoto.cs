@@ -1,33 +1,34 @@
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 {
-    public class UpdateProfilePhoto : IMethod
-    {
-        public static int ConstructorId { get; } = 1926525996;
+	public partial class UpdateProfilePhoto : IMethod
+	{
+		public static int ConstructorId { get; } = 1926525996;
+		public InputPhotoBase Id { get; set; }
 
-        public System.Type Type { get; init; } = typeof(PhotoBase);
-        public bool IsVector { get; init; } = false;
-        public InputPhotoBase Id { get; set; }
+		public Type Type { get; init; } = typeof(PhotoBase);
+		public bool IsVector { get; init; } = false;
 
-        public void UpdateFlags()
-        {
-        }
+		public void UpdateFlags()
+		{
+		}
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+		public void Serialize(Writer writer)
+		{
+			if (ConstructorId != 0)
+			{
+				writer.Write(ConstructorId);
+			}
 
-            writer.Write(Id);
-        }
+			writer.Write(Id);
+		}
 
-        public void Deserialize(Reader reader)
-        {
-            Id = reader.Read<InputPhotoBase>();
-        }
-    }
+		public void Deserialize(Reader reader)
+		{
+			Id = reader.Read<InputPhotoBase>();
+		}
+	}
 }
