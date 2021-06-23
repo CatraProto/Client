@@ -6,14 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
 	public partial class UpdateProfile : IMethod
 	{
-		[Flags]
-		public enum FlagsEnum
-		{
-			FirstName = 1 << 0,
-			LastName = 1 << 1,
-			About = 1 << 2
-		}
-
 		public static int ConstructorId { get; } = 2018596725;
 		public int Flags { get; set; }
 		public string FirstName { get; set; }
@@ -22,6 +14,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 		public Type Type { get; init; } = typeof(UserBase);
 		public bool IsVector { get; init; } = false;
+
+		[Flags]
+		public enum FlagsEnum
+		{
+			FirstName = 1 << 0,
+			LastName = 1 << 1,
+			About = 1 << 2
+		}
 
 		public void UpdateFlags()
 		{

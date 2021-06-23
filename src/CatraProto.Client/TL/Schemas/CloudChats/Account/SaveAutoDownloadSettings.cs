@@ -6,13 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
 	public partial class SaveAutoDownloadSettings : IMethod
 	{
-		[Flags]
-		public enum FlagsEnum
-		{
-			Low = 1 << 0,
-			High = 1 << 1
-		}
-
 		public static int ConstructorId { get; } = 1995661875;
 		public int Flags { get; set; }
 		public bool Low { get; set; }
@@ -21,6 +14,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 		public Type Type { get; init; } = typeof(bool);
 		public bool IsVector { get; init; } = false;
+
+		[Flags]
+		public enum FlagsEnum
+		{
+			Low = 1 << 0,
+			High = 1 << 1
+		}
 
 		public void UpdateFlags()
 		{

@@ -6,18 +6,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
 	public partial class SetContentSettings : IMethod
 	{
-		[Flags]
-		public enum FlagsEnum
-		{
-			SensitiveEnabled = 1 << 0
-		}
-
 		public static int ConstructorId { get; } = -1250643605;
 		public int Flags { get; set; }
 		public bool SensitiveEnabled { get; set; }
 
 		public Type Type { get; init; } = typeof(bool);
 		public bool IsVector { get; init; } = false;
+
+		[Flags]
+		public enum FlagsEnum
+		{
+			SensitiveEnabled = 1 << 0
+		}
 
 		public void UpdateFlags()
 		{

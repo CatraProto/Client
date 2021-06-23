@@ -6,14 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
 	public partial class InstallTheme : IMethod
 	{
-		[Flags]
-		public enum FlagsEnum
-		{
-			Dark = 1 << 0,
-			Format = 1 << 1,
-			Theme = 1 << 1
-		}
-
 		public static int ConstructorId { get; } = 2061776695;
 		public int Flags { get; set; }
 		public bool Dark { get; set; }
@@ -22,6 +14,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 		public Type Type { get; init; } = typeof(bool);
 		public bool IsVector { get; init; } = false;
+
+		[Flags]
+		public enum FlagsEnum
+		{
+			Dark = 1 << 0,
+			Format = 1 << 1,
+			Theme = 1 << 1
+		}
 
 		public void UpdateFlags()
 		{

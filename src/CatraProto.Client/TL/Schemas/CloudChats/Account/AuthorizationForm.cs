@@ -6,12 +6,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
 	public partial class AuthorizationForm : AuthorizationFormBase
 	{
-		[Flags]
-		public enum FlagsEnum
-		{
-			PrivacyPolicyUrl = 1 << 0
-		}
-
 		public static int ConstructorId { get; } = -1389486888;
 		public int Flags { get; set; }
 		public override IList<SecureRequiredTypeBase> RequiredTypes { get; set; }
@@ -19,6 +13,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		public override IList<SecureValueErrorBase> Errors { get; set; }
 		public override IList<UserBase> Users { get; set; }
 		public override string PrivacyPolicyUrl { get; set; }
+
+		[Flags]
+		public enum FlagsEnum
+		{
+			PrivacyPolicyUrl = 1 << 0
+		}
 
 		public override void UpdateFlags()
 		{

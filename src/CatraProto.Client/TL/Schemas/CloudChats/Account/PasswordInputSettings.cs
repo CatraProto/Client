@@ -5,6 +5,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
 	public partial class PasswordInputSettings : PasswordInputSettingsBase
 	{
+		public static int ConstructorId { get; } = -1036572727;
+		public int Flags { get; set; }
+		public override PasswordKdfAlgoBase NewAlgo { get; set; }
+		public override byte[] NewPasswordHash { get; set; }
+		public override string Hint { get; set; }
+		public override string Email { get; set; }
+		public override SecureSecretSettingsBase NewSecureSettings { get; set; }
+
 		[Flags]
 		public enum FlagsEnum
 		{
@@ -14,14 +22,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 			Email = 1 << 1,
 			NewSecureSettings = 1 << 2
 		}
-
-		public static int ConstructorId { get; } = -1036572727;
-		public int Flags { get; set; }
-		public override PasswordKdfAlgoBase NewAlgo { get; set; }
-		public override byte[] NewPasswordHash { get; set; }
-		public override string Hint { get; set; }
-		public override string Email { get; set; }
-		public override SecureSecretSettingsBase NewSecureSettings { get; set; }
 
 		public override void UpdateFlags()
 		{

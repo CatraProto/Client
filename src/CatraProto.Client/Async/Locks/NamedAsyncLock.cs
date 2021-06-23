@@ -5,103 +5,102 @@ using System.Threading.Tasks;
 
 namespace CatraProto.Client.Async.Locks
 {
-	public class NamedAsyncLock<T>
-	{
-		private Dictionary<T, Counter<SemaphoreSlim>> _semaphores = new Dictionary<T, Counter<SemaphoreSlim>>();
+    public class NamedAsyncLock<T>
+    {
+        private readonly struct Releaser<R> : IDisposable
+        {
+            private readonly R _releaseKey;
+            private readonly NamedAsyncLock<R> _asyncLock;
 
-		private SemaphoreSlim GetLock(T key)
-		{
-			lock (_semaphores)
-			{
-				if (_semaphores.TryGetValue(key, out var semaphore))
-				{
-					semaphore.IncreaseCount();
-					return semaphore.Item;
-				}
+            internal Releaser(R releaseKey, NamedAsyncLock<R> asyncLock)
+            {
+                _asyncLock = asyncLock;
+                _releaseKey = releaseKey;
+            }
 
-				var semaphoreSlim = new SemaphoreSlim(1, 1);
-				var counter = new Counter<SemaphoreSlim>(semaphoreSlim, 1);
-				_semaphores.Add(key, counter);
-				return semaphoreSlim;
-			}
-		}
+            public void Dispose()
+            {
+                _asyncLock.ReleaseLock(_releaseKey);
+            }
+        }
 
-		internal void ReleaseLock(T key)
-		{
-			lock (_semaphores)
-			{
-				var counter = _semaphores[key];
-				if (counter.RequestedTimesLock - 1 == 0)
-				{
-					_semaphores.Remove(key);
-					counter.Item.Dispose();
-				}
-				else
-				{
-					counter.Item.Release();
-				}
-			}
-		}
+        private class Counter<I>
+        {
+            public int RequestedTimesLock { get; private set; }
+            public I Item { get; private set; }
+            private readonly object _mutex = new object();
 
-		public async ValueTask<IDisposable> LockAsync(T key)
-		{
-			await GetLock(key).WaitAsync().ConfigureAwait(false);
-			return new Releaser<T>(key, this);
-		}
+            internal Counter(I item, int initialRequested = 0)
+            {
+                Item = item;
+                RequestedTimesLock = initialRequested;
+            }
 
-		private readonly struct Releaser<R> : IDisposable
-		{
-			private readonly R _releaseKey;
-			private readonly NamedAsyncLock<R> _asyncLock;
+            public void IncreaseCount()
+            {
+                lock (_mutex)
+                {
+                    RequestedTimesLock++;
+                }
+            }
 
-			internal Releaser(R releaseKey, NamedAsyncLock<R> asyncLock)
-			{
-				_asyncLock = asyncLock;
-				_releaseKey = releaseKey;
-			}
+            public void DecreaseCount()
+            {
+                lock (_mutex)
+                {
+                    RequestedTimesLock--;
+                }
+            }
 
-			public void Dispose()
-			{
-				_asyncLock.ReleaseLock(_releaseKey);
-			}
-		}
+            public void SetCount(int count)
+            {
+                lock (_mutex)
+                {
+                    RequestedTimesLock = count;
+                }
+            }
+        }
 
-		private class Counter<I>
-		{
-			private readonly object _mutex = new object();
+        private Dictionary<T, Counter<SemaphoreSlim>> _semaphores = new Dictionary<T, Counter<SemaphoreSlim>>();
 
-			internal Counter(I item, int initialRequested = 0)
-			{
-				Item = item;
-				RequestedTimesLock = initialRequested;
-			}
+        private SemaphoreSlim GetLock(T key)
+        {
+            lock (_semaphores)
+            {
+                if (_semaphores.TryGetValue(key, out var semaphore))
+                {
+                    semaphore.IncreaseCount();
+                    return semaphore.Item;
+                }
 
-			public int RequestedTimesLock { get; private set; }
-			public I Item { get; private set; }
+                var semaphoreSlim = new SemaphoreSlim(1, 1);
+                var counter = new Counter<SemaphoreSlim>(semaphoreSlim, 1);
+                _semaphores.Add(key, counter);
+                return semaphoreSlim;
+            }
+        }
 
-			public void IncreaseCount()
-			{
-				lock (_mutex)
-				{
-					RequestedTimesLock++;
-				}
-			}
+        internal void ReleaseLock(T key)
+        {
+            lock (_semaphores)
+            {
+                var counter = _semaphores[key];
+                if (counter.RequestedTimesLock - 1 == 0)
+                {
+                    _semaphores.Remove(key);
+                    counter.Item.Dispose();
+                }
+                else
+                {
+                    counter.Item.Release();
+                }
+            }
+        }
 
-			public void DecreaseCount()
-			{
-				lock (_mutex)
-				{
-					RequestedTimesLock--;
-				}
-			}
-
-			public void SetCount(int count)
-			{
-				lock (_mutex)
-				{
-					RequestedTimesLock = count;
-				}
-			}
-		}
-	}
+        public async ValueTask<IDisposable> LockAsync(T key)
+        {
+            await GetLock(key).WaitAsync().ConfigureAwait(false);
+            return new Releaser<T>(key, this);
+        }
+    }
 }

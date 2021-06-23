@@ -13,6 +13,23 @@ namespace CatraProto.Client.TL.Requests
 {
 	public partial class CloudChatsApi
 	{
+		public Auth Auth { get; }
+		public Account Account { get; }
+		public Users Users { get; }
+		public Contacts Contacts { get; }
+		public Messages Messages { get; }
+		public Updates Updates { get; }
+		public Photos Photos { get; }
+		public Upload Upload { get; }
+		public Help Help { get; }
+		public Channels Channels { get; }
+		public Bots Bots { get; }
+		public Payments Payments { get; }
+		public Stickers Stickers { get; }
+		public Phone Phone { get; }
+		public Langpack Langpack { get; }
+		public Folders Folders { get; }
+		public Stats Stats { get; }
 		private MessagesHandler _messagesHandler;
 
 		internal CloudChatsApi(MessagesHandler messagesHandler)
@@ -37,24 +54,6 @@ namespace CatraProto.Client.TL.Requests
 			Folders = new Folders(messagesHandler);
 			Stats = new Stats(messagesHandler);
 		}
-
-		public Auth Auth { get; }
-		public Account Account { get; }
-		public Users Users { get; }
-		public Contacts Contacts { get; }
-		public Messages Messages { get; }
-		public Updates Updates { get; }
-		public Photos Photos { get; }
-		public Upload Upload { get; }
-		public Help Help { get; }
-		public Channels Channels { get; }
-		public Bots Bots { get; }
-		public Payments Payments { get; }
-		public Stickers Stickers { get; }
-		public Phone Phone { get; }
-		public Langpack Langpack { get; }
-		public Folders Folders { get; }
-		public Stats Stats { get; }
 
 		public async Task<RpcMessage<IObject>> InvokeAfterMsgAsync(long msgId, IObject query, CancellationToken cancellationToken = default)
 		{

@@ -5,19 +5,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
 	public partial class Password : PasswordBase
 	{
-		[Flags]
-		public enum FlagsEnum
-		{
-			HasRecovery = 1 << 0,
-			HasSecureValues = 1 << 1,
-			HasPassword = 1 << 2,
-			CurrentAlgo = 1 << 2,
-			SrpB = 1 << 2,
-			SrpId = 1 << 2,
-			Hint = 1 << 3,
-			EmailUnconfirmedPattern = 1 << 4
-		}
-
 		public static int ConstructorId { get; } = -1390001672;
 		public int Flags { get; set; }
 		public override bool HasRecovery { get; set; }
@@ -31,6 +18,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		public override PasswordKdfAlgoBase NewAlgo { get; set; }
 		public override SecurePasswordKdfAlgoBase NewSecureAlgo { get; set; }
 		public override byte[] SecureRandom { get; set; }
+
+		[Flags]
+		public enum FlagsEnum
+		{
+			HasRecovery = 1 << 0,
+			HasSecureValues = 1 << 1,
+			HasPassword = 1 << 2,
+			CurrentAlgo = 1 << 2,
+			SrpB = 1 << 2,
+			SrpId = 1 << 2,
+			Hint = 1 << 3,
+			EmailUnconfirmedPattern = 1 << 4
+		}
 
 		public override void UpdateFlags()
 		{

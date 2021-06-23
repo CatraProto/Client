@@ -5,17 +5,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
 	public partial class PasswordSettings : PasswordSettingsBase
 	{
+		public static int ConstructorId { get; } = -1705233435;
+		public int Flags { get; set; }
+		public override string Email { get; set; }
+		public override SecureSecretSettingsBase SecureSettings { get; set; }
+
 		[Flags]
 		public enum FlagsEnum
 		{
 			Email = 1 << 0,
 			SecureSettings = 1 << 1
 		}
-
-		public static int ConstructorId { get; } = -1705233435;
-		public int Flags { get; set; }
-		public override string Email { get; set; }
-		public override SecureSecretSettingsBase SecureSettings { get; set; }
 
 		public override void UpdateFlags()
 		{

@@ -7,12 +7,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
 	public partial class RegisterDevice : IMethod
 	{
-		[Flags]
-		public enum FlagsEnum
-		{
-			NoMuted = 1 << 0
-		}
-
 		public static int ConstructorId { get; } = 1754754159;
 		public int Flags { get; set; }
 		public bool NoMuted { get; set; }
@@ -24,6 +18,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 		public Type Type { get; init; } = typeof(bool);
 		public bool IsVector { get; init; } = false;
+
+		[Flags]
+		public enum FlagsEnum
+		{
+			NoMuted = 1 << 0
+		}
 
 		public void UpdateFlags()
 		{
