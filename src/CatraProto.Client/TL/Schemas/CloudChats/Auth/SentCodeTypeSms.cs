@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
-    public partial class SentCodeTypeSms : SentCodeTypeBase
+    public class SentCodeTypeSms : SentCodeTypeBase
     {
         public static int ConstructorId { get; } = -1073693790;
         public int Length { get; set; }
@@ -13,7 +13,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Length);
         }
 

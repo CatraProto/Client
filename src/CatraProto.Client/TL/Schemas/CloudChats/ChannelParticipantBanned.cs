@@ -3,8 +3,14 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class ChannelParticipantBanned : ChannelParticipantBase
+    public class ChannelParticipantBanned : ChannelParticipantBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            Left = 1 << 0
+        }
+
         public static int ConstructorId { get; } = 470789295;
         public int Flags { get; set; }
         public bool Left { get; set; }
@@ -13,12 +19,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int Date { get; set; }
         public ChatBannedRightsBase BannedRights { get; set; }
 
-        [Flags]
-        public enum FlagsEnum
-        {
-            Left = 1 << 0
-        }
-
         public override void UpdateFlags()
         {
             Flags = Left ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
@@ -26,7 +26,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(UserId);

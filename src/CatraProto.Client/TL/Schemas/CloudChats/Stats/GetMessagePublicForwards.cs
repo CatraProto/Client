@@ -1,13 +1,15 @@
-using System;
 using CatraProto.Client.TL.Schemas.CloudChats.Messages;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 {
-    public partial class GetMessagePublicForwards : IMethod
+    public class GetMessagePublicForwards : IMethod
     {
         public static int ConstructorId { get; } = 1445996571;
+
+        public System.Type Type { get; init; } = typeof(MessagesBase);
+        public bool IsVector { get; init; } = false;
         public InputChannelBase Channel { get; set; }
         public int MsgId { get; set; }
         public int OffsetRate { get; set; }
@@ -15,16 +17,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
         public int OffsetId { get; set; }
         public int Limit { get; set; }
 
-        public Type Type { get; init; } = typeof(MessagesBase);
-        public bool IsVector { get; init; } = false;
-
         public void UpdateFlags()
         {
         }
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Channel);
             writer.Write(MsgId);
             writer.Write(OffsetRate);

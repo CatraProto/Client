@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ using CatraProto.Client.TL.Schemas.CloudChats.Folders;
 
 namespace CatraProto.Client.TL.Requests.CloudChats
 {
-    public partial class Folders
+    public class Folders
     {
         private MessagesHandler _messagesHandler;
 
@@ -18,12 +19,18 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             _messagesHandler = messagesHandler;
         }
 
-        public async Task<RpcMessage<UpdatesBase>> EditPeerFolders(List<InputFolderPeerBase> folderPeers, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<UpdatesBase>> EditPeerFoldersAsync(List<InputFolderPeerBase> folderPeers,
+            CancellationToken cancellationToken = default)
         {
+            if (folderPeers is null)
+            {
+                throw new ArgumentNullException(nameof(folderPeers));
+            }
+
             var rpcResponse = new RpcMessage<UpdatesBase>();
             var methodBody = new EditPeerFolders
             {
-                FolderPeers = folderPeers,
+                FolderPeers = folderPeers
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage
@@ -35,12 +42,13 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             return rpcResponse;
         }
 
-        public async Task<RpcMessage<UpdatesBase>> DeleteFolder(int folderId, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<UpdatesBase>> DeleteFolderAsync(int folderId,
+            CancellationToken cancellationToken = default)
         {
             var rpcResponse = new RpcMessage<UpdatesBase>();
             var methodBody = new DeleteFolder
             {
-                FolderId = folderId,
+                FolderId = folderId
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage

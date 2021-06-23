@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class TextImage : RichTextBase
+    public class TextImage : RichTextBase
     {
         public static int ConstructorId { get; } = 136105807;
         public long DocumentId { get; set; }
@@ -15,7 +15,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(DocumentId);
             writer.Write(W);
             writer.Write(H);

@@ -4,22 +4,22 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 {
-    public partial class ClearSavedInfo : IMethod
+    public class ClearSavedInfo : IMethod
     {
-        public static int ConstructorId { get; } = -667062079;
-        public int Flags { get; set; }
-        public bool Credentials { get; set; }
-        public bool Info { get; set; }
-
-        public Type Type { get; init; } = typeof(bool);
-        public bool IsVector { get; init; } = false;
-
         [Flags]
         public enum FlagsEnum
         {
             Credentials = 1 << 0,
             Info = 1 << 1
         }
+
+        public static int ConstructorId { get; } = -667062079;
+
+        public System.Type Type { get; init; } = typeof(bool);
+        public bool IsVector { get; init; } = false;
+        public int Flags { get; set; }
+        public bool Credentials { get; set; }
+        public bool Info { get; set; }
 
         public void UpdateFlags()
         {
@@ -29,7 +29,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
         }

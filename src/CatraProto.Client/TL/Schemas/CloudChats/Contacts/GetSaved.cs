@@ -4,7 +4,7 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
-    public partial class GetSaved : IMethod
+    public class GetSaved : IMethod
     {
         public static int ConstructorId { get; } = -2098076769;
 
@@ -17,7 +17,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
         }
 
         public void Deserialize(Reader reader)

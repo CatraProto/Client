@@ -3,8 +3,14 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class UpdateBotInlineQuery : UpdateBase
+    public class UpdateBotInlineQuery : UpdateBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            Geo = 1 << 0
+        }
+
         public static int ConstructorId { get; } = 1417832080;
         public int Flags { get; set; }
         public long QueryId { get; set; }
@@ -13,12 +19,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public GeoPointBase Geo { get; set; }
         public string Offset { get; set; }
 
-        [Flags]
-        public enum FlagsEnum
-        {
-            Geo = 1 << 0
-        }
-
         public override void UpdateFlags()
         {
             Flags = Geo == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
@@ -26,7 +26,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(QueryId);

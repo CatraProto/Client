@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-    public partial class FutureSalt : FutureSaltBase
+    public class FutureSalt : FutureSaltBase
     {
         public static int ConstructorId { get; } = 155834844;
         public override int ValidSince { get; set; }
@@ -15,7 +15,11 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(ValidSince);
             writer.Write(ValidUntil);
             writer.Write(Salt);

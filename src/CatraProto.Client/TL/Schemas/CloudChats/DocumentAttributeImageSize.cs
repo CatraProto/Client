@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class DocumentAttributeImageSize : DocumentAttributeBase
+    public class DocumentAttributeImageSize : DocumentAttributeBase
     {
         public static int ConstructorId { get; } = 1815593308;
         public int W { get; set; }
@@ -14,7 +14,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(W);
             writer.Write(H);
         }

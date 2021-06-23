@@ -4,9 +4,19 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class GetDialogs : IMethod
+    public class GetDialogs : IMethod
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            ExcludePinned = 1 << 0,
+            FolderId = 1 << 1
+        }
+
         public static int ConstructorId { get; } = -1594999949;
+
+        public System.Type Type { get; init; } = typeof(DialogsBase);
+        public bool IsVector { get; init; } = false;
         public int Flags { get; set; }
         public bool ExcludePinned { get; set; }
         public int? FolderId { get; set; }
@@ -16,16 +26,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public int Limit { get; set; }
         public int Hash { get; set; }
 
-        public Type Type { get; init; } = typeof(DialogsBase);
-        public bool IsVector { get; init; } = false;
-
-        [Flags]
-        public enum FlagsEnum
-        {
-            ExcludePinned = 1 << 0,
-            FolderId = 1 << 1
-        }
-
         public void UpdateFlags()
         {
             Flags = ExcludePinned ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
@@ -34,7 +34,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             if (FlagsHelper.IsFlagSet(Flags, 1))

@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class MessageMediaPoll : MessageMediaBase
+    public class MessageMediaPoll : MessageMediaBase
     {
         public static int ConstructorId { get; } = 1272375192;
         public PollBase Poll { get; set; }
@@ -14,7 +14,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Poll);
             writer.Write(Results);
         }

@@ -3,7 +3,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class PageBlockEmbedPost : PageBlockBase
+    public class PageBlockEmbedPost : PageBlockBase
     {
         public static int ConstructorId { get; } = -229005301;
         public string Url { get; set; }
@@ -20,7 +20,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Url);
             writer.Write(WebpageId);
             writer.Write(AuthorPhotoId);

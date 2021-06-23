@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,25 +11,8 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Requests
 {
-    public partial class CloudChatsApi
+    public class CloudChatsApi
     {
-        public Auth Auth { get; }
-        public Account Account { get; }
-        public Users Users { get; }
-        public Contacts Contacts { get; }
-        public Messages Messages { get; }
-        public Updates Updates { get; }
-        public Photos Photos { get; }
-        public Upload Upload { get; }
-        public Help Help { get; }
-        public Channels Channels { get; }
-        public Bots Bots { get; }
-        public Payments Payments { get; }
-        public Stickers Stickers { get; }
-        public Phone Phone { get; }
-        public Langpack Langpack { get; }
-        public Folders Folders { get; }
-        public Stats Stats { get; }
         private MessagesHandler _messagesHandler;
 
         internal CloudChatsApi(MessagesHandler messagesHandler)
@@ -54,13 +38,37 @@ namespace CatraProto.Client.TL.Requests
             Stats = new Stats(messagesHandler);
         }
 
-        public async Task<RpcMessage<IObject>> InvokeAfterMsg(long msgId, IObject query, CancellationToken cancellationToken = default)
+        public Auth Auth { get; }
+        public Account Account { get; }
+        public Users Users { get; }
+        public Contacts Contacts { get; }
+        public Messages Messages { get; }
+        public Updates Updates { get; }
+        public Photos Photos { get; }
+        public Upload Upload { get; }
+        public Help Help { get; }
+        public Channels Channels { get; }
+        public Bots Bots { get; }
+        public Payments Payments { get; }
+        public Stickers Stickers { get; }
+        public Phone Phone { get; }
+        public Langpack Langpack { get; }
+        public Folders Folders { get; }
+        public Stats Stats { get; }
+
+        public async Task<RpcMessage<IObject>> InvokeAfterMsgAsync(long msgId, IObject query,
+            CancellationToken cancellationToken = default)
         {
+            if (query is null)
+            {
+                throw new ArgumentNullException(nameof(query));
+            }
+
             var rpcResponse = new RpcMessage<IObject>();
             var methodBody = new InvokeAfterMsg
             {
                 MsgId = msgId,
-                Query = query,
+                Query = query
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage
@@ -72,13 +80,19 @@ namespace CatraProto.Client.TL.Requests
             return rpcResponse;
         }
 
-        public async Task<RpcMessage<IObject>> InvokeAfterMsgs(List<long> msgIds, IObject query, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<IObject>> InvokeAfterMsgsAsync(List<long> msgIds, IObject query,
+            CancellationToken cancellationToken = default)
         {
+            if (query is null)
+            {
+                throw new ArgumentNullException(nameof(query));
+            }
+
             var rpcResponse = new RpcMessage<IObject>();
             var methodBody = new InvokeAfterMsgs
             {
                 MsgIds = msgIds,
-                Query = query,
+                Query = query
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage
@@ -90,8 +104,46 @@ namespace CatraProto.Client.TL.Requests
             return rpcResponse;
         }
 
-        public async Task<RpcMessage<IObject>> InitConnection(int apiId, string deviceModel, string systemVersion, string appVersion, string systemLangCode, string langPack, string langCode, IObject query, InputClientProxyBase? proxy = null, JSONValueBase? pparams = null, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<IObject>> InitConnectionAsync(int apiId, string deviceModel, string systemVersion,
+            string appVersion, string systemLangCode, string langPack, string langCode, IObject query,
+            InputClientProxyBase proxy = null, JSONValueBase pparams = null,
+            CancellationToken cancellationToken = default)
         {
+            if (deviceModel is null)
+            {
+                throw new ArgumentNullException(nameof(deviceModel));
+            }
+
+            if (systemVersion is null)
+            {
+                throw new ArgumentNullException(nameof(systemVersion));
+            }
+
+            if (appVersion is null)
+            {
+                throw new ArgumentNullException(nameof(appVersion));
+            }
+
+            if (systemLangCode is null)
+            {
+                throw new ArgumentNullException(nameof(systemLangCode));
+            }
+
+            if (langPack is null)
+            {
+                throw new ArgumentNullException(nameof(langPack));
+            }
+
+            if (langCode is null)
+            {
+                throw new ArgumentNullException(nameof(langCode));
+            }
+
+            if (query is null)
+            {
+                throw new ArgumentNullException(nameof(query));
+            }
+
             var rpcResponse = new RpcMessage<IObject>();
             var methodBody = new InitConnection
             {
@@ -104,7 +156,7 @@ namespace CatraProto.Client.TL.Requests
                 LangCode = langCode,
                 Query = query,
                 Proxy = proxy,
-                Params = pparams,
+                Params = pparams
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage
@@ -116,13 +168,19 @@ namespace CatraProto.Client.TL.Requests
             return rpcResponse;
         }
 
-        public async Task<RpcMessage<IObject>> InvokeWithLayer(int layer, IObject query, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<IObject>> InvokeWithLayerAsync(int layer, IObject query,
+            CancellationToken cancellationToken = default)
         {
+            if (query is null)
+            {
+                throw new ArgumentNullException(nameof(query));
+            }
+
             var rpcResponse = new RpcMessage<IObject>();
             var methodBody = new InvokeWithLayer
             {
                 Layer = layer,
-                Query = query,
+                Query = query
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage
@@ -134,12 +192,18 @@ namespace CatraProto.Client.TL.Requests
             return rpcResponse;
         }
 
-        public async Task<RpcMessage<IObject>> InvokeWithoutUpdates(IObject query, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<IObject>> InvokeWithoutUpdatesAsync(IObject query,
+            CancellationToken cancellationToken = default)
         {
+            if (query is null)
+            {
+                throw new ArgumentNullException(nameof(query));
+            }
+
             var rpcResponse = new RpcMessage<IObject>();
             var methodBody = new InvokeWithoutUpdates
             {
-                Query = query,
+                Query = query
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage
@@ -151,13 +215,24 @@ namespace CatraProto.Client.TL.Requests
             return rpcResponse;
         }
 
-        public async Task<RpcMessage<IObject>> InvokeWithMessagesRange(MessageRangeBase range, IObject query, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<IObject>> InvokeWithMessagesRangeAsync(MessageRangeBase range, IObject query,
+            CancellationToken cancellationToken = default)
         {
+            if (range is null)
+            {
+                throw new ArgumentNullException(nameof(range));
+            }
+
+            if (query is null)
+            {
+                throw new ArgumentNullException(nameof(query));
+            }
+
             var rpcResponse = new RpcMessage<IObject>();
             var methodBody = new InvokeWithMessagesRange
             {
                 Range = range,
-                Query = query,
+                Query = query
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage
@@ -169,13 +244,19 @@ namespace CatraProto.Client.TL.Requests
             return rpcResponse;
         }
 
-        public async Task<RpcMessage<IObject>> InvokeWithTakeout(long takeoutId, IObject query, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<IObject>> InvokeWithTakeoutAsync(long takeoutId, IObject query,
+            CancellationToken cancellationToken = default)
         {
+            if (query is null)
+            {
+                throw new ArgumentNullException(nameof(query));
+            }
+
             var rpcResponse = new RpcMessage<IObject>();
             var methodBody = new InvokeWithTakeout
             {
                 TakeoutId = takeoutId,
-                Query = query,
+                Query = query
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage

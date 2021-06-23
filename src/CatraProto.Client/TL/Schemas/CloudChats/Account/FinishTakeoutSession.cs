@@ -4,20 +4,20 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public partial class FinishTakeoutSession : IMethod
+    public class FinishTakeoutSession : IMethod
     {
-        public static int ConstructorId { get; } = 489050862;
-        public int Flags { get; set; }
-        public bool Success { get; set; }
-
-        public Type Type { get; init; } = typeof(bool);
-        public bool IsVector { get; init; } = false;
-
         [Flags]
         public enum FlagsEnum
         {
             Success = 1 << 0
         }
+
+        public static int ConstructorId { get; } = 489050862;
+
+        public Type Type { get; init; } = typeof(bool);
+        public bool IsVector { get; init; } = false;
+        public int Flags { get; set; }
+        public bool Success { get; set; }
 
         public void UpdateFlags()
         {
@@ -26,7 +26,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
         }

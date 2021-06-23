@@ -3,8 +3,15 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class InputBotInlineResultDocument : InputBotInlineResultBase
+    public class InputBotInlineResultDocument : InputBotInlineResultBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            Title = 1 << 1,
+            Description = 1 << 2
+        }
+
         public static int ConstructorId { get; } = -459324;
         public int Flags { get; set; }
         public override string Id { get; set; }
@@ -14,13 +21,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public InputDocumentBase Document { get; set; }
         public override InputBotInlineMessageBase SendMessage { get; set; }
 
-        [Flags]
-        public enum FlagsEnum
-        {
-            Title = 1 << 1,
-            Description = 1 << 2
-        }
-
         public override void UpdateFlags()
         {
             Flags = Title == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
@@ -29,7 +29,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Id);

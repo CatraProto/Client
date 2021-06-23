@@ -4,14 +4,14 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public partial class GetTmpPassword : IMethod
+    public class GetTmpPassword : IMethod
     {
         public static int ConstructorId { get; } = 1151208273;
-        public InputCheckPasswordSRPBase Password { get; set; }
-        public int Period { get; set; }
 
         public Type Type { get; init; } = typeof(TmpPasswordBase);
         public bool IsVector { get; init; } = false;
+        public InputCheckPasswordSRPBase Password { get; set; }
+        public int Period { get; set; }
 
         public void UpdateFlags()
         {
@@ -19,7 +19,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Password);
             writer.Write(Period);
         }

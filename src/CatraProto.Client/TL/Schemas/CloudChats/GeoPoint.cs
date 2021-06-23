@@ -3,20 +3,20 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class GeoPoint : GeoPointBase
+    public class GeoPoint : GeoPointBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            AccuracyRadius = 1 << 0
+        }
+
         public static int ConstructorId { get; } = -1297942941;
         public int Flags { get; set; }
         public double Long { get; set; }
         public double Lat { get; set; }
         public long AccessHash { get; set; }
         public int? AccuracyRadius { get; set; }
-
-        [Flags]
-        public enum FlagsEnum
-        {
-            AccuracyRadius = 1 << 0
-        }
 
         public override void UpdateFlags()
         {
@@ -25,7 +25,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Long);

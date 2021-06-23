@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class SecureCredentialsEncrypted : SecureCredentialsEncryptedBase
+    public class SecureCredentialsEncrypted : SecureCredentialsEncryptedBase
     {
         public static int ConstructorId { get; } = 871426631;
         public override byte[] Data { get; set; }
@@ -15,7 +15,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Data);
             writer.Write(Hash);
             writer.Write(Secret);

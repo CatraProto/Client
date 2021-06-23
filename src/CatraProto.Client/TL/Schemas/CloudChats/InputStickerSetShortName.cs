@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class InputStickerSetShortName : InputStickerSetBase
+    public class InputStickerSetShortName : InputStickerSetBase
     {
         public static int ConstructorId { get; } = -2044933984;
         public string ShortName { get; set; }
@@ -13,7 +13,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(ShortName);
         }
 

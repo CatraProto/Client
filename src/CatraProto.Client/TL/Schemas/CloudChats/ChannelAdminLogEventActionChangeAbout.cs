@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class ChannelAdminLogEventActionChangeAbout : ChannelAdminLogEventActionBase
+    public class ChannelAdminLogEventActionChangeAbout : ChannelAdminLogEventActionBase
     {
         public static int ConstructorId { get; } = 1427671598;
         public string PrevValue { get; set; }
@@ -14,7 +14,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(PrevValue);
             writer.Write(NewValue);
         }

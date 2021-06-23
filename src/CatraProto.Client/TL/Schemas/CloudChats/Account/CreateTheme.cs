@@ -4,24 +4,24 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public partial class CreateTheme : IMethod
+    public class CreateTheme : IMethod
     {
-        public static int ConstructorId { get; } = -2077048289;
-        public int Flags { get; set; }
-        public string Slug { get; set; }
-        public string Title { get; set; }
-        public InputDocumentBase Document { get; set; }
-        public InputThemeSettingsBase Settings { get; set; }
-
-        public Type Type { get; init; } = typeof(ThemeBase);
-        public bool IsVector { get; init; } = false;
-
         [Flags]
         public enum FlagsEnum
         {
             Document = 1 << 2,
             Settings = 1 << 3
         }
+
+        public static int ConstructorId { get; } = -2077048289;
+
+        public Type Type { get; init; } = typeof(ThemeBase);
+        public bool IsVector { get; init; } = false;
+        public int Flags { get; set; }
+        public string Slug { get; set; }
+        public string Title { get; set; }
+        public InputDocumentBase Document { get; set; }
+        public InputThemeSettingsBase Settings { get; set; }
 
         public void UpdateFlags()
         {
@@ -31,7 +31,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Slug);

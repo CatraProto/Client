@@ -4,21 +4,21 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class MarkDialogUnread : IMethod
+    public class MarkDialogUnread : IMethod
     {
-        public static int ConstructorId { get; } = -1031349873;
-        public int Flags { get; set; }
-        public bool Unread { get; set; }
-        public InputDialogPeerBase Peer { get; set; }
-
-        public Type Type { get; init; } = typeof(bool);
-        public bool IsVector { get; init; } = false;
-
         [Flags]
         public enum FlagsEnum
         {
             Unread = 1 << 0
         }
+
+        public static int ConstructorId { get; } = -1031349873;
+
+        public System.Type Type { get; init; } = typeof(bool);
+        public bool IsVector { get; init; } = false;
+        public int Flags { get; set; }
+        public bool Unread { get; set; }
+        public InputDialogPeerBase Peer { get; set; }
 
         public void UpdateFlags()
         {
@@ -27,7 +27,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Peer);

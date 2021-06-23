@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Storage
 {
-    public partial class FileMp3 : FileTypeBase
+    public class FileMp3 : FileTypeBase
     {
         public static int ConstructorId { get; } = 1384777335;
 
@@ -12,7 +12,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Storage
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
         }
 
         public override void Deserialize(Reader reader)

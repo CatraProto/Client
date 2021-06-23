@@ -1,16 +1,15 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class GetAllStickers : IMethod
+    public class GetAllStickers : IMethod
     {
         public static int ConstructorId { get; } = 479598769;
-        public int Hash { get; set; }
 
-        public Type Type { get; init; } = typeof(AllStickersBase);
+        public System.Type Type { get; init; } = typeof(AllStickersBase);
         public bool IsVector { get; init; } = false;
+        public int Hash { get; set; }
 
         public void UpdateFlags()
         {
@@ -18,7 +17,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Hash);
         }
 

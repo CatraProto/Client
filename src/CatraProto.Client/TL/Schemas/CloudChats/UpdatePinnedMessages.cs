@@ -4,8 +4,14 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class UpdatePinnedMessages : UpdateBase
+    public class UpdatePinnedMessages : UpdateBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            Pinned = 1 << 0
+        }
+
         public static int ConstructorId { get; } = -309990731;
         public int Flags { get; set; }
         public bool Pinned { get; set; }
@@ -14,12 +20,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int Pts { get; set; }
         public int PtsCount { get; set; }
 
-        [Flags]
-        public enum FlagsEnum
-        {
-            Pinned = 1 << 0
-        }
-
         public override void UpdateFlags()
         {
             Flags = Pinned ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
@@ -27,7 +27,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Peer);

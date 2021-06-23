@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class InputPrivacyValueDisallowAll : InputPrivacyRuleBase
+    public class InputPrivacyValueDisallowAll : InputPrivacyRuleBase
     {
         public static int ConstructorId { get; } = -697604407;
 
@@ -12,7 +12,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
         }
 
         public override void Deserialize(Reader reader)

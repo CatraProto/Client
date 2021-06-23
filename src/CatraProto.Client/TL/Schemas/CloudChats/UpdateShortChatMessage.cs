@@ -4,8 +4,21 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class UpdateShortChatMessage : UpdatesBase
+    public class UpdateShortChatMessage : UpdatesBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            Out = 1 << 1,
+            Mentioned = 1 << 4,
+            MediaUnread = 1 << 5,
+            Silent = 1 << 13,
+            FwdFrom = 1 << 2,
+            ViaBotId = 1 << 11,
+            ReplyTo = 1 << 3,
+            Entities = 1 << 7
+        }
+
         public static int ConstructorId { get; } = 1076714939;
         public int Flags { get; set; }
         public bool Out { get; set; }
@@ -24,19 +37,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public MessageReplyHeaderBase ReplyTo { get; set; }
         public IList<MessageEntityBase> Entities { get; set; }
 
-        [Flags]
-        public enum FlagsEnum
-        {
-            Out = 1 << 1,
-            Mentioned = 1 << 4,
-            MediaUnread = 1 << 5,
-            Silent = 1 << 13,
-            FwdFrom = 1 << 2,
-            ViaBotId = 1 << 11,
-            ReplyTo = 1 << 3,
-            Entities = 1 << 7
-        }
-
         public override void UpdateFlags()
         {
             Flags = Out ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
@@ -51,7 +51,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Id);

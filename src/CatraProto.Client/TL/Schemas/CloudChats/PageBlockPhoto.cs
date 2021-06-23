@@ -3,21 +3,21 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class PageBlockPhoto : PageBlockBase
+    public class PageBlockPhoto : PageBlockBase
     {
-        public static int ConstructorId { get; } = 391759200;
-        public int Flags { get; set; }
-        public long PhotoId { get; set; }
-        public PageCaptionBase Caption { get; set; }
-        public string Url { get; set; }
-        public long? WebpageId { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
             Url = 1 << 0,
             WebpageId = 1 << 0
         }
+
+        public static int ConstructorId { get; } = 391759200;
+        public int Flags { get; set; }
+        public long PhotoId { get; set; }
+        public PageCaptionBase Caption { get; set; }
+        public string Url { get; set; }
+        public long? WebpageId { get; set; }
 
         public override void UpdateFlags()
         {
@@ -27,7 +27,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(PhotoId);

@@ -4,9 +4,19 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class InitConnection : IMethod
+    public class InitConnection : IMethod
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            Proxy = 1 << 0,
+            Params = 1 << 1
+        }
+
         public static int ConstructorId { get; } = -1043505495;
+
+        public System.Type Type { get; init; } = typeof(IObject);
+        public bool IsVector { get; init; } = false;
         public int Flags { get; set; }
         public int ApiId { get; set; }
         public string DeviceModel { get; set; }
@@ -19,16 +29,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public JSONValueBase Params { get; set; }
         public IObject Query { get; set; }
 
-        public Type Type { get; init; } = typeof(IObject);
-        public bool IsVector { get; init; } = false;
-
-        [Flags]
-        public enum FlagsEnum
-        {
-            Proxy = 1 << 0,
-            Params = 1 << 1
-        }
-
         public void UpdateFlags()
         {
             Flags = Proxy == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
@@ -37,7 +37,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(ApiId);

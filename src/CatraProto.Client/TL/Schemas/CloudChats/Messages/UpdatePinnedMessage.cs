@@ -4,19 +4,8 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class UpdatePinnedMessage : IMethod
+    public class UpdatePinnedMessage : IMethod
     {
-        public static int ConstructorId { get; } = -760547348;
-        public int Flags { get; set; }
-        public bool Silent { get; set; }
-        public bool Unpin { get; set; }
-        public bool PmOneside { get; set; }
-        public InputPeerBase Peer { get; set; }
-        public int Id { get; set; }
-
-        public Type Type { get; init; } = typeof(UpdatesBase);
-        public bool IsVector { get; init; } = false;
-
         [Flags]
         public enum FlagsEnum
         {
@@ -24,6 +13,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             Unpin = 1 << 1,
             PmOneside = 1 << 2
         }
+
+        public static int ConstructorId { get; } = -760547348;
+
+        public System.Type Type { get; init; } = typeof(UpdatesBase);
+        public bool IsVector { get; init; } = false;
+        public int Flags { get; set; }
+        public bool Silent { get; set; }
+        public bool Unpin { get; set; }
+        public bool PmOneside { get; set; }
+        public InputPeerBase Peer { get; set; }
+        public int Id { get; set; }
 
         public void UpdateFlags()
         {
@@ -34,7 +34,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Peer);

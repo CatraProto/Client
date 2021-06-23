@@ -3,7 +3,7 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-    public partial class RpcResult : RpcResultBase
+    public class RpcResult : RpcResultBase
     {
         public static int ConstructorId { get; } = -212046591;
         public override long ReqMsgId { get; set; }
@@ -15,7 +15,11 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(ReqMsgId);
             writer.Write(Result);
         }

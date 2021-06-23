@@ -5,9 +5,18 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public partial class RegisterDevice : IMethod
+    public class RegisterDevice : IMethod
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            NoMuted = 1 << 0
+        }
+
         public static int ConstructorId { get; } = 1754754159;
+
+        public Type Type { get; init; } = typeof(bool);
+        public bool IsVector { get; init; } = false;
         public int Flags { get; set; }
         public bool NoMuted { get; set; }
         public int TokenType { get; set; }
@@ -16,15 +25,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public byte[] Secret { get; set; }
         public IList<int> OtherUids { get; set; }
 
-        public Type Type { get; init; } = typeof(bool);
-        public bool IsVector { get; init; } = false;
-
-        [Flags]
-        public enum FlagsEnum
-        {
-            NoMuted = 1 << 0
-        }
-
         public void UpdateFlags()
         {
             Flags = NoMuted ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
@@ -32,7 +32,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(TokenType);

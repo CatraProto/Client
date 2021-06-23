@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class InputPhotoFileLocation : InputFileLocationBase
+    public class InputPhotoFileLocation : InputFileLocationBase
     {
         public static int ConstructorId { get; } = 1075322878;
         public long Id { get; set; }
@@ -16,7 +16,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Id);
             writer.Write(AccessHash);
             writer.Write(FileReference);

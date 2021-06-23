@@ -3,8 +3,14 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class UpdateReadChannelInbox : UpdateBase
+    public class UpdateReadChannelInbox : UpdateBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            FolderId = 1 << 0
+        }
+
         public static int ConstructorId { get; } = 856380452;
         public int Flags { get; set; }
         public int? FolderId { get; set; }
@@ -13,12 +19,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int StillUnreadCount { get; set; }
         public int Pts { get; set; }
 
-        [Flags]
-        public enum FlagsEnum
-        {
-            FolderId = 1 << 0
-        }
-
         public override void UpdateFlags()
         {
             Flags = FolderId == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
@@ -26,7 +26,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             if (FlagsHelper.IsFlagSet(Flags, 0))

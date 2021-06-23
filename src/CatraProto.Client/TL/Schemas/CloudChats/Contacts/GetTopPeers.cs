@@ -4,25 +4,8 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
-    public partial class GetTopPeers : IMethod
+    public class GetTopPeers : IMethod
     {
-        public static int ConstructorId { get; } = -728224331;
-        public int Flags { get; set; }
-        public bool Correspondents { get; set; }
-        public bool BotsPm { get; set; }
-        public bool BotsInline { get; set; }
-        public bool PhoneCalls { get; set; }
-        public bool ForwardUsers { get; set; }
-        public bool ForwardChats { get; set; }
-        public bool Groups { get; set; }
-        public bool Channels { get; set; }
-        public int Offset { get; set; }
-        public int Limit { get; set; }
-        public int Hash { get; set; }
-
-        public Type Type { get; init; } = typeof(TopPeersBase);
-        public bool IsVector { get; init; } = false;
-
         [Flags]
         public enum FlagsEnum
         {
@@ -35,6 +18,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
             Groups = 1 << 10,
             Channels = 1 << 15
         }
+
+        public static int ConstructorId { get; } = -728224331;
+
+        public Type Type { get; init; } = typeof(TopPeersBase);
+        public bool IsVector { get; init; } = false;
+        public int Flags { get; set; }
+        public bool Correspondents { get; set; }
+        public bool BotsPm { get; set; }
+        public bool BotsInline { get; set; }
+        public bool PhoneCalls { get; set; }
+        public bool ForwardUsers { get; set; }
+        public bool ForwardChats { get; set; }
+        public bool Groups { get; set; }
+        public bool Channels { get; set; }
+        public int Offset { get; set; }
+        public int Limit { get; set; }
+        public int Hash { get; set; }
 
         public void UpdateFlags()
         {
@@ -50,7 +50,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Offset);

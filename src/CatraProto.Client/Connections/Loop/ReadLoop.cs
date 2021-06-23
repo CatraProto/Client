@@ -41,7 +41,7 @@ namespace CatraProto.Client.Connections.Loop
                         });
                         continue;
                     }
-                    
+
                     var authKey = reader.Read<long>();
                     if (authKey == 0)
                     {

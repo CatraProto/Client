@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class PageListOrderedItemText : PageListOrderedItemBase
+    public class PageListOrderedItemText : PageListOrderedItemBase
     {
         public static int ConstructorId { get; } = 1577484359;
         public override string Num { get; set; }
@@ -14,7 +14,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Num);
             writer.Write(Text);
         }

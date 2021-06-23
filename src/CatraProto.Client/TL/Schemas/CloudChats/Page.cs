@@ -4,8 +4,17 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class Page : PageBase
+    public class Page : PageBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            Part = 1 << 0,
+            Rtl = 1 << 1,
+            V2 = 1 << 2,
+            Views = 1 << 3
+        }
+
         public static int ConstructorId { get; } = -1738178803;
         public int Flags { get; set; }
         public override bool Part { get; set; }
@@ -17,15 +26,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override IList<DocumentBase> Documents { get; set; }
         public override int? Views { get; set; }
 
-        [Flags]
-        public enum FlagsEnum
-        {
-            Part = 1 << 0,
-            Rtl = 1 << 1,
-            V2 = 1 << 2,
-            Views = 1 << 3
-        }
-
         public override void UpdateFlags()
         {
             Flags = Part ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
@@ -36,7 +36,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Url);

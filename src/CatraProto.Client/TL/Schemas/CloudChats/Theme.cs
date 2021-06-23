@@ -3,8 +3,17 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class Theme : ThemeBase
+    public class Theme : ThemeBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            Creator = 1 << 0,
+            Default = 1 << 1,
+            Document = 1 << 2,
+            Settings = 1 << 3
+        }
+
         public static int ConstructorId { get; } = 42930452;
         public int Flags { get; set; }
         public override bool Creator { get; set; }
@@ -17,15 +26,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override ThemeSettingsBase Settings { get; set; }
         public override int InstallsCount { get; set; }
 
-        [Flags]
-        public enum FlagsEnum
-        {
-            Creator = 1 << 0,
-            Default = 1 << 1,
-            Document = 1 << 2,
-            Settings = 1 << 3
-        }
-
         public override void UpdateFlags()
         {
             Flags = Creator ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
@@ -36,7 +36,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Id);

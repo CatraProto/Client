@@ -4,20 +4,20 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class VotesList : VotesListBase
+    public class VotesList : VotesListBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            NextOffset = 1 << 0
+        }
+
         public static int ConstructorId { get; } = 136574537;
         public int Flags { get; set; }
         public override int Count { get; set; }
         public override IList<MessageUserVoteBase> Votes { get; set; }
         public override IList<UserBase> Users { get; set; }
         public override string NextOffset { get; set; }
-
-        [Flags]
-        public enum FlagsEnum
-        {
-            NextOffset = 1 << 0
-        }
 
         public override void UpdateFlags()
         {
@@ -26,7 +26,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Count);

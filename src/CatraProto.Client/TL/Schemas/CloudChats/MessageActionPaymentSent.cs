@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class MessageActionPaymentSent : MessageActionBase
+    public class MessageActionPaymentSent : MessageActionBase
     {
         public static int ConstructorId { get; } = 1080663248;
         public string Currency { get; set; }
@@ -14,7 +14,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Currency);
             writer.Write(TotalAmount);
         }

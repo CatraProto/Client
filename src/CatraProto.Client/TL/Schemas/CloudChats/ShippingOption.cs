@@ -3,7 +3,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class ShippingOption : ShippingOptionBase
+    public class ShippingOption : ShippingOptionBase
     {
         public static int ConstructorId { get; } = -1239335713;
         public override string Id { get; set; }
@@ -16,7 +16,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Id);
             writer.Write(Title);
             writer.Write(Prices);

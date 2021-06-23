@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class PageBlockMap : PageBlockBase
+    public class PageBlockMap : PageBlockBase
     {
         public static int ConstructorId { get; } = -1538310410;
         public GeoPointBase Geo { get; set; }
@@ -17,7 +17,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Geo);
             writer.Write(Zoom);
             writer.Write(W);

@@ -3,7 +3,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public partial class PrivacyRules : PrivacyRulesBase
+    public class PrivacyRules : PrivacyRulesBase
     {
         public static int ConstructorId { get; } = 1352683077;
         public override IList<PrivacyRuleBase> Rules { get; set; }
@@ -16,7 +16,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Rules);
             writer.Write(Chats);
             writer.Write(Users);

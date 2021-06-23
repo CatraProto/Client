@@ -5,13 +5,13 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 {
-    public partial class GetLeftChannels : IMethod
+    public class GetLeftChannels : IMethod
     {
         public static int ConstructorId { get; } = -2092831552;
-        public int Offset { get; set; }
 
         public Type Type { get; init; } = typeof(ChatsBase);
         public bool IsVector { get; init; } = false;
+        public int Offset { get; set; }
 
         public void UpdateFlags()
         {
@@ -19,7 +19,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Offset);
         }
 

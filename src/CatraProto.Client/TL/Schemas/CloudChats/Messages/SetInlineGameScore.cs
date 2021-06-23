@@ -4,25 +4,25 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class SetInlineGameScore : IMethod
+    public class SetInlineGameScore : IMethod
     {
-        public static int ConstructorId { get; } = 363700068;
-        public int Flags { get; set; }
-        public bool EditMessage { get; set; }
-        public bool Force { get; set; }
-        public InputBotInlineMessageIDBase Id { get; set; }
-        public InputUserBase UserId { get; set; }
-        public int Score { get; set; }
-
-        public Type Type { get; init; } = typeof(bool);
-        public bool IsVector { get; init; } = false;
-
         [Flags]
         public enum FlagsEnum
         {
             EditMessage = 1 << 0,
             Force = 1 << 1
         }
+
+        public static int ConstructorId { get; } = 363700068;
+
+        public System.Type Type { get; init; } = typeof(bool);
+        public bool IsVector { get; init; } = false;
+        public int Flags { get; set; }
+        public bool EditMessage { get; set; }
+        public bool Force { get; set; }
+        public InputBotInlineMessageIDBase Id { get; set; }
+        public InputUserBase UserId { get; set; }
+        public int Score { get; set; }
 
         public void UpdateFlags()
         {
@@ -32,7 +32,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Id);

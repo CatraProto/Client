@@ -5,20 +5,8 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class EditInlineBotMessage : IMethod
+    public class EditInlineBotMessage : IMethod
     {
-        public static int ConstructorId { get; } = -2091549254;
-        public int Flags { get; set; }
-        public bool NoWebpage { get; set; }
-        public InputBotInlineMessageIDBase Id { get; set; }
-        public string Message { get; set; }
-        public InputMediaBase Media { get; set; }
-        public ReplyMarkupBase ReplyMarkup { get; set; }
-        public IList<MessageEntityBase> Entities { get; set; }
-
-        public Type Type { get; init; } = typeof(bool);
-        public bool IsVector { get; init; } = false;
-
         [Flags]
         public enum FlagsEnum
         {
@@ -28,6 +16,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             ReplyMarkup = 1 << 2,
             Entities = 1 << 3
         }
+
+        public static int ConstructorId { get; } = -2091549254;
+
+        public System.Type Type { get; init; } = typeof(bool);
+        public bool IsVector { get; init; } = false;
+        public int Flags { get; set; }
+        public bool NoWebpage { get; set; }
+        public InputBotInlineMessageIDBase Id { get; set; }
+        public string Message { get; set; }
+        public InputMediaBase Media { get; set; }
+        public ReplyMarkupBase ReplyMarkup { get; set; }
+        public IList<MessageEntityBase> Entities { get; set; }
 
         public void UpdateFlags()
         {
@@ -40,7 +40,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Id);

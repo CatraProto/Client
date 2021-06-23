@@ -4,23 +4,23 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class SetBotPrecheckoutResults : IMethod
+    public class SetBotPrecheckoutResults : IMethod
     {
-        public static int ConstructorId { get; } = 163765653;
-        public int Flags { get; set; }
-        public bool Success { get; set; }
-        public long QueryId { get; set; }
-        public string Error { get; set; }
-
-        public Type Type { get; init; } = typeof(bool);
-        public bool IsVector { get; init; } = false;
-
         [Flags]
         public enum FlagsEnum
         {
             Success = 1 << 1,
             Error = 1 << 0
         }
+
+        public static int ConstructorId { get; } = 163765653;
+
+        public System.Type Type { get; init; } = typeof(bool);
+        public bool IsVector { get; init; } = false;
+        public int Flags { get; set; }
+        public bool Success { get; set; }
+        public long QueryId { get; set; }
+        public string Error { get; set; }
 
         public void UpdateFlags()
         {
@@ -30,7 +30,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(QueryId);

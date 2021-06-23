@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class KeyboardButtonRequestPhone : KeyboardButtonBase
+    public class KeyboardButtonRequestPhone : KeyboardButtonBase
     {
         public static int ConstructorId { get; } = -1318425559;
         public override string Text { get; set; }
@@ -13,7 +13,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Text);
         }
 

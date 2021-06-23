@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class UpdateNotifySettings : UpdateBase
+    public class UpdateNotifySettings : UpdateBase
     {
         public static int ConstructorId { get; } = -1094555409;
         public NotifyPeerBase Peer { get; set; }
@@ -14,7 +14,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Peer);
             writer.Write(NotifySettings);
         }

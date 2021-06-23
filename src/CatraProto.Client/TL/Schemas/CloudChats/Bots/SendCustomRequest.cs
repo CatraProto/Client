@@ -4,14 +4,14 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Bots
 {
-    public partial class SendCustomRequest : IMethod
+    public class SendCustomRequest : IMethod
     {
         public static int ConstructorId { get; } = -1440257555;
-        public string CustomMethod { get; set; }
-        public DataJSONBase Params { get; set; }
 
         public Type Type { get; init; } = typeof(DataJSONBase);
         public bool IsVector { get; init; } = false;
+        public string CustomMethod { get; set; }
+        public DataJSONBase Params { get; set; }
 
         public void UpdateFlags()
         {
@@ -19,7 +19,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Bots
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(CustomMethod);
             writer.Write(Params);
         }

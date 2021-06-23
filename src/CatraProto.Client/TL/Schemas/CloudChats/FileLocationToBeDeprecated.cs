@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class FileLocationToBeDeprecated : FileLocationBase
+    public class FileLocationToBeDeprecated : FileLocationBase
     {
         public static int ConstructorId { get; } = -1132476723;
         public override long VolumeId { get; set; }
@@ -14,7 +14,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(VolumeId);
             writer.Write(LocalId);
         }

@@ -1,16 +1,15 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
-    public partial class ToggleTopPeers : IMethod
+    public class ToggleTopPeers : IMethod
     {
         public static int ConstructorId { get; } = -2062238246;
-        public bool Enabled { get; set; }
 
-        public Type Type { get; init; } = typeof(bool);
+        public System.Type Type { get; init; } = typeof(bool);
         public bool IsVector { get; init; } = false;
+        public bool Enabled { get; set; }
 
         public void UpdateFlags()
         {
@@ -18,7 +17,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Enabled);
         }
 

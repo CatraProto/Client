@@ -3,21 +3,8 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class ChatAdminRights : ChatAdminRightsBase
+    public class ChatAdminRights : ChatAdminRightsBase
     {
-        public static int ConstructorId { get; } = 1605510357;
-        public int Flags { get; set; }
-        public override bool ChangeInfo { get; set; }
-        public override bool PostMessages { get; set; }
-        public override bool EditMessages { get; set; }
-        public override bool DeleteMessages { get; set; }
-        public override bool BanUsers { get; set; }
-        public override bool InviteUsers { get; set; }
-        public override bool PinMessages { get; set; }
-        public override bool AddAdmins { get; set; }
-        public override bool Anonymous { get; set; }
-        public override bool ManageCall { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
@@ -32,6 +19,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Anonymous = 1 << 10,
             ManageCall = 1 << 11
         }
+
+        public static int ConstructorId { get; } = 1605510357;
+        public int Flags { get; set; }
+        public override bool ChangeInfo { get; set; }
+        public override bool PostMessages { get; set; }
+        public override bool EditMessages { get; set; }
+        public override bool DeleteMessages { get; set; }
+        public override bool BanUsers { get; set; }
+        public override bool InviteUsers { get; set; }
+        public override bool PinMessages { get; set; }
+        public override bool AddAdmins { get; set; }
+        public override bool Anonymous { get; set; }
+        public override bool ManageCall { get; set; }
 
         public override void UpdateFlags()
         {
@@ -49,7 +49,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
         }

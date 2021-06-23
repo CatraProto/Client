@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class DhConfig : DhConfigBase
+    public class DhConfig : DhConfigBase
     {
         public static int ConstructorId { get; } = 740433629;
         public int G { get; set; }
@@ -16,7 +16,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(G);
             writer.Write(P);
             writer.Write(Version);

@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class InputMessagesFilterRoundVoice : MessagesFilterBase
+    public class InputMessagesFilterRoundVoice : MessagesFilterBase
     {
         public static int ConstructorId { get; } = 2054952868;
 
@@ -12,7 +12,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
         }
 
         public override void Deserialize(Reader reader)

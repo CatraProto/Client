@@ -4,22 +4,22 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public partial class GetNotifyExceptions : IMethod
+    public class GetNotifyExceptions : IMethod
     {
-        public static int ConstructorId { get; } = 1398240377;
-        public int Flags { get; set; }
-        public bool CompareSound { get; set; }
-        public InputNotifyPeerBase Peer { get; set; }
-
-        public Type Type { get; init; } = typeof(UpdatesBase);
-        public bool IsVector { get; init; } = false;
-
         [Flags]
         public enum FlagsEnum
         {
             CompareSound = 1 << 1,
             Peer = 1 << 0
         }
+
+        public static int ConstructorId { get; } = 1398240377;
+
+        public Type Type { get; init; } = typeof(UpdatesBase);
+        public bool IsVector { get; init; } = false;
+        public int Flags { get; set; }
+        public bool CompareSound { get; set; }
+        public InputNotifyPeerBase Peer { get; set; }
 
         public void UpdateFlags()
         {
@@ -29,7 +29,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             if (FlagsHelper.IsFlagSet(Flags, 0))

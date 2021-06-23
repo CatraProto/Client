@@ -3,7 +3,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class TopPeerCategoryPeers : TopPeerCategoryPeersBase
+    public class TopPeerCategoryPeers : TopPeerCategoryPeersBase
     {
         public static int ConstructorId { get; } = -75283823;
         public override TopPeerCategoryBase Category { get; set; }
@@ -16,7 +16,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Category);
             writer.Write(Count);
             writer.Write(Peers);

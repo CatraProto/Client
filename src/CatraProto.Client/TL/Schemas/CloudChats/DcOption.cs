@@ -3,8 +3,19 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class DcOption : DcOptionBase
+    public class DcOption : DcOptionBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            Ipv6 = 1 << 0,
+            MediaOnly = 1 << 1,
+            TcpoOnly = 1 << 2,
+            Cdn = 1 << 3,
+            Static = 1 << 4,
+            Secret = 1 << 10
+        }
+
         public static int ConstructorId { get; } = 414687501;
         public int Flags { get; set; }
         public override bool Ipv6 { get; set; }
@@ -16,17 +27,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override string IpAddress { get; set; }
         public override int Port { get; set; }
         public override byte[] Secret { get; set; }
-
-        [Flags]
-        public enum FlagsEnum
-        {
-            Ipv6 = 1 << 0,
-            MediaOnly = 1 << 1,
-            TcpoOnly = 1 << 2,
-            Cdn = 1 << 3,
-            Static = 1 << 4,
-            Secret = 1 << 10
-        }
 
         public override void UpdateFlags()
         {
@@ -40,7 +40,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Id);

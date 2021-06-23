@@ -3,8 +3,17 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class MessageMediaInvoice : MessageMediaBase
+    public class MessageMediaInvoice : MessageMediaBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            ShippingAddressRequested = 1 << 1,
+            Test = 1 << 3,
+            Photo = 1 << 0,
+            ReceiptMsgId = 1 << 2
+        }
+
         public static int ConstructorId { get; } = -2074799289;
         public int Flags { get; set; }
         public bool ShippingAddressRequested { get; set; }
@@ -17,15 +26,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public long TotalAmount { get; set; }
         public string StartParam { get; set; }
 
-        [Flags]
-        public enum FlagsEnum
-        {
-            ShippingAddressRequested = 1 << 1,
-            Test = 1 << 3,
-            Photo = 1 << 0,
-            ReceiptMsgId = 1 << 2
-        }
-
         public override void UpdateFlags()
         {
             Flags = ShippingAddressRequested ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
@@ -36,7 +36,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Title);

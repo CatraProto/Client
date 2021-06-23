@@ -3,21 +3,21 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
-    public partial class SentCode : SentCodeBase
+    public class SentCode : SentCodeBase
     {
-        public static int ConstructorId { get; } = 1577067778;
-        public int Flags { get; set; }
-        public override SentCodeTypeBase Type { get; set; }
-        public override string PhoneCodeHash { get; set; }
-        public override CodeTypeBase NextType { get; set; }
-        public override int? Timeout { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
             NextType = 1 << 1,
             Timeout = 1 << 2
         }
+
+        public static int ConstructorId { get; } = 1577067778;
+        public int Flags { get; set; }
+        public override SentCodeTypeBase Type { get; set; }
+        public override string PhoneCodeHash { get; set; }
+        public override CodeTypeBase NextType { get; set; }
+        public override int? Timeout { get; set; }
 
         public override void UpdateFlags()
         {
@@ -27,7 +27,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Type);

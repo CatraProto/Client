@@ -4,23 +4,23 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 {
-    public partial class SetCallRating : IMethod
+    public class SetCallRating : IMethod
     {
-        public static int ConstructorId { get; } = 1508562471;
-        public int Flags { get; set; }
-        public bool UserInitiative { get; set; }
-        public InputPhoneCallBase Peer { get; set; }
-        public int Rating { get; set; }
-        public string Comment { get; set; }
-
-        public Type Type { get; init; } = typeof(UpdatesBase);
-        public bool IsVector { get; init; } = false;
-
         [Flags]
         public enum FlagsEnum
         {
             UserInitiative = 1 << 0
         }
+
+        public static int ConstructorId { get; } = 1508562471;
+
+        public System.Type Type { get; init; } = typeof(UpdatesBase);
+        public bool IsVector { get; init; } = false;
+        public int Flags { get; set; }
+        public bool UserInitiative { get; set; }
+        public InputPhoneCallBase Peer { get; set; }
+        public int Rating { get; set; }
+        public string Comment { get; set; }
 
         public void UpdateFlags()
         {
@@ -29,7 +29,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Peer);

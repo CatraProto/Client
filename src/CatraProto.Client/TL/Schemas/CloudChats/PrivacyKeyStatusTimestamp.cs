@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class PrivacyKeyStatusTimestamp : PrivacyKeyBase
+    public class PrivacyKeyStatusTimestamp : PrivacyKeyBase
     {
         public static int ConstructorId { get; } = -1137792208;
 
@@ -12,7 +12,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
         }
 
         public override void Deserialize(Reader reader)

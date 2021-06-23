@@ -3,19 +3,8 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class PageBlockEmbed : PageBlockBase
+    public class PageBlockEmbed : PageBlockBase
     {
-        public static int ConstructorId { get; } = -1468953147;
-        public int Flags { get; set; }
-        public bool FullWidth { get; set; }
-        public bool AllowScrolling { get; set; }
-        public string Url { get; set; }
-        public string Html { get; set; }
-        public long? PosterPhotoId { get; set; }
-        public int? W { get; set; }
-        public int? H { get; set; }
-        public PageCaptionBase Caption { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
@@ -27,6 +16,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             W = 1 << 5,
             H = 1 << 5
         }
+
+        public static int ConstructorId { get; } = -1468953147;
+        public int Flags { get; set; }
+        public bool FullWidth { get; set; }
+        public bool AllowScrolling { get; set; }
+        public string Url { get; set; }
+        public string Html { get; set; }
+        public long? PosterPhotoId { get; set; }
+        public int? W { get; set; }
+        public int? H { get; set; }
+        public PageCaptionBase Caption { get; set; }
 
         public override void UpdateFlags()
         {
@@ -41,7 +41,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             if (FlagsHelper.IsFlagSet(Flags, 1))

@@ -4,8 +4,15 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class ChannelMessages : MessagesBase
+    public class ChannelMessages : MessagesBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            Inexact = 1 << 1,
+            OffsetIdOffset = 1 << 2
+        }
+
         public static int ConstructorId { get; } = 1682413576;
         public int Flags { get; set; }
         public bool Inexact { get; set; }
@@ -16,13 +23,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public IList<ChatBase> Chats { get; set; }
         public IList<UserBase> Users { get; set; }
 
-        [Flags]
-        public enum FlagsEnum
-        {
-            Inexact = 1 << 1,
-            OffsetIdOffset = 1 << 2
-        }
-
         public override void UpdateFlags()
         {
             Flags = Inexact ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
@@ -31,7 +31,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Pts);

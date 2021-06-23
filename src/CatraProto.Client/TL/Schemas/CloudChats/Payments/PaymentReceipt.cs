@@ -4,8 +4,15 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 {
-    public partial class PaymentReceipt : PaymentReceiptBase
+    public class PaymentReceipt : PaymentReceiptBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            Info = 1 << 0,
+            Shipping = 1 << 1
+        }
+
         public static int ConstructorId { get; } = 1342771681;
         public int Flags { get; set; }
         public override int Date { get; set; }
@@ -19,13 +26,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
         public override string CredentialsTitle { get; set; }
         public override IList<UserBase> Users { get; set; }
 
-        [Flags]
-        public enum FlagsEnum
-        {
-            Info = 1 << 0,
-            Shipping = 1 << 1
-        }
-
         public override void UpdateFlags()
         {
             Flags = Info == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
@@ -34,7 +34,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Date);

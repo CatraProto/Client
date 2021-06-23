@@ -3,17 +3,8 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class Folder : FolderBase
+    public class Folder : FolderBase
     {
-        public static int ConstructorId { get; } = -11252123;
-        public int Flags { get; set; }
-        public override bool AutofillNewBroadcasts { get; set; }
-        public override bool AutofillPublicGroups { get; set; }
-        public override bool AutofillNewCorrespondents { get; set; }
-        public override int Id { get; set; }
-        public override string Title { get; set; }
-        public override ChatPhotoBase Photo { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
@@ -22,6 +13,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             AutofillNewCorrespondents = 1 << 2,
             Photo = 1 << 3
         }
+
+        public static int ConstructorId { get; } = -11252123;
+        public int Flags { get; set; }
+        public override bool AutofillNewBroadcasts { get; set; }
+        public override bool AutofillPublicGroups { get; set; }
+        public override bool AutofillNewCorrespondents { get; set; }
+        public override int Id { get; set; }
+        public override string Title { get; set; }
+        public override ChatPhotoBase Photo { get; set; }
 
         public override void UpdateFlags()
         {
@@ -33,7 +33,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Id);

@@ -3,17 +3,8 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class InputThemeSettings : InputThemeSettingsBase
+    public class InputThemeSettings : InputThemeSettingsBase
     {
-        public static int ConstructorId { get; } = -1118798639;
-        public int Flags { get; set; }
-        public override BaseThemeBase BaseTheme { get; set; }
-        public override int AccentColor { get; set; }
-        public override int? MessageTopColor { get; set; }
-        public override int? MessageBottomColor { get; set; }
-        public override InputWallPaperBase Wallpaper { get; set; }
-        public override WallPaperSettingsBase WallpaperSettings { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
@@ -22,6 +13,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Wallpaper = 1 << 1,
             WallpaperSettings = 1 << 1
         }
+
+        public static int ConstructorId { get; } = -1118798639;
+        public int Flags { get; set; }
+        public override BaseThemeBase BaseTheme { get; set; }
+        public override int AccentColor { get; set; }
+        public override int? MessageTopColor { get; set; }
+        public override int? MessageBottomColor { get; set; }
+        public override InputWallPaperBase Wallpaper { get; set; }
+        public override WallPaperSettingsBase WallpaperSettings { get; set; }
 
         public override void UpdateFlags()
         {
@@ -33,7 +33,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(BaseTheme);

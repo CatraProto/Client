@@ -43,10 +43,12 @@ namespace CatraProto.TL.Generator.Objects
                 .Concat(Parameters.Where(x => x.HasFlag))
                 .ToList();
 
+            var nullPolicies = new StringBuilder();
             for (var index = 0; index < parametersOrdered.Count; index++)
             {
                 var parameter = parametersOrdered[index];
                 parameter.Type.WriteMethodParameter(args, parameter);
+                parameter.Type.WriteNullPolicy(nullPolicies, parameter);
                 if (index < parametersOrdered.Count - 1)
                 {
                     args.Append(", ");
@@ -54,7 +56,8 @@ namespace CatraProto.TL.Generator.Objects
             }
 
             var comma = args.Length == 0 ? "" : ",";
-            builder.AppendLine($"{StringTools.TwoTabs}public async Task<RpcMessage<{returnType}>> {Name}({args}{comma} CancellationToken cancellationToken = default)\n{StringTools.TwoTabs}{{");
+            builder.AppendLine($"{StringTools.TwoTabs}public async Task<RpcMessage<{returnType}>> {Name}Async({args}{comma} CancellationToken cancellationToken = default)\n{StringTools.TwoTabs}{{");
+            builder.AppendLine($"{StringTools.ThreeTabs}{nullPolicies}");
             builder.AppendLine($"{StringTools.ThreeTabs}var rpcResponse = new RpcMessage<{returnType}>();");
             builder.AppendLine($"{StringTools.ThreeTabs}var methodBody = new {Namespace.FullNamespace}()\n{StringTools.ThreeTabs}{{");
             foreach (var parameter in parametersOrdered)

@@ -3,7 +3,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
-    public partial class Blocked : BlockedBase
+    public class Blocked : BlockedBase
     {
         public static int ConstructorId { get; } = 182326673;
         public override IList<PeerBlockedBase> Blocked_ { get; set; }
@@ -16,7 +16,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Blocked_);
             writer.Write(Chats);
             writer.Write(Users);

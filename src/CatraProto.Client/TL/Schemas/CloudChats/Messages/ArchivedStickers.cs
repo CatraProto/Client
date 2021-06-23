@@ -3,7 +3,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class ArchivedStickers : ArchivedStickersBase
+    public class ArchivedStickers : ArchivedStickersBase
     {
         public static int ConstructorId { get; } = 1338747336;
         public override int Count { get; set; }
@@ -15,7 +15,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Count);
             writer.Write(Sets);
         }

@@ -5,22 +5,22 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 {
-    public partial class GetAdminedPublicChannels : IMethod
+    public class GetAdminedPublicChannels : IMethod
     {
-        public static int ConstructorId { get; } = -122669393;
-        public int Flags { get; set; }
-        public bool ByLocation { get; set; }
-        public bool CheckLimit { get; set; }
-
-        public Type Type { get; init; } = typeof(ChatsBase);
-        public bool IsVector { get; init; } = false;
-
         [Flags]
         public enum FlagsEnum
         {
             ByLocation = 1 << 0,
             CheckLimit = 1 << 1
         }
+
+        public static int ConstructorId { get; } = -122669393;
+
+        public Type Type { get; init; } = typeof(ChatsBase);
+        public bool IsVector { get; init; } = false;
+        public int Flags { get; set; }
+        public bool ByLocation { get; set; }
+        public bool CheckLimit { get; set; }
 
         public void UpdateFlags()
         {
@@ -30,7 +30,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
         }

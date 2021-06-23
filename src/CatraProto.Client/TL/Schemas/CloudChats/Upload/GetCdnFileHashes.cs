@@ -1,17 +1,16 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 {
-    public partial class GetCdnFileHashes : IMethod
+    public class GetCdnFileHashes : IMethod
     {
         public static int ConstructorId { get; } = 1302676017;
+
+        public System.Type Type { get; init; } = typeof(FileHashBase);
+        public bool IsVector { get; init; } = false;
         public byte[] FileToken { get; set; }
         public int Offset { get; set; }
-
-        public Type Type { get; init; } = typeof(FileHashBase);
-        public bool IsVector { get; init; } = false;
 
         public void UpdateFlags()
         {
@@ -19,7 +18,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(FileToken);
             writer.Write(Offset);
         }

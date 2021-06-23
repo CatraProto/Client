@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class ChatInvitePeek : ChatInviteBase
+    public class ChatInvitePeek : ChatInviteBase
     {
         public static int ConstructorId { get; } = 1634294960;
         public ChatBase Chat { get; set; }
@@ -14,7 +14,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Chat);
             writer.Write(Expires);
         }

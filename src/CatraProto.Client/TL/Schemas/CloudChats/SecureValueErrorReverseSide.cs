@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class SecureValueErrorReverseSide : SecureValueErrorBase
+    public class SecureValueErrorReverseSide : SecureValueErrorBase
     {
         public static int ConstructorId { get; } = -2037765467;
         public override SecureValueTypeBase Type { get; set; }
@@ -15,7 +15,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Type);
             writer.Write(FileHash);
             writer.Write(Text);

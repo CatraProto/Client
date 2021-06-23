@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class StatsAbsValueAndPrev : StatsAbsValueAndPrevBase
+    public class StatsAbsValueAndPrev : StatsAbsValueAndPrevBase
     {
         public static int ConstructorId { get; } = -884757282;
         public override double Current { get; set; }
@@ -14,7 +14,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Current);
             writer.Write(Previous);
         }

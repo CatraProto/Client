@@ -4,18 +4,8 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class MessageReplies : MessageRepliesBase
+    public class MessageReplies : MessageRepliesBase
     {
-        public static int ConstructorId { get; } = 1093204652;
-        public int Flags { get; set; }
-        public override bool Comments { get; set; }
-        public override int Replies { get; set; }
-        public override int RepliesPts { get; set; }
-        public override IList<PeerBase> RecentRepliers { get; set; }
-        public override int? ChannelId { get; set; }
-        public override int? MaxId { get; set; }
-        public override int? ReadMaxId { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
@@ -25,6 +15,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             MaxId = 1 << 2,
             ReadMaxId = 1 << 3
         }
+
+        public static int ConstructorId { get; } = 1093204652;
+        public int Flags { get; set; }
+        public override bool Comments { get; set; }
+        public override int Replies { get; set; }
+        public override int RepliesPts { get; set; }
+        public override IList<PeerBase> RecentRepliers { get; set; }
+        public override int? ChannelId { get; set; }
+        public override int? MaxId { get; set; }
+        public override int? ReadMaxId { get; set; }
 
         public override void UpdateFlags()
         {
@@ -37,7 +37,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Replies);

@@ -3,7 +3,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class UpdateMessagePollVote : UpdateBase
+    public class UpdateMessagePollVote : UpdateBase
     {
         public static int ConstructorId { get; } = 1123585836;
         public long PollId { get; set; }
@@ -16,7 +16,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(PollId);
             writer.Write(UserId);
             writer.Write(Options);

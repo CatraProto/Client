@@ -4,24 +4,24 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 {
-    public partial class SendPaymentForm : IMethod
+    public class SendPaymentForm : IMethod
     {
-        public static int ConstructorId { get; } = 730364339;
-        public int Flags { get; set; }
-        public int MsgId { get; set; }
-        public string RequestedInfoId { get; set; }
-        public string ShippingOptionId { get; set; }
-        public InputPaymentCredentialsBase Credentials { get; set; }
-
-        public Type Type { get; init; } = typeof(PaymentResultBase);
-        public bool IsVector { get; init; } = false;
-
         [Flags]
         public enum FlagsEnum
         {
             RequestedInfoId = 1 << 0,
             ShippingOptionId = 1 << 1
         }
+
+        public static int ConstructorId { get; } = 730364339;
+
+        public System.Type Type { get; init; } = typeof(PaymentResultBase);
+        public bool IsVector { get; init; } = false;
+        public int Flags { get; set; }
+        public int MsgId { get; set; }
+        public string RequestedInfoId { get; set; }
+        public string ShippingOptionId { get; set; }
+        public InputPaymentCredentialsBase Credentials { get; set; }
 
         public void UpdateFlags()
         {
@@ -31,7 +31,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(MsgId);

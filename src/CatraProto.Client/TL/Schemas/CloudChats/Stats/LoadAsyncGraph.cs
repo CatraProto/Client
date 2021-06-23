@@ -4,21 +4,21 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 {
-    public partial class LoadAsyncGraph : IMethod
+    public class LoadAsyncGraph : IMethod
     {
-        public static int ConstructorId { get; } = 1646092192;
-        public int Flags { get; set; }
-        public string Token { get; set; }
-        public long? X { get; set; }
-
-        public Type Type { get; init; } = typeof(StatsGraphBase);
-        public bool IsVector { get; init; } = false;
-
         [Flags]
         public enum FlagsEnum
         {
             X = 1 << 0
         }
+
+        public static int ConstructorId { get; } = 1646092192;
+
+        public System.Type Type { get; init; } = typeof(StatsGraphBase);
+        public bool IsVector { get; init; } = false;
+        public int Flags { get; set; }
+        public string Token { get; set; }
+        public long? X { get; set; }
 
         public void UpdateFlags()
         {
@@ -27,7 +27,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Token);

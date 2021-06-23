@@ -3,18 +3,18 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class InputMediaPhotoExternal : InputMediaBase
+    public class InputMediaPhotoExternal : InputMediaBase
     {
-        public static int ConstructorId { get; } = -440664550;
-        public int Flags { get; set; }
-        public string Url { get; set; }
-        public int? TtlSeconds { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
             TtlSeconds = 1 << 0
         }
+
+        public static int ConstructorId { get; } = -440664550;
+        public int Flags { get; set; }
+        public string Url { get; set; }
+        public int? TtlSeconds { get; set; }
 
         public override void UpdateFlags()
         {
@@ -23,7 +23,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Url);

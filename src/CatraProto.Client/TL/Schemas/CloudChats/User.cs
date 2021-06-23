@@ -4,37 +4,8 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class User : UserBase
+    public class User : UserBase
     {
-        public static int ConstructorId { get; } = -1820043071;
-        public int Flags { get; set; }
-        public bool Self { get; set; }
-        public bool Contact { get; set; }
-        public bool MutualContact { get; set; }
-        public bool Deleted { get; set; }
-        public bool Bot { get; set; }
-        public bool BotChatHistory { get; set; }
-        public bool BotNochats { get; set; }
-        public bool Verified { get; set; }
-        public bool Restricted { get; set; }
-        public bool Min { get; set; }
-        public bool BotInlineGeo { get; set; }
-        public bool Support { get; set; }
-        public bool Scam { get; set; }
-        public bool ApplyMinPhoto { get; set; }
-        public override int Id { get; set; }
-        public long? AccessHash { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Username { get; set; }
-        public string Phone { get; set; }
-        public UserProfilePhotoBase Photo { get; set; }
-        public UserStatusBase Status { get; set; }
-        public int? BotInfoVersion { get; set; }
-        public IList<RestrictionReasonBase> RestrictionReason { get; set; }
-        public string BotInlinePlaceholder { get; set; }
-        public string LangCode { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
@@ -64,6 +35,35 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             BotInlinePlaceholder = 1 << 19,
             LangCode = 1 << 22
         }
+
+        public static int ConstructorId { get; } = -1820043071;
+        public int Flags { get; set; }
+        public bool Self { get; set; }
+        public bool Contact { get; set; }
+        public bool MutualContact { get; set; }
+        public bool Deleted { get; set; }
+        public bool Bot { get; set; }
+        public bool BotChatHistory { get; set; }
+        public bool BotNochats { get; set; }
+        public bool Verified { get; set; }
+        public bool Restricted { get; set; }
+        public bool Min { get; set; }
+        public bool BotInlineGeo { get; set; }
+        public bool Support { get; set; }
+        public bool Scam { get; set; }
+        public bool ApplyMinPhoto { get; set; }
+        public override int Id { get; set; }
+        public long? AccessHash { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Username { get; set; }
+        public string Phone { get; set; }
+        public UserProfilePhotoBase Photo { get; set; }
+        public UserStatusBase Status { get; set; }
+        public int? BotInfoVersion { get; set; }
+        public IList<RestrictionReasonBase> RestrictionReason { get; set; }
+        public string BotInlinePlaceholder { get; set; }
+        public string LangCode { get; set; }
 
         public override void UpdateFlags()
         {
@@ -96,7 +96,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Id);

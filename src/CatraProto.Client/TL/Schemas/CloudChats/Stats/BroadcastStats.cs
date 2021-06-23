@@ -3,7 +3,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 {
-    public partial class BroadcastStats : BroadcastStatsBase
+    public class BroadcastStats : BroadcastStatsBase
     {
         public static int ConstructorId { get; } = -1107852396;
         public override StatsDateRangeDaysBase Period { get; set; }
@@ -28,7 +28,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Period);
             writer.Write(Followers);
             writer.Write(ViewsPerPost);

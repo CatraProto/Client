@@ -3,20 +3,20 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class KeyboardButtonUrlAuth : KeyboardButtonBase
+    public class KeyboardButtonUrlAuth : KeyboardButtonBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            FwdText = 1 << 0
+        }
+
         public static int ConstructorId { get; } = 280464681;
         public int Flags { get; set; }
         public override string Text { get; set; }
         public string FwdText { get; set; }
         public string Url { get; set; }
         public int ButtonId { get; set; }
-
-        [Flags]
-        public enum FlagsEnum
-        {
-            FwdText = 1 << 0
-        }
 
         public override void UpdateFlags()
         {
@@ -25,7 +25,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Text);

@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class InputEncryptedChat : InputEncryptedChatBase
+    public class InputEncryptedChat : InputEncryptedChatBase
     {
         public static int ConstructorId { get; } = -247351839;
         public override int ChatId { get; set; }
@@ -14,7 +14,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(ChatId);
             writer.Write(AccessHash);
         }

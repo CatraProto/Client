@@ -3,8 +3,15 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class PhoneConnectionWebrtc : PhoneConnectionBase
+    public class PhoneConnectionWebrtc : PhoneConnectionBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            Turn = 1 << 0,
+            Stun = 1 << 1
+        }
+
         public static int ConstructorId { get; } = 1667228533;
         public int Flags { get; set; }
         public bool Turn { get; set; }
@@ -16,13 +23,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public string Username { get; set; }
         public string Password { get; set; }
 
-        [Flags]
-        public enum FlagsEnum
-        {
-            Turn = 1 << 0,
-            Stun = 1 << 1
-        }
-
         public override void UpdateFlags()
         {
             Flags = Turn ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
@@ -31,7 +31,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Id);

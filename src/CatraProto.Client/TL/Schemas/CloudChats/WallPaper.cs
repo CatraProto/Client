@@ -3,8 +3,18 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class WallPaper : WallPaperBase
+    public class WallPaper : WallPaperBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            Creator = 1 << 0,
+            Default = 1 << 1,
+            Pattern = 1 << 3,
+            Dark = 1 << 4,
+            Settings = 1 << 2
+        }
+
         public static int ConstructorId { get; } = -1539849235;
         public long Id { get; set; }
         public int Flags { get; set; }
@@ -17,16 +27,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public DocumentBase Document { get; set; }
         public override WallPaperSettingsBase Settings { get; set; }
 
-        [Flags]
-        public enum FlagsEnum
-        {
-            Creator = 1 << 0,
-            Default = 1 << 1,
-            Pattern = 1 << 3,
-            Dark = 1 << 4,
-            Settings = 1 << 2
-        }
-
         public override void UpdateFlags()
         {
             Flags = Creator ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
@@ -38,7 +38,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Id);
             UpdateFlags();
             writer.Write(Flags);

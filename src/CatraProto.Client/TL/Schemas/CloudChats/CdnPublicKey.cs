@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class CdnPublicKey : CdnPublicKeyBase
+    public class CdnPublicKey : CdnPublicKeyBase
     {
         public static int ConstructorId { get; } = -914167110;
         public override int DcId { get; set; }
@@ -14,7 +14,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(DcId);
             writer.Write(PublicKey);
         }

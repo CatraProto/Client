@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class NearestDc : NearestDcBase
+    public class NearestDc : NearestDcBase
     {
         public static int ConstructorId { get; } = -1910892683;
         public override string Country { get; set; }
@@ -15,7 +15,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Country);
             writer.Write(ThisDc);
             writer.Write(NearestDc_);

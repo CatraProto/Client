@@ -4,15 +4,15 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public partial class GetTheme : IMethod
+    public class GetTheme : IMethod
     {
         public static int ConstructorId { get; } = -1919060949;
-        public string Format { get; set; }
-        public InputThemeBase Theme { get; set; }
-        public long DocumentId { get; set; }
 
         public Type Type { get; init; } = typeof(ThemeBase);
         public bool IsVector { get; init; } = false;
+        public string Format { get; set; }
+        public InputThemeBase Theme { get; set; }
+        public long DocumentId { get; set; }
 
         public void UpdateFlags()
         {
@@ -20,7 +20,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Format);
             writer.Write(Theme);
             writer.Write(DocumentId);

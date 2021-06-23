@@ -3,7 +3,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 {
-    public partial class BankCardData : BankCardDataBase
+    public class BankCardData : BankCardDataBase
     {
         public static int ConstructorId { get; } = 1042605427;
         public override string Title { get; set; }
@@ -15,7 +15,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Title);
             writer.Write(OpenUrls);
         }

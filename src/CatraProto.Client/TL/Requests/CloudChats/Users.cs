@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ using CatraProto.Client.TL.Schemas.CloudChats.Users;
 
 namespace CatraProto.Client.TL.Requests.CloudChats
 {
-    public partial class Users
+    public class Users
     {
         private MessagesHandler _messagesHandler;
 
@@ -18,12 +19,18 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             _messagesHandler = messagesHandler;
         }
 
-        public async Task<RpcMessage<UserBase>> GetUsers(List<InputUserBase> id, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<UserBase>> GetUsersAsync(List<InputUserBase> id,
+            CancellationToken cancellationToken = default)
         {
+            if (id is null)
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+
             var rpcResponse = new RpcMessage<UserBase>();
             var methodBody = new GetUsers
             {
-                Id = id,
+                Id = id
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage
@@ -35,12 +42,18 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             return rpcResponse;
         }
 
-        public async Task<RpcMessage<UserFullBase>> GetFullUser(InputUserBase id, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<UserFullBase>> GetFullUserAsync(InputUserBase id,
+            CancellationToken cancellationToken = default)
         {
+            if (id is null)
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+
             var rpcResponse = new RpcMessage<UserFullBase>();
             var methodBody = new GetFullUser
             {
-                Id = id,
+                Id = id
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage
@@ -52,13 +65,24 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             return rpcResponse;
         }
 
-        public async Task<RpcMessage<bool>> SetSecureValueErrors(InputUserBase id, List<SecureValueErrorBase> errors, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<bool>> SetSecureValueErrorsAsync(InputUserBase id,
+            List<SecureValueErrorBase> errors, CancellationToken cancellationToken = default)
         {
+            if (id is null)
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+
+            if (errors is null)
+            {
+                throw new ArgumentNullException(nameof(errors));
+            }
+
             var rpcResponse = new RpcMessage<bool>();
             var methodBody = new SetSecureValueErrors
             {
                 Id = id,
-                Errors = errors,
+                Errors = errors
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage

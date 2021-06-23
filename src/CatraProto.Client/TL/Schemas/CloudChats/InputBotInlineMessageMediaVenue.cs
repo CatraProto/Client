@@ -3,8 +3,14 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class InputBotInlineMessageMediaVenue : InputBotInlineMessageBase
+    public class InputBotInlineMessageMediaVenue : InputBotInlineMessageBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            ReplyMarkup = 1 << 2
+        }
+
         public static int ConstructorId { get; } = 1098628881;
         public int Flags { get; set; }
         public InputGeoPointBase GeoPoint { get; set; }
@@ -15,12 +21,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public string VenueType { get; set; }
         public override ReplyMarkupBase ReplyMarkup { get; set; }
 
-        [Flags]
-        public enum FlagsEnum
-        {
-            ReplyMarkup = 1 << 2
-        }
-
         public override void UpdateFlags()
         {
             Flags = ReplyMarkup == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
@@ -28,7 +28,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(GeoPoint);

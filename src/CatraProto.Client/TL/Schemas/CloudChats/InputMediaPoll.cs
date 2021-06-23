@@ -4,15 +4,8 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class InputMediaPoll : InputMediaBase
+    public class InputMediaPoll : InputMediaBase
     {
-        public static int ConstructorId { get; } = 261416433;
-        public int Flags { get; set; }
-        public PollBase Poll { get; set; }
-        public IList<byte[]> CorrectAnswers { get; set; }
-        public string Solution { get; set; }
-        public IList<MessageEntityBase> SolutionEntities { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
@@ -20,6 +13,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Solution = 1 << 1,
             SolutionEntities = 1 << 1
         }
+
+        public static int ConstructorId { get; } = 261416433;
+        public int Flags { get; set; }
+        public PollBase Poll { get; set; }
+        public IList<byte[]> CorrectAnswers { get; set; }
+        public string Solution { get; set; }
+        public IList<MessageEntityBase> SolutionEntities { get; set; }
 
         public override void UpdateFlags()
         {
@@ -30,7 +30,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Poll);

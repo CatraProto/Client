@@ -4,17 +4,8 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public partial class UpdateProfile : IMethod
+    public class UpdateProfile : IMethod
     {
-        public static int ConstructorId { get; } = 2018596725;
-        public int Flags { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string About { get; set; }
-
-        public Type Type { get; init; } = typeof(UserBase);
-        public bool IsVector { get; init; } = false;
-
         [Flags]
         public enum FlagsEnum
         {
@@ -22,6 +13,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             LastName = 1 << 1,
             About = 1 << 2
         }
+
+        public static int ConstructorId { get; } = 2018596725;
+
+        public Type Type { get; init; } = typeof(UserBase);
+        public bool IsVector { get; init; } = false;
+        public int Flags { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string About { get; set; }
 
         public void UpdateFlags()
         {
@@ -32,7 +32,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             if (FlagsHelper.IsFlagSet(Flags, 0))

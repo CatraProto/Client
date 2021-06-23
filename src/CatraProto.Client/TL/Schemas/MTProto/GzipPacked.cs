@@ -3,7 +3,7 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-    public partial class GzipPacked : IObject
+    public class GzipPacked : IObject
     {
         public static int ConstructorId { get; } = 812830625;
         public byte[] PackedData { get; set; }
@@ -14,7 +14,11 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(PackedData);
         }
 

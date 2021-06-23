@@ -4,18 +4,8 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
-    public partial class BlockFromReplies : IMethod
+    public class BlockFromReplies : IMethod
     {
-        public static int ConstructorId { get; } = 698914348;
-        public int Flags { get; set; }
-        public bool DeleteMessage { get; set; }
-        public bool DeleteHistory { get; set; }
-        public bool ReportSpam { get; set; }
-        public int MsgId { get; set; }
-
-        public Type Type { get; init; } = typeof(UpdatesBase);
-        public bool IsVector { get; init; } = false;
-
         [Flags]
         public enum FlagsEnum
         {
@@ -23,6 +13,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
             DeleteHistory = 1 << 1,
             ReportSpam = 1 << 2
         }
+
+        public static int ConstructorId { get; } = 698914348;
+
+        public Type Type { get; init; } = typeof(UpdatesBase);
+        public bool IsVector { get; init; } = false;
+        public int Flags { get; set; }
+        public bool DeleteMessage { get; set; }
+        public bool DeleteHistory { get; set; }
+        public bool ReportSpam { get; set; }
+        public int MsgId { get; set; }
 
         public void UpdateFlags()
         {
@@ -33,7 +33,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(MsgId);

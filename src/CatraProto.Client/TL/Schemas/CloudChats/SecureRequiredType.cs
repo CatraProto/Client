@@ -3,15 +3,8 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class SecureRequiredType : SecureRequiredTypeBase
+    public class SecureRequiredType : SecureRequiredTypeBase
     {
-        public static int ConstructorId { get; } = -2103600678;
-        public int Flags { get; set; }
-        public bool NativeNames { get; set; }
-        public bool SelfieRequired { get; set; }
-        public bool TranslationRequired { get; set; }
-        public SecureValueTypeBase Type { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
@@ -19,6 +12,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             SelfieRequired = 1 << 1,
             TranslationRequired = 1 << 2
         }
+
+        public static int ConstructorId { get; } = -2103600678;
+        public int Flags { get; set; }
+        public bool NativeNames { get; set; }
+        public bool SelfieRequired { get; set; }
+        public bool TranslationRequired { get; set; }
+        public SecureValueTypeBase Type { get; set; }
 
         public override void UpdateFlags()
         {
@@ -29,7 +29,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Type);

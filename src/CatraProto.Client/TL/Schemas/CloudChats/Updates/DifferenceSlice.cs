@@ -3,7 +3,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 {
-    public partial class DifferenceSlice : DifferenceBase
+    public class DifferenceSlice : DifferenceBase
     {
         public static int ConstructorId { get; } = -1459938943;
         public IList<MessageBase> NewMessages { get; set; }
@@ -19,7 +19,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(NewMessages);
             writer.Write(NewEncryptedMessages);
             writer.Write(OtherUpdates);

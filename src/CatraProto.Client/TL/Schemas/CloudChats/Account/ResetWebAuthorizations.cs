@@ -4,7 +4,7 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public partial class ResetWebAuthorizations : IMethod
+    public class ResetWebAuthorizations : IMethod
     {
         public static int ConstructorId { get; } = 1747789204;
 
@@ -17,7 +17,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
         }
 
         public void Deserialize(Reader reader)

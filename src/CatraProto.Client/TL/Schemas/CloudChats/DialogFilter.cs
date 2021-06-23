@@ -4,8 +4,22 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class DialogFilter : DialogFilterBase
+    public class DialogFilter : DialogFilterBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            Contacts = 1 << 0,
+            NonContacts = 1 << 1,
+            Groups = 1 << 2,
+            Broadcasts = 1 << 3,
+            Bots = 1 << 4,
+            ExcludeMuted = 1 << 11,
+            ExcludeRead = 1 << 12,
+            ExcludeArchived = 1 << 13,
+            Emoticon = 1 << 25
+        }
+
         public static int ConstructorId { get; } = 1949890536;
         public int Flags { get; set; }
         public override bool Contacts { get; set; }
@@ -23,20 +37,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override IList<InputPeerBase> IncludePeers { get; set; }
         public override IList<InputPeerBase> ExcludePeers { get; set; }
 
-        [Flags]
-        public enum FlagsEnum
-        {
-            Contacts = 1 << 0,
-            NonContacts = 1 << 1,
-            Groups = 1 << 2,
-            Broadcasts = 1 << 3,
-            Bots = 1 << 4,
-            ExcludeMuted = 1 << 11,
-            ExcludeRead = 1 << 12,
-            ExcludeArchived = 1 << 13,
-            Emoticon = 1 << 25
-        }
-
         public override void UpdateFlags()
         {
             Flags = Contacts ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
@@ -52,7 +52,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Id);

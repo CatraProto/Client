@@ -3,7 +3,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class StickerSetMultiCovered : StickerSetCoveredBase
+    public class StickerSetMultiCovered : StickerSetCoveredBase
     {
         public static int ConstructorId { get; } = 872932635;
         public override StickerSetBase Set { get; set; }
@@ -15,7 +15,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Set);
             writer.Write(Covers);
         }

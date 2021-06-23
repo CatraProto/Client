@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class InputFolderPeer : InputFolderPeerBase
+    public class InputFolderPeer : InputFolderPeerBase
     {
         public static int ConstructorId { get; } = -70073706;
         public override InputPeerBase Peer { get; set; }
@@ -14,7 +14,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Peer);
             writer.Write(FolderId);
         }

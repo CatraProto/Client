@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class InputMediaGeoPoint : InputMediaBase
+    public class InputMediaGeoPoint : InputMediaBase
     {
         public static int ConstructorId { get; } = -104578748;
         public InputGeoPointBase GeoPoint { get; set; }
@@ -13,7 +13,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(GeoPoint);
         }
 

@@ -3,8 +3,16 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class Authorization : AuthorizationBase
+    public class Authorization : AuthorizationBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            Current = 1 << 0,
+            OfficialApp = 1 << 1,
+            PasswordPending = 1 << 2
+        }
+
         public static int ConstructorId { get; } = -1392388579;
         public int Flags { get; set; }
         public override bool Current { get; set; }
@@ -23,14 +31,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override string Country { get; set; }
         public override string Region { get; set; }
 
-        [Flags]
-        public enum FlagsEnum
-        {
-            Current = 1 << 0,
-            OfficialApp = 1 << 1,
-            PasswordPending = 1 << 2
-        }
-
         public override void UpdateFlags()
         {
             Flags = Current ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
@@ -40,7 +40,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Hash);

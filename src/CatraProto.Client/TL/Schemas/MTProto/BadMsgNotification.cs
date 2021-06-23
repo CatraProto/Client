@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-    public partial class BadMsgNotification : BadMsgNotificationBase
+    public class BadMsgNotification : BadMsgNotificationBase
     {
         public static int ConstructorId { get; } = -1477445615;
         public override long BadMsgId { get; set; }
@@ -15,7 +15,11 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(BadMsgId);
             writer.Write(BadMsgSeqno);
             writer.Write(ErrorCode);

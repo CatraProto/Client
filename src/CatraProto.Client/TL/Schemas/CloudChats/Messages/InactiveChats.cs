@@ -3,7 +3,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class InactiveChats : InactiveChatsBase
+    public class InactiveChats : InactiveChatsBase
     {
         public static int ConstructorId { get; } = -1456996667;
         public override IList<int> Dates { get; set; }
@@ -16,7 +16,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Dates);
             writer.Write(Chats);
             writer.Write(Users);

@@ -5,18 +5,8 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class ToggleStickerSets : IMethod
+    public class ToggleStickerSets : IMethod
     {
-        public static int ConstructorId { get; } = -1257951254;
-        public int Flags { get; set; }
-        public bool Uninstall { get; set; }
-        public bool Archive { get; set; }
-        public bool Unarchive { get; set; }
-        public IList<InputStickerSetBase> Stickersets { get; set; }
-
-        public Type Type { get; init; } = typeof(bool);
-        public bool IsVector { get; init; } = false;
-
         [Flags]
         public enum FlagsEnum
         {
@@ -24,6 +14,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             Archive = 1 << 1,
             Unarchive = 1 << 2
         }
+
+        public static int ConstructorId { get; } = -1257951254;
+
+        public System.Type Type { get; init; } = typeof(bool);
+        public bool IsVector { get; init; } = false;
+        public int Flags { get; set; }
+        public bool Uninstall { get; set; }
+        public bool Archive { get; set; }
+        public bool Unarchive { get; set; }
+        public IList<InputStickerSetBase> Stickersets { get; set; }
 
         public void UpdateFlags()
         {
@@ -34,7 +34,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Stickersets);

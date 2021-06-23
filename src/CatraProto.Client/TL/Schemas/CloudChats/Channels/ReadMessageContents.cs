@@ -5,14 +5,14 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 {
-    public partial class ReadMessageContents : IMethod
+    public class ReadMessageContents : IMethod
     {
         public static int ConstructorId { get; } = -357180360;
-        public InputChannelBase Channel { get; set; }
-        public IList<int> Id { get; set; }
 
         public Type Type { get; init; } = typeof(bool);
         public bool IsVector { get; init; } = false;
+        public InputChannelBase Channel { get; set; }
+        public IList<int> Id { get; set; }
 
         public void UpdateFlags()
         {
@@ -20,7 +20,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Channel);
             writer.Write(Id);
         }

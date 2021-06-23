@@ -4,8 +4,15 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class UpdateServiceNotification : UpdateBase
+    public class UpdateServiceNotification : UpdateBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            Popup = 1 << 0,
+            InboxDate = 1 << 1
+        }
+
         public static int ConstructorId { get; } = -337352679;
         public int Flags { get; set; }
         public bool Popup { get; set; }
@@ -15,13 +22,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public MessageMediaBase Media { get; set; }
         public IList<MessageEntityBase> Entities { get; set; }
 
-        [Flags]
-        public enum FlagsEnum
-        {
-            Popup = 1 << 0,
-            InboxDate = 1 << 1
-        }
-
         public override void UpdateFlags()
         {
             Flags = Popup ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
@@ -30,7 +30,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             if (FlagsHelper.IsFlagSet(Flags, 1))

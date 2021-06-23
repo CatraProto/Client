@@ -4,21 +4,21 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class ToggleDialogPin : IMethod
+    public class ToggleDialogPin : IMethod
     {
-        public static int ConstructorId { get; } = -1489903017;
-        public int Flags { get; set; }
-        public bool Pinned { get; set; }
-        public InputDialogPeerBase Peer { get; set; }
-
-        public Type Type { get; init; } = typeof(bool);
-        public bool IsVector { get; init; } = false;
-
         [Flags]
         public enum FlagsEnum
         {
             Pinned = 1 << 0
         }
+
+        public static int ConstructorId { get; } = -1489903017;
+
+        public System.Type Type { get; init; } = typeof(bool);
+        public bool IsVector { get; init; } = false;
+        public int Flags { get; set; }
+        public bool Pinned { get; set; }
+        public InputDialogPeerBase Peer { get; set; }
 
         public void UpdateFlags()
         {
@@ -27,7 +27,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Peer);

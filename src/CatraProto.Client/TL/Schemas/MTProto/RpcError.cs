@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-    public partial class RpcError : RpcErrorBase
+    public class RpcError : RpcErrorBase
     {
         public static int ConstructorId { get; } = 558156313;
         public override int ErrorCode { get; set; }
@@ -14,7 +14,11 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(ErrorCode);
             writer.Write(ErrorMessage);
         }

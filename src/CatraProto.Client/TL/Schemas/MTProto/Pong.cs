@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-    public partial class Pong : PongBase
+    public class Pong : PongBase
     {
         public static int ConstructorId { get; } = 880243653;
         public override long MsgId { get; set; }
@@ -14,7 +14,11 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(MsgId);
             writer.Write(PingId);
         }

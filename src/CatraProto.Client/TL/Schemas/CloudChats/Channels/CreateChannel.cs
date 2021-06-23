@@ -4,21 +4,8 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 {
-    public partial class CreateChannel : IMethod
+    public class CreateChannel : IMethod
     {
-        public static int ConstructorId { get; } = 1029681423;
-        public int Flags { get; set; }
-        public bool Broadcast { get; set; }
-        public bool Megagroup { get; set; }
-        public bool ForImport { get; set; }
-        public string Title { get; set; }
-        public string About { get; set; }
-        public InputGeoPointBase GeoPoint { get; set; }
-        public string Address { get; set; }
-
-        public Type Type { get; init; } = typeof(UpdatesBase);
-        public bool IsVector { get; init; } = false;
-
         [Flags]
         public enum FlagsEnum
         {
@@ -28,6 +15,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
             GeoPoint = 1 << 2,
             Address = 1 << 2
         }
+
+        public static int ConstructorId { get; } = 1029681423;
+
+        public Type Type { get; init; } = typeof(UpdatesBase);
+        public bool IsVector { get; init; } = false;
+        public int Flags { get; set; }
+        public bool Broadcast { get; set; }
+        public bool Megagroup { get; set; }
+        public bool ForImport { get; set; }
+        public string Title { get; set; }
+        public string About { get; set; }
+        public InputGeoPointBase GeoPoint { get; set; }
+        public string Address { get; set; }
 
         public void UpdateFlags()
         {
@@ -40,7 +40,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Title);

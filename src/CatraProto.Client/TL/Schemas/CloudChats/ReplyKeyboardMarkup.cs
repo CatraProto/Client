@@ -4,15 +4,8 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class ReplyKeyboardMarkup : ReplyMarkupBase
+    public class ReplyKeyboardMarkup : ReplyMarkupBase
     {
-        public static int ConstructorId { get; } = 889353612;
-        public int Flags { get; set; }
-        public bool Resize { get; set; }
-        public bool SingleUse { get; set; }
-        public bool Selective { get; set; }
-        public IList<KeyboardButtonRowBase> Rows { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
@@ -20,6 +13,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             SingleUse = 1 << 1,
             Selective = 1 << 2
         }
+
+        public static int ConstructorId { get; } = 889353612;
+        public int Flags { get; set; }
+        public bool Resize { get; set; }
+        public bool SingleUse { get; set; }
+        public bool Selective { get; set; }
+        public IList<KeyboardButtonRowBase> Rows { get; set; }
 
         public override void UpdateFlags()
         {
@@ -30,7 +30,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Rows);

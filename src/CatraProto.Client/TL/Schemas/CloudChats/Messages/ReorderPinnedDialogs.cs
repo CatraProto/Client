@@ -5,22 +5,22 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class ReorderPinnedDialogs : IMethod
+    public class ReorderPinnedDialogs : IMethod
     {
-        public static int ConstructorId { get; } = 991616823;
-        public int Flags { get; set; }
-        public bool Force { get; set; }
-        public int FolderId { get; set; }
-        public IList<InputDialogPeerBase> Order { get; set; }
-
-        public Type Type { get; init; } = typeof(bool);
-        public bool IsVector { get; init; } = false;
-
         [Flags]
         public enum FlagsEnum
         {
             Force = 1 << 0
         }
+
+        public static int ConstructorId { get; } = 991616823;
+
+        public System.Type Type { get; init; } = typeof(bool);
+        public bool IsVector { get; init; } = false;
+        public int Flags { get; set; }
+        public bool Force { get; set; }
+        public int FolderId { get; set; }
+        public IList<InputDialogPeerBase> Order { get; set; }
 
         public void UpdateFlags()
         {
@@ -29,7 +29,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(FolderId);

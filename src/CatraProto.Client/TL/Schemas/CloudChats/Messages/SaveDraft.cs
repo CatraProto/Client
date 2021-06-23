@@ -5,19 +5,8 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class SaveDraft : IMethod
+    public class SaveDraft : IMethod
     {
-        public static int ConstructorId { get; } = -1137057461;
-        public int Flags { get; set; }
-        public bool NoWebpage { get; set; }
-        public int? ReplyToMsgId { get; set; }
-        public InputPeerBase Peer { get; set; }
-        public string Message { get; set; }
-        public IList<MessageEntityBase> Entities { get; set; }
-
-        public Type Type { get; init; } = typeof(bool);
-        public bool IsVector { get; init; } = false;
-
         [Flags]
         public enum FlagsEnum
         {
@@ -25,6 +14,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             ReplyToMsgId = 1 << 0,
             Entities = 1 << 3
         }
+
+        public static int ConstructorId { get; } = -1137057461;
+
+        public System.Type Type { get; init; } = typeof(bool);
+        public bool IsVector { get; init; } = false;
+        public int Flags { get; set; }
+        public bool NoWebpage { get; set; }
+        public int? ReplyToMsgId { get; set; }
+        public InputPeerBase Peer { get; set; }
+        public string Message { get; set; }
+        public IList<MessageEntityBase> Entities { get; set; }
 
         public void UpdateFlags()
         {
@@ -35,7 +35,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             if (FlagsHelper.IsFlagSet(Flags, 0))

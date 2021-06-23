@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class PeerLocated : PeerLocatedBase
+    public class PeerLocated : PeerLocatedBase
     {
         public static int ConstructorId { get; } = -901375139;
         public PeerBase Peer { get; set; }
@@ -15,7 +15,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Peer);
             writer.Write(Expires);
             writer.Write(Distance);

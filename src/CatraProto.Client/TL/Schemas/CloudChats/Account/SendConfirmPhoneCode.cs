@@ -5,14 +5,14 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public partial class SendConfirmPhoneCode : IMethod
+    public class SendConfirmPhoneCode : IMethod
     {
         public static int ConstructorId { get; } = 457157256;
-        public string Hash { get; set; }
-        public CodeSettingsBase Settings { get; set; }
 
         public Type Type { get; init; } = typeof(SentCodeBase);
         public bool IsVector { get; init; } = false;
+        public string Hash { get; set; }
+        public CodeSettingsBase Settings { get; set; }
 
         public void UpdateFlags()
         {
@@ -20,7 +20,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Hash);
             writer.Write(Settings);
         }

@@ -4,9 +4,19 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class Search : IMethod
+    public class Search : IMethod
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            FromId = 1 << 0,
+            TopMsgId = 1 << 1
+        }
+
         public static int ConstructorId { get; } = 204812012;
+
+        public System.Type Type { get; init; } = typeof(MessagesBase);
+        public bool IsVector { get; init; } = false;
         public int Flags { get; set; }
         public InputPeerBase Peer { get; set; }
         public string Q { get; set; }
@@ -22,16 +32,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public int MinId { get; set; }
         public int Hash { get; set; }
 
-        public Type Type { get; init; } = typeof(MessagesBase);
-        public bool IsVector { get; init; } = false;
-
-        [Flags]
-        public enum FlagsEnum
-        {
-            FromId = 1 << 0,
-            TopMsgId = 1 << 1
-        }
-
         public void UpdateFlags()
         {
             Flags = FromId == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
@@ -40,7 +40,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Peer);

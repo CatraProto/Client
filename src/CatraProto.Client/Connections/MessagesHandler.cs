@@ -160,7 +160,7 @@ namespace CatraProto.Client.Connections
                 method = null;
                 return false;
             }
-            
+
             if (_sentMessages.TryGetValue(messageId, out var container))
             {
                 if (container.OutgoingMessage.Body is IMethod outMethod)

@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class InputWebFileLocation : InputWebFileLocationBase
+    public class InputWebFileLocation : InputWebFileLocationBase
     {
         public static int ConstructorId { get; } = -1036396922;
         public string Url { get; set; }
@@ -14,7 +14,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Url);
             writer.Write(AccessHash);
         }

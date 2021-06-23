@@ -4,20 +4,8 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class SecureValue : SecureValueBase
+    public class SecureValue : SecureValueBase
     {
-        public static int ConstructorId { get; } = 411017418;
-        public int Flags { get; set; }
-        public override SecureValueTypeBase Type { get; set; }
-        public override SecureDataBase Data { get; set; }
-        public override SecureFileBase FrontSide { get; set; }
-        public override SecureFileBase ReverseSide { get; set; }
-        public override SecureFileBase Selfie { get; set; }
-        public override IList<SecureFileBase> Translation { get; set; }
-        public override IList<SecureFileBase> Files { get; set; }
-        public override SecurePlainDataBase PlainData { get; set; }
-        public override byte[] Hash { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
@@ -29,6 +17,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Files = 1 << 4,
             PlainData = 1 << 5
         }
+
+        public static int ConstructorId { get; } = 411017418;
+        public int Flags { get; set; }
+        public override SecureValueTypeBase Type { get; set; }
+        public override SecureDataBase Data { get; set; }
+        public override SecureFileBase FrontSide { get; set; }
+        public override SecureFileBase ReverseSide { get; set; }
+        public override SecureFileBase Selfie { get; set; }
+        public override IList<SecureFileBase> Translation { get; set; }
+        public override IList<SecureFileBase> Files { get; set; }
+        public override SecurePlainDataBase PlainData { get; set; }
+        public override byte[] Hash { get; set; }
 
         public override void UpdateFlags()
         {
@@ -43,7 +43,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Type);

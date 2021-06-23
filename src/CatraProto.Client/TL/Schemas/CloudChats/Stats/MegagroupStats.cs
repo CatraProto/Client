@@ -3,7 +3,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 {
-    public partial class MegagroupStats : MegagroupStatsBase
+    public class MegagroupStats : MegagroupStatsBase
     {
         public static int ConstructorId { get; } = -276825834;
         public override StatsDateRangeDaysBase Period { get; set; }
@@ -30,7 +30,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Period);
             writer.Write(Members);
             writer.Write(Messages);

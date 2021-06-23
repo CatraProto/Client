@@ -5,9 +5,20 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 {
-    public partial class CreateStickerSet : IMethod
+    public class CreateStickerSet : IMethod
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            Masks = 1 << 0,
+            Animated = 1 << 1,
+            Thumb = 1 << 2
+        }
+
         public static int ConstructorId { get; } = -251435136;
+
+        public System.Type Type { get; init; } = typeof(Messages.StickerSetBase);
+        public bool IsVector { get; init; } = false;
         public int Flags { get; set; }
         public bool Masks { get; set; }
         public bool Animated { get; set; }
@@ -16,17 +27,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
         public string ShortName { get; set; }
         public InputDocumentBase Thumb { get; set; }
         public IList<InputStickerSetItemBase> Stickers { get; set; }
-
-        public Type Type { get; init; } = typeof(Messages.StickerSetBase);
-        public bool IsVector { get; init; } = false;
-
-        [Flags]
-        public enum FlagsEnum
-        {
-            Masks = 1 << 0,
-            Animated = 1 << 1,
-            Thumb = 1 << 2
-        }
 
         public void UpdateFlags()
         {
@@ -37,7 +37,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(UserId);

@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class RestrictionReason : RestrictionReasonBase
+    public class RestrictionReason : RestrictionReasonBase
     {
         public static int ConstructorId { get; } = -797791052;
         public override string Platform { get; set; }
@@ -15,7 +15,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Platform);
             writer.Write(Reason);
             writer.Write(Text);

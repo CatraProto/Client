@@ -3,18 +3,18 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class InputPaymentCredentials : InputPaymentCredentialsBase
+    public class InputPaymentCredentials : InputPaymentCredentialsBase
     {
-        public static int ConstructorId { get; } = 873977640;
-        public int Flags { get; set; }
-        public bool Save { get; set; }
-        public DataJSONBase Data { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
             Save = 1 << 0
         }
+
+        public static int ConstructorId { get; } = 873977640;
+        public int Flags { get; set; }
+        public bool Save { get; set; }
+        public DataJSONBase Data { get; set; }
 
         public override void UpdateFlags()
         {
@@ -23,7 +23,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Data);

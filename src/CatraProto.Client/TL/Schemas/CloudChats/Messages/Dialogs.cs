@@ -3,7 +3,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class Dialogs : DialogsBase
+    public class Dialogs : DialogsBase
     {
         public static int ConstructorId { get; } = 364538944;
         public IList<DialogBase> Dialogs_ { get; set; }
@@ -17,7 +17,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Dialogs_);
             writer.Write(Messages);
             writer.Write(Chats);

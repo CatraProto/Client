@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections;
@@ -8,7 +9,7 @@ using CatraProto.Client.TL.Schemas.CloudChats.Upload;
 
 namespace CatraProto.Client.TL.Requests.CloudChats
 {
-    public partial class Upload
+    public class Upload
     {
         private MessagesHandler _messagesHandler;
 
@@ -17,14 +18,20 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             _messagesHandler = messagesHandler;
         }
 
-        public async Task<RpcMessage<bool>> SaveFilePart(long fileId, int filePart, byte[] bytes, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<bool>> SaveFilePartAsync(long fileId, int filePart, byte[] bytes,
+            CancellationToken cancellationToken = default)
         {
+            if (bytes is null)
+            {
+                throw new ArgumentNullException(nameof(bytes));
+            }
+
             var rpcResponse = new RpcMessage<bool>();
             var methodBody = new SaveFilePart
             {
                 FileId = fileId,
                 FilePart = filePart,
-                Bytes = bytes,
+                Bytes = bytes
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage
@@ -36,8 +43,14 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             return rpcResponse;
         }
 
-        public async Task<RpcMessage<FileBase>> GetFile(InputFileLocationBase location, int offset, int limit, bool precise = true, bool cdnSupported = true, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<FileBase>> GetFileAsync(InputFileLocationBase location, int offset, int limit,
+            bool precise = true, bool cdnSupported = true, CancellationToken cancellationToken = default)
         {
+            if (location is null)
+            {
+                throw new ArgumentNullException(nameof(location));
+            }
+
             var rpcResponse = new RpcMessage<FileBase>();
             var methodBody = new GetFile
             {
@@ -45,7 +58,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
                 Offset = offset,
                 Limit = limit,
                 Precise = precise,
-                CdnSupported = cdnSupported,
+                CdnSupported = cdnSupported
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage
@@ -57,15 +70,21 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             return rpcResponse;
         }
 
-        public async Task<RpcMessage<bool>> SaveBigFilePart(long fileId, int filePart, int fileTotalParts, byte[] bytes, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<bool>> SaveBigFilePartAsync(long fileId, int filePart, int fileTotalParts,
+            byte[] bytes, CancellationToken cancellationToken = default)
         {
+            if (bytes is null)
+            {
+                throw new ArgumentNullException(nameof(bytes));
+            }
+
             var rpcResponse = new RpcMessage<bool>();
             var methodBody = new SaveBigFilePart
             {
                 FileId = fileId,
                 FilePart = filePart,
                 FileTotalParts = fileTotalParts,
-                Bytes = bytes,
+                Bytes = bytes
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage
@@ -77,14 +96,20 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             return rpcResponse;
         }
 
-        public async Task<RpcMessage<WebFileBase>> GetWebFile(InputWebFileLocationBase location, int offset, int limit, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<WebFileBase>> GetWebFileAsync(InputWebFileLocationBase location, int offset,
+            int limit, CancellationToken cancellationToken = default)
         {
+            if (location is null)
+            {
+                throw new ArgumentNullException(nameof(location));
+            }
+
             var rpcResponse = new RpcMessage<WebFileBase>();
             var methodBody = new GetWebFile
             {
                 Location = location,
                 Offset = offset,
-                Limit = limit,
+                Limit = limit
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage
@@ -96,14 +121,20 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             return rpcResponse;
         }
 
-        public async Task<RpcMessage<CdnFileBase>> GetCdnFile(byte[] fileToken, int offset, int limit, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<CdnFileBase>> GetCdnFileAsync(byte[] fileToken, int offset, int limit,
+            CancellationToken cancellationToken = default)
         {
+            if (fileToken is null)
+            {
+                throw new ArgumentNullException(nameof(fileToken));
+            }
+
             var rpcResponse = new RpcMessage<CdnFileBase>();
             var methodBody = new GetCdnFile
             {
                 FileToken = fileToken,
                 Offset = offset,
-                Limit = limit,
+                Limit = limit
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage
@@ -115,13 +146,24 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             return rpcResponse;
         }
 
-        public async Task<RpcMessage<FileHashBase>> ReuploadCdnFile(byte[] fileToken, byte[] requestToken, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<FileHashBase>> ReuploadCdnFileAsync(byte[] fileToken, byte[] requestToken,
+            CancellationToken cancellationToken = default)
         {
+            if (fileToken is null)
+            {
+                throw new ArgumentNullException(nameof(fileToken));
+            }
+
+            if (requestToken is null)
+            {
+                throw new ArgumentNullException(nameof(requestToken));
+            }
+
             var rpcResponse = new RpcMessage<FileHashBase>();
             var methodBody = new ReuploadCdnFile
             {
                 FileToken = fileToken,
-                RequestToken = requestToken,
+                RequestToken = requestToken
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage
@@ -133,13 +175,19 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             return rpcResponse;
         }
 
-        public async Task<RpcMessage<FileHashBase>> GetCdnFileHashes(byte[] fileToken, int offset, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<FileHashBase>> GetCdnFileHashesAsync(byte[] fileToken, int offset,
+            CancellationToken cancellationToken = default)
         {
+            if (fileToken is null)
+            {
+                throw new ArgumentNullException(nameof(fileToken));
+            }
+
             var rpcResponse = new RpcMessage<FileHashBase>();
             var methodBody = new GetCdnFileHashes
             {
                 FileToken = fileToken,
-                Offset = offset,
+                Offset = offset
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage
@@ -151,13 +199,19 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             return rpcResponse;
         }
 
-        public async Task<RpcMessage<FileHashBase>> GetFileHashes(InputFileLocationBase location, int offset, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<FileHashBase>> GetFileHashesAsync(InputFileLocationBase location, int offset,
+            CancellationToken cancellationToken = default)
         {
+            if (location is null)
+            {
+                throw new ArgumentNullException(nameof(location));
+            }
+
             var rpcResponse = new RpcMessage<FileHashBase>();
             var methodBody = new GetFileHashes
             {
                 Location = location,
-                Offset = offset,
+                Offset = offset
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage

@@ -3,21 +3,21 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class PollAnswerVoters : PollAnswerVotersBase
+    public class PollAnswerVoters : PollAnswerVotersBase
     {
-        public static int ConstructorId { get; } = 997055186;
-        public int Flags { get; set; }
-        public override bool Chosen { get; set; }
-        public override bool Correct { get; set; }
-        public override byte[] Option { get; set; }
-        public override int Voters { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
             Chosen = 1 << 0,
             Correct = 1 << 1
         }
+
+        public static int ConstructorId { get; } = 997055186;
+        public int Flags { get; set; }
+        public override bool Chosen { get; set; }
+        public override bool Correct { get; set; }
+        public override byte[] Option { get; set; }
+        public override int Voters { get; set; }
 
         public override void UpdateFlags()
         {
@@ -27,7 +27,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Option);

@@ -3,7 +3,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 {
-    public partial class FileCdnRedirect : FileBase
+    public class FileCdnRedirect : FileBase
     {
         public static int ConstructorId { get; } = -242427324;
         public int DcId { get; set; }
@@ -18,7 +18,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(DcId);
             writer.Write(FileToken);
             writer.Write(EncryptionKey);

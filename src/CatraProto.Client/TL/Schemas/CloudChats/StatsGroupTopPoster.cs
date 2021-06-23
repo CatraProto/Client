@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class StatsGroupTopPoster : StatsGroupTopPosterBase
+    public class StatsGroupTopPoster : StatsGroupTopPosterBase
     {
         public static int ConstructorId { get; } = 418631927;
         public override int UserId { get; set; }
@@ -15,7 +15,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(UserId);
             writer.Write(Messages);
             writer.Write(AvgChars);

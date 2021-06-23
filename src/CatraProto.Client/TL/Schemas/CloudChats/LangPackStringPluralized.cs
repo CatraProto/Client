@@ -3,18 +3,8 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class LangPackStringPluralized : LangPackStringBase
+    public class LangPackStringPluralized : LangPackStringBase
     {
-        public static int ConstructorId { get; } = 1816636575;
-        public int Flags { get; set; }
-        public override string Key { get; set; }
-        public string ZeroValue { get; set; }
-        public string OneValue { get; set; }
-        public string TwoValue { get; set; }
-        public string FewValue { get; set; }
-        public string ManyValue { get; set; }
-        public string OtherValue { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
@@ -24,6 +14,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             FewValue = 1 << 3,
             ManyValue = 1 << 4
         }
+
+        public static int ConstructorId { get; } = 1816636575;
+        public int Flags { get; set; }
+        public override string Key { get; set; }
+        public string ZeroValue { get; set; }
+        public string OneValue { get; set; }
+        public string TwoValue { get; set; }
+        public string FewValue { get; set; }
+        public string ManyValue { get; set; }
+        public string OtherValue { get; set; }
 
         public override void UpdateFlags()
         {
@@ -36,7 +36,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Key);

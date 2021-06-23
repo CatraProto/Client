@@ -4,8 +4,15 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-    public partial class TermsOfService : TermsOfServiceBase
+    public class TermsOfService : TermsOfServiceBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            Popup = 1 << 0,
+            MinAgeConfirm = 1 << 1
+        }
+
         public static int ConstructorId { get; } = 2013922064;
         public int Flags { get; set; }
         public override bool Popup { get; set; }
@@ -13,13 +20,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
         public override string Text { get; set; }
         public override IList<MessageEntityBase> Entities { get; set; }
         public override int? MinAgeConfirm { get; set; }
-
-        [Flags]
-        public enum FlagsEnum
-        {
-            Popup = 1 << 0,
-            MinAgeConfirm = 1 << 1
-        }
 
         public override void UpdateFlags()
         {
@@ -29,7 +29,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Id);

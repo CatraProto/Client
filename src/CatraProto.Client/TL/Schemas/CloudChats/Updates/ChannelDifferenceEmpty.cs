@@ -3,20 +3,20 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 {
-    public partial class ChannelDifferenceEmpty : ChannelDifferenceBase
+    public class ChannelDifferenceEmpty : ChannelDifferenceBase
     {
-        public static int ConstructorId { get; } = 1041346555;
-        public int Flags { get; set; }
-        public override bool Final { get; set; }
-        public int Pts { get; set; }
-        public override int? Timeout { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
             Final = 1 << 0,
             Timeout = 1 << 1
         }
+
+        public static int ConstructorId { get; } = 1041346555;
+        public int Flags { get; set; }
+        public override bool Final { get; set; }
+        public int Pts { get; set; }
+        public override int? Timeout { get; set; }
 
         public override void UpdateFlags()
         {
@@ -26,7 +26,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Pts);

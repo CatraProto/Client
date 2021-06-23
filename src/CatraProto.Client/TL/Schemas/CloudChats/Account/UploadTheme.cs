@@ -4,23 +4,23 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public partial class UploadTheme : IMethod
+    public class UploadTheme : IMethod
     {
-        public static int ConstructorId { get; } = 473805619;
-        public int Flags { get; set; }
-        public InputFileBase File { get; set; }
-        public InputFileBase Thumb { get; set; }
-        public string FileName { get; set; }
-        public string MimeType { get; set; }
-
-        public Type Type { get; init; } = typeof(DocumentBase);
-        public bool IsVector { get; init; } = false;
-
         [Flags]
         public enum FlagsEnum
         {
             Thumb = 1 << 0
         }
+
+        public static int ConstructorId { get; } = 473805619;
+
+        public Type Type { get; init; } = typeof(DocumentBase);
+        public bool IsVector { get; init; } = false;
+        public int Flags { get; set; }
+        public InputFileBase File { get; set; }
+        public InputFileBase Thumb { get; set; }
+        public string FileName { get; set; }
+        public string MimeType { get; set; }
 
         public void UpdateFlags()
         {
@@ -29,7 +29,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(File);

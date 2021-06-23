@@ -4,8 +4,16 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-    public partial class PromoData : PromoDataBase
+    public class PromoData : PromoDataBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            Proxy = 1 << 0,
+            PsaType = 1 << 1,
+            PsaMessage = 1 << 2
+        }
+
         public static int ConstructorId { get; } = -1942390465;
         public int Flags { get; set; }
         public bool Proxy { get; set; }
@@ -16,14 +24,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
         public string PsaType { get; set; }
         public string PsaMessage { get; set; }
 
-        [Flags]
-        public enum FlagsEnum
-        {
-            Proxy = 1 << 0,
-            PsaType = 1 << 1,
-            PsaMessage = 1 << 2
-        }
-
         public override void UpdateFlags()
         {
             Flags = Proxy ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
@@ -33,7 +33,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Expires);

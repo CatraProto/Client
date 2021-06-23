@@ -4,19 +4,8 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class GetBotCallbackAnswer : IMethod
+    public class GetBotCallbackAnswer : IMethod
     {
-        public static int ConstructorId { get; } = -1824339449;
-        public int Flags { get; set; }
-        public bool Game { get; set; }
-        public InputPeerBase Peer { get; set; }
-        public int MsgId { get; set; }
-        public byte[] Data { get; set; }
-        public InputCheckPasswordSRPBase Password { get; set; }
-
-        public Type Type { get; init; } = typeof(BotCallbackAnswerBase);
-        public bool IsVector { get; init; } = false;
-
         [Flags]
         public enum FlagsEnum
         {
@@ -24,6 +13,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             Data = 1 << 0,
             Password = 1 << 2
         }
+
+        public static int ConstructorId { get; } = -1824339449;
+
+        public System.Type Type { get; init; } = typeof(BotCallbackAnswerBase);
+        public bool IsVector { get; init; } = false;
+        public int Flags { get; set; }
+        public bool Game { get; set; }
+        public InputPeerBase Peer { get; set; }
+        public int MsgId { get; set; }
+        public byte[] Data { get; set; }
+        public InputCheckPasswordSRPBase Password { get; set; }
 
         public void UpdateFlags()
         {
@@ -34,7 +34,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Peer);

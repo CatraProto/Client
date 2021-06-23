@@ -4,21 +4,8 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public partial class InitTakeoutSession : IMethod
+    public class InitTakeoutSession : IMethod
     {
-        public static int ConstructorId { get; } = -262453244;
-        public int Flags { get; set; }
-        public bool Contacts { get; set; }
-        public bool MessageUsers { get; set; }
-        public bool MessageChats { get; set; }
-        public bool MessageMegagroups { get; set; }
-        public bool MessageChannels { get; set; }
-        public bool Files { get; set; }
-        public int? FileMaxSize { get; set; }
-
-        public Type Type { get; init; } = typeof(TakeoutBase);
-        public bool IsVector { get; init; } = false;
-
         [Flags]
         public enum FlagsEnum
         {
@@ -30,6 +17,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             Files = 1 << 5,
             FileMaxSize = 1 << 5
         }
+
+        public static int ConstructorId { get; } = -262453244;
+
+        public Type Type { get; init; } = typeof(TakeoutBase);
+        public bool IsVector { get; init; } = false;
+        public int Flags { get; set; }
+        public bool Contacts { get; set; }
+        public bool MessageUsers { get; set; }
+        public bool MessageChats { get; set; }
+        public bool MessageMegagroups { get; set; }
+        public bool MessageChannels { get; set; }
+        public bool Files { get; set; }
+        public int? FileMaxSize { get; set; }
 
         public void UpdateFlags()
         {
@@ -44,7 +44,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             if (FlagsHelper.IsFlagSet(Flags, 5))

@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 {
-    public partial class PaymentResult : PaymentResultBase
+    public class PaymentResult : PaymentResultBase
     {
         public static int ConstructorId { get; } = 1314881805;
         public UpdatesBase Updates { get; set; }
@@ -13,7 +13,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Updates);
         }
 

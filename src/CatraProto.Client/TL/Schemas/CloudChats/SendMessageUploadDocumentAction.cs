@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class SendMessageUploadDocumentAction : SendMessageActionBase
+    public class SendMessageUploadDocumentAction : SendMessageActionBase
     {
         public static int ConstructorId { get; } = -1441998364;
         public int Progress { get; set; }
@@ -13,7 +13,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Progress);
         }
 

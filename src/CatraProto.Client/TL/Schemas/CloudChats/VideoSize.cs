@@ -3,8 +3,14 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class VideoSize : VideoSizeBase
+    public class VideoSize : VideoSizeBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            VideoStartTs = 1 << 0
+        }
+
         public static int ConstructorId { get; } = -399391402;
         public int Flags { get; set; }
         public override string Type { get; set; }
@@ -14,12 +20,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override int Size { get; set; }
         public override double? VideoStartTs { get; set; }
 
-        [Flags]
-        public enum FlagsEnum
-        {
-            VideoStartTs = 1 << 0
-        }
-
         public override void UpdateFlags()
         {
             Flags = VideoStartTs == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
@@ -27,7 +27,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Type);

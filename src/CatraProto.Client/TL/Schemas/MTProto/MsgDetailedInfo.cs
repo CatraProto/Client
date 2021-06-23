@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-    public partial class MsgDetailedInfo : MsgDetailedInfoBase
+    public class MsgDetailedInfo : MsgDetailedInfoBase
     {
         public static int ConstructorId { get; } = 661470918;
         public long MsgId { get; set; }
@@ -16,7 +16,11 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(MsgId);
             writer.Write(AnswerMsgId);
             writer.Write(Bytes);

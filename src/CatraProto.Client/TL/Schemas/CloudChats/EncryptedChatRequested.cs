@@ -3,8 +3,14 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class EncryptedChatRequested : EncryptedChatBase
+    public class EncryptedChatRequested : EncryptedChatBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            FolderId = 1 << 0
+        }
+
         public static int ConstructorId { get; } = 1651608194;
         public int Flags { get; set; }
         public int? FolderId { get; set; }
@@ -15,12 +21,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ParticipantId { get; set; }
         public byte[] GA { get; set; }
 
-        [Flags]
-        public enum FlagsEnum
-        {
-            FolderId = 1 << 0
-        }
-
         public override void UpdateFlags()
         {
             Flags = FolderId == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
@@ -28,7 +28,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             if (FlagsHelper.IsFlagSet(Flags, 0))

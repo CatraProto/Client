@@ -5,23 +5,23 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class SetBotShippingResults : IMethod
+    public class SetBotShippingResults : IMethod
     {
-        public static int ConstructorId { get; } = -436833542;
-        public int Flags { get; set; }
-        public long QueryId { get; set; }
-        public string Error { get; set; }
-        public IList<ShippingOptionBase> ShippingOptions { get; set; }
-
-        public Type Type { get; init; } = typeof(bool);
-        public bool IsVector { get; init; } = false;
-
         [Flags]
         public enum FlagsEnum
         {
             Error = 1 << 0,
             ShippingOptions = 1 << 1
         }
+
+        public static int ConstructorId { get; } = -436833542;
+
+        public System.Type Type { get; init; } = typeof(bool);
+        public bool IsVector { get; init; } = false;
+        public int Flags { get; set; }
+        public long QueryId { get; set; }
+        public string Error { get; set; }
+        public IList<ShippingOptionBase> ShippingOptions { get; set; }
 
         public void UpdateFlags()
         {
@@ -31,7 +31,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(QueryId);

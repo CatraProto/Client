@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
-using CatraProto.TL.Generator.Objects.Interfaces;
+using Object = CatraProto.TL.Generator.Objects.Interfaces.Object;
 
 namespace CatraProto.TL.Generator.Objects.Types.Interfaces
 {
@@ -58,6 +60,14 @@ namespace CatraProto.TL.Generator.Objects.Types.Interfaces
                 $"{StringTools.TwoTabs}{GetParameterAccessibility(parameter, isAbstract)} {type} {parameter.Name} {{ get; set; }}");
         }
 
+        public virtual void WriteNullPolicy(StringBuilder builder, Parameter parameter)
+        {
+            if (!parameter.HasFlag && (this is GenericType || this is RuntimeDefinedType || this is StringType || this is BytesType))
+            {
+                builder.AppendLine($"if({parameter.InMethodName} is null) throw new ArgumentNullException(nameof({parameter.InMethodName}));");
+            }
+        }
+        
         public virtual void WriteMethodParameter(StringBuilder stringBuilder, Parameter parameter)
         {
             var writtenType = parameter.Type.IsBare ? parameter.Type.Name : parameter.Type.Namespace.FullNamespace;
@@ -66,7 +76,7 @@ namespace CatraProto.TL.Generator.Objects.Types.Interfaces
                 writtenType = "List<" + writtenType + ">";
             }
 
-            if (parameter.HasFlag && this is not StringType)
+            if (parameter.HasFlag && this is not StringType && this is not GenericType && this is not RuntimeDefinedType && this is not BytesType)
             {
                 writtenType += "?";
             }

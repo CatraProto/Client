@@ -5,9 +5,21 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class ForwardMessages : IMethod
+    public class ForwardMessages : IMethod
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            Silent = 1 << 5,
+            Background = 1 << 6,
+            WithMyScore = 1 << 8,
+            ScheduleDate = 1 << 10
+        }
+
         public static int ConstructorId { get; } = -637606386;
+
+        public System.Type Type { get; init; } = typeof(UpdatesBase);
+        public bool IsVector { get; init; } = false;
         public int Flags { get; set; }
         public bool Silent { get; set; }
         public bool Background { get; set; }
@@ -17,18 +29,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public IList<long> RandomId { get; set; }
         public InputPeerBase ToPeer { get; set; }
         public int? ScheduleDate { get; set; }
-
-        public Type Type { get; init; } = typeof(UpdatesBase);
-        public bool IsVector { get; init; } = false;
-
-        [Flags]
-        public enum FlagsEnum
-        {
-            Silent = 1 << 5,
-            Background = 1 << 6,
-            WithMyScore = 1 << 8,
-            ScheduleDate = 1 << 10
-        }
 
         public void UpdateFlags()
         {
@@ -40,7 +40,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(FromPeer);

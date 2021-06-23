@@ -3,7 +3,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-    public partial class MsgsAllInfo : MsgsAllInfoBase
+    public class MsgsAllInfo : MsgsAllInfoBase
     {
         public static int ConstructorId { get; } = -1933520591;
         public override IList<long> MsgIds { get; set; }
@@ -15,7 +15,11 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(MsgIds);
             writer.Write(Info);
         }

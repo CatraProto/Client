@@ -4,8 +4,16 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class BotResults : BotResultsBase
+    public class BotResults : BotResultsBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            Gallery = 1 << 0,
+            NextOffset = 1 << 1,
+            SwitchPm = 1 << 2
+        }
+
         public static int ConstructorId { get; } = -1803769784;
         public int Flags { get; set; }
         public override bool Gallery { get; set; }
@@ -16,14 +24,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public override int CacheTime { get; set; }
         public override IList<UserBase> Users { get; set; }
 
-        [Flags]
-        public enum FlagsEnum
-        {
-            Gallery = 1 << 0,
-            NextOffset = 1 << 1,
-            SwitchPm = 1 << 2
-        }
-
         public override void UpdateFlags()
         {
             Flags = Gallery ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
@@ -33,7 +33,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(QueryId);

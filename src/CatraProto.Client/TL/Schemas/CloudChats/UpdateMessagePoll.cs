@@ -3,19 +3,19 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class UpdateMessagePoll : UpdateBase
+    public class UpdateMessagePoll : UpdateBase
     {
-        public static int ConstructorId { get; } = -1398708869;
-        public int Flags { get; set; }
-        public long PollId { get; set; }
-        public PollBase Poll { get; set; }
-        public PollResultsBase Results { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
             Poll = 1 << 0
         }
+
+        public static int ConstructorId { get; } = -1398708869;
+        public int Flags { get; set; }
+        public long PollId { get; set; }
+        public PollBase Poll { get; set; }
+        public PollResultsBase Results { get; set; }
 
         public override void UpdateFlags()
         {
@@ -24,7 +24,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(PollId);

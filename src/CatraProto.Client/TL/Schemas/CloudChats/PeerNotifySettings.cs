@@ -3,15 +3,8 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class PeerNotifySettings : PeerNotifySettingsBase
+    public class PeerNotifySettings : PeerNotifySettingsBase
     {
-        public static int ConstructorId { get; } = -1353671392;
-        public int Flags { get; set; }
-        public override bool? ShowPreviews { get; set; }
-        public override bool? Silent { get; set; }
-        public override int? MuteUntil { get; set; }
-        public override string Sound { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
@@ -20,6 +13,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             MuteUntil = 1 << 2,
             Sound = 1 << 3
         }
+
+        public static int ConstructorId { get; } = -1353671392;
+        public int Flags { get; set; }
+        public override bool? ShowPreviews { get; set; }
+        public override bool? Silent { get; set; }
+        public override int? MuteUntil { get; set; }
+        public override string Sound { get; set; }
 
         public override void UpdateFlags()
         {
@@ -31,7 +31,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(ShowPreviews.Value);

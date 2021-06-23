@@ -4,8 +4,15 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class Document : DocumentBase
+    public class Document : DocumentBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            Thumbs = 1 << 0,
+            VideoThumbs = 1 << 1
+        }
+
         public static int ConstructorId { get; } = 512177195;
         public int Flags { get; set; }
         public override long Id { get; set; }
@@ -19,13 +26,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int DcId { get; set; }
         public IList<DocumentAttributeBase> Attributes { get; set; }
 
-        [Flags]
-        public enum FlagsEnum
-        {
-            Thumbs = 1 << 0,
-            VideoThumbs = 1 << 1
-        }
-
         public override void UpdateFlags()
         {
             Flags = Thumbs == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
@@ -34,7 +34,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Id);

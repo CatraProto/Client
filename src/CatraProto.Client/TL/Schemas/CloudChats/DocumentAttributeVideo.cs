@@ -3,8 +3,15 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class DocumentAttributeVideo : DocumentAttributeBase
+    public class DocumentAttributeVideo : DocumentAttributeBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            RoundMessage = 1 << 0,
+            SupportsStreaming = 1 << 1
+        }
+
         public static int ConstructorId { get; } = 250621158;
         public int Flags { get; set; }
         public bool RoundMessage { get; set; }
@@ -12,13 +19,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int Duration { get; set; }
         public int W { get; set; }
         public int H { get; set; }
-
-        [Flags]
-        public enum FlagsEnum
-        {
-            RoundMessage = 1 << 0,
-            SupportsStreaming = 1 << 1
-        }
 
         public override void UpdateFlags()
         {
@@ -28,7 +28,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Duration);

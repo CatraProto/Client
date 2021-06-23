@@ -12,7 +12,7 @@ namespace CatraProto.Client.Crypto
         public static byte[] ComputeDataHashedFilling(IObject obj, IObjectProvider provider, int length = 255)
         {
             using var ms = InternalComputeHash(obj, provider);
-            
+
             if (ms.Length < length)
             {
                 var b = new byte[length - ms.Length];
@@ -22,7 +22,7 @@ namespace CatraProto.Client.Crypto
 
             return ms.ToArray();
         }
-        
+
         public static byte[] ComputeDataHashedPadding(IObject obj, IObjectProvider provider, int padding = 16)
         {
             using var ms = InternalComputeHash(obj, provider);
@@ -50,8 +50,8 @@ namespace CatraProto.Client.Crypto
             ms.Write(serToBytes);
             return ms;
         }
-        
-        
+
+
         public static byte[] ShaBigIntegers(BigInteger bigInteger, BigInteger otherBigInteger)
         {
             using var ms = new MemoryStream();

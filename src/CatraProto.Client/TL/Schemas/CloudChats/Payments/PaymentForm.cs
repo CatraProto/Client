@@ -4,8 +4,19 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 {
-    public partial class PaymentForm : PaymentFormBase
+    public class PaymentForm : PaymentFormBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            CanSaveCredentials = 1 << 2,
+            PasswordMissing = 1 << 3,
+            NativeProvider = 1 << 4,
+            NativeParams = 1 << 4,
+            SavedInfo = 1 << 0,
+            SavedCredentials = 1 << 1
+        }
+
         public static int ConstructorId { get; } = 1062645411;
         public int Flags { get; set; }
         public override bool CanSaveCredentials { get; set; }
@@ -20,17 +31,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
         public override PaymentSavedCredentialsBase SavedCredentials { get; set; }
         public override IList<UserBase> Users { get; set; }
 
-        [Flags]
-        public enum FlagsEnum
-        {
-            CanSaveCredentials = 1 << 2,
-            PasswordMissing = 1 << 3,
-            NativeProvider = 1 << 4,
-            NativeParams = 1 << 4,
-            SavedInfo = 1 << 0,
-            SavedCredentials = 1 << 1
-        }
-
         public override void UpdateFlags()
         {
             Flags = CanSaveCredentials ? FlagsHelper.SetFlag(Flags, 2) : FlagsHelper.UnsetFlag(Flags, 2);
@@ -43,7 +43,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(BotId);

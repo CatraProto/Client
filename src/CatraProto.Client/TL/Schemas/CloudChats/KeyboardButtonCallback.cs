@@ -3,19 +3,19 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class KeyboardButtonCallback : KeyboardButtonBase
+    public class KeyboardButtonCallback : KeyboardButtonBase
     {
-        public static int ConstructorId { get; } = 901503851;
-        public int Flags { get; set; }
-        public bool RequiresPassword { get; set; }
-        public override string Text { get; set; }
-        public byte[] Data { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
             RequiresPassword = 1 << 0
         }
+
+        public static int ConstructorId { get; } = 901503851;
+        public int Flags { get; set; }
+        public bool RequiresPassword { get; set; }
+        public override string Text { get; set; }
+        public byte[] Data { get; set; }
 
         public override void UpdateFlags()
         {
@@ -24,7 +24,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Text);

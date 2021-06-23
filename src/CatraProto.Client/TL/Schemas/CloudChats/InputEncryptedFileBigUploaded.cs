@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class InputEncryptedFileBigUploaded : InputEncryptedFileBase
+    public class InputEncryptedFileBigUploaded : InputEncryptedFileBase
     {
         public static int ConstructorId { get; } = 767652808;
         public long Id { get; set; }
@@ -15,7 +15,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Id);
             writer.Write(Parts);
             writer.Write(KeyFingerprint);

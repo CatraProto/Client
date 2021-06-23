@@ -3,19 +3,19 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class InputStickerSetItem : InputStickerSetItemBase
+    public class InputStickerSetItem : InputStickerSetItemBase
     {
-        public static int ConstructorId { get; } = -6249322;
-        public int Flags { get; set; }
-        public override InputDocumentBase Document { get; set; }
-        public override string Emoji { get; set; }
-        public override MaskCoordsBase MaskCoords { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
             MaskCoords = 1 << 0
         }
+
+        public static int ConstructorId { get; } = -6249322;
+        public int Flags { get; set; }
+        public override InputDocumentBase Document { get; set; }
+        public override string Emoji { get; set; }
+        public override MaskCoordsBase MaskCoords { get; set; }
 
         public override void UpdateFlags()
         {
@@ -24,7 +24,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Document);

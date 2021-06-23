@@ -1,16 +1,15 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 {
-    public partial class RemoveStickerFromSet : IMethod
+    public class RemoveStickerFromSet : IMethod
     {
         public static int ConstructorId { get; } = -143257775;
-        public InputDocumentBase Sticker { get; set; }
 
-        public Type Type { get; init; } = typeof(Messages.StickerSetBase);
+        public System.Type Type { get; init; } = typeof(Messages.StickerSetBase);
         public bool IsVector { get; init; } = false;
+        public InputDocumentBase Sticker { get; set; }
 
         public void UpdateFlags()
         {
@@ -18,7 +17,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Sticker);
         }
 

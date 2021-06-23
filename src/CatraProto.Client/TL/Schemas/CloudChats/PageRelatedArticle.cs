@@ -3,18 +3,8 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class PageRelatedArticle : PageRelatedArticleBase
+    public class PageRelatedArticle : PageRelatedArticleBase
     {
-        public static int ConstructorId { get; } = -1282352120;
-        public int Flags { get; set; }
-        public override string Url { get; set; }
-        public override long WebpageId { get; set; }
-        public override string Title { get; set; }
-        public override string Description { get; set; }
-        public override long? PhotoId { get; set; }
-        public override string Author { get; set; }
-        public override int? PublishedDate { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
@@ -24,6 +14,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Author = 1 << 3,
             PublishedDate = 1 << 4
         }
+
+        public static int ConstructorId { get; } = -1282352120;
+        public int Flags { get; set; }
+        public override string Url { get; set; }
+        public override long WebpageId { get; set; }
+        public override string Title { get; set; }
+        public override string Description { get; set; }
+        public override long? PhotoId { get; set; }
+        public override string Author { get; set; }
+        public override int? PublishedDate { get; set; }
 
         public override void UpdateFlags()
         {
@@ -36,7 +36,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Url);

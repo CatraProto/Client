@@ -4,22 +4,22 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 {
-    public partial class GetMessageStats : IMethod
+    public class GetMessageStats : IMethod
     {
-        public static int ConstructorId { get; } = -1226791947;
-        public int Flags { get; set; }
-        public bool Dark { get; set; }
-        public InputChannelBase Channel { get; set; }
-        public int MsgId { get; set; }
-
-        public Type Type { get; init; } = typeof(MessageStatsBase);
-        public bool IsVector { get; init; } = false;
-
         [Flags]
         public enum FlagsEnum
         {
             Dark = 1 << 0
         }
+
+        public static int ConstructorId { get; } = -1226791947;
+
+        public System.Type Type { get; init; } = typeof(MessageStatsBase);
+        public bool IsVector { get; init; } = false;
+        public int Flags { get; set; }
+        public bool Dark { get; set; }
+        public InputChannelBase Channel { get; set; }
+        public int MsgId { get; set; }
 
         public void UpdateFlags()
         {
@@ -28,7 +28,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Channel);

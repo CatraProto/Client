@@ -3,8 +3,14 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class PhoneCallRequested : PhoneCallBase
+    public class PhoneCallRequested : PhoneCallBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            Video = 1 << 6
+        }
+
         public static int ConstructorId { get; } = -2014659757;
         public int Flags { get; set; }
         public bool Video { get; set; }
@@ -16,12 +22,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public byte[] GAHash { get; set; }
         public PhoneCallProtocolBase Protocol { get; set; }
 
-        [Flags]
-        public enum FlagsEnum
-        {
-            Video = 1 << 6
-        }
-
         public override void UpdateFlags()
         {
             Flags = Video ? FlagsHelper.SetFlag(Flags, 6) : FlagsHelper.UnsetFlag(Flags, 6);
@@ -29,7 +29,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Id);

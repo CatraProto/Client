@@ -5,21 +5,8 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class SetInlineBotResults : IMethod
+    public class SetInlineBotResults : IMethod
     {
-        public static int ConstructorId { get; } = -346119674;
-        public int Flags { get; set; }
-        public bool Gallery { get; set; }
-        public bool Private { get; set; }
-        public long QueryId { get; set; }
-        public IList<InputBotInlineResultBase> Results { get; set; }
-        public int CacheTime { get; set; }
-        public string NextOffset { get; set; }
-        public InlineBotSwitchPMBase SwitchPm { get; set; }
-
-        public Type Type { get; init; } = typeof(bool);
-        public bool IsVector { get; init; } = false;
-
         [Flags]
         public enum FlagsEnum
         {
@@ -28,6 +15,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             NextOffset = 1 << 2,
             SwitchPm = 1 << 3
         }
+
+        public static int ConstructorId { get; } = -346119674;
+
+        public System.Type Type { get; init; } = typeof(bool);
+        public bool IsVector { get; init; } = false;
+        public int Flags { get; set; }
+        public bool Gallery { get; set; }
+        public bool Private { get; set; }
+        public long QueryId { get; set; }
+        public IList<InputBotInlineResultBase> Results { get; set; }
+        public int CacheTime { get; set; }
+        public string NextOffset { get; set; }
+        public InlineBotSwitchPMBase SwitchPm { get; set; }
 
         public void UpdateFlags()
         {
@@ -39,7 +39,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(QueryId);

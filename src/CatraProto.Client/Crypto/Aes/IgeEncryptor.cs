@@ -32,14 +32,11 @@ namespace CatraProto.Client.Crypto.Aes
         private byte[] Process(byte[] from, bool encrypt)
         {
             var modulo = from.Length % 16;
-            if (from.Length % 16 != 0)
+            if (modulo != 0)
             {
-                var paddingBytes = new byte[modulo];
-                new Random().NextBytes(paddingBytes);
-                for (var i = 0; i < paddingBytes.Length; i++)
-                {
-                    from[from.Length + 1 + i] = paddingBytes[i];
-                }
+                var padding = new byte[16 - modulo];
+                new Random().NextBytes(padding);
+                from = from.Concat(padding).ToArray();
             }
 
             GetParameters(encrypt, out var transformer, out var oldCleanBlock, out var oldProcessedBlock);
@@ -68,7 +65,8 @@ namespace CatraProto.Client.Crypto.Aes
             return output;
         }
 
-        private void GetParameters(bool encrypt, out ICryptoTransform transformer, out byte[] oldCleanBlock, out byte[] oldProcessedBlock)
+        private void GetParameters(bool encrypt, out ICryptoTransform transformer, out byte[] oldCleanBlock,
+            out byte[] oldProcessedBlock)
         {
             if (encrypt)
             {

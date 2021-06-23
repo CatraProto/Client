@@ -3,8 +3,15 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class UpdateChannelParticipant : UpdateBase
+    public class UpdateChannelParticipant : UpdateBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            PrevParticipant = 1 << 0,
+            NewParticipant = 1 << 1
+        }
+
         public static int ConstructorId { get; } = 1708307556;
         public int Flags { get; set; }
         public int ChannelId { get; set; }
@@ -14,13 +21,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public ChannelParticipantBase NewParticipant { get; set; }
         public int Qts { get; set; }
 
-        [Flags]
-        public enum FlagsEnum
-        {
-            PrevParticipant = 1 << 0,
-            NewParticipant = 1 << 1
-        }
-
         public override void UpdateFlags()
         {
             Flags = PrevParticipant == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
@@ -29,7 +29,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(ChannelId);

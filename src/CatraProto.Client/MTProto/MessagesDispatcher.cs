@@ -31,7 +31,7 @@ namespace CatraProto.Client.MTProto
                     ErrorCode = reader.Read<int>(),
                     ErrorMessage = "Unencrypted message error"
                 };
-                
+
                 if (!_handler.SetMessageCompletion(0, rpcError))
                 {
                     _logger.Warning($"Couldn't find a message to complete with error {rpcError.ErrorCode}");
@@ -39,7 +39,7 @@ namespace CatraProto.Client.MTProto
 
                 return;
             }
-            
+
             var nextType = reader.GetNextType();
             if (nextType == typeof(GzipPacked))
             {
@@ -75,7 +75,6 @@ namespace CatraProto.Client.MTProto
                         {
                             var response = method.IsVector ? reader.ReadVector(method.Type) : reader.Read(method.Type);
                             _handler.SetMessageCompletion(0, response);
-                            return;
                         }
                     }
                 }

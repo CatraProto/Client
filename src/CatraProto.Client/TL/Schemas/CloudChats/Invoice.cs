@@ -4,21 +4,8 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class Invoice : InvoiceBase
+    public class Invoice : InvoiceBase
     {
-        public static int ConstructorId { get; } = -1022713000;
-        public int Flags { get; set; }
-        public override bool Test { get; set; }
-        public override bool NameRequested { get; set; }
-        public override bool PhoneRequested { get; set; }
-        public override bool EmailRequested { get; set; }
-        public override bool ShippingAddressRequested { get; set; }
-        public override bool Flexible { get; set; }
-        public override bool PhoneToProvider { get; set; }
-        public override bool EmailToProvider { get; set; }
-        public override string Currency { get; set; }
-        public override IList<LabeledPriceBase> Prices { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
@@ -31,6 +18,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             PhoneToProvider = 1 << 6,
             EmailToProvider = 1 << 7
         }
+
+        public static int ConstructorId { get; } = -1022713000;
+        public int Flags { get; set; }
+        public override bool Test { get; set; }
+        public override bool NameRequested { get; set; }
+        public override bool PhoneRequested { get; set; }
+        public override bool EmailRequested { get; set; }
+        public override bool ShippingAddressRequested { get; set; }
+        public override bool Flexible { get; set; }
+        public override bool PhoneToProvider { get; set; }
+        public override bool EmailToProvider { get; set; }
+        public override string Currency { get; set; }
+        public override IList<LabeledPriceBase> Prices { get; set; }
 
         public override void UpdateFlags()
         {
@@ -46,7 +46,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Currency);

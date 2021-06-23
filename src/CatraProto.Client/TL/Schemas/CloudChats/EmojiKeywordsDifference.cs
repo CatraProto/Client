@@ -3,7 +3,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class EmojiKeywordsDifference : EmojiKeywordsDifferenceBase
+    public class EmojiKeywordsDifference : EmojiKeywordsDifferenceBase
     {
         public static int ConstructorId { get; } = 1556570557;
         public override string LangCode { get; set; }
@@ -17,7 +17,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(LangCode);
             writer.Write(FromVersion);
             writer.Write(Version);

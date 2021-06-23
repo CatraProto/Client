@@ -4,16 +4,8 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class DraftMessage : DraftMessageBase
+    public class DraftMessage : DraftMessageBase
     {
-        public static int ConstructorId { get; } = -40996577;
-        public int Flags { get; set; }
-        public bool NoWebpage { get; set; }
-        public int? ReplyToMsgId { get; set; }
-        public string Message { get; set; }
-        public IList<MessageEntityBase> Entities { get; set; }
-        public override int? Date { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
@@ -22,6 +14,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Entities = 1 << 3,
             Date = 1 << 0
         }
+
+        public static int ConstructorId { get; } = -40996577;
+        public int Flags { get; set; }
+        public bool NoWebpage { get; set; }
+        public int? ReplyToMsgId { get; set; }
+        public string Message { get; set; }
+        public IList<MessageEntityBase> Entities { get; set; }
+        public override int? Date { get; set; }
 
         public override void UpdateFlags()
         {
@@ -33,7 +33,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             if (FlagsHelper.IsFlagSet(Flags, 0))

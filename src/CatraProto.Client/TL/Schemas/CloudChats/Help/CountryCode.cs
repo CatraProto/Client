@@ -4,20 +4,20 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-    public partial class CountryCode : CountryCodeBase
+    public class CountryCode : CountryCodeBase
     {
-        public static int ConstructorId { get; } = 1107543535;
-        public int Flags { get; set; }
-        public override string CountryCode_ { get; set; }
-        public override IList<string> Prefixes { get; set; }
-        public override IList<string> Patterns { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
             Prefixes = 1 << 0,
             Patterns = 1 << 1
         }
+
+        public static int ConstructorId { get; } = 1107543535;
+        public int Flags { get; set; }
+        public override string CountryCode_ { get; set; }
+        public override IList<string> Prefixes { get; set; }
+        public override IList<string> Patterns { get; set; }
 
         public override void UpdateFlags()
         {
@@ -27,7 +27,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(CountryCode_);

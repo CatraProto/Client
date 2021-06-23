@@ -1,16 +1,15 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
-    public partial class ResolveUsername : IMethod
+    public class ResolveUsername : IMethod
     {
         public static int ConstructorId { get; } = -113456221;
-        public string Username { get; set; }
 
-        public Type Type { get; init; } = typeof(ResolvedPeerBase);
+        public System.Type Type { get; init; } = typeof(ResolvedPeerBase);
         public bool IsVector { get; init; } = false;
+        public string Username { get; set; }
 
         public void UpdateFlags()
         {
@@ -18,7 +17,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Username);
         }
 

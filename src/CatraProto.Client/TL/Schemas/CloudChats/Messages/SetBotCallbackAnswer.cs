@@ -4,19 +4,8 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class SetBotCallbackAnswer : IMethod
+    public class SetBotCallbackAnswer : IMethod
     {
-        public static int ConstructorId { get; } = -712043766;
-        public int Flags { get; set; }
-        public bool Alert { get; set; }
-        public long QueryId { get; set; }
-        public string Message { get; set; }
-        public string Url { get; set; }
-        public int CacheTime { get; set; }
-
-        public Type Type { get; init; } = typeof(bool);
-        public bool IsVector { get; init; } = false;
-
         [Flags]
         public enum FlagsEnum
         {
@@ -24,6 +13,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             Message = 1 << 0,
             Url = 1 << 2
         }
+
+        public static int ConstructorId { get; } = -712043766;
+
+        public System.Type Type { get; init; } = typeof(bool);
+        public bool IsVector { get; init; } = false;
+        public int Flags { get; set; }
+        public bool Alert { get; set; }
+        public long QueryId { get; set; }
+        public string Message { get; set; }
+        public string Url { get; set; }
+        public int CacheTime { get; set; }
 
         public void UpdateFlags()
         {
@@ -34,7 +34,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(QueryId);

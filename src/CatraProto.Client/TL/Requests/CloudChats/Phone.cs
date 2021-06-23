@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections;
@@ -9,7 +10,7 @@ using PhoneCallBase = CatraProto.Client.TL.Schemas.CloudChats.Phone.PhoneCallBas
 
 namespace CatraProto.Client.TL.Requests.CloudChats
 {
-    public partial class Phone
+    public class Phone
     {
         private MessagesHandler _messagesHandler;
 
@@ -18,7 +19,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             _messagesHandler = messagesHandler;
         }
 
-        public async Task<RpcMessage<DataJSONBase>> GetCallConfig(CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<DataJSONBase>> GetCallConfigAsync(CancellationToken cancellationToken = default)
         {
             var rpcResponse = new RpcMessage<DataJSONBase>();
             var methodBody = new GetCallConfig();
@@ -32,8 +33,24 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             return rpcResponse;
         }
 
-        public async Task<RpcMessage<PhoneCallBase>> RequestCall(InputUserBase userId, int randomId, byte[] gAHash, PhoneCallProtocolBase protocol, bool video = true, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<PhoneCallBase>> RequestCallAsync(InputUserBase userId, int randomId, byte[] gAHash,
+            PhoneCallProtocolBase protocol, bool video = true, CancellationToken cancellationToken = default)
         {
+            if (userId is null)
+            {
+                throw new ArgumentNullException(nameof(userId));
+            }
+
+            if (gAHash is null)
+            {
+                throw new ArgumentNullException(nameof(gAHash));
+            }
+
+            if (protocol is null)
+            {
+                throw new ArgumentNullException(nameof(protocol));
+            }
+
             var rpcResponse = new RpcMessage<PhoneCallBase>();
             var methodBody = new RequestCall
             {
@@ -41,7 +58,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
                 RandomId = randomId,
                 GAHash = gAHash,
                 Protocol = protocol,
-                Video = video,
+                Video = video
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage
@@ -53,14 +70,30 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             return rpcResponse;
         }
 
-        public async Task<RpcMessage<PhoneCallBase>> AcceptCall(InputPhoneCallBase peer, byte[] gB, PhoneCallProtocolBase protocol, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<PhoneCallBase>> AcceptCallAsync(InputPhoneCallBase peer, byte[] gB, PhoneCallProtocolBase protocol,
+            CancellationToken cancellationToken = default)
         {
+            if (peer is null)
+            {
+                throw new ArgumentNullException(nameof(peer));
+            }
+
+            if (gB is null)
+            {
+                throw new ArgumentNullException(nameof(gB));
+            }
+
+            if (protocol is null)
+            {
+                throw new ArgumentNullException(nameof(protocol));
+            }
+
             var rpcResponse = new RpcMessage<PhoneCallBase>();
             var methodBody = new AcceptCall
             {
                 Peer = peer,
                 GB = gB,
-                Protocol = protocol,
+                Protocol = protocol
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage
@@ -72,15 +105,31 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             return rpcResponse;
         }
 
-        public async Task<RpcMessage<PhoneCallBase>> ConfirmCall(InputPhoneCallBase peer, byte[] gA, long keyFingerprint, PhoneCallProtocolBase protocol, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<PhoneCallBase>> ConfirmCallAsync(InputPhoneCallBase peer, byte[] gA,
+            long keyFingerprint, PhoneCallProtocolBase protocol, CancellationToken cancellationToken = default)
         {
+            if (peer is null)
+            {
+                throw new ArgumentNullException(nameof(peer));
+            }
+
+            if (gA is null)
+            {
+                throw new ArgumentNullException(nameof(gA));
+            }
+
+            if (protocol is null)
+            {
+                throw new ArgumentNullException(nameof(protocol));
+            }
+
             var rpcResponse = new RpcMessage<PhoneCallBase>();
             var methodBody = new ConfirmCall
             {
                 Peer = peer,
                 GA = gA,
                 KeyFingerprint = keyFingerprint,
-                Protocol = protocol,
+                Protocol = protocol
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage
@@ -92,12 +141,18 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             return rpcResponse;
         }
 
-        public async Task<RpcMessage<bool>> ReceivedCall(InputPhoneCallBase peer, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<bool>> ReceivedCallAsync(InputPhoneCallBase peer,
+            CancellationToken cancellationToken = default)
         {
+            if (peer is null)
+            {
+                throw new ArgumentNullException(nameof(peer));
+            }
+
             var rpcResponse = new RpcMessage<bool>();
             var methodBody = new ReceivedCall
             {
-                Peer = peer,
+                Peer = peer
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage
@@ -109,8 +164,20 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             return rpcResponse;
         }
 
-        public async Task<RpcMessage<UpdatesBase>> DiscardCall(InputPhoneCallBase peer, int duration, PhoneCallDiscardReasonBase reason, long connectionId, bool video = true, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<UpdatesBase>> DiscardCallAsync(InputPhoneCallBase peer, int duration,
+            PhoneCallDiscardReasonBase reason, long connectionId, bool video = true,
+            CancellationToken cancellationToken = default)
         {
+            if (peer is null)
+            {
+                throw new ArgumentNullException(nameof(peer));
+            }
+
+            if (reason is null)
+            {
+                throw new ArgumentNullException(nameof(reason));
+            }
+
             var rpcResponse = new RpcMessage<UpdatesBase>();
             var methodBody = new DiscardCall
             {
@@ -118,7 +185,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
                 Duration = duration,
                 Reason = reason,
                 ConnectionId = connectionId,
-                Video = video,
+                Video = video
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage
@@ -130,15 +197,26 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             return rpcResponse;
         }
 
-        public async Task<RpcMessage<UpdatesBase>> SetCallRating(InputPhoneCallBase peer, int rating, string comment, bool userInitiative = true, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<UpdatesBase>> SetCallRatingAsync(InputPhoneCallBase peer, int rating,
+            string comment, bool userInitiative = true, CancellationToken cancellationToken = default)
         {
+            if (peer is null)
+            {
+                throw new ArgumentNullException(nameof(peer));
+            }
+
+            if (comment is null)
+            {
+                throw new ArgumentNullException(nameof(comment));
+            }
+
             var rpcResponse = new RpcMessage<UpdatesBase>();
             var methodBody = new SetCallRating
             {
                 Peer = peer,
                 Rating = rating,
                 Comment = comment,
-                UserInitiative = userInitiative,
+                UserInitiative = userInitiative
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage
@@ -150,13 +228,24 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             return rpcResponse;
         }
 
-        public async Task<RpcMessage<bool>> SaveCallDebug(InputPhoneCallBase peer, DataJSONBase debug, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<bool>> SaveCallDebugAsync(InputPhoneCallBase peer, DataJSONBase debug,
+            CancellationToken cancellationToken = default)
         {
+            if (peer is null)
+            {
+                throw new ArgumentNullException(nameof(peer));
+            }
+
+            if (debug is null)
+            {
+                throw new ArgumentNullException(nameof(debug));
+            }
+
             var rpcResponse = new RpcMessage<bool>();
             var methodBody = new SaveCallDebug
             {
                 Peer = peer,
-                Debug = debug,
+                Debug = debug
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage
@@ -168,13 +257,24 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             return rpcResponse;
         }
 
-        public async Task<RpcMessage<bool>> SendSignalingData(InputPhoneCallBase peer, byte[] data, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<bool>> SendSignalingDataAsync(InputPhoneCallBase peer, byte[] data,
+            CancellationToken cancellationToken = default)
         {
+            if (peer is null)
+            {
+                throw new ArgumentNullException(nameof(peer));
+            }
+
+            if (data is null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+
             var rpcResponse = new RpcMessage<bool>();
             var methodBody = new SendSignalingData
             {
                 Peer = peer,
-                Data = data,
+                Data = data
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage

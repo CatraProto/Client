@@ -3,17 +3,17 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class DraftMessageEmpty : DraftMessageBase
+    public class DraftMessageEmpty : DraftMessageBase
     {
-        public static int ConstructorId { get; } = 453805082;
-        public int Flags { get; set; }
-        public override int? Date { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
             Date = 1 << 0
         }
+
+        public static int ConstructorId { get; } = 453805082;
+        public int Flags { get; set; }
+        public override int? Date { get; set; }
 
         public override void UpdateFlags()
         {
@@ -22,7 +22,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             if (FlagsHelper.IsFlagSet(Flags, 0))

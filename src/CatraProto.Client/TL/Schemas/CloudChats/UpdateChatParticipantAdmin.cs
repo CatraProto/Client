@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class UpdateChatParticipantAdmin : UpdateBase
+    public class UpdateChatParticipantAdmin : UpdateBase
     {
         public static int ConstructorId { get; } = -1232070311;
         public int ChatId { get; set; }
@@ -16,7 +16,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(ChatId);
             writer.Write(UserId);
             writer.Write(IsAdmin);

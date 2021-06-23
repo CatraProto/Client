@@ -4,16 +4,16 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
-    public partial class SendCode : IMethod
+    public class SendCode : IMethod
     {
         public static int ConstructorId { get; } = -1502141361;
+
+        public Type Type { get; init; } = typeof(SentCodeBase);
+        public bool IsVector { get; init; } = false;
         public string PhoneNumber { get; set; }
         public int ApiId { get; set; }
         public string ApiHash { get; set; }
         public CodeSettingsBase Settings { get; set; }
-
-        public Type Type { get; init; } = typeof(SentCodeBase);
-        public bool IsVector { get; init; } = false;
 
         public void UpdateFlags()
         {
@@ -21,7 +21,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(PhoneNumber);
             writer.Write(ApiId);
             writer.Write(ApiHash);

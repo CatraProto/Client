@@ -3,20 +3,8 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class PeerSettings : PeerSettingsBase
+    public class PeerSettings : PeerSettingsBase
     {
-        public static int ConstructorId { get; } = 1933519201;
-        public int Flags { get; set; }
-        public override bool ReportSpam { get; set; }
-        public override bool AddContact { get; set; }
-        public override bool BlockContact { get; set; }
-        public override bool ShareContact { get; set; }
-        public override bool NeedContactsException { get; set; }
-        public override bool ReportGeo { get; set; }
-        public override bool Autoarchived { get; set; }
-        public override bool InviteMembers { get; set; }
-        public override int? GeoDistance { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
@@ -30,6 +18,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             InviteMembers = 1 << 8,
             GeoDistance = 1 << 6
         }
+
+        public static int ConstructorId { get; } = 1933519201;
+        public int Flags { get; set; }
+        public override bool ReportSpam { get; set; }
+        public override bool AddContact { get; set; }
+        public override bool BlockContact { get; set; }
+        public override bool ShareContact { get; set; }
+        public override bool NeedContactsException { get; set; }
+        public override bool ReportGeo { get; set; }
+        public override bool Autoarchived { get; set; }
+        public override bool InviteMembers { get; set; }
+        public override int? GeoDistance { get; set; }
 
         public override void UpdateFlags()
         {
@@ -46,7 +46,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             if (FlagsHelper.IsFlagSet(Flags, 6))

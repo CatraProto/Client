@@ -4,8 +4,16 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-    public partial class AppUpdate : AppUpdateBase
+    public class AppUpdate : AppUpdateBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            CanNotSkip = 1 << 0,
+            Document = 1 << 1,
+            Url = 1 << 2
+        }
+
         public static int ConstructorId { get; } = 497489295;
         public int Flags { get; set; }
         public bool CanNotSkip { get; set; }
@@ -16,14 +24,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
         public DocumentBase Document { get; set; }
         public string Url { get; set; }
 
-        [Flags]
-        public enum FlagsEnum
-        {
-            CanNotSkip = 1 << 0,
-            Document = 1 << 1,
-            Url = 1 << 2
-        }
-
         public override void UpdateFlags()
         {
             Flags = CanNotSkip ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
@@ -33,7 +33,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Id);

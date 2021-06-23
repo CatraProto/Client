@@ -4,8 +4,19 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class ChatFull : ChatFullBase
+    public class ChatFull : ChatFullBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            CanSetUsername = 1 << 7,
+            HasScheduled = 1 << 8,
+            ChatPhoto = 1 << 2,
+            BotInfo = 1 << 3,
+            PinnedMsgId = 1 << 6,
+            FolderId = 1 << 11
+        }
+
         public static int ConstructorId { get; } = 461151667;
         public int Flags { get; set; }
         public override bool CanSetUsername { get; set; }
@@ -20,17 +31,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override int? PinnedMsgId { get; set; }
         public override int? FolderId { get; set; }
 
-        [Flags]
-        public enum FlagsEnum
-        {
-            CanSetUsername = 1 << 7,
-            HasScheduled = 1 << 8,
-            ChatPhoto = 1 << 2,
-            BotInfo = 1 << 3,
-            PinnedMsgId = 1 << 6,
-            FolderId = 1 << 11
-        }
-
         public override void UpdateFlags()
         {
             Flags = CanSetUsername ? FlagsHelper.SetFlag(Flags, 7) : FlagsHelper.UnsetFlag(Flags, 7);
@@ -43,7 +43,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Id);

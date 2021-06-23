@@ -3,19 +3,19 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public partial class ContentSettings : ContentSettingsBase
+    public class ContentSettings : ContentSettingsBase
     {
-        public static int ConstructorId { get; } = 1474462241;
-        public int Flags { get; set; }
-        public override bool SensitiveEnabled { get; set; }
-        public override bool SensitiveCanChange { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
             SensitiveEnabled = 1 << 0,
             SensitiveCanChange = 1 << 1
         }
+
+        public static int ConstructorId { get; } = 1474462241;
+        public int Flags { get; set; }
+        public override bool SensitiveEnabled { get; set; }
+        public override bool SensitiveCanChange { get; set; }
 
         public override void UpdateFlags()
         {
@@ -25,7 +25,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
         }

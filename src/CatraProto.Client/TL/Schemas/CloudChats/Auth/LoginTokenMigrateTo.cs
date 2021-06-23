@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
-    public partial class LoginTokenMigrateTo : LoginTokenBase
+    public class LoginTokenMigrateTo : LoginTokenBase
     {
         public static int ConstructorId { get; } = 110008598;
         public int DcId { get; set; }
@@ -14,7 +14,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(DcId);
             writer.Write(Token);
         }

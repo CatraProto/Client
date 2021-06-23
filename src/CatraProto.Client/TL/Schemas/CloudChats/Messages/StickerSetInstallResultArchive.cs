@@ -3,7 +3,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class StickerSetInstallResultArchive : StickerSetInstallResultBase
+    public class StickerSetInstallResultArchive : StickerSetInstallResultBase
     {
         public static int ConstructorId { get; } = 904138920;
         public IList<StickerSetCoveredBase> Sets { get; set; }
@@ -14,7 +14,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Sets);
         }
 

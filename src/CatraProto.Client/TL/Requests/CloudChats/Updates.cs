@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections;
@@ -8,7 +9,7 @@ using CatraProto.Client.TL.Schemas.CloudChats.Updates;
 
 namespace CatraProto.Client.TL.Requests.CloudChats
 {
-    public partial class Updates
+    public class Updates
     {
         private MessagesHandler _messagesHandler;
 
@@ -17,7 +18,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             _messagesHandler = messagesHandler;
         }
 
-        public async Task<RpcMessage<StateBase>> GetState(CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<StateBase>> GetStateAsync(CancellationToken cancellationToken = default)
         {
             var rpcResponse = new RpcMessage<StateBase>();
             var methodBody = new GetState();
@@ -31,7 +32,8 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             return rpcResponse;
         }
 
-        public async Task<RpcMessage<DifferenceBase>> GetDifference(int pts, int date, int qts, int? ptsTotalLimit = null, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<DifferenceBase>> GetDifferenceAsync(int pts, int date, int qts,
+            int? ptsTotalLimit = null, CancellationToken cancellationToken = default)
         {
             var rpcResponse = new RpcMessage<DifferenceBase>();
             var methodBody = new GetDifference
@@ -39,7 +41,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
                 Pts = pts,
                 Date = date,
                 Qts = qts,
-                PtsTotalLimit = ptsTotalLimit,
+                PtsTotalLimit = ptsTotalLimit
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage
@@ -51,8 +53,20 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             return rpcResponse;
         }
 
-        public async Task<RpcMessage<ChannelDifferenceBase>> GetChannelDifference(InputChannelBase channel, ChannelMessagesFilterBase filter, int pts, int limit, bool force = true, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<ChannelDifferenceBase>> GetChannelDifferenceAsync(InputChannelBase channel,
+            ChannelMessagesFilterBase filter, int pts, int limit, bool force = true,
+            CancellationToken cancellationToken = default)
         {
+            if (channel is null)
+            {
+                throw new ArgumentNullException(nameof(channel));
+            }
+
+            if (filter is null)
+            {
+                throw new ArgumentNullException(nameof(filter));
+            }
+
             var rpcResponse = new RpcMessage<ChannelDifferenceBase>();
             var methodBody = new GetChannelDifference
             {
@@ -60,7 +74,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
                 Filter = filter,
                 Pts = pts,
                 Limit = limit,
-                Force = force,
+                Force = force
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage

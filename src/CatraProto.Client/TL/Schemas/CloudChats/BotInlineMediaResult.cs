@@ -3,8 +3,17 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class BotInlineMediaResult : BotInlineResultBase
+    public class BotInlineMediaResult : BotInlineResultBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            Photo = 1 << 0,
+            Document = 1 << 1,
+            Title = 1 << 1,
+            Description = 1 << 2
+        }
+
         public static int ConstructorId { get; } = 400266251;
         public int Flags { get; set; }
         public override string Id { get; set; }
@@ -14,15 +23,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override string Title { get; set; }
         public override string Description { get; set; }
         public override BotInlineMessageBase SendMessage { get; set; }
-
-        [Flags]
-        public enum FlagsEnum
-        {
-            Photo = 1 << 0,
-            Document = 1 << 1,
-            Title = 1 << 1,
-            Description = 1 << 2
-        }
 
         public override void UpdateFlags()
         {
@@ -34,7 +34,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Id);

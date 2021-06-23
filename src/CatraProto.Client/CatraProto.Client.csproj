@@ -1,25 +1,26 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
-    <LangVersion>9</LangVersion>
-  </PropertyGroup>
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net5.0</TargetFramework>
+        <LangVersion>9</LangVersion>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Tasks\Models\**" />
-    <EmbeddedResource Remove="Tasks\Models\**" />
-    <None Remove="Tasks\Models\**" />
-  </ItemGroup>
+    <ItemGroup>
+        <Compile Remove="Tasks\Models\**" />
+        <EmbeddedResource Remove="Tasks\Models\**" />
+        <None Remove="Tasks\Models\**" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Serilog" Version="2.10.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
-    <PackageReference Include="System.Threading.Channels" Version="5.0.0" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Serilog" Version="2.10.0" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+        <PackageReference Include="System.Threading.Channels" Version="5.0.0" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <InternalsVisibleTo Include="CatraProto.Client.UnitTests" />
-    <ProjectReference Include="..\CatraProto.TL\CatraProto.TL.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <InternalsVisibleTo Include="CatraProto.Client.UnitTests" />
+        <InternalsVisibleTo Include="CatraProto.Client.Benchmark" />
+        <ProjectReference Include="..\CatraProto.TL\CatraProto.TL.csproj" />
+    </ItemGroup>
 
 </Project>

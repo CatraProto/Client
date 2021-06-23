@@ -3,19 +3,19 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class UrlAuthResultRequest : UrlAuthResultBase
+    public class UrlAuthResultRequest : UrlAuthResultBase
     {
-        public static int ConstructorId { get; } = -1831650802;
-        public int Flags { get; set; }
-        public bool RequestWriteAccess { get; set; }
-        public UserBase Bot { get; set; }
-        public string Domain { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
             RequestWriteAccess = 1 << 0
         }
+
+        public static int ConstructorId { get; } = -1831650802;
+        public int Flags { get; set; }
+        public bool RequestWriteAccess { get; set; }
+        public UserBase Bot { get; set; }
+        public string Domain { get; set; }
 
         public override void UpdateFlags()
         {
@@ -24,7 +24,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Bot);

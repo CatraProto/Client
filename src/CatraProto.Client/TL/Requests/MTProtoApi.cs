@@ -1,3 +1,4 @@
+using System;
 using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ using CatraProto.Client.TL.Schemas.MTProto;
 
 namespace CatraProto.Client.TL.Requests
 {
-    public partial class MTProtoApi
+    public class MTProtoApi
     {
         private MessagesHandler _messagesHandler;
 
@@ -17,12 +18,13 @@ namespace CatraProto.Client.TL.Requests
             _messagesHandler = messagesHandler;
         }
 
-        public async Task<RpcMessage<ResPQBase>> ReqPq(BigInteger nonce, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<ResPQBase>> ReqPqAsync(BigInteger nonce,
+            CancellationToken cancellationToken = default)
         {
             var rpcResponse = new RpcMessage<ResPQBase>();
             var methodBody = new ReqPq
             {
-                Nonce = nonce,
+                Nonce = nonce
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage
@@ -34,8 +36,25 @@ namespace CatraProto.Client.TL.Requests
             return rpcResponse;
         }
 
-        public async Task<RpcMessage<ServerDHParamsBase>> ReqDHParams(BigInteger nonce, BigInteger serverNonce, byte[] p, byte[] q, long publicKeyFingerprint, byte[] encryptedData, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<ServerDHParamsBase>> ReqDHParamsAsync(BigInteger nonce, BigInteger serverNonce,
+            byte[] p, byte[] q, long publicKeyFingerprint, byte[] encryptedData,
+            CancellationToken cancellationToken = default)
         {
+            if (p is null)
+            {
+                throw new ArgumentNullException(nameof(p));
+            }
+
+            if (q is null)
+            {
+                throw new ArgumentNullException(nameof(q));
+            }
+
+            if (encryptedData is null)
+            {
+                throw new ArgumentNullException(nameof(encryptedData));
+            }
+
             var rpcResponse = new RpcMessage<ServerDHParamsBase>();
             var methodBody = new ReqDHParams
             {
@@ -44,7 +63,7 @@ namespace CatraProto.Client.TL.Requests
                 P = p,
                 Q = q,
                 PublicKeyFingerprint = publicKeyFingerprint,
-                EncryptedData = encryptedData,
+                EncryptedData = encryptedData
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage
@@ -56,14 +75,20 @@ namespace CatraProto.Client.TL.Requests
             return rpcResponse;
         }
 
-        public async Task<RpcMessage<SetClientDHParamsAnswerBase>> SetClientDHParams(BigInteger nonce, BigInteger serverNonce, byte[] encryptedData, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<SetClientDHParamsAnswerBase>> SetClientDHParamsAsync(BigInteger nonce,
+            BigInteger serverNonce, byte[] encryptedData, CancellationToken cancellationToken = default)
         {
+            if (encryptedData is null)
+            {
+                throw new ArgumentNullException(nameof(encryptedData));
+            }
+
             var rpcResponse = new RpcMessage<SetClientDHParamsAnswerBase>();
             var methodBody = new SetClientDHParams
             {
                 Nonce = nonce,
                 ServerNonce = serverNonce,
-                EncryptedData = encryptedData,
+                EncryptedData = encryptedData
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage
@@ -75,12 +100,13 @@ namespace CatraProto.Client.TL.Requests
             return rpcResponse;
         }
 
-        public async Task<RpcMessage<RpcDropAnswerBase>> RpcDropAnswer(long reqMsgId, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<RpcDropAnswerBase>> RpcDropAnswerAsync(long reqMsgId,
+            CancellationToken cancellationToken = default)
         {
             var rpcResponse = new RpcMessage<RpcDropAnswerBase>();
             var methodBody = new RpcDropAnswer
             {
-                ReqMsgId = reqMsgId,
+                ReqMsgId = reqMsgId
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage
@@ -92,12 +118,13 @@ namespace CatraProto.Client.TL.Requests
             return rpcResponse;
         }
 
-        public async Task<RpcMessage<FutureSaltsBase>> GetFutureSalts(int num, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<FutureSaltsBase>> GetFutureSaltsAsync(int num,
+            CancellationToken cancellationToken = default)
         {
             var rpcResponse = new RpcMessage<FutureSaltsBase>();
             var methodBody = new GetFutureSalts
             {
-                Num = num,
+                Num = num
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage
@@ -109,12 +136,12 @@ namespace CatraProto.Client.TL.Requests
             return rpcResponse;
         }
 
-        public async Task<RpcMessage<PongBase>> Ping(long pingId, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<PongBase>> PingAsync(long pingId, CancellationToken cancellationToken = default)
         {
             var rpcResponse = new RpcMessage<PongBase>();
             var methodBody = new Ping
             {
-                PingId = pingId,
+                PingId = pingId
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage
@@ -126,13 +153,14 @@ namespace CatraProto.Client.TL.Requests
             return rpcResponse;
         }
 
-        public async Task<RpcMessage<PongBase>> PingDelayDisconnect(long pingId, int disconnectDelay, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<PongBase>> PingDelayDisconnectAsync(long pingId, int disconnectDelay,
+            CancellationToken cancellationToken = default)
         {
             var rpcResponse = new RpcMessage<PongBase>();
             var methodBody = new PingDelayDisconnect
             {
                 PingId = pingId,
-                DisconnectDelay = disconnectDelay,
+                DisconnectDelay = disconnectDelay
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage
@@ -144,12 +172,13 @@ namespace CatraProto.Client.TL.Requests
             return rpcResponse;
         }
 
-        public async Task<RpcMessage<DestroySessionResBase>> DestroySession(long sessionId, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<DestroySessionResBase>> DestroySessionAsync(long sessionId,
+            CancellationToken cancellationToken = default)
         {
             var rpcResponse = new RpcMessage<DestroySessionResBase>();
             var methodBody = new DestroySession
             {
-                SessionId = sessionId,
+                SessionId = sessionId
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage
@@ -161,14 +190,15 @@ namespace CatraProto.Client.TL.Requests
             return rpcResponse;
         }
 
-        public async Task<RpcMessage<HttpWaitBase>> HttpWait(int maxDelay, int waitAfter, int maxWait, CancellationToken cancellationToken = default)
+        public async Task<RpcMessage<HttpWaitBase>> HttpWaitAsync(int maxDelay, int waitAfter, int maxWait,
+            CancellationToken cancellationToken = default)
         {
             var rpcResponse = new RpcMessage<HttpWaitBase>();
             var methodBody = new HttpWait
             {
                 MaxDelay = maxDelay,
                 WaitAfter = waitAfter,
-                MaxWait = maxWait,
+                MaxWait = maxWait
             };
 
             await await _messagesHandler.EnqueueMessage(new OutgoingMessage

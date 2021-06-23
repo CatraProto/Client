@@ -4,24 +4,24 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class GetInlineBotResults : IMethod
+    public class GetInlineBotResults : IMethod
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            GeoPoint = 1 << 0
+        }
+
         public static int ConstructorId { get; } = 1364105629;
+
+        public System.Type Type { get; init; } = typeof(BotResultsBase);
+        public bool IsVector { get; init; } = false;
         public int Flags { get; set; }
         public InputUserBase Bot { get; set; }
         public InputPeerBase Peer { get; set; }
         public InputGeoPointBase GeoPoint { get; set; }
         public string Query { get; set; }
         public string Offset { get; set; }
-
-        public Type Type { get; init; } = typeof(BotResultsBase);
-        public bool IsVector { get; init; } = false;
-
-        [Flags]
-        public enum FlagsEnum
-        {
-            GeoPoint = 1 << 0
-        }
 
         public void UpdateFlags()
         {
@@ -30,7 +30,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Bot);

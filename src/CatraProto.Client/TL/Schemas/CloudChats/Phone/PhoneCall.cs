@@ -3,7 +3,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 {
-    public partial class PhoneCall : PhoneCallBase
+    public class PhoneCall : PhoneCallBase
     {
         public static int ConstructorId { get; } = -326966976;
         public override CloudChats.PhoneCallBase PhoneCall_ { get; set; }
@@ -15,7 +15,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(PhoneCall_);
             writer.Write(Users);
         }

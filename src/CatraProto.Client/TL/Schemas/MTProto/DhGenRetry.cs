@@ -1,10 +1,9 @@
 using System.Numerics;
 using CatraProto.TL;
-using CatraProto.TL.Exceptions;
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-    public partial class DhGenRetry : SetClientDHParamsAnswerBase
+    public class DhGenRetry : SetClientDHParamsAnswerBase
     {
         public static int ConstructorId { get; } = 1188831161;
         public override BigInteger Nonce { get; set; }
@@ -17,25 +16,35 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             var sizeNonce = Nonce.GetByteCount();
             if (sizeNonce != 16)
             {
-                throw new SerializationException($"ByteSize mismatch, should be 16bytes got {sizeNonce}bytes", SerializationException.SerializationErrors.BitSizeMismatch);
+                throw new CatraProto.TL.Exceptions.SerializationException(
+                    $"ByteSize mismatch, should be 16bytes got {sizeNonce}bytes",
+                    CatraProto.TL.Exceptions.SerializationException.SerializationErrors.BitSizeMismatch);
             }
 
             writer.Write(Nonce);
             var sizeServerNonce = ServerNonce.GetByteCount();
             if (sizeServerNonce != 16)
             {
-                throw new SerializationException($"ByteSize mismatch, should be 16bytes got {sizeServerNonce}bytes", SerializationException.SerializationErrors.BitSizeMismatch);
+                throw new CatraProto.TL.Exceptions.SerializationException(
+                    $"ByteSize mismatch, should be 16bytes got {sizeServerNonce}bytes",
+                    CatraProto.TL.Exceptions.SerializationException.SerializationErrors.BitSizeMismatch);
             }
 
             writer.Write(ServerNonce);
             var sizeNewNonceHash2 = NewNonceHash2.GetByteCount();
             if (sizeNewNonceHash2 != 16)
             {
-                throw new SerializationException($"ByteSize mismatch, should be 16bytes got {sizeNewNonceHash2}bytes", SerializationException.SerializationErrors.BitSizeMismatch);
+                throw new CatraProto.TL.Exceptions.SerializationException(
+                    $"ByteSize mismatch, should be 16bytes got {sizeNewNonceHash2}bytes",
+                    CatraProto.TL.Exceptions.SerializationException.SerializationErrors.BitSizeMismatch);
             }
 
             writer.Write(NewNonceHash2);

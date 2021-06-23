@@ -3,19 +3,19 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public partial class PasswordSettings : PasswordSettingsBase
+    public class PasswordSettings : PasswordSettingsBase
     {
-        public static int ConstructorId { get; } = -1705233435;
-        public int Flags { get; set; }
-        public override string Email { get; set; }
-        public override SecureSecretSettingsBase SecureSettings { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
             Email = 1 << 0,
             SecureSettings = 1 << 1
         }
+
+        public static int ConstructorId { get; } = -1705233435;
+        public int Flags { get; set; }
+        public override string Email { get; set; }
+        public override SecureSecretSettingsBase SecureSettings { get; set; }
 
         public override void UpdateFlags()
         {
@@ -25,7 +25,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             if (FlagsHelper.IsFlagSet(Flags, 0))

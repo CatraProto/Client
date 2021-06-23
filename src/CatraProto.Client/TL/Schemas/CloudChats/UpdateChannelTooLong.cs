@@ -3,18 +3,18 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class UpdateChannelTooLong : UpdateBase
+    public class UpdateChannelTooLong : UpdateBase
     {
-        public static int ConstructorId { get; } = -352032773;
-        public int Flags { get; set; }
-        public int ChannelId { get; set; }
-        public int? Pts { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
             Pts = 1 << 0
         }
+
+        public static int ConstructorId { get; } = -352032773;
+        public int Flags { get; set; }
+        public int ChannelId { get; set; }
+        public int? Pts { get; set; }
 
         public override void UpdateFlags()
         {
@@ -23,7 +23,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(ChannelId);

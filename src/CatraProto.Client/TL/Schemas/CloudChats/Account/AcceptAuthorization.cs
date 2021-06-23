@@ -5,17 +5,17 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public partial class AcceptAuthorization : IMethod
+    public class AcceptAuthorization : IMethod
     {
         public static int ConstructorId { get; } = -419267436;
+
+        public Type Type { get; init; } = typeof(bool);
+        public bool IsVector { get; init; } = false;
         public int BotId { get; set; }
         public string Scope { get; set; }
         public string PublicKey { get; set; }
         public IList<SecureValueHashBase> ValueHashes { get; set; }
         public SecureCredentialsEncryptedBase Credentials { get; set; }
-
-        public Type Type { get; init; } = typeof(bool);
-        public bool IsVector { get; init; } = false;
 
         public void UpdateFlags()
         {
@@ -23,7 +23,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(BotId);
             writer.Write(Scope);
             writer.Write(PublicKey);

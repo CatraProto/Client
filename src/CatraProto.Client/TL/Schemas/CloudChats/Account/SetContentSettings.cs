@@ -4,20 +4,20 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public partial class SetContentSettings : IMethod
+    public class SetContentSettings : IMethod
     {
-        public static int ConstructorId { get; } = -1250643605;
-        public int Flags { get; set; }
-        public bool SensitiveEnabled { get; set; }
-
-        public Type Type { get; init; } = typeof(bool);
-        public bool IsVector { get; init; } = false;
-
         [Flags]
         public enum FlagsEnum
         {
             SensitiveEnabled = 1 << 0
         }
+
+        public static int ConstructorId { get; } = -1250643605;
+
+        public Type Type { get; init; } = typeof(bool);
+        public bool IsVector { get; init; } = false;
+        public int Flags { get; set; }
+        public bool SensitiveEnabled { get; set; }
 
         public void UpdateFlags()
         {
@@ -26,7 +26,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
         }

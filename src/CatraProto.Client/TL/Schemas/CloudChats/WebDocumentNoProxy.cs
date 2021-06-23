@@ -3,7 +3,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class WebDocumentNoProxy : WebDocumentBase
+    public class WebDocumentNoProxy : WebDocumentBase
     {
         public static int ConstructorId { get; } = -104284986;
         public override string Url { get; set; }
@@ -17,7 +17,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Url);
             writer.Write(Size);
             writer.Write(MimeType);

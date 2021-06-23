@@ -4,17 +4,8 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 {
-    public partial class UploadProfilePhoto : IMethod
+    public class UploadProfilePhoto : IMethod
     {
-        public static int ConstructorId { get; } = -1980559511;
-        public int Flags { get; set; }
-        public InputFileBase File { get; set; }
-        public InputFileBase Video { get; set; }
-        public double? VideoStartTs { get; set; }
-
-        public Type Type { get; init; } = typeof(PhotoBase);
-        public bool IsVector { get; init; } = false;
-
         [Flags]
         public enum FlagsEnum
         {
@@ -22,6 +13,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
             Video = 1 << 1,
             VideoStartTs = 1 << 2
         }
+
+        public static int ConstructorId { get; } = -1980559511;
+
+        public System.Type Type { get; init; } = typeof(PhotoBase);
+        public bool IsVector { get; init; } = false;
+        public int Flags { get; set; }
+        public InputFileBase File { get; set; }
+        public InputFileBase Video { get; set; }
+        public double? VideoStartTs { get; set; }
 
         public void UpdateFlags()
         {
@@ -32,7 +32,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             if (FlagsHelper.IsFlagSet(Flags, 0))

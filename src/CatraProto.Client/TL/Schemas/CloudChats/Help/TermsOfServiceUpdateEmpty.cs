@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-    public partial class TermsOfServiceUpdateEmpty : TermsOfServiceUpdateBase
+    public class TermsOfServiceUpdateEmpty : TermsOfServiceUpdateBase
     {
         public static int ConstructorId { get; } = -483352705;
         public override int Expires { get; set; }
@@ -13,7 +13,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Expires);
         }
 

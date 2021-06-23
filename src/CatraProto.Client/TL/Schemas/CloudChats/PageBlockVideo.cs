@@ -3,21 +3,21 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class PageBlockVideo : PageBlockBase
+    public class PageBlockVideo : PageBlockBase
     {
-        public static int ConstructorId { get; } = 2089805750;
-        public int Flags { get; set; }
-        public bool Autoplay { get; set; }
-        public bool Loop { get; set; }
-        public long VideoId { get; set; }
-        public PageCaptionBase Caption { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
             Autoplay = 1 << 0,
             Loop = 1 << 1
         }
+
+        public static int ConstructorId { get; } = 2089805750;
+        public int Flags { get; set; }
+        public bool Autoplay { get; set; }
+        public bool Loop { get; set; }
+        public long VideoId { get; set; }
+        public PageCaptionBase Caption { get; set; }
 
         public override void UpdateFlags()
         {
@@ -27,7 +27,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(VideoId);

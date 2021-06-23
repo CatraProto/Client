@@ -4,19 +4,19 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 {
-    public partial class ValidatedRequestedInfo : ValidatedRequestedInfoBase
+    public class ValidatedRequestedInfo : ValidatedRequestedInfoBase
     {
-        public static int ConstructorId { get; } = -784000893;
-        public int Flags { get; set; }
-        public override string Id { get; set; }
-        public override IList<ShippingOptionBase> ShippingOptions { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
             Id = 1 << 0,
             ShippingOptions = 1 << 1
         }
+
+        public static int ConstructorId { get; } = -784000893;
+        public int Flags { get; set; }
+        public override string Id { get; set; }
+        public override IList<ShippingOptionBase> ShippingOptions { get; set; }
 
         public override void UpdateFlags()
         {
@@ -26,7 +26,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             if (FlagsHelper.IsFlagSet(Flags, 0))

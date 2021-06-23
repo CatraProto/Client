@@ -11,22 +11,17 @@ namespace CatraProto.Client.Crypto
 {
     class Rsa : IDisposable
     {
+        /// <value>List of known RSAKeys by CatraProto.</value>
+        public static Dictionary<long, string> RsaKeys { get; set; } = new Dictionary<long, string>
+        {
+            { -4344800451088585951, @"-----BEGIN RSA PUBLIC KEY----- MIIBCgKCAQEAwVACPi9w23mF3tBkdZz+zwrzKOaaQdr01vAbU4E1pvkfj4sqDsm6lyDONS789sVoD/xCS9Y0hkkC3gtL1tSfTlgCMOOul9lcixlEKzwKENj1Yz/s7daSan9tqw3bfUV/nqgbhGX81v/+7RFAEd+RwFnK7a+XYl9sluzHRyVVaTTveB2GazTwEfzk2DWgkBluml8OREmvfraX3bkHZJTKX4EQSjBbbdJ2ZXIsRrYOXfaA+xayEGB+8hdlLmAjbCVfaigxX0CDqWeR1yFL9kwd9P0NsZRPsmoqVwMbMu7mStFai6aIhc3nSlv8kg9qv1m6XHVQY3PnEw+QQtqSIXklHwIDAQAB -----END RSA PUBLIC KEY-----" }
+        };
+
         private readonly RsaImplementation _rsaKey = RsaImplementation.Create();
 
         public Rsa(string key)
         {
             _rsaKey.ImportFromPem(key);
-        }
-
-        /// <value>List of known RSAKeys by CatraProto.</value>
-        public static string[] RsaKeys
-        {
-            get
-            {
-                var keys = new string[1];
-                keys[0] = @"-----BEGIN RSA PUBLIC KEY----- MIIBCgKCAQEAwVACPi9w23mF3tBkdZz+zwrzKOaaQdr01vAbU4E1pvkfj4sqDsm6lyDONS789sVoD/xCS9Y0hkkC3gtL1tSfTlgCMOOul9lcixlEKzwKENj1Yz/s7daSan9tqw3bfUV/nqgbhGX81v/+7RFAEd+RwFnK7a+XYl9sluzHRyVVaTTveB2GazTwEfzk2DWgkBluml8OREmvfraX3bkHZJTKX4EQSjBbbdJ2ZXIsRrYOXfaA+xayEGB+8hdlLmAjbCVfaigxX0CDqWeR1yFL9kwd9P0NsZRPsmoqVwMbMu7mStFai6aIhc3nSlv8kg9qv1m6XHVQY3PnEw+QQtqSIXklHwIDAQAB -----END RSA PUBLIC KEY-----";
-                return keys;
-            }
         }
 
         public long ComputeFingerprint()
@@ -48,20 +43,10 @@ namespace CatraProto.Client.Crypto
 
         public static Rsa FindByFingerprint(long fingerprint)
         {
-            var keys = RsaKeys;
-            foreach (var stringKey in keys)
-            {
-                var rsa = new Rsa(stringKey);
-                if (fingerprint == rsa.ComputeFingerprint())
-                {
-                    return rsa;
-                }
-            }
-
-            return null;
+            return RsaKeys.TryGetValue(fingerprint, out var key) ? new Rsa(key) : null;
         }
-        
-        
+
+
         public static Tuple<long, Rsa> FindByFingerprints(IList<long> fingerprints)
         {
             for (var index = 0; index < fingerprints.Count; index++)
@@ -74,7 +59,7 @@ namespace CatraProto.Client.Crypto
                 }
             }
 
-            return null;
+            return new Tuple<long, Rsa>(0, null);
         }
 
         public byte[] EncryptData(byte[] data)
@@ -93,7 +78,7 @@ namespace CatraProto.Client.Crypto
 
             return byteArray;
         }
-        
+
         public void Dispose()
         {
             _rsaKey?.Dispose();

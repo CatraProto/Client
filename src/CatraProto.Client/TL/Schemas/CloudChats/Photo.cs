@@ -4,8 +4,15 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class Photo : PhotoBase
+    public class Photo : PhotoBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            HasStickers = 1 << 0,
+            VideoSizes = 1 << 1
+        }
+
         public static int ConstructorId { get; } = -82216347;
         public int Flags { get; set; }
         public bool HasStickers { get; set; }
@@ -17,13 +24,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public IList<VideoSizeBase> VideoSizes { get; set; }
         public int DcId { get; set; }
 
-        [Flags]
-        public enum FlagsEnum
-        {
-            HasStickers = 1 << 0,
-            VideoSizes = 1 << 1
-        }
-
         public override void UpdateFlags()
         {
             Flags = HasStickers ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
@@ -32,7 +32,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Id);

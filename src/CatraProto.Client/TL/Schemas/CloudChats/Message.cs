@@ -4,8 +4,36 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class Message : MessageBase
+    public class Message : MessageBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            Out = 1 << 1,
+            Mentioned = 1 << 4,
+            MediaUnread = 1 << 5,
+            Silent = 1 << 13,
+            Post = 1 << 14,
+            FromScheduled = 1 << 18,
+            Legacy = 1 << 19,
+            EditHide = 1 << 21,
+            Pinned = 1 << 24,
+            FromId = 1 << 8,
+            FwdFrom = 1 << 2,
+            ViaBotId = 1 << 11,
+            ReplyTo = 1 << 3,
+            Media = 1 << 9,
+            ReplyMarkup = 1 << 6,
+            Entities = 1 << 7,
+            Views = 1 << 10,
+            Forwards = 1 << 10,
+            Replies = 1 << 23,
+            EditDate = 1 << 15,
+            PostAuthor = 1 << 16,
+            GroupedId = 1 << 17,
+            RestrictionReason = 1 << 22
+        }
+
         public static int ConstructorId { get; } = 1487813065;
         public int Flags { get; set; }
         public bool Out { get; set; }
@@ -36,34 +64,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public long? GroupedId { get; set; }
         public IList<RestrictionReasonBase> RestrictionReason { get; set; }
 
-        [Flags]
-        public enum FlagsEnum
-        {
-            Out = 1 << 1,
-            Mentioned = 1 << 4,
-            MediaUnread = 1 << 5,
-            Silent = 1 << 13,
-            Post = 1 << 14,
-            FromScheduled = 1 << 18,
-            Legacy = 1 << 19,
-            EditHide = 1 << 21,
-            Pinned = 1 << 24,
-            FromId = 1 << 8,
-            FwdFrom = 1 << 2,
-            ViaBotId = 1 << 11,
-            ReplyTo = 1 << 3,
-            Media = 1 << 9,
-            ReplyMarkup = 1 << 6,
-            Entities = 1 << 7,
-            Views = 1 << 10,
-            Forwards = 1 << 10,
-            Replies = 1 << 23,
-            EditDate = 1 << 15,
-            PostAuthor = 1 << 16,
-            GroupedId = 1 << 17,
-            RestrictionReason = 1 << 22
-        }
-
         public override void UpdateFlags()
         {
             Flags = Out ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
@@ -93,7 +93,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Id);

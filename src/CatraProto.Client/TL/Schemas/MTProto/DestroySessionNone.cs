@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-    public partial class DestroySessionNone : DestroySessionResBase
+    public class DestroySessionNone : DestroySessionResBase
     {
         public static int ConstructorId { get; } = 1658015945;
         public override long SessionId { get; set; }
@@ -13,7 +13,11 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(SessionId);
         }
 

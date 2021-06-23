@@ -3,17 +3,17 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class ReplyKeyboardHide : ReplyMarkupBase
+    public class ReplyKeyboardHide : ReplyMarkupBase
     {
-        public static int ConstructorId { get; } = -1606526075;
-        public int Flags { get; set; }
-        public bool Selective { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
             Selective = 1 << 2
         }
+
+        public static int ConstructorId { get; } = -1606526075;
+        public int Flags { get; set; }
+        public bool Selective { get; set; }
 
         public override void UpdateFlags()
         {
@@ -22,7 +22,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
         }

@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class DialogFilterSuggested : DialogFilterSuggestedBase
+    public class DialogFilterSuggested : DialogFilterSuggestedBase
     {
         public static int ConstructorId { get; } = 2004110666;
         public override DialogFilterBase Filter { get; set; }
@@ -14,7 +14,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Filter);
             writer.Write(Description);
         }

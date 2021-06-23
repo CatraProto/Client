@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class InputCheckPasswordSRP : InputCheckPasswordSRPBase
+    public class InputCheckPasswordSRP : InputCheckPasswordSRPBase
     {
         public static int ConstructorId { get; } = -763367294;
         public long SrpId { get; set; }
@@ -15,7 +15,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(SrpId);
             writer.Write(A);
             writer.Write(M1);

@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class PostAddress : PostAddressBase
+    public class PostAddress : PostAddressBase
     {
         public static int ConstructorId { get; } = 512535275;
         public override string StreetLine1 { get; set; }
@@ -18,7 +18,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(StreetLine1);
             writer.Write(StreetLine2);
             writer.Write(City);

@@ -3,7 +3,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 {
-    public partial class PhotosSlice : PhotosBase
+    public class PhotosSlice : PhotosBase
     {
         public static int ConstructorId { get; } = 352657236;
         public int Count { get; set; }
@@ -16,7 +16,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Count);
             writer.Write(Photos);
             writer.Write(Users);

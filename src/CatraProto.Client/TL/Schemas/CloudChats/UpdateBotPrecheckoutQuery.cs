@@ -3,8 +3,15 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class UpdateBotPrecheckoutQuery : UpdateBase
+    public class UpdateBotPrecheckoutQuery : UpdateBase
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            Info = 1 << 0,
+            ShippingOptionId = 1 << 1
+        }
+
         public static int ConstructorId { get; } = 1563376297;
         public int Flags { get; set; }
         public long QueryId { get; set; }
@@ -15,13 +22,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public string Currency { get; set; }
         public long TotalAmount { get; set; }
 
-        [Flags]
-        public enum FlagsEnum
-        {
-            Info = 1 << 0,
-            ShippingOptionId = 1 << 1
-        }
-
         public override void UpdateFlags()
         {
             Flags = Info == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
@@ -30,7 +30,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(QueryId);

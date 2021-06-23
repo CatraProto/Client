@@ -4,9 +4,23 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class SendInlineBotResult : IMethod
+    public class SendInlineBotResult : IMethod
     {
+        [Flags]
+        public enum FlagsEnum
+        {
+            Silent = 1 << 5,
+            Background = 1 << 6,
+            ClearDraft = 1 << 7,
+            HideVia = 1 << 11,
+            ReplyToMsgId = 1 << 0,
+            ScheduleDate = 1 << 10
+        }
+
         public static int ConstructorId { get; } = 570955184;
+
+        public System.Type Type { get; init; } = typeof(UpdatesBase);
+        public bool IsVector { get; init; } = false;
         public int Flags { get; set; }
         public bool Silent { get; set; }
         public bool Background { get; set; }
@@ -18,20 +32,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public long QueryId { get; set; }
         public string Id { get; set; }
         public int? ScheduleDate { get; set; }
-
-        public Type Type { get; init; } = typeof(UpdatesBase);
-        public bool IsVector { get; init; } = false;
-
-        [Flags]
-        public enum FlagsEnum
-        {
-            Silent = 1 << 5,
-            Background = 1 << 6,
-            ClearDraft = 1 << 7,
-            HideVia = 1 << 11,
-            ReplyToMsgId = 1 << 0,
-            ScheduleDate = 1 << 10
-        }
 
         public void UpdateFlags()
         {
@@ -45,7 +45,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Peer);

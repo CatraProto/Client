@@ -4,20 +4,20 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class InputMediaUploadedPhoto : InputMediaBase
+    public class InputMediaUploadedPhoto : InputMediaBase
     {
-        public static int ConstructorId { get; } = 505969924;
-        public int Flags { get; set; }
-        public InputFileBase File { get; set; }
-        public IList<InputDocumentBase> Stickers { get; set; }
-        public int? TtlSeconds { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
             Stickers = 1 << 0,
             TtlSeconds = 1 << 1
         }
+
+        public static int ConstructorId { get; } = 505969924;
+        public int Flags { get; set; }
+        public InputFileBase File { get; set; }
+        public IList<InputDocumentBase> Stickers { get; set; }
+        public int? TtlSeconds { get; set; }
 
         public override void UpdateFlags()
         {
@@ -27,7 +27,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(File);

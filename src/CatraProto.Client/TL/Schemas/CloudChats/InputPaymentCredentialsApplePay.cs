@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class InputPaymentCredentialsApplePay : InputPaymentCredentialsBase
+    public class InputPaymentCredentialsApplePay : InputPaymentCredentialsBase
     {
         public static int ConstructorId { get; } = 178373535;
         public DataJSONBase PaymentData { get; set; }
@@ -13,7 +13,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(PaymentData);
         }
 

@@ -9,7 +9,7 @@ namespace CatraProto.Client.Crypto.KeyExchange
         {
             if (otherBigInteger != bigInteger)
             {
-                throw new Exception($"Nonce mismatch");
+                throw new Exception("Nonce mismatch");
             }
         }
     }

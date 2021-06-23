@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public partial class AutoDownloadSettings : AutoDownloadSettingsBase
+    public class AutoDownloadSettings : AutoDownloadSettingsBase
     {
         public static int ConstructorId { get; } = 1674235686;
         public override CloudChats.AutoDownloadSettingsBase Low { get; set; }
@@ -15,7 +15,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Low);
             writer.Write(Medium);
             writer.Write(High);

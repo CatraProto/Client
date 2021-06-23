@@ -5,25 +5,8 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class SendMessage : IMethod
+    public class SendMessage : IMethod
     {
-        public static int ConstructorId { get; } = 1376532592;
-        public int Flags { get; set; }
-        public bool NoWebpage { get; set; }
-        public bool Silent { get; set; }
-        public bool Background { get; set; }
-        public bool ClearDraft { get; set; }
-        public InputPeerBase Peer { get; set; }
-        public int? ReplyToMsgId { get; set; }
-        public string Message { get; set; }
-        public long RandomId { get; set; }
-        public ReplyMarkupBase ReplyMarkup { get; set; }
-        public IList<MessageEntityBase> Entities { get; set; }
-        public int? ScheduleDate { get; set; }
-
-        public Type Type { get; init; } = typeof(UpdatesBase);
-        public bool IsVector { get; init; } = false;
-
         [Flags]
         public enum FlagsEnum
         {
@@ -36,6 +19,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             Entities = 1 << 3,
             ScheduleDate = 1 << 10
         }
+
+        public static int ConstructorId { get; } = 1376532592;
+
+        public System.Type Type { get; init; } = typeof(UpdatesBase);
+        public bool IsVector { get; init; } = false;
+        public int Flags { get; set; }
+        public bool NoWebpage { get; set; }
+        public bool Silent { get; set; }
+        public bool Background { get; set; }
+        public bool ClearDraft { get; set; }
+        public InputPeerBase Peer { get; set; }
+        public int? ReplyToMsgId { get; set; }
+        public string Message { get; set; }
+        public long RandomId { get; set; }
+        public ReplyMarkupBase ReplyMarkup { get; set; }
+        public IList<MessageEntityBase> Entities { get; set; }
+        public int? ScheduleDate { get; set; }
 
         public void UpdateFlags()
         {
@@ -51,7 +51,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Peer);

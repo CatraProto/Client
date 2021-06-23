@@ -4,21 +4,21 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class UpdateDialogFilter : IMethod
+    public class UpdateDialogFilter : IMethod
     {
-        public static int ConstructorId { get; } = 450142282;
-        public int Flags { get; set; }
-        public int Id { get; set; }
-        public DialogFilterBase Filter { get; set; }
-
-        public Type Type { get; init; } = typeof(bool);
-        public bool IsVector { get; init; } = false;
-
         [Flags]
         public enum FlagsEnum
         {
             Filter = 1 << 0
         }
+
+        public static int ConstructorId { get; } = 450142282;
+
+        public System.Type Type { get; init; } = typeof(bool);
+        public bool IsVector { get; init; } = false;
+        public int Flags { get; set; }
+        public int Id { get; set; }
+        public DialogFilterBase Filter { get; set; }
 
         public void UpdateFlags()
         {
@@ -27,7 +27,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Id);

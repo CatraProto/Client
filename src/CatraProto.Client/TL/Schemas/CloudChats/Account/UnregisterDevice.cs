@@ -5,15 +5,15 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public partial class UnregisterDevice : IMethod
+    public class UnregisterDevice : IMethod
     {
         public static int ConstructorId { get; } = 813089983;
-        public int TokenType { get; set; }
-        public string Token { get; set; }
-        public IList<int> OtherUids { get; set; }
 
         public Type Type { get; init; } = typeof(bool);
         public bool IsVector { get; init; } = false;
+        public int TokenType { get; set; }
+        public string Token { get; set; }
+        public IList<int> OtherUids { get; set; }
 
         public void UpdateFlags()
         {
@@ -21,7 +21,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(TokenType);
             writer.Write(Token);
             writer.Write(OtherUids);

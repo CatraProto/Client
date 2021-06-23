@@ -4,15 +4,8 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class BotInlineMessageText : BotInlineMessageBase
+    public class BotInlineMessageText : BotInlineMessageBase
     {
-        public static int ConstructorId { get; } = -1937807902;
-        public int Flags { get; set; }
-        public bool NoWebpage { get; set; }
-        public string Message { get; set; }
-        public IList<MessageEntityBase> Entities { get; set; }
-        public override ReplyMarkupBase ReplyMarkup { get; set; }
-
         [Flags]
         public enum FlagsEnum
         {
@@ -20,6 +13,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Entities = 1 << 1,
             ReplyMarkup = 1 << 2
         }
+
+        public static int ConstructorId { get; } = -1937807902;
+        public int Flags { get; set; }
+        public bool NoWebpage { get; set; }
+        public string Message { get; set; }
+        public IList<MessageEntityBase> Entities { get; set; }
+        public override ReplyMarkupBase ReplyMarkup { get; set; }
 
         public override void UpdateFlags()
         {
@@ -30,7 +30,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             UpdateFlags();
             writer.Write(Flags);
             writer.Write(Message);

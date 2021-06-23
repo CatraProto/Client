@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class InputStickerSetThumb : InputFileLocationBase
+    public class InputStickerSetThumb : InputFileLocationBase
     {
         public static int ConstructorId { get; } = 230353641;
         public InputStickerSetBase Stickerset { get; set; }
@@ -15,7 +15,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(Stickerset);
             writer.Write(VolumeId);
             writer.Write(LocalId);

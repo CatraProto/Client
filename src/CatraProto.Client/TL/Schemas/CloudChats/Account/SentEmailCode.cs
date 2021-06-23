@@ -2,7 +2,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public partial class SentEmailCode : SentEmailCodeBase
+    public class SentEmailCode : SentEmailCodeBase
     {
         public static int ConstructorId { get; } = -2128640689;
         public override string EmailPattern { get; set; }
@@ -14,7 +14,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public override void Serialize(Writer writer)
         {
-            if (ConstructorId != 0) writer.Write(ConstructorId);
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+
             writer.Write(EmailPattern);
             writer.Write(Length);
         }
