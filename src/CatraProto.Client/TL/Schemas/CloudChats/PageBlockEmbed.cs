@@ -1,12 +1,15 @@
-using System;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class PageBlockEmbed : PageBlockBase
 	{
 		[Flags]
-		public enum FlagsEnum
+		public enum FlagsEnum 
 		{
 			FullWidth = 1 << 0,
 			AllowScrolling = 1 << 3,
@@ -17,7 +20,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			H = 1 << 5
 		}
 
-		public static int ConstructorId { get; } = -1468953147;
+        public static int ConstructorId { get; } = -1468953147;
 		public int Flags { get; set; }
 		public bool FullWidth { get; set; }
 		public bool AllowScrolling { get; set; }
@@ -26,9 +29,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public long? PosterPhotoId { get; set; }
 		public int? W { get; set; }
 		public int? H { get; set; }
-		public PageCaptionBase Caption { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase Caption { get; set; }
 
-		public override void UpdateFlags()
+		public override void UpdateFlags() 
 		{
 			Flags = FullWidth ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
 			Flags = AllowScrolling ? FlagsHelper.SetFlag(Flags, 3) : FlagsHelper.UnsetFlag(Flags, 3);
@@ -37,43 +40,41 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = PosterPhotoId == null ? FlagsHelper.UnsetFlag(Flags, 4) : FlagsHelper.SetFlag(Flags, 4);
 			Flags = W == null ? FlagsHelper.UnsetFlag(Flags, 5) : FlagsHelper.SetFlag(Flags, 5);
 			Flags = H == null ? FlagsHelper.UnsetFlag(Flags, 5) : FlagsHelper.SetFlag(Flags, 5);
+
 		}
 
 		public override void Serialize(Writer writer)
 		{
-			if (ConstructorId != 0)
-			{
-				writer.Write(ConstructorId);
-			}
-
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
-			if (FlagsHelper.IsFlagSet(Flags, 1))
+			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
 				writer.Write(Url);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 2))
+			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
 				writer.Write(Html);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 4))
+			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
 				writer.Write(PosterPhotoId.Value);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 5))
+			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
 				writer.Write(W.Value);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 5))
+			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
 				writer.Write(H.Value);
 			}
 
 			writer.Write(Caption);
+
 		}
 
 		public override void Deserialize(Reader reader)
@@ -81,32 +82,33 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = reader.Read<int>();
 			FullWidth = FlagsHelper.IsFlagSet(Flags, 0);
 			AllowScrolling = FlagsHelper.IsFlagSet(Flags, 3);
-			if (FlagsHelper.IsFlagSet(Flags, 1))
+			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
 				Url = reader.Read<string>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 2))
+			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
 				Html = reader.Read<string>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 4))
+			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
 				PosterPhotoId = reader.Read<long>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 5))
+			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
 				W = reader.Read<int>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 5))
+			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
 				H = reader.Read<int>();
 			}
 
-			Caption = reader.Read<PageCaptionBase>();
+			Caption = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase>();
+
 		}
 	}
 }

@@ -1,10 +1,14 @@
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class WebAuthorization : WebAuthorizationBase
 	{
-		public static int ConstructorId { get; } = -892779534;
+
+
+        public static int ConstructorId { get; } = -892779534;
 		public override long Hash { get; set; }
 		public override int BotId { get; set; }
 		public override string Domain { get; set; }
@@ -15,17 +19,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override string Ip { get; set; }
 		public override string Region { get; set; }
 
-		public override void UpdateFlags()
+		public override void UpdateFlags() 
 		{
+
 		}
 
 		public override void Serialize(Writer writer)
 		{
-			if (ConstructorId != 0)
-			{
-				writer.Write(ConstructorId);
-			}
-
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(Hash);
 			writer.Write(BotId);
 			writer.Write(Domain);
@@ -35,6 +36,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			writer.Write(DateActive);
 			writer.Write(Ip);
 			writer.Write(Region);
+
 		}
 
 		public override void Deserialize(Reader reader)
@@ -48,6 +50,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			DateActive = reader.Read<int>();
 			Ip = reader.Read<string>();
 			Region = reader.Read<string>();
+
 		}
 	}
 }

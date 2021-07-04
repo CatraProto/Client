@@ -1,30 +1,34 @@
-using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Collections.Generic;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class KeyboardButtonRow : KeyboardButtonRowBase
 	{
-		public static int ConstructorId { get; } = 2002815875;
-		public override IList<KeyboardButtonBase> Buttons { get; set; }
 
-		public override void UpdateFlags()
+
+        public static int ConstructorId { get; } = 2002815875;
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonBase> Buttons { get; set; }
+
+		public override void UpdateFlags() 
 		{
+
 		}
 
 		public override void Serialize(Writer writer)
 		{
-			if (ConstructorId != 0)
-			{
-				writer.Write(ConstructorId);
-			}
-
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(Buttons);
+
 		}
 
 		public override void Deserialize(Reader reader)
 		{
-			Buttons = reader.ReadVector<KeyboardButtonBase>();
+			Buttons = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonBase>();
+
 		}
 	}
 }

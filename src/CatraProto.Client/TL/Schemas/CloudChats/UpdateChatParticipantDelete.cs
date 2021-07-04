@@ -1,28 +1,30 @@
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class UpdateChatParticipantDelete : UpdateBase
 	{
-		public static int ConstructorId { get; } = 1851755554;
+
+
+        public static int ConstructorId { get; } = 1851755554;
 		public int ChatId { get; set; }
 		public int UserId { get; set; }
 		public int Version { get; set; }
 
-		public override void UpdateFlags()
+		public override void UpdateFlags() 
 		{
+
 		}
 
 		public override void Serialize(Writer writer)
 		{
-			if (ConstructorId != 0)
-			{
-				writer.Write(ConstructorId);
-			}
-
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(ChatId);
 			writer.Write(UserId);
 			writer.Write(Version);
+
 		}
 
 		public override void Deserialize(Reader reader)
@@ -30,6 +32,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ChatId = reader.Read<int>();
 			UserId = reader.Read<int>();
 			Version = reader.Read<int>();
+
 		}
 	}
 }

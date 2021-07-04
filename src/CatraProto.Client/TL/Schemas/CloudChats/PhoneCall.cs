@@ -1,19 +1,22 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System;
+using CatraProto.Client.TL.Schemas.CloudChats;
+using System.Collections.Generic;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class PhoneCall : PhoneCallBase
 	{
 		[Flags]
-		public enum FlagsEnum
+		public enum FlagsEnum 
 		{
 			P2pAllowed = 1 << 5,
 			Video = 1 << 6
 		}
 
-		public static int ConstructorId { get; } = -2025673089;
+        public static int ConstructorId { get; } = -2025673089;
 		public int Flags { get; set; }
 		public bool P2pAllowed { get; set; }
 		public bool Video { get; set; }
@@ -24,23 +27,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int ParticipantId { get; set; }
 		public byte[] GAOrB { get; set; }
 		public long KeyFingerprint { get; set; }
-		public PhoneCallProtocolBase Protocol { get; set; }
-		public IList<PhoneConnectionBase> Connections { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase Protocol { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.PhoneConnectionBase> Connections { get; set; }
 		public int StartDate { get; set; }
 
-		public override void UpdateFlags()
+		public override void UpdateFlags() 
 		{
 			Flags = P2pAllowed ? FlagsHelper.SetFlag(Flags, 5) : FlagsHelper.UnsetFlag(Flags, 5);
 			Flags = Video ? FlagsHelper.SetFlag(Flags, 6) : FlagsHelper.UnsetFlag(Flags, 6);
+
 		}
 
 		public override void Serialize(Writer writer)
 		{
-			if (ConstructorId != 0)
-			{
-				writer.Write(ConstructorId);
-			}
-
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
 			writer.Write(Id);
@@ -53,6 +53,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			writer.Write(Protocol);
 			writer.Write(Connections);
 			writer.Write(StartDate);
+
 		}
 
 		public override void Deserialize(Reader reader)
@@ -67,9 +68,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ParticipantId = reader.Read<int>();
 			GAOrB = reader.Read<byte[]>();
 			KeyFingerprint = reader.Read<long>();
-			Protocol = reader.Read<PhoneCallProtocolBase>();
-			Connections = reader.ReadVector<PhoneConnectionBase>();
+			Protocol = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase>();
+			Connections = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PhoneConnectionBase>();
 			StartDate = reader.Read<int>();
+
 		}
 	}
 }

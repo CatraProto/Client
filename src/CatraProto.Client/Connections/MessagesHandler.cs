@@ -22,10 +22,7 @@ namespace CatraProto.Client.Connections
         private readonly ILogger _logger;
         private MessageContainer _oldMessage;
         private Channel<MessageContainer> _outgoingMessages = Channel.CreateUnbounded<MessageContainer>();
-
-        private ConcurrentDictionary<long, MessageContainer> _sentMessages =
-            new ConcurrentDictionary<long, MessageContainer>();
-
+        private ConcurrentDictionary<long, MessageContainer> _sentMessages = new ConcurrentDictionary<long, MessageContainer>();
         private AsyncLock _unencryptedMessagesLock = new AsyncLock();
 
         public MessagesHandler(ILogger logger)
@@ -59,16 +56,14 @@ namespace CatraProto.Client.Connections
                     _logger.Information("Lock acquired for unencrypted message");
                     if (_oldMessage != null)
                     {
-                        _logger.Information(
-                            "An old unencrypted message hasn't yet received a response, waiting before enqueueing this one...");
+                        _logger.Information("An old unencrypted message hasn't yet received a response, waiting before enqueueing this one...");
                         try
                         {
                             await _oldMessage.CompletionSource.Task;
                         }
                         finally
                         {
-                            _logger.Information(
-                                "The old message received a response or got cancelled, proceeding to enqueue...");
+                            _logger.Information("The old message received a response or got cancelled, proceeding to enqueue...");
                         }
                     }
 
@@ -141,6 +136,7 @@ namespace CatraProto.Client.Connections
                     _oldMessage.RpcContainer.SetResponse(response);
                     _oldMessage.CompletionSource.TrySetResult();
                     _oldMessage.CancellationTokenRegistration.Unregister();
+                    _oldMessage = null;
                     _logger.Information("Completed task for unencryptedMessage, received: {Type}", response.ToString());
                 }
                 else

@@ -1,32 +1,36 @@
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class PageBlockPreformatted : PageBlockBase
 	{
-		public static int ConstructorId { get; } = -1066346178;
-		public RichTextBase Text { get; set; }
+
+
+        public static int ConstructorId { get; } = -1066346178;
+		public CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Text { get; set; }
 		public string Language { get; set; }
 
-		public override void UpdateFlags()
+		public override void UpdateFlags() 
 		{
+
 		}
 
 		public override void Serialize(Writer writer)
 		{
-			if (ConstructorId != 0)
-			{
-				writer.Write(ConstructorId);
-			}
-
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(Text);
 			writer.Write(Language);
+
 		}
 
 		public override void Deserialize(Reader reader)
 		{
-			Text = reader.Read<RichTextBase>();
+			Text = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
 			Language = reader.Read<string>();
+
 		}
 	}
 }

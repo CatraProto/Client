@@ -8,6 +8,7 @@ namespace CatraProto.Client.Connections
         public IPAddress IpAddress { get; init; }
         public int Port { get; init; }
         public int DcId { get; init; }
+        public bool Main { get; init; }
 
         public ConnectionInfo(IPAddress ipAddress, int port, int dcId)
         {
@@ -18,7 +19,7 @@ namespace CatraProto.Client.Connections
 
         public override string ToString()
         {
-            return IpAddress + ":" + Port + $" (DC{DcId})";
+            return IpAddress + ":" + Port + $" (DC{DcId}, Main: {Main})";
         }
     }
 }

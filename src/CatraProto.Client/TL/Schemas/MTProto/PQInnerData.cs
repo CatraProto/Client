@@ -1,12 +1,15 @@
-using System.Numerics;
 using CatraProto.TL;
-using CatraProto.TL.Exceptions;
+using CatraProto.TL.Interfaces;
+using System.Numerics;
+
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
 	public partial class PQInnerData : PQInnerDataBase
 	{
-		public static int ConstructorId { get; } = -2083955988;
+
+
+        public static int ConstructorId { get; } = -2083955988;
 		public override byte[] Pq { get; set; }
 		public override byte[] P { get; set; }
 		public override byte[] Q { get; set; }
@@ -14,44 +17,33 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 		public override BigInteger ServerNonce { get; set; }
 		public override BigInteger NewNonce { get; set; }
 
-		public override void UpdateFlags()
+		public override void UpdateFlags() 
 		{
+
 		}
 
 		public override void Serialize(Writer writer)
 		{
-			if (ConstructorId != 0)
-			{
-				writer.Write(ConstructorId);
-			}
-
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(Pq);
 			writer.Write(P);
 			writer.Write(Q);
 			var sizeNonce = Nonce.GetByteCount();
-			if (sizeNonce != 16)
-			{
-				throw new SerializationException($"ByteSize mismatch, should be 16bytes got {sizeNonce}bytes",
-					SerializationException.SerializationErrors.BitSizeMismatch);
+			if(sizeNonce != 16){
+				throw new CatraProto.TL.Exceptions.SerializationException($"ByteSize mismatch, should be 16bytes got {sizeNonce}bytes", CatraProto.TL.Exceptions.SerializationException.SerializationErrors.BitSizeMismatch);
 			}
-
 			writer.Write(Nonce);
 			var sizeServerNonce = ServerNonce.GetByteCount();
-			if (sizeServerNonce != 16)
-			{
-				throw new SerializationException($"ByteSize mismatch, should be 16bytes got {sizeServerNonce}bytes",
-					SerializationException.SerializationErrors.BitSizeMismatch);
+			if(sizeServerNonce != 16){
+				throw new CatraProto.TL.Exceptions.SerializationException($"ByteSize mismatch, should be 16bytes got {sizeServerNonce}bytes", CatraProto.TL.Exceptions.SerializationException.SerializationErrors.BitSizeMismatch);
 			}
-
 			writer.Write(ServerNonce);
 			var sizeNewNonce = NewNonce.GetByteCount();
-			if (sizeNewNonce != 32)
-			{
-				throw new SerializationException($"ByteSize mismatch, should be 32bytes got {sizeNewNonce}bytes",
-					SerializationException.SerializationErrors.BitSizeMismatch);
+			if(sizeNewNonce != 32){
+				throw new CatraProto.TL.Exceptions.SerializationException($"ByteSize mismatch, should be 32bytes got {sizeNewNonce}bytes", CatraProto.TL.Exceptions.SerializationException.SerializationErrors.BitSizeMismatch);
 			}
-
 			writer.Write(NewNonce);
+
 		}
 
 		public override void Deserialize(Reader reader)
@@ -62,6 +54,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 			Nonce = reader.Read<BigInteger>(128);
 			ServerNonce = reader.Read<BigInteger>(128);
 			NewNonce = reader.Read<BigInteger>(256);
+
 		}
 	}
 }

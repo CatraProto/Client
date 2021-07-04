@@ -1,40 +1,42 @@
-using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using CatraProto.Client.TL.Schemas.CloudChats;
+using System.Collections.Generic;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 {
 	public partial class MegagroupStats : MegagroupStatsBase
 	{
-		public static int ConstructorId { get; } = -276825834;
-		public override StatsDateRangeDaysBase Period { get; set; }
-		public override StatsAbsValueAndPrevBase Members { get; set; }
-		public override StatsAbsValueAndPrevBase Messages { get; set; }
-		public override StatsAbsValueAndPrevBase Viewers { get; set; }
-		public override StatsAbsValueAndPrevBase Posters { get; set; }
-		public override StatsGraphBase GrowthGraph { get; set; }
-		public override StatsGraphBase MembersGraph { get; set; }
-		public override StatsGraphBase NewMembersBySourceGraph { get; set; }
-		public override StatsGraphBase LanguagesGraph { get; set; }
-		public override StatsGraphBase MessagesGraph { get; set; }
-		public override StatsGraphBase ActionsGraph { get; set; }
-		public override StatsGraphBase TopHoursGraph { get; set; }
-		public override StatsGraphBase WeekdaysGraph { get; set; }
-		public override IList<StatsGroupTopPosterBase> TopPosters { get; set; }
-		public override IList<StatsGroupTopAdminBase> TopAdmins { get; set; }
-		public override IList<StatsGroupTopInviterBase> TopInviters { get; set; }
-		public override IList<UserBase> Users { get; set; }
 
-		public override void UpdateFlags()
+
+        public static int ConstructorId { get; } = -276825834;
+		public override CatraProto.Client.TL.Schemas.CloudChats.StatsDateRangeDaysBase Period { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase Members { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase Messages { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase Viewers { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase Posters { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase GrowthGraph { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase MembersGraph { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase NewMembersBySourceGraph { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase LanguagesGraph { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase MessagesGraph { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase ActionsGraph { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase TopHoursGraph { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase WeekdaysGraph { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.StatsGroupTopPosterBase> TopPosters { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.StatsGroupTopAdminBase> TopAdmins { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.StatsGroupTopInviterBase> TopInviters { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+
+		public override void UpdateFlags() 
 		{
+
 		}
 
 		public override void Serialize(Writer writer)
 		{
-			if (ConstructorId != 0)
-			{
-				writer.Write(ConstructorId);
-			}
-
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(Period);
 			writer.Write(Members);
 			writer.Write(Messages);
@@ -52,27 +54,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 			writer.Write(TopAdmins);
 			writer.Write(TopInviters);
 			writer.Write(Users);
+
 		}
 
 		public override void Deserialize(Reader reader)
 		{
-			Period = reader.Read<StatsDateRangeDaysBase>();
-			Members = reader.Read<StatsAbsValueAndPrevBase>();
-			Messages = reader.Read<StatsAbsValueAndPrevBase>();
-			Viewers = reader.Read<StatsAbsValueAndPrevBase>();
-			Posters = reader.Read<StatsAbsValueAndPrevBase>();
-			GrowthGraph = reader.Read<StatsGraphBase>();
-			MembersGraph = reader.Read<StatsGraphBase>();
-			NewMembersBySourceGraph = reader.Read<StatsGraphBase>();
-			LanguagesGraph = reader.Read<StatsGraphBase>();
-			MessagesGraph = reader.Read<StatsGraphBase>();
-			ActionsGraph = reader.Read<StatsGraphBase>();
-			TopHoursGraph = reader.Read<StatsGraphBase>();
-			WeekdaysGraph = reader.Read<StatsGraphBase>();
-			TopPosters = reader.ReadVector<StatsGroupTopPosterBase>();
-			TopAdmins = reader.ReadVector<StatsGroupTopAdminBase>();
-			TopInviters = reader.ReadVector<StatsGroupTopInviterBase>();
-			Users = reader.ReadVector<UserBase>();
+			Period = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsDateRangeDaysBase>();
+			Members = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase>();
+			Messages = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase>();
+			Viewers = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase>();
+			Posters = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase>();
+			GrowthGraph = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
+			MembersGraph = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
+			NewMembersBySourceGraph = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
+			LanguagesGraph = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
+			MessagesGraph = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
+			ActionsGraph = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
+			TopHoursGraph = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
+			WeekdaysGraph = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
+			TopPosters = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.StatsGroupTopPosterBase>();
+			TopAdmins = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.StatsGroupTopAdminBase>();
+			TopInviters = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.StatsGroupTopInviterBase>();
+			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+
 		}
 	}
 }

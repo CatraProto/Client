@@ -39,6 +39,10 @@ namespace CatraProto.TL
 
 		public void Write<T>(T value)
 		{
+			if (value == null)
+			{
+				throw new SerializationException($"{nameof(value)} is null", SerializationException.SerializationErrors.ValueNull);
+			}
 			switch (value)
 			{
 				case int i:

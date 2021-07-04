@@ -1,17 +1,20 @@
-using System;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class PhoneCallRequested : PhoneCallBase
 	{
 		[Flags]
-		public enum FlagsEnum
+		public enum FlagsEnum 
 		{
 			Video = 1 << 6
 		}
 
-		public static int ConstructorId { get; } = -2014659757;
+        public static int ConstructorId { get; } = -2014659757;
 		public int Flags { get; set; }
 		public bool Video { get; set; }
 		public override long Id { get; set; }
@@ -20,20 +23,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int AdminId { get; set; }
 		public int ParticipantId { get; set; }
 		public byte[] GAHash { get; set; }
-		public PhoneCallProtocolBase Protocol { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase Protocol { get; set; }
 
-		public override void UpdateFlags()
+		public override void UpdateFlags() 
 		{
 			Flags = Video ? FlagsHelper.SetFlag(Flags, 6) : FlagsHelper.UnsetFlag(Flags, 6);
+
 		}
 
 		public override void Serialize(Writer writer)
 		{
-			if (ConstructorId != 0)
-			{
-				writer.Write(ConstructorId);
-			}
-
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
 			writer.Write(Id);
@@ -43,6 +43,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			writer.Write(ParticipantId);
 			writer.Write(GAHash);
 			writer.Write(Protocol);
+
 		}
 
 		public override void Deserialize(Reader reader)
@@ -55,7 +56,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			AdminId = reader.Read<int>();
 			ParticipantId = reader.Read<int>();
 			GAHash = reader.Read<byte[]>();
-			Protocol = reader.Read<PhoneCallProtocolBase>();
+			Protocol = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase>();
+
 		}
 	}
 }

@@ -1,11 +1,13 @@
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Collections.Generic;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public abstract class DialogFilterBase : IObject
-	{
+    public abstract class DialogFilterBase : IObject
+    {
 		public abstract bool Contacts { get; set; }
 		public abstract bool NonContacts { get; set; }
 		public abstract bool Groups { get; set; }
@@ -17,12 +19,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public abstract int Id { get; set; }
 		public abstract string Title { get; set; }
 		public abstract string Emoticon { get; set; }
-		public abstract IList<InputPeerBase> PinnedPeers { get; set; }
-		public abstract IList<InputPeerBase> IncludePeers { get; set; }
-		public abstract IList<InputPeerBase> ExcludePeers { get; set; }
+		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> PinnedPeers { get; set; }
+		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> IncludePeers { get; set; }
+		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> ExcludePeers { get; set; }
 
-		public abstract void UpdateFlags();
-		public abstract void Deserialize(Reader reader);
-		public abstract void Serialize(Writer writer);
-	}
+        public abstract void UpdateFlags();
+        public abstract void Deserialize(Reader reader);
+        public abstract void Serialize(Writer writer);
+    }
 }

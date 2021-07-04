@@ -1,12 +1,14 @@
-using System;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class PeerSettings : PeerSettingsBase
 	{
 		[Flags]
-		public enum FlagsEnum
+		public enum FlagsEnum 
 		{
 			ReportSpam = 1 << 0,
 			AddContact = 1 << 1,
@@ -19,7 +21,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			GeoDistance = 1 << 6
 		}
 
-		public static int ConstructorId { get; } = 1933519201;
+        public static int ConstructorId { get; } = 1933519201;
 		public int Flags { get; set; }
 		public override bool ReportSpam { get; set; }
 		public override bool AddContact { get; set; }
@@ -31,7 +33,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override bool InviteMembers { get; set; }
 		public override int? GeoDistance { get; set; }
 
-		public override void UpdateFlags()
+		public override void UpdateFlags() 
 		{
 			Flags = ReportSpam ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
 			Flags = AddContact ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
@@ -42,21 +44,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = Autoarchived ? FlagsHelper.SetFlag(Flags, 7) : FlagsHelper.UnsetFlag(Flags, 7);
 			Flags = InviteMembers ? FlagsHelper.SetFlag(Flags, 8) : FlagsHelper.UnsetFlag(Flags, 8);
 			Flags = GeoDistance == null ? FlagsHelper.UnsetFlag(Flags, 6) : FlagsHelper.SetFlag(Flags, 6);
+
 		}
 
 		public override void Serialize(Writer writer)
 		{
-			if (ConstructorId != 0)
-			{
-				writer.Write(ConstructorId);
-			}
-
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
-			if (FlagsHelper.IsFlagSet(Flags, 6))
+			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
 				writer.Write(GeoDistance.Value);
 			}
+
+
 		}
 
 		public override void Deserialize(Reader reader)
@@ -70,10 +71,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ReportGeo = FlagsHelper.IsFlagSet(Flags, 5);
 			Autoarchived = FlagsHelper.IsFlagSet(Flags, 7);
 			InviteMembers = FlagsHelper.IsFlagSet(Flags, 8);
-			if (FlagsHelper.IsFlagSet(Flags, 6))
+			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
 				GeoDistance = reader.Read<int>();
 			}
+
+
 		}
 	}
 }

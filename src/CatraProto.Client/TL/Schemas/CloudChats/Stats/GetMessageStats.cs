@@ -1,50 +1,51 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 {
 	public partial class GetMessageStats : IMethod
 	{
 		[Flags]
-		public enum FlagsEnum
+		public enum FlagsEnum 
 		{
 			Dark = 1 << 0
 		}
 
-		public static int ConstructorId { get; } = -1226791947;
+        public static int ConstructorId { get; } = -1226791947;
+
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Stats.MessageStatsBase);
+		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Dark { get; set; }
-		public InputChannelBase Channel { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase Channel { get; set; }
 		public int MsgId { get; set; }
 
-		public Type Type { get; init; } = typeof(MessageStatsBase);
-		public bool IsVector { get; init; } = false;
-
-		public void UpdateFlags()
+		public void UpdateFlags() 
 		{
 			Flags = Dark ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
+
 		}
 
 		public void Serialize(Writer writer)
 		{
-			if (ConstructorId != 0)
-			{
-				writer.Write(ConstructorId);
-			}
-
+            if(ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
 			writer.Write(Channel);
 			writer.Write(MsgId);
+
 		}
 
 		public void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
 			Dark = FlagsHelper.IsFlagSet(Flags, 0);
-			Channel = reader.Read<InputChannelBase>();
+			Channel = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
 			MsgId = reader.Read<int>();
+
 		}
 	}
 }

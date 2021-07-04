@@ -1,13 +1,16 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System;
+using CatraProto.Client.TL.Schemas.CloudChats;
+using System.Collections.Generic;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 {
 	public partial class PaymentForm : PaymentFormBase
 	{
 		[Flags]
-		public enum FlagsEnum
+		public enum FlagsEnum 
 		{
 			CanSaveCredentials = 1 << 2,
 			PasswordMissing = 1 << 3,
@@ -17,21 +20,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 			SavedCredentials = 1 << 1
 		}
 
-		public static int ConstructorId { get; } = 1062645411;
+        public static int ConstructorId { get; } = 1062645411;
 		public int Flags { get; set; }
 		public override bool CanSaveCredentials { get; set; }
 		public override bool PasswordMissing { get; set; }
 		public override int BotId { get; set; }
-		public override InvoiceBase Invoice { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.InvoiceBase Invoice { get; set; }
 		public override int ProviderId { get; set; }
 		public override string Url { get; set; }
 		public override string NativeProvider { get; set; }
-		public override DataJSONBase NativeParams { get; set; }
-		public override PaymentRequestedInfoBase SavedInfo { get; set; }
-		public override PaymentSavedCredentialsBase SavedCredentials { get; set; }
-		public override IList<UserBase> Users { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase NativeParams { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase SavedInfo { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.PaymentSavedCredentialsBase SavedCredentials { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
-		public override void UpdateFlags()
+		public override void UpdateFlags() 
 		{
 			Flags = CanSaveCredentials ? FlagsHelper.SetFlag(Flags, 2) : FlagsHelper.UnsetFlag(Flags, 2);
 			Flags = PasswordMissing ? FlagsHelper.SetFlag(Flags, 3) : FlagsHelper.UnsetFlag(Flags, 3);
@@ -39,42 +42,40 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 			Flags = NativeParams == null ? FlagsHelper.UnsetFlag(Flags, 4) : FlagsHelper.SetFlag(Flags, 4);
 			Flags = SavedInfo == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
 			Flags = SavedCredentials == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
+
 		}
 
 		public override void Serialize(Writer writer)
 		{
-			if (ConstructorId != 0)
-			{
-				writer.Write(ConstructorId);
-			}
-
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
 			writer.Write(BotId);
 			writer.Write(Invoice);
 			writer.Write(ProviderId);
 			writer.Write(Url);
-			if (FlagsHelper.IsFlagSet(Flags, 4))
+			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
 				writer.Write(NativeProvider);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 4))
+			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
 				writer.Write(NativeParams);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 0))
+			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				writer.Write(SavedInfo);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 1))
+			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
 				writer.Write(SavedCredentials);
 			}
 
 			writer.Write(Users);
+
 		}
 
 		public override void Deserialize(Reader reader)
@@ -83,30 +84,31 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 			CanSaveCredentials = FlagsHelper.IsFlagSet(Flags, 2);
 			PasswordMissing = FlagsHelper.IsFlagSet(Flags, 3);
 			BotId = reader.Read<int>();
-			Invoice = reader.Read<InvoiceBase>();
+			Invoice = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InvoiceBase>();
 			ProviderId = reader.Read<int>();
 			Url = reader.Read<string>();
-			if (FlagsHelper.IsFlagSet(Flags, 4))
+			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
 				NativeProvider = reader.Read<string>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 4))
+			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				NativeParams = reader.Read<DataJSONBase>();
+				NativeParams = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 0))
+			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				SavedInfo = reader.Read<PaymentRequestedInfoBase>();
+				SavedInfo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 1))
+			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				SavedCredentials = reader.Read<PaymentSavedCredentialsBase>();
+				SavedCredentials = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PaymentSavedCredentialsBase>();
 			}
 
-			Users = reader.ReadVector<UserBase>();
+			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+
 		}
 	}
 }

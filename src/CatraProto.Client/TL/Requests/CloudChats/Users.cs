@@ -1,95 +1,81 @@
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections;
 using CatraProto.Client.MTProto.Messages;
 using CatraProto.Client.MTProto.Rpc;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using CatraProto.Client.TL.Schemas.CloudChats.Users;
+using CatraProto.TL.Interfaces;
+using System.Collections.Generic;
+using System.Numerics;
 
 namespace CatraProto.Client.TL.Requests.CloudChats
 {
 	public partial class Users
 	{
-		private MessagesHandler _messagesHandler;
-
-		internal Users(MessagesHandler messagesHandler)
+		
+	    private MessagesHandler _messagesHandler;
+	    internal Users(MessagesHandler messagesHandler)
+	    {
+	        _messagesHandler = messagesHandler;
+	        
+	    }
+	    
+	    		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.UserBase>> GetUsersAsync(List<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase> id, CancellationToken cancellationToken = default)
 		{
-			_messagesHandler = messagesHandler;
-		}
+			if(id is null) throw new ArgumentNullException(nameof(id));
 
-		public async Task<RpcMessage<UserBase>> GetUsersAsync(List<InputUserBase> id, CancellationToken cancellationToken = default)
-		{
-			if (id is null)
-			{
-				throw new ArgumentNullException(nameof(id));
-			}
-
-			var rpcResponse = new RpcMessage<UserBase>();
-			var methodBody = new GetUsers
-			{
-				Id = id
-			};
-
-			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-			{
-				Body = methodBody,
-				CancellationToken = cancellationToken,
-				IsEncrypted = true
-			}, rpcResponse);
-			return rpcResponse;
-		}
-
-		public async Task<RpcMessage<UserFullBase>> GetFullUserAsync(InputUserBase id, CancellationToken cancellationToken = default)
-		{
-			if (id is null)
-			{
-				throw new ArgumentNullException(nameof(id));
-			}
-
-			var rpcResponse = new RpcMessage<UserFullBase>();
-			var methodBody = new GetFullUser
-			{
-				Id = id
-			};
-
-			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-			{
-				Body = methodBody,
-				CancellationToken = cancellationToken,
-				IsEncrypted = true
-			}, rpcResponse);
-			return rpcResponse;
-		}
-
-		public async Task<RpcMessage<bool>> SetSecureValueErrorsAsync(InputUserBase id, List<SecureValueErrorBase> errors,
-			CancellationToken cancellationToken = default)
-		{
-			if (id is null)
-			{
-				throw new ArgumentNullException(nameof(id));
-			}
-
-			if (errors is null)
-			{
-				throw new ArgumentNullException(nameof(errors));
-			}
-
-			var rpcResponse = new RpcMessage<bool>();
-			var methodBody = new SetSecureValueErrors
+			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Users.GetUsers()
 			{
 				Id = id,
-				Errors = errors
 			};
 
 			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-			{
-				Body = methodBody,
-				CancellationToken = cancellationToken,
-				IsEncrypted = true
-			}, rpcResponse);
+				{
+					Body = methodBody,
+					CancellationToken = cancellationToken,
+					IsEncrypted = true
+				}, rpcResponse);
 			return rpcResponse;
 		}
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.UserFullBase>> GetFullUserAsync(CatraProto.Client.TL.Schemas.CloudChats.InputUserBase id, CancellationToken cancellationToken = default)
+		{
+			if(id is null) throw new ArgumentNullException(nameof(id));
+
+			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.UserFullBase>();
+			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Users.GetFullUser()
+			{
+				Id = id,
+			};
+
+			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
+				{
+					Body = methodBody,
+					CancellationToken = cancellationToken,
+					IsEncrypted = true
+				}, rpcResponse);
+			return rpcResponse;
+		}
+		public async Task<RpcMessage<bool>> SetSecureValueErrorsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputUserBase id, List<CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase> errors, CancellationToken cancellationToken = default)
+		{
+			if(id is null) throw new ArgumentNullException(nameof(id));
+if(errors is null) throw new ArgumentNullException(nameof(errors));
+
+			var rpcResponse = new RpcMessage<bool>();
+			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Users.SetSecureValueErrors()
+			{
+				Id = id,
+				Errors = errors,
+			};
+
+			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
+				{
+					Body = methodBody,
+					CancellationToken = cancellationToken,
+					IsEncrypted = true
+				}, rpcResponse);
+			return rpcResponse;
+		}
+
 	}
 }

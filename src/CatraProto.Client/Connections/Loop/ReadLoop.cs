@@ -14,13 +14,11 @@ namespace CatraProto.Client.Connections.Loop
         private readonly CancellationTokenSource _cancellationToken = new CancellationTokenSource();
         private readonly Connection _connection;
         private ILogger _logger;
-        private MessagesHandler _messagesHandler;
 
-        public ReadLoop(Connection connection, MessagesHandler messagesHandler, ILogger logger)
+        public ReadLoop(Connection connection, ILogger logger)
         {
             _logger = logger.ForContext<ReadLoop>();
             _connection = connection;
-            _messagesHandler = messagesHandler;
         }
 
         private async Task Loop()
@@ -33,6 +31,12 @@ namespace CatraProto.Client.Connections.Loop
                 {
                     var message = await protocol.Reader.ReadMessageAsync(_cancellationToken.Token);
                     using var reader = new Reader(MergedProvider.Singleton, message.ToMemoryStream());
+                    if (message.Length == 0)
+                    {
+                        _logger.Error("Received 0 bytes from server");
+                        continue;
+                    }
+                    
                     if (message.Length == 4)
                     {
                         _connection.MessagesDispatcher.DispatchMessage(new UnencryptedMessage
@@ -53,11 +57,16 @@ namespace CatraProto.Client.Connections.Loop
                     }
                     else
                     {
+                        var imported = new EncryptedMessage(_connection.SessionData.AuthKey, message);
+                        _logger.Information(
+                            "Received an encrypted message from Telegram, dispatching... Id: {MessageId}, Body Length: {Length}",
+                            imported.MessageId, imported.Body.Length);
+                        _connection.MessagesDispatcher.DispatchMessage(imported);
                     }
                 }
                 catch (Exception e)
                 {
-                    _logger.Error(e, "Unexpected exception thrown, please report this on the github issues page");
+                    _logger.Error(e, "Unexpected exception thrown");
                 }
             }
 

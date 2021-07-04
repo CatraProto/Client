@@ -1,13 +1,16 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System;
+using CatraProto.Client.TL.Schemas.CloudChats;
+using System.Collections.Generic;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class ChannelFull : ChatFullBase
 	{
 		[Flags]
-		public enum FlagsEnum
+		public enum FlagsEnum 
 		{
 			CanViewParticipants = 1 << 3,
 			CanSetUsername = 1 << 7,
@@ -37,7 +40,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			StatsDc = 1 << 12
 		}
 
-		public static int ConstructorId { get; } = -253335766;
+        public static int ConstructorId { get; } = -253335766;
 		public int Flags { get; set; }
 		public bool CanViewParticipants { get; set; }
 		public override bool CanSetUsername { get; set; }
@@ -57,24 +60,24 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int ReadInboxMaxId { get; set; }
 		public int ReadOutboxMaxId { get; set; }
 		public int UnreadCount { get; set; }
-		public override PhotoBase ChatPhoto { get; set; }
-		public override PeerNotifySettingsBase NotifySettings { get; set; }
-		public override ExportedChatInviteBase ExportedInvite { get; set; }
-		public override IList<BotInfoBase> BotInfo { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.PhotoBase ChatPhoto { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase NotifySettings { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.ExportedChatInviteBase ExportedInvite { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase> BotInfo { get; set; }
 		public int? MigratedFromChatId { get; set; }
 		public int? MigratedFromMaxId { get; set; }
 		public override int? PinnedMsgId { get; set; }
-		public StickerSetBase Stickerset { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.StickerSetBase Stickerset { get; set; }
 		public int? AvailableMinId { get; set; }
 		public override int? FolderId { get; set; }
 		public int? LinkedChatId { get; set; }
-		public ChannelLocationBase Location { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.ChannelLocationBase Location { get; set; }
 		public int? SlowmodeSeconds { get; set; }
 		public int? SlowmodeNextSendDate { get; set; }
 		public int? StatsDc { get; set; }
 		public int Pts { get; set; }
 
-		public override void UpdateFlags()
+		public override void UpdateFlags() 
 		{
 			Flags = CanViewParticipants ? FlagsHelper.SetFlag(Flags, 3) : FlagsHelper.UnsetFlag(Flags, 3);
 			Flags = CanSetUsername ? FlagsHelper.SetFlag(Flags, 7) : FlagsHelper.UnsetFlag(Flags, 7);
@@ -102,40 +105,37 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = SlowmodeSeconds == null ? FlagsHelper.UnsetFlag(Flags, 17) : FlagsHelper.SetFlag(Flags, 17);
 			Flags = SlowmodeNextSendDate == null ? FlagsHelper.UnsetFlag(Flags, 18) : FlagsHelper.SetFlag(Flags, 18);
 			Flags = StatsDc == null ? FlagsHelper.UnsetFlag(Flags, 12) : FlagsHelper.SetFlag(Flags, 12);
+
 		}
 
 		public override void Serialize(Writer writer)
 		{
-			if (ConstructorId != 0)
-			{
-				writer.Write(ConstructorId);
-			}
-
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
 			writer.Write(Id);
 			writer.Write(About);
-			if (FlagsHelper.IsFlagSet(Flags, 0))
+			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				writer.Write(ParticipantsCount.Value);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 1))
+			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
 				writer.Write(AdminsCount.Value);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 2))
+			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
 				writer.Write(KickedCount.Value);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 2))
+			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
 				writer.Write(BannedCount.Value);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 13))
+			if(FlagsHelper.IsFlagSet(Flags, 13))
 			{
 				writer.Write(OnlineCount.Value);
 			}
@@ -143,74 +143,75 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			writer.Write(ReadInboxMaxId);
 			writer.Write(ReadOutboxMaxId);
 			writer.Write(UnreadCount);
-			if (FlagsHelper.IsFlagSet(Flags, 2))
+			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
 				writer.Write(ChatPhoto);
 			}
 
 			writer.Write(NotifySettings);
 			writer.Write(ExportedInvite);
-			if (FlagsHelper.IsFlagSet(Flags, 3))
+			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
 				writer.Write(BotInfo);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 4))
+			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
 				writer.Write(MigratedFromChatId.Value);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 4))
+			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
 				writer.Write(MigratedFromMaxId.Value);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 6))
+			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
 				writer.Write(PinnedMsgId.Value);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 8))
+			if(FlagsHelper.IsFlagSet(Flags, 8))
 			{
 				writer.Write(Stickerset);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 9))
+			if(FlagsHelper.IsFlagSet(Flags, 9))
 			{
 				writer.Write(AvailableMinId.Value);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 11))
+			if(FlagsHelper.IsFlagSet(Flags, 11))
 			{
 				writer.Write(FolderId.Value);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 14))
+			if(FlagsHelper.IsFlagSet(Flags, 14))
 			{
 				writer.Write(LinkedChatId.Value);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 15))
+			if(FlagsHelper.IsFlagSet(Flags, 15))
 			{
 				writer.Write(Location);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 17))
+			if(FlagsHelper.IsFlagSet(Flags, 17))
 			{
 				writer.Write(SlowmodeSeconds.Value);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 18))
+			if(FlagsHelper.IsFlagSet(Flags, 18))
 			{
 				writer.Write(SlowmodeNextSendDate.Value);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 12))
+			if(FlagsHelper.IsFlagSet(Flags, 12))
 			{
 				writer.Write(StatsDc.Value);
 			}
 
 			writer.Write(Pts);
+
 		}
 
 		public override void Deserialize(Reader reader)
@@ -226,27 +227,27 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Blocked = FlagsHelper.IsFlagSet(Flags, 22);
 			Id = reader.Read<int>();
 			About = reader.Read<string>();
-			if (FlagsHelper.IsFlagSet(Flags, 0))
+			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				ParticipantsCount = reader.Read<int>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 1))
+			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
 				AdminsCount = reader.Read<int>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 2))
+			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
 				KickedCount = reader.Read<int>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 2))
+			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
 				BannedCount = reader.Read<int>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 13))
+			if(FlagsHelper.IsFlagSet(Flags, 13))
 			{
 				OnlineCount = reader.Read<int>();
 			}
@@ -254,74 +255,75 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ReadInboxMaxId = reader.Read<int>();
 			ReadOutboxMaxId = reader.Read<int>();
 			UnreadCount = reader.Read<int>();
-			if (FlagsHelper.IsFlagSet(Flags, 2))
+			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				ChatPhoto = reader.Read<PhotoBase>();
+				ChatPhoto = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
 			}
 
-			NotifySettings = reader.Read<PeerNotifySettingsBase>();
-			ExportedInvite = reader.Read<ExportedChatInviteBase>();
-			if (FlagsHelper.IsFlagSet(Flags, 3))
+			NotifySettings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase>();
+			ExportedInvite = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ExportedChatInviteBase>();
+			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				BotInfo = reader.ReadVector<BotInfoBase>();
+				BotInfo = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 4))
+			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
 				MigratedFromChatId = reader.Read<int>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 4))
+			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
 				MigratedFromMaxId = reader.Read<int>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 6))
+			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
 				PinnedMsgId = reader.Read<int>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 8))
+			if(FlagsHelper.IsFlagSet(Flags, 8))
 			{
-				Stickerset = reader.Read<StickerSetBase>();
+				Stickerset = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StickerSetBase>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 9))
+			if(FlagsHelper.IsFlagSet(Flags, 9))
 			{
 				AvailableMinId = reader.Read<int>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 11))
+			if(FlagsHelper.IsFlagSet(Flags, 11))
 			{
 				FolderId = reader.Read<int>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 14))
+			if(FlagsHelper.IsFlagSet(Flags, 14))
 			{
 				LinkedChatId = reader.Read<int>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 15))
+			if(FlagsHelper.IsFlagSet(Flags, 15))
 			{
-				Location = reader.Read<ChannelLocationBase>();
+				Location = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChannelLocationBase>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 17))
+			if(FlagsHelper.IsFlagSet(Flags, 17))
 			{
 				SlowmodeSeconds = reader.Read<int>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 18))
+			if(FlagsHelper.IsFlagSet(Flags, 18))
 			{
 				SlowmodeNextSendDate = reader.Read<int>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 12))
+			if(FlagsHelper.IsFlagSet(Flags, 12))
 			{
 				StatsDc = reader.Read<int>();
 			}
 
 			Pts = reader.Read<int>();
+
 		}
 	}
 }

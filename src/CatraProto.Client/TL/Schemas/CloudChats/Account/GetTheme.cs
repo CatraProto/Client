@@ -1,40 +1,42 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
 	public partial class GetTheme : IMethod
 	{
-		public static int ConstructorId { get; } = -1919060949;
+
+
+        public static int ConstructorId { get; } = -1919060949;
+
+		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.ThemeBase);
+		public bool IsVector { get; init; } = false;
 		public string Format { get; set; }
-		public InputThemeBase Theme { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputThemeBase Theme { get; set; }
 		public long DocumentId { get; set; }
 
-		public Type Type { get; init; } = typeof(ThemeBase);
-		public bool IsVector { get; init; } = false;
-
-		public void UpdateFlags()
+		public void UpdateFlags() 
 		{
+
 		}
 
 		public void Serialize(Writer writer)
 		{
-			if (ConstructorId != 0)
-			{
-				writer.Write(ConstructorId);
-			}
-
+            if(ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(Format);
 			writer.Write(Theme);
 			writer.Write(DocumentId);
+
 		}
 
 		public void Deserialize(Reader reader)
 		{
 			Format = reader.Read<string>();
-			Theme = reader.Read<InputThemeBase>();
+			Theme = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputThemeBase>();
 			DocumentId = reader.Read<long>();
+
 		}
 	}
 }

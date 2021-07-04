@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatraProto.Client.UnitTests
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatraProto.Client.Benchmark", "tests\CatraProto.Client.Benchmark\CatraProto.Client.Benchmark.csproj", "{28F2F0D8-E2F9-49F0-B0DA-E7C22CFF5A85}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatraProto.Start", "src\CatraProto.Start\CatraProto.Start.csproj", "{9CECB64F-379A-4136-8206-37A73C279CB6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,6 +62,10 @@ Global
 		{28F2F0D8-E2F9-49F0-B0DA-E7C22CFF5A85}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28F2F0D8-E2F9-49F0-B0DA-E7C22CFF5A85}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28F2F0D8-E2F9-49F0-B0DA-E7C22CFF5A85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CECB64F-379A-4136-8206-37A73C279CB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CECB64F-379A-4136-8206-37A73C279CB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CECB64F-379A-4136-8206-37A73C279CB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CECB64F-379A-4136-8206-37A73C279CB6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -75,5 +81,6 @@ Global
 		{6C0762E4-7ADB-45C8-9E96-3CE3EC97A588} = {32061930-7649-4670-B1EB-AFE850FB8EDD}
 		{4D17C95F-A94E-4760-94F0-E8AF40E844F1} = {32061930-7649-4670-B1EB-AFE850FB8EDD}
 		{28F2F0D8-E2F9-49F0-B0DA-E7C22CFF5A85} = {32061930-7649-4670-B1EB-AFE850FB8EDD}
+		{9CECB64F-379A-4136-8206-37A73C279CB6} = {A9504A16-031C-45B4-9893-5EA88B5B61F5}
 	EndGlobalSection
 EndGlobal

@@ -1,12 +1,15 @@
-using System;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class StickerSet : StickerSetBase
 	{
 		[Flags]
-		public enum FlagsEnum
+		public enum FlagsEnum 
 		{
 			Archived = 1 << 1,
 			Official = 1 << 2,
@@ -17,7 +20,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ThumbDcId = 1 << 4
 		}
 
-		public static int ConstructorId { get; } = -290164953;
+        public static int ConstructorId { get; } = -290164953;
 		public int Flags { get; set; }
 		public override bool Archived { get; set; }
 		public override bool Official { get; set; }
@@ -28,12 +31,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override long AccessHash { get; set; }
 		public override string Title { get; set; }
 		public override string ShortName { get; set; }
-		public override PhotoSizeBase Thumb { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase Thumb { get; set; }
 		public override int? ThumbDcId { get; set; }
 		public override int Count { get; set; }
 		public override int Hash { get; set; }
 
-		public override void UpdateFlags()
+		public override void UpdateFlags() 
 		{
 			Flags = Archived ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
 			Flags = Official ? FlagsHelper.SetFlag(Flags, 2) : FlagsHelper.UnsetFlag(Flags, 2);
@@ -42,18 +45,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = InstalledDate == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
 			Flags = Thumb == null ? FlagsHelper.UnsetFlag(Flags, 4) : FlagsHelper.SetFlag(Flags, 4);
 			Flags = ThumbDcId == null ? FlagsHelper.UnsetFlag(Flags, 4) : FlagsHelper.SetFlag(Flags, 4);
+
 		}
 
 		public override void Serialize(Writer writer)
 		{
-			if (ConstructorId != 0)
-			{
-				writer.Write(ConstructorId);
-			}
-
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
-			if (FlagsHelper.IsFlagSet(Flags, 0))
+			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				writer.Write(InstalledDate.Value);
 			}
@@ -62,18 +62,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			writer.Write(AccessHash);
 			writer.Write(Title);
 			writer.Write(ShortName);
-			if (FlagsHelper.IsFlagSet(Flags, 4))
+			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
 				writer.Write(Thumb);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 4))
+			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
 				writer.Write(ThumbDcId.Value);
 			}
 
 			writer.Write(Count);
 			writer.Write(Hash);
+
 		}
 
 		public override void Deserialize(Reader reader)
@@ -83,7 +84,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Official = FlagsHelper.IsFlagSet(Flags, 2);
 			Masks = FlagsHelper.IsFlagSet(Flags, 3);
 			Animated = FlagsHelper.IsFlagSet(Flags, 5);
-			if (FlagsHelper.IsFlagSet(Flags, 0))
+			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				InstalledDate = reader.Read<int>();
 			}
@@ -92,18 +93,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			AccessHash = reader.Read<long>();
 			Title = reader.Read<string>();
 			ShortName = reader.Read<string>();
-			if (FlagsHelper.IsFlagSet(Flags, 4))
+			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				Thumb = reader.Read<PhotoSizeBase>();
+				Thumb = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 4))
+			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
 				ThumbDcId = reader.Read<int>();
 			}
 
 			Count = reader.Read<int>();
 			Hash = reader.Read<int>();
+
 		}
 	}
 }

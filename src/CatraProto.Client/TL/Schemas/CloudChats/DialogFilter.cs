@@ -1,13 +1,16 @@
+using CatraProto.TL;
+using CatraProto.TL.Interfaces;
 using System;
 using System.Collections.Generic;
-using CatraProto.TL;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class DialogFilter : DialogFilterBase
 	{
 		[Flags]
-		public enum FlagsEnum
+		public enum FlagsEnum 
 		{
 			Contacts = 1 << 0,
 			NonContacts = 1 << 1,
@@ -20,7 +23,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Emoticon = 1 << 25
 		}
 
-		public static int ConstructorId { get; } = 1949890536;
+        public static int ConstructorId { get; } = 1949890536;
 		public int Flags { get; set; }
 		public override bool Contacts { get; set; }
 		public override bool NonContacts { get; set; }
@@ -33,11 +36,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override int Id { get; set; }
 		public override string Title { get; set; }
 		public override string Emoticon { get; set; }
-		public override IList<InputPeerBase> PinnedPeers { get; set; }
-		public override IList<InputPeerBase> IncludePeers { get; set; }
-		public override IList<InputPeerBase> ExcludePeers { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> PinnedPeers { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> IncludePeers { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> ExcludePeers { get; set; }
 
-		public override void UpdateFlags()
+		public override void UpdateFlags() 
 		{
 			Flags = Contacts ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
 			Flags = NonContacts ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
@@ -48,20 +51,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = ExcludeRead ? FlagsHelper.SetFlag(Flags, 12) : FlagsHelper.UnsetFlag(Flags, 12);
 			Flags = ExcludeArchived ? FlagsHelper.SetFlag(Flags, 13) : FlagsHelper.UnsetFlag(Flags, 13);
 			Flags = Emoticon == null ? FlagsHelper.UnsetFlag(Flags, 25) : FlagsHelper.SetFlag(Flags, 25);
+
 		}
 
 		public override void Serialize(Writer writer)
 		{
-			if (ConstructorId != 0)
-			{
-				writer.Write(ConstructorId);
-			}
-
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
 			writer.Write(Id);
 			writer.Write(Title);
-			if (FlagsHelper.IsFlagSet(Flags, 25))
+			if(FlagsHelper.IsFlagSet(Flags, 25))
 			{
 				writer.Write(Emoticon);
 			}
@@ -69,6 +69,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			writer.Write(PinnedPeers);
 			writer.Write(IncludePeers);
 			writer.Write(ExcludePeers);
+
 		}
 
 		public override void Deserialize(Reader reader)
@@ -84,14 +85,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ExcludeArchived = FlagsHelper.IsFlagSet(Flags, 13);
 			Id = reader.Read<int>();
 			Title = reader.Read<string>();
-			if (FlagsHelper.IsFlagSet(Flags, 25))
+			if(FlagsHelper.IsFlagSet(Flags, 25))
 			{
 				Emoticon = reader.Read<string>();
 			}
 
-			PinnedPeers = reader.ReadVector<InputPeerBase>();
-			IncludePeers = reader.ReadVector<InputPeerBase>();
-			ExcludePeers = reader.ReadVector<InputPeerBase>();
+			PinnedPeers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+			IncludePeers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+			ExcludePeers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+
 		}
 	}
 }

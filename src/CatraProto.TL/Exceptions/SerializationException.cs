@@ -8,7 +8,8 @@ namespace CatraProto.TL.Exceptions
 		{
 			BoolNull,
 			TypeNotFound,
-			BitSizeMismatch
+			BitSizeMismatch,
+			ValueNull
 		}
 
 		public SerializationException(string message, SerializationErrors errorCode) : base(message)

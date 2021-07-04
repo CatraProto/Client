@@ -3,9 +3,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections.Messages;
 using CatraProto.Client.Connections.Messages.Interfaces;
+using CatraProto.Client.MTProto.AuthKeyHandler;
+using CatraProto.Client.MTProto.AuthKeyHandler.Results;
 using CatraProto.Client.TL.Schemas;
+using CatraProto.Client.TL.Schemas.CloudChats;
 using CatraProto.TL;
+using CatraProto.TL.Exceptions;
+using CatraProto.TL.Interfaces;
 using Serilog;
+using EncryptedMessage = CatraProto.Client.Connections.Messages.EncryptedMessage;
 
 namespace CatraProto.Client.Connections.Loop
 {
@@ -15,11 +21,11 @@ namespace CatraProto.Client.Connections.Loop
         private Connection _connection;
         private ILogger _logger;
         private MessagesHandler _messagesHandler;
-
-        public WriteLoop(Connection connection, MessagesHandler messagesHandler, ILogger logger)
+        
+        public WriteLoop(Connection connection, ILogger logger)
         {
             _connection = connection;
-            _messagesHandler = messagesHandler;
+            _messagesHandler = connection.MessagesHandler;
             _logger = logger.ForContext<WriteLoop>();
         }
 
@@ -38,24 +44,44 @@ namespace CatraProto.Client.Connections.Loop
                         continue;
                     }
 
-                    IMessage preparedMessage = null;
-                    if (message.IsEncrypted)
+                    try
                     {
-                    }
-                    else
-                    {
-                        _logger.Information("Serializing unencrypted message of type {MessageType}", message.Body);
-                        preparedMessage = new UnencryptedMessage
+                        _logger.Information("Serializing message of type {Type}", message.Body);
+                        var body = message.Body.ToArray(MergedProvider.Singleton);
+                        IMessage preparedMessage;
+                        if (message.IsEncrypted)
                         {
-                            Body = message.Body.ToArray(MergedProvider.Singleton),
-                            MessageId = _connection.MessageIdsHandler.ComputeMessageId()
-                        };
-                        var exported = preparedMessage!.Export();
+                            preparedMessage = new EncryptedMessage(_connection.SessionData.AuthKey)
+                            {
+                                AuthKeyId = _connection.SessionData.AuthKey.AuthKeyId,
+                                Salt = _connection.SessionData.Salt,
+                                SessionId = _connection.SessionData.SessionId,
+                                MessageId = _connection.MessageIdsHandler.ComputeMessageId(),
+                                SeqNo = _connection.SessionData.SeqnoHandler.ComputeSeqno(message.Body),
+                                Body = body
+                            };
+                        }
+                        else
+                        {
+                            preparedMessage = new UnencryptedMessage
+                            {
+                                Body = body,
+                                MessageId = _connection.MessageIdsHandler.ComputeMessageId()
+                            };
+                        }
+                        
+                        var exported = preparedMessage.Export();
                         await _connection.Protocol.Writer.SendAsync(exported);
-                        _logger.Information("Message sent");
+                        if (message.IsEncrypted)
+                        {
+                            _connection.MessagesHandler.AddSentMessage(preparedMessage.MessageId, container);
+                        }
                     }
-
-                    //_logger.Information("Sending message with Id {Id} as unencryptedMessage, length {Length}", message.MessageId /*, message.Length*/);
+                    catch (SerializationException e)
+                    {
+                        _logger.Error("Serialization of message of type {Type} failed, throwing exception on caller", message.Body);
+                        container.CompletionSource.TrySetException(e);
+                    }
                 }
                 catch (OperationCanceledException)
                 {

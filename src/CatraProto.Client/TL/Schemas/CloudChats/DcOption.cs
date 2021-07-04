@@ -1,12 +1,14 @@
-using System;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class DcOption : DcOptionBase
 	{
 		[Flags]
-		public enum FlagsEnum
+		public enum FlagsEnum 
 		{
 			Ipv6 = 1 << 0,
 			MediaOnly = 1 << 1,
@@ -16,7 +18,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Secret = 1 << 10
 		}
 
-		public static int ConstructorId { get; } = 414687501;
+        public static int ConstructorId { get; } = 414687501;
 		public int Flags { get; set; }
 		public override bool Ipv6 { get; set; }
 		public override bool MediaOnly { get; set; }
@@ -28,7 +30,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override int Port { get; set; }
 		public override byte[] Secret { get; set; }
 
-		public override void UpdateFlags()
+		public override void UpdateFlags() 
 		{
 			Flags = Ipv6 ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
 			Flags = MediaOnly ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
@@ -36,24 +38,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = Cdn ? FlagsHelper.SetFlag(Flags, 3) : FlagsHelper.UnsetFlag(Flags, 3);
 			Flags = Static ? FlagsHelper.SetFlag(Flags, 4) : FlagsHelper.UnsetFlag(Flags, 4);
 			Flags = Secret == null ? FlagsHelper.UnsetFlag(Flags, 10) : FlagsHelper.SetFlag(Flags, 10);
+
 		}
 
 		public override void Serialize(Writer writer)
 		{
-			if (ConstructorId != 0)
-			{
-				writer.Write(ConstructorId);
-			}
-
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
 			writer.Write(Id);
 			writer.Write(IpAddress);
 			writer.Write(Port);
-			if (FlagsHelper.IsFlagSet(Flags, 10))
+			if(FlagsHelper.IsFlagSet(Flags, 10))
 			{
 				writer.Write(Secret);
 			}
+
+
 		}
 
 		public override void Deserialize(Reader reader)
@@ -67,10 +68,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Id = reader.Read<int>();
 			IpAddress = reader.Read<string>();
 			Port = reader.Read<int>();
-			if (FlagsHelper.IsFlagSet(Flags, 10))
+			if(FlagsHelper.IsFlagSet(Flags, 10))
 			{
 				Secret = reader.Read<byte[]>();
 			}
+
+
 		}
 	}
 }

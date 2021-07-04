@@ -26,16 +26,15 @@ namespace CatraProto.Client.MTProto
             using var reader = new Reader(MergedProvider.Singleton, message.Body.ToMemoryStream());
             if (message.Body.Length == 4)
             {
+                var error = reader.Read<int>();
+                _logger.Warning("Received protocol error from server, error: {Error}", error);
                 var rpcError = new RpcError
                 {
-                    ErrorCode = reader.Read<int>(),
+                    ErrorCode = error,
                     ErrorMessage = "Unencrypted message error"
                 };
 
-                if (!_handler.SetMessageCompletion(0, rpcError))
-                {
-                    _logger.Warning($"Couldn't find a message to complete with error {rpcError.ErrorCode}");
-                }
+                _handler.SetMessageCompletion(0, rpcError);
 
                 return;
             }
@@ -55,10 +54,6 @@ namespace CatraProto.Client.MTProto
                     var response = method.IsVector ? reader.ReadVector(method.Type) : reader.Read(method.Type);
                     //TODO: Database
                     _handler.SetMessageCompletion(messageId, response);
-                }
-                else
-                {
-                    _logger.Warning("Couldn't find {Id} in the list of outgoing messages", messageId);
                 }
             }
             else if (nextType == typeof(MsgContainer))

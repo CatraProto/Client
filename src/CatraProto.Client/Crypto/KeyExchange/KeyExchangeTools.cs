@@ -31,13 +31,17 @@ namespace CatraProto.Client.Crypto
             return ms.ToArray();
         }
 
-        public static byte[] DecryptMessage(IgeEncryptor encryptor, byte[] data)
+        public static byte[] DecryptMessage(IgeEncryptor encryptor, byte[] data, out byte[] sha)
         {
             var decrypted = encryptor.Decrypt(data);
             var reader = new BinaryReader(decrypted.ToMemoryStream());
-            reader.BaseStream.Position += 20;
-            var answer = reader.ReadBytes(decrypted.Length - 20);
-            return answer;
+            sha = reader.ReadBytes(20);
+            return reader.ReadBytes(decrypted.Length - 20);
+        }
+
+        public static byte[] ComputeServerSalt(BigInteger serverNonce, BigInteger newNonce)
+        {
+            return CryptoTools.XorBlock(newNonce.ToByteArray().Take(8).ToArray(), serverNonce.ToByteArray().Take(8).ToArray());
         }
     }
 }

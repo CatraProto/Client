@@ -1,43 +1,43 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System;
+using System.Collections.Generic;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
 	public partial class ReorderPinnedDialogs : IMethod
 	{
 		[Flags]
-		public enum FlagsEnum
+		public enum FlagsEnum 
 		{
 			Force = 1 << 0
 		}
 
-		public static int ConstructorId { get; } = 991616823;
+        public static int ConstructorId { get; } = 991616823;
+
+		public System.Type Type { get; init; } = typeof(bool);
+		public bool IsVector { get; init; } = false;
 		public int Flags { get; set; }
 		public bool Force { get; set; }
 		public int FolderId { get; set; }
-		public IList<InputDialogPeerBase> Order { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputDialogPeerBase> Order { get; set; }
 
-		public Type Type { get; init; } = typeof(bool);
-		public bool IsVector { get; init; } = false;
-
-		public void UpdateFlags()
+		public void UpdateFlags() 
 		{
 			Flags = Force ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
+
 		}
 
 		public void Serialize(Writer writer)
 		{
-			if (ConstructorId != 0)
-			{
-				writer.Write(ConstructorId);
-			}
-
+            if(ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
 			writer.Write(FolderId);
 			writer.Write(Order);
+
 		}
 
 		public void Deserialize(Reader reader)
@@ -45,7 +45,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Flags = reader.Read<int>();
 			Force = FlagsHelper.IsFlagSet(Flags, 0);
 			FolderId = reader.Read<int>();
-			Order = reader.ReadVector<InputDialogPeerBase>();
+			Order = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputDialogPeerBase>();
+
 		}
 	}
 }

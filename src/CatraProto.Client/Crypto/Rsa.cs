@@ -11,7 +11,6 @@ namespace CatraProto.Client.Crypto
 {
     class Rsa : IDisposable
     {
-        /// <value>List of known RSAKeys by CatraProto.</value>
         public static Dictionary<long, string> RsaKeys { get; set; } = new Dictionary<long, string>
         {
             {
@@ -21,7 +20,7 @@ namespace CatraProto.Client.Crypto
         };
 
         private readonly RsaImplementation _rsaKey = RsaImplementation.Create();
-
+        
         public Rsa(string key)
         {
             _rsaKey.ImportFromPem(key);

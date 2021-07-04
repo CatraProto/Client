@@ -1,30 +1,32 @@
-using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
 	public partial class LogOut : IMethod
 	{
-		public static int ConstructorId { get; } = 1461180992;
 
-		public Type Type { get; init; } = typeof(bool);
+
+        public static int ConstructorId { get; } = 1461180992;
+
+		public System.Type Type { get; init; } = typeof(bool);
 		public bool IsVector { get; init; } = false;
 
-		public void UpdateFlags()
+		public void UpdateFlags() 
 		{
+
 		}
 
 		public void Serialize(Writer writer)
 		{
-			if (ConstructorId != 0)
-			{
-				writer.Write(ConstructorId);
-			}
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+
 		}
 
 		public void Deserialize(Reader reader)
 		{
+
 		}
 	}
 }

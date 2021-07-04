@@ -1,12 +1,14 @@
-using System;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class WallPaperSettings : WallPaperSettingsBase
 	{
 		[Flags]
-		public enum FlagsEnum
+		public enum FlagsEnum 
 		{
 			Blur = 1 << 1,
 			Motion = 1 << 2,
@@ -16,7 +18,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Rotation = 1 << 4
 		}
 
-		public static int ConstructorId { get; } = 84438264;
+        public static int ConstructorId { get; } = 84438264;
 		public int Flags { get; set; }
 		public override bool Blur { get; set; }
 		public override bool Motion { get; set; }
@@ -25,7 +27,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override int? Intensity { get; set; }
 		public override int? Rotation { get; set; }
 
-		public override void UpdateFlags()
+		public override void UpdateFlags() 
 		{
 			Flags = Blur ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
 			Flags = Motion ? FlagsHelper.SetFlag(Flags, 2) : FlagsHelper.UnsetFlag(Flags, 2);
@@ -33,36 +35,35 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = SecondBackgroundColor == null ? FlagsHelper.UnsetFlag(Flags, 4) : FlagsHelper.SetFlag(Flags, 4);
 			Flags = Intensity == null ? FlagsHelper.UnsetFlag(Flags, 3) : FlagsHelper.SetFlag(Flags, 3);
 			Flags = Rotation == null ? FlagsHelper.UnsetFlag(Flags, 4) : FlagsHelper.SetFlag(Flags, 4);
+
 		}
 
 		public override void Serialize(Writer writer)
 		{
-			if (ConstructorId != 0)
-			{
-				writer.Write(ConstructorId);
-			}
-
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
-			if (FlagsHelper.IsFlagSet(Flags, 0))
+			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				writer.Write(BackgroundColor.Value);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 4))
+			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
 				writer.Write(SecondBackgroundColor.Value);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 3))
+			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
 				writer.Write(Intensity.Value);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 4))
+			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
 				writer.Write(Rotation.Value);
 			}
+
+
 		}
 
 		public override void Deserialize(Reader reader)
@@ -70,25 +71,27 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = reader.Read<int>();
 			Blur = FlagsHelper.IsFlagSet(Flags, 1);
 			Motion = FlagsHelper.IsFlagSet(Flags, 2);
-			if (FlagsHelper.IsFlagSet(Flags, 0))
+			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				BackgroundColor = reader.Read<int>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 4))
+			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
 				SecondBackgroundColor = reader.Read<int>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 3))
+			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
 				Intensity = reader.Read<int>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 4))
+			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
 				Rotation = reader.Read<int>();
 			}
+
+
 		}
 	}
 }

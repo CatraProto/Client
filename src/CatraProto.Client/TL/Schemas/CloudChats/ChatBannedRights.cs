@@ -1,12 +1,14 @@
-using System;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class ChatBannedRights : ChatBannedRightsBase
 	{
 		[Flags]
-		public enum FlagsEnum
+		public enum FlagsEnum 
 		{
 			ViewMessages = 1 << 0,
 			SendMessages = 1 << 1,
@@ -22,7 +24,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			PinMessages = 1 << 17
 		}
 
-		public static int ConstructorId { get; } = -1626209256;
+        public static int ConstructorId { get; } = -1626209256;
 		public int Flags { get; set; }
 		public override bool ViewMessages { get; set; }
 		public override bool SendMessages { get; set; }
@@ -38,7 +40,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override bool PinMessages { get; set; }
 		public override int UntilDate { get; set; }
 
-		public override void UpdateFlags()
+		public override void UpdateFlags() 
 		{
 			Flags = ViewMessages ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
 			Flags = SendMessages ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
@@ -52,18 +54,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = ChangeInfo ? FlagsHelper.SetFlag(Flags, 10) : FlagsHelper.UnsetFlag(Flags, 10);
 			Flags = InviteUsers ? FlagsHelper.SetFlag(Flags, 15) : FlagsHelper.UnsetFlag(Flags, 15);
 			Flags = PinMessages ? FlagsHelper.SetFlag(Flags, 17) : FlagsHelper.UnsetFlag(Flags, 17);
+
 		}
 
 		public override void Serialize(Writer writer)
 		{
-			if (ConstructorId != 0)
-			{
-				writer.Write(ConstructorId);
-			}
-
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
 			writer.Write(UntilDate);
+
 		}
 
 		public override void Deserialize(Reader reader)
@@ -82,6 +82,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			InviteUsers = FlagsHelper.IsFlagSet(Flags, 15);
 			PinMessages = FlagsHelper.IsFlagSet(Flags, 17);
 			UntilDate = reader.Read<int>();
+
 		}
 	}
 }

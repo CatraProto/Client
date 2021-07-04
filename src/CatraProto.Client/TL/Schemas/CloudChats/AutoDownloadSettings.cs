@@ -1,12 +1,14 @@
-using System;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class AutoDownloadSettings : AutoDownloadSettingsBase
 	{
 		[Flags]
-		public enum FlagsEnum
+		public enum FlagsEnum 
 		{
 			Disabled = 1 << 0,
 			VideoPreloadLarge = 1 << 1,
@@ -14,7 +16,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			PhonecallsLessData = 1 << 3
 		}
 
-		public static int ConstructorId { get; } = -532532493;
+        public static int ConstructorId { get; } = -532532493;
 		public int Flags { get; set; }
 		public override bool Disabled { get; set; }
 		public override bool VideoPreloadLarge { get; set; }
@@ -25,27 +27,25 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override int FileSizeMax { get; set; }
 		public override int VideoUploadMaxbitrate { get; set; }
 
-		public override void UpdateFlags()
+		public override void UpdateFlags() 
 		{
 			Flags = Disabled ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
 			Flags = VideoPreloadLarge ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
 			Flags = AudioPreloadNext ? FlagsHelper.SetFlag(Flags, 2) : FlagsHelper.UnsetFlag(Flags, 2);
 			Flags = PhonecallsLessData ? FlagsHelper.SetFlag(Flags, 3) : FlagsHelper.UnsetFlag(Flags, 3);
+
 		}
 
 		public override void Serialize(Writer writer)
 		{
-			if (ConstructorId != 0)
-			{
-				writer.Write(ConstructorId);
-			}
-
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
 			writer.Write(PhotoSizeMax);
 			writer.Write(VideoSizeMax);
 			writer.Write(FileSizeMax);
 			writer.Write(VideoUploadMaxbitrate);
+
 		}
 
 		public override void Deserialize(Reader reader)
@@ -59,6 +59,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			VideoSizeMax = reader.Read<int>();
 			FileSizeMax = reader.Read<int>();
 			VideoUploadMaxbitrate = reader.Read<int>();
+
 		}
 	}
 }

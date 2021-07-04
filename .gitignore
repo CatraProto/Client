@@ -336,3 +336,5 @@ ASALocalRun/
 # Local History for Visual Studio
 .localhistory/
 
+#InternalTesting
+src/CatraProto.Start/

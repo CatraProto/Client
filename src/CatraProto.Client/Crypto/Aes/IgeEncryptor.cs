@@ -32,12 +32,12 @@ namespace CatraProto.Client.Crypto.Aes
         private byte[] Process(byte[] from, bool encrypt)
         {
             var modulo = from.Length % 16;
-            if (modulo != 0)
-            {
-                var padding = new byte[16 - modulo];
-                new Random().NextBytes(padding);
-                from = from.Concat(padding).ToArray();
-            }
+            // if (modulo != 0)
+            // {
+            //     var padding = new byte[16 - modulo];
+            //     new Random().NextBytes(padding);
+            //     from = from.Concat(padding).ToArray();
+            // }
 
             GetParameters(encrypt, out var transformer, out var oldCleanBlock, out var oldProcessedBlock);
 
@@ -47,9 +47,9 @@ namespace CatraProto.Client.Crypto.Aes
                 var cleanBlock = new byte[16];
                 Array.Copy(from, i, cleanBlock, 0, 16);
 
-                var xoredToEncrypt = XorBlock(cleanBlock, oldProcessedBlock);
+                var xoredToEncrypt = CryptoTools.XorBlock(cleanBlock, oldProcessedBlock);
                 var blockResult = transformer.TransformFinalBlock(xoredToEncrypt, 0, 16);
-                var xoredEncrypted = XorBlock(blockResult, oldCleanBlock);
+                var xoredEncrypted = CryptoTools.XorBlock(blockResult, oldCleanBlock);
 
                 var currentI = i;
                 for (var j = 0; j < xoredEncrypted.Length; j++)
@@ -65,8 +65,7 @@ namespace CatraProto.Client.Crypto.Aes
             return output;
         }
 
-        private void GetParameters(bool encrypt, out ICryptoTransform transformer, out byte[] oldCleanBlock,
-            out byte[] oldProcessedBlock)
+        private void GetParameters(bool encrypt, out ICryptoTransform transformer, out byte[] oldCleanBlock, out byte[] oldProcessedBlock)
         {
             if (encrypt)
             {
@@ -81,23 +80,6 @@ namespace CatraProto.Client.Crypto.Aes
                 oldProcessedBlock = _iv2;
             }
         }
-
-        private static byte[] XorBlock(byte[] first, byte[] second)
-        {
-            if (first.Length != second.Length)
-            {
-                throw new ArgumentException("First byte array and second must have the same length");
-            }
-
-            var output = new byte[first.Length];
-            for (var i = 0; i < first.Length; i++)
-            {
-                output[i] = (byte)(first[i] ^ second[i]);
-            }
-
-            return output;
-        }
-
 
         public byte[] Encrypt(byte[] plainText)
         {

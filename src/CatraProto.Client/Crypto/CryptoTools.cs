@@ -7,13 +7,40 @@ namespace CatraProto.Client.Crypto
 {
     static class CryptoTools
     {
-        public static BigInteger GenerateBigInt(int size, bool unsinged = false)
+        public static byte[] XorBlock(byte[] first, byte[] second)
         {
-            var byteArray = new byte[size / 8];
-            new Random().NextBytes(byteArray);
-            return new BigInteger(byteArray, unsinged);
+            if (first.Length != second.Length)
+            {
+                throw new ArgumentException("First byte array and second must have the same length");
+            }
+
+            var output = new byte[first.Length];
+            for (var i = 0; i < first.Length; i++)
+            {
+                output[i] = (byte)(first[i] ^ second[i]);
+            }
+
+            return output;
         }
 
+        public static byte[] GenerateRandomBytes(int count)
+        {
+            var byteArray = new byte[count];
+            new Random().NextBytes(byteArray);
+            return byteArray;
+        }
+        
+        public static BigInteger GenerateBigInt(int size, bool unsigned = false, bool isBigEndian = false)
+        {
+            var buffer = GenerateRandomBytes(size / 8);
+            if (unsigned)
+            {
+                var zeroByte = new byte[] { 0x00 };
+                buffer = isBigEndian ? zeroByte.Concat(buffer).ToArray() : buffer.Concat(zeroByte).ToArray();
+            }
+            
+            return new BigInteger(buffer, false, isBigEndian);
+        }
 
         public static Tuple<byte[], byte[]> GetFastPq(ulong pq)
         {
@@ -27,7 +54,7 @@ namespace CatraProto.Client.Crypto
                 : new Tuple<byte[], byte[]>(transformedSecond, transformedFirst);
         }
 
-        private static byte[] RemoveFirstBytes(byte[] array)
+        public static byte[] RemoveFirstBytes(byte[] array)
         {
             var result = new List<byte>(array);
 

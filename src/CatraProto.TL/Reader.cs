@@ -79,7 +79,7 @@ namespace CatraProto.TL
 
 				return BigInteger.ReadBytes(bitSize.Value, this);
 			}
-			else if (type.GetInterfaces()[^1] == typeof(IObject))
+			else if (type == typeof(IObject) || type.GetInterfaces()[^1] == typeof(IObject))
 			{
 				var id = _reader.ReadInt32();
 				var instance = _provider.ResolveConstructorId(id);

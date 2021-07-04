@@ -1,35 +1,39 @@
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class InputBotInlineResultGame : InputBotInlineResultBase
 	{
-		public static int ConstructorId { get; } = 1336154098;
+
+
+        public static int ConstructorId { get; } = 1336154098;
 		public override string Id { get; set; }
 		public string ShortName { get; set; }
-		public override InputBotInlineMessageBase SendMessage { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageBase SendMessage { get; set; }
 
-		public override void UpdateFlags()
+		public override void UpdateFlags() 
 		{
+
 		}
 
 		public override void Serialize(Writer writer)
 		{
-			if (ConstructorId != 0)
-			{
-				writer.Write(ConstructorId);
-			}
-
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(Id);
 			writer.Write(ShortName);
 			writer.Write(SendMessage);
+
 		}
 
 		public override void Deserialize(Reader reader)
 		{
 			Id = reader.Read<string>();
 			ShortName = reader.Read<string>();
-			SendMessage = reader.Read<InputBotInlineMessageBase>();
+			SendMessage = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageBase>();
+
 		}
 	}
 }

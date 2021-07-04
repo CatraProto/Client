@@ -1,12 +1,15 @@
-using System;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class PageTableCell : PageTableCellBase
 	{
 		[Flags]
-		public enum FlagsEnum
+		public enum FlagsEnum 
 		{
 			Header = 1 << 0,
 			AlignCenter = 1 << 3,
@@ -18,18 +21,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Rowspan = 1 << 2
 		}
 
-		public static int ConstructorId { get; } = 878078826;
+        public static int ConstructorId { get; } = 878078826;
 		public int Flags { get; set; }
 		public override bool Header { get; set; }
 		public override bool AlignCenter { get; set; }
 		public override bool AlignRight { get; set; }
 		public override bool ValignMiddle { get; set; }
 		public override bool ValignBottom { get; set; }
-		public override RichTextBase Text { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Text { get; set; }
 		public override int? Colspan { get; set; }
 		public override int? Rowspan { get; set; }
 
-		public override void UpdateFlags()
+		public override void UpdateFlags() 
 		{
 			Flags = Header ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
 			Flags = AlignCenter ? FlagsHelper.SetFlag(Flags, 3) : FlagsHelper.UnsetFlag(Flags, 3);
@@ -39,31 +42,30 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = Text == null ? FlagsHelper.UnsetFlag(Flags, 7) : FlagsHelper.SetFlag(Flags, 7);
 			Flags = Colspan == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
 			Flags = Rowspan == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
+
 		}
 
 		public override void Serialize(Writer writer)
 		{
-			if (ConstructorId != 0)
-			{
-				writer.Write(ConstructorId);
-			}
-
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
-			if (FlagsHelper.IsFlagSet(Flags, 7))
+			if(FlagsHelper.IsFlagSet(Flags, 7))
 			{
 				writer.Write(Text);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 1))
+			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
 				writer.Write(Colspan.Value);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 2))
+			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
 				writer.Write(Rowspan.Value);
 			}
+
+
 		}
 
 		public override void Deserialize(Reader reader)
@@ -74,20 +76,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			AlignRight = FlagsHelper.IsFlagSet(Flags, 4);
 			ValignMiddle = FlagsHelper.IsFlagSet(Flags, 5);
 			ValignBottom = FlagsHelper.IsFlagSet(Flags, 6);
-			if (FlagsHelper.IsFlagSet(Flags, 7))
+			if(FlagsHelper.IsFlagSet(Flags, 7))
 			{
-				Text = reader.Read<RichTextBase>();
+				Text = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 1))
+			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
 				Colspan = reader.Read<int>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 2))
+			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
 				Rowspan = reader.Read<int>();
 			}
+
+
 		}
 	}
 }

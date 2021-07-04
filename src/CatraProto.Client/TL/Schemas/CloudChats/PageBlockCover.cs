@@ -1,29 +1,33 @@
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class PageBlockCover : PageBlockBase
 	{
-		public static int ConstructorId { get; } = 972174080;
-		public PageBlockBase Cover { get; set; }
 
-		public override void UpdateFlags()
+
+        public static int ConstructorId { get; } = 972174080;
+		public CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase Cover { get; set; }
+
+		public override void UpdateFlags() 
 		{
+
 		}
 
 		public override void Serialize(Writer writer)
 		{
-			if (ConstructorId != 0)
-			{
-				writer.Write(ConstructorId);
-			}
-
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(Cover);
+
 		}
 
 		public override void Deserialize(Reader reader)
 		{
-			Cover = reader.Read<PageBlockBase>();
+			Cover = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase>();
+
 		}
 	}
 }

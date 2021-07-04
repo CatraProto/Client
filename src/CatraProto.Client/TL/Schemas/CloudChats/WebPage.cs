@@ -1,13 +1,16 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System;
+using CatraProto.Client.TL.Schemas.CloudChats;
+using System.Collections.Generic;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class WebPage : WebPageBase
 	{
 		[Flags]
-		public enum FlagsEnum
+		public enum FlagsEnum 
 		{
 			Type = 1 << 0,
 			SiteName = 1 << 1,
@@ -25,7 +28,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Attributes = 1 << 12
 		}
 
-		public static int ConstructorId { get; } = -392411726;
+        public static int ConstructorId { get; } = -392411726;
 		public int Flags { get; set; }
 		public long Id { get; set; }
 		public string Url { get; set; }
@@ -35,18 +38,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public string SiteName { get; set; }
 		public string Title { get; set; }
 		public string Description { get; set; }
-		public PhotoBase Photo { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PhotoBase Photo { get; set; }
 		public string EmbedUrl { get; set; }
 		public string EmbedType { get; set; }
 		public int? EmbedWidth { get; set; }
 		public int? EmbedHeight { get; set; }
 		public int? Duration { get; set; }
 		public string Author { get; set; }
-		public DocumentBase Document { get; set; }
-		public PageBase CachedPage { get; set; }
-		public IList<WebPageAttributeBase> Attributes { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.DocumentBase Document { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PageBase CachedPage { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.WebPageAttributeBase> Attributes { get; set; }
 
-		public override void UpdateFlags()
+		public override void UpdateFlags() 
 		{
 			Flags = Type == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
 			Flags = SiteName == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
@@ -62,90 +65,89 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = Document == null ? FlagsHelper.UnsetFlag(Flags, 9) : FlagsHelper.SetFlag(Flags, 9);
 			Flags = CachedPage == null ? FlagsHelper.UnsetFlag(Flags, 10) : FlagsHelper.SetFlag(Flags, 10);
 			Flags = Attributes == null ? FlagsHelper.UnsetFlag(Flags, 12) : FlagsHelper.SetFlag(Flags, 12);
+
 		}
 
 		public override void Serialize(Writer writer)
 		{
-			if (ConstructorId != 0)
-			{
-				writer.Write(ConstructorId);
-			}
-
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
 			writer.Write(Id);
 			writer.Write(Url);
 			writer.Write(DisplayUrl);
 			writer.Write(Hash);
-			if (FlagsHelper.IsFlagSet(Flags, 0))
+			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				writer.Write(Type);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 1))
+			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
 				writer.Write(SiteName);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 2))
+			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
 				writer.Write(Title);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 3))
+			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
 				writer.Write(Description);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 4))
+			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
 				writer.Write(Photo);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 5))
+			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
 				writer.Write(EmbedUrl);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 5))
+			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
 				writer.Write(EmbedType);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 6))
+			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
 				writer.Write(EmbedWidth.Value);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 6))
+			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
 				writer.Write(EmbedHeight.Value);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 7))
+			if(FlagsHelper.IsFlagSet(Flags, 7))
 			{
 				writer.Write(Duration.Value);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 8))
+			if(FlagsHelper.IsFlagSet(Flags, 8))
 			{
 				writer.Write(Author);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 9))
+			if(FlagsHelper.IsFlagSet(Flags, 9))
 			{
 				writer.Write(Document);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 10))
+			if(FlagsHelper.IsFlagSet(Flags, 10))
 			{
 				writer.Write(CachedPage);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 12))
+			if(FlagsHelper.IsFlagSet(Flags, 12))
 			{
 				writer.Write(Attributes);
 			}
+
+
 		}
 
 		public override void Deserialize(Reader reader)
@@ -155,75 +157,77 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Url = reader.Read<string>();
 			DisplayUrl = reader.Read<string>();
 			Hash = reader.Read<int>();
-			if (FlagsHelper.IsFlagSet(Flags, 0))
+			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				Type = reader.Read<string>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 1))
+			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
 				SiteName = reader.Read<string>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 2))
+			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
 				Title = reader.Read<string>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 3))
+			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
 				Description = reader.Read<string>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 4))
+			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				Photo = reader.Read<PhotoBase>();
+				Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 5))
+			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
 				EmbedUrl = reader.Read<string>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 5))
+			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
 				EmbedType = reader.Read<string>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 6))
+			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
 				EmbedWidth = reader.Read<int>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 6))
+			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
 				EmbedHeight = reader.Read<int>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 7))
+			if(FlagsHelper.IsFlagSet(Flags, 7))
 			{
 				Duration = reader.Read<int>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 8))
+			if(FlagsHelper.IsFlagSet(Flags, 8))
 			{
 				Author = reader.Read<string>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 9))
+			if(FlagsHelper.IsFlagSet(Flags, 9))
 			{
-				Document = reader.Read<DocumentBase>();
+				Document = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 10))
+			if(FlagsHelper.IsFlagSet(Flags, 10))
 			{
-				CachedPage = reader.Read<PageBase>();
+				CachedPage = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PageBase>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 12))
+			if(FlagsHelper.IsFlagSet(Flags, 12))
 			{
-				Attributes = reader.ReadVector<WebPageAttributeBase>();
+				Attributes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.WebPageAttributeBase>();
 			}
+
+
 		}
 	}
 }

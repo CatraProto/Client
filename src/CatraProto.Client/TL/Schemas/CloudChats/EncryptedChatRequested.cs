@@ -1,17 +1,19 @@
-using System;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class EncryptedChatRequested : EncryptedChatBase
 	{
 		[Flags]
-		public enum FlagsEnum
+		public enum FlagsEnum 
 		{
 			FolderId = 1 << 0
 		}
 
-		public static int ConstructorId { get; } = 1651608194;
+        public static int ConstructorId { get; } = 1651608194;
 		public int Flags { get; set; }
 		public int? FolderId { get; set; }
 		public override int Id { get; set; }
@@ -21,21 +23,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int ParticipantId { get; set; }
 		public byte[] GA { get; set; }
 
-		public override void UpdateFlags()
+		public override void UpdateFlags() 
 		{
 			Flags = FolderId == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
+
 		}
 
 		public override void Serialize(Writer writer)
 		{
-			if (ConstructorId != 0)
-			{
-				writer.Write(ConstructorId);
-			}
-
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
-			if (FlagsHelper.IsFlagSet(Flags, 0))
+			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				writer.Write(FolderId.Value);
 			}
@@ -46,12 +45,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			writer.Write(AdminId);
 			writer.Write(ParticipantId);
 			writer.Write(GA);
+
 		}
 
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			if (FlagsHelper.IsFlagSet(Flags, 0))
+			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				FolderId = reader.Read<int>();
 			}
@@ -62,6 +62,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			AdminId = reader.Read<int>();
 			ParticipantId = reader.Read<int>();
 			GA = reader.Read<byte[]>();
+
 		}
 	}
 }

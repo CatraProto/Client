@@ -1,30 +1,32 @@
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class InputFile : InputFileBase
 	{
-		public static int ConstructorId { get; } = -181407105;
+
+
+        public static int ConstructorId { get; } = -181407105;
 		public override long Id { get; set; }
 		public override int Parts { get; set; }
 		public override string Name { get; set; }
 		public string Md5Checksum { get; set; }
 
-		public override void UpdateFlags()
+		public override void UpdateFlags() 
 		{
+
 		}
 
 		public override void Serialize(Writer writer)
 		{
-			if (ConstructorId != 0)
-			{
-				writer.Write(ConstructorId);
-			}
-
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(Id);
 			writer.Write(Parts);
 			writer.Write(Name);
 			writer.Write(Md5Checksum);
+
 		}
 
 		public override void Deserialize(Reader reader)
@@ -33,6 +35,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Parts = reader.Read<int>();
 			Name = reader.Read<string>();
 			Md5Checksum = reader.Read<string>();
+
 		}
 	}
 }

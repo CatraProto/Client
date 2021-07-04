@@ -1,13 +1,16 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System;
+using CatraProto.Client.TL.Schemas.CloudChats;
+using System.Collections.Generic;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class User : UserBase
 	{
 		[Flags]
-		public enum FlagsEnum
+		public enum FlagsEnum 
 		{
 			Self = 1 << 10,
 			Contact = 1 << 11,
@@ -36,7 +39,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			LangCode = 1 << 22
 		}
 
-		public static int ConstructorId { get; } = -1820043071;
+        public static int ConstructorId { get; } = -1820043071;
 		public int Flags { get; set; }
 		public bool Self { get; set; }
 		public bool Contact { get; set; }
@@ -58,14 +61,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public string LastName { get; set; }
 		public string Username { get; set; }
 		public string Phone { get; set; }
-		public UserProfilePhotoBase Photo { get; set; }
-		public UserStatusBase Status { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.UserProfilePhotoBase Photo { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.UserStatusBase Status { get; set; }
 		public int? BotInfoVersion { get; set; }
-		public IList<RestrictionReasonBase> RestrictionReason { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase> RestrictionReason { get; set; }
 		public string BotInlinePlaceholder { get; set; }
 		public string LangCode { get; set; }
 
-		public override void UpdateFlags()
+		public override void UpdateFlags() 
 		{
 			Flags = Self ? FlagsHelper.SetFlag(Flags, 10) : FlagsHelper.UnsetFlag(Flags, 10);
 			Flags = Contact ? FlagsHelper.SetFlag(Flags, 11) : FlagsHelper.UnsetFlag(Flags, 11);
@@ -92,72 +95,71 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = RestrictionReason == null ? FlagsHelper.UnsetFlag(Flags, 18) : FlagsHelper.SetFlag(Flags, 18);
 			Flags = BotInlinePlaceholder == null ? FlagsHelper.UnsetFlag(Flags, 19) : FlagsHelper.SetFlag(Flags, 19);
 			Flags = LangCode == null ? FlagsHelper.UnsetFlag(Flags, 22) : FlagsHelper.SetFlag(Flags, 22);
+
 		}
 
 		public override void Serialize(Writer writer)
 		{
-			if (ConstructorId != 0)
-			{
-				writer.Write(ConstructorId);
-			}
-
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
 			writer.Write(Id);
-			if (FlagsHelper.IsFlagSet(Flags, 0))
+			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				writer.Write(AccessHash.Value);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 1))
+			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
 				writer.Write(FirstName);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 2))
+			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
 				writer.Write(LastName);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 3))
+			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
 				writer.Write(Username);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 4))
+			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
 				writer.Write(Phone);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 5))
+			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
 				writer.Write(Photo);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 6))
+			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
 				writer.Write(Status);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 14))
+			if(FlagsHelper.IsFlagSet(Flags, 14))
 			{
 				writer.Write(BotInfoVersion.Value);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 18))
+			if(FlagsHelper.IsFlagSet(Flags, 18))
 			{
 				writer.Write(RestrictionReason);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 19))
+			if(FlagsHelper.IsFlagSet(Flags, 19))
 			{
 				writer.Write(BotInlinePlaceholder);
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 22))
+			if(FlagsHelper.IsFlagSet(Flags, 22))
 			{
 				writer.Write(LangCode);
 			}
+
+
 		}
 
 		public override void Deserialize(Reader reader)
@@ -178,60 +180,62 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Scam = FlagsHelper.IsFlagSet(Flags, 24);
 			ApplyMinPhoto = FlagsHelper.IsFlagSet(Flags, 25);
 			Id = reader.Read<int>();
-			if (FlagsHelper.IsFlagSet(Flags, 0))
+			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				AccessHash = reader.Read<long>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 1))
+			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
 				FirstName = reader.Read<string>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 2))
+			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
 				LastName = reader.Read<string>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 3))
+			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
 				Username = reader.Read<string>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 4))
+			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
 				Phone = reader.Read<string>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 5))
+			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				Photo = reader.Read<UserProfilePhotoBase>();
+				Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.UserProfilePhotoBase>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 6))
+			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
-				Status = reader.Read<UserStatusBase>();
+				Status = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.UserStatusBase>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 14))
+			if(FlagsHelper.IsFlagSet(Flags, 14))
 			{
 				BotInfoVersion = reader.Read<int>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 18))
+			if(FlagsHelper.IsFlagSet(Flags, 18))
 			{
-				RestrictionReason = reader.ReadVector<RestrictionReasonBase>();
+				RestrictionReason = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 19))
+			if(FlagsHelper.IsFlagSet(Flags, 19))
 			{
 				BotInlinePlaceholder = reader.Read<string>();
 			}
 
-			if (FlagsHelper.IsFlagSet(Flags, 22))
+			if(FlagsHelper.IsFlagSet(Flags, 22))
 			{
 				LangCode = reader.Read<string>();
 			}
+
+
 		}
 	}
 }

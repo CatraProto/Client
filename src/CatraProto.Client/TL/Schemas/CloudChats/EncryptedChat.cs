@@ -1,10 +1,14 @@
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class EncryptedChat : EncryptedChatBase
 	{
-		public static int ConstructorId { get; } = -94974410;
+
+
+        public static int ConstructorId { get; } = -94974410;
 		public override int Id { get; set; }
 		public long AccessHash { get; set; }
 		public int Date { get; set; }
@@ -13,17 +17,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public byte[] GAOrB { get; set; }
 		public long KeyFingerprint { get; set; }
 
-		public override void UpdateFlags()
+		public override void UpdateFlags() 
 		{
+
 		}
 
 		public override void Serialize(Writer writer)
 		{
-			if (ConstructorId != 0)
-			{
-				writer.Write(ConstructorId);
-			}
-
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(Id);
 			writer.Write(AccessHash);
 			writer.Write(Date);
@@ -31,6 +32,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			writer.Write(ParticipantId);
 			writer.Write(GAOrB);
 			writer.Write(KeyFingerprint);
+
 		}
 
 		public override void Deserialize(Reader reader)
@@ -42,6 +44,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ParticipantId = reader.Read<int>();
 			GAOrB = reader.Read<byte[]>();
 			KeyFingerprint = reader.Read<long>();
+
 		}
 	}
 }

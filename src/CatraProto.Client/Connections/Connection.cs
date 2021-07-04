@@ -4,8 +4,9 @@ using CatraProto.Client.Connections.Loop;
 using CatraProto.Client.Connections.Protocols.Interfaces;
 using CatraProto.Client.Connections.Protocols.TcpAbridged;
 using CatraProto.Client.MTProto;
-using CatraProto.Client.MTProto.Messages;
-using CatraProto.Client.MTProto.Rpc;
+using CatraProto.Client.MTProto.Auth;
+using CatraProto.Client.MTProto.AuthKeyHandler;
+using CatraProto.Client.MTProto.AuthKeyHandler.Results;
 using Serilog;
 
 namespace CatraProto.Client.Connections
@@ -17,28 +18,39 @@ namespace CatraProto.Client.Connections
             get => _session.MessageIdsHandler;
         }
 
+        public SessionData SessionData { get; }
         public MessagesDispatcher MessagesDispatcher { get; }
         public ConnectionInfo ConnectionInfo { get; }
         public MessagesHandler MessagesHandler { get; }
-        public IProtocol Protocol { get; }
+        public IProtocol Protocol { get; private set; }
+
         private ILogger _logger;
         private ReadLoop _readLoop;
         private Session _session;
         private WriteLoop _writeLoop;
+        private ConnectionProtocol _protocolType;
 
-        public Connection(Session session, ConnectionInfo connectionInfo,
-            ConnectionProtocol protocol = ConnectionProtocol.TcpAbridged)
+        public Connection(Session session, ConnectionInfo connectionInfo, ConnectionProtocol protocolType)
         {
             _logger = session.Logger.ForContext<Connection>();
             _session = session;
             MessagesHandler = new MessagesHandler(_logger);
             MessagesDispatcher = new MessagesDispatcher(MessagesHandler, _logger);
+            SessionData = new SessionData
+            {
+                AuthKey = new AuthKey(new Api(MessagesHandler), _logger, -1)
+            };
             ConnectionInfo = connectionInfo;
-            switch (protocol)
+            _protocolType = protocolType;
+            Protocol = CreateProtocol();
+        }
+
+        private IProtocol CreateProtocol()
+        {
+            switch (_protocolType)
             {
                 case ConnectionProtocol.TcpAbridged:
-                    Protocol = new Abridged(connectionInfo, _logger);
-                    break;
+                    return new Abridged(ConnectionInfo, _logger);
                 default:
                     throw new NotSupportedException("Protocol not supported");
             }
@@ -46,44 +58,36 @@ namespace CatraProto.Client.Connections
 
         public async Task ConnectAsync()
         {
-            if (Protocol.IsConnected)
-            {
-                _logger.Debug("Trying to connect but we are already connected");
-                return;
-            }
-
-            _logger.Information("Connecting to {Connection}...", ConnectionInfo);
-
-            //For the future: it would be a great to pass a cancellation token here, so that if the clients gets closed
-            //before establishing a connection it will stop instead of trying again and again
             while (true)
             {
                 try
                 {
+                    _logger.Information("Trying to connect to {Connection}", ConnectionInfo);
                     await Protocol.ConnectAsync();
                     await StartLoops();
+                    
+                    if (SessionData.AuthKey.RawAuthKey == null)
+                    {
+                        var authKey = await SessionData.AuthKey.ComputeAuthKey();
+                        SessionData.Salt = BitConverter.ToInt64(((AuthKeySuccess)authKey).ServerSalt);
+                    }
                     break;
                 }
                 catch (Exception e)
                 {
-                    _logger.Debug("Error: {Message}", e.Message);
-                    _logger.Error("An error occurred while connecting, trying again in 3 seconds...");
+                    _logger.Error("Couldn't connect due to {Message}, trying again in 3 seconds", e.Message);
                     await Task.Delay(3000);
                 }
             }
 
-            _logger.Information("Connected to {Connection}", ConnectionInfo);
-        }
 
-        public Task<Task> SendObjectAsync(OutgoingMessage message, IRpcMessage rpcResponse)
-        {
-            return MessagesHandler.EnqueueMessage(message, rpcResponse);
+            _logger.Information("Connected to {Connection}", ConnectionInfo);
         }
 
         private async Task StartLoops()
         {
-            _writeLoop ??= new WriteLoop(this, MessagesHandler, _logger);
-            _readLoop ??= new ReadLoop(this, MessagesHandler, _logger);
+            _writeLoop ??= new WriteLoop(this, _logger);
+            _readLoop ??= new ReadLoop(this, _logger);
 
             await _writeLoop.StartAsync();
             await _readLoop.StartAsync();

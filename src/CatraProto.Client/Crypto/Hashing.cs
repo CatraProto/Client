@@ -7,7 +7,7 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.Crypto
 {
-    class Hashing
+    static class Hashing
     {
         public static byte[] ComputeDataHashedFilling(IObject obj, IObjectProvider provider, int length = 255)
         {
@@ -27,12 +27,12 @@ namespace CatraProto.Client.Crypto
         {
             using var ms = InternalComputeHash(obj, provider);
 
-            if (ms.Length % 16 == 0)
+            if (ms.Length % padding == 0)
             {
                 return ms.ToArray();
             }
 
-            var b = new byte[16 - ms.Length % 16];
+            var b = new byte[padding - ms.Length % padding];
             new Random().NextBytes(b);
             ms.Write(b);
 

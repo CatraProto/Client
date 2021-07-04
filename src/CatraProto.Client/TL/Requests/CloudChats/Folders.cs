@@ -1,62 +1,60 @@
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections;
 using CatraProto.Client.MTProto.Messages;
 using CatraProto.Client.MTProto.Rpc;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using CatraProto.Client.TL.Schemas.CloudChats.Folders;
+using CatraProto.TL.Interfaces;
+using System.Collections.Generic;
+using System.Numerics;
 
 namespace CatraProto.Client.TL.Requests.CloudChats
 {
 	public partial class Folders
 	{
-		private MessagesHandler _messagesHandler;
-
-		internal Folders(MessagesHandler messagesHandler)
+		
+	    private MessagesHandler _messagesHandler;
+	    internal Folders(MessagesHandler messagesHandler)
+	    {
+	        _messagesHandler = messagesHandler;
+	        
+	    }
+	    
+	    		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> EditPeerFoldersAsync(List<CatraProto.Client.TL.Schemas.CloudChats.InputFolderPeerBase> folderPeers, CancellationToken cancellationToken = default)
 		{
-			_messagesHandler = messagesHandler;
-		}
+			if(folderPeers is null) throw new ArgumentNullException(nameof(folderPeers));
 
-		public async Task<RpcMessage<UpdatesBase>> EditPeerFoldersAsync(List<InputFolderPeerBase> folderPeers,
-			CancellationToken cancellationToken = default)
-		{
-			if (folderPeers is null)
+			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>();
+			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Folders.EditPeerFolders()
 			{
-				throw new ArgumentNullException(nameof(folderPeers));
-			}
-
-			var rpcResponse = new RpcMessage<UpdatesBase>();
-			var methodBody = new EditPeerFolders
-			{
-				FolderPeers = folderPeers
+				FolderPeers = folderPeers,
 			};
 
 			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-			{
-				Body = methodBody,
-				CancellationToken = cancellationToken,
-				IsEncrypted = true
-			}, rpcResponse);
+				{
+					Body = methodBody,
+					CancellationToken = cancellationToken,
+					IsEncrypted = true
+				}, rpcResponse);
 			return rpcResponse;
 		}
-
-		public async Task<RpcMessage<UpdatesBase>> DeleteFolderAsync(int folderId, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> DeleteFolderAsync(int folderId, CancellationToken cancellationToken = default)
 		{
-			var rpcResponse = new RpcMessage<UpdatesBase>();
-			var methodBody = new DeleteFolder
+			
+			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>();
+			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Folders.DeleteFolder()
 			{
-				FolderId = folderId
+				FolderId = folderId,
 			};
 
 			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-			{
-				Body = methodBody,
-				CancellationToken = cancellationToken,
-				IsEncrypted = true
-			}, rpcResponse);
+				{
+					Body = methodBody,
+					CancellationToken = cancellationToken,
+					IsEncrypted = true
+				}, rpcResponse);
 			return rpcResponse;
 		}
+
 	}
 }

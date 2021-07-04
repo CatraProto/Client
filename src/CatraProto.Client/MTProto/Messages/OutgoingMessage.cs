@@ -12,7 +12,6 @@ namespace CatraProto.Client.MTProto.Messages
         };
 
         public CancellationToken CancellationToken { get; set; }
-
         public bool IsEncrypted { get; set; }
         public IObject Body { get; set; }
     }
