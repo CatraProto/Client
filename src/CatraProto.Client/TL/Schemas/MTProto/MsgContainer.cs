@@ -2,6 +2,7 @@ using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using System.Collections.Generic;
 using CatraProto.Client.TL.Schemas.MTProto;
+using CatraProto.TL.ObjectDeserializers;
 
 
 namespace CatraProto.Client.TL.Schemas.MTProto
@@ -11,7 +12,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
 
         public static int ConstructorId { get; } = 1945237724;
-		public override IList<CatraProto.Client.TL.Schemas.MTProto.MessageBase> Messages { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.MTProto.Message> Messages { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -27,7 +28,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
 		public override void Deserialize(Reader reader)
 		{
-			Messages = reader.ReadVector<CatraProto.Client.TL.Schemas.MTProto.MessageBase>(() => {var instance = (CatraProto.Client.TL.Schemas.MTProto.MessageBase)new CatraProto.Client.TL.Schemas.MTProto.Message(); instance.Deserialize(reader); return instance;});
+			Messages = reader.ReadVector(new NakedObjectDeserializer<Message>(), true);
 
 		}
 	}

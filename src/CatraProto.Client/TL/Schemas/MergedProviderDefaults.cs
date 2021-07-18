@@ -1,14 +1,29 @@
 using System;
+using CatraProto.Client.MTProto.Rpc;
 using CatraProto.Client.TL.Schemas.CloudChats;
+using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas
 {
-    partial class MergedProvider : IObjectProvider
+    partial class MergedProvider : ObjectProvider
     {
         public static readonly MergedProvider Singleton = new MergedProvider();
-        public Type BoolTrue { get; init; } = typeof(BoolFalse);
-        public Type BoolFalse { get; init; } = typeof(BoolFalse);
-        public int VectorId { get; init; } = 481674261;
+        public override Type BoolTrue { get; init; } = typeof(BoolFalse);
+        public override Type BoolFalse { get; init; } = typeof(BoolFalse);
+        public override int VectorId { get; init; } = 481674261;
+        
+        protected override bool InternalResolveConstructorId(int constructorId, out IObject obj)
+        {
+            switch (constructorId)
+            {
+                case -212046591:
+                    obj = new RpcObject();
+                    return true;
+            }
+
+            obj = null;
+            return false;
+        }
     }
 }

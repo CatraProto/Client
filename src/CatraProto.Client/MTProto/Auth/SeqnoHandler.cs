@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL.Interfaces;
 using Serilog;
 
@@ -8,37 +5,36 @@ namespace CatraProto.Client.MTProto.Auth
 {
     class SeqnoHandler
     {
-        private static List<Type> _notContentRelatedMessages = new List<Type>()
-        {
-            typeof(MsgsAck),
-            typeof(Ping),
-            typeof(MsgContainer)
-        };
-
-        private int _contentRelatedSent = 0;
+        public int ContentRelatedReceived { get; set; }
+        public int ContentRelatedSent { get; set; }
         private ILogger _logger;
-        public SeqnoHandler()
+
+        public SeqnoHandler(ILogger logger, int clientInitialState = 0, int serverInitialState = 0)
         {
-            //_logger = logger.ForContext<SeqnoHandler>();
+            _logger = logger.ForContext<SeqnoHandler>();
+            ContentRelatedReceived = clientInitialState;
+            ContentRelatedSent = serverInitialState;
         }
 
-        public bool IsContentRelated(IObject obj)
+        public int ComputeSeqno(IObject obj, bool computeServer = false)
         {
-            return !_notContentRelatedMessages.Contains(obj.GetType());
-        }
+            var side = computeServer ? "server" : "client";
+            var add = AcknowledgementHandler.IsContentRelated(obj) ? 1 : 0;
+            var currentSeqno = computeServer ? ContentRelatedReceived : ContentRelatedSent;
+            var computedNewSeqno = currentSeqno * 2 + add;
+            var newSeqno = currentSeqno + add;
 
-        public int ComputeSeqno(IObject obj)
-        {
-            var seqno = _contentRelatedSent * 2;
-            if (!IsContentRelated(obj))
+            if (computeServer)
             {
-                return seqno;
+                ContentRelatedReceived = newSeqno;
+            }
+            else
+            {
+                ContentRelatedSent = newSeqno;
             }
 
-            _contentRelatedSent++;
-            seqno++;
-
-            return seqno;
+            _logger.Verbose("Computed {Side} seqno for object {Obj}, new value is {NSeqno}", side, obj, computedNewSeqno);
+            return computedNewSeqno;
         }
     }
 }

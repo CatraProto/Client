@@ -1,82 +1,98 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using CatraProto.Client.Connections.Exceptions;
 using CatraProto.Client.Connections.Messages;
 using CatraProto.Client.Extensions;
+using CatraProto.Client.MTProto.Messages.Interfaces;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.TL;
 using Serilog;
+using IMessage = CatraProto.Client.Connections.Messages.Interfaces.IMessage;
 
 namespace CatraProto.Client.Connections.Loop
 {
     class ReadLoop : Async.Loops.Loop
     {
         private readonly CancellationTokenSource _cancellationToken = new CancellationTokenSource();
-        private readonly Connection _connection;
+        private ConnectionState _connectionState; 
+        private Connection _connection;
         private ILogger _logger;
 
         public ReadLoop(Connection connection, ILogger logger)
         {
             _logger = logger.ForContext<ReadLoop>();
             _connection = connection;
+            _connectionState = connection.ConnectionState;
         }
 
         private async Task Loop()
         {
-            _logger.Information("Listening for incoming messages from {Connection}...", _connection.ConnectionInfo);
             var protocol = _connection.Protocol;
+            _logger.Information("Listening for incoming messages from {Connection}...", _connection.ConnectionInfo);
             while (!_cancellationToken.IsCancellationRequested)
             {
                 try
                 {
                     var message = await protocol.Reader.ReadMessageAsync(_cancellationToken.Token);
+                    _connection.StateSignaler.SetSignal(false);
                     using var reader = new Reader(MergedProvider.Singleton, message.ToMemoryStream());
-                    if (message.Length == 0)
+
+                    switch (message.Length)
                     {
-                        _logger.Error("Received 0 bytes from server");
-                        continue;
-                    }
-                    
-                    if (message.Length == 4)
-                    {
-                        _connection.MessagesDispatcher.DispatchMessage(new UnencryptedMessage
-                        {
-                            Body = message
-                        });
-                        continue;
+                        case 0:
+                            _logger.Error("Received 0 bytes from server");
+                            continue;
+                        case 4:
+                            _connectionState.MessagesDispatcher.DispatchMessage(new UnencryptedMessage { Body = message });
+                            _connection.StateSignaler.SetSignal(true);
+                            continue;
                     }
 
-                    var authKey = reader.Read<long>();
-                    if (authKey == 0)
+                    var authKeyId = reader.Read<long>();
+                    IMessage imported;
+                    if (authKeyId == 0)
                     {
-                        var imported = new UnencryptedMessage(message);
-                        _logger.Information(
-                            "Received an unencrypted message from Telegram, dispatching... Id: {MessageId}, Body Length: {Length}",
-                            imported.MessageId, imported.Body.Length);
-                        _connection.MessagesDispatcher.DispatchMessage(imported);
+                        imported = new UnencryptedMessage(message);
                     }
                     else
                     {
-                        var imported = new EncryptedMessage(_connection.SessionData.AuthKey, message);
-                        _logger.Information(
-                            "Received an encrypted message from Telegram, dispatching... Id: {MessageId}, Body Length: {Length}",
-                            imported.MessageId, imported.Body.Length);
-                        _connection.MessagesDispatcher.DispatchMessage(imported);
+                        var getAuthKey = await _connection.ConnectionState.TemporaryAuthKey.GetAuthKeyAsync(onlyCached: true);
+                        if (authKeyId == getAuthKey.AuthKeyId)
+                        {
+                            imported = new EncryptedMessage(getAuthKey, message);
+                        }
+                        else
+                        {
+                            _logger.Error("Received a message from an unknown AuthKeyId ({Id})", authKeyId);
+                            continue;
+                        }
                     }
+
+                    _connectionState.MessagesDispatcher.DispatchMessage(imported);
+                    _connection.StateSignaler.SetSignal(true);
+                }
+                catch (OperationCanceledException e) when (e.CancellationToken == _cancellationToken.Token)
+                {
+                    //Ignored on purpose
+                }
+                catch (ConnectionClosedException)
+                {
+                    await _connection.ConnectAsync();
                 }
                 catch (Exception e)
                 {
-                    _logger.Error(e, "Unexpected exception thrown");
+                    _logger.Error(e, "Exception thrown on ReadLoop for {Info}", _connection.ConnectionInfo);
+                    break;
                 }
             }
 
-            _logger.Information("ReadLoop shutdown");
+            _logger.Information("ReadLoop for connection {Info} shutdown", _connection.ConnectionInfo);
             SetLoopStopped();
         }
 
         protected override void StopSignal()
         {
-            _logger.Information("Requesting ReadLoop shutdown");
             _cancellationToken.Cancel();
         }
 

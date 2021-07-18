@@ -4,7 +4,7 @@ using System.Numerics;
 using CatraProto.Client.Crypto.Aes;
 using CatraProto.Client.Extensions;
 
-namespace CatraProto.Client.Crypto
+namespace CatraProto.Client.Crypto.KeyExchange
 {
     class KeyExchangeTools
     {

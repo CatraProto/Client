@@ -8,7 +8,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 {
     public abstract class MessageContainerBase : IObject
     {
-		public abstract IList<CatraProto.Client.TL.Schemas.MTProto.MessageBase> Messages { get; set; }
+		public abstract IList<CatraProto.Client.TL.Schemas.MTProto.Message> Messages { get; set; }
 
         public abstract void UpdateFlags();
         public abstract void Deserialize(Reader reader);

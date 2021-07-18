@@ -9,7 +9,7 @@ namespace CatraProto.Client.Crypto
 {
     static class Hashing
     {
-        public static byte[] ComputeDataHashedFilling(IObject obj, IObjectProvider provider, int length = 255)
+        public static byte[] ComputeDataHashedFilling(IObject obj, ObjectProvider provider, int length = 255)
         {
             using var ms = InternalComputeHash(obj, provider);
 
@@ -23,7 +23,7 @@ namespace CatraProto.Client.Crypto
             return ms.ToArray();
         }
 
-        public static byte[] ComputeDataHashedPadding(IObject obj, IObjectProvider provider, int padding = 16)
+        public static byte[] ComputeDataHashedPadding(IObject obj, ObjectProvider provider, int padding = 16)
         {
             using var ms = InternalComputeHash(obj, provider);
 
@@ -39,7 +39,7 @@ namespace CatraProto.Client.Crypto
             return ms.ToArray();
         }
 
-        private static MemoryStream InternalComputeHash(IObject obj, IObjectProvider provider)
+        private static MemoryStream InternalComputeHash(IObject obj, ObjectProvider provider)
         {
             var ms = new MemoryStream();
 

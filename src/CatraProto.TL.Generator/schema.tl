@@ -1565,6 +1565,7 @@ msgs_state_info#04deb57d req_msg_id:long info:bytes = MsgsStateInfo;
 msgs_all_info#8cc0d131 msg_ids:Vector<long> info:bytes = MsgsAllInfo;
 msg_detailed_info#276d3ec6 msg_id:long answer_msg_id:long bytes:int status:int = MsgDetailedInfo;
 msg_new_detailed_info#809db6df answer_msg_id:long bytes:int status:int = MsgDetailedInfo;
+bind_auth_key_inner#75a3f765 nonce:long temp_auth_key_id:long perm_auth_key_id:long temp_session_id:long expires_at:int = BindAuthKeyInner;
 
 ---functions---
 -/-returnsUnencrypted-/-

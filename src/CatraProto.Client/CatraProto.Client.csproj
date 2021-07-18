@@ -17,6 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <InternalsVisibleTo Include="CatraProto.Start" />
         <InternalsVisibleTo Include="CatraProto.Client.UnitTests" />
         <InternalsVisibleTo Include="CatraProto.Client.Benchmark" />
         <ProjectReference Include="..\CatraProto.TL\CatraProto.TL.csproj" />

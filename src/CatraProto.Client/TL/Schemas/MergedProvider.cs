@@ -6,10 +6,14 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas
 {
-    partial class MergedProvider : IObjectProvider
+    partial class MergedProvider : ObjectProvider
     {
-        public IObject ResolveConstructorId(int constructorId)
+        public override IObject ResolveConstructorId(int constructorId)
         {
+        	if (InternalResolveConstructorId(constructorId, out var obj))
+            {
+                return obj;
+        	}
 			switch (constructorId)
 			{
 				case -1132882121:
@@ -2474,6 +2478,8 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.MTProto.MsgDetailedInfo();
 				case -2137147681:
 					return new CatraProto.Client.TL.Schemas.MTProto.MsgNewDetailedInfo();
+				case 1973679973:
+					return new CatraProto.Client.TL.Schemas.MTProto.BindAuthKeyInner();
 				case 1615239032:
 					return new CatraProto.Client.TL.Schemas.MTProto.ReqPq();
 				case -1099002127:

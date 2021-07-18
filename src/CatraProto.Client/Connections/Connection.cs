@@ -1,46 +1,29 @@
 ﻿using System;
 using System.Threading.Tasks;
+using CatraProto.Client.Async.Signalers;
 using CatraProto.Client.Connections.Loop;
 using CatraProto.Client.Connections.Protocols.Interfaces;
 using CatraProto.Client.Connections.Protocols.TcpAbridged;
-using CatraProto.Client.MTProto;
-using CatraProto.Client.MTProto.Auth;
-using CatraProto.Client.MTProto.AuthKeyHandler;
-using CatraProto.Client.MTProto.AuthKeyHandler.Results;
 using Serilog;
 
 namespace CatraProto.Client.Connections
 {
-    class Connection : IDisposable
+    class Connection
     {
-        public MessageIdsHandler MessageIdsHandler
-        {
-            get => _session.MessageIdsHandler;
-        }
-
-        public SessionData SessionData { get; }
-        public MessagesDispatcher MessagesDispatcher { get; }
+        public AsyncStateSignaler StateSignaler { get; } = new AsyncStateSignaler(true);
+        public ConnectionState ConnectionState { get; set; }
         public ConnectionInfo ConnectionInfo { get; }
-        public MessagesHandler MessagesHandler { get; }
-        public IProtocol Protocol { get; private set; }
-
+        public IProtocol Protocol { get; }
         private ILogger _logger;
         private ReadLoop _readLoop;
-        private Session _session;
         private WriteLoop _writeLoop;
         private ConnectionProtocol _protocolType;
 
-        public Connection(Session session, ConnectionInfo connectionInfo, ConnectionProtocol protocolType)
+        public Connection(ConnectionInfo connectionInfo, ConnectionState connectionState, ConnectionProtocol protocolType, ILogger logger)
         {
-            _logger = session.Logger.ForContext<Connection>();
-            _session = session;
-            MessagesHandler = new MessagesHandler(_logger);
-            MessagesDispatcher = new MessagesDispatcher(MessagesHandler, _logger);
-            SessionData = new SessionData
-            {
-                AuthKey = new AuthKey(new Api(MessagesHandler), _logger, -1)
-            };
+            _logger = logger.ForContext<Connection>();
             ConnectionInfo = connectionInfo;
+            ConnectionState = connectionState;
             _protocolType = protocolType;
             Protocol = CreateProtocol();
         }
@@ -58,19 +41,18 @@ namespace CatraProto.Client.Connections
 
         public async Task ConnectAsync()
         {
+            if (ConnectionState == null)
+            {
+                throw new Exception("A connection state must be provided before connecting");
+            }
+            
             while (true)
             {
                 try
                 {
-                    _logger.Information("Trying to connect to {Connection}", ConnectionInfo);
+                    _logger.Information("Connecting to {Connection}", ConnectionInfo);
                     await Protocol.ConnectAsync();
                     await StartLoops();
-                    
-                    if (SessionData.AuthKey.RawAuthKey == null)
-                    {
-                        var authKey = await SessionData.AuthKey.ComputeAuthKey();
-                        SessionData.Salt = BitConverter.ToInt64(((AuthKeySuccess)authKey).ServerSalt);
-                    }
                     break;
                 }
                 catch (Exception e)
@@ -91,11 +73,6 @@ namespace CatraProto.Client.Connections
 
             await _writeLoop.StartAsync();
             await _readLoop.StartAsync();
-        }
-
-        public void Dispose()
-        {
-            MessagesHandler?.Dispose();
         }
     }
 }

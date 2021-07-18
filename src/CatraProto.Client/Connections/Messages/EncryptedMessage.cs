@@ -7,7 +7,7 @@ using CatraProto.Client.Connections.Messages.Interfaces;
 using CatraProto.Client.Crypto;
 using CatraProto.Client.Crypto.Aes;
 using CatraProto.Client.Extensions;
-using CatraProto.Client.MTProto.AuthKeyHandler;
+using CatraProto.Client.MTProto.Auth.AuthKeyHandler;
 using CatraProto.TL;
 
 namespace CatraProto.Client.Connections.Messages
@@ -28,6 +28,11 @@ namespace CatraProto.Client.Connections.Messages
         public long MessageId { get; set; }
         public byte[] Body { get; set; }
 
+        public EncryptedMessage()
+        {
+            
+        }
+        
         public EncryptedMessage(AuthKey authKey)
         {
             _authKey = authKey;

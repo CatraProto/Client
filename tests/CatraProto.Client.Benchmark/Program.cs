@@ -1,4 +1,5 @@
-﻿using BenchmarkDotNet.Running;
+﻿using BenchmarkDotNet.Jobs;
+using BenchmarkDotNet.Running;
 using CatraProto.Client.Benchmark.Crypto;
 
 namespace CatraProto.Client.Benchmark

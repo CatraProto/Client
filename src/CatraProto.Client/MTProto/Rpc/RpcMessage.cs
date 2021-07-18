@@ -25,13 +25,16 @@ namespace CatraProto.Client.MTProto.Rpc
 
         public void SetResponse(object o)
         {
-            if (o is RpcError error)
+            switch (o)
             {
-                Error = ParseError(error);
-            }
-            else
-            {
-                Response = (T)o;
+                case null:
+                    return;
+                case RpcError error:
+                    Error = ParseError(error);
+                    break;
+                default:
+                    Response = (T)o;
+                    break;
             }
         }
     }

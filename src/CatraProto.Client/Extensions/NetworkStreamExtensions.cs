@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
+using CatraProto.Client.Connections.Exceptions;
 
 namespace CatraProto.Client.Extensions
 {
@@ -20,21 +21,25 @@ namespace CatraProto.Client.Extensions
             return BitConverter.ToInt32(bytes);
         }
 
-        public static async Task<byte[]> ReadBytesAsync(this NetworkStream stream, int count, int offset = 0,
-            CancellationToken cancellationToken = default)
+        public static async Task<byte[]> ReadBytesAsync(this NetworkStream stream, int count, CancellationToken cancellationToken = default)
         {
             var buffer = new byte[count];
-            await stream.ReadAsync(buffer.AsMemory(offset, count), cancellationToken);
+            var readCount = 0;
+            while (readCount != buffer.Length)
+            {
+                readCount += await stream.ReadAsync(buffer, readCount, count, cancellationToken);
+                if (readCount == 0)
+                {
+                    throw new ConnectionClosedException();
+                }
+            }
+
             return buffer;
         }
 
-        public static async Task<byte> ReadByte(this NetworkStream stream,
-            int offset = 0,
-            CancellationToken cancellationToken = default)
+        public static async Task<byte> ReadByte(this NetworkStream stream, CancellationToken cancellationToken = default)
         {
-            var buffer = new byte[1];
-            await stream.ReadAsync(buffer.AsMemory(offset, 1), cancellationToken);
-            return buffer[0];
+            return (await stream.ReadBytesAsync(1, cancellationToken: cancellationToken))[0];
         }
     }
 }

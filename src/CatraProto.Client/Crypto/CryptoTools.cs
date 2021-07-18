@@ -7,6 +7,13 @@ namespace CatraProto.Client.Crypto
 {
     static class CryptoTools
     {
+        public static long CreateRandomLong()
+        {
+            var random = new Random();
+            var bArray = new byte[8];
+            random.NextBytes(bArray);
+            return BitConverter.ToInt64(bArray);
+        }
         public static byte[] XorBlock(byte[] first, byte[] second)
         {
             if (first.Length != second.Length)

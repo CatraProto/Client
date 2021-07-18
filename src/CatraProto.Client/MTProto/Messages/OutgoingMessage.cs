@@ -8,7 +8,7 @@ namespace CatraProto.Client.MTProto.Messages
     {
         public MessageOptions MessageOptions { get; set; } = new MessageOptions
         {
-            ExpectsResponse = true
+            AwaiterType = AwaiterType.RpcResponse
         };
 
         public CancellationToken CancellationToken { get; set; }

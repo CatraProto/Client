@@ -23,19 +23,19 @@ namespace CatraProto.Client.Connections.Protocols.TcpAbridged
             var length = firstByte;
             if (length >= 0x7f)
             {
-                length = await _networkStream.ReadByte(0, token) |
-                         await _networkStream.ReadByte(0, token) << 8 |
-                         await _networkStream.ReadByte(0, token) << 16;
+                length = await _networkStream.ReadByte(token) |
+                         await _networkStream.ReadByte(token) << 8 |
+                         await _networkStream.ReadByte(token) << 16;
             }
 
             length *= 4;
-            _logger.Debug("Length is {Length}. First byte {Byte}", length, firstByte);
+            _logger.Information("Transport received a message of {Length} ({Byte})", length, firstByte);
             return length;
         }
 
         public async Task<byte[]> ReadMessageAsync(CancellationToken token = default)
         {
-            var firstByte = await _networkStream.ReadByte(0, token);
+            var firstByte = await _networkStream.ReadByte(token);
             var length = await GetMessageLength(firstByte, token);
             return await _networkStream.ReadBytesAsync(length, cancellationToken: token);
         }

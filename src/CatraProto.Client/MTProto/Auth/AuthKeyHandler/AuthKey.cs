@@ -2,53 +2,55 @@ using System;
 using System.Linq;
 using System.Numerics;
 using System.Security;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Security.Cryptography;
 using CatraProto.Client.Crypto;
 using CatraProto.Client.Crypto.Aes;
 using CatraProto.Client.Crypto.KeyExchange;
-using CatraProto.Client.MTProto.AuthKeyHandler.Results;
+using CatraProto.Client.MTProto.Auth.AuthKeyHandler.Results;
+using CatraProto.Client.MTProto.Session.Interfaces;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL;
 using Serilog;
 
-namespace CatraProto.Client.MTProto.AuthKeyHandler
+namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
 {
-    class AuthKey
+    class AuthKey : ISessionSerializer
     {
         public byte[] RawAuthKey { get; private set; }
         public long AuthKeyId { get; set; }
-        public bool IsPermanent { get; init; }
-
-        public DateTimeOffset? ExpiresIn
-        {
-            get => _expiresIn;
-        }
-
-        private DateTimeOffset _expiresIn;
-        private int _duration;
+        public long ServerSalt { get; private set; }
         private ILogger _logger;
         private Api _api;
 
-        public AuthKey(byte[] key, Api api, ILogger logger)
-        {
-        }
-
-        public AuthKey(Api api, ILogger logger, int duration)
+        public AuthKey(Api api, ILogger logger)
         {
             _logger = logger.ForContext<AuthKey>();
-            IsPermanent = duration < 0;
-            _duration = 0;
             _api = api;
         }
 
-        public async Task<AuthKeyResult> ComputeAuthKey(CancellationToken cancellationToken = default)
+        public void Read(Reader reader)
+        {
+            RawAuthKey = reader.Read<byte[]>();
+            AuthKeyId = reader.Read<long>();
+            ServerSalt = reader.Read<long>();
+        }
+
+        public void Save(Writer writer)
+        {
+            writer.Write(RawAuthKey);
+            writer.Write(AuthKeyId);
+            writer.Write(ServerSalt);
+        }
+        
+        public async Task<AuthKeyResult> ComputeAuthKey(int duration, CancellationToken cancellationToken = default)
         {
             try
             {
-                _logger.Information("Generating auth {Type} key", IsPermanent ? "permanent" : "temporary");
+                var isPermanent = duration <= 0;
+                _logger.Information("Generating auth {Type} key", isPermanent ? "permanent" : "temporary");
                 var nonce = CryptoTools.GenerateBigInt(128);
                 var reqPq = await _api.MtProtoApi.ReqPqMultiAsync(nonce, cancellationToken);
                 if (!reqPq.RpcCallFailed)
@@ -70,7 +72,7 @@ namespace CatraProto.Client.MTProto.AuthKeyHandler
                     var (p, q) = CryptoTools.GetFastPq(BitConverter.ToUInt64(pq.Reverse().ToArray()));
                     var newNonce = CryptoTools.GenerateBigInt(256);
 
-                    PQInnerDataBase toHash = IsPermanent ? new PQInnerData() : new PQInnerDataTemp { ExpiresIn = _duration };
+                    PQInnerDataBase toHash = isPermanent ? new PQInnerData() : new PQInnerDataTemp { ExpiresIn = duration };
                     toHash.Nonce = nonce;
                     toHash.ServerNonce = reqPq.Response.ServerNonce;
                     toHash.NewNonce = newNonce;
@@ -138,12 +140,12 @@ namespace CatraProto.Client.MTProto.AuthKeyHandler
                                         .ModPow(new BigInteger(zeroByte.Concat(serverDhInnerData.GA).ToArray(), isBigEndian: true), b, dhPrime)
                                         .ToByteArray(isBigEndian: true));
                                     AuthKeyId = BitConverter.ToInt64(SHA1.HashData(RawAuthKey).TakeLast(8).ToArray());
-                                    var serverSalt = KeyExchangeTools.ComputeServerSalt(serverNonce, newNonce);
+                                    ServerSalt = BitConverter.ToInt64(KeyExchangeTools.ComputeServerSalt(serverNonce, newNonce));
                                     
                                     _logger.Information(
                                         "Nonce and serverNonce match, AuthKey successfully generated. AuthKey: {Key} AuthKeyId: {Id} ServerSalt: {Salt}",
-                                        RawAuthKey, AuthKeyId, serverSalt);
-                                    return new AuthKeySuccess(serverSalt);
+                                        RawAuthKey, AuthKeyId, ServerSalt);
+                                    return new AuthKeySuccess();
                                 }
                                 else
                                 {
@@ -197,10 +199,10 @@ namespace CatraProto.Client.MTProto.AuthKeyHandler
                 throw new Exception("AuthKey must be generated first");
             }
 
-            var sha256a = SHA256.HashData(msgKey.Concat(RawAuthKey.Skip(x).Take(36)).ToArray());
-            var sha256b = SHA256.HashData(RawAuthKey.Skip(40 + x).Take(36).Concat(msgKey).ToArray());
-            var aesKey = sha256a.Take(8).Concat(sha256b.Skip(8).Take(16).Concat(sha256a.Skip(24).Take(8))).ToArray();
-            var aesIv = sha256b.Take(8).Concat(sha256a.Skip(8).Take(16).Concat(sha256b.Skip(24).Take(8))).ToArray();
+            var sha256A = SHA256.HashData(msgKey.Concat(RawAuthKey.Skip(x).Take(36)).ToArray());
+            var sha256B = SHA256.HashData(RawAuthKey.Skip(40 + x).Take(36).Concat(msgKey).ToArray());
+            var aesKey = sha256A.Take(8).Concat(sha256B.Skip(8).Take(16).Concat(sha256A.Skip(24).Take(8))).ToArray();
+            var aesIv = sha256B.Take(8).Concat(sha256A.Skip(8).Take(16).Concat(sha256B.Skip(24).Take(8))).ToArray();
             return new IgeEncryptor(aesKey, aesIv);
         }
     }

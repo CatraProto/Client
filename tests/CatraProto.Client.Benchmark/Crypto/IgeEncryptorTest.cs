@@ -4,6 +4,7 @@ using CatraProto.Client.Crypto.Aes;
 
 namespace CatraProto.Client.Benchmark.Crypto
 {
+	//Not really a test, it's just to have an idea
 	[MemoryDiagnoser]
 	public class IgeEncryptorTest
 	{
@@ -15,7 +16,7 @@ namespace CatraProto.Client.Benchmark.Crypto
 		{
 			var iv = new byte[32];
 			var key = new byte[16];
-			_payload = new byte[419432];
+			_payload = new byte[4155440];
 
 			var random = new Random();
 			random.NextBytes(iv);
@@ -35,7 +36,6 @@ namespace CatraProto.Client.Benchmark.Crypto
 		{
 			_encryptor.Decrypt(_payload);
 		}
-
 
 		[GlobalCleanup]
 		public void CleanUp()

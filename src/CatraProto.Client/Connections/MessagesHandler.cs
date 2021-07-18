@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using CatraProto.Client.Async.Locks;
 using CatraProto.Client.MTProto.Messages;
 using CatraProto.Client.MTProto.Rpc;
+using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL.Interfaces;
 using Serilog;
 
@@ -16,23 +17,18 @@ namespace CatraProto.Client.Connections
     {
         public int OutgoingCount
         {
-            get => _outgoingMessages.Reader.Count;
+            get => OutgoingMessages.Reader.Count;
         }
-
+        
+        public Channel<MessageContainer> OutgoingMessages { get; } = Channel.CreateUnbounded<MessageContainer>();
         private readonly ILogger _logger;
         private MessageContainer _oldMessage;
-        private Channel<MessageContainer> _outgoingMessages = Channel.CreateUnbounded<MessageContainer>();
         private ConcurrentDictionary<long, MessageContainer> _sentMessages = new ConcurrentDictionary<long, MessageContainer>();
         private AsyncLock _unencryptedMessagesLock = new AsyncLock();
 
         public MessagesHandler(ILogger logger)
         {
             _logger = logger.ForContext<MessagesHandler>();
-        }
-
-        public Task<MessageContainer> ListenAsync(CancellationToken cancellationToken)
-        {
-            return _outgoingMessages.Reader.ReadAsync(cancellationToken).AsTask();
         }
 
         public async Task<Task> EnqueueMessage(OutgoingMessage message, IRpcMessage rpcContainer)
@@ -48,7 +44,7 @@ namespace CatraProto.Client.Connections
             if (!message.IsEncrypted)
             {
                 //This deserves an explanation:
-                //UnencryptedMessages aren't identifiable by their MessageId since it is not persistent,
+                //UnencryptedMessages aren't identifiable by their message id since it is not persistent,
                 //therefore, the best way to complete the correct task is to send one message after the previous one received a response
                 _logger.Information("Enqueuing unencrypted message, acquiring lock...");
                 using (await _unencryptedMessagesLock.LockAsync())
@@ -63,14 +59,14 @@ namespace CatraProto.Client.Connections
                         }
                         finally
                         {
-                            _logger.Information("The old message received a response or got cancelled, proceeding to enqueue...");
+                            if (!_oldMessage.CompletionSource.Task.IsCompletedSuccessfully)
+                            {
+                                _logger.Information("The old message got cancelled, proceeding to enqueue...");
+                            } 
                         }
                     }
 
-                    if (message.MessageOptions.ExpectsResponse)
-                    {
-                        _oldMessage = messageContainer;
-                    }
+                    _oldMessage = messageContainer;
                 }
             }
 
@@ -85,9 +81,13 @@ namespace CatraProto.Client.Connections
 
             messageContainer.CancellationTokenRegistration =
                 message.CancellationToken.Register(() => DequeueMessage(messageContainer, message.CancellationToken));
-            _outgoingMessages.Writer.TryWrite(messageContainer);
-            _logger.Information("{Type} message enqueued successfully",
-                message.IsEncrypted ? "Encrypted" : "Unencrypted");
+            OutgoingMessages.Writer.TryWrite(messageContainer);
+            _logger.Information("{Type} message enqueued successfully", message.IsEncrypted ? "Encrypted" : "Unencrypted");
+            if (message.MessageOptions.AwaiterType == AwaiterType.WhenScheduled)
+            {
+                completionSource.TrySetResult();
+            }
+
             return completionSource.Task;
         }
 
@@ -110,49 +110,42 @@ namespace CatraProto.Client.Connections
             _sentMessages.TryRemove(messageKey, out _);
         }
 
-        public bool SetMessageCompletion(long messageId, object response)
+        public bool SetMessageResult(long messageId, object response)
         {
-            var isEncrypted = messageId != 0;
-            if (isEncrypted)
+            MessageContainer container;
+            if (messageId != 0)
             {
-                if (_sentMessages.TryRemove(messageId, out var container))
-                {
-                    container.RpcContainer.SetResponse(response);
-                    container.CancellationTokenRegistration.Unregister();
-                    container.CompletionSource.TrySetResult();
-                    _logger.Information("Completed task for message {Id}. Received: {Type}", messageId,
-                        response.ToString());
-                }
-                else
-                {
-                    _logger.Warning("Can't complete messageId {Id}. Message not found", messageId);
-                    return false;
-                }
+                _sentMessages.TryRemove(messageId, out container);
             }
             else
             {
-                if (_oldMessage != null)
-                {
-                    _oldMessage.RpcContainer.SetResponse(response);
-                    _oldMessage.CompletionSource.TrySetResult();
-                    _oldMessage.CancellationTokenRegistration.Unregister();
-                    _oldMessage = null;
-                    _logger.Information("Completed task for unencryptedMessage, received: {Type}", response.ToString());
-                }
-                else
-                {
-                    _logger.Warning("Can't complete unencrypted task, no old task was found. Received type: {Type}",
-                        response.ToString());
-                    return false;
-                }
+                container = _oldMessage;
+            }
+
+            if (container != null)
+            {
+                container.RpcContainer.SetResponse(response);
+                container.CancellationTokenRegistration.Unregister();
+                container.CompletionSource.TrySetResult();
+                _logger.Information("Received a message of type {Type} in reply to message {Id}", response, messageId);
+            }
+            else
+            {
+                _logger.Warning("Received a message of type {Type} but no message with id {Id} could be found", response, messageId);
+                return false;
             }
 
             return true;
         }
-
+        
         public bool AddSentMessage(long messageId, MessageContainer message)
         {
             return _sentMessages.TryAdd(messageId, message);
+        }
+
+        public bool RemoveSentMessage(long messageId, out MessageContainer message)
+        {
+            return _sentMessages.TryRemove(messageId, out message);
         }
 
         public bool GetMethod(long messageId, out IMethod method)
@@ -178,12 +171,12 @@ namespace CatraProto.Client.Connections
                 }
                 else
                 {
-                    _logger.Warning("Requested messageId {Id} is not a method", messageId);
+                    _logger.Error("Found message {Id} but it is not a method", messageId);
                 }
             }
             else
             {
-                _logger.Warning("Couldn't find messageId {Id}", messageId);
+                _logger.Error("Couldn't find messageId in the list of sent messages {Id}", messageId);
             }
 
             method = null;

@@ -2,6 +2,7 @@ using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using System.Collections.Generic;
 using CatraProto.Client.TL.Schemas.MTProto;
+using CatraProto.TL.ObjectDeserializers;
 
 
 namespace CatraProto.Client.TL.Schemas.MTProto
@@ -13,7 +14,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
         public static int ConstructorId { get; } = -1370486635;
 		public override long ReqMsgId { get; set; }
 		public override int Now { get; set; }
-		public override IList<CatraProto.Client.TL.Schemas.MTProto.FutureSaltBase> Salts { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.MTProto.FutureSalt> Salts { get; set; }
 
 		public override void UpdateFlags() 
 		{
@@ -33,7 +34,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 		{
 			ReqMsgId = reader.Read<long>();
 			Now = reader.Read<int>();
-			Salts = reader.ReadVector<CatraProto.Client.TL.Schemas.MTProto.FutureSaltBase>();
+			Salts = reader.ReadVector(new NakedObjectDeserializer<FutureSalt>(), true);
 
 		}
 	}

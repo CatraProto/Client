@@ -6,10 +6,14 @@ using CatraProto.TL.Interfaces;
 
 namespace ^Namespace^
 {
-    partial class ^ProviderName^ : IObjectProvider
+    partial class ^ProviderName^ : ObjectProvider
     {
-        public IObject ResolveConstructorId(int constructorId)
+        public override IObject ResolveConstructorId(int constructorId)
         {
+        	if (InternalResolveConstructorId(constructorId, out var obj))
+            {
+                return obj;
+        	}
 ^Switch^
             
             return null;

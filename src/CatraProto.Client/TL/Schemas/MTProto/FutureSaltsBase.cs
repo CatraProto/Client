@@ -10,7 +10,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
     {
 		public abstract long ReqMsgId { get; set; }
 		public abstract int Now { get; set; }
-		public abstract IList<CatraProto.Client.TL.Schemas.MTProto.FutureSaltBase> Salts { get; set; }
+		public abstract IList<CatraProto.Client.TL.Schemas.MTProto.FutureSalt> Salts { get; set; }
 
         public abstract void UpdateFlags();
         public abstract void Deserialize(Reader reader);

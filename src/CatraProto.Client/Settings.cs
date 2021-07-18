@@ -1,13 +1,23 @@
-﻿namespace CatraProto.Client
+﻿using System;
+
+namespace CatraProto.Client
 {
     public class Settings
     {
         public string DatacenterAddress { get; set; } = "149.154.167.51";
         public string SessionName { get; init; }
-
-        public Settings(string sessionName)
+        public string SessionPath { get; init; }
+        public Settings(string sessionName, string sessionPath = null)
         {
-            SessionName = sessionName;
+            if (sessionName == null) throw new ArgumentNullException(nameof(sessionName));
+            if (sessionPath == null)
+            {
+                SessionPath = sessionName + ".catra";
+            }
+            else
+            {
+                SessionPath = sessionPath;
+            }
         }
     }
 }

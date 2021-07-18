@@ -9,15 +9,15 @@ namespace CatraProto.TL
 {
 	public class Writer : IDisposable
 	{
-		private IObjectProvider _provider;
+		private ObjectProvider _provider;
 
 		private BinaryWriter _writer;
 
-		public Writer(IObjectProvider provider, Stream stream, bool leaveOpen = false) : this(provider, stream, Encoding.UTF8, leaveOpen)
+		public Writer(ObjectProvider provider, Stream stream, bool leaveOpen = false) : this(provider, stream, Encoding.UTF8, leaveOpen)
 		{
 		}
 
-		public Writer(IObjectProvider provider, Stream stream, Encoding encoding, bool leaveOpen = false)
+		public Writer(ObjectProvider provider, Stream stream, Encoding encoding, bool leaveOpen = false)
 		{
 			_provider = provider;
 			_writer = new BinaryWriter(stream, encoding, leaveOpen);
@@ -43,6 +43,7 @@ namespace CatraProto.TL
 			{
 				throw new SerializationException($"{nameof(value)} is null", SerializationException.SerializationErrors.ValueNull);
 			}
+			
 			switch (value)
 			{
 				case int i:
@@ -119,10 +120,15 @@ namespace CatraProto.TL
 				_writer.Write((byte)0);
 			}
 		}
-
+		
 		public void Write<T>(IList<T> list)
 		{
 			Write(_provider.VectorId);
+			WriteNakedVector(list);
+		}
+		
+		public void WriteNakedVector<T>(IList<T> list)
+		{
 			Write(list.Count);
 			foreach (var element in list)
 			{
