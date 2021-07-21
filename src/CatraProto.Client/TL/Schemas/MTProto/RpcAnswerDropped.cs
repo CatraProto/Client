@@ -1,18 +1,29 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class RpcAnswerDropped : RpcDropAnswerBase
+	public partial class RpcAnswerDropped : CatraProto.Client.TL.Schemas.MTProto.RpcDropAnswerBase
 	{
 
 
-        public static int ConstructorId { get; } = -1539647305;
+        public static int StaticConstructorId { get => -1539647305; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("msg_id")]
 		public long MsgId { get; set; }
+
+[JsonPropertyName("seq_no")]
 		public int SeqNo { get; set; }
+
+[JsonPropertyName("bytes")]
 		public int Bytes { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

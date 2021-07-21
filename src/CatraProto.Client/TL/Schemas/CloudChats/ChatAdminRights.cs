@@ -1,11 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChatAdminRights : ChatAdminRightsBase
+	public partial class ChatAdminRights : CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -22,19 +23,44 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ManageCall = 1 << 11
 		}
 
-        public static int ConstructorId { get; } = 1605510357;
+        public static int StaticConstructorId { get => 1605510357; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("change_info")]
 		public override bool ChangeInfo { get; set; }
+
+[JsonPropertyName("post_messages")]
 		public override bool PostMessages { get; set; }
+
+[JsonPropertyName("edit_messages")]
 		public override bool EditMessages { get; set; }
+
+[JsonPropertyName("delete_messages")]
 		public override bool DeleteMessages { get; set; }
+
+[JsonPropertyName("ban_users")]
 		public override bool BanUsers { get; set; }
+
+[JsonPropertyName("invite_users")]
 		public override bool InviteUsers { get; set; }
+
+[JsonPropertyName("pin_messages")]
 		public override bool PinMessages { get; set; }
+
+[JsonPropertyName("add_admins")]
 		public override bool AddAdmins { get; set; }
+
+[JsonPropertyName("anonymous")]
 		public override bool Anonymous { get; set; }
+
+[JsonPropertyName("manage_call")]
 		public override bool ManageCall { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = ChangeInfo ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

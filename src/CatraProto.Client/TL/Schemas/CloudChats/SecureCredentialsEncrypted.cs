@@ -1,18 +1,29 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class SecureCredentialsEncrypted : SecureCredentialsEncryptedBase
+	public partial class SecureCredentialsEncrypted : CatraProto.Client.TL.Schemas.CloudChats.SecureCredentialsEncryptedBase
 	{
 
 
-        public static int ConstructorId { get; } = 871426631;
+        public static int StaticConstructorId { get => 871426631; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("data")]
 		public override byte[] Data { get; set; }
+
+[JsonPropertyName("hash")]
 		public override byte[] Hash { get; set; }
+
+[JsonPropertyName("secret")]
 		public override byte[] Secret { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

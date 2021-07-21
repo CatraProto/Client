@@ -1,16 +1,23 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class SecurePlainEmail : SecurePlainDataBase
+	public partial class SecurePlainEmail : CatraProto.Client.TL.Schemas.CloudChats.SecurePlainDataBase
 	{
 
 
-        public static int ConstructorId { get; } = 569137759;
+        public static int StaticConstructorId { get => 569137759; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("email")]
 		public string Email { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

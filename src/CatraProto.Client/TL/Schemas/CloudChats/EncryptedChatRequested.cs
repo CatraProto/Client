@@ -1,11 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class EncryptedChatRequested : EncryptedChatBase
+	public partial class EncryptedChatRequested : CatraProto.Client.TL.Schemas.CloudChats.EncryptedChatBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -13,16 +14,35 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			FolderId = 1 << 0
 		}
 
-        public static int ConstructorId { get; } = 1651608194;
+        public static int StaticConstructorId { get => 1651608194; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("folder_id")]
 		public int? FolderId { get; set; }
+
+[JsonPropertyName("id")]
 		public override int Id { get; set; }
+
+[JsonPropertyName("access_hash")]
 		public long AccessHash { get; set; }
+
+[JsonPropertyName("date")]
 		public int Date { get; set; }
+
+[JsonPropertyName("admin_id")]
 		public int AdminId { get; set; }
+
+[JsonPropertyName("participant_id")]
 		public int ParticipantId { get; set; }
+
+[JsonPropertyName("g_a")]
 		public byte[] GA { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = FolderId == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);

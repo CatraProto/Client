@@ -1,13 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using System.Collections.Generic;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class Channel : ChatBase
+	public partial class Channel : CatraProto.Client.TL.Schemas.CloudChats.ChatBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -35,35 +34,92 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ParticipantsCount = 1 << 17
 		}
 
-        public static int ConstructorId { get; } = -753232354;
+        public static int StaticConstructorId { get => -753232354; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("creator")]
 		public bool Creator { get; set; }
+
+[JsonPropertyName("left")]
 		public bool Left { get; set; }
+
+[JsonPropertyName("broadcast")]
 		public bool Broadcast { get; set; }
+
+[JsonPropertyName("verified")]
 		public bool Verified { get; set; }
+
+[JsonPropertyName("megagroup")]
 		public bool Megagroup { get; set; }
+
+[JsonPropertyName("restricted")]
 		public bool Restricted { get; set; }
+
+[JsonPropertyName("signatures")]
 		public bool Signatures { get; set; }
+
+[JsonPropertyName("min")]
 		public bool Min { get; set; }
+
+[JsonPropertyName("scam")]
 		public bool Scam { get; set; }
+
+[JsonPropertyName("has_link")]
 		public bool HasLink { get; set; }
+
+[JsonPropertyName("has_geo")]
 		public bool HasGeo { get; set; }
+
+[JsonPropertyName("slowmode_enabled")]
 		public bool SlowmodeEnabled { get; set; }
+
+[JsonPropertyName("call_active")]
 		public bool CallActive { get; set; }
+
+[JsonPropertyName("call_not_empty")]
 		public bool CallNotEmpty { get; set; }
+
+[JsonPropertyName("id")]
 		public override int Id { get; set; }
+
+[JsonPropertyName("access_hash")]
 		public long? AccessHash { get; set; }
+
+[JsonPropertyName("title")]
 		public string Title { get; set; }
+
+[JsonPropertyName("username")]
 		public string Username { get; set; }
+
+[JsonPropertyName("photo")]
 		public CatraProto.Client.TL.Schemas.CloudChats.ChatPhotoBase Photo { get; set; }
+
+[JsonPropertyName("date")]
 		public int Date { get; set; }
+
+[JsonPropertyName("version")]
 		public int Version { get; set; }
+
+[JsonPropertyName("restriction_reason")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase> RestrictionReason { get; set; }
+
+[JsonPropertyName("admin_rights")]
 		public CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase AdminRights { get; set; }
+
+[JsonPropertyName("banned_rights")]
 		public CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase BannedRights { get; set; }
+
+[JsonPropertyName("default_banned_rights")]
 		public CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase DefaultBannedRights { get; set; }
+
+[JsonPropertyName("participants_count")]
 		public int? ParticipantsCount { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Creator ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

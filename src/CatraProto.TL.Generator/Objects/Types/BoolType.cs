@@ -1,23 +1,24 @@
 using System;
 using System.Text;
+using CatraProto.TL.Generator.DeclarationInfo;
 using CatraProto.TL.Generator.Objects.Types.Interfaces;
 
 namespace CatraProto.TL.Generator.Objects.Types
 {
 	class BoolType : TypeBase
 	{
+		public string InitialTypeName { get; }
+
 		public BoolType(string startingTypeName)
 		{
 			InitialTypeName = startingTypeName;
-			IsBare = true;
-			Name = "bool";
+			TypeInfo.IsBare = true;
+			NamingInfo = "bool";
 		}
-
-		public string InitialTypeName { get; }
-
+		
 		public override void WriteMethodParameter(StringBuilder stringBuilder, Parameter parameter)
 		{
-			var writtenType = parameter.Type.Name;
+			var writtenType = parameter.Type.GetTypeName(NamingType.FullNamespace, parameter, true);
 			var after = "";
 
 			if (InitialTypeName == "true")
@@ -30,20 +31,19 @@ namespace CatraProto.TL.Generator.Objects.Types
 				after = " = null";
 			}
 
-			stringBuilder.Append(writtenType + " " + parameter.InMethodName + after);
+			stringBuilder.Append(writtenType + " " + parameter.NamingInfo.CamelCaseName + after);
 		}
 
-		public override void WriteParameter(StringBuilder stringBuilder, Parameter parameter,
-			string customTypeName = null, bool allowOverride = false)
+		public override void WriteParameter(StringBuilder stringBuilder, Parameter parameter, string customTypeName = null, bool allowOverride = false)
 		{
-			var type = parameter.IsVector ? $"IList<{Name}>" : Name;
+			var type = GetTypeName(NamingType.FullNamespace, parameter,true);
 			if (parameter.HasFlag && InitialTypeName == "Bool")
 			{
 				type += '?';
 			}
 
 			stringBuilder.AppendLine(
-				$"{StringTools.TwoTabs}{GetParameterAccessibility(parameter, allowOverride)} {type} {parameter.Name} {{ get; set; }}");
+				$"\n[JsonPropertyName(\"{parameter.NamingInfo.OriginalName}\")]\n{StringTools.TwoTabs}{GetParameterAccessibility(parameter, allowOverride)} {type} {parameter.NamingInfo.PascalCaseName} {{ get; set; }}");
 		}
 
 		public override void WriteDeserializer(StringBuilder stringBuilder, Parameter parameter)
@@ -51,11 +51,11 @@ namespace CatraProto.TL.Generator.Objects.Types
 			if (InitialTypeName == "true")
 			{
 				stringBuilder.AppendLine(
-					$"{StringTools.ThreeTabs}{parameter.Name} = FlagsHelper.IsFlagSet({parameter.Flag.Name}, {parameter.Flag.Bit});");
+					$"{StringTools.ThreeTabs}{parameter.NamingInfo.PascalCaseName} = FlagsHelper.IsFlagSet({parameter.Flag.Name}, {parameter.Flag.Bit});");
 				return;
 			}
 
-			stringBuilder.AppendLine($"{StringTools.ThreeTabs}{parameter.Name} = reader.Read<bool>();");
+			stringBuilder.AppendLine($"{StringTools.ThreeTabs}{parameter.NamingInfo.PascalCaseName} = reader.Read<bool>();");
 		}
 
 		public override void WriteSerializer(StringBuilder stringBuilder, Parameter parameter)
@@ -66,7 +66,7 @@ namespace CatraProto.TL.Generator.Objects.Types
 				return;
 			}
 
-			stringBuilder.AppendLine($"{StringTools.ThreeTabs}writer.Write({parameter.Name}{(parameter.HasFlag ? ".Value" : "")});");
+			stringBuilder.AppendLine($"{StringTools.ThreeTabs}writer.Write({parameter.NamingInfo.PascalCaseName}{(parameter.HasFlag ? ".Value" : "")});");
 		}
 
 		public override void WriteFlagUpdate(StringBuilder stringBuilder, Parameter parameter)
@@ -79,7 +79,7 @@ namespace CatraProto.TL.Generator.Objects.Types
 			if (InitialTypeName == "true")
 			{
 				stringBuilder.AppendLine(
-					$"{StringTools.ThreeTabs}{parameter.Flag.Name} = {parameter.Name} ? FlagsHelper.SetFlag({parameter.Flag.Name}, {parameter.Flag.Bit}) : FlagsHelper.UnsetFlag({parameter.Flag.Name}, {parameter.Flag.Bit});");
+					$"{StringTools.ThreeTabs}{parameter.Flag.Name} = {parameter.NamingInfo.PascalCaseName} ? FlagsHelper.SetFlag({parameter.Flag.Name}, {parameter.Flag.Bit}) : FlagsHelper.UnsetFlag({parameter.Flag.Name}, {parameter.Flag.Bit});");
 				return;
 			}
 

@@ -1,12 +1,12 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
 using System.Collections.Generic;
-
+using System.Text.Json.Serialization;
+using CatraProto.TL;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PhoneCallProtocol : PhoneCallProtocolBase
+	public partial class PhoneCallProtocol : CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,14 +15,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			UdpReflector = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = -58224696;
+        public static int StaticConstructorId { get => -58224696; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("udp_p2p")]
 		public override bool UdpP2p { get; set; }
+
+[JsonPropertyName("udp_reflector")]
 		public override bool UdpReflector { get; set; }
+
+[JsonPropertyName("min_layer")]
 		public override int MinLayer { get; set; }
+
+[JsonPropertyName("max_layer")]
 		public override int MaxLayer { get; set; }
+
+[JsonPropertyName("library_versions")]
 		public override IList<string> LibraryVersions { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = UdpP2p ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

@@ -1,16 +1,23 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 {
-	public partial class DifferenceTooLong : DifferenceBase
+	public partial class DifferenceTooLong : CatraProto.Client.TL.Schemas.CloudChats.Updates.DifferenceBase
 	{
 
 
-        public static int ConstructorId { get; } = 1258196845;
+        public static int StaticConstructorId { get => 1258196845; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("pts")]
 		public int Pts { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

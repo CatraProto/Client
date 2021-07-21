@@ -1,23 +1,35 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using CatraProto.Client.TL.Schemas.CloudChats.Updates;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class PeerDialogs : PeerDialogsBase
+	public partial class PeerDialogs : CatraProto.Client.TL.Schemas.CloudChats.Messages.PeerDialogsBase
 	{
 
 
-        public static int ConstructorId { get; } = 863093588;
+        public static int StaticConstructorId { get => 863093588; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("dialogs")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.DialogBase> Dialogs { get; set; }
+
+[JsonPropertyName("messages")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.MessageBase> Messages { get; set; }
+
+[JsonPropertyName("chats")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
+
+[JsonPropertyName("users")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+
+[JsonPropertyName("state")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.Updates.StateBase State { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

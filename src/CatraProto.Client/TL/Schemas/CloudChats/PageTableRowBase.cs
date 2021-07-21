@@ -1,13 +1,13 @@
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+using System.Text.Json.Serialization;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
-
+using CatraProto.TL.Interfaces;
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public abstract class PageTableRowBase : IObject
     {
+
+[JsonPropertyName("cells")]
 		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.PageTableCellBase> Cells { get; set; }
 
         public abstract void UpdateFlags();

@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class Theme : ThemeBase
+	public partial class Theme : CatraProto.Client.TL.Schemas.CloudChats.ThemeBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -17,18 +17,41 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Settings = 1 << 3
 		}
 
-        public static int ConstructorId { get; } = 42930452;
+        public static int StaticConstructorId { get => 42930452; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("creator")]
 		public override bool Creator { get; set; }
+
+[JsonPropertyName("default")]
 		public override bool Default { get; set; }
+
+[JsonPropertyName("id")]
 		public override long Id { get; set; }
+
+[JsonPropertyName("access_hash")]
 		public override long AccessHash { get; set; }
+
+[JsonPropertyName("slug")]
 		public override string Slug { get; set; }
+
+[JsonPropertyName("title")]
 		public override string Title { get; set; }
+
+[JsonPropertyName("document")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.DocumentBase Document { get; set; }
+
+[JsonPropertyName("settings")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.ThemeSettingsBase Settings { get; set; }
+
+[JsonPropertyName("installs_count")]
 		public override int InstallsCount { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Creator ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

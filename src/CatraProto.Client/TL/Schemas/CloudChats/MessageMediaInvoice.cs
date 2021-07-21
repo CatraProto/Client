@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageMediaInvoice : MessageMediaBase
+	public partial class MessageMediaInvoice : CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -17,18 +17,41 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ReceiptMsgId = 1 << 2
 		}
 
-        public static int ConstructorId { get; } = -2074799289;
+        public static int StaticConstructorId { get => -2074799289; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("shipping_address_requested")]
 		public bool ShippingAddressRequested { get; set; }
+
+[JsonPropertyName("test")]
 		public bool Test { get; set; }
+
+[JsonPropertyName("title")]
 		public string Title { get; set; }
+
+[JsonPropertyName("description")]
 		public string Description { get; set; }
+
+[JsonPropertyName("photo")]
 		public CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase Photo { get; set; }
+
+[JsonPropertyName("receipt_msg_id")]
 		public int? ReceiptMsgId { get; set; }
+
+[JsonPropertyName("currency")]
 		public string Currency { get; set; }
+
+[JsonPropertyName("total_amount")]
 		public long TotalAmount { get; set; }
+
+[JsonPropertyName("start_param")]
 		public string StartParam { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = ShippingAddressRequested ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);

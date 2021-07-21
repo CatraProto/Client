@@ -1,13 +1,12 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Text.Json.Serialization;
+using CatraProto.TL;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelMessagesFilter : ChannelMessagesFilterBase
+	public partial class ChannelMessagesFilter : CatraProto.Client.TL.Schemas.CloudChats.ChannelMessagesFilterBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,11 +14,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ExcludeNewMessages = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = -847783593;
+        public static int StaticConstructorId { get => -847783593; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("exclude_new_messages")]
 		public bool ExcludeNewMessages { get; set; }
+
+[JsonPropertyName("ranges")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageRangeBase> Ranges { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = ExcludeNewMessages ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);

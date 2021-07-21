@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateDialogPinned : UpdateBase
+	public partial class UpdateDialogPinned : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,12 +15,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			FolderId = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = 1852826908;
+        public static int StaticConstructorId { get => 1852826908; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("pinned")]
 		public bool Pinned { get; set; }
+
+[JsonPropertyName("folder_id")]
 		public int? FolderId { get; set; }
+
+[JsonPropertyName("peer")]
 		public CatraProto.Client.TL.Schemas.CloudChats.DialogPeerBase Peer { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Pinned ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

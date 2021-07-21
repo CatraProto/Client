@@ -1,11 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelForbidden : ChatBase
+	public partial class ChannelForbidden : CatraProto.Client.TL.Schemas.CloudChats.ChatBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,15 +16,32 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			UntilDate = 1 << 16
 		}
 
-        public static int ConstructorId { get; } = 681420594;
+        public static int StaticConstructorId { get => 681420594; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("broadcast")]
 		public bool Broadcast { get; set; }
+
+[JsonPropertyName("megagroup")]
 		public bool Megagroup { get; set; }
+
+[JsonPropertyName("id")]
 		public override int Id { get; set; }
+
+[JsonPropertyName("access_hash")]
 		public long AccessHash { get; set; }
+
+[JsonPropertyName("title")]
 		public string Title { get; set; }
+
+[JsonPropertyName("until_date")]
 		public int? UntilDate { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Broadcast ? FlagsHelper.SetFlag(Flags, 5) : FlagsHelper.UnsetFlag(Flags, 5);

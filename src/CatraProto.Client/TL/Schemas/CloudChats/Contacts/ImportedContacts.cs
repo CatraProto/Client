@@ -1,21 +1,32 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
-	public partial class ImportedContacts : ImportedContactsBase
+	public partial class ImportedContacts : CatraProto.Client.TL.Schemas.CloudChats.Contacts.ImportedContactsBase
 	{
 
 
-        public static int ConstructorId { get; } = 2010127419;
+        public static int StaticConstructorId { get => 2010127419; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("imported")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.ImportedContactBase> Imported { get; set; }
+
+[JsonPropertyName("popular_invites")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.PopularContactBase> PopularInvites { get; set; }
+
+[JsonPropertyName("retry_contacts")]
 		public override IList<long> RetryContacts { get; set; }
+
+[JsonPropertyName("users")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

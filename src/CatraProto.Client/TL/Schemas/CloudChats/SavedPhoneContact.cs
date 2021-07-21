@@ -1,19 +1,32 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class SavedPhoneContact : SavedContactBase
+	public partial class SavedPhoneContact : CatraProto.Client.TL.Schemas.CloudChats.SavedContactBase
 	{
 
 
-        public static int ConstructorId { get; } = 289586518;
+        public static int StaticConstructorId { get => 289586518; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("phone")]
 		public override string Phone { get; set; }
+
+[JsonPropertyName("first_name")]
 		public override string FirstName { get; set; }
+
+[JsonPropertyName("last_name")]
 		public override string LastName { get; set; }
+
+[JsonPropertyName("date")]
 		public override int Date { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

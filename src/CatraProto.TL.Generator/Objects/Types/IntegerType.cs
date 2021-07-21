@@ -1,37 +1,44 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using CatraProto.TL.Generator.DeclarationInfo;
 using CatraProto.TL.Generator.Objects.Types.Interfaces;
 
 namespace CatraProto.TL.Generator.Objects.Types
 {
 	class IntegerType : TypeBase
 	{
+		public int BitSize { get; }
 		public IntegerType(int bitSize)
 		{
-			IsBare = true;
 			BitSize = bitSize;
-			Name = BitSize switch
-			{
-				> 64 => "BigInteger",
-				64 => "long",
-				_ => "int"
-			};
-		}
-
-		public int BitSize { get; }
-
-		public override void WriteDeserializer(StringBuilder stringBuilder, Parameter parameter)
-		{
-			WriteFlagStart(stringBuilder, out var spacing, parameter);
-			var method = parameter.IsVector ? "ReadVector" : "Read";
+			TypeInfo.IsBare = true;
 			switch (BitSize)
 			{
 				case > 64:
-					stringBuilder.AppendLine($"{spacing}{parameter.Name} = reader.{method}<BigInteger>({BitSize.ToString()});");
+					NamingInfo = "BigInteger";
+					Namespace = new Namespace("System.Numerics.BigInteger", false);
+					break;
+				case 64:
+					NamingInfo = "long";
 					break;
 				default:
-					stringBuilder.AppendLine($"{spacing}{parameter.Name} = reader.{method}<{Name}>();");
+					NamingInfo = "int";
+					break;
+			}
+		}
+		
+		public override void WriteDeserializer(StringBuilder stringBuilder, Parameter parameter)
+		{
+			WriteFlagStart(stringBuilder, out var spacing, parameter);
+			var method = parameter.VectorInfo.IsVector ? "ReadVector" : "Read";
+			switch (BitSize)
+			{
+				case > 64:
+					stringBuilder.AppendLine($"{spacing}{parameter.NamingInfo.PascalCaseName} = reader.{method}<System.Numerics.BigInteger>({BitSize});");
+					break;
+				default:
+					stringBuilder.AppendLine($"{spacing}{parameter.NamingInfo.PascalCaseName} = reader.{method}<{NamingInfo.OriginalName}>();");
 					break;
 			}
 
@@ -41,17 +48,17 @@ namespace CatraProto.TL.Generator.Objects.Types
 		public override void WriteSerializer(StringBuilder stringBuilder, Parameter parameter)
 		{
 			WriteFlagStart(stringBuilder, out var spacing, parameter);
-			var propertyValue = parameter.HasFlag && !parameter.IsVector ? parameter.Name + ".Value" : parameter.Name;
+			var propertyValue = parameter.HasFlag && !parameter.VectorInfo.IsVector ? parameter.NamingInfo.PascalCaseName + ".Value" : parameter.NamingInfo.PascalCaseName;
 
 			switch (BitSize)
 			{
 				case > 64:
-					stringBuilder.AppendLine($"{spacing}var size{parameter.Name} = {parameter.Name}.GetByteCount();");
-					stringBuilder.AppendLine($"{spacing}if(size{parameter.Name} != {BitSize / 8}){{");
+					stringBuilder.AppendLine($"{spacing}var size{parameter.NamingInfo.PascalCaseName} = {parameter.NamingInfo.PascalCaseName}.GetByteCount();");
+					stringBuilder.AppendLine($"{spacing}if(size{parameter.NamingInfo.PascalCaseName} != {BitSize / 8}){{");
 					stringBuilder.AppendLine(
-						$"{spacing}{StringTools.OneTabs}throw new CatraProto.TL.Exceptions.SerializationException($\"ByteSize mismatch, should be {BitSize / 8}bytes got {{size{parameter.Name}}}bytes\", CatraProto.TL.Exceptions.SerializationException.SerializationErrors.BitSizeMismatch);");
+						$"{spacing}{StringTools.OneTabs}throw new CatraProto.TL.Exceptions.SerializationException($\"ByteSize mismatch, should be {BitSize / 8}bytes got {{size{parameter.NamingInfo.PascalCaseName}}}bytes\", CatraProto.TL.Exceptions.SerializationException.SerializationErrors.BitSizeMismatch);");
 					stringBuilder.AppendLine($"{spacing}}}");
-					stringBuilder.AppendLine($"{spacing}writer.Write({parameter.Name});");
+					stringBuilder.AppendLine($"{spacing}writer.Write({parameter.NamingInfo.PascalCaseName});");
 					break;
 				default:
 					stringBuilder.AppendLine($"{spacing}writer.Write({propertyValue});");
@@ -61,29 +68,17 @@ namespace CatraProto.TL.Generator.Objects.Types
 			WriteFlagEnd(stringBuilder, spacing, parameter);
 		}
 
-		public override void WriteParameter(StringBuilder stringBuilder, Parameter parameter,
-			string customTypeName = null, bool isAbstract = false)
+		public override void WriteParameter(StringBuilder stringBuilder, Parameter parameter, string customTypeName = null, bool isAbstract = false)
 		{
-			var type = parameter.IsVector ? $"IList<{Name}>" : Name;
-			type = parameter.HasFlag && parameter.IsVector == false ? type + "?" : type;
-			stringBuilder.Append($"{StringTools.TwoTabs}{GetParameterAccessibility(parameter, isAbstract)} {type}");
-			stringBuilder.AppendLine($" {parameter.Name} {{ get; set; }}");
+			var type = GetTypeName(NamingType.FullNamespace, parameter, true);
+			type = parameter.HasFlag && parameter.VectorInfo.IsVector == false ? type + "?" : type;
+			stringBuilder.Append($"\n[JsonPropertyName(\"{parameter.NamingInfo.OriginalName}\")]\n{StringTools.TwoTabs}{GetParameterAccessibility(parameter, isAbstract)} {type}");
+			stringBuilder.AppendLine($" {parameter.NamingInfo.PascalCaseName} {{ get; set; }}");
 		}
 
 		public override void WriteBaseParameters(StringBuilder stringBuilder, bool isAbstract = false)
 		{
 			throw new NotSupportedException("Bare types don't have a Base implementation.");
-		}
-
-		public override List<Namespace> GetRequiredNamespaces(Parameter parameter)
-		{
-			var list = base.GetRequiredNamespaces(parameter);
-			if (BitSize > 64)
-			{
-				list.Add(new Namespace("System.Numerics.BigInteger", false));
-			}
-
-			return list;
 		}
 
 		public static bool operator ==(IntegerType integer1, IntegerType integer2)

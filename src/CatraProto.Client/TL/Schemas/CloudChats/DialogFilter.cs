@@ -1,13 +1,12 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Text.Json.Serialization;
+using CatraProto.TL;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class DialogFilter : DialogFilterBase
+	public partial class DialogFilter : CatraProto.Client.TL.Schemas.CloudChats.DialogFilterBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -23,23 +22,56 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Emoticon = 1 << 25
 		}
 
-        public static int ConstructorId { get; } = 1949890536;
+        public static int StaticConstructorId { get => 1949890536; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("contacts")]
 		public override bool Contacts { get; set; }
+
+[JsonPropertyName("non_contacts")]
 		public override bool NonContacts { get; set; }
+
+[JsonPropertyName("groups")]
 		public override bool Groups { get; set; }
+
+[JsonPropertyName("broadcasts")]
 		public override bool Broadcasts { get; set; }
+
+[JsonPropertyName("bots")]
 		public override bool Bots { get; set; }
+
+[JsonPropertyName("exclude_muted")]
 		public override bool ExcludeMuted { get; set; }
+
+[JsonPropertyName("exclude_read")]
 		public override bool ExcludeRead { get; set; }
+
+[JsonPropertyName("exclude_archived")]
 		public override bool ExcludeArchived { get; set; }
+
+[JsonPropertyName("id")]
 		public override int Id { get; set; }
+
+[JsonPropertyName("title")]
 		public override string Title { get; set; }
+
+[JsonPropertyName("emoticon")]
 		public override string Emoticon { get; set; }
+
+[JsonPropertyName("pinned_peers")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> PinnedPeers { get; set; }
+
+[JsonPropertyName("include_peers")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> IncludePeers { get; set; }
+
+[JsonPropertyName("exclude_peers")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> ExcludePeers { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Contacts ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

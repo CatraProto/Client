@@ -1,8 +1,8 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Collections.Generic;
+using CatraProto.TL;
+using System.Text.Json.Serialization;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
@@ -14,16 +14,35 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 			AddPhonePrivacyException = 1 << 0
 		}
 
-        public static int ConstructorId { get; } = -386636848;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => -386636848; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("add_phone_privacy_exception")]
 		public bool AddPhonePrivacyException { get; set; }
+
+[JsonPropertyName("id")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase Id { get; set; }
+
+[JsonPropertyName("first_name")]
 		public string FirstName { get; set; }
+
+[JsonPropertyName("last_name")]
 		public string LastName { get; set; }
+
+[JsonPropertyName("phone")]
 		public string Phone { get; set; }
+
 
 		public void UpdateFlags() 
 		{

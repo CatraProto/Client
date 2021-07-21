@@ -1,13 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using System.Collections.Generic;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputSecureValue : InputSecureValueBase
+	public partial class InputSecureValue : CatraProto.Client.TL.Schemas.CloudChats.InputSecureValueBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -21,17 +20,38 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			PlainData = 1 << 5
 		}
 
-        public static int ConstructorId { get; } = -618540889;
+        public static int StaticConstructorId { get => -618540889; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("type")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase Type { get; set; }
+
+[JsonPropertyName("data")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.SecureDataBase Data { get; set; }
+
+[JsonPropertyName("front_side")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.InputSecureFileBase FrontSide { get; set; }
+
+[JsonPropertyName("reverse_side")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.InputSecureFileBase ReverseSide { get; set; }
+
+[JsonPropertyName("selfie")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.InputSecureFileBase Selfie { get; set; }
+
+[JsonPropertyName("translation")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.InputSecureFileBase> Translation { get; set; }
+
+[JsonPropertyName("files")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.InputSecureFileBase> Files { get; set; }
+
+[JsonPropertyName("plain_data")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.SecurePlainDataBase PlainData { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Data == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);

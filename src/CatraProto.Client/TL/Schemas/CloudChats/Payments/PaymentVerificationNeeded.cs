@@ -1,16 +1,23 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 {
-	public partial class PaymentVerificationNeeded : PaymentResultBase
+	public partial class PaymentVerificationNeeded : CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentResultBase
 	{
 
 
-        public static int ConstructorId { get; } = -666824391;
+        public static int StaticConstructorId { get => -666824391; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("url")]
 		public string Url { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

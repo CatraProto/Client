@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class PasswordInputSettings : PasswordInputSettingsBase
+	public partial class PasswordInputSettings : CatraProto.Client.TL.Schemas.CloudChats.Account.PasswordInputSettingsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -18,14 +18,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 			NewSecureSettings = 1 << 2
 		}
 
-        public static int ConstructorId { get; } = -1036572727;
+        public static int StaticConstructorId { get => -1036572727; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("new_algo")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase NewAlgo { get; set; }
+
+[JsonPropertyName("new_password_hash")]
 		public override byte[] NewPasswordHash { get; set; }
+
+[JsonPropertyName("hint")]
 		public override string Hint { get; set; }
+
+[JsonPropertyName("email")]
 		public override string Email { get; set; }
+
+[JsonPropertyName("new_secure_settings")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.SecureSecretSettingsBase NewSecureSettings { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = NewAlgo == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);

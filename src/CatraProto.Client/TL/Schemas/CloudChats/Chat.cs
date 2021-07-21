@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class Chat : ChatBase
+	public partial class Chat : CatraProto.Client.TL.Schemas.CloudChats.ChatBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -22,24 +22,59 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			DefaultBannedRights = 1 << 18
 		}
 
-        public static int ConstructorId { get; } = 1004149726;
+        public static int StaticConstructorId { get => 1004149726; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("creator")]
 		public bool Creator { get; set; }
+
+[JsonPropertyName("kicked")]
 		public bool Kicked { get; set; }
+
+[JsonPropertyName("left")]
 		public bool Left { get; set; }
+
+[JsonPropertyName("deactivated")]
 		public bool Deactivated { get; set; }
+
+[JsonPropertyName("call_active")]
 		public bool CallActive { get; set; }
+
+[JsonPropertyName("call_not_empty")]
 		public bool CallNotEmpty { get; set; }
+
+[JsonPropertyName("id")]
 		public override int Id { get; set; }
+
+[JsonPropertyName("title")]
 		public string Title { get; set; }
+
+[JsonPropertyName("photo")]
 		public CatraProto.Client.TL.Schemas.CloudChats.ChatPhotoBase Photo { get; set; }
+
+[JsonPropertyName("participants_count")]
 		public int ParticipantsCount { get; set; }
+
+[JsonPropertyName("date")]
 		public int Date { get; set; }
+
+[JsonPropertyName("version")]
 		public int Version { get; set; }
+
+[JsonPropertyName("migrated_to")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase MigratedTo { get; set; }
+
+[JsonPropertyName("admin_rights")]
 		public CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase AdminRights { get; set; }
+
+[JsonPropertyName("default_banned_rights")]
 		public CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase DefaultBannedRights { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Creator ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

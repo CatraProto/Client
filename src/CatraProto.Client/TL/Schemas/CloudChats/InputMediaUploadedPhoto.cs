@@ -1,13 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using System.Collections.Generic;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputMediaUploadedPhoto : InputMediaBase
+	public partial class InputMediaUploadedPhoto : CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,12 +15,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			TtlSeconds = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = 505969924;
+        public static int StaticConstructorId { get => 505969924; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("file")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase File { get; set; }
+
+[JsonPropertyName("stickers")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase> Stickers { get; set; }
+
+[JsonPropertyName("ttl_seconds")]
 		public int? TtlSeconds { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Stickers == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);

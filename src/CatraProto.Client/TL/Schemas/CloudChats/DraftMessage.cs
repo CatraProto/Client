@@ -1,13 +1,12 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Text.Json.Serialization;
+using CatraProto.TL;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class DraftMessage : DraftMessageBase
+	public partial class DraftMessage : CatraProto.Client.TL.Schemas.CloudChats.DraftMessageBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -18,14 +17,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Date = 1 << 0
 		}
 
-        public static int ConstructorId { get; } = -40996577;
+        public static int StaticConstructorId { get => -40996577; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("no_webpage")]
 		public bool NoWebpage { get; set; }
+
+[JsonPropertyName("reply_to_msg_id")]
 		public int? ReplyToMsgId { get; set; }
+
+[JsonPropertyName("message")]
 		public string Message { get; set; }
+
+[JsonPropertyName("entities")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
+
+[JsonPropertyName("date")]
 		public override int? Date { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = NoWebpage ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);

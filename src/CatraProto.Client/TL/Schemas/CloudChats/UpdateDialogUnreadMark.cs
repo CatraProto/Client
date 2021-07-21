@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateDialogUnreadMark : UpdateBase
+	public partial class UpdateDialogUnreadMark : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,11 +14,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Unread = 1 << 0
 		}
 
-        public static int ConstructorId { get; } = -513517117;
+        public static int StaticConstructorId { get => -513517117; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("unread")]
 		public bool Unread { get; set; }
+
+[JsonPropertyName("peer")]
 		public CatraProto.Client.TL.Schemas.CloudChats.DialogPeerBase Peer { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Unread ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

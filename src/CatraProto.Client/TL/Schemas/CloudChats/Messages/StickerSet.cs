@@ -1,20 +1,29 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using System.Collections.Generic;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class StickerSet : StickerSetBase
+	public partial class StickerSet : CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetBase
 	{
 
 
-        public static int ConstructorId { get; } = -1240849242;
+        public static int StaticConstructorId { get => -1240849242; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("set")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.StickerSetBase Set { get; set; }
+
+[JsonPropertyName("packs")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.StickerPackBase> Packs { get; set; }
+
+[JsonPropertyName("documents")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase> Documents { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

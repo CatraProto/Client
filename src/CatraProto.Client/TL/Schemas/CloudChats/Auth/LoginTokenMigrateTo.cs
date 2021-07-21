@@ -1,17 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
-	public partial class LoginTokenMigrateTo : LoginTokenBase
+	public partial class LoginTokenMigrateTo : CatraProto.Client.TL.Schemas.CloudChats.Auth.LoginTokenBase
 	{
 
 
-        public static int ConstructorId { get; } = 110008598;
+        public static int StaticConstructorId { get => 110008598; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("dc_id")]
 		public int DcId { get; set; }
+
+[JsonPropertyName("token")]
 		public byte[] Token { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

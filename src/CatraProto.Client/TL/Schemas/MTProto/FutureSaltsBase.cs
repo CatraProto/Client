@@ -1,15 +1,19 @@
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+using System.Text.Json.Serialization;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.MTProto;
-
-
+using CatraProto.TL.Interfaces;
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
     public abstract class FutureSaltsBase : IObject
     {
+
+[JsonPropertyName("req_msg_id")]
 		public abstract long ReqMsgId { get; set; }
+
+[JsonPropertyName("now")]
 		public abstract int Now { get; set; }
+
+[JsonPropertyName("salts")]
 		public abstract IList<CatraProto.Client.TL.Schemas.MTProto.FutureSalt> Salts { get; set; }
 
         public abstract void UpdateFlags();

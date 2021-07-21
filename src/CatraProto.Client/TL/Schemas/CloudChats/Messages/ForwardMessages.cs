@@ -1,9 +1,8 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
 using System.Collections.Generic;
-
+using CatraProto.TL;
+using System.Text.Json.Serialization;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
@@ -18,19 +17,44 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			ScheduleDate = 1 << 10
 		}
 
-        public static int ConstructorId { get; } = -637606386;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => -637606386; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("silent")]
 		public bool Silent { get; set; }
+
+[JsonPropertyName("background")]
 		public bool Background { get; set; }
+
+[JsonPropertyName("with_my_score")]
 		public bool WithMyScore { get; set; }
+
+[JsonPropertyName("from_peer")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase FromPeer { get; set; }
+
+[JsonPropertyName("id")]
 		public IList<int> Id { get; set; }
+
+[JsonPropertyName("random_id")]
 		public IList<long> RandomId { get; set; }
+
+[JsonPropertyName("to_peer")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase ToPeer { get; set; }
+
+[JsonPropertyName("schedule_date")]
 		public int? ScheduleDate { get; set; }
+
 
 		public void UpdateFlags() 
 		{

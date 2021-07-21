@@ -1,8 +1,8 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
 using System.Collections.Generic;
-
+using CatraProto.TL;
+using System.Text.Json.Serialization;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
@@ -14,17 +14,38 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 			NoMuted = 1 << 0
 		}
 
-        public static int ConstructorId { get; } = 1754754159;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => 1754754159; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(bool);
 
-		public System.Type Type { get; init; } = typeof(bool);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("no_muted")]
 		public bool NoMuted { get; set; }
+
+[JsonPropertyName("token_type")]
 		public int TokenType { get; set; }
+
+[JsonPropertyName("token")]
 		public string Token { get; set; }
+
+[JsonPropertyName("app_sandbox")]
 		public bool AppSandbox { get; set; }
+
+[JsonPropertyName("secret")]
 		public byte[] Secret { get; set; }
+
+[JsonPropertyName("other_uids")]
 		public IList<int> OtherUids { get; set; }
+
 
 		public void UpdateFlags() 
 		{

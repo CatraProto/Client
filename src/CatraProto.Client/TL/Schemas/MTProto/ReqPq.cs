@@ -1,7 +1,8 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using System.Text.Json.Serialization;
 using CatraProto.TL.Interfaces;
-using System.Numerics;
-
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
@@ -9,11 +10,20 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 	{
 
 
-        public static int ConstructorId { get; } = 1615239032;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => 1615239032; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.ResPQBase);
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.ResPQBase);
-		public bool IsVector { get; init; } = false;
-		public BigInteger Nonce { get; set; }
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonPropertyName("nonce")]
+		public System.Numerics.BigInteger Nonce { get; set; }
+
 
 		public void UpdateFlags() 
 		{
@@ -33,7 +43,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
 		public void Deserialize(Reader reader)
 		{
-			Nonce = reader.Read<BigInteger>(128);
+			Nonce = reader.Read<System.Numerics.BigInteger>(128);
 
 		}
 	}

@@ -1,18 +1,29 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputEncryptedFileBigUploaded : InputEncryptedFileBase
+	public partial class InputEncryptedFileBigUploaded : CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedFileBase
 	{
 
 
-        public static int ConstructorId { get; } = 767652808;
+        public static int StaticConstructorId { get => 767652808; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("id")]
 		public long Id { get; set; }
+
+[JsonPropertyName("parts")]
 		public int Parts { get; set; }
+
+[JsonPropertyName("key_fingerprint")]
 		public int KeyFingerprint { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

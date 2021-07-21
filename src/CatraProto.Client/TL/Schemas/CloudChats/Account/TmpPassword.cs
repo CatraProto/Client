@@ -1,17 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class TmpPassword : TmpPasswordBase
+	public partial class TmpPassword : CatraProto.Client.TL.Schemas.CloudChats.Account.TmpPasswordBase
 	{
 
 
-        public static int ConstructorId { get; } = -614138572;
+        public static int StaticConstructorId { get => -614138572; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("TmpPassword_")]
 		public override byte[] TmpPassword_ { get; set; }
+
+[JsonPropertyName("valid_until")]
 		public override int ValidUntil { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

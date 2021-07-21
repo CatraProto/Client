@@ -1,11 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class DocumentAttributeVideo : DocumentAttributeBase
+	public partial class DocumentAttributeVideo : CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,14 +15,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			SupportsStreaming = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = 250621158;
+        public static int StaticConstructorId { get => 250621158; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("round_message")]
 		public bool RoundMessage { get; set; }
+
+[JsonPropertyName("supports_streaming")]
 		public bool SupportsStreaming { get; set; }
+
+[JsonPropertyName("duration")]
 		public int Duration { get; set; }
+
+[JsonPropertyName("w")]
 		public int W { get; set; }
+
+[JsonPropertyName("h")]
 		public int H { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = RoundMessage ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

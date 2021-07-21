@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelParticipantBanned : ChannelParticipantBase
+	public partial class ChannelParticipantBanned : CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,14 +14,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Left = 1 << 0
 		}
 
-        public static int ConstructorId { get; } = 470789295;
+        public static int StaticConstructorId { get => 470789295; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("left")]
 		public bool Left { get; set; }
+
+[JsonPropertyName("user_id")]
 		public override int UserId { get; set; }
+
+[JsonPropertyName("kicked_by")]
 		public int KickedBy { get; set; }
+
+[JsonPropertyName("date")]
 		public int Date { get; set; }
+
+[JsonPropertyName("banned_rights")]
 		public CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase BannedRights { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Left ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

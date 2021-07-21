@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageService : MessageBase
+	public partial class MessageService : CatraProto.Client.TL.Schemas.CloudChats.MessageBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -21,21 +21,50 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ReplyTo = 1 << 3
 		}
 
-        public static int ConstructorId { get; } = 678405636;
+        public static int StaticConstructorId { get => 678405636; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("out")]
 		public bool Out { get; set; }
+
+[JsonPropertyName("mentioned")]
 		public bool Mentioned { get; set; }
+
+[JsonPropertyName("media_unread")]
 		public bool MediaUnread { get; set; }
+
+[JsonPropertyName("silent")]
 		public bool Silent { get; set; }
+
+[JsonPropertyName("post")]
 		public bool Post { get; set; }
+
+[JsonPropertyName("legacy")]
 		public bool Legacy { get; set; }
+
+[JsonPropertyName("id")]
 		public override int Id { get; set; }
+
+[JsonPropertyName("from_id")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase FromId { get; set; }
+
+[JsonPropertyName("peer_id")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase PeerId { get; set; }
+
+[JsonPropertyName("reply_to")]
 		public CatraProto.Client.TL.Schemas.CloudChats.MessageReplyHeaderBase ReplyTo { get; set; }
+
+[JsonPropertyName("date")]
 		public int Date { get; set; }
+
+[JsonPropertyName("action")]
 		public CatraProto.Client.TL.Schemas.CloudChats.MessageActionBase Action { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Out ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);

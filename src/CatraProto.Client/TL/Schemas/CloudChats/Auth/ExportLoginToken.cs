@@ -1,7 +1,8 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+using System;
 using System.Collections.Generic;
-
+using CatraProto.TL;
+using System.Text.Json.Serialization;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
@@ -9,13 +10,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 	{
 
 
-        public static int ConstructorId { get; } = -1313598185;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => -1313598185; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Auth.LoginTokenBase);
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Auth.LoginTokenBase);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonPropertyName("api_id")]
 		public int ApiId { get; set; }
+
+[JsonPropertyName("api_hash")]
 		public string ApiHash { get; set; }
+
+[JsonPropertyName("except_ids")]
 		public IList<int> ExceptIds { get; set; }
+
 
 		public void UpdateFlags() 
 		{

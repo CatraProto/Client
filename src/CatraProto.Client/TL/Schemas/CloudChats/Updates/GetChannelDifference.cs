@@ -1,8 +1,8 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Collections.Generic;
+using CatraProto.TL;
+using System.Text.Json.Serialization;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 {
@@ -14,16 +14,35 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 			Force = 1 << 0
 		}
 
-        public static int ConstructorId { get; } = 51854712;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => 51854712; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Updates.ChannelDifferenceBase);
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Updates.ChannelDifferenceBase);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("force")]
 		public bool Force { get; set; }
+
+[JsonPropertyName("channel")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase Channel { get; set; }
+
+[JsonPropertyName("filter")]
 		public CatraProto.Client.TL.Schemas.CloudChats.ChannelMessagesFilterBase Filter { get; set; }
+
+[JsonPropertyName("pts")]
 		public int Pts { get; set; }
+
+[JsonPropertyName("limit")]
 		public int Limit { get; set; }
+
 
 		public void UpdateFlags() 
 		{

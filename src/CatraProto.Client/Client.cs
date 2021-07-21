@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using CatraProto.Client.Async.Signalers;
 using CatraProto.Client.Connections;
@@ -39,6 +40,7 @@ namespace CatraProto.Client
         public async Task SaveSession()
         {
              await _sessionManager.SaveAsync(_fileStream);
+             _fileStream.Flush();
         }
     }
 }

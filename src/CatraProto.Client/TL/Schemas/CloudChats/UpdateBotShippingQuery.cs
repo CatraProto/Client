@@ -1,20 +1,32 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateBotShippingQuery : UpdateBase
+	public partial class UpdateBotShippingQuery : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 
 
-        public static int ConstructorId { get; } = -523384512;
+        public static int StaticConstructorId { get => -523384512; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("query_id")]
 		public long QueryId { get; set; }
+
+[JsonPropertyName("user_id")]
 		public int UserId { get; set; }
+
+[JsonPropertyName("payload")]
 		public byte[] Payload { get; set; }
+
+[JsonPropertyName("shipping_address")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PostAddressBase ShippingAddress { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

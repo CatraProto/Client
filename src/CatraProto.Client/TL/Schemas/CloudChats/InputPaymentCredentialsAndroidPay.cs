@@ -1,18 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputPaymentCredentialsAndroidPay : InputPaymentCredentialsBase
+	public partial class InputPaymentCredentialsAndroidPay : CatraProto.Client.TL.Schemas.CloudChats.InputPaymentCredentialsBase
 	{
 
 
-        public static int ConstructorId { get; } = -905587442;
+        public static int StaticConstructorId { get => -905587442; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("payment_token")]
 		public CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase PaymentToken { get; set; }
+
+[JsonPropertyName("google_transaction_id")]
 		public string GoogleTransactionId { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

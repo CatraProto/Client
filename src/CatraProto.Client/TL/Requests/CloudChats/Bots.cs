@@ -59,7 +59,7 @@ if(pparams is null) throw new ArgumentNullException(nameof(pparams));
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<bool>> SetBotCommandsAsync(List<CatraProto.Client.TL.Schemas.CloudChats.BotCommandBase> commands, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<bool>> SetBotCommandsAsync(IList<CatraProto.Client.TL.Schemas.CloudChats.BotCommandBase> commands, CancellationToken cancellationToken = default)
 		{
 			if(commands is null) throw new ArgumentNullException(nameof(commands));
 

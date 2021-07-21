@@ -1,7 +1,8 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using System.Text.Json.Serialization;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
@@ -9,13 +10,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 	{
 
 
-        public static int ConstructorId { get; } = -578472351;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => -578472351; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase);
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonPropertyName("file")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase File { get; set; }
+
+[JsonPropertyName("mime_type")]
 		public string MimeType { get; set; }
+
+[JsonPropertyName("settings")]
 		public CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase Settings { get; set; }
+
 
 		public void UpdateFlags() 
 		{

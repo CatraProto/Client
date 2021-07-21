@@ -8,8 +8,8 @@ namespace CatraProto.TL.Generator.Objects.Types
 	{
 		public DoubleType()
 		{
-			Name = "double";
-			IsBare = true;
+			NamingInfo = "double";
+			TypeInfo.IsBare = true;
 		}
 
 		public override void WriteBaseParameters(StringBuilder stringBuilder, bool isAbstract = false)

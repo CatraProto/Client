@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PhoneCallDiscarded : PhoneCallBase
+	public partial class PhoneCallDiscarded : CatraProto.Client.TL.Schemas.CloudChats.PhoneCallBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -18,15 +18,32 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Duration = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = 1355435489;
+        public static int StaticConstructorId { get => 1355435489; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("need_rating")]
 		public bool NeedRating { get; set; }
+
+[JsonPropertyName("need_debug")]
 		public bool NeedDebug { get; set; }
+
+[JsonPropertyName("video")]
 		public bool Video { get; set; }
+
+[JsonPropertyName("id")]
 		public override long Id { get; set; }
+
+[JsonPropertyName("reason")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PhoneCallDiscardReasonBase Reason { get; set; }
+
+[JsonPropertyName("duration")]
 		public int? Duration { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = NeedRating ? FlagsHelper.SetFlag(Flags, 2) : FlagsHelper.UnsetFlag(Flags, 2);

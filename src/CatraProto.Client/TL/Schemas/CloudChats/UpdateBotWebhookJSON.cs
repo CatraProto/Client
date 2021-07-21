@@ -1,17 +1,23 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateBotWebhookJSON : UpdateBase
+	public partial class UpdateBotWebhookJSON : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 
 
-        public static int ConstructorId { get; } = -2095595325;
+        public static int StaticConstructorId { get => -2095595325; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("data")]
 		public CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase Data { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateReadHistoryInbox : UpdateBase
+	public partial class UpdateReadHistoryInbox : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,15 +14,32 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			FolderId = 1 << 0
 		}
 
-        public static int ConstructorId { get; } = -1667805217;
+        public static int StaticConstructorId { get => -1667805217; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("folder_id")]
 		public int? FolderId { get; set; }
+
+[JsonPropertyName("peer")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
+
+[JsonPropertyName("max_id")]
 		public int MaxId { get; set; }
+
+[JsonPropertyName("still_unread_count")]
 		public int StillUnreadCount { get; set; }
+
+[JsonPropertyName("pts")]
 		public int Pts { get; set; }
+
+[JsonPropertyName("pts_count")]
 		public int PtsCount { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = FolderId == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);

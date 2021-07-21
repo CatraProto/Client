@@ -1,8 +1,8 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Collections.Generic;
+using CatraProto.TL;
+using System.Text.Json.Serialization;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 {
@@ -15,15 +15,32 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 			ShippingOptionId = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = 730364339;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => 730364339; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentResultBase);
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentResultBase);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("msg_id")]
 		public int MsgId { get; set; }
+
+[JsonPropertyName("requested_info_id")]
 		public string RequestedInfoId { get; set; }
+
+[JsonPropertyName("shipping_option_id")]
 		public string ShippingOptionId { get; set; }
+
+[JsonPropertyName("credentials")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputPaymentCredentialsBase Credentials { get; set; }
+
 
 		public void UpdateFlags() 
 		{

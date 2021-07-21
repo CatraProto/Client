@@ -1,8 +1,8 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Collections.Generic;
+using CatraProto.TL;
+using System.Text.Json.Serialization;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
@@ -16,16 +16,35 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Password = 1 << 2
 		}
 
-        public static int ConstructorId { get; } = -1824339449;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => -1824339449; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.BotCallbackAnswerBase);
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.BotCallbackAnswerBase);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("game")]
 		public bool Game { get; set; }
+
+[JsonPropertyName("peer")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
+
+[JsonPropertyName("msg_id")]
 		public int MsgId { get; set; }
+
+[JsonPropertyName("data")]
 		public byte[] Data { get; set; }
+
+[JsonPropertyName("password")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputCheckPasswordSRPBase Password { get; set; }
+
 
 		public void UpdateFlags() 
 		{

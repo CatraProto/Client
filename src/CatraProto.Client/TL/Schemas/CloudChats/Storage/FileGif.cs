@@ -1,15 +1,20 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats.Storage
 {
-	public partial class FileGif : FileTypeBase
+	public partial class FileGif : CatraProto.Client.TL.Schemas.CloudChats.Storage.FileTypeBase
 	{
 
 
-        public static int ConstructorId { get; } = -891180321;
-
+        public static int StaticConstructorId { get => -891180321; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+        
 		public override void UpdateFlags() 
 		{
 

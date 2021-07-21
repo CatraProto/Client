@@ -1,8 +1,8 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Collections.Generic;
+using CatraProto.TL;
+using System.Text.Json.Serialization;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
@@ -15,24 +15,59 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			TopMsgId = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = 204812012;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => 204812012; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase);
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("peer")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
+
+[JsonPropertyName("q")]
 		public string Q { get; set; }
+
+[JsonPropertyName("from_id")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase FromId { get; set; }
+
+[JsonPropertyName("top_msg_id")]
 		public int? TopMsgId { get; set; }
+
+[JsonPropertyName("filter")]
 		public CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase Filter { get; set; }
+
+[JsonPropertyName("min_date")]
 		public int MinDate { get; set; }
+
+[JsonPropertyName("max_date")]
 		public int MaxDate { get; set; }
+
+[JsonPropertyName("offset_id")]
 		public int OffsetId { get; set; }
+
+[JsonPropertyName("add_offset")]
 		public int AddOffset { get; set; }
+
+[JsonPropertyName("limit")]
 		public int Limit { get; set; }
+
+[JsonPropertyName("max_id")]
 		public int MaxId { get; set; }
+
+[JsonPropertyName("min_id")]
 		public int MinId { get; set; }
+
+[JsonPropertyName("hash")]
 		public int Hash { get; set; }
+
 
 		public void UpdateFlags() 
 		{

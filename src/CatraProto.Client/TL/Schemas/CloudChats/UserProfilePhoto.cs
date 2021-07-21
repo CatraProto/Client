@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UserProfilePhoto : UserProfilePhotoBase
+	public partial class UserProfilePhoto : CatraProto.Client.TL.Schemas.CloudChats.UserProfilePhotoBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,14 +14,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			HasVideo = 1 << 0
 		}
 
-        public static int ConstructorId { get; } = 1775479590;
+        public static int StaticConstructorId { get => 1775479590; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("has_video")]
 		public bool HasVideo { get; set; }
+
+[JsonPropertyName("photo_id")]
 		public long PhotoId { get; set; }
+
+[JsonPropertyName("photo_small")]
 		public CatraProto.Client.TL.Schemas.CloudChats.FileLocationBase PhotoSmall { get; set; }
+
+[JsonPropertyName("photo_big")]
 		public CatraProto.Client.TL.Schemas.CloudChats.FileLocationBase PhotoBig { get; set; }
+
+[JsonPropertyName("dc_id")]
 		public int DcId { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = HasVideo ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class BotInlineResult : BotInlineResultBase
+	public partial class BotInlineResult : CatraProto.Client.TL.Schemas.CloudChats.BotInlineResultBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -18,17 +18,38 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Content = 1 << 5
 		}
 
-        public static int ConstructorId { get; } = 295067450;
+        public static int StaticConstructorId { get => 295067450; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("id")]
 		public override string Id { get; set; }
+
+[JsonPropertyName("type")]
 		public override string Type { get; set; }
+
+[JsonPropertyName("title")]
 		public override string Title { get; set; }
+
+[JsonPropertyName("description")]
 		public override string Description { get; set; }
+
+[JsonPropertyName("url")]
 		public string Url { get; set; }
+
+[JsonPropertyName("thumb")]
 		public CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase Thumb { get; set; }
+
+[JsonPropertyName("content")]
 		public CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase Content { get; set; }
+
+[JsonPropertyName("send_message")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.BotInlineMessageBase SendMessage { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Title == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);

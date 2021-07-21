@@ -1,13 +1,12 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Text.Json.Serialization;
+using CatraProto.TL;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class DiscussionMessage : DiscussionMessageBase
+	public partial class DiscussionMessage : CatraProto.Client.TL.Schemas.CloudChats.Messages.DiscussionMessageBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -17,15 +16,32 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			ReadOutboxMaxId = 1 << 2
 		}
 
-        public static int ConstructorId { get; } = -170029155;
+        public static int StaticConstructorId { get => -170029155; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("messages")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.MessageBase> Messages { get; set; }
+
+[JsonPropertyName("max_id")]
 		public override int? MaxId { get; set; }
+
+[JsonPropertyName("read_inbox_max_id")]
 		public override int? ReadInboxMaxId { get; set; }
+
+[JsonPropertyName("read_outbox_max_id")]
 		public override int? ReadOutboxMaxId { get; set; }
+
+[JsonPropertyName("chats")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
+
+[JsonPropertyName("users")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = MaxId == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);

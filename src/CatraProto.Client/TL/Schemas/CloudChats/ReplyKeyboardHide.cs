@@ -1,11 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ReplyKeyboardHide : ReplyMarkupBase
+	public partial class ReplyKeyboardHide : CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -13,10 +14,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Selective = 1 << 2
 		}
 
-        public static int ConstructorId { get; } = -1606526075;
+        public static int StaticConstructorId { get => -1606526075; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("selective")]
 		public bool Selective { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Selective ? FlagsHelper.SetFlag(Flags, 2) : FlagsHelper.UnsetFlag(Flags, 2);

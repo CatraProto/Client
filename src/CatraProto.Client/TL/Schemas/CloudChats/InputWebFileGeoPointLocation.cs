@@ -1,22 +1,38 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputWebFileGeoPointLocation : InputWebFileLocationBase
+	public partial class InputWebFileGeoPointLocation : CatraProto.Client.TL.Schemas.CloudChats.InputWebFileLocationBase
 	{
 
 
-        public static int ConstructorId { get; } = -1625153079;
+        public static int StaticConstructorId { get => -1625153079; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("geo_point")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase GeoPoint { get; set; }
+
+[JsonPropertyName("access_hash")]
 		public override long AccessHash { get; set; }
+
+[JsonPropertyName("w")]
 		public int W { get; set; }
+
+[JsonPropertyName("h")]
 		public int H { get; set; }
+
+[JsonPropertyName("zoom")]
 		public int Zoom { get; set; }
+
+[JsonPropertyName("scale")]
 		public int Scale { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

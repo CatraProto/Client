@@ -1,17 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputClientProxy : InputClientProxyBase
+	public partial class InputClientProxy : CatraProto.Client.TL.Schemas.CloudChats.InputClientProxyBase
 	{
 
 
-        public static int ConstructorId { get; } = 1968737087;
+        public static int StaticConstructorId { get => 1968737087; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("address")]
 		public override string Address { get; set; }
+
+[JsonPropertyName("port")]
 		public override int Port { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

@@ -1,40 +1,36 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using CatraProto.TL.Exceptions;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Interfaces.Deserializers;
 using CatraProto.TL.ObjectDeserializers;
 
 namespace CatraProto.TL
 {
     public class Reader : IDisposable
     {
-        private ObjectProvider _provider;
-
-        private BinaryReader _reader;
-
-        public Reader(ObjectProvider provider, Stream stream, bool leaveOpen = false) : this(provider, stream, Encoding.UTF8, leaveOpen)
-        {
-        }
-
-        public Reader(ObjectProvider provider, Stream stream, Encoding encoding, bool leaveOpen = false)
-        {
-            _provider = provider;
-            _reader = new BinaryReader(stream, encoding, leaveOpen);
-        }
-
         public Stream Stream
         {
             get => _reader.BaseStream;
         }
-
-        public void Dispose()
+        
+        private Dictionary<Type, ICustomObjectDeserializer> _customObjectDeserializers = new Dictionary<Type, ICustomObjectDeserializer>();
+        private ObjectProvider _provider;
+        private BinaryReader _reader;
+        
+        public Reader(ObjectProvider provider, Stream stream, bool leaveOpen = false)
         {
-            _reader?.Dispose();
+            _provider = provider;
+            _reader = new BinaryReader(stream, Encoding.UTF8, leaveOpen);
         }
 
+        public void AddCustomObjectDeserializer(Type type, ICustomObjectDeserializer deserializer)
+        {
+            _customObjectDeserializers.TryAdd(type, deserializer);
+        }
+        
         public T Read<T>(int? bitSize = null)
         {
             return (T)Read(typeof(T), bitSize);
@@ -90,7 +86,14 @@ namespace CatraProto.TL
                         DeserializationException.DeserializationErrors.ProviderReturnedNull);
                 }
 
-                instance.Deserialize(this);
+                if (_customObjectDeserializers.TryGetValue(instance.GetType(), out var deserializer))
+                {
+                    deserializer.DeserializeObject(instance, this);
+                }
+                else
+                {
+                    instance.Deserialize(this);
+                }
                 return instance;
             }
 
@@ -154,15 +157,15 @@ namespace CatraProto.TL
 
         public IList<object> ReadVector(Type type, bool naked = false)
         {
-            return ReadVector(new RegularObjectDeserializer<object>(type), naked);
+            return ReadVector(new RegularObjectVectorDeserializer<object>(type), naked);
         }
 
         public IList<T> ReadVector<T>(bool naked = false)
         {
-            return ReadVector(new RegularObjectDeserializer<T>(typeof(T)), naked);
+            return ReadVector(new RegularObjectVectorDeserializer<T>(typeof(T)), naked);
         }
         
-        public IList<T> ReadVector<T>(ICustomDeserializer<T> deserializer, bool naked = false)
+        public IList<T> ReadVector<T>(ICustomVectorDeserializer<T> vectorDeserializer, bool naked = false)
         {
             if (!naked)
             {
@@ -173,10 +176,15 @@ namespace CatraProto.TL
             var list = new List<T>();
             for (var i = 0; i < size; i++)
             {
-                list.Add(deserializer.GetValue(this));
+                list.Add(vectorDeserializer.GetValue(this));
             }
 
             return list;
+        }
+        
+        public void Dispose()
+        {
+            _reader?.Dispose();
         }
     }
 }

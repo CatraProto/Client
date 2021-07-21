@@ -1,19 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageActionSecureValuesSentMe : MessageActionBase
+	public partial class MessageActionSecureValuesSentMe : CatraProto.Client.TL.Schemas.CloudChats.MessageActionBase
 	{
 
 
-        public static int ConstructorId { get; } = 455635795;
+        public static int StaticConstructorId { get => 455635795; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("values")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase> Values { get; set; }
+
+[JsonPropertyName("credentials")]
 		public CatraProto.Client.TL.Schemas.CloudChats.SecureCredentialsEncryptedBase Credentials { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

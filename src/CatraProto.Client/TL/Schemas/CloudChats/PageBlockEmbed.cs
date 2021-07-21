@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PageBlockEmbed : PageBlockBase
+	public partial class PageBlockEmbed : CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -20,17 +20,38 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			H = 1 << 5
 		}
 
-        public static int ConstructorId { get; } = -1468953147;
+        public static int StaticConstructorId { get => -1468953147; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("full_width")]
 		public bool FullWidth { get; set; }
+
+[JsonPropertyName("allow_scrolling")]
 		public bool AllowScrolling { get; set; }
+
+[JsonPropertyName("url")]
 		public string Url { get; set; }
+
+[JsonPropertyName("html")]
 		public string Html { get; set; }
+
+[JsonPropertyName("poster_photo_id")]
 		public long? PosterPhotoId { get; set; }
+
+[JsonPropertyName("w")]
 		public int? W { get; set; }
+
+[JsonPropertyName("h")]
 		public int? H { get; set; }
+
+[JsonPropertyName("caption")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase Caption { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = FullWidth ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

@@ -292,7 +292,7 @@ if(phoneCodeHash is null) throw new ArgumentNullException(nameof(phoneCodeHash))
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<bool>> DropTempAuthKeysAsync(List<long> exceptAuthKeys, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<bool>> DropTempAuthKeysAsync(IList<long> exceptAuthKeys, CancellationToken cancellationToken = default)
 		{
 			
 			var rpcResponse = new RpcMessage<bool>();
@@ -309,7 +309,7 @@ if(phoneCodeHash is null) throw new ArgumentNullException(nameof(phoneCodeHash))
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.LoginTokenBase>> ExportLoginTokenAsync(int apiId, string apiHash, List<int> exceptIds, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.LoginTokenBase>> ExportLoginTokenAsync(int apiId, string apiHash, IList<int> exceptIds, CancellationToken cancellationToken = default)
 		{
 			if(apiHash is null) throw new ArgumentNullException(nameof(apiHash));
 

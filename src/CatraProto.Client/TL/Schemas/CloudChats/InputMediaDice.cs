@@ -1,16 +1,23 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputMediaDice : InputMediaBase
+	public partial class InputMediaDice : CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase
 	{
 
 
-        public static int ConstructorId { get; } = -428884101;
+        public static int StaticConstructorId { get => -428884101; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("emoticon")]
 		public string Emoticon { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

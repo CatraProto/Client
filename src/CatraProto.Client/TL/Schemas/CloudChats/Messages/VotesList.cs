@@ -1,13 +1,12 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Text.Json.Serialization;
+using CatraProto.TL;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class VotesList : VotesListBase
+	public partial class VotesList : CatraProto.Client.TL.Schemas.CloudChats.Messages.VotesListBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,13 +14,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			NextOffset = 1 << 0
 		}
 
-        public static int ConstructorId { get; } = 136574537;
+        public static int StaticConstructorId { get => 136574537; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("count")]
 		public override int Count { get; set; }
+
+[JsonPropertyName("votes")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.MessageUserVoteBase> Votes { get; set; }
+
+[JsonPropertyName("users")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+
+[JsonPropertyName("next_offset")]
 		public override string NextOffset { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = NextOffset == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);

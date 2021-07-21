@@ -1,16 +1,23 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-	public partial class InviteText : InviteTextBase
+	public partial class InviteText : CatraProto.Client.TL.Schemas.CloudChats.Help.InviteTextBase
 	{
 
 
-        public static int ConstructorId { get; } = 415997816;
+        public static int StaticConstructorId { get => 415997816; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("message")]
 		public override string Message { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

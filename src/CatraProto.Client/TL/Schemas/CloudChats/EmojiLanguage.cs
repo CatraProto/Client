@@ -1,16 +1,23 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class EmojiLanguage : EmojiLanguageBase
+	public partial class EmojiLanguage : CatraProto.Client.TL.Schemas.CloudChats.EmojiLanguageBase
 	{
 
 
-        public static int ConstructorId { get; } = -1275374751;
+        public static int StaticConstructorId { get => -1275374751; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("lang_code")]
 		public override string LangCode { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

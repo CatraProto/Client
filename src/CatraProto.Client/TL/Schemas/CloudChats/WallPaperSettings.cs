@@ -1,11 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class WallPaperSettings : WallPaperSettingsBase
+	public partial class WallPaperSettings : CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -18,15 +19,32 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Rotation = 1 << 4
 		}
 
-        public static int ConstructorId { get; } = 84438264;
+        public static int StaticConstructorId { get => 84438264; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("blur")]
 		public override bool Blur { get; set; }
+
+[JsonPropertyName("motion")]
 		public override bool Motion { get; set; }
+
+[JsonPropertyName("background_color")]
 		public override int? BackgroundColor { get; set; }
+
+[JsonPropertyName("second_background_color")]
 		public override int? SecondBackgroundColor { get; set; }
+
+[JsonPropertyName("intensity")]
 		public override int? Intensity { get; set; }
+
+[JsonPropertyName("rotation")]
 		public override int? Rotation { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Blur ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);

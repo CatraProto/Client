@@ -1,11 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelAdminLogEventsFilter : ChannelAdminLogEventsFilterBase
+	public partial class ChannelAdminLogEventsFilter : CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventsFilterBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -28,25 +29,62 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Invites = 1 << 15
 		}
 
-        public static int ConstructorId { get; } = -368018716;
+        public static int StaticConstructorId { get => -368018716; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("join")]
 		public override bool Join { get; set; }
+
+[JsonPropertyName("leave")]
 		public override bool Leave { get; set; }
+
+[JsonPropertyName("invite")]
 		public override bool Invite { get; set; }
+
+[JsonPropertyName("ban")]
 		public override bool Ban { get; set; }
+
+[JsonPropertyName("unban")]
 		public override bool Unban { get; set; }
+
+[JsonPropertyName("kick")]
 		public override bool Kick { get; set; }
+
+[JsonPropertyName("unkick")]
 		public override bool Unkick { get; set; }
+
+[JsonPropertyName("promote")]
 		public override bool Promote { get; set; }
+
+[JsonPropertyName("demote")]
 		public override bool Demote { get; set; }
+
+[JsonPropertyName("info")]
 		public override bool Info { get; set; }
+
+[JsonPropertyName("settings")]
 		public override bool Settings { get; set; }
+
+[JsonPropertyName("pinned")]
 		public override bool Pinned { get; set; }
+
+[JsonPropertyName("edit")]
 		public override bool Edit { get; set; }
+
+[JsonPropertyName("delete")]
 		public override bool Delete { get; set; }
+
+[JsonPropertyName("group_call")]
 		public override bool GroupCall { get; set; }
+
+[JsonPropertyName("invites")]
 		public override bool Invites { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Join ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

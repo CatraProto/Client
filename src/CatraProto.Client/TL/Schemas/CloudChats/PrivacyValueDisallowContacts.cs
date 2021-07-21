@@ -1,15 +1,20 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PrivacyValueDisallowContacts : PrivacyRuleBase
+	public partial class PrivacyValueDisallowContacts : CatraProto.Client.TL.Schemas.CloudChats.PrivacyRuleBase
 	{
 
 
-        public static int ConstructorId { get; } = -125240806;
-
+        public static int StaticConstructorId { get => -125240806; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+        
 		public override void UpdateFlags() 
 		{
 

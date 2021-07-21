@@ -1,15 +1,20 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputWallPaperNoFile : InputWallPaperBase
+	public partial class InputWallPaperNoFile : CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase
 	{
 
 
-        public static int ConstructorId { get; } = -2077770836;
-
+        public static int StaticConstructorId { get => -2077770836; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+        
 		public override void UpdateFlags() 
 		{
 

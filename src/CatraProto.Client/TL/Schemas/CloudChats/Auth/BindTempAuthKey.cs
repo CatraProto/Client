@@ -1,6 +1,8 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using System.Text.Json.Serialization;
 using CatraProto.TL.Interfaces;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
@@ -8,14 +10,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 	{
 
 
-        public static int ConstructorId { get; } = -841733627;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => -841733627; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(bool);
 
-		public System.Type Type { get; init; } = typeof(bool);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonPropertyName("perm_auth_key_id")]
 		public long PermAuthKeyId { get; set; }
+
+[JsonPropertyName("nonce")]
 		public long Nonce { get; set; }
+
+[JsonPropertyName("expires_at")]
 		public int ExpiresAt { get; set; }
+
+[JsonPropertyName("encrypted_message")]
 		public byte[] EncryptedMessage { get; set; }
+
 
 		public void UpdateFlags() 
 		{

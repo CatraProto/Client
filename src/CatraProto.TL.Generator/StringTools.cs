@@ -11,7 +11,8 @@ namespace CatraProto.TL.Generator
 		public const string ThreeTabs = "\t\t\t";
 		public const string FourTabs = "\t\t\t\t";
 		public const string FiveTabs = "\t\t\t\t\t";
-
+		public static Character[] SplitValues { get; set; }
+		
 		private static string[] _bannedKeywords =
 		{
 			"params",
@@ -27,9 +28,7 @@ namespace CatraProto.TL.Generator
 			SplitValues[1] = new Character { Char = '_', Delete = true };
 			SplitValues[2] = new Character { Char = '.', Delete = false };
 		}
-
-		public static Character[] SplitValues { get; set; }
-
+		
 		public static string PascalCase(string name)
 		{
 			if (string.IsNullOrEmpty(name))
@@ -50,7 +49,7 @@ namespace CatraProto.TL.Generator
 
 				foreach (var value in SplitValues)
 				{
-					if (i + 1 <= name.Length)
+					if (i + 1 < name.Length)
 					{
 						if (value.Char == ch)
 						{

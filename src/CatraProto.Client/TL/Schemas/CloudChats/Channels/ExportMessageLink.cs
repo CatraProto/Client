@@ -1,8 +1,8 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Collections.Generic;
+using CatraProto.TL;
+using System.Text.Json.Serialization;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 {
@@ -15,15 +15,32 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 			Thread = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = -432034325;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => -432034325; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.ExportedMessageLinkBase);
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.ExportedMessageLinkBase);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("grouped")]
 		public bool Grouped { get; set; }
+
+[JsonPropertyName("thread")]
 		public bool Thread { get; set; }
+
+[JsonPropertyName("channel")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase Channel { get; set; }
+
+[JsonPropertyName("id")]
 		public int Id { get; set; }
+
 
 		public void UpdateFlags() 
 		{

@@ -1,11 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PeerSettings : PeerSettingsBase
+	public partial class PeerSettings : CatraProto.Client.TL.Schemas.CloudChats.PeerSettingsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -21,18 +22,41 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			GeoDistance = 1 << 6
 		}
 
-        public static int ConstructorId { get; } = 1933519201;
+        public static int StaticConstructorId { get => 1933519201; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("report_spam")]
 		public override bool ReportSpam { get; set; }
+
+[JsonPropertyName("add_contact")]
 		public override bool AddContact { get; set; }
+
+[JsonPropertyName("block_contact")]
 		public override bool BlockContact { get; set; }
+
+[JsonPropertyName("share_contact")]
 		public override bool ShareContact { get; set; }
+
+[JsonPropertyName("need_contacts_exception")]
 		public override bool NeedContactsException { get; set; }
+
+[JsonPropertyName("report_geo")]
 		public override bool ReportGeo { get; set; }
+
+[JsonPropertyName("autoarchived")]
 		public override bool Autoarchived { get; set; }
+
+[JsonPropertyName("invite_members")]
 		public override bool InviteMembers { get; set; }
+
+[JsonPropertyName("geo_distance")]
 		public override int? GeoDistance { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = ReportSpam ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

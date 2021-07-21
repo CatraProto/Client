@@ -1,11 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class KeyboardButtonSwitchInline : KeyboardButtonBase
+	public partial class KeyboardButtonSwitchInline : CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -13,12 +14,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			SamePeer = 1 << 0
 		}
 
-        public static int ConstructorId { get; } = 90744648;
+        public static int StaticConstructorId { get => 90744648; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("same_peer")]
 		public bool SamePeer { get; set; }
+
+[JsonPropertyName("text")]
 		public override string Text { get; set; }
+
+[JsonPropertyName("query")]
 		public string Query { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = SamePeer ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

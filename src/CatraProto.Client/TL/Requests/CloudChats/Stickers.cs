@@ -20,7 +20,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 	        
 	    }
 	    
-	    		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetBase>> CreateStickerSetAsync(CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId, string title, string shortName, List<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetItemBase> stickers, bool masks = true, bool animated = true, CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase thumb = null, CancellationToken cancellationToken = default)
+	    		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetBase>> CreateStickerSetAsync(CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId, string title, string shortName, IList<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetItemBase> stickers, bool masks = true, bool animated = true, CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase thumb = null, CancellationToken cancellationToken = default)
 		{
 			if(userId is null) throw new ArgumentNullException(nameof(userId));
 if(title is null) throw new ArgumentNullException(nameof(title));

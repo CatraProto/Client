@@ -1,13 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using System.Collections.Generic;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChatFull : ChatFullBase
+	public partial class ChatFull : CatraProto.Client.TL.Schemas.CloudChats.ChatFullBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -20,20 +19,47 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			FolderId = 1 << 11
 		}
 
-        public static int ConstructorId { get; } = 461151667;
+        public static int StaticConstructorId { get => 461151667; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("can_set_username")]
 		public override bool CanSetUsername { get; set; }
+
+[JsonPropertyName("has_scheduled")]
 		public override bool HasScheduled { get; set; }
+
+[JsonPropertyName("id")]
 		public override int Id { get; set; }
+
+[JsonPropertyName("about")]
 		public override string About { get; set; }
+
+[JsonPropertyName("participants")]
 		public CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantsBase Participants { get; set; }
+
+[JsonPropertyName("chat_photo")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.PhotoBase ChatPhoto { get; set; }
+
+[JsonPropertyName("notify_settings")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase NotifySettings { get; set; }
+
+[JsonPropertyName("exported_invite")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.ExportedChatInviteBase ExportedInvite { get; set; }
+
+[JsonPropertyName("bot_info")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase> BotInfo { get; set; }
+
+[JsonPropertyName("pinned_msg_id")]
 		public override int? PinnedMsgId { get; set; }
+
+[JsonPropertyName("folder_id")]
 		public override int? FolderId { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = CanSetUsername ? FlagsHelper.SetFlag(Flags, 7) : FlagsHelper.UnsetFlag(Flags, 7);

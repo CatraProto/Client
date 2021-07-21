@@ -1,7 +1,8 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-
+using System.Collections.Generic;
+using CatraProto.TL;
+using System.Text.Json.Serialization;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
@@ -19,18 +20,41 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 			FileMaxSize = 1 << 5
 		}
 
-        public static int ConstructorId { get; } = -262453244;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => -262453244; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Account.TakeoutBase);
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Account.TakeoutBase);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("contacts")]
 		public bool Contacts { get; set; }
+
+[JsonPropertyName("message_users")]
 		public bool MessageUsers { get; set; }
+
+[JsonPropertyName("message_chats")]
 		public bool MessageChats { get; set; }
+
+[JsonPropertyName("message_megagroups")]
 		public bool MessageMegagroups { get; set; }
+
+[JsonPropertyName("message_channels")]
 		public bool MessageChannels { get; set; }
+
+[JsonPropertyName("files")]
 		public bool Files { get; set; }
+
+[JsonPropertyName("file_max_size")]
 		public int? FileMaxSize { get; set; }
+
 
 		public void UpdateFlags() 
 		{

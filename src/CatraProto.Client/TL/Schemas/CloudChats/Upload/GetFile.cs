@@ -1,8 +1,8 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Collections.Generic;
+using CatraProto.TL;
+using System.Text.Json.Serialization;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 {
@@ -15,16 +15,35 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 			CdnSupported = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = -1319462148;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => -1319462148; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Upload.FileBase);
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Upload.FileBase);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("precise")]
 		public bool Precise { get; set; }
+
+[JsonPropertyName("cdn_supported")]
 		public bool CdnSupported { get; set; }
+
+[JsonPropertyName("location")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputFileLocationBase Location { get; set; }
+
+[JsonPropertyName("offset")]
 		public int Offset { get; set; }
+
+[JsonPropertyName("limit")]
 		public int Limit { get; set; }
+
 
 		public void UpdateFlags() 
 		{

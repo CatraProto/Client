@@ -1,13 +1,12 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Text.Json.Serialization;
+using CatraProto.TL;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class Invoice : InvoiceBase
+	public partial class Invoice : CatraProto.Client.TL.Schemas.CloudChats.InvoiceBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -22,19 +21,44 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			EmailToProvider = 1 << 7
 		}
 
-        public static int ConstructorId { get; } = -1022713000;
+        public static int StaticConstructorId { get => -1022713000; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("test")]
 		public override bool Test { get; set; }
+
+[JsonPropertyName("name_requested")]
 		public override bool NameRequested { get; set; }
+
+[JsonPropertyName("phone_requested")]
 		public override bool PhoneRequested { get; set; }
+
+[JsonPropertyName("email_requested")]
 		public override bool EmailRequested { get; set; }
+
+[JsonPropertyName("shipping_address_requested")]
 		public override bool ShippingAddressRequested { get; set; }
+
+[JsonPropertyName("flexible")]
 		public override bool Flexible { get; set; }
+
+[JsonPropertyName("phone_to_provider")]
 		public override bool PhoneToProvider { get; set; }
+
+[JsonPropertyName("email_to_provider")]
 		public override bool EmailToProvider { get; set; }
+
+[JsonPropertyName("currency")]
 		public override string Currency { get; set; }
+
+[JsonPropertyName("prices")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase> Prices { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Test ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

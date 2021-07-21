@@ -24,7 +24,7 @@ namespace CatraProto.TL.Generator
 
 			var optimizedObjects = Optimizer.Optimize(analyzed);
 			var writer = await Writer.Create(Optimizer.Optimize(optimizedObjects));
-			var dictionaryWriter = await DictionaryWriter.Create(optimizedObjects);
+			var dictionaryWriter = await ProviderWriter.Create(optimizedObjects);
 			var taskList = new List<Task>
 			{
 				writer.Write(),

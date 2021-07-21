@@ -1,5 +1,6 @@
 using System;
 using CatraProto.TL.Generator.CodeGeneration.Parsing;
+using CatraProto.TL.Generator.DeclarationInfo;
 using CatraProto.TL.Generator.Objects;
 using CatraProto.TL.Generator.Objects.Types;
 using Xunit;
@@ -46,11 +47,11 @@ namespace CatraProto.TL.Generator.UnitTests.ParserTests
 
 			Assert.Single(args);
 			var parameter = Parameter.Create(args[0]);
-			Assert.Equal(expectedName, parameter.Name);
-			Assert.Equal(expectedTypeName, parameter.Type.Name);
-			Assert.Equal(expectedIsNaked, parameter.IsNaked);
-			Assert.Equal(expectedIsVector, parameter.IsVector);
-			Assert.Equal(expectedIsBare, parameter.Type.IsBare);
+			Assert.Equal(expectedName, parameter.NamingInfo.PascalCaseName);
+			Assert.Equal(expectedTypeName, parameter.Type.GetTypeName(NamingType.PascalCase, null, false));
+			Assert.Equal(expectedIsNaked, parameter.Type.TypeInfo.IsNaked);
+			Assert.Equal(expectedIsVector, parameter.VectorInfo.IsVector);
+			Assert.Equal(expectedIsBare, parameter.Type.TypeInfo.IsBare);
 			Assert.Equal(expectedType, parameter.Type.GetType());
 
 			if (expectedNamespace == null)
@@ -59,7 +60,7 @@ namespace CatraProto.TL.Generator.UnitTests.ParserTests
 			}
 			else
 			{
-				Assert.Equal(expectedNamespace, parameter.Type.Namespace.FullNamespace);
+				Assert.Equal(expectedNamespace, parameter.Type.GetTypeName(NamingType.FullNamespace, null, false));
 			}
 
 			if (expectedFlagBit != null)
@@ -99,14 +100,13 @@ namespace CatraProto.TL.Generator.UnitTests.ParserTests
 
 			Assert.Single(args);
 			var parameter = Parameter.Create(args[0]);
-			Assert.Equal("ParameterName", parameter.Name);
-			Assert.Equal(expectedTypeName, parameter.Type.Name);
-			Assert.False(parameter.IsNaked);
-			Assert.Equal(expectedIsVector, parameter.IsVector);
-			Assert.True(parameter.Type.IsBare);
+			Assert.Equal("ParameterName", parameter.NamingInfo.PascalCaseName);
+			Assert.Equal(expectedTypeName, parameter.Type.GetTypeName(NamingType.FullNamespace, null, false));
+			Assert.False(parameter.Type.TypeInfo.IsNaked);
+			Assert.Equal(expectedIsVector, parameter.VectorInfo.IsVector);
+			Assert.True(parameter.Type.TypeInfo.IsBare);
 			Assert.IsType<IntegerType>(parameter.Type);
 			Assert.Equal(expectedBitSize, ((IntegerType)parameter.Type).BitSize);
-			Assert.Null(parameter.Type.Namespace);
 
 			if (expectedFlagBit != null)
 			{

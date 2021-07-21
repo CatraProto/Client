@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PaymentRequestedInfo : PaymentRequestedInfoBase
+	public partial class PaymentRequestedInfo : CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -17,13 +17,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ShippingAddress = 1 << 3
 		}
 
-        public static int ConstructorId { get; } = -1868808300;
+        public static int StaticConstructorId { get => -1868808300; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("name")]
 		public override string Name { get; set; }
+
+[JsonPropertyName("phone")]
 		public override string Phone { get; set; }
+
+[JsonPropertyName("email")]
 		public override string Email { get; set; }
+
+[JsonPropertyName("shipping_address")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.PostAddressBase ShippingAddress { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Name == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);

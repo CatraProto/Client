@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class Password : PasswordBase
+	public partial class Password : CatraProto.Client.TL.Schemas.CloudChats.Account.PasswordBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -21,20 +21,47 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 			EmailUnconfirmedPattern = 1 << 4
 		}
 
-        public static int ConstructorId { get; } = -1390001672;
+        public static int StaticConstructorId { get => -1390001672; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("has_recovery")]
 		public override bool HasRecovery { get; set; }
+
+[JsonPropertyName("has_secure_values")]
 		public override bool HasSecureValues { get; set; }
+
+[JsonPropertyName("has_password")]
 		public override bool HasPassword { get; set; }
+
+[JsonPropertyName("current_algo")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase CurrentAlgo { get; set; }
+
+[JsonPropertyName("srp_B")]
 		public override byte[] SrpB { get; set; }
+
+[JsonPropertyName("srp_id")]
 		public override long? SrpId { get; set; }
+
+[JsonPropertyName("hint")]
 		public override string Hint { get; set; }
+
+[JsonPropertyName("email_unconfirmed_pattern")]
 		public override string EmailUnconfirmedPattern { get; set; }
+
+[JsonPropertyName("new_algo")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase NewAlgo { get; set; }
+
+[JsonPropertyName("new_secure_algo")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.SecurePasswordKdfAlgoBase NewSecureAlgo { get; set; }
+
+[JsonPropertyName("secure_random")]
 		public override byte[] SecureRandom { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = HasRecovery ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

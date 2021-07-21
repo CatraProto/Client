@@ -1,16 +1,22 @@
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+using System.Text.Json.Serialization;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
-
+using CatraProto.TL.Interfaces;
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public abstract class WebDocumentBase : IObject
     {
+
+[JsonPropertyName("url")]
 		public abstract string Url { get; set; }
+
+[JsonPropertyName("size")]
 		public abstract int Size { get; set; }
+
+[JsonPropertyName("mime_type")]
 		public abstract string MimeType { get; set; }
+
+[JsonPropertyName("attributes")]
 		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase> Attributes { get; set; }
 
         public abstract void UpdateFlags();

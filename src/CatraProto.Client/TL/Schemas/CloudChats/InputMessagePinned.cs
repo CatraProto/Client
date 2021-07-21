@@ -1,15 +1,20 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputMessagePinned : InputMessageBase
+	public partial class InputMessagePinned : CatraProto.Client.TL.Schemas.CloudChats.InputMessageBase
 	{
 
 
-        public static int ConstructorId { get; } = -2037963464;
-
+        public static int StaticConstructorId { get => -2037963464; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+        
 		public override void UpdateFlags() 
 		{
 

@@ -1,12 +1,12 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
 using System.Collections.Generic;
-
+using System.Text.Json.Serialization;
+using CatraProto.TL;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-	public partial class CountryCode : CountryCodeBase
+	public partial class CountryCode : CatraProto.Client.TL.Schemas.CloudChats.Help.CountryCodeBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,12 +15,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 			Patterns = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = 1107543535;
+        public static int StaticConstructorId { get => 1107543535; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("CountryCode_")]
 		public override string CountryCode_ { get; set; }
+
+[JsonPropertyName("prefixes")]
 		public override IList<string> Prefixes { get; set; }
+
+[JsonPropertyName("patterns")]
 		public override IList<string> Patterns { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Prefixes == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);

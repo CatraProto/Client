@@ -1,6 +1,8 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using System.Text.Json.Serialization;
 using CatraProto.TL.Interfaces;
-
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
@@ -8,13 +10,26 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 	{
 
 
-        public static int ConstructorId { get; } = -1835453025;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => -1835453025; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.HttpWaitBase);
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.HttpWaitBase);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonPropertyName("max_delay")]
 		public int MaxDelay { get; set; }
+
+[JsonPropertyName("wait_after")]
 		public int WaitAfter { get; set; }
+
+[JsonPropertyName("max_wait")]
 		public int MaxWait { get; set; }
+
 
 		public void UpdateFlags() 
 		{

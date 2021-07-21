@@ -1,3 +1,7 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using CatraProto.Client.MTProto.Rpc.RpcErrors;
 using CatraProto.Client.MTProto.Rpc.RpcErrors.Interfaces;
 using CatraProto.Client.TL.Schemas.MTProto;

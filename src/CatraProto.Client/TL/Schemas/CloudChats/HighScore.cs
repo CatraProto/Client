@@ -1,18 +1,29 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class HighScore : HighScoreBase
+	public partial class HighScore : CatraProto.Client.TL.Schemas.CloudChats.HighScoreBase
 	{
 
 
-        public static int ConstructorId { get; } = 1493171408;
+        public static int StaticConstructorId { get => 1493171408; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("pos")]
 		public override int Pos { get; set; }
+
+[JsonPropertyName("user_id")]
 		public override int UserId { get; set; }
+
+[JsonPropertyName("score")]
 		public override int Score { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

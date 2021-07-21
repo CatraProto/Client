@@ -1,18 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputGameShortName : InputGameBase
+	public partial class InputGameShortName : CatraProto.Client.TL.Schemas.CloudChats.InputGameBase
 	{
 
 
-        public static int ConstructorId { get; } = -1020139510;
+        public static int StaticConstructorId { get => -1020139510; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("bot_id")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase BotId { get; set; }
+
+[JsonPropertyName("short_name")]
 		public string ShortName { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

@@ -87,7 +87,7 @@ namespace CatraProto.TL.Generator.CodeGeneration.Optimization
 			{
 				foreach (var parameter in obj.Parameters)
 				{
-					if (parameter.Type.IsBare || parameter.Type.IsNaked)
+					if (parameter.Type.TypeInfo.IsBare || parameter.Type.TypeInfo.IsNaked)
 					{
 						continue;
 					}
@@ -105,7 +105,7 @@ namespace CatraProto.TL.Generator.CodeGeneration.Optimization
 
 					if (type is null)
 					{
-						throw new Exception("The type " + parameter.Type.Name + " inside object" + obj.Name + " has not been found anywhere.");
+						throw new Exception("The type " + parameter.Type.NamingInfo.OriginalName + " inside object" + obj.NamingInfo.OriginalName + " has not been found anywhere.");
 					}
 
 					type.ReferencedParameters.Add(parameter);
@@ -184,14 +184,15 @@ namespace CatraProto.TL.Generator.CodeGeneration.Optimization
 					x.Namespace.PartialNamespace != null && x.Namespace.PartialNamespace == obj.Namespace.FullNamespace);
 				if (findConflictingNamespace is not null || obj.Namespace.PartialNamespaceArray[^1] == obj.Namespace.Class)
 				{
-					obj.Name = obj.Name[0] + obj.Name;
+					obj.NamingInfo = obj.NamingInfo.PascalCaseName[0] + obj.NamingInfo.PascalCaseName;
+					obj.Namespace.Class = obj.NamingInfo.PascalCaseName;
 				}
 
 				foreach (var objParameter in obj.Parameters)
 				{
-					if (objParameter.Name == obj.Name)
+					if (objParameter.NamingInfo.PascalCaseName == obj.NamingInfo.PascalCaseName)
 					{
-						objParameter.Name += "_";
+						objParameter.NamingInfo = objParameter.NamingInfo.PascalCaseName += "_";
 					}
 				}
 			}

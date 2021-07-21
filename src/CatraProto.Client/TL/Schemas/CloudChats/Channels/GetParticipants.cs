@@ -1,7 +1,8 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using System.Text.Json.Serialization;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 {
@@ -9,15 +10,32 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 	{
 
 
-        public static int ConstructorId { get; } = 306054633;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => 306054633; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Channels.ChannelParticipantsBase);
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Channels.ChannelParticipantsBase);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonPropertyName("channel")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase Channel { get; set; }
+
+[JsonPropertyName("filter")]
 		public CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantsFilterBase Filter { get; set; }
+
+[JsonPropertyName("offset")]
 		public int Offset { get; set; }
+
+[JsonPropertyName("limit")]
 		public int Limit { get; set; }
+
+[JsonPropertyName("hash")]
 		public int Hash { get; set; }
+
 
 		public void UpdateFlags() 
 		{

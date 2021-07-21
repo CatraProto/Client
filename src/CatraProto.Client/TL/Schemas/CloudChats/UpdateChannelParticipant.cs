@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateChannelParticipant : UpdateBase
+	public partial class UpdateChannelParticipant : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,15 +15,32 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			NewParticipant = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = 1708307556;
+        public static int StaticConstructorId { get => 1708307556; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("channel_id")]
 		public int ChannelId { get; set; }
+
+[JsonPropertyName("date")]
 		public int Date { get; set; }
+
+[JsonPropertyName("user_id")]
 		public int UserId { get; set; }
+
+[JsonPropertyName("prev_participant")]
 		public CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantBase PrevParticipant { get; set; }
+
+[JsonPropertyName("new_participant")]
 		public CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantBase NewParticipant { get; set; }
+
+[JsonPropertyName("qts")]
 		public int Qts { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = PrevParticipant == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);

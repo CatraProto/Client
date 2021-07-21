@@ -1,12 +1,13 @@
 using CatraProto.TL;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public abstract class StickerSetCoveredBase : IObject
     {
+
+[JsonPropertyName("set")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.StickerSetBase Set { get; set; }
 
         public abstract void UpdateFlags();

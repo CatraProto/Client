@@ -1,19 +1,32 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class DhConfig : DhConfigBase
+	public partial class DhConfig : CatraProto.Client.TL.Schemas.CloudChats.Messages.DhConfigBase
 	{
 
 
-        public static int ConstructorId { get; } = 740433629;
+        public static int StaticConstructorId { get => 740433629; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("g")]
 		public int G { get; set; }
+
+[JsonPropertyName("p")]
 		public byte[] P { get; set; }
+
+[JsonPropertyName("version")]
 		public int Version { get; set; }
+
+[JsonPropertyName("random")]
 		public override byte[] Random { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

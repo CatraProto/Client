@@ -7,7 +7,9 @@ using CatraProto.Client.Connections.Loop;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
 using Serilog;
+using MessageContainer = CatraProto.Client.Connections.MessageContainer;
 
 namespace CatraProto.Client.MTProto.Containers
 {
@@ -40,17 +42,19 @@ namespace CatraProto.Client.MTProto.Containers
 
         private void WriteContainer()
         {
-            _currentWriter.Write(MsgContainer.ConstructorId);
+            _currentWriter.Write(MsgContainer.StaticConstructorId);
         }
 
         public void CreateContainer(List<MessageContainer> messages, ConnectionState connectionState)
         {
             _logger.Information("Converting {Count} messages to containers", messages.Count);
+            
             for (var i = 0; i < messages.Count; i++)
             {
                 var messageContainer = messages[i];
                 if (SocketTools.TrySerialize(messageContainer, _logger, out var serialized))
                 {
+                    //serialized = messageContainer.OutgoingMessage.Body is IMethod ? GzipHandler.FromBytes(serialized) : serialized;
                     if (_currentBytes + (serialized.Length + 8 + 4 + 4) > ContainerBytesLimit || _currentMessagesCount > ContainerMessagesLimit)
                     {
                         connectionState.MessagesHandler.OutgoingMessages.Writer.TryWrite(messageContainer);

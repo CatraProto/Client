@@ -1,16 +1,23 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class DestroySessionNone : DestroySessionResBase
+	public partial class DestroySessionNone : CatraProto.Client.TL.Schemas.MTProto.DestroySessionResBase
 	{
 
 
-        public static int ConstructorId { get; } = 1658015945;
+        public static int StaticConstructorId { get => 1658015945; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("session_id")]
 		public override long SessionId { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

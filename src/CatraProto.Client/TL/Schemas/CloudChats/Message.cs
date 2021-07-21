@@ -1,13 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using System.Collections.Generic;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class Message : MessageBase
+	public partial class Message : CatraProto.Client.TL.Schemas.CloudChats.MessageBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -37,36 +36,95 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			RestrictionReason = 1 << 22
 		}
 
-        public static int ConstructorId { get; } = 1487813065;
+        public static int StaticConstructorId { get => 1487813065; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("out")]
 		public bool Out { get; set; }
+
+[JsonPropertyName("mentioned")]
 		public bool Mentioned { get; set; }
+
+[JsonPropertyName("media_unread")]
 		public bool MediaUnread { get; set; }
+
+[JsonPropertyName("silent")]
 		public bool Silent { get; set; }
+
+[JsonPropertyName("post")]
 		public bool Post { get; set; }
+
+[JsonPropertyName("from_scheduled")]
 		public bool FromScheduled { get; set; }
+
+[JsonPropertyName("legacy")]
 		public bool Legacy { get; set; }
+
+[JsonPropertyName("edit_hide")]
 		public bool EditHide { get; set; }
+
+[JsonPropertyName("pinned")]
 		public bool Pinned { get; set; }
+
+[JsonPropertyName("id")]
 		public override int Id { get; set; }
+
+[JsonPropertyName("from_id")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase FromId { get; set; }
+
+[JsonPropertyName("peer_id")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase PeerId { get; set; }
+
+[JsonPropertyName("fwd_from")]
 		public CatraProto.Client.TL.Schemas.CloudChats.MessageFwdHeaderBase FwdFrom { get; set; }
+
+[JsonPropertyName("via_bot_id")]
 		public int? ViaBotId { get; set; }
+
+[JsonPropertyName("reply_to")]
 		public CatraProto.Client.TL.Schemas.CloudChats.MessageReplyHeaderBase ReplyTo { get; set; }
+
+[JsonPropertyName("date")]
 		public int Date { get; set; }
+
+[JsonPropertyName("Message_")]
 		public string Message_ { get; set; }
+
+[JsonPropertyName("media")]
 		public CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase Media { get; set; }
+
+[JsonPropertyName("reply_markup")]
 		public CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase ReplyMarkup { get; set; }
+
+[JsonPropertyName("entities")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
+
+[JsonPropertyName("views")]
 		public int? Views { get; set; }
+
+[JsonPropertyName("forwards")]
 		public int? Forwards { get; set; }
+
+[JsonPropertyName("replies")]
 		public CatraProto.Client.TL.Schemas.CloudChats.MessageRepliesBase Replies { get; set; }
+
+[JsonPropertyName("edit_date")]
 		public int? EditDate { get; set; }
+
+[JsonPropertyName("post_author")]
 		public string PostAuthor { get; set; }
+
+[JsonPropertyName("grouped_id")]
 		public long? GroupedId { get; set; }
+
+[JsonPropertyName("restriction_reason")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase> RestrictionReason { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Out ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);

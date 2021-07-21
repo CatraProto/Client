@@ -1,16 +1,23 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PhotoSizeEmpty : PhotoSizeBase
+	public partial class PhotoSizeEmpty : CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase
 	{
 
 
-        public static int ConstructorId { get; } = 236446268;
+        public static int StaticConstructorId { get => 236446268; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("type")]
 		public override string Type { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

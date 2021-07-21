@@ -1,22 +1,38 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Numerics;
-
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class PQInnerData : PQInnerDataBase
+	public partial class PQInnerData : CatraProto.Client.TL.Schemas.MTProto.PQInnerDataBase
 	{
 
 
-        public static int ConstructorId { get; } = -2083955988;
+        public static int StaticConstructorId { get => -2083955988; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("pq")]
 		public override byte[] Pq { get; set; }
-		public override byte[] P { get; set; }
-		public override byte[] Q { get; set; }
-		public override BigInteger Nonce { get; set; }
-		public override BigInteger ServerNonce { get; set; }
-		public override BigInteger NewNonce { get; set; }
 
+[JsonPropertyName("p")]
+		public override byte[] P { get; set; }
+
+[JsonPropertyName("q")]
+		public override byte[] Q { get; set; }
+
+[JsonPropertyName("nonce")]
+		public override System.Numerics.BigInteger Nonce { get; set; }
+
+[JsonPropertyName("server_nonce")]
+		public override System.Numerics.BigInteger ServerNonce { get; set; }
+
+[JsonPropertyName("new_nonce")]
+		public override System.Numerics.BigInteger NewNonce { get; set; }
+
+        
 		public override void UpdateFlags() 
 		{
 
@@ -51,9 +67,9 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 			Pq = reader.Read<byte[]>();
 			P = reader.Read<byte[]>();
 			Q = reader.Read<byte[]>();
-			Nonce = reader.Read<BigInteger>(128);
-			ServerNonce = reader.Read<BigInteger>(128);
-			NewNonce = reader.Read<BigInteger>(256);
+			Nonce = reader.Read<System.Numerics.BigInteger>(128);
+			ServerNonce = reader.Read<System.Numerics.BigInteger>(128);
+			NewNonce = reader.Read<System.Numerics.BigInteger>(256);
 
 		}
 	}

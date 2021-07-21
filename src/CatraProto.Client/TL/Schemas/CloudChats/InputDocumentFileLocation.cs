@@ -1,19 +1,32 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputDocumentFileLocation : InputFileLocationBase
+	public partial class InputDocumentFileLocation : CatraProto.Client.TL.Schemas.CloudChats.InputFileLocationBase
 	{
 
 
-        public static int ConstructorId { get; } = -1160743548;
+        public static int StaticConstructorId { get => -1160743548; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("id")]
 		public long Id { get; set; }
+
+[JsonPropertyName("access_hash")]
 		public long AccessHash { get; set; }
+
+[JsonPropertyName("file_reference")]
 		public byte[] FileReference { get; set; }
+
+[JsonPropertyName("thumb_size")]
 		public string ThumbSize { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

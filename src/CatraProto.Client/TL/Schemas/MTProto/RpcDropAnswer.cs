@@ -1,6 +1,8 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using System.Text.Json.Serialization;
 using CatraProto.TL.Interfaces;
-
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
@@ -8,11 +10,20 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 	{
 
 
-        public static int ConstructorId { get; } = 1491380032;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => 1491380032; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.RpcDropAnswerBase);
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.RpcDropAnswerBase);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonPropertyName("req_msg_id")]
 		public long ReqMsgId { get; set; }
+
 
 		public void UpdateFlags() 
 		{

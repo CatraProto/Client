@@ -1,13 +1,12 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Text.Json.Serialization;
+using CatraProto.TL;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class MessagesSlice : MessagesBase
+	public partial class MessagesSlice : CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -17,16 +16,35 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			OffsetIdOffset = 1 << 2
 		}
 
-        public static int ConstructorId { get; } = 978610270;
+        public static int StaticConstructorId { get => 978610270; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("inexact")]
 		public bool Inexact { get; set; }
+
+[JsonPropertyName("count")]
 		public int Count { get; set; }
+
+[JsonPropertyName("next_rate")]
 		public int? NextRate { get; set; }
+
+[JsonPropertyName("offset_id_offset")]
 		public int? OffsetIdOffset { get; set; }
+
+[JsonPropertyName("messages")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageBase> Messages { get; set; }
+
+[JsonPropertyName("chats")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
+
+[JsonPropertyName("users")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Inexact ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);

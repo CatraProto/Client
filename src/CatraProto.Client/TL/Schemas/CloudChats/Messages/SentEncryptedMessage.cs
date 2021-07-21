@@ -1,16 +1,23 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class SentEncryptedMessage : SentEncryptedMessageBase
+	public partial class SentEncryptedMessage : CatraProto.Client.TL.Schemas.CloudChats.Messages.SentEncryptedMessageBase
 	{
 
 
-        public static int ConstructorId { get; } = 1443858741;
+        public static int StaticConstructorId { get => 1443858741; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("date")]
 		public override int Date { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

@@ -11,7 +11,7 @@ namespace CatraProto.TL.Generator.UnitTests.ParserTests
 		{
 			var analyzer = new Parser("test#7B");
 			var id = analyzer.FindId();
-			var name = analyzer.FindName();
+			var name = analyzer.FindName(out _);
 
 			Assert.Equal(123, id);
 			Assert.Equal("test", name);
@@ -22,7 +22,7 @@ namespace CatraProto.TL.Generator.UnitTests.ParserTests
 		{
 			var analyzer = new Parser("test");
 			var id = analyzer.FindId();
-			var name = analyzer.FindName();
+			var name = analyzer.FindName(out _);
 
 			Assert.Null(id);
 			Assert.Equal("test", name);

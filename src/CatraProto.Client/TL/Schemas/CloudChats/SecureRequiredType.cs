@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class SecureRequiredType : SecureRequiredTypeBase
+	public partial class SecureRequiredType : CatraProto.Client.TL.Schemas.CloudChats.SecureRequiredTypeBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,13 +16,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			TranslationRequired = 1 << 2
 		}
 
-        public static int ConstructorId { get; } = -2103600678;
+        public static int StaticConstructorId { get => -2103600678; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("native_names")]
 		public bool NativeNames { get; set; }
+
+[JsonPropertyName("selfie_required")]
 		public bool SelfieRequired { get; set; }
+
+[JsonPropertyName("translation_required")]
 		public bool TranslationRequired { get; set; }
+
+[JsonPropertyName("type")]
 		public CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase Type { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = NativeNames ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

@@ -1,13 +1,12 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Text.Json.Serialization;
+using CatraProto.TL;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class WebPageAttributeTheme : WebPageAttributeBase
+	public partial class WebPageAttributeTheme : CatraProto.Client.TL.Schemas.CloudChats.WebPageAttributeBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,11 +15,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Settings = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = 1421174295;
+        public static int StaticConstructorId { get => 1421174295; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("documents")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase> Documents { get; set; }
+
+[JsonPropertyName("settings")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.ThemeSettingsBase Settings { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Documents == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);

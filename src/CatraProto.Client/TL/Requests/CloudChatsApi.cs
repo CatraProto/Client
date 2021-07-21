@@ -73,7 +73,7 @@ Stats = new CatraProto.Client.TL.Requests.CloudChats.Stats(messagesHandler);
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<IObject>> InvokeAfterMsgsAsync(List<long> msgIds, IObject query, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<IObject>> InvokeAfterMsgsAsync(IList<long> msgIds, IObject query, CancellationToken cancellationToken = default)
 		{
 			if(query is null) throw new ArgumentNullException(nameof(query));
 

@@ -1,17 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageActionPaymentSent : MessageActionBase
+	public partial class MessageActionPaymentSent : CatraProto.Client.TL.Schemas.CloudChats.MessageActionBase
 	{
 
 
-        public static int ConstructorId { get; } = 1080663248;
+        public static int StaticConstructorId { get => 1080663248; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("currency")]
 		public string Currency { get; set; }
+
+[JsonPropertyName("total_amount")]
 		public long TotalAmount { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

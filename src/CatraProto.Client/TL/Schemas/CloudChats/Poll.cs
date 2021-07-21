@@ -1,13 +1,12 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Text.Json.Serialization;
+using CatraProto.TL;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class Poll : PollBase
+	public partial class Poll : CatraProto.Client.TL.Schemas.CloudChats.PollBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -20,18 +19,41 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			CloseDate = 1 << 5
 		}
 
-        public static int ConstructorId { get; } = -2032041631;
+        public static int StaticConstructorId { get => -2032041631; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("id")]
 		public override long Id { get; set; }
+
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("closed")]
 		public override bool Closed { get; set; }
+
+[JsonPropertyName("public_voters")]
 		public override bool PublicVoters { get; set; }
+
+[JsonPropertyName("multiple_choice")]
 		public override bool MultipleChoice { get; set; }
+
+[JsonPropertyName("quiz")]
 		public override bool Quiz { get; set; }
+
+[JsonPropertyName("question")]
 		public override string Question { get; set; }
+
+[JsonPropertyName("answers")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.PollAnswerBase> Answers { get; set; }
+
+[JsonPropertyName("close_period")]
 		public override int? ClosePeriod { get; set; }
+
+[JsonPropertyName("close_date")]
 		public override int? CloseDate { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Closed ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

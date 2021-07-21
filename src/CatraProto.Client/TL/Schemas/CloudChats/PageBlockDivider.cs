@@ -1,15 +1,20 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PageBlockDivider : PageBlockBase
+	public partial class PageBlockDivider : CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase
 	{
 
 
-        public static int ConstructorId { get; } = -618614392;
-
+        public static int StaticConstructorId { get => -618614392; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+        
 		public override void UpdateFlags() 
 		{
 

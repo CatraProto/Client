@@ -1,19 +1,29 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputStickerSetThumb : InputFileLocationBase
+	public partial class InputStickerSetThumb : CatraProto.Client.TL.Schemas.CloudChats.InputFileLocationBase
 	{
 
 
-        public static int ConstructorId { get; } = 230353641;
+        public static int StaticConstructorId { get => 230353641; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("stickerset")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase Stickerset { get; set; }
+
+[JsonPropertyName("volume_id")]
 		public long VolumeId { get; set; }
+
+[JsonPropertyName("local_id")]
 		public int LocalId { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

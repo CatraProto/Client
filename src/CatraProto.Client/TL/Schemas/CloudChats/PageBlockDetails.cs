@@ -1,13 +1,12 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Text.Json.Serialization;
+using CatraProto.TL;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PageBlockDetails : PageBlockBase
+	public partial class PageBlockDetails : CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,12 +14,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Open = 1 << 0
 		}
 
-        public static int ConstructorId { get; } = 1987480557;
+        public static int StaticConstructorId { get => 1987480557; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("open")]
 		public bool Open { get; set; }
+
+[JsonPropertyName("blocks")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase> Blocks { get; set; }
+
+[JsonPropertyName("title")]
 		public CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Title { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Open ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

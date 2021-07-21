@@ -1,6 +1,8 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
@@ -8,8 +10,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 	{
 
 
-        public static int ConstructorId { get; } = -1720552011;
-
+        public static int StaticConstructorId { get => -1720552011; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+        
 		public void UpdateFlags() 
 		{
 

@@ -1,15 +1,20 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class SendMessageChooseContactAction : SendMessageActionBase
+	public partial class SendMessageChooseContactAction : CatraProto.Client.TL.Schemas.CloudChats.SendMessageActionBase
 	{
 
 
-        public static int ConstructorId { get; } = 1653390447;
-
+        public static int StaticConstructorId { get => 1653390447; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+        
 		public override void UpdateFlags() 
 		{
 

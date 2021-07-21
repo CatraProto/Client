@@ -1,13 +1,19 @@
 using CatraProto.TL;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
-
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public abstract class StatsGroupTopPosterBase : IObject
     {
+
+[JsonPropertyName("user_id")]
 		public abstract int UserId { get; set; }
+
+[JsonPropertyName("messages")]
 		public abstract int Messages { get; set; }
+
+[JsonPropertyName("avg_chars")]
 		public abstract int AvgChars { get; set; }
 
         public abstract void UpdateFlags();

@@ -1,8 +1,8 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Collections.Generic;
+using CatraProto.TL;
+using System.Text.Json.Serialization;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
@@ -15,21 +15,50 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Params = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = -1043505495;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => -1043505495; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(IObject);
 
-		public System.Type Type { get; init; } = typeof(IObject);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("api_id")]
 		public int ApiId { get; set; }
+
+[JsonPropertyName("device_model")]
 		public string DeviceModel { get; set; }
+
+[JsonPropertyName("system_version")]
 		public string SystemVersion { get; set; }
+
+[JsonPropertyName("app_version")]
 		public string AppVersion { get; set; }
+
+[JsonPropertyName("system_lang_code")]
 		public string SystemLangCode { get; set; }
+
+[JsonPropertyName("lang_pack")]
 		public string LangPack { get; set; }
+
+[JsonPropertyName("lang_code")]
 		public string LangCode { get; set; }
+
+[JsonPropertyName("proxy")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputClientProxyBase Proxy { get; set; }
+
+[JsonPropertyName("params")]
 		public CatraProto.Client.TL.Schemas.CloudChats.JSONValueBase Params { get; set; }
+
+[JsonPropertyName("query")]
 		public IObject Query { get; set; }
+
 
 		public void UpdateFlags() 
 		{

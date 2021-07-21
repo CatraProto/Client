@@ -1,13 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using System.Collections.Generic;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class WebPage : WebPageBase
+	public partial class WebPage : CatraProto.Client.TL.Schemas.CloudChats.WebPageBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -28,27 +27,68 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Attributes = 1 << 12
 		}
 
-        public static int ConstructorId { get; } = -392411726;
+        public static int StaticConstructorId { get => -392411726; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("id")]
 		public long Id { get; set; }
+
+[JsonPropertyName("url")]
 		public string Url { get; set; }
+
+[JsonPropertyName("display_url")]
 		public string DisplayUrl { get; set; }
+
+[JsonPropertyName("hash")]
 		public int Hash { get; set; }
+
+[JsonPropertyName("type")]
 		public string Type { get; set; }
+
+[JsonPropertyName("site_name")]
 		public string SiteName { get; set; }
+
+[JsonPropertyName("title")]
 		public string Title { get; set; }
+
+[JsonPropertyName("description")]
 		public string Description { get; set; }
+
+[JsonPropertyName("photo")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PhotoBase Photo { get; set; }
+
+[JsonPropertyName("embed_url")]
 		public string EmbedUrl { get; set; }
+
+[JsonPropertyName("embed_type")]
 		public string EmbedType { get; set; }
+
+[JsonPropertyName("embed_width")]
 		public int? EmbedWidth { get; set; }
+
+[JsonPropertyName("embed_height")]
 		public int? EmbedHeight { get; set; }
+
+[JsonPropertyName("duration")]
 		public int? Duration { get; set; }
+
+[JsonPropertyName("author")]
 		public string Author { get; set; }
+
+[JsonPropertyName("document")]
 		public CatraProto.Client.TL.Schemas.CloudChats.DocumentBase Document { get; set; }
+
+[JsonPropertyName("cached_page")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PageBase CachedPage { get; set; }
+
+[JsonPropertyName("attributes")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.WebPageAttributeBase> Attributes { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Type == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);

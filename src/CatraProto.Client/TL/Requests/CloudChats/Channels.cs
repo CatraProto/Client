@@ -39,7 +39,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedMessagesBase>> DeleteMessagesAsync(CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase channel, List<int> id, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedMessagesBase>> DeleteMessagesAsync(CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase channel, IList<int> id, CancellationToken cancellationToken = default)
 		{
 			if(channel is null) throw new ArgumentNullException(nameof(channel));
 
@@ -78,7 +78,7 @@ if(userId is null) throw new ArgumentNullException(nameof(userId));
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<bool>> ReportSpamAsync(CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase channel, CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId, List<int> id, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<bool>> ReportSpamAsync(CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase channel, CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId, IList<int> id, CancellationToken cancellationToken = default)
 		{
 			if(channel is null) throw new ArgumentNullException(nameof(channel));
 if(userId is null) throw new ArgumentNullException(nameof(userId));
@@ -99,7 +99,7 @@ if(userId is null) throw new ArgumentNullException(nameof(userId));
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>> GetMessagesAsync(CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase channel, List<CatraProto.Client.TL.Schemas.CloudChats.InputMessageBase> id, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>> GetMessagesAsync(CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase channel, IList<CatraProto.Client.TL.Schemas.CloudChats.InputMessageBase> id, CancellationToken cancellationToken = default)
 		{
 			if(channel is null) throw new ArgumentNullException(nameof(channel));
 if(id is null) throw new ArgumentNullException(nameof(id));
@@ -162,7 +162,7 @@ if(userId is null) throw new ArgumentNullException(nameof(userId));
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Messages.ChatsBase>> GetChannelsAsync(List<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase> id, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Messages.ChatsBase>> GetChannelsAsync(IList<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase> id, CancellationToken cancellationToken = default)
 		{
 			if(id is null) throw new ArgumentNullException(nameof(id));
 
@@ -363,7 +363,7 @@ if(username is null) throw new ArgumentNullException(nameof(username));
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> InviteToChannelAsync(CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase channel, List<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase> users, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> InviteToChannelAsync(CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase channel, IList<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase> users, CancellationToken cancellationToken = default)
 		{
 			if(channel is null) throw new ArgumentNullException(nameof(channel));
 if(users is null) throw new ArgumentNullException(nameof(users));
@@ -481,7 +481,7 @@ if(bannedRights is null) throw new ArgumentNullException(nameof(bannedRights));
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Channels.AdminLogResultsBase>> GetAdminLogAsync(CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase channel, string q, long maxId, long minId, int limit, CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventsFilterBase eventsFilter = null, List<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase> admins = null, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Channels.AdminLogResultsBase>> GetAdminLogAsync(CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase channel, string q, long maxId, long minId, int limit, CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventsFilterBase eventsFilter = null, IList<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase> admins = null, CancellationToken cancellationToken = default)
 		{
 			if(channel is null) throw new ArgumentNullException(nameof(channel));
 if(q is null) throw new ArgumentNullException(nameof(q));
@@ -526,7 +526,7 @@ if(stickerset is null) throw new ArgumentNullException(nameof(stickerset));
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<bool>> ReadMessageContentsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase channel, List<int> id, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<bool>> ReadMessageContentsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase channel, IList<int> id, CancellationToken cancellationToken = default)
 		{
 			if(channel is null) throw new ArgumentNullException(nameof(channel));
 

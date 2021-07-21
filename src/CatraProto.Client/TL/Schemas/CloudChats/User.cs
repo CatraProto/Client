@@ -1,13 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using System.Collections.Generic;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class User : UserBase
+	public partial class User : CatraProto.Client.TL.Schemas.CloudChats.UserBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -39,35 +38,92 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			LangCode = 1 << 22
 		}
 
-        public static int ConstructorId { get; } = -1820043071;
+        public static int StaticConstructorId { get => -1820043071; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("self")]
 		public bool Self { get; set; }
+
+[JsonPropertyName("contact")]
 		public bool Contact { get; set; }
+
+[JsonPropertyName("mutual_contact")]
 		public bool MutualContact { get; set; }
+
+[JsonPropertyName("deleted")]
 		public bool Deleted { get; set; }
+
+[JsonPropertyName("bot")]
 		public bool Bot { get; set; }
+
+[JsonPropertyName("bot_chat_history")]
 		public bool BotChatHistory { get; set; }
+
+[JsonPropertyName("bot_nochats")]
 		public bool BotNochats { get; set; }
+
+[JsonPropertyName("verified")]
 		public bool Verified { get; set; }
+
+[JsonPropertyName("restricted")]
 		public bool Restricted { get; set; }
+
+[JsonPropertyName("min")]
 		public bool Min { get; set; }
+
+[JsonPropertyName("bot_inline_geo")]
 		public bool BotInlineGeo { get; set; }
+
+[JsonPropertyName("support")]
 		public bool Support { get; set; }
+
+[JsonPropertyName("scam")]
 		public bool Scam { get; set; }
+
+[JsonPropertyName("apply_min_photo")]
 		public bool ApplyMinPhoto { get; set; }
+
+[JsonPropertyName("id")]
 		public override int Id { get; set; }
+
+[JsonPropertyName("access_hash")]
 		public long? AccessHash { get; set; }
+
+[JsonPropertyName("first_name")]
 		public string FirstName { get; set; }
+
+[JsonPropertyName("last_name")]
 		public string LastName { get; set; }
+
+[JsonPropertyName("username")]
 		public string Username { get; set; }
+
+[JsonPropertyName("phone")]
 		public string Phone { get; set; }
+
+[JsonPropertyName("photo")]
 		public CatraProto.Client.TL.Schemas.CloudChats.UserProfilePhotoBase Photo { get; set; }
+
+[JsonPropertyName("status")]
 		public CatraProto.Client.TL.Schemas.CloudChats.UserStatusBase Status { get; set; }
+
+[JsonPropertyName("bot_info_version")]
 		public int? BotInfoVersion { get; set; }
+
+[JsonPropertyName("restriction_reason")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase> RestrictionReason { get; set; }
+
+[JsonPropertyName("bot_inline_placeholder")]
 		public string BotInlinePlaceholder { get; set; }
+
+[JsonPropertyName("lang_code")]
 		public string LangCode { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Self ? FlagsHelper.SetFlag(Flags, 10) : FlagsHelper.UnsetFlag(Flags, 10);

@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputMediaInvoice : InputMediaBase
+	public partial class InputMediaInvoice : CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,17 +14,38 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Photo = 1 << 0
 		}
 
-        public static int ConstructorId { get; } = -186607933;
+        public static int StaticConstructorId { get => -186607933; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("title")]
 		public string Title { get; set; }
+
+[JsonPropertyName("description")]
 		public string Description { get; set; }
+
+[JsonPropertyName("photo")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputWebDocumentBase Photo { get; set; }
+
+[JsonPropertyName("invoice")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InvoiceBase Invoice { get; set; }
+
+[JsonPropertyName("payload")]
 		public byte[] Payload { get; set; }
+
+[JsonPropertyName("provider")]
 		public string Provider { get; set; }
+
+[JsonPropertyName("provider_data")]
 		public CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase ProviderData { get; set; }
+
+[JsonPropertyName("start_param")]
 		public string StartParam { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Photo == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);

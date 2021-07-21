@@ -1,16 +1,23 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class SendMessageUploadAudioAction : SendMessageActionBase
+	public partial class SendMessageUploadAudioAction : CatraProto.Client.TL.Schemas.CloudChats.SendMessageActionBase
 	{
 
 
-        public static int ConstructorId { get; } = -212740181;
+        public static int StaticConstructorId { get => -212740181; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("progress")]
 		public int Progress { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

@@ -1,11 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class CodeSettings : CodeSettingsBase
+	public partial class CodeSettings : CatraProto.Client.TL.Schemas.CloudChats.CodeSettingsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,12 +16,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			AllowAppHash = 1 << 4
 		}
 
-        public static int ConstructorId { get; } = -557924733;
+        public static int StaticConstructorId { get => -557924733; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("allow_flashcall")]
 		public override bool AllowFlashcall { get; set; }
+
+[JsonPropertyName("current_number")]
 		public override bool CurrentNumber { get; set; }
+
+[JsonPropertyName("allow_app_hash")]
 		public override bool AllowAppHash { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = AllowFlashcall ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

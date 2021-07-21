@@ -1,13 +1,19 @@
 using CatraProto.TL;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
-
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public abstract class InputBotInlineMessageIDBase : IObject
     {
+
+[JsonPropertyName("dc_id")]
 		public abstract int DcId { get; set; }
+
+[JsonPropertyName("id")]
 		public abstract long Id { get; set; }
+
+[JsonPropertyName("access_hash")]
 		public abstract long AccessHash { get; set; }
 
         public abstract void UpdateFlags();

@@ -1,4 +1,8 @@
-﻿^Usings^
+﻿using System;
+using System.Collections.Generic;
+using CatraProto.TL;
+using System.Text.Json.Serialization;
+using CatraProto.TL.Interfaces;
 
 namespace ^Namespace^
 {
@@ -6,9 +10,12 @@ namespace ^Namespace^
 	{
 ^FlagsEnums^
 
-        public static int ConstructorId { get; } = ^ConstructorId^;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => ^ConstructorId^; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        ^Properties^
 
-^Properties^
 		public void UpdateFlags() 
 		{
 ^FlagsUpdate^

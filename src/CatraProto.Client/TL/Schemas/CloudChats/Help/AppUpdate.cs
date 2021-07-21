@@ -1,13 +1,12 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Text.Json.Serialization;
+using CatraProto.TL;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-	public partial class AppUpdate : AppUpdateBase
+	public partial class AppUpdate : CatraProto.Client.TL.Schemas.CloudChats.Help.AppUpdateBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -17,16 +16,35 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 			Url = 1 << 2
 		}
 
-        public static int ConstructorId { get; } = 497489295;
+        public static int StaticConstructorId { get => 497489295; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("can_not_skip")]
 		public bool CanNotSkip { get; set; }
+
+[JsonPropertyName("id")]
 		public int Id { get; set; }
+
+[JsonPropertyName("version")]
 		public string Version { get; set; }
+
+[JsonPropertyName("text")]
 		public string Text { get; set; }
+
+[JsonPropertyName("entities")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
+
+[JsonPropertyName("document")]
 		public CatraProto.Client.TL.Schemas.CloudChats.DocumentBase Document { get; set; }
+
+[JsonPropertyName("url")]
 		public string Url { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = CanNotSkip ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

@@ -7,8 +7,11 @@ using System.Threading.Tasks;
 using CatraProto.Client.Async.Awaiters;
 using CatraProto.Client.Connections.Messages;
 using CatraProto.Client.Connections.Messages.Interfaces;
+using CatraProto.Client.Extensions;
+using CatraProto.Client.MTProto;
 using CatraProto.Client.MTProto.Containers;
 using CatraProto.Client.MTProto.Messages;
+using CatraProto.Client.MTProto.Rpc;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.Client.TL.Schemas.CloudChats;
 using CatraProto.Client.TL.Schemas.CloudChats.Auth;
@@ -175,7 +178,7 @@ namespace CatraProto.Client.Connections.Loop
                     SessionId = _connection.ConnectionState.SessionIdHandler.GetSessionId(),
                     MessageId = _connection.ConnectionState.MessageIdsHandler.ComputeMessageId(),
                     SeqNo = _connection.ConnectionState.SeqnoHandler.ComputeSeqno(messages[0].OutgoingMessage.Body),
-                    Body = requestBody,
+                    Body = GzipHandler.FromBytes(requestBody),
                 };
 
                 _connectionState.MessagesHandler.AddSentMessage(encryptedMessage.MessageId, messages[0]);
@@ -196,10 +199,13 @@ namespace CatraProto.Client.Connections.Loop
                     Body = writer.SerializedContainer,
                 };
 
+                _logger.Information("Container {Id}", encryptedMessage.MessageId);
                 for (var i = 0; i < writer.Messages.Count; i++)
                 {
+                    _logger.Information("Adding {Id}", writer.Messages[i].MsgId);
                     _connectionState.MessagesHandler.AddSentMessage(writer.Messages[i].MsgId, writer.MessageContainers[i]);
                 }
+
                 await _connection.Protocol.Writer.SendWithTimeoutAsync(encryptedMessage.Export(), _logger);
             }
         }

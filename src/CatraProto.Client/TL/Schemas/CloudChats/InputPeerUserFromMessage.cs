@@ -1,19 +1,29 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputPeerUserFromMessage : InputPeerBase
+	public partial class InputPeerUserFromMessage : CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase
 	{
 
 
-        public static int ConstructorId { get; } = 398123750;
+        public static int StaticConstructorId { get => 398123750; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("peer")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
+
+[JsonPropertyName("msg_id")]
 		public int MsgId { get; set; }
+
+[JsonPropertyName("user_id")]
 		public int UserId { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

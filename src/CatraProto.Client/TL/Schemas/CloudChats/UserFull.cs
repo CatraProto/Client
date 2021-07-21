@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UserFull : UserFullBase
+	public partial class UserFull : CatraProto.Client.TL.Schemas.CloudChats.UserFullBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -24,24 +24,59 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			FolderId = 1 << 11
 		}
 
-        public static int ConstructorId { get; } = -302941166;
+        public static int StaticConstructorId { get => -302941166; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("blocked")]
 		public override bool Blocked { get; set; }
+
+[JsonPropertyName("phone_calls_available")]
 		public override bool PhoneCallsAvailable { get; set; }
+
+[JsonPropertyName("phone_calls_private")]
 		public override bool PhoneCallsPrivate { get; set; }
+
+[JsonPropertyName("can_pin_message")]
 		public override bool CanPinMessage { get; set; }
+
+[JsonPropertyName("has_scheduled")]
 		public override bool HasScheduled { get; set; }
+
+[JsonPropertyName("video_calls_available")]
 		public override bool VideoCallsAvailable { get; set; }
+
+[JsonPropertyName("user")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.UserBase User { get; set; }
+
+[JsonPropertyName("about")]
 		public override string About { get; set; }
+
+[JsonPropertyName("settings")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.PeerSettingsBase Settings { get; set; }
+
+[JsonPropertyName("profile_photo")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.PhotoBase ProfilePhoto { get; set; }
+
+[JsonPropertyName("notify_settings")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase NotifySettings { get; set; }
+
+[JsonPropertyName("bot_info")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase BotInfo { get; set; }
+
+[JsonPropertyName("pinned_msg_id")]
 		public override int? PinnedMsgId { get; set; }
+
+[JsonPropertyName("common_chats_count")]
 		public override int CommonChatsCount { get; set; }
+
+[JsonPropertyName("folder_id")]
 		public override int? FolderId { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Blocked ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputBotInlineMessageMediaGeo : InputBotInlineMessageBase
+	public partial class InputBotInlineMessageMediaGeo : CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -17,14 +17,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ReplyMarkup = 1 << 2
 		}
 
-        public static int ConstructorId { get; } = -1768777083;
+        public static int StaticConstructorId { get => -1768777083; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("geo_point")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase GeoPoint { get; set; }
+
+[JsonPropertyName("heading")]
 		public int? Heading { get; set; }
+
+[JsonPropertyName("period")]
 		public int? Period { get; set; }
+
+[JsonPropertyName("proximity_notification_radius")]
 		public int? ProximityNotificationRadius { get; set; }
+
+[JsonPropertyName("reply_markup")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase ReplyMarkup { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Heading == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);

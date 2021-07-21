@@ -1,21 +1,35 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class EncryptedMessage : EncryptedMessageBase
+	public partial class EncryptedMessage : CatraProto.Client.TL.Schemas.CloudChats.EncryptedMessageBase
 	{
 
 
-        public static int ConstructorId { get; } = -317144808;
+        public static int StaticConstructorId { get => -317144808; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("random_id")]
 		public override long RandomId { get; set; }
+
+[JsonPropertyName("chat_id")]
 		public override int ChatId { get; set; }
+
+[JsonPropertyName("date")]
 		public override int Date { get; set; }
+
+[JsonPropertyName("bytes")]
 		public override byte[] Bytes { get; set; }
+
+[JsonPropertyName("file")]
 		public CatraProto.Client.TL.Schemas.CloudChats.EncryptedFileBase File { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

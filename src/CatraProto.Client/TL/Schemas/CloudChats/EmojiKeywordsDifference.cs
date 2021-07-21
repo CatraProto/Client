@@ -1,21 +1,32 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class EmojiKeywordsDifference : EmojiKeywordsDifferenceBase
+	public partial class EmojiKeywordsDifference : CatraProto.Client.TL.Schemas.CloudChats.EmojiKeywordsDifferenceBase
 	{
 
 
-        public static int ConstructorId { get; } = 1556570557;
+        public static int StaticConstructorId { get => 1556570557; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("lang_code")]
 		public override string LangCode { get; set; }
+
+[JsonPropertyName("from_version")]
 		public override int FromVersion { get; set; }
+
+[JsonPropertyName("version")]
 		public override int Version { get; set; }
+
+[JsonPropertyName("keywords")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.EmojiKeywordBase> Keywords { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

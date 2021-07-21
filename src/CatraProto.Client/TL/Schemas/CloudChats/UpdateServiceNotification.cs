@@ -1,13 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using System.Collections.Generic;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateServiceNotification : UpdateBase
+	public partial class UpdateServiceNotification : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,15 +15,32 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			InboxDate = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = -337352679;
+        public static int StaticConstructorId { get => -337352679; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("popup")]
 		public bool Popup { get; set; }
+
+[JsonPropertyName("inbox_date")]
 		public int? InboxDate { get; set; }
+
+[JsonPropertyName("type")]
 		public string Type { get; set; }
+
+[JsonPropertyName("message")]
 		public string Message { get; set; }
+
+[JsonPropertyName("media")]
 		public CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase Media { get; set; }
+
+[JsonPropertyName("entities")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Popup ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

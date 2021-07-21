@@ -1,6 +1,8 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using System.Text.Json.Serialization;
 using CatraProto.TL.Interfaces;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
@@ -8,12 +10,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 	{
 
 
-        public static int ConstructorId { get; } = 1935116200;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => 1935116200; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Help.CountriesListBase);
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Help.CountriesListBase);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonPropertyName("lang_code")]
 		public string LangCode { get; set; }
+
+[JsonPropertyName("hash")]
 		public int Hash { get; set; }
+
 
 		public void UpdateFlags() 
 		{

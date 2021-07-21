@@ -1,15 +1,20 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UserStatusEmpty : UserStatusBase
+	public partial class UserStatusEmpty : CatraProto.Client.TL.Schemas.CloudChats.UserStatusBase
 	{
 
 
-        public static int ConstructorId { get; } = 164646985;
-
+        public static int StaticConstructorId { get => 164646985; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+        
 		public override void UpdateFlags() 
 		{
 

@@ -1,19 +1,32 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class BadServerSalt : BadMsgNotificationBase
+	public partial class BadServerSalt : CatraProto.Client.TL.Schemas.MTProto.BadMsgNotificationBase
 	{
 
 
-        public static int ConstructorId { get; } = -307542917;
+        public static int StaticConstructorId { get => -307542917; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("bad_msg_id")]
 		public override long BadMsgId { get; set; }
+
+[JsonPropertyName("bad_msg_seqno")]
 		public override int BadMsgSeqno { get; set; }
+
+[JsonPropertyName("error_code")]
 		public override int ErrorCode { get; set; }
+
+[JsonPropertyName("new_server_salt")]
 		public long NewServerSalt { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

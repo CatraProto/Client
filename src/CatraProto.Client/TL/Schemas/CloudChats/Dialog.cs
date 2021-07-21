@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class Dialog : DialogBase
+	public partial class Dialog : CatraProto.Client.TL.Schemas.CloudChats.DialogBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -18,21 +18,50 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			FolderId = 1 << 4
 		}
 
-        public static int ConstructorId { get; } = 739712882;
+        public static int StaticConstructorId { get => 739712882; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("pinned")]
 		public override bool Pinned { get; set; }
+
+[JsonPropertyName("unread_mark")]
 		public bool UnreadMark { get; set; }
+
+[JsonPropertyName("peer")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
+
+[JsonPropertyName("top_message")]
 		public override int TopMessage { get; set; }
+
+[JsonPropertyName("read_inbox_max_id")]
 		public int ReadInboxMaxId { get; set; }
+
+[JsonPropertyName("read_outbox_max_id")]
 		public int ReadOutboxMaxId { get; set; }
+
+[JsonPropertyName("unread_count")]
 		public int UnreadCount { get; set; }
+
+[JsonPropertyName("unread_mentions_count")]
 		public int UnreadMentionsCount { get; set; }
+
+[JsonPropertyName("notify_settings")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase NotifySettings { get; set; }
+
+[JsonPropertyName("pts")]
 		public int? Pts { get; set; }
+
+[JsonPropertyName("draft")]
 		public CatraProto.Client.TL.Schemas.CloudChats.DraftMessageBase Draft { get; set; }
+
+[JsonPropertyName("folder_id")]
 		public int? FolderId { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Pinned ? FlagsHelper.SetFlag(Flags, 2) : FlagsHelper.UnsetFlag(Flags, 2);

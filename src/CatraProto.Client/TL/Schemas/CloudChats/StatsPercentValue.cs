@@ -1,17 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class StatsPercentValue : StatsPercentValueBase
+	public partial class StatsPercentValue : CatraProto.Client.TL.Schemas.CloudChats.StatsPercentValueBase
 	{
 
 
-        public static int ConstructorId { get; } = -875679776;
+        public static int StaticConstructorId { get => -875679776; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("part")]
 		public override double Part { get; set; }
+
+[JsonPropertyName("total")]
 		public override double Total { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

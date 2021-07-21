@@ -1,19 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PageListOrderedItemBlocks : PageListOrderedItemBase
+	public partial class PageListOrderedItemBlocks : CatraProto.Client.TL.Schemas.CloudChats.PageListOrderedItemBase
 	{
 
 
-        public static int ConstructorId { get; } = -1730311882;
+        public static int StaticConstructorId { get => -1730311882; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("num")]
 		public override string Num { get; set; }
+
+[JsonPropertyName("blocks")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase> Blocks { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

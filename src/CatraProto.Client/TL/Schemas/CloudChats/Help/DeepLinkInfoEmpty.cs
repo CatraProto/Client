@@ -1,15 +1,20 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-	public partial class DeepLinkInfoEmpty : DeepLinkInfoBase
+	public partial class DeepLinkInfoEmpty : CatraProto.Client.TL.Schemas.CloudChats.Help.DeepLinkInfoBase
 	{
 
 
-        public static int ConstructorId { get; } = 1722786150;
-
+        public static int StaticConstructorId { get => 1722786150; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+        
 		public override void UpdateFlags() 
 		{
 

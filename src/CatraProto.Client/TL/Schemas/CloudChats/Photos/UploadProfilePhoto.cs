@@ -1,8 +1,8 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Collections.Generic;
+using CatraProto.TL;
+using System.Text.Json.Serialization;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 {
@@ -16,14 +16,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 			VideoStartTs = 1 << 2
 		}
 
-        public static int ConstructorId { get; } = -1980559511;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => -1980559511; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Photos.PhotoBase);
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Photos.PhotoBase);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("file")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase File { get; set; }
+
+[JsonPropertyName("video")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase Video { get; set; }
+
+[JsonPropertyName("video_start_ts")]
 		public double? VideoStartTs { get; set; }
+
 
 		public void UpdateFlags() 
 		{

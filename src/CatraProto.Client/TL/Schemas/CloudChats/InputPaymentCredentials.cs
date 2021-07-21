@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputPaymentCredentials : InputPaymentCredentialsBase
+	public partial class InputPaymentCredentials : CatraProto.Client.TL.Schemas.CloudChats.InputPaymentCredentialsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,11 +14,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Save = 1 << 0
 		}
 
-        public static int ConstructorId { get; } = 873977640;
+        public static int StaticConstructorId { get => 873977640; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("save")]
 		public bool Save { get; set; }
+
+[JsonPropertyName("data")]
 		public CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase Data { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Save ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

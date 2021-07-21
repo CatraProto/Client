@@ -1,8 +1,8 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Collections.Generic;
+using CatraProto.TL;
+using System.Text.Json.Serialization;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
@@ -14,15 +14,32 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 			Thumb = 1 << 0
 		}
 
-        public static int ConstructorId { get; } = 473805619;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => 473805619; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.DocumentBase);
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.DocumentBase);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("file")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase File { get; set; }
+
+[JsonPropertyName("thumb")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase Thumb { get; set; }
+
+[JsonPropertyName("file_name")]
 		public string FileName { get; set; }
+
+[JsonPropertyName("mime_type")]
 		public string MimeType { get; set; }
+
 
 		public void UpdateFlags() 
 		{

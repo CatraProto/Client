@@ -1,20 +1,35 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PhoneConnection : PhoneConnectionBase
+	public partial class PhoneConnection : CatraProto.Client.TL.Schemas.CloudChats.PhoneConnectionBase
 	{
 
 
-        public static int ConstructorId { get; } = -1655957568;
+        public static int StaticConstructorId { get => -1655957568; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("id")]
 		public override long Id { get; set; }
+
+[JsonPropertyName("ip")]
 		public override string Ip { get; set; }
+
+[JsonPropertyName("ipv6")]
 		public override string Ipv6 { get; set; }
+
+[JsonPropertyName("port")]
 		public override int Port { get; set; }
+
+[JsonPropertyName("peer_tag")]
 		public byte[] PeerTag { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

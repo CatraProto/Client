@@ -1,17 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputSecureFile : InputSecureFileBase
+	public partial class InputSecureFile : CatraProto.Client.TL.Schemas.CloudChats.InputSecureFileBase
 	{
 
 
-        public static int ConstructorId { get; } = 1399317950;
+        public static int StaticConstructorId { get => 1399317950; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("id")]
 		public override long Id { get; set; }
+
+[JsonPropertyName("access_hash")]
 		public long AccessHash { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

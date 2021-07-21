@@ -1,20 +1,35 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 {
-	public partial class State : StateBase
+	public partial class State : CatraProto.Client.TL.Schemas.CloudChats.Updates.StateBase
 	{
 
 
-        public static int ConstructorId { get; } = -1519637954;
+        public static int StaticConstructorId { get => -1519637954; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("pts")]
 		public override int Pts { get; set; }
+
+[JsonPropertyName("qts")]
 		public override int Qts { get; set; }
+
+[JsonPropertyName("date")]
 		public override int Date { get; set; }
+
+[JsonPropertyName("seq")]
 		public override int Seq { get; set; }
+
+[JsonPropertyName("unread_count")]
 		public override int UnreadCount { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

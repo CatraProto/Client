@@ -1,11 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class GeoPoint : GeoPointBase
+	public partial class GeoPoint : CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -13,13 +14,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			AccuracyRadius = 1 << 0
 		}
 
-        public static int ConstructorId { get; } = -1297942941;
+        public static int StaticConstructorId { get => -1297942941; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("long")]
 		public double Long { get; set; }
+
+[JsonPropertyName("lat")]
 		public double Lat { get; set; }
+
+[JsonPropertyName("access_hash")]
 		public long AccessHash { get; set; }
+
+[JsonPropertyName("accuracy_radius")]
 		public int? AccuracyRadius { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = AccuracyRadius == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using System.Threading.Tasks;
 using CatraProto.Client.Connections;
 using CatraProto.Client.Connections.Messages.Interfaces;
 using CatraProto.Client.Extensions;
@@ -19,17 +20,20 @@ namespace CatraProto.Client.MTProto
     class MessagesDispatcher
     {
         private ConnectionState _connectionState;
+        private RpcDeserializer _rpcDeserializer;
         private ILogger _logger;
 
         public MessagesDispatcher(ConnectionState connectionState, ILogger logger)
         {
             _logger = logger.ForContext<MessagesDispatcher>();
             _connectionState = connectionState;
+            _rpcDeserializer = new RpcDeserializer(_connectionState.MessagesHandler, logger);
         }
 
         public void DispatchMessage(IMessage message)
         {
             var reader = new Reader(MergedProvider.Singleton, message.Body.ToMemoryStream());
+            reader.AddCustomObjectDeserializer(typeof(RpcObject), _rpcDeserializer);
             if (message.Body.Length == 4)
             {
                 var error = reader.Read<int>();
@@ -140,7 +144,7 @@ namespace CatraProto.Client.MTProto
                     HandleFutureSalts(futureSalts);
                     break;
                 case RpcObject rpcResult:
-                    HandleRpcResult(rpcResult, reader);
+                    HandleRpcResult(rpcResult);
                     break;
                 case MsgContainer msgContainer:
                     HandleContainer(msgContainer, reader);
@@ -160,13 +164,16 @@ namespace CatraProto.Client.MTProto
                     }
                     else if (obj is UUpdates updates)
                     {
+                        var random = new Random();
                         for (var i = 0; i < updates.Updates.Count; i++)
                         {
-                            _ = _connectionState.Api.CloudChatsApi.Messages.SendMessageAsync(new InputPeerUser()
+                            var randomInt = random.Next();
+                            
+                            _ = _connectionState.Api.CloudChatsApi.Users.GetUsersAsync(new List<InputUserBase>(){new InputUser()
                             {
-                                UserId = updates.Users[0].Id,
-                                AccessHash = ((User)updates.Users[0]).AccessHash.Value
-                            }, "Ciao da CatraProto", new Random().Next());   
+                                AccessHash = ((User)updates.Users[0]).AccessHash.Value,
+                                UserId = ((User)updates.Users[0]).Id
+                            }}).ContinueWith(x => _logger.Information(x.Result.Response[0].Id.ToString()), TaskContinuationOptions.OnlyOnRanToCompletion);
                         }
                     }
 
@@ -187,29 +194,11 @@ namespace CatraProto.Client.MTProto
             _connectionState.MessagesHandler.SetMessageResult(futureSalts.ReqMsgId, futureSalts);
         }
 
-        private void HandleRpcResult(RpcObject rpcObject, Reader reader)
+        private void HandleRpcResult(RpcObject rpcObject)
         {
             _logger.Information("Handling rpc message in response to id {Id}", rpcObject.MessageId);
-            if (_connectionState.MessagesHandler.GetMethod(rpcObject.MessageId, out var method))
-            {
-                var toDispose = false;
-                var nextType = reader.GetNextType();
-                if (nextType == typeof(GzipPacked))
-                {
-                    _logger.Information("Result of rpc query is wrapped by a gzip packet");
-                    reader = new Reader(MergedProvider.Singleton, GzipHandler.ReadGzipPacket(reader.Read<GzipPacked>().PackedData));
-                    toDispose = true;
-                }
+            _connectionState.MessagesHandler.SetMessageResult(rpcObject.MessageId, rpcObject.Response);
 
-                var response = method.IsVector ? reader.ReadVector(method.Type) : reader.Read(method.Type);
-                //TODO: Database
-                _connectionState.MessagesHandler.SetMessageResult(rpcObject.MessageId, response);
-
-                if (toDispose)
-                {
-                    reader.Dispose();
-                }
-            }
         }
     }
 }

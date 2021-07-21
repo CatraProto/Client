@@ -1,17 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdatePhoneCallSignalingData : UpdateBase
+	public partial class UpdatePhoneCallSignalingData : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 
 
-        public static int ConstructorId { get; } = 643940105;
+        public static int StaticConstructorId { get => 643940105; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("phone_call_id")]
 		public long PhoneCallId { get; set; }
+
+[JsonPropertyName("data")]
 		public byte[] Data { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

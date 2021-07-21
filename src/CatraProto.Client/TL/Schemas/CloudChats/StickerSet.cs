@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class StickerSet : StickerSetBase
+	public partial class StickerSet : CatraProto.Client.TL.Schemas.CloudChats.StickerSetBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -20,22 +20,53 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ThumbDcId = 1 << 4
 		}
 
-        public static int ConstructorId { get; } = -290164953;
+        public static int StaticConstructorId { get => -290164953; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("archived")]
 		public override bool Archived { get; set; }
+
+[JsonPropertyName("official")]
 		public override bool Official { get; set; }
+
+[JsonPropertyName("masks")]
 		public override bool Masks { get; set; }
+
+[JsonPropertyName("animated")]
 		public override bool Animated { get; set; }
+
+[JsonPropertyName("installed_date")]
 		public override int? InstalledDate { get; set; }
+
+[JsonPropertyName("id")]
 		public override long Id { get; set; }
+
+[JsonPropertyName("access_hash")]
 		public override long AccessHash { get; set; }
+
+[JsonPropertyName("title")]
 		public override string Title { get; set; }
+
+[JsonPropertyName("short_name")]
 		public override string ShortName { get; set; }
+
+[JsonPropertyName("thumb")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase Thumb { get; set; }
+
+[JsonPropertyName("thumb_dc_id")]
 		public override int? ThumbDcId { get; set; }
+
+[JsonPropertyName("count")]
 		public override int Count { get; set; }
+
+[JsonPropertyName("hash")]
 		public override int Hash { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Archived ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);

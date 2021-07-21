@@ -1,17 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class StatsDateRangeDays : StatsDateRangeDaysBase
+	public partial class StatsDateRangeDays : CatraProto.Client.TL.Schemas.CloudChats.StatsDateRangeDaysBase
 	{
 
 
-        public static int ConstructorId { get; } = -1237848657;
+        public static int StaticConstructorId { get => -1237848657; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("min_date")]
 		public override int MinDate { get; set; }
+
+[JsonPropertyName("max_date")]
 		public override int MaxDate { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

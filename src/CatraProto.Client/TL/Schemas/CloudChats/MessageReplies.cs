@@ -1,13 +1,12 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Text.Json.Serialization;
+using CatraProto.TL;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageReplies : MessageRepliesBase
+	public partial class MessageReplies : CatraProto.Client.TL.Schemas.CloudChats.MessageRepliesBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -19,16 +18,35 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ReadMaxId = 1 << 3
 		}
 
-        public static int ConstructorId { get; } = 1093204652;
+        public static int StaticConstructorId { get => 1093204652; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("comments")]
 		public override bool Comments { get; set; }
+
+[JsonPropertyName("replies")]
 		public override int Replies { get; set; }
+
+[JsonPropertyName("replies_pts")]
 		public override int RepliesPts { get; set; }
+
+[JsonPropertyName("recent_repliers")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.PeerBase> RecentRepliers { get; set; }
+
+[JsonPropertyName("channel_id")]
 		public override int? ChannelId { get; set; }
+
+[JsonPropertyName("max_id")]
 		public override int? MaxId { get; set; }
+
+[JsonPropertyName("read_max_id")]
 		public override int? ReadMaxId { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Comments ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

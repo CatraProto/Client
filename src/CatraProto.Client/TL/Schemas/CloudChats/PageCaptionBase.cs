@@ -1,13 +1,16 @@
 using CatraProto.TL;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public abstract class PageCaptionBase : IObject
     {
+
+[JsonPropertyName("text")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Text { get; set; }
+
+[JsonPropertyName("credit")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Credit { get; set; }
 
         public abstract void UpdateFlags();

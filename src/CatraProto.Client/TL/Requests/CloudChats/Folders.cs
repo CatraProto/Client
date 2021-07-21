@@ -20,7 +20,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 	        
 	    }
 	    
-	    		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> EditPeerFoldersAsync(List<CatraProto.Client.TL.Schemas.CloudChats.InputFolderPeerBase> folderPeers, CancellationToken cancellationToken = default)
+	    		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> EditPeerFoldersAsync(IList<CatraProto.Client.TL.Schemas.CloudChats.InputFolderPeerBase> folderPeers, CancellationToken cancellationToken = default)
 		{
 			if(folderPeers is null) throw new ArgumentNullException(nameof(folderPeers));
 

@@ -1,11 +1,13 @@
 using CatraProto.TL;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
-
-
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
     public abstract class PromoDataBase : IObject
     {
+
+[JsonPropertyName("expires")]
 		public abstract int Expires { get; set; }
 
         public abstract void UpdateFlags();

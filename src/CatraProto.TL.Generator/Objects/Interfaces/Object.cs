@@ -1,137 +1,124 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using CatraProto.TL.Generator.DeclarationInfo;
 using CatraProto.TL.Generator.Objects.Types;
 using CatraProto.TL.Generator.Objects.Types.Interfaces;
 
 namespace CatraProto.TL.Generator.Objects.Interfaces
 {
-	public abstract class Object
-	{
-		public int Id { get; set; }
-		public Namespace Namespace { get; set; }
-		public List<Parameter> Parameters { get; set; }
-		public TypeBase Type { get; set; }
-		public bool IsNaked { get; set; }
+    public abstract class Object
+    {
+        public int Id { get; set; }
+        public Namespace Namespace { get; set; }
+        public List<Parameter> Parameters { get; set; }
+        public TypeBase Type { get; set; }
+        public NamingInfo NamingInfo { get; set; }
 
-		public string Name
-		{
-			get => Namespace.Class;
-			set => Namespace[^1] = value;
-		}
+        public virtual string GetMethodsAccessibility()
+        {
+            if (Type is RuntimeDefinedType)
+            {
+                return "public";
+            }
 
-		public virtual string GetMethodsAccessibility()
-		{
-			if (Type is RuntimeDefinedType)
-			{
-				return "public";
-			}
+            return "public override";
+        }
 
-			return "public override";
-		}
+        public virtual void WriteFlagsUpdating(StringBuilder builder)
+        {
+            foreach (var parameter in Parameters)
+            {
+                parameter.Type.WriteFlagUpdate(builder, parameter);
+            }
+        }
 
-		public virtual void WriteFlagsUpdating(StringBuilder builder)
-		{
-			foreach (var parameter in Parameters)
-			{
-				parameter.Type.WriteFlagUpdate(builder, parameter);
-			}
-		}
+        public virtual void WriteFlagsEnums(StringBuilder builder)
+        {
+            var getFlaggedParameters = Parameters.Where(x => x.HasFlag).ToList();
+            var dictionary = new Dictionary<string, List<Parameter>>();
 
-		public virtual void WriteUsings(StringBuilder builder)
-		{
-			var importsList = new List<string>();
-			builder.AppendLine("using CatraProto.TL;");
-			builder.AppendLine("using CatraProto.TL.Interfaces;");
+            foreach (var flaggedParameter in getFlaggedParameters)
+            {
+                if (dictionary.ContainsKey(flaggedParameter.Flag.Name))
+                {
+                    dictionary[flaggedParameter.Flag.Name].Add(flaggedParameter);
+                }
+                else
+                {
+                    var list = new List<Parameter> { flaggedParameter };
+                    dictionary.Add(flaggedParameter.Flag.Name, list);
+                }
+            }
 
-			if (this is Method && Type.Namespace != null)
-			{
-				builder.AppendLine($"using {Type.Namespace.PartialNamespace};");
-				importsList.Add(Type.Namespace.PartialNamespace);
-			}
+            var lastIterationNumber = 1;
+            foreach (var flag in dictionary)
+            {
+                builder.AppendLine($"{StringTools.TwoTabs}[Flags]");
+                builder.AppendLine(
+                    $"{StringTools.TwoTabs}public enum {StringTools.PascalCase(flag.Key)}Enum \n{StringTools.TwoTabs}{{");
+                for (var index = 0; index < flag.Value.Count; index++)
+                {
+                    var parameter = flag.Value[index];
+                    builder.Append($"{StringTools.ThreeTabs}{parameter.NamingInfo.PascalCaseName} = 1 << {parameter.Flag.Bit}");
+                    if (flag.Value.Count != index + 1)
+                    {
+                        builder.Append(',');
+                    }
 
-			foreach (var parameter in Parameters)
-			{
-				foreach (var requiredNamespace in parameter.Type.GetRequiredNamespaces(parameter))
-				{
-					if (!importsList.Contains(requiredNamespace.PartialNamespace))
-					{
-						builder.AppendLine($"using {requiredNamespace.PartialNamespace};");
-						importsList.Add(requiredNamespace.PartialNamespace);
-					}
-				}
-			}
-		}
+                    builder.AppendLine();
+                }
 
-		public virtual void WriteFlagsEnums(StringBuilder builder)
-		{
-			var getFlaggedParameters = Parameters.Where(x => x.HasFlag).ToList();
-			var dictionary = new Dictionary<string, List<Parameter>>();
+                builder.Append($"{StringTools.TwoTabs}}}");
+                if (dictionary.Count > lastIterationNumber)
+                {
+                    builder.AppendLine();
+                    builder.AppendLine();
+                }
 
-			foreach (var flaggedParameter in getFlaggedParameters)
-			{
-				if (dictionary.ContainsKey(flaggedParameter.Flag.Name))
-				{
-					dictionary[flaggedParameter.Flag.Name].Add(flaggedParameter);
-				}
-				else
-				{
-					var list = new List<Parameter> { flaggedParameter };
-					dictionary.Add(flaggedParameter.Flag.Name, list);
-				}
-			}
+                lastIterationNumber++;
+            }
+        }
 
-			var lastIterationNumber = 1;
-			foreach (var flag in dictionary)
-			{
-				builder.AppendLine($"{StringTools.TwoTabs}[Flags]");
-				builder.AppendLine(
-					$"{StringTools.TwoTabs}public enum {StringTools.PascalCase(flag.Key)}Enum \n{StringTools.TwoTabs}{{");
-				for (var index = 0; index < flag.Value.Count; index++)
-				{
-					var parameter = flag.Value[index];
-					builder.Append($"{StringTools.ThreeTabs}{parameter.Name} = 1 << {parameter.Flag.Bit}");
-					if (flag.Value.Count != index + 1)
-					{
-						builder.Append(',');
-					}
+        public virtual void WriteParameters(StringBuilder builder)
+        {
+            foreach (var parameter in Parameters)
+            {
+                parameter.Type.WriteParameter(builder, parameter);
+            }
+        }
 
-					builder.AppendLine();
-				}
+        public virtual void WriteSerializer(StringBuilder builder)
+        {
+            foreach (var parameter in Parameters)
+            {
+                parameter.Type.WriteSerializer(builder, parameter);
+            }
+        }
 
-				builder.Append($"{StringTools.TwoTabs}}}");
-				if (dictionary.Count > lastIterationNumber)
-				{
-					builder.AppendLine();
-					builder.AppendLine();
-				}
+        public virtual void WriteDeserializer(StringBuilder builder)
+        {
+            foreach (var parameter in Parameters)
+            {
+                parameter.Type.WriteDeserializer(builder, parameter);
+            }
+        }
 
-				lastIterationNumber++;
-			}
-		}
+        public virtual string GetObjectName(NamingType type)
+        {
+            switch (type)
+            {
+                case NamingType.CamelCase:
+                    return NamingInfo.CamelCaseName;
+                case NamingType.PascalCase:
+                    return NamingInfo.PascalCaseName;
+                case NamingType.Original:
+                    return NamingInfo.OriginalName;
+                case NamingType.FullNamespace:
+                    return Namespace.FullNamespace;
+            }
 
-		public virtual void WriteParameters(StringBuilder builder)
-		{
-			foreach (var parameter in Parameters)
-			{
-				parameter.Type.WriteParameter(builder, parameter);
-			}
-		}
-
-		public virtual void WriteSerializer(StringBuilder builder)
-		{
-			foreach (var parameter in Parameters)
-			{
-				parameter.Type.WriteSerializer(builder, parameter);
-			}
-		}
-
-		public virtual void WriteDeserializer(StringBuilder builder)
-		{
-			foreach (var parameter in Parameters)
-			{
-				parameter.Type.WriteDeserializer(builder, parameter);
-			}
-		}
-	}
+            return "INVALID NAME";
+        }
+    }
 }

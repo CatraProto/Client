@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class Folder : FolderBase
+	public partial class Folder : CatraProto.Client.TL.Schemas.CloudChats.FolderBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -17,15 +17,32 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Photo = 1 << 3
 		}
 
-        public static int ConstructorId { get; } = -11252123;
+        public static int StaticConstructorId { get => -11252123; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("autofill_new_broadcasts")]
 		public override bool AutofillNewBroadcasts { get; set; }
+
+[JsonPropertyName("autofill_public_groups")]
 		public override bool AutofillPublicGroups { get; set; }
+
+[JsonPropertyName("autofill_new_correspondents")]
 		public override bool AutofillNewCorrespondents { get; set; }
+
+[JsonPropertyName("id")]
 		public override int Id { get; set; }
+
+[JsonPropertyName("title")]
 		public override string Title { get; set; }
+
+[JsonPropertyName("photo")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.ChatPhotoBase Photo { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = AutofillNewBroadcasts ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

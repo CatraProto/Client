@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class Game : GameBase
+	public partial class Game : CatraProto.Client.TL.Schemas.CloudChats.GameBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,16 +14,35 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Document = 1 << 0
 		}
 
-        public static int ConstructorId { get; } = -1107729093;
+        public static int StaticConstructorId { get => -1107729093; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("id")]
 		public override long Id { get; set; }
+
+[JsonPropertyName("access_hash")]
 		public override long AccessHash { get; set; }
+
+[JsonPropertyName("short_name")]
 		public override string ShortName { get; set; }
+
+[JsonPropertyName("title")]
 		public override string Title { get; set; }
+
+[JsonPropertyName("description")]
 		public override string Description { get; set; }
+
+[JsonPropertyName("photo")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.PhotoBase Photo { get; set; }
+
+[JsonPropertyName("document")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.DocumentBase Document { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Document == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);

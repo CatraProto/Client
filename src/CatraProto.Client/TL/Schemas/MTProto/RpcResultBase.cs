@@ -1,12 +1,16 @@
 using CatraProto.TL;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
-
-
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
     public abstract class RpcResultBase : IObject
     {
+
+[JsonPropertyName("req_msg_id")]
 		public abstract long ReqMsgId { get; set; }
+
+[JsonPropertyName("result")]
 		public abstract IObject Result { get; set; }
 
         public abstract void UpdateFlags();

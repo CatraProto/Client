@@ -1,13 +1,12 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Text.Json.Serialization;
+using CatraProto.TL;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-	public partial class DeepLinkInfo : DeepLinkInfoBase
+	public partial class DeepLinkInfo : CatraProto.Client.TL.Schemas.CloudChats.Help.DeepLinkInfoBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,12 +15,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 			Entities = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = 1783556146;
+        public static int StaticConstructorId { get => 1783556146; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("update_app")]
 		public bool UpdateApp { get; set; }
+
+[JsonPropertyName("message")]
 		public string Message { get; set; }
+
+[JsonPropertyName("entities")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = UpdateApp ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

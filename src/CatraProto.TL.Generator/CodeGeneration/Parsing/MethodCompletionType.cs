@@ -1,6 +1,6 @@
 namespace CatraProto.TL.Generator.CodeGeneration.Parsing
 {
-	enum MethodType
+	enum MethodCompletionType
 	{
 		ReturnsEncryptedRPCResult,
 		ReturnsUnencrypted

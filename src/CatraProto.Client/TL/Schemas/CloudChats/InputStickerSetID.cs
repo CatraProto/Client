@@ -1,17 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputStickerSetID : InputStickerSetBase
+	public partial class InputStickerSetID : CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase
 	{
 
 
-        public static int ConstructorId { get; } = -1645763991;
+        public static int StaticConstructorId { get => -1645763991; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("id")]
 		public long Id { get; set; }
+
+[JsonPropertyName("access_hash")]
 		public long AccessHash { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

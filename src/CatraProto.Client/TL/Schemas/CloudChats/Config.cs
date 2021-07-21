@@ -1,13 +1,12 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Text.Json.Serialization;
+using CatraProto.TL;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class Config : ConfigBase
+	public partial class Config : CatraProto.Client.TL.Schemas.CloudChats.ConfigBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -30,60 +29,167 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			BaseLangPackVersion = 1 << 2
 		}
 
-        public static int ConstructorId { get; } = 856375399;
+        public static int StaticConstructorId { get => 856375399; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("phonecalls_enabled")]
 		public override bool PhonecallsEnabled { get; set; }
+
+[JsonPropertyName("default_p2p_contacts")]
 		public override bool DefaultP2pContacts { get; set; }
+
+[JsonPropertyName("preload_featured_stickers")]
 		public override bool PreloadFeaturedStickers { get; set; }
+
+[JsonPropertyName("ignore_phone_entities")]
 		public override bool IgnorePhoneEntities { get; set; }
+
+[JsonPropertyName("revoke_pm_inbox")]
 		public override bool RevokePmInbox { get; set; }
+
+[JsonPropertyName("blocked_mode")]
 		public override bool BlockedMode { get; set; }
+
+[JsonPropertyName("pfs_enabled")]
 		public override bool PfsEnabled { get; set; }
+
+[JsonPropertyName("date")]
 		public override int Date { get; set; }
+
+[JsonPropertyName("expires")]
 		public override int Expires { get; set; }
+
+[JsonPropertyName("test_mode")]
 		public override bool TestMode { get; set; }
+
+[JsonPropertyName("this_dc")]
 		public override int ThisDc { get; set; }
+
+[JsonPropertyName("dc_options")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase> DcOptions { get; set; }
+
+[JsonPropertyName("dc_txt_domain_name")]
 		public override string DcTxtDomainName { get; set; }
+
+[JsonPropertyName("chat_size_max")]
 		public override int ChatSizeMax { get; set; }
+
+[JsonPropertyName("megagroup_size_max")]
 		public override int MegagroupSizeMax { get; set; }
+
+[JsonPropertyName("forwarded_count_max")]
 		public override int ForwardedCountMax { get; set; }
+
+[JsonPropertyName("online_update_period_ms")]
 		public override int OnlineUpdatePeriodMs { get; set; }
+
+[JsonPropertyName("offline_blur_timeout_ms")]
 		public override int OfflineBlurTimeoutMs { get; set; }
+
+[JsonPropertyName("offline_idle_timeout_ms")]
 		public override int OfflineIdleTimeoutMs { get; set; }
+
+[JsonPropertyName("online_cloud_timeout_ms")]
 		public override int OnlineCloudTimeoutMs { get; set; }
+
+[JsonPropertyName("notify_cloud_delay_ms")]
 		public override int NotifyCloudDelayMs { get; set; }
+
+[JsonPropertyName("notify_default_delay_ms")]
 		public override int NotifyDefaultDelayMs { get; set; }
+
+[JsonPropertyName("push_chat_period_ms")]
 		public override int PushChatPeriodMs { get; set; }
+
+[JsonPropertyName("push_chat_limit")]
 		public override int PushChatLimit { get; set; }
+
+[JsonPropertyName("saved_gifs_limit")]
 		public override int SavedGifsLimit { get; set; }
+
+[JsonPropertyName("edit_time_limit")]
 		public override int EditTimeLimit { get; set; }
+
+[JsonPropertyName("revoke_time_limit")]
 		public override int RevokeTimeLimit { get; set; }
+
+[JsonPropertyName("revoke_pm_time_limit")]
 		public override int RevokePmTimeLimit { get; set; }
+
+[JsonPropertyName("rating_e_decay")]
 		public override int RatingEDecay { get; set; }
+
+[JsonPropertyName("stickers_recent_limit")]
 		public override int StickersRecentLimit { get; set; }
+
+[JsonPropertyName("stickers_faved_limit")]
 		public override int StickersFavedLimit { get; set; }
+
+[JsonPropertyName("channels_read_media_period")]
 		public override int ChannelsReadMediaPeriod { get; set; }
+
+[JsonPropertyName("tmp_sessions")]
 		public override int? TmpSessions { get; set; }
+
+[JsonPropertyName("pinned_dialogs_count_max")]
 		public override int PinnedDialogsCountMax { get; set; }
+
+[JsonPropertyName("pinned_infolder_count_max")]
 		public override int PinnedInfolderCountMax { get; set; }
+
+[JsonPropertyName("call_receive_timeout_ms")]
 		public override int CallReceiveTimeoutMs { get; set; }
+
+[JsonPropertyName("call_ring_timeout_ms")]
 		public override int CallRingTimeoutMs { get; set; }
+
+[JsonPropertyName("call_connect_timeout_ms")]
 		public override int CallConnectTimeoutMs { get; set; }
+
+[JsonPropertyName("call_packet_timeout_ms")]
 		public override int CallPacketTimeoutMs { get; set; }
+
+[JsonPropertyName("me_url_prefix")]
 		public override string MeUrlPrefix { get; set; }
+
+[JsonPropertyName("autoupdate_url_prefix")]
 		public override string AutoupdateUrlPrefix { get; set; }
+
+[JsonPropertyName("gif_search_username")]
 		public override string GifSearchUsername { get; set; }
+
+[JsonPropertyName("venue_search_username")]
 		public override string VenueSearchUsername { get; set; }
+
+[JsonPropertyName("img_search_username")]
 		public override string ImgSearchUsername { get; set; }
+
+[JsonPropertyName("static_maps_provider")]
 		public override string StaticMapsProvider { get; set; }
+
+[JsonPropertyName("caption_length_max")]
 		public override int CaptionLengthMax { get; set; }
+
+[JsonPropertyName("message_length_max")]
 		public override int MessageLengthMax { get; set; }
+
+[JsonPropertyName("webfile_dc_id")]
 		public override int WebfileDcId { get; set; }
+
+[JsonPropertyName("suggested_lang_code")]
 		public override string SuggestedLangCode { get; set; }
+
+[JsonPropertyName("lang_pack_version")]
 		public override int? LangPackVersion { get; set; }
+
+[JsonPropertyName("base_lang_pack_version")]
 		public override int? BaseLangPackVersion { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = PhonecallsEnabled ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);

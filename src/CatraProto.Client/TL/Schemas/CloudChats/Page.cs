@@ -1,13 +1,12 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Text.Json.Serialization;
+using CatraProto.TL;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class Page : PageBase
+	public partial class Page : CatraProto.Client.TL.Schemas.CloudChats.PageBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -18,17 +17,38 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Views = 1 << 3
 		}
 
-        public static int ConstructorId { get; } = -1738178803;
+        public static int StaticConstructorId { get => -1738178803; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("part")]
 		public override bool Part { get; set; }
+
+[JsonPropertyName("rtl")]
 		public override bool Rtl { get; set; }
+
+[JsonPropertyName("v2")]
 		public override bool V2 { get; set; }
+
+[JsonPropertyName("url")]
 		public override string Url { get; set; }
+
+[JsonPropertyName("blocks")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase> Blocks { get; set; }
+
+[JsonPropertyName("photos")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase> Photos { get; set; }
+
+[JsonPropertyName("documents")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase> Documents { get; set; }
+
+[JsonPropertyName("views")]
 		public override int? Views { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Part ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

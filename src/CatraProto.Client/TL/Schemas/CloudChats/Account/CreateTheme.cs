@@ -1,8 +1,8 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Collections.Generic;
+using CatraProto.TL;
+using System.Text.Json.Serialization;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
@@ -15,15 +15,32 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 			Settings = 1 << 3
 		}
 
-        public static int ConstructorId { get; } = -2077048289;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => -2077048289; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.ThemeBase);
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.ThemeBase);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("slug")]
 		public string Slug { get; set; }
+
+[JsonPropertyName("title")]
 		public string Title { get; set; }
+
+[JsonPropertyName("document")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase Document { get; set; }
+
+[JsonPropertyName("settings")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputThemeSettingsBase Settings { get; set; }
+
 
 		public void UpdateFlags() 
 		{

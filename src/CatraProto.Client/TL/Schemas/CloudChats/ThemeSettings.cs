@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ThemeSettings : ThemeSettingsBase
+	public partial class ThemeSettings : CatraProto.Client.TL.Schemas.CloudChats.ThemeSettingsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,14 +16,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Wallpaper = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = -1676371894;
+        public static int StaticConstructorId { get => -1676371894; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("base_theme")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.BaseThemeBase BaseTheme { get; set; }
+
+[JsonPropertyName("accent_color")]
 		public override int AccentColor { get; set; }
+
+[JsonPropertyName("message_top_color")]
 		public override int? MessageTopColor { get; set; }
+
+[JsonPropertyName("message_bottom_color")]
 		public override int? MessageBottomColor { get; set; }
+
+[JsonPropertyName("wallpaper")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase Wallpaper { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = MessageTopColor == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);

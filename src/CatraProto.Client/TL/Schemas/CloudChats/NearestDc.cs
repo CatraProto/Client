@@ -1,18 +1,29 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class NearestDc : NearestDcBase
+	public partial class NearestDc : CatraProto.Client.TL.Schemas.CloudChats.NearestDcBase
 	{
 
 
-        public static int ConstructorId { get; } = -1910892683;
+        public static int StaticConstructorId { get => -1910892683; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("country")]
 		public override string Country { get; set; }
+
+[JsonPropertyName("this_dc")]
 		public override int ThisDc { get; set; }
+
+[JsonPropertyName("NearestDc_")]
 		public override int NearestDc_ { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

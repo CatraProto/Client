@@ -1,6 +1,8 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using System.Text.Json.Serialization;
 using CatraProto.TL.Interfaces;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Langpack
 {
@@ -8,11 +10,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Langpack
 	{
 
 
-        public static int ConstructorId { get; } = 1120311183;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => 1120311183; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.LangPackLanguageBase);
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.LangPackLanguageBase);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = true;
+
+[JsonPropertyName("lang_pack")]
 		public string LangPack { get; set; }
+
 
 		public void UpdateFlags() 
 		{

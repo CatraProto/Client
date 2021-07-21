@@ -1,18 +1,23 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class Authorizations : AuthorizationsBase
+	public partial class Authorizations : CatraProto.Client.TL.Schemas.CloudChats.Account.AuthorizationsBase
 	{
 
 
-        public static int ConstructorId { get; } = 307276766;
+        public static int StaticConstructorId { get => 307276766; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("Authorizations_")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.AuthorizationBase> Authorizations_ { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

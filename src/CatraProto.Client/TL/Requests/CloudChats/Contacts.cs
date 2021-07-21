@@ -20,10 +20,10 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 	        
 	    }
 	    
-	    		public async Task<RpcMessage<int>> GetContactIDsAsync(int hash, CancellationToken cancellationToken = default)
+	    		public async Task<RpcMessage<IList<int>>> GetContactIDsAsync(int hash, CancellationToken cancellationToken = default)
 		{
 			
-			var rpcResponse = new RpcMessage<int>();
+			var rpcResponse = new RpcMessage<IList<int>>();
 			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Contacts.GetContactIDs()
 			{
 				Hash = hash,
@@ -37,10 +37,10 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.ContactStatusBase>> GetStatusesAsync( CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<IList<CatraProto.Client.TL.Schemas.CloudChats.ContactStatusBase>>> GetStatusesAsync( CancellationToken cancellationToken = default)
 		{
 			
-			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.ContactStatusBase>();
+			var rpcResponse = new RpcMessage<IList<CatraProto.Client.TL.Schemas.CloudChats.ContactStatusBase>>();
 			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Contacts.GetStatuses()
 			{
 			};
@@ -70,7 +70,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Contacts.ImportedContactsBase>> ImportContactsAsync(List<CatraProto.Client.TL.Schemas.CloudChats.InputContactBase> contacts, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Contacts.ImportedContactsBase>> ImportContactsAsync(IList<CatraProto.Client.TL.Schemas.CloudChats.InputContactBase> contacts, CancellationToken cancellationToken = default)
 		{
 			if(contacts is null) throw new ArgumentNullException(nameof(contacts));
 
@@ -88,7 +88,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> DeleteContactsAsync(List<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase> id, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> DeleteContactsAsync(IList<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase> id, CancellationToken cancellationToken = default)
 		{
 			if(id is null) throw new ArgumentNullException(nameof(id));
 
@@ -106,7 +106,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<bool>> DeleteByPhonesAsync(List<string> phones, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<bool>> DeleteByPhonesAsync(IList<string> phones, CancellationToken cancellationToken = default)
 		{
 			if(phones is null) throw new ArgumentNullException(nameof(phones));
 
@@ -278,10 +278,10 @@ if(peer is null) throw new ArgumentNullException(nameof(peer));
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.SavedContactBase>> GetSavedAsync( CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<IList<CatraProto.Client.TL.Schemas.CloudChats.SavedContactBase>>> GetSavedAsync( CancellationToken cancellationToken = default)
 		{
 			
-			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.SavedContactBase>();
+			var rpcResponse = new RpcMessage<IList<CatraProto.Client.TL.Schemas.CloudChats.SavedContactBase>>();
 			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Contacts.GetSaved()
 			{
 			};

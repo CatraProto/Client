@@ -1,16 +1,23 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class KeyboardButton : KeyboardButtonBase
+	public partial class KeyboardButton : CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonBase
 	{
 
 
-        public static int ConstructorId { get; } = -1560655744;
+        public static int StaticConstructorId { get => -1560655744; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("text")]
 		public override string Text { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

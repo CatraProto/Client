@@ -1,7 +1,8 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-
+using System.Collections.Generic;
+using CatraProto.TL;
+using System.Text.Json.Serialization;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 {
@@ -14,13 +15,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 			Info = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = -667062079;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => -667062079; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(bool);
 
-		public System.Type Type { get; init; } = typeof(bool);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("credentials")]
 		public bool Credentials { get; set; }
+
+[JsonPropertyName("info")]
 		public bool Info { get; set; }
+
 
 		public void UpdateFlags() 
 		{

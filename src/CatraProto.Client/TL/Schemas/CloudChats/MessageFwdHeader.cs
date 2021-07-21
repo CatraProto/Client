@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageFwdHeader : MessageFwdHeaderBase
+	public partial class MessageFwdHeader : CatraProto.Client.TL.Schemas.CloudChats.MessageFwdHeaderBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -21,18 +21,41 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			PsaType = 1 << 6
 		}
 
-        public static int ConstructorId { get; } = 1601666510;
+        public static int StaticConstructorId { get => 1601666510; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("imported")]
 		public override bool Imported { get; set; }
+
+[JsonPropertyName("from_id")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.PeerBase FromId { get; set; }
+
+[JsonPropertyName("from_name")]
 		public override string FromName { get; set; }
+
+[JsonPropertyName("date")]
 		public override int Date { get; set; }
+
+[JsonPropertyName("channel_post")]
 		public override int? ChannelPost { get; set; }
+
+[JsonPropertyName("post_author")]
 		public override string PostAuthor { get; set; }
+
+[JsonPropertyName("saved_from_peer")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.PeerBase SavedFromPeer { get; set; }
+
+[JsonPropertyName("saved_from_msg_id")]
 		public override int? SavedFromMsgId { get; set; }
+
+[JsonPropertyName("psa_type")]
 		public override string PsaType { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Imported ? FlagsHelper.SetFlag(Flags, 7) : FlagsHelper.UnsetFlag(Flags, 7);

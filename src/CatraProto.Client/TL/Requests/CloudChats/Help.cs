@@ -241,7 +241,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<bool>> SaveAppLogAsync(List<CatraProto.Client.TL.Schemas.CloudChats.InputAppEventBase> events, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<bool>> SaveAppLogAsync(IList<CatraProto.Client.TL.Schemas.CloudChats.InputAppEventBase> events, CancellationToken cancellationToken = default)
 		{
 			if(events is null) throw new ArgumentNullException(nameof(events));
 
@@ -310,7 +310,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Help.UserInfoBase>> EditUserInfoAsync(CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId, string message, List<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> entities, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Help.UserInfoBase>> EditUserInfoAsync(CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId, string message, IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> entities, CancellationToken cancellationToken = default)
 		{
 			if(userId is null) throw new ArgumentNullException(nameof(userId));
 if(message is null) throw new ArgumentNullException(nameof(message));

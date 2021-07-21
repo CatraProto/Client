@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputChatUploadedPhoto : InputChatPhotoBase
+	public partial class InputChatUploadedPhoto : CatraProto.Client.TL.Schemas.CloudChats.InputChatPhotoBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,12 +16,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			VideoStartTs = 1 << 2
 		}
 
-        public static int ConstructorId { get; } = -968723890;
+        public static int StaticConstructorId { get => -968723890; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("file")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase File { get; set; }
+
+[JsonPropertyName("video")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase Video { get; set; }
+
+[JsonPropertyName("video_start_ts")]
 		public double? VideoStartTs { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = File == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);

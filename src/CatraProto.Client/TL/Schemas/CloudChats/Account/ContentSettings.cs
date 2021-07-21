@@ -1,11 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class ContentSettings : ContentSettingsBase
+	public partial class ContentSettings : CatraProto.Client.TL.Schemas.CloudChats.Account.ContentSettingsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,11 +15,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 			SensitiveCanChange = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = 1474462241;
+        public static int StaticConstructorId { get => 1474462241; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("sensitive_enabled")]
 		public override bool SensitiveEnabled { get; set; }
+
+[JsonPropertyName("sensitive_can_change")]
 		public override bool SensitiveCanChange { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = SensitiveEnabled ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

@@ -1,18 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageMediaPoll : MessageMediaBase
+	public partial class MessageMediaPoll : CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase
 	{
 
 
-        public static int ConstructorId { get; } = 1272375192;
+        public static int StaticConstructorId { get => 1272375192; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("poll")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PollBase Poll { get; set; }
+
+[JsonPropertyName("results")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PollResultsBase Results { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

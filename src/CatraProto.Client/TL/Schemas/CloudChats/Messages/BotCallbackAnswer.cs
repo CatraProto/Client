@@ -1,11 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class BotCallbackAnswer : BotCallbackAnswerBase
+	public partial class BotCallbackAnswer : CatraProto.Client.TL.Schemas.CloudChats.Messages.BotCallbackAnswerBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -17,15 +18,32 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Url = 1 << 2
 		}
 
-        public static int ConstructorId { get; } = 911761060;
+        public static int StaticConstructorId { get => 911761060; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("alert")]
 		public override bool Alert { get; set; }
+
+[JsonPropertyName("has_url")]
 		public override bool HasUrl { get; set; }
+
+[JsonPropertyName("native_ui")]
 		public override bool NativeUi { get; set; }
+
+[JsonPropertyName("message")]
 		public override string Message { get; set; }
+
+[JsonPropertyName("url")]
 		public override string Url { get; set; }
+
+[JsonPropertyName("cache_time")]
 		public override int CacheTime { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Alert ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);

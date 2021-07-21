@@ -20,7 +20,7 @@ namespace CatraProto.Client.TL.Requests
 	        
 	    }
 	    
-	    		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.ResPQBase>> ReqPqAsync(BigInteger nonce, CancellationToken cancellationToken = default)
+	    		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.ResPQBase>> ReqPqAsync(System.Numerics.BigInteger nonce, CancellationToken cancellationToken = default)
 		{
 			
 			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.MTProto.ResPQBase>();
@@ -37,7 +37,7 @@ namespace CatraProto.Client.TL.Requests
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.ResPQBase>> ReqPqMultiAsync(BigInteger nonce, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.ResPQBase>> ReqPqMultiAsync(System.Numerics.BigInteger nonce, CancellationToken cancellationToken = default)
 		{
 			
 			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.MTProto.ResPQBase>();
@@ -54,7 +54,7 @@ namespace CatraProto.Client.TL.Requests
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.ServerDHParamsBase>> ReqDHParamsAsync(BigInteger nonce, BigInteger serverNonce, byte[] p, byte[] q, long publicKeyFingerprint, byte[] encryptedData, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.ServerDHParamsBase>> ReqDHParamsAsync(System.Numerics.BigInteger nonce, System.Numerics.BigInteger serverNonce, byte[] p, byte[] q, long publicKeyFingerprint, byte[] encryptedData, CancellationToken cancellationToken = default)
 		{
 			if(p is null) throw new ArgumentNullException(nameof(p));
 if(q is null) throw new ArgumentNullException(nameof(q));
@@ -79,7 +79,7 @@ if(encryptedData is null) throw new ArgumentNullException(nameof(encryptedData))
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.SetClientDHParamsAnswerBase>> SetClientDHParamsAsync(BigInteger nonce, BigInteger serverNonce, byte[] encryptedData, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.SetClientDHParamsAnswerBase>> SetClientDHParamsAsync(System.Numerics.BigInteger nonce, System.Numerics.BigInteger serverNonce, byte[] encryptedData, CancellationToken cancellationToken = default)
 		{
 			if(encryptedData is null) throw new ArgumentNullException(nameof(encryptedData));
 

@@ -1,15 +1,20 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class SecurePasswordKdfAlgoUnknown : SecurePasswordKdfAlgoBase
+	public partial class SecurePasswordKdfAlgoUnknown : CatraProto.Client.TL.Schemas.CloudChats.SecurePasswordKdfAlgoBase
 	{
 
 
-        public static int ConstructorId { get; } = 4883767;
-
+        public static int StaticConstructorId { get => 4883767; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+        
 		public override void UpdateFlags() 
 		{
 

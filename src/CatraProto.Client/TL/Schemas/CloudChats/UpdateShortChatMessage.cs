@@ -1,13 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using System.Collections.Generic;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateShortChatMessage : UpdatesBase
+	public partial class UpdateShortChatMessage : CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -22,24 +21,59 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Entities = 1 << 7
 		}
 
-        public static int ConstructorId { get; } = 1076714939;
+        public static int StaticConstructorId { get => 1076714939; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("out")]
 		public bool Out { get; set; }
+
+[JsonPropertyName("mentioned")]
 		public bool Mentioned { get; set; }
+
+[JsonPropertyName("media_unread")]
 		public bool MediaUnread { get; set; }
+
+[JsonPropertyName("silent")]
 		public bool Silent { get; set; }
+
+[JsonPropertyName("id")]
 		public int Id { get; set; }
+
+[JsonPropertyName("from_id")]
 		public int FromId { get; set; }
+
+[JsonPropertyName("chat_id")]
 		public int ChatId { get; set; }
+
+[JsonPropertyName("message")]
 		public string Message { get; set; }
+
+[JsonPropertyName("pts")]
 		public int Pts { get; set; }
+
+[JsonPropertyName("pts_count")]
 		public int PtsCount { get; set; }
+
+[JsonPropertyName("date")]
 		public int Date { get; set; }
+
+[JsonPropertyName("fwd_from")]
 		public CatraProto.Client.TL.Schemas.CloudChats.MessageFwdHeaderBase FwdFrom { get; set; }
+
+[JsonPropertyName("via_bot_id")]
 		public int? ViaBotId { get; set; }
+
+[JsonPropertyName("reply_to")]
 		public CatraProto.Client.TL.Schemas.CloudChats.MessageReplyHeaderBase ReplyTo { get; set; }
+
+[JsonPropertyName("entities")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Out ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);

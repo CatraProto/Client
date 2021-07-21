@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PageBlockPhoto : PageBlockBase
+	public partial class PageBlockPhoto : CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,13 +15,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			WebpageId = 1 << 0
 		}
 
-        public static int ConstructorId { get; } = 391759200;
+        public static int StaticConstructorId { get => 391759200; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("photo_id")]
 		public long PhotoId { get; set; }
+
+[JsonPropertyName("caption")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase Caption { get; set; }
+
+[JsonPropertyName("url")]
 		public string Url { get; set; }
+
+[JsonPropertyName("webpage_id")]
 		public long? WebpageId { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Url == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);

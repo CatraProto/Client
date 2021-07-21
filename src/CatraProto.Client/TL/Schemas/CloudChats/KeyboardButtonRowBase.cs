@@ -1,13 +1,13 @@
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+using System.Text.Json.Serialization;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
-
+using CatraProto.TL.Interfaces;
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public abstract class KeyboardButtonRowBase : IObject
     {
+
+[JsonPropertyName("buttons")]
 		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonBase> Buttons { get; set; }
 
         public abstract void UpdateFlags();

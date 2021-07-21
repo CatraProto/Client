@@ -40,13 +40,13 @@ if(langCode is null) throw new ArgumentNullException(nameof(langCode));
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.LangPackStringBase>> GetStringsAsync(string langPack, string langCode, List<string> keys, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<IList<CatraProto.Client.TL.Schemas.CloudChats.LangPackStringBase>>> GetStringsAsync(string langPack, string langCode, IList<string> keys, CancellationToken cancellationToken = default)
 		{
 			if(langPack is null) throw new ArgumentNullException(nameof(langPack));
 if(langCode is null) throw new ArgumentNullException(nameof(langCode));
 if(keys is null) throw new ArgumentNullException(nameof(keys));
 
-			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.LangPackStringBase>();
+			var rpcResponse = new RpcMessage<IList<CatraProto.Client.TL.Schemas.CloudChats.LangPackStringBase>>();
 			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Langpack.GetStrings()
 			{
 				LangPack = langPack,
@@ -83,11 +83,11 @@ if(langCode is null) throw new ArgumentNullException(nameof(langCode));
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.LangPackLanguageBase>> GetLanguagesAsync(string langPack, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<IList<CatraProto.Client.TL.Schemas.CloudChats.LangPackLanguageBase>>> GetLanguagesAsync(string langPack, CancellationToken cancellationToken = default)
 		{
 			if(langPack is null) throw new ArgumentNullException(nameof(langPack));
 
-			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.LangPackLanguageBase>();
+			var rpcResponse = new RpcMessage<IList<CatraProto.Client.TL.Schemas.CloudChats.LangPackLanguageBase>>();
 			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Langpack.GetLanguages()
 			{
 				LangPack = langPack,

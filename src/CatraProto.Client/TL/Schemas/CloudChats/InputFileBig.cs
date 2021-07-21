@@ -1,18 +1,29 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputFileBig : InputFileBase
+	public partial class InputFileBig : CatraProto.Client.TL.Schemas.CloudChats.InputFileBase
 	{
 
 
-        public static int ConstructorId { get; } = -95482955;
+        public static int StaticConstructorId { get => -95482955; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("id")]
 		public override long Id { get; set; }
+
+[JsonPropertyName("parts")]
 		public override int Parts { get; set; }
+
+[JsonPropertyName("name")]
 		public override string Name { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

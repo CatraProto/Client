@@ -1,11 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 {
-	public partial class ChannelDifferenceEmpty : ChannelDifferenceBase
+	public partial class ChannelDifferenceEmpty : CatraProto.Client.TL.Schemas.CloudChats.Updates.ChannelDifferenceBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,12 +15,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 			Timeout = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = 1041346555;
+        public static int StaticConstructorId { get => 1041346555; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("final")]
 		public override bool Final { get; set; }
+
+[JsonPropertyName("pts")]
 		public int Pts { get; set; }
+
+[JsonPropertyName("timeout")]
 		public override int? Timeout { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Final ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

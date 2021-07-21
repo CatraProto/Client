@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UrlAuthResultRequest : UrlAuthResultBase
+	public partial class UrlAuthResultRequest : CatraProto.Client.TL.Schemas.CloudChats.UrlAuthResultBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,12 +14,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			RequestWriteAccess = 1 << 0
 		}
 
-        public static int ConstructorId { get; } = -1831650802;
+        public static int StaticConstructorId { get => -1831650802; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("request_write_access")]
 		public bool RequestWriteAccess { get; set; }
+
+[JsonPropertyName("bot")]
 		public CatraProto.Client.TL.Schemas.CloudChats.UserBase Bot { get; set; }
+
+[JsonPropertyName("domain")]
 		public string Domain { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = RequestWriteAccess ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats.Auth;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
-	public partial class SentCode : SentCodeBase
+	public partial class SentCode : CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,13 +15,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 			Timeout = 1 << 2
 		}
 
-        public static int ConstructorId { get; } = 1577067778;
+        public static int StaticConstructorId { get => 1577067778; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("type")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeTypeBase Type { get; set; }
+
+[JsonPropertyName("phone_code_hash")]
 		public override string PhoneCodeHash { get; set; }
+
+[JsonPropertyName("next_type")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.Auth.CodeTypeBase NextType { get; set; }
+
+[JsonPropertyName("timeout")]
 		public override int? Timeout { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = NextType == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);

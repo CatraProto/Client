@@ -1,13 +1,16 @@
 using CatraProto.TL;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public abstract class InputBotInlineResultBase : IObject
     {
+
+[JsonPropertyName("id")]
 		public abstract string Id { get; set; }
+
+[JsonPropertyName("send_message")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageBase SendMessage { get; set; }
 
         public abstract void UpdateFlags();

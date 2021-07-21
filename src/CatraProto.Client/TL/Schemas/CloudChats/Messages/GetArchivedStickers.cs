@@ -1,7 +1,8 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-
+using System.Collections.Generic;
+using CatraProto.TL;
+using System.Text.Json.Serialization;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
@@ -13,14 +14,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Masks = 1 << 0
 		}
 
-        public static int ConstructorId { get; } = 1475442322;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => 1475442322; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.ArchivedStickersBase);
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.ArchivedStickersBase);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("masks")]
 		public bool Masks { get; set; }
+
+[JsonPropertyName("offset_id")]
 		public long OffsetId { get; set; }
+
+[JsonPropertyName("limit")]
 		public int Limit { get; set; }
+
 
 		public void UpdateFlags() 
 		{

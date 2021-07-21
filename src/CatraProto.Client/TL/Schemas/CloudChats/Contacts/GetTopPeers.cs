@@ -1,7 +1,8 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-
+using System.Collections.Generic;
+using CatraProto.TL;
+using System.Text.Json.Serialization;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
@@ -20,22 +21,53 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 			Channels = 1 << 15
 		}
 
-        public static int ConstructorId { get; } = -728224331;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => -728224331; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Contacts.TopPeersBase);
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Contacts.TopPeersBase);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("correspondents")]
 		public bool Correspondents { get; set; }
+
+[JsonPropertyName("bots_pm")]
 		public bool BotsPm { get; set; }
+
+[JsonPropertyName("bots_inline")]
 		public bool BotsInline { get; set; }
+
+[JsonPropertyName("phone_calls")]
 		public bool PhoneCalls { get; set; }
+
+[JsonPropertyName("forward_users")]
 		public bool ForwardUsers { get; set; }
+
+[JsonPropertyName("forward_chats")]
 		public bool ForwardChats { get; set; }
+
+[JsonPropertyName("groups")]
 		public bool Groups { get; set; }
+
+[JsonPropertyName("channels")]
 		public bool Channels { get; set; }
+
+[JsonPropertyName("offset")]
 		public int Offset { get; set; }
+
+[JsonPropertyName("limit")]
 		public int Limit { get; set; }
+
+[JsonPropertyName("hash")]
 		public int Hash { get; set; }
+
 
 		public void UpdateFlags() 
 		{

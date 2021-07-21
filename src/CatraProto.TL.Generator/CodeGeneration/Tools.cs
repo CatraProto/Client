@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using CatraProto.TL.Generator.DeclarationInfo;
 using CatraProto.TL.Generator.Objects.Types;
 using CatraProto.TL.Generator.Objects.Types.Interfaces;
 
@@ -6,7 +7,7 @@ namespace CatraProto.TL.Generator.CodeGeneration
 {
 	static class Tools
 	{
-		public static TypeBase CreateType(string type, bool isBaseType = false)
+		public static TypeBase CreateType(string type, TypeInfo typeInfo)
 		{
 			if (Regex.IsMatch(type, @"\bint[0-9]*"))
 			{
@@ -35,13 +36,8 @@ namespace CatraProto.TL.Generator.CodeGeneration
 				case "X":
 					return new RuntimeDefinedType();
 			}
-
-			if (isBaseType)
-			{
-				type += "Base";
-			}
-
-			return new GenericType(type);
+			
+			return new GenericType(type, typeInfo);
 		}
 	}
 }

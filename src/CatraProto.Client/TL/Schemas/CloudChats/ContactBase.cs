@@ -1,12 +1,16 @@
 using CatraProto.TL;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
-
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public abstract class ContactBase : IObject
     {
+
+[JsonPropertyName("user_id")]
 		public abstract int UserId { get; set; }
+
+[JsonPropertyName("mutual")]
 		public abstract bool Mutual { get; set; }
 
         public abstract void UpdateFlags();

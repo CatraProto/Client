@@ -1,20 +1,29 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChatParticipants : ChatParticipantsBase
+	public partial class ChatParticipants : CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantsBase
 	{
 
 
-        public static int ConstructorId { get; } = 1061556205;
+        public static int StaticConstructorId { get => 1061556205; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("chat_id")]
 		public override int ChatId { get; set; }
+
+[JsonPropertyName("participants")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantBase> Participants { get; set; }
+
+[JsonPropertyName("version")]
 		public int Version { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

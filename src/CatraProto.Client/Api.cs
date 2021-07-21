@@ -1,4 +1,5 @@
-﻿using CatraProto.Client.Connections;
+﻿using System.Text.Json.Serialization;
+using CatraProto.Client.Connections;
 using CatraProto.Client.TL.Requests;
 
 namespace CatraProto.Client

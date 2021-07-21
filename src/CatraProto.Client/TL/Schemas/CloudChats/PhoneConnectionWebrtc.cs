@@ -1,11 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PhoneConnectionWebrtc : PhoneConnectionBase
+	public partial class PhoneConnectionWebrtc : CatraProto.Client.TL.Schemas.CloudChats.PhoneConnectionBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,17 +15,38 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Stun = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = 1667228533;
+        public static int StaticConstructorId { get => 1667228533; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("turn")]
 		public bool Turn { get; set; }
+
+[JsonPropertyName("stun")]
 		public bool Stun { get; set; }
+
+[JsonPropertyName("id")]
 		public override long Id { get; set; }
+
+[JsonPropertyName("ip")]
 		public override string Ip { get; set; }
+
+[JsonPropertyName("ipv6")]
 		public override string Ipv6 { get; set; }
+
+[JsonPropertyName("port")]
 		public override int Port { get; set; }
+
+[JsonPropertyName("username")]
 		public string Username { get; set; }
+
+[JsonPropertyName("password")]
 		public string Password { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Turn ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

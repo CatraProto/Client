@@ -1,11 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class AutoDownloadSettings : AutoDownloadSettingsBase
+	public partial class AutoDownloadSettings : CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,17 +17,38 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			PhonecallsLessData = 1 << 3
 		}
 
-        public static int ConstructorId { get; } = -532532493;
+        public static int StaticConstructorId { get => -532532493; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("disabled")]
 		public override bool Disabled { get; set; }
+
+[JsonPropertyName("video_preload_large")]
 		public override bool VideoPreloadLarge { get; set; }
+
+[JsonPropertyName("audio_preload_next")]
 		public override bool AudioPreloadNext { get; set; }
+
+[JsonPropertyName("phonecalls_less_data")]
 		public override bool PhonecallsLessData { get; set; }
+
+[JsonPropertyName("photo_size_max")]
 		public override int PhotoSizeMax { get; set; }
+
+[JsonPropertyName("video_size_max")]
 		public override int VideoSizeMax { get; set; }
+
+[JsonPropertyName("file_size_max")]
 		public override int FileSizeMax { get; set; }
+
+[JsonPropertyName("video_upload_maxbitrate")]
 		public override int VideoUploadMaxbitrate { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Disabled ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

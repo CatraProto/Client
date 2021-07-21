@@ -1,8 +1,8 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Collections.Generic;
+using CatraProto.TL;
+using System.Text.Json.Serialization;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
@@ -15,18 +15,41 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			FolderId = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = -1594999949;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => -1594999949; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.DialogsBase);
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.DialogsBase);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("exclude_pinned")]
 		public bool ExcludePinned { get; set; }
+
+[JsonPropertyName("folder_id")]
 		public int? FolderId { get; set; }
+
+[JsonPropertyName("offset_date")]
 		public int OffsetDate { get; set; }
+
+[JsonPropertyName("offset_id")]
 		public int OffsetId { get; set; }
+
+[JsonPropertyName("offset_peer")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase OffsetPeer { get; set; }
+
+[JsonPropertyName("limit")]
 		public int Limit { get; set; }
+
+[JsonPropertyName("hash")]
 		public int Hash { get; set; }
+
 
 		public void UpdateFlags() 
 		{

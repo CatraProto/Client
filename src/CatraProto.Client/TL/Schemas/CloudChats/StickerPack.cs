@@ -1,18 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Collections.Generic;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class StickerPack : StickerPackBase
+	public partial class StickerPack : CatraProto.Client.TL.Schemas.CloudChats.StickerPackBase
 	{
 
 
-        public static int ConstructorId { get; } = 313694676;
+        public static int StaticConstructorId { get => 313694676; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("emoticon")]
 		public override string Emoticon { get; set; }
+
+[JsonPropertyName("documents")]
 		public override IList<long> Documents { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

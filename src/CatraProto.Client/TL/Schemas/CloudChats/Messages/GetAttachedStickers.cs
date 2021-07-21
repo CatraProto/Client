@@ -1,7 +1,8 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using System.Text.Json.Serialization;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
@@ -9,11 +10,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 	{
 
 
-        public static int ConstructorId { get; } = -866424884;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => -866424884; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.StickerSetCoveredBase);
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.StickerSetCoveredBase);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = true;
+
+[JsonPropertyName("media")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputStickeredMediaBase Media { get; set; }
+
 
 		public void UpdateFlags() 
 		{

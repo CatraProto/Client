@@ -1,16 +1,23 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
-	public partial class PasswordRecovery : PasswordRecoveryBase
+	public partial class PasswordRecovery : CatraProto.Client.TL.Schemas.CloudChats.Auth.PasswordRecoveryBase
 	{
 
 
-        public static int ConstructorId { get; } = 326715557;
+        public static int StaticConstructorId { get => 326715557; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("email_pattern")]
 		public override string EmailPattern { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

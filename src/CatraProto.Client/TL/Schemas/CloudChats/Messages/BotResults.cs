@@ -1,13 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using System.Collections.Generic;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class BotResults : BotResultsBase
+	public partial class BotResults : CatraProto.Client.TL.Schemas.CloudChats.Messages.BotResultsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -17,16 +16,35 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			SwitchPm = 1 << 2
 		}
 
-        public static int ConstructorId { get; } = -1803769784;
+        public static int StaticConstructorId { get => -1803769784; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("gallery")]
 		public override bool Gallery { get; set; }
+
+[JsonPropertyName("query_id")]
 		public override long QueryId { get; set; }
+
+[JsonPropertyName("next_offset")]
 		public override string NextOffset { get; set; }
+
+[JsonPropertyName("switch_pm")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.InlineBotSwitchPMBase SwitchPm { get; set; }
+
+[JsonPropertyName("results")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.BotInlineResultBase> Results { get; set; }
+
+[JsonPropertyName("cache_time")]
 		public override int CacheTime { get; set; }
+
+[JsonPropertyName("users")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Gallery ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

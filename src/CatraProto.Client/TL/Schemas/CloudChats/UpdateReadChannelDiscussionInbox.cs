@@ -1,11 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateReadChannelDiscussionInbox : UpdateBase
+	public partial class UpdateReadChannelDiscussionInbox : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,14 +15,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			BroadcastPost = 1 << 0
 		}
 
-        public static int ConstructorId { get; } = 482860628;
+        public static int StaticConstructorId { get => 482860628; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("channel_id")]
 		public int ChannelId { get; set; }
+
+[JsonPropertyName("top_msg_id")]
 		public int TopMsgId { get; set; }
+
+[JsonPropertyName("read_max_id")]
 		public int ReadMaxId { get; set; }
+
+[JsonPropertyName("broadcast_id")]
 		public int? BroadcastId { get; set; }
+
+[JsonPropertyName("broadcast_post")]
 		public int? BroadcastPost { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = BroadcastId == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);

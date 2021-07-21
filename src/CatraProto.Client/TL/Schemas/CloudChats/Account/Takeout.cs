@@ -1,16 +1,23 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class Takeout : TakeoutBase
+	public partial class Takeout : CatraProto.Client.TL.Schemas.CloudChats.Account.TakeoutBase
 	{
 
 
-        public static int ConstructorId { get; } = 1304052993;
+        public static int StaticConstructorId { get => 1304052993; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("id")]
 		public override long Id { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using CatraProto.TL.Generator.DeclarationInfo;
 using CatraProto.TL.Generator.Objects.Types.Interfaces;
 
 namespace CatraProto.TL.Generator.Objects.Types
@@ -8,26 +9,24 @@ namespace CatraProto.TL.Generator.Objects.Types
 	{
 		public StringType()
 		{
-			IsBare = true;
-			Name = "string";
+			TypeInfo.IsBare = true;
+			NamingInfo = "string";
 		}
 
-		public override void WriteParameter(StringBuilder stringBuilder, Parameter parameter,
-			string customTypeName = null, bool isAbstract = false)
+		public override void WriteParameter(StringBuilder stringBuilder, Parameter parameter, string customTypeName = null, bool isAbstract = false)
 		{
-			var type = parameter.IsVector ? $"IList<{Name}>" : Name;
-			stringBuilder.AppendLine(
-				$"{StringTools.TwoTabs}{GetParameterAccessibility(parameter, isAbstract)} {type} {parameter.Name} {{ get; set; }}");
+			var type = GetTypeName(NamingType.CamelCase, parameter, true);
+			stringBuilder.AppendLine($"\n[JsonPropertyName(\"{parameter.NamingInfo.OriginalName}\")]\n{StringTools.TwoTabs}{GetParameterAccessibility(parameter, isAbstract)} {type} {parameter.NamingInfo.PascalCaseName} {{ get; set; }}");
 		}
 
 		public override void WriteSerializer(StringBuilder stringBuilder, Parameter parameter)
 		{
 			WriteFlagStart(stringBuilder, out var spacing, parameter);
-			stringBuilder.AppendLine($"{spacing}writer.Write({parameter.Name});");
+			stringBuilder.AppendLine($"{spacing}writer.Write({parameter.NamingInfo.PascalCaseName});");
 			WriteFlagEnd(stringBuilder, spacing, parameter);
 		}
 
-		public override void WriteBaseParameters(StringBuilder stringBuilder, bool allowOverrides = true)
+		public override void WriteBaseParameters(StringBuilder stringBuilder, bool allowOverrides = false)
 		{
 			throw new NotSupportedException();
 		}

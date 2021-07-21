@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageMediaDocument : MessageMediaBase
+	public partial class MessageMediaDocument : CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,11 +15,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			TtlSeconds = 1 << 2
 		}
 
-        public static int ConstructorId { get; } = -1666158377;
+        public static int StaticConstructorId { get => -1666158377; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("document")]
 		public CatraProto.Client.TL.Schemas.CloudChats.DocumentBase Document { get; set; }
+
+[JsonPropertyName("ttl_seconds")]
 		public int? TtlSeconds { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Document == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);

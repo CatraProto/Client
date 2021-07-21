@@ -1,17 +1,23 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Collections.Generic;
-
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class MsgResendReq : MsgResendReqBase
+	public partial class MsgResendReq : CatraProto.Client.TL.Schemas.MTProto.MsgResendReqBase
 	{
 
 
-        public static int ConstructorId { get; } = 2105940488;
+        public static int StaticConstructorId { get => 2105940488; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("msg_ids")]
 		public override IList<long> MsgIds { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

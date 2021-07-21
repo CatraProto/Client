@@ -1,13 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using System.Collections.Generic;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PhoneCall : PhoneCallBase
+	public partial class PhoneCall : CatraProto.Client.TL.Schemas.CloudChats.PhoneCallBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,21 +15,50 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Video = 1 << 6
 		}
 
-        public static int ConstructorId { get; } = -2025673089;
+        public static int StaticConstructorId { get => -2025673089; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("p2p_allowed")]
 		public bool P2pAllowed { get; set; }
+
+[JsonPropertyName("video")]
 		public bool Video { get; set; }
+
+[JsonPropertyName("id")]
 		public override long Id { get; set; }
+
+[JsonPropertyName("access_hash")]
 		public long AccessHash { get; set; }
+
+[JsonPropertyName("date")]
 		public int Date { get; set; }
+
+[JsonPropertyName("admin_id")]
 		public int AdminId { get; set; }
+
+[JsonPropertyName("participant_id")]
 		public int ParticipantId { get; set; }
+
+[JsonPropertyName("g_a_or_b")]
 		public byte[] GAOrB { get; set; }
+
+[JsonPropertyName("key_fingerprint")]
 		public long KeyFingerprint { get; set; }
+
+[JsonPropertyName("protocol")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase Protocol { get; set; }
+
+[JsonPropertyName("connections")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.PhoneConnectionBase> Connections { get; set; }
+
+[JsonPropertyName("start_date")]
 		public int StartDate { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = P2pAllowed ? FlagsHelper.SetFlag(Flags, 5) : FlagsHelper.UnsetFlag(Flags, 5);

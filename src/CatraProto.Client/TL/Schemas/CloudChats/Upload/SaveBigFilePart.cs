@@ -1,6 +1,8 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using System.Text.Json.Serialization;
 using CatraProto.TL.Interfaces;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 {
@@ -8,14 +10,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 	{
 
 
-        public static int ConstructorId { get; } = -562337987;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => -562337987; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(bool);
 
-		public System.Type Type { get; init; } = typeof(bool);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonPropertyName("file_id")]
 		public long FileId { get; set; }
+
+[JsonPropertyName("file_part")]
 		public int FilePart { get; set; }
+
+[JsonPropertyName("file_total_parts")]
 		public int FileTotalParts { get; set; }
+
+[JsonPropertyName("bytes")]
 		public byte[] Bytes { get; set; }
+
 
 		public void UpdateFlags() 
 		{

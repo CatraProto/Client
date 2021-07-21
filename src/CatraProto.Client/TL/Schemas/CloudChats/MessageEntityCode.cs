@@ -1,17 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageEntityCode : MessageEntityBase
+	public partial class MessageEntityCode : CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase
 	{
 
 
-        public static int ConstructorId { get; } = 681706865;
+        public static int StaticConstructorId { get => 681706865; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("offset")]
 		public override int Offset { get; set; }
+
+[JsonPropertyName("length")]
 		public override int Length { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

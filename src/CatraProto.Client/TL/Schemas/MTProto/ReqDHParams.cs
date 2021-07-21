@@ -1,7 +1,8 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using System.Text.Json.Serialization;
 using CatraProto.TL.Interfaces;
-using System.Numerics;
-
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
@@ -9,16 +10,35 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 	{
 
 
-        public static int ConstructorId { get; } = -686627650;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => -686627650; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.ServerDHParamsBase);
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.ServerDHParamsBase);
-		public bool IsVector { get; init; } = false;
-		public BigInteger Nonce { get; set; }
-		public BigInteger ServerNonce { get; set; }
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonPropertyName("nonce")]
+		public System.Numerics.BigInteger Nonce { get; set; }
+
+[JsonPropertyName("server_nonce")]
+		public System.Numerics.BigInteger ServerNonce { get; set; }
+
+[JsonPropertyName("p")]
 		public byte[] P { get; set; }
+
+[JsonPropertyName("q")]
 		public byte[] Q { get; set; }
+
+[JsonPropertyName("public_key_fingerprint")]
 		public long PublicKeyFingerprint { get; set; }
+
+[JsonPropertyName("encrypted_data")]
 		public byte[] EncryptedData { get; set; }
+
 
 		public void UpdateFlags() 
 		{
@@ -47,8 +67,8 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
 		public void Deserialize(Reader reader)
 		{
-			Nonce = reader.Read<BigInteger>(128);
-			ServerNonce = reader.Read<BigInteger>(128);
+			Nonce = reader.Read<System.Numerics.BigInteger>(128);
+			ServerNonce = reader.Read<System.Numerics.BigInteger>(128);
 			P = reader.Read<byte[]>();
 			Q = reader.Read<byte[]>();
 			PublicKeyFingerprint = reader.Read<long>();

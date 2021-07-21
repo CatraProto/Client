@@ -44,10 +44,10 @@ namespace CatraProto.TL.Generator.UnitTests.OptimizerTests
 			{
 				foreach (var objParameter in obj.Parameters)
 				{
-					if (objParameter.IsCommon && !mergedCommonParameters.Contains(objParameter.Name))
+					if (objParameter.IsCommon && !mergedCommonParameters.Contains(objParameter.NamingInfo.PascalCaseName))
 					{
-						_testOutputHelper.WriteLine(objParameter.Name);
-						mergedCommonParameters.Add(objParameter.Name);
+						_testOutputHelper.WriteLine(objParameter.NamingInfo.PascalCaseName);
+						mergedCommonParameters.Add(objParameter.NamingInfo.PascalCaseName);
 					}
 				}
 			}

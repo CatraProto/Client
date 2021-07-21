@@ -1,15 +1,20 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PrivacyKeyPhoneP2P : PrivacyKeyBase
+	public partial class PrivacyKeyPhoneP2P : CatraProto.Client.TL.Schemas.CloudChats.PrivacyKeyBase
 	{
 
 
-        public static int ConstructorId { get; } = 961092808;
-
+        public static int StaticConstructorId { get => 961092808; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+        
 		public override void UpdateFlags() 
 		{
 

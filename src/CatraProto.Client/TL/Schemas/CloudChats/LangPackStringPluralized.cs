@@ -1,11 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class LangPackStringPluralized : LangPackStringBase
+	public partial class LangPackStringPluralized : CatraProto.Client.TL.Schemas.CloudChats.LangPackStringBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -17,16 +18,35 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ManyValue = 1 << 4
 		}
 
-        public static int ConstructorId { get; } = 1816636575;
+        public static int StaticConstructorId { get => 1816636575; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("key")]
 		public override string Key { get; set; }
+
+[JsonPropertyName("zero_value")]
 		public string ZeroValue { get; set; }
+
+[JsonPropertyName("one_value")]
 		public string OneValue { get; set; }
+
+[JsonPropertyName("two_value")]
 		public string TwoValue { get; set; }
+
+[JsonPropertyName("few_value")]
 		public string FewValue { get; set; }
+
+[JsonPropertyName("many_value")]
 		public string ManyValue { get; set; }
+
+[JsonPropertyName("other_value")]
 		public string OtherValue { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = ZeroValue == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);

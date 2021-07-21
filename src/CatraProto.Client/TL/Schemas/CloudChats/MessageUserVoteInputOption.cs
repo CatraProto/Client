@@ -1,17 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageUserVoteInputOption : MessageUserVoteBase
+	public partial class MessageUserVoteInputOption : CatraProto.Client.TL.Schemas.CloudChats.MessageUserVoteBase
 	{
 
 
-        public static int ConstructorId { get; } = 909603888;
+        public static int StaticConstructorId { get => 909603888; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("user_id")]
 		public override int UserId { get; set; }
+
+[JsonPropertyName("date")]
 		public override int Date { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

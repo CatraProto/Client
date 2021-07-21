@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class PasswordSettings : PasswordSettingsBase
+	public partial class PasswordSettings : CatraProto.Client.TL.Schemas.CloudChats.Account.PasswordSettingsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,11 +15,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 			SecureSettings = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = -1705233435;
+        public static int StaticConstructorId { get => -1705233435; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("email")]
 		public override string Email { get; set; }
+
+[JsonPropertyName("secure_settings")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.SecureSecretSettingsBase SecureSettings { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Email == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);

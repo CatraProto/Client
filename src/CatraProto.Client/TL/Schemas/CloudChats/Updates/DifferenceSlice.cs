@@ -1,24 +1,38 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using CatraProto.Client.TL.Schemas.CloudChats.Updates;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 {
-	public partial class DifferenceSlice : DifferenceBase
+	public partial class DifferenceSlice : CatraProto.Client.TL.Schemas.CloudChats.Updates.DifferenceBase
 	{
 
 
-        public static int ConstructorId { get; } = -1459938943;
+        public static int StaticConstructorId { get => -1459938943; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("new_messages")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageBase> NewMessages { get; set; }
+
+[JsonPropertyName("new_encrypted_messages")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.EncryptedMessageBase> NewEncryptedMessages { get; set; }
+
+[JsonPropertyName("other_updates")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.UpdateBase> OtherUpdates { get; set; }
+
+[JsonPropertyName("chats")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
+
+[JsonPropertyName("users")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+
+[JsonPropertyName("intermediate_state")]
 		public CatraProto.Client.TL.Schemas.CloudChats.Updates.StateBase IntermediateState { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

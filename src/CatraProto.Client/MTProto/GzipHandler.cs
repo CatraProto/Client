@@ -24,5 +24,21 @@ namespace CatraProto.Client.MTProto
             using var reader = new Reader(MergedProvider.Singleton, ReadGzipPacket(compressedData));
             return reader.Read<IObject>();
         }
+        
+        
+        public static byte[] FromBytes(byte[] original)
+        {
+            if (original.Length <= 255)
+            {
+                return original;
+            }
+            
+            using var compressedStream = new MemoryStream();
+            using var stream = new GZipStream(compressedStream, CompressionMode.Compress);
+            using var originalStream = original.ToMemoryStream();
+            originalStream.CopyTo(stream);
+            compressedStream.Seek(0, SeekOrigin.Begin);
+            return compressedStream.ToArray();
+        }
     }
 }

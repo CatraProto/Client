@@ -1,13 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using System.Collections.Generic;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 {
-	public partial class PaymentForm : PaymentFormBase
+	public partial class PaymentForm : CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentFormBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -20,20 +19,47 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 			SavedCredentials = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = 1062645411;
+        public static int StaticConstructorId { get => 1062645411; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("can_save_credentials")]
 		public override bool CanSaveCredentials { get; set; }
+
+[JsonPropertyName("password_missing")]
 		public override bool PasswordMissing { get; set; }
+
+[JsonPropertyName("bot_id")]
 		public override int BotId { get; set; }
+
+[JsonPropertyName("invoice")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.InvoiceBase Invoice { get; set; }
+
+[JsonPropertyName("provider_id")]
 		public override int ProviderId { get; set; }
+
+[JsonPropertyName("url")]
 		public override string Url { get; set; }
+
+[JsonPropertyName("native_provider")]
 		public override string NativeProvider { get; set; }
+
+[JsonPropertyName("native_params")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase NativeParams { get; set; }
+
+[JsonPropertyName("saved_info")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase SavedInfo { get; set; }
+
+[JsonPropertyName("saved_credentials")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.PaymentSavedCredentialsBase SavedCredentials { get; set; }
+
+[JsonPropertyName("users")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = CanSaveCredentials ? FlagsHelper.SetFlag(Flags, 2) : FlagsHelper.UnsetFlag(Flags, 2);

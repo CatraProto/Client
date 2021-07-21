@@ -20,11 +20,11 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 	        
 	    }
 	    
-	    		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.UserBase>> GetUsersAsync(List<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase> id, CancellationToken cancellationToken = default)
+	    		public async Task<RpcMessage<IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase>>> GetUsersAsync(IList<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase> id, CancellationToken cancellationToken = default)
 		{
 			if(id is null) throw new ArgumentNullException(nameof(id));
 
-			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+			var rpcResponse = new RpcMessage<IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase>>();
 			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Users.GetUsers()
 			{
 				Id = id,
@@ -56,7 +56,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<bool>> SetSecureValueErrorsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputUserBase id, List<CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase> errors, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<bool>> SetSecureValueErrorsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputUserBase id, IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase> errors, CancellationToken cancellationToken = default)
 		{
 			if(id is null) throw new ArgumentNullException(nameof(id));
 if(errors is null) throw new ArgumentNullException(nameof(errors));

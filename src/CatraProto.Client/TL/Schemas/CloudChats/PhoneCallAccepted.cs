@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PhoneCallAccepted : PhoneCallBase
+	public partial class PhoneCallAccepted : CatraProto.Client.TL.Schemas.CloudChats.PhoneCallBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,17 +14,38 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Video = 1 << 6
 		}
 
-        public static int ConstructorId { get; } = -1719909046;
+        public static int StaticConstructorId { get => -1719909046; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("video")]
 		public bool Video { get; set; }
+
+[JsonPropertyName("id")]
 		public override long Id { get; set; }
+
+[JsonPropertyName("access_hash")]
 		public long AccessHash { get; set; }
+
+[JsonPropertyName("date")]
 		public int Date { get; set; }
+
+[JsonPropertyName("admin_id")]
 		public int AdminId { get; set; }
+
+[JsonPropertyName("participant_id")]
 		public int ParticipantId { get; set; }
+
+[JsonPropertyName("g_b")]
 		public byte[] GB { get; set; }
+
+[JsonPropertyName("protocol")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase Protocol { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Video ? FlagsHelper.SetFlag(Flags, 6) : FlagsHelper.UnsetFlag(Flags, 6);

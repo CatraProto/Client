@@ -1,11 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class KeyboardButtonCallback : KeyboardButtonBase
+	public partial class KeyboardButtonCallback : CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -13,12 +14,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			RequiresPassword = 1 << 0
 		}
 
-        public static int ConstructorId { get; } = 901503851;
+        public static int StaticConstructorId { get => 901503851; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("requires_password")]
 		public bool RequiresPassword { get; set; }
+
+[JsonPropertyName("text")]
 		public override string Text { get; set; }
+
+[JsonPropertyName("data")]
 		public byte[] Data { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = RequiresPassword ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

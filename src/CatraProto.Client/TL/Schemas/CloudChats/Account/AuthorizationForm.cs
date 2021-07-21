@@ -1,13 +1,12 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Text.Json.Serialization;
+using CatraProto.TL;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class AuthorizationForm : AuthorizationFormBase
+	public partial class AuthorizationForm : CatraProto.Client.TL.Schemas.CloudChats.Account.AuthorizationFormBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,14 +14,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 			PrivacyPolicyUrl = 1 << 0
 		}
 
-        public static int ConstructorId { get; } = -1389486888;
+        public static int StaticConstructorId { get => -1389486888; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("required_types")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.SecureRequiredTypeBase> RequiredTypes { get; set; }
+
+[JsonPropertyName("values")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase> Values { get; set; }
+
+[JsonPropertyName("errors")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase> Errors { get; set; }
+
+[JsonPropertyName("users")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+
+[JsonPropertyName("privacy_policy_url")]
 		public override string PrivacyPolicyUrl { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = PrivacyPolicyUrl == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);

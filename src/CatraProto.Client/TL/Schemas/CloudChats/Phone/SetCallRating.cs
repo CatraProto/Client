@@ -1,8 +1,8 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Collections.Generic;
+using CatraProto.TL;
+using System.Text.Json.Serialization;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 {
@@ -14,15 +14,32 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 			UserInitiative = 1 << 0
 		}
 
-        public static int ConstructorId { get; } = 1508562471;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => 1508562471; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("user_initiative")]
 		public bool UserInitiative { get; set; }
+
+[JsonPropertyName("peer")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputPhoneCallBase Peer { get; set; }
+
+[JsonPropertyName("rating")]
 		public int Rating { get; set; }
+
+[JsonPropertyName("comment")]
 		public string Comment { get; set; }
+
 
 		public void UpdateFlags() 
 		{

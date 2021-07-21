@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateBotPrecheckoutQuery : UpdateBase
+	public partial class UpdateBotPrecheckoutQuery : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,16 +15,35 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ShippingOptionId = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = 1563376297;
+        public static int StaticConstructorId { get => 1563376297; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("query_id")]
 		public long QueryId { get; set; }
+
+[JsonPropertyName("user_id")]
 		public int UserId { get; set; }
+
+[JsonPropertyName("payload")]
 		public byte[] Payload { get; set; }
+
+[JsonPropertyName("info")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase Info { get; set; }
+
+[JsonPropertyName("shipping_option_id")]
 		public string ShippingOptionId { get; set; }
+
+[JsonPropertyName("currency")]
 		public string Currency { get; set; }
+
+[JsonPropertyName("total_amount")]
 		public long TotalAmount { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Info == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);

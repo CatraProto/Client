@@ -1,13 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using System.Collections.Generic;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-	public partial class PromoData : PromoDataBase
+	public partial class PromoData : CatraProto.Client.TL.Schemas.CloudChats.Help.PromoDataBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -17,16 +16,35 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 			PsaMessage = 1 << 2
 		}
 
-        public static int ConstructorId { get; } = -1942390465;
+        public static int StaticConstructorId { get => -1942390465; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("proxy")]
 		public bool Proxy { get; set; }
+
+[JsonPropertyName("expires")]
 		public override int Expires { get; set; }
+
+[JsonPropertyName("peer")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
+
+[JsonPropertyName("chats")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
+
+[JsonPropertyName("users")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+
+[JsonPropertyName("psa_type")]
 		public string PsaType { get; set; }
+
+[JsonPropertyName("psa_message")]
 		public string PsaMessage { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Proxy ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

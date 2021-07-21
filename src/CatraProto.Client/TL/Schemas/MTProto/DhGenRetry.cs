@@ -1,19 +1,29 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Numerics;
-
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class DhGenRetry : SetClientDHParamsAnswerBase
+	public partial class DhGenRetry : CatraProto.Client.TL.Schemas.MTProto.SetClientDHParamsAnswerBase
 	{
 
 
-        public static int ConstructorId { get; } = 1188831161;
-		public override BigInteger Nonce { get; set; }
-		public override BigInteger ServerNonce { get; set; }
-		public BigInteger NewNonceHash2 { get; set; }
+        public static int StaticConstructorId { get => 1188831161; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("nonce")]
+		public override System.Numerics.BigInteger Nonce { get; set; }
 
+[JsonPropertyName("server_nonce")]
+		public override System.Numerics.BigInteger ServerNonce { get; set; }
+
+[JsonPropertyName("new_nonce_hash2")]
+		public System.Numerics.BigInteger NewNonceHash2 { get; set; }
+
+        
 		public override void UpdateFlags() 
 		{
 
@@ -42,9 +52,9 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
 		public override void Deserialize(Reader reader)
 		{
-			Nonce = reader.Read<BigInteger>(128);
-			ServerNonce = reader.Read<BigInteger>(128);
-			NewNonceHash2 = reader.Read<BigInteger>(128);
+			Nonce = reader.Read<System.Numerics.BigInteger>(128);
+			ServerNonce = reader.Read<System.Numerics.BigInteger>(128);
+			NewNonceHash2 = reader.Read<System.Numerics.BigInteger>(128);
 
 		}
 	}

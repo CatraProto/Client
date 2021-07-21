@@ -1,14 +1,16 @@
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+using System.Text.Json.Serialization;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
-
+using CatraProto.TL.Interfaces;
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public abstract class HighScoresBase : IObject
     {
+
+[JsonPropertyName("scores")]
 		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.HighScoreBase> Scores { get; set; }
+
+[JsonPropertyName("users")]
 		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
         public abstract void UpdateFlags();

@@ -3,17 +3,18 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CatraProto.TL.Generator.DeclarationInfo;
 using CatraProto.TL.Generator.Objects.Interfaces;
 using CatraProto.TL.Generator.Settings;
 
 namespace CatraProto.TL.Generator.CodeGeneration.Writing
 {
-	public class DictionaryWriter
+	public class ProviderWriter
 	{
 		private string _dictionaryTemplate;
 		private List<Object> _objects;
 
-		private DictionaryWriter(params List<Object>[] objects)
+		private ProviderWriter(params List<Object>[] objects)
 		{
 			_objects = new List<Object>();
 			foreach (var objectList in objects)
@@ -22,9 +23,9 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
 			}
 		}
 
-		public static async Task<DictionaryWriter> Create(params List<Object>[] objects)
+		public static async Task<ProviderWriter> Create(params List<Object>[] objects)
 		{
-			return new DictionaryWriter(objects)
+			return new ProviderWriter(objects)
 			{
 				_dictionaryTemplate = await File.ReadAllTextAsync(Configuration.DictionaryTemplatePath)
 			};
@@ -36,13 +37,13 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
 			types.AppendLine($"{StringTools.ThreeTabs}switch (constructorId)\n{StringTools.ThreeTabs}{{");
 			foreach (var obj in _objects)
 			{
-				if (obj.IsNaked)
+				if (obj.Id == 0)
 				{
 					continue;
 				}
 
 				types.AppendLine($"{StringTools.FourTabs}case {obj.Id}:");
-				types.AppendLine($"{StringTools.FiveTabs}return new {obj.Namespace.PartialNamespace}.{obj.Name}();");
+				types.AppendLine($"{StringTools.FiveTabs}return new {obj.GetObjectName(NamingType.FullNamespace)}();");
 			}
 
 			types.AppendLine($"{StringTools.ThreeTabs}}}");

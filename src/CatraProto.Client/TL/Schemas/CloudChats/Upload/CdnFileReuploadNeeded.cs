@@ -1,16 +1,23 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 {
-	public partial class CdnFileReuploadNeeded : CdnFileBase
+	public partial class CdnFileReuploadNeeded : CatraProto.Client.TL.Schemas.CloudChats.Upload.CdnFileBase
 	{
 
 
-        public static int ConstructorId { get; } = -290921362;
+        public static int StaticConstructorId { get => -290921362; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("request_token")]
 		public byte[] RequestToken { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

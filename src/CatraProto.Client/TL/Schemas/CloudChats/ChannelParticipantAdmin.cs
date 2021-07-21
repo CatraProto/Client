@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelParticipantAdmin : ChannelParticipantBase
+	public partial class ChannelParticipantAdmin : CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -17,17 +17,38 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Rank = 1 << 2
 		}
 
-        public static int ConstructorId { get; } = -859915345;
+        public static int StaticConstructorId { get => -859915345; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("can_edit")]
 		public bool CanEdit { get; set; }
+
+[JsonPropertyName("self")]
 		public bool Self { get; set; }
+
+[JsonPropertyName("user_id")]
 		public override int UserId { get; set; }
+
+[JsonPropertyName("inviter_id")]
 		public int? InviterId { get; set; }
+
+[JsonPropertyName("promoted_by")]
 		public int PromotedBy { get; set; }
+
+[JsonPropertyName("date")]
 		public int Date { get; set; }
+
+[JsonPropertyName("admin_rights")]
 		public CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase AdminRights { get; set; }
+
+[JsonPropertyName("rank")]
 		public string Rank { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = CanEdit ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

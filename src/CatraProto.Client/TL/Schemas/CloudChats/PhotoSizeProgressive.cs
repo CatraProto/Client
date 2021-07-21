@@ -1,22 +1,35 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using System.Collections.Generic;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PhotoSizeProgressive : PhotoSizeBase
+	public partial class PhotoSizeProgressive : CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase
 	{
 
 
-        public static int ConstructorId { get; } = 1520986705;
+        public static int StaticConstructorId { get => 1520986705; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("type")]
 		public override string Type { get; set; }
+
+[JsonPropertyName("location")]
 		public CatraProto.Client.TL.Schemas.CloudChats.FileLocationBase Location { get; set; }
+
+[JsonPropertyName("w")]
 		public int W { get; set; }
+
+[JsonPropertyName("h")]
 		public int H { get; set; }
+
+[JsonPropertyName("sizes")]
 		public IList<int> Sizes { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

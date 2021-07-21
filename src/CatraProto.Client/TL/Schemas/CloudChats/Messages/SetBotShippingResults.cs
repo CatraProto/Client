@@ -1,9 +1,8 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using CatraProto.TL;
+using System.Text.Json.Serialization;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
@@ -16,14 +15,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			ShippingOptions = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = -436833542;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => -436833542; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(bool);
 
-		public System.Type Type { get; init; } = typeof(bool);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("query_id")]
 		public long QueryId { get; set; }
+
+[JsonPropertyName("error")]
 		public string Error { get; set; }
+
+[JsonPropertyName("shipping_options")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.ShippingOptionBase> ShippingOptions { get; set; }
+
 
 		public void UpdateFlags() 
 		{

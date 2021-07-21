@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateInlineBotCallbackQuery : UpdateBase
+	public partial class UpdateInlineBotCallbackQuery : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,15 +15,32 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			GameShortName = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = -103646630;
+        public static int StaticConstructorId { get => -103646630; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("query_id")]
 		public long QueryId { get; set; }
+
+[JsonPropertyName("user_id")]
 		public int UserId { get; set; }
+
+[JsonPropertyName("msg_id")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageIDBase MsgId { get; set; }
+
+[JsonPropertyName("chat_instance")]
 		public long ChatInstance { get; set; }
+
+[JsonPropertyName("data")]
 		public byte[] Data { get; set; }
+
+[JsonPropertyName("game_short_name")]
 		public string GameShortName { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Data == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);

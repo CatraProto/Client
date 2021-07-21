@@ -1,13 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using System.Collections.Generic;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-	public partial class TermsOfService : TermsOfServiceBase
+	public partial class TermsOfService : CatraProto.Client.TL.Schemas.CloudChats.Help.TermsOfServiceBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,14 +15,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 			MinAgeConfirm = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = 2013922064;
+        public static int StaticConstructorId { get => 2013922064; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("popup")]
 		public override bool Popup { get; set; }
+
+[JsonPropertyName("id")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase Id { get; set; }
+
+[JsonPropertyName("text")]
 		public override string Text { get; set; }
+
+[JsonPropertyName("entities")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
+
+[JsonPropertyName("min_age_confirm")]
 		public override int? MinAgeConfirm { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Popup ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

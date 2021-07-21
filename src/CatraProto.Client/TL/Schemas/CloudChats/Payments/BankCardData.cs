@@ -1,19 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 {
-	public partial class BankCardData : BankCardDataBase
+	public partial class BankCardData : CatraProto.Client.TL.Schemas.CloudChats.Payments.BankCardDataBase
 	{
 
 
-        public static int ConstructorId { get; } = 1042605427;
+        public static int StaticConstructorId { get => 1042605427; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("title")]
 		public override string Title { get; set; }
+
+[JsonPropertyName("open_urls")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.BankCardOpenUrlBase> OpenUrls { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

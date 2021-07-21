@@ -1,16 +1,23 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UserStatusOnline : UserStatusBase
+	public partial class UserStatusOnline : CatraProto.Client.TL.Schemas.CloudChats.UserStatusBase
 	{
 
 
-        public static int ConstructorId { get; } = -306628279;
+        public static int StaticConstructorId { get => -306628279; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("expires")]
 		public int Expires { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

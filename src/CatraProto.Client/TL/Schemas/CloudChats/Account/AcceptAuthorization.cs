@@ -1,8 +1,8 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+using System;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using CatraProto.TL;
+using System.Text.Json.Serialization;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
@@ -10,15 +10,32 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 	{
 
 
-        public static int ConstructorId { get; } = -419267436;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => -419267436; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(bool);
 
-		public System.Type Type { get; init; } = typeof(bool);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonPropertyName("bot_id")]
 		public int BotId { get; set; }
+
+[JsonPropertyName("scope")]
 		public string Scope { get; set; }
+
+[JsonPropertyName("public_key")]
 		public string PublicKey { get; set; }
+
+[JsonPropertyName("value_hashes")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueHashBase> ValueHashes { get; set; }
+
+[JsonPropertyName("credentials")]
 		public CatraProto.Client.TL.Schemas.CloudChats.SecureCredentialsEncryptedBase Credentials { get; set; }
+
 
 		public void UpdateFlags() 
 		{

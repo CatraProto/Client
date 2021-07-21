@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PageTableCell : PageTableCellBase
+	public partial class PageTableCell : CatraProto.Client.TL.Schemas.CloudChats.PageTableCellBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -21,17 +21,38 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Rowspan = 1 << 2
 		}
 
-        public static int ConstructorId { get; } = 878078826;
+        public static int StaticConstructorId { get => 878078826; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("header")]
 		public override bool Header { get; set; }
+
+[JsonPropertyName("align_center")]
 		public override bool AlignCenter { get; set; }
+
+[JsonPropertyName("align_right")]
 		public override bool AlignRight { get; set; }
+
+[JsonPropertyName("valign_middle")]
 		public override bool ValignMiddle { get; set; }
+
+[JsonPropertyName("valign_bottom")]
 		public override bool ValignBottom { get; set; }
+
+[JsonPropertyName("text")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Text { get; set; }
+
+[JsonPropertyName("colspan")]
 		public override int? Colspan { get; set; }
+
+[JsonPropertyName("rowspan")]
 		public override int? Rowspan { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Header ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

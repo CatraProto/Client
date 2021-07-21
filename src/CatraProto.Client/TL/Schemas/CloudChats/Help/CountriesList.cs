@@ -1,19 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats.Help;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-	public partial class CountriesList : CountriesListBase
+	public partial class CountriesList : CatraProto.Client.TL.Schemas.CloudChats.Help.CountriesListBase
 	{
 
 
-        public static int ConstructorId { get; } = -2016381538;
+        public static int StaticConstructorId { get => -2016381538; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("countries")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.Help.CountryBase> Countries { get; set; }
+
+[JsonPropertyName("hash")]
 		public int Hash { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

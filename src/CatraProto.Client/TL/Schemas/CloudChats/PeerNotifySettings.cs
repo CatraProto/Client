@@ -1,11 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PeerNotifySettings : PeerNotifySettingsBase
+	public partial class PeerNotifySettings : CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,13 +17,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Sound = 1 << 3
 		}
 
-        public static int ConstructorId { get; } = -1353671392;
+        public static int StaticConstructorId { get => -1353671392; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("show_previews")]
 		public override bool? ShowPreviews { get; set; }
+
+[JsonPropertyName("silent")]
 		public override bool? Silent { get; set; }
+
+[JsonPropertyName("mute_until")]
 		public override int? MuteUntil { get; set; }
+
+[JsonPropertyName("sound")]
 		public override string Sound { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = ShowPreviews == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);

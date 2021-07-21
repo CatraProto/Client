@@ -1,17 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class BotCommand : BotCommandBase
+	public partial class BotCommand : CatraProto.Client.TL.Schemas.CloudChats.BotCommandBase
 	{
 
 
-        public static int ConstructorId { get; } = -1032140601;
+        public static int StaticConstructorId { get => -1032140601; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("command")]
 		public override string Command { get; set; }
+
+[JsonPropertyName("description")]
 		public override string Description { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

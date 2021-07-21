@@ -1,18 +1,29 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputCheckPasswordSRP : InputCheckPasswordSRPBase
+	public partial class InputCheckPasswordSRP : CatraProto.Client.TL.Schemas.CloudChats.InputCheckPasswordSRPBase
 	{
 
 
-        public static int ConstructorId { get; } = -763367294;
+        public static int StaticConstructorId { get => -763367294; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("srp_id")]
 		public long SrpId { get; set; }
+
+[JsonPropertyName("A")]
 		public byte[] A { get; set; }
+
+[JsonPropertyName("M1")]
 		public byte[] M1 { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

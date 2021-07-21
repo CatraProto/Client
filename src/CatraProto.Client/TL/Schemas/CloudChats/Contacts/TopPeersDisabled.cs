@@ -1,15 +1,20 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
-	public partial class TopPeersDisabled : TopPeersBase
+	public partial class TopPeersDisabled : CatraProto.Client.TL.Schemas.CloudChats.Contacts.TopPeersBase
 	{
 
 
-        public static int ConstructorId { get; } = -1255369827;
-
+        public static int StaticConstructorId { get => -1255369827; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+        
 		public override void UpdateFlags() 
 		{
 

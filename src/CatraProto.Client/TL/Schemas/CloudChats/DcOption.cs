@@ -1,11 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class DcOption : DcOptionBase
+	public partial class DcOption : CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -18,18 +19,41 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Secret = 1 << 10
 		}
 
-        public static int ConstructorId { get; } = 414687501;
+        public static int StaticConstructorId { get => 414687501; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("ipv6")]
 		public override bool Ipv6 { get; set; }
+
+[JsonPropertyName("media_only")]
 		public override bool MediaOnly { get; set; }
+
+[JsonPropertyName("tcpo_only")]
 		public override bool TcpoOnly { get; set; }
+
+[JsonPropertyName("cdn")]
 		public override bool Cdn { get; set; }
+
+[JsonPropertyName("static")]
 		public override bool Static { get; set; }
+
+[JsonPropertyName("id")]
 		public override int Id { get; set; }
+
+[JsonPropertyName("ip_address")]
 		public override string IpAddress { get; set; }
+
+[JsonPropertyName("port")]
 		public override int Port { get; set; }
+
+[JsonPropertyName("secret")]
 		public override byte[] Secret { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Ipv6 ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

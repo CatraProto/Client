@@ -57,11 +57,11 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<long>> DeletePhotosAsync(List<CatraProto.Client.TL.Schemas.CloudChats.InputPhotoBase> id, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<IList<long>>> DeletePhotosAsync(IList<CatraProto.Client.TL.Schemas.CloudChats.InputPhotoBase> id, CancellationToken cancellationToken = default)
 		{
 			if(id is null) throw new ArgumentNullException(nameof(id));
 
-			var rpcResponse = new RpcMessage<long>();
+			var rpcResponse = new RpcMessage<IList<long>>();
 			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Photos.DeletePhotos()
 			{
 				Id = id,

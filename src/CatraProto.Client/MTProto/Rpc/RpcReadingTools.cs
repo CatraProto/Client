@@ -13,7 +13,7 @@ namespace CatraProto.Client.MTProto.Rpc
         {
             var message = array.ToMemoryStream();
             using var binaryReader = new BinaryReader(message, Encoding.Default);
-            if (binaryReader.ReadInt32() == RpcResult.ConstructorId)
+            if (binaryReader.ReadInt32() == RpcResult.StaticConstructorId)
             {
                 messageId = binaryReader.ReadInt32();
                 return true;
@@ -27,7 +27,7 @@ namespace CatraProto.Client.MTProto.Rpc
         {
             var stream = array.ToMemoryStream();
             using var reader = new Reader(MergedProvider.Singleton, stream);
-            if (reader.Read<int>() == RpcError.ConstructorId)
+            if (reader.Read<int>() == RpcError.StaticConstructorId)
             {
                 error = reader.Read<RpcError>();
                 return true;

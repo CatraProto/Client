@@ -1,8 +1,8 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Collections.Generic;
+using CatraProto.TL;
+using System.Text.Json.Serialization;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
@@ -16,16 +16,35 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			PmOneside = 1 << 2
 		}
 
-        public static int ConstructorId { get; } = -760547348;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => -760547348; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("silent")]
 		public bool Silent { get; set; }
+
+[JsonPropertyName("unpin")]
 		public bool Unpin { get; set; }
+
+[JsonPropertyName("pm_oneside")]
 		public bool PmOneside { get; set; }
+
+[JsonPropertyName("peer")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
+
+[JsonPropertyName("id")]
 		public int Id { get; set; }
+
 
 		public void UpdateFlags() 
 		{

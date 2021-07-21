@@ -17,6 +17,7 @@ namespace CatraProto.TL.Generator.Objects
 		public string Class
 		{
 			get => _arrayNamespace[^1];
+			set => _arrayNamespace[^1] = value;
 		}
 
 		public string FullNamespace

@@ -1,21 +1,32 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Numerics;
-using System.Collections.Generic;
-
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class ResPQ : ResPQBase
+	public partial class ResPQ : CatraProto.Client.TL.Schemas.MTProto.ResPQBase
 	{
 
 
-        public static int ConstructorId { get; } = 85337187;
-		public override BigInteger Nonce { get; set; }
-		public override BigInteger ServerNonce { get; set; }
+        public static int StaticConstructorId { get => 85337187; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("nonce")]
+		public override System.Numerics.BigInteger Nonce { get; set; }
+
+[JsonPropertyName("server_nonce")]
+		public override System.Numerics.BigInteger ServerNonce { get; set; }
+
+[JsonPropertyName("pq")]
 		public override byte[] Pq { get; set; }
+
+[JsonPropertyName("server_public_key_fingerprints")]
 		public override IList<long> ServerPublicKeyFingerprints { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 
@@ -41,8 +52,8 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
 		public override void Deserialize(Reader reader)
 		{
-			Nonce = reader.Read<BigInteger>(128);
-			ServerNonce = reader.Read<BigInteger>(128);
+			Nonce = reader.Read<System.Numerics.BigInteger>(128);
+			ServerNonce = reader.Read<System.Numerics.BigInteger>(128);
 			Pq = reader.Read<byte[]>();
 			ServerPublicKeyFingerprints = reader.ReadVector<long>();
 

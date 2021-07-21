@@ -1,11 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class LangPackLanguage : LangPackLanguageBase
+	public partial class LangPackLanguage : CatraProto.Client.TL.Schemas.CloudChats.LangPackLanguageBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,20 +17,47 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			BaseLangCode = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = -288727837;
+        public static int StaticConstructorId { get => -288727837; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("official")]
 		public override bool Official { get; set; }
+
+[JsonPropertyName("rtl")]
 		public override bool Rtl { get; set; }
+
+[JsonPropertyName("beta")]
 		public override bool Beta { get; set; }
+
+[JsonPropertyName("name")]
 		public override string Name { get; set; }
+
+[JsonPropertyName("native_name")]
 		public override string NativeName { get; set; }
+
+[JsonPropertyName("lang_code")]
 		public override string LangCode { get; set; }
+
+[JsonPropertyName("base_lang_code")]
 		public override string BaseLangCode { get; set; }
+
+[JsonPropertyName("plural_code")]
 		public override string PluralCode { get; set; }
+
+[JsonPropertyName("strings_count")]
 		public override int StringsCount { get; set; }
+
+[JsonPropertyName("translated_count")]
 		public override int TranslatedCount { get; set; }
+
+[JsonPropertyName("translations_url")]
 		public override string TranslationsUrl { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Official ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

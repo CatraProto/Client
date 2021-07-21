@@ -1,18 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PageBlockAuthorDate : PageBlockBase
+	public partial class PageBlockAuthorDate : CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase
 	{
 
 
-        public static int ConstructorId { get; } = -1162877472;
+        public static int StaticConstructorId { get => -1162877472; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("author")]
 		public CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Author { get; set; }
+
+[JsonPropertyName("published_date")]
 		public int PublishedDate { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

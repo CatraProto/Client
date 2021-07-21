@@ -1,17 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class StatsGroupTopInviter : StatsGroupTopInviterBase
+	public partial class StatsGroupTopInviter : CatraProto.Client.TL.Schemas.CloudChats.StatsGroupTopInviterBase
 	{
 
 
-        public static int ConstructorId { get; } = 831924812;
+        public static int StaticConstructorId { get => 831924812; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("user_id")]
 		public override int UserId { get; set; }
+
+[JsonPropertyName("invitations")]
 		public override int Invitations { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

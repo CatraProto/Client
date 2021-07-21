@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class WallPaper : WallPaperBase
+	public partial class WallPaper : CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -18,18 +18,41 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Settings = 1 << 2
 		}
 
-        public static int ConstructorId { get; } = -1539849235;
+        public static int StaticConstructorId { get => -1539849235; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("id")]
 		public long Id { get; set; }
+
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("creator")]
 		public bool Creator { get; set; }
+
+[JsonPropertyName("default")]
 		public override bool Default { get; set; }
+
+[JsonPropertyName("pattern")]
 		public bool Pattern { get; set; }
+
+[JsonPropertyName("dark")]
 		public override bool Dark { get; set; }
+
+[JsonPropertyName("access_hash")]
 		public long AccessHash { get; set; }
+
+[JsonPropertyName("slug")]
 		public string Slug { get; set; }
+
+[JsonPropertyName("document")]
 		public CatraProto.Client.TL.Schemas.CloudChats.DocumentBase Document { get; set; }
+
+[JsonPropertyName("settings")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase Settings { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Creator ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

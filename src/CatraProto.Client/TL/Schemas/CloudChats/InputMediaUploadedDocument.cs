@@ -1,13 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using System.Collections.Generic;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputMediaUploadedDocument : InputMediaBase
+	public partial class InputMediaUploadedDocument : CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -19,17 +18,38 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			TtlSeconds = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = 1530447553;
+        public static int StaticConstructorId { get => 1530447553; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("nosound_video")]
 		public bool NosoundVideo { get; set; }
+
+[JsonPropertyName("force_file")]
 		public bool ForceFile { get; set; }
+
+[JsonPropertyName("file")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase File { get; set; }
+
+[JsonPropertyName("thumb")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase Thumb { get; set; }
+
+[JsonPropertyName("mime_type")]
 		public string MimeType { get; set; }
+
+[JsonPropertyName("attributes")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase> Attributes { get; set; }
+
+[JsonPropertyName("stickers")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase> Stickers { get; set; }
+
+[JsonPropertyName("ttl_seconds")]
 		public int? TtlSeconds { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = NosoundVideo ? FlagsHelper.SetFlag(Flags, 3) : FlagsHelper.UnsetFlag(Flags, 3);

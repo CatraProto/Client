@@ -20,7 +20,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 	        
 	    }
 	    
-	    		public async Task<RpcMessage<bool>> RegisterDeviceAsync(int tokenType, string token, bool appSandbox, byte[] secret, List<int> otherUids, bool noMuted = true, CancellationToken cancellationToken = default)
+	    		public async Task<RpcMessage<bool>> RegisterDeviceAsync(int tokenType, string token, bool appSandbox, byte[] secret, IList<int> otherUids, bool noMuted = true, CancellationToken cancellationToken = default)
 		{
 			if(token is null) throw new ArgumentNullException(nameof(token));
 if(secret is null) throw new ArgumentNullException(nameof(secret));
@@ -44,7 +44,7 @@ if(secret is null) throw new ArgumentNullException(nameof(secret));
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<bool>> UnregisterDeviceAsync(int tokenType, string token, List<int> otherUids, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<bool>> UnregisterDeviceAsync(int tokenType, string token, IList<int> otherUids, CancellationToken cancellationToken = default)
 		{
 			if(token is null) throw new ArgumentNullException(nameof(token));
 
@@ -245,7 +245,7 @@ if(reason is null) throw new ArgumentNullException(nameof(reason));
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Account.PrivacyRulesBase>> SetPrivacyAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPrivacyKeyBase key, List<CatraProto.Client.TL.Schemas.CloudChats.InputPrivacyRuleBase> rules, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Account.PrivacyRulesBase>> SetPrivacyAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPrivacyKeyBase key, IList<CatraProto.Client.TL.Schemas.CloudChats.InputPrivacyRuleBase> rules, CancellationToken cancellationToken = default)
 		{
 			if(key is null) throw new ArgumentNullException(nameof(key));
 if(rules is null) throw new ArgumentNullException(nameof(rules));
@@ -571,10 +571,10 @@ if(phoneCode is null) throw new ArgumentNullException(nameof(phoneCode));
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase>> GetAllSecureValuesAsync( CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase>>> GetAllSecureValuesAsync( CancellationToken cancellationToken = default)
 		{
 			
-			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase>();
+			var rpcResponse = new RpcMessage<IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase>>();
 			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Account.GetAllSecureValues()
 			{
 			};
@@ -587,11 +587,11 @@ if(phoneCode is null) throw new ArgumentNullException(nameof(phoneCode));
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase>> GetSecureValueAsync(List<CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase> types, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase>>> GetSecureValueAsync(IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase> types, CancellationToken cancellationToken = default)
 		{
 			if(types is null) throw new ArgumentNullException(nameof(types));
 
-			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase>();
+			var rpcResponse = new RpcMessage<IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase>>();
 			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Account.GetSecureValue()
 			{
 				Types = types,
@@ -624,7 +624,7 @@ if(phoneCode is null) throw new ArgumentNullException(nameof(phoneCode));
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<bool>> DeleteSecureValueAsync(List<CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase> types, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<bool>> DeleteSecureValueAsync(IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase> types, CancellationToken cancellationToken = default)
 		{
 			if(types is null) throw new ArgumentNullException(nameof(types));
 
@@ -663,7 +663,7 @@ if(publicKey is null) throw new ArgumentNullException(nameof(publicKey));
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<bool>> AcceptAuthorizationAsync(int botId, string scope, string publicKey, List<CatraProto.Client.TL.Schemas.CloudChats.SecureValueHashBase> valueHashes, CatraProto.Client.TL.Schemas.CloudChats.SecureCredentialsEncryptedBase credentials, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<bool>> AcceptAuthorizationAsync(int botId, string scope, string publicKey, IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueHashBase> valueHashes, CatraProto.Client.TL.Schemas.CloudChats.SecureCredentialsEncryptedBase credentials, CancellationToken cancellationToken = default)
 		{
 			if(scope is null) throw new ArgumentNullException(nameof(scope));
 if(publicKey is null) throw new ArgumentNullException(nameof(publicKey));
@@ -1222,11 +1222,11 @@ if(theme is null) throw new ArgumentNullException(nameof(theme));
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase>> GetMultiWallPapersAsync(List<CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase> wallpapers, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<IList<CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase>>> GetMultiWallPapersAsync(IList<CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase> wallpapers, CancellationToken cancellationToken = default)
 		{
 			if(wallpapers is null) throw new ArgumentNullException(nameof(wallpapers));
 
-			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase>();
+			var rpcResponse = new RpcMessage<IList<CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase>>();
 			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Account.GetMultiWallPapers()
 			{
 				Wallpapers = wallpapers,

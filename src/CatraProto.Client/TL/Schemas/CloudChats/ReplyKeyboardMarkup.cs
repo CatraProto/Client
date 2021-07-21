@@ -1,13 +1,12 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Text.Json.Serialization;
+using CatraProto.TL;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ReplyKeyboardMarkup : ReplyMarkupBase
+	public partial class ReplyKeyboardMarkup : CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -17,13 +16,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Selective = 1 << 2
 		}
 
-        public static int ConstructorId { get; } = 889353612;
+        public static int StaticConstructorId { get => 889353612; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("resize")]
 		public bool Resize { get; set; }
+
+[JsonPropertyName("single_use")]
 		public bool SingleUse { get; set; }
+
+[JsonPropertyName("selective")]
 		public bool Selective { get; set; }
+
+[JsonPropertyName("rows")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonRowBase> Rows { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Resize ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

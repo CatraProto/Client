@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class DocumentAttributeSticker : DocumentAttributeBase
+	public partial class DocumentAttributeSticker : CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,13 +15,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			MaskCoords = 1 << 0
 		}
 
-        public static int ConstructorId { get; } = 1662637586;
+        public static int StaticConstructorId { get => 1662637586; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("mask")]
 		public bool Mask { get; set; }
+
+[JsonPropertyName("alt")]
 		public string Alt { get; set; }
+
+[JsonPropertyName("stickerset")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase Stickerset { get; set; }
+
+[JsonPropertyName("mask_coords")]
 		public CatraProto.Client.TL.Schemas.CloudChats.MaskCoordsBase MaskCoords { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Mask ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);

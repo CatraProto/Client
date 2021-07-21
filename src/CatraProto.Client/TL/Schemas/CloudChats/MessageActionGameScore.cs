@@ -1,17 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageActionGameScore : MessageActionBase
+	public partial class MessageActionGameScore : CatraProto.Client.TL.Schemas.CloudChats.MessageActionBase
 	{
 
 
-        public static int ConstructorId { get; } = -1834538890;
+        public static int StaticConstructorId { get => -1834538890; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("game_id")]
 		public long GameId { get; set; }
+
+[JsonPropertyName("score")]
 		public int Score { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

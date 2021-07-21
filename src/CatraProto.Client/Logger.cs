@@ -1,5 +1,6 @@
 ﻿using Serilog;
 using Serilog.Core;
+using Serilog.Sinks.SystemConsole.Themes;
 
 namespace CatraProto.Client
 {

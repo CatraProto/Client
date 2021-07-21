@@ -1,19 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class WallPapers : WallPapersBase
+	public partial class WallPapers : CatraProto.Client.TL.Schemas.CloudChats.Account.WallPapersBase
 	{
 
 
-        public static int ConstructorId { get; } = 1881892265;
+        public static int StaticConstructorId { get => 1881892265; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("hash")]
 		public int Hash { get; set; }
+
+[JsonPropertyName("wallpapers")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase> Wallpapers { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

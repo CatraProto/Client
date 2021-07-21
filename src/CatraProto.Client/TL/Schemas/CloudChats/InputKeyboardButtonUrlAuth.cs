@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputKeyboardButtonUrlAuth : KeyboardButtonBase
+	public partial class InputKeyboardButtonUrlAuth : CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,14 +15,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			FwdText = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = -802258988;
+        public static int StaticConstructorId { get => -802258988; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("request_write_access")]
 		public bool RequestWriteAccess { get; set; }
+
+[JsonPropertyName("text")]
 		public override string Text { get; set; }
+
+[JsonPropertyName("fwd_text")]
 		public string FwdText { get; set; }
+
+[JsonPropertyName("url")]
 		public string Url { get; set; }
+
+[JsonPropertyName("bot")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase Bot { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = RequestWriteAccess ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

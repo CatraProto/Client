@@ -1,9 +1,8 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
 using System.Collections.Generic;
-
+using CatraProto.TL;
+using System.Text.Json.Serialization;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 {
@@ -16,18 +15,41 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 			Admins = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = 870184064;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => 870184064; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Channels.AdminLogResultsBase);
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Channels.AdminLogResultsBase);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("channel")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase Channel { get; set; }
+
+[JsonPropertyName("q")]
 		public string Q { get; set; }
+
+[JsonPropertyName("events_filter")]
 		public CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventsFilterBase EventsFilter { get; set; }
+
+[JsonPropertyName("admins")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase> Admins { get; set; }
+
+[JsonPropertyName("max_id")]
 		public long MaxId { get; set; }
+
+[JsonPropertyName("min_id")]
 		public long MinId { get; set; }
+
+[JsonPropertyName("limit")]
 		public int Limit { get; set; }
+
 
 		public void UpdateFlags() 
 		{

@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using CatraProto.TL.Generator.DeclarationInfo;
 using CatraProto.TL.Generator.Objects.Types.Interfaces;
 
 namespace CatraProto.TL.Generator.Objects.Types
@@ -8,22 +9,22 @@ namespace CatraProto.TL.Generator.Objects.Types
 	{
 		public BytesType()
 		{
-			Name = "byte[]";
-			IsBare = true;
+			NamingInfo = "byte[]";
+			TypeInfo.IsBare = true;
 		}
 
 		public override void WriteParameter(StringBuilder stringBuilder, Parameter parameter,
 			string customTypeName = null, bool isAbstract = false)
 		{
-			var type = parameter.IsVector ? $"IList<{Name}>" : Name;
+			var type = GetTypeName(NamingType.FullNamespace, parameter, true);
 			stringBuilder.AppendLine(
-				$"{StringTools.TwoTabs}{GetParameterAccessibility(parameter, isAbstract)} {type} {parameter.Name} {{ get; set; }}");
+				$"\n[JsonPropertyName(\"{parameter.NamingInfo.OriginalName}\")]\n{StringTools.TwoTabs}{GetParameterAccessibility(parameter, isAbstract)} {type} {parameter.NamingInfo.PascalCaseName} {{ get; set; }}");
 		}
 
 		public override void WriteSerializer(StringBuilder stringBuilder, Parameter parameter)
 		{
 			WriteFlagStart(stringBuilder, out var spacing, parameter);
-			stringBuilder.AppendLine($"{spacing}writer.Write({parameter.Name});");
+			stringBuilder.AppendLine($"{spacing}writer.Write({parameter.NamingInfo.PascalCaseName});");
 			WriteFlagEnd(stringBuilder, spacing, parameter);
 		}
 

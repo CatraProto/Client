@@ -1,21 +1,35 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats.Storage;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 {
-	public partial class WebFile : WebFileBase
+	public partial class WebFile : CatraProto.Client.TL.Schemas.CloudChats.Upload.WebFileBase
 	{
 
 
-        public static int ConstructorId { get; } = 568808380;
+        public static int StaticConstructorId { get => 568808380; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("size")]
 		public override int Size { get; set; }
+
+[JsonPropertyName("mime_type")]
 		public override string MimeType { get; set; }
+
+[JsonPropertyName("file_type")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.Storage.FileTypeBase FileType { get; set; }
+
+[JsonPropertyName("mtime")]
 		public override int Mtime { get; set; }
+
+[JsonPropertyName("bytes")]
 		public override byte[] Bytes { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

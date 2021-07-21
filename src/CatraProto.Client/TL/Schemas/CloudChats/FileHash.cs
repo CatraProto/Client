@@ -1,18 +1,29 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class FileHash : FileHashBase
+	public partial class FileHash : CatraProto.Client.TL.Schemas.CloudChats.FileHashBase
 	{
 
 
-        public static int ConstructorId { get; } = 1648543603;
+        public static int StaticConstructorId { get => 1648543603; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("offset")]
 		public override int Offset { get; set; }
+
+[JsonPropertyName("limit")]
 		public override int Limit { get; set; }
+
+[JsonPropertyName("hash")]
 		public override byte[] Hash { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

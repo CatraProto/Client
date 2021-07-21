@@ -1,17 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PollAnswer : PollAnswerBase
+	public partial class PollAnswer : CatraProto.Client.TL.Schemas.CloudChats.PollAnswerBase
 	{
 
 
-        public static int ConstructorId { get; } = 1823064809;
+        public static int StaticConstructorId { get => 1823064809; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("text")]
 		public override string Text { get; set; }
+
+[JsonPropertyName("option")]
 		public override byte[] Option { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

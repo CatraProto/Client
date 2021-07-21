@@ -1,7 +1,8 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-
+using System.Collections.Generic;
+using CatraProto.TL;
+using System.Text.Json.Serialization;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
@@ -15,15 +16,32 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 			ReportSpam = 1 << 2
 		}
 
-        public static int ConstructorId { get; } = 698914348;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => 698914348; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("delete_message")]
 		public bool DeleteMessage { get; set; }
+
+[JsonPropertyName("delete_history")]
 		public bool DeleteHistory { get; set; }
+
+[JsonPropertyName("report_spam")]
 		public bool ReportSpam { get; set; }
+
+[JsonPropertyName("msg_id")]
 		public int MsgId { get; set; }
+
 
 		public void UpdateFlags() 
 		{

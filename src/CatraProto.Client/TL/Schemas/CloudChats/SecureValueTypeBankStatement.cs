@@ -1,15 +1,20 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class SecureValueTypeBankStatement : SecureValueTypeBase
+	public partial class SecureValueTypeBankStatement : CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase
 	{
 
 
-        public static int ConstructorId { get; } = -1995211763;
-
+        public static int StaticConstructorId { get => -1995211763; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+        
 		public override void UpdateFlags() 
 		{
 

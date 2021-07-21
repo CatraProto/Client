@@ -1,17 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageRange : MessageRangeBase
+	public partial class MessageRange : CatraProto.Client.TL.Schemas.CloudChats.MessageRangeBase
 	{
 
 
-        public static int ConstructorId { get; } = 182649427;
+        public static int StaticConstructorId { get => 182649427; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("min_id")]
 		public override int MinId { get; set; }
+
+[JsonPropertyName("max_id")]
 		public override int MaxId { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

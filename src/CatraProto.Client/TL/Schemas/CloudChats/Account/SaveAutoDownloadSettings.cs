@@ -1,8 +1,8 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Collections.Generic;
+using CatraProto.TL;
+using System.Text.Json.Serialization;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
@@ -15,14 +15,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 			High = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = 1995661875;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => 1995661875; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(bool);
 
-		public System.Type Type { get; init; } = typeof(bool);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("low")]
 		public bool Low { get; set; }
+
+[JsonPropertyName("high")]
 		public bool High { get; set; }
+
+[JsonPropertyName("settings")]
 		public CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase Settings { get; set; }
+
 
 		public void UpdateFlags() 
 		{

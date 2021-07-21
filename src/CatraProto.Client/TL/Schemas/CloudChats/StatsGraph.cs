@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class StatsGraph : StatsGraphBase
+	public partial class StatsGraph : CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,11 +14,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ZoomToken = 1 << 0
 		}
 
-        public static int ConstructorId { get; } = -1901828938;
+        public static int StaticConstructorId { get => -1901828938; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("json")]
 		public CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase Json { get; set; }
+
+[JsonPropertyName("zoom_token")]
 		public string ZoomToken { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = ZoomToken == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);

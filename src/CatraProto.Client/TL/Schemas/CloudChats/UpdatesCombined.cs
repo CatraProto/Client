@@ -1,23 +1,38 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdatesCombined : UpdatesBase
+	public partial class UpdatesCombined : CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase
 	{
 
 
-        public static int ConstructorId { get; } = 1918567619;
+        public static int StaticConstructorId { get => 1918567619; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("updates")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.UpdateBase> Updates { get; set; }
+
+[JsonPropertyName("users")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+
+[JsonPropertyName("chats")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
+
+[JsonPropertyName("date")]
 		public int Date { get; set; }
+
+[JsonPropertyName("seq_start")]
 		public int SeqStart { get; set; }
+
+[JsonPropertyName("seq")]
 		public int Seq { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

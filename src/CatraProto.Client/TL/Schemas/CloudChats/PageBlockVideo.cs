@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PageBlockVideo : PageBlockBase
+	public partial class PageBlockVideo : CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,13 +15,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Loop = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = 2089805750;
+        public static int StaticConstructorId { get => 2089805750; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("autoplay")]
 		public bool Autoplay { get; set; }
+
+[JsonPropertyName("loop")]
 		public bool Loop { get; set; }
+
+[JsonPropertyName("video_id")]
 		public long VideoId { get; set; }
+
+[JsonPropertyName("caption")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase Caption { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Autoplay ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

@@ -1,17 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelAdminLogEventActionChangeUsername : ChannelAdminLogEventActionBase
+	public partial class ChannelAdminLogEventActionChangeUsername : CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionBase
 	{
 
 
-        public static int ConstructorId { get; } = 1783299128;
+        public static int StaticConstructorId { get => 1783299128; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("prev_value")]
 		public string PrevValue { get; set; }
+
+[JsonPropertyName("new_value")]
 		public string NewValue { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

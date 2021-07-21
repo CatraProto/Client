@@ -1,13 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using System.Collections.Generic;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelFull : ChatFullBase
+	public partial class ChannelFull : CatraProto.Client.TL.Schemas.CloudChats.ChatFullBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -40,43 +39,116 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			StatsDc = 1 << 12
 		}
 
-        public static int ConstructorId { get; } = -253335766;
+        public static int StaticConstructorId { get => -253335766; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("can_view_participants")]
 		public bool CanViewParticipants { get; set; }
+
+[JsonPropertyName("can_set_username")]
 		public override bool CanSetUsername { get; set; }
+
+[JsonPropertyName("can_set_stickers")]
 		public bool CanSetStickers { get; set; }
+
+[JsonPropertyName("hidden_prehistory")]
 		public bool HiddenPrehistory { get; set; }
+
+[JsonPropertyName("can_set_location")]
 		public bool CanSetLocation { get; set; }
+
+[JsonPropertyName("has_scheduled")]
 		public override bool HasScheduled { get; set; }
+
+[JsonPropertyName("can_view_stats")]
 		public bool CanViewStats { get; set; }
+
+[JsonPropertyName("blocked")]
 		public bool Blocked { get; set; }
+
+[JsonPropertyName("id")]
 		public override int Id { get; set; }
+
+[JsonPropertyName("about")]
 		public override string About { get; set; }
+
+[JsonPropertyName("participants_count")]
 		public int? ParticipantsCount { get; set; }
+
+[JsonPropertyName("admins_count")]
 		public int? AdminsCount { get; set; }
+
+[JsonPropertyName("kicked_count")]
 		public int? KickedCount { get; set; }
+
+[JsonPropertyName("banned_count")]
 		public int? BannedCount { get; set; }
+
+[JsonPropertyName("online_count")]
 		public int? OnlineCount { get; set; }
+
+[JsonPropertyName("read_inbox_max_id")]
 		public int ReadInboxMaxId { get; set; }
+
+[JsonPropertyName("read_outbox_max_id")]
 		public int ReadOutboxMaxId { get; set; }
+
+[JsonPropertyName("unread_count")]
 		public int UnreadCount { get; set; }
+
+[JsonPropertyName("chat_photo")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.PhotoBase ChatPhoto { get; set; }
+
+[JsonPropertyName("notify_settings")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase NotifySettings { get; set; }
+
+[JsonPropertyName("exported_invite")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.ExportedChatInviteBase ExportedInvite { get; set; }
+
+[JsonPropertyName("bot_info")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase> BotInfo { get; set; }
+
+[JsonPropertyName("migrated_from_chat_id")]
 		public int? MigratedFromChatId { get; set; }
+
+[JsonPropertyName("migrated_from_max_id")]
 		public int? MigratedFromMaxId { get; set; }
+
+[JsonPropertyName("pinned_msg_id")]
 		public override int? PinnedMsgId { get; set; }
+
+[JsonPropertyName("stickerset")]
 		public CatraProto.Client.TL.Schemas.CloudChats.StickerSetBase Stickerset { get; set; }
+
+[JsonPropertyName("available_min_id")]
 		public int? AvailableMinId { get; set; }
+
+[JsonPropertyName("folder_id")]
 		public override int? FolderId { get; set; }
+
+[JsonPropertyName("linked_chat_id")]
 		public int? LinkedChatId { get; set; }
+
+[JsonPropertyName("location")]
 		public CatraProto.Client.TL.Schemas.CloudChats.ChannelLocationBase Location { get; set; }
+
+[JsonPropertyName("slowmode_seconds")]
 		public int? SlowmodeSeconds { get; set; }
+
+[JsonPropertyName("slowmode_next_send_date")]
 		public int? SlowmodeNextSendDate { get; set; }
+
+[JsonPropertyName("stats_dc")]
 		public int? StatsDc { get; set; }
+
+[JsonPropertyName("pts")]
 		public int Pts { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = CanViewParticipants ? FlagsHelper.SetFlag(Flags, 3) : FlagsHelper.UnsetFlag(Flags, 3);

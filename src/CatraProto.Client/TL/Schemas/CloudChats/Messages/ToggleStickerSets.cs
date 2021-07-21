@@ -1,9 +1,8 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using CatraProto.TL;
+using System.Text.Json.Serialization;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
@@ -17,15 +16,32 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Unarchive = 1 << 2
 		}
 
-        public static int ConstructorId { get; } = -1257951254;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => -1257951254; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(bool);
 
-		public System.Type Type { get; init; } = typeof(bool);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("uninstall")]
 		public bool Uninstall { get; set; }
+
+[JsonPropertyName("archive")]
 		public bool Archive { get; set; }
+
+[JsonPropertyName("unarchive")]
 		public bool Unarchive { get; set; }
+
+[JsonPropertyName("stickersets")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase> Stickersets { get; set; }
+
 
 		public void UpdateFlags() 
 		{

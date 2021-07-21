@@ -1,11 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChatBannedRights : ChatBannedRightsBase
+	public partial class ChatBannedRights : CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -24,22 +25,53 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			PinMessages = 1 << 17
 		}
 
-        public static int ConstructorId { get; } = -1626209256;
+        public static int StaticConstructorId { get => -1626209256; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("view_messages")]
 		public override bool ViewMessages { get; set; }
+
+[JsonPropertyName("send_messages")]
 		public override bool SendMessages { get; set; }
+
+[JsonPropertyName("send_media")]
 		public override bool SendMedia { get; set; }
+
+[JsonPropertyName("send_stickers")]
 		public override bool SendStickers { get; set; }
+
+[JsonPropertyName("send_gifs")]
 		public override bool SendGifs { get; set; }
+
+[JsonPropertyName("send_games")]
 		public override bool SendGames { get; set; }
+
+[JsonPropertyName("send_inline")]
 		public override bool SendInline { get; set; }
+
+[JsonPropertyName("embed_links")]
 		public override bool EmbedLinks { get; set; }
+
+[JsonPropertyName("send_polls")]
 		public override bool SendPolls { get; set; }
+
+[JsonPropertyName("change_info")]
 		public override bool ChangeInfo { get; set; }
+
+[JsonPropertyName("invite_users")]
 		public override bool InviteUsers { get; set; }
+
+[JsonPropertyName("pin_messages")]
 		public override bool PinMessages { get; set; }
+
+[JsonPropertyName("until_date")]
 		public override int UntilDate { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = ViewMessages ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

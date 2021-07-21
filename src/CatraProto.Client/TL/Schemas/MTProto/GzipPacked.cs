@@ -1,6 +1,8 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
@@ -8,9 +10,14 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 	{
 
 
-        public static int ConstructorId { get; } = 812830625;
+        public static int StaticConstructorId { get => 812830625; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("packed_data")]
 		public byte[] PackedData { get; set; }
 
+        
 		public void UpdateFlags() 
 		{
 

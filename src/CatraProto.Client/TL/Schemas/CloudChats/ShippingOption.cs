@@ -1,20 +1,29 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ShippingOption : ShippingOptionBase
+	public partial class ShippingOption : CatraProto.Client.TL.Schemas.CloudChats.ShippingOptionBase
 	{
 
 
-        public static int ConstructorId { get; } = -1239335713;
+        public static int StaticConstructorId { get => -1239335713; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("id")]
 		public override string Id { get; set; }
+
+[JsonPropertyName("title")]
 		public override string Title { get; set; }
+
+[JsonPropertyName("prices")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase> Prices { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

@@ -1,13 +1,12 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Text.Json.Serialization;
+using CatraProto.TL;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class Document : DocumentBase
+	public partial class Document : CatraProto.Client.TL.Schemas.CloudChats.DocumentBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,19 +15,44 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			VideoThumbs = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = 512177195;
+        public static int StaticConstructorId { get => 512177195; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("id")]
 		public override long Id { get; set; }
+
+[JsonPropertyName("access_hash")]
 		public long AccessHash { get; set; }
+
+[JsonPropertyName("file_reference")]
 		public byte[] FileReference { get; set; }
+
+[JsonPropertyName("date")]
 		public int Date { get; set; }
+
+[JsonPropertyName("mime_type")]
 		public string MimeType { get; set; }
+
+[JsonPropertyName("size")]
 		public int Size { get; set; }
+
+[JsonPropertyName("thumbs")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase> Thumbs { get; set; }
+
+[JsonPropertyName("video_thumbs")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.VideoSizeBase> VideoThumbs { get; set; }
+
+[JsonPropertyName("dc_id")]
 		public int DcId { get; set; }
+
+[JsonPropertyName("attributes")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase> Attributes { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Thumbs == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);

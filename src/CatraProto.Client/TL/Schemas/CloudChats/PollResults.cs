@@ -1,13 +1,12 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Text.Json.Serialization;
+using CatraProto.TL;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PollResults : PollResultsBase
+	public partial class PollResults : CatraProto.Client.TL.Schemas.CloudChats.PollResultsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -20,15 +19,32 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			SolutionEntities = 1 << 4
 		}
 
-        public static int ConstructorId { get; } = -1159937629;
+        public static int StaticConstructorId { get => -1159937629; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("min")]
 		public override bool Min { get; set; }
+
+[JsonPropertyName("results")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.PollAnswerVotersBase> Results { get; set; }
+
+[JsonPropertyName("total_voters")]
 		public override int? TotalVoters { get; set; }
+
+[JsonPropertyName("recent_voters")]
 		public override IList<int> RecentVoters { get; set; }
+
+[JsonPropertyName("solution")]
 		public override string Solution { get; set; }
+
+[JsonPropertyName("solution_entities")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> SolutionEntities { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Min ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

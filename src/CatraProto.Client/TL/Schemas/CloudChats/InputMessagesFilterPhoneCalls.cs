@@ -1,11 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputMessagesFilterPhoneCalls : MessagesFilterBase
+	public partial class InputMessagesFilterPhoneCalls : CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -13,10 +14,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Missed = 1 << 0
 		}
 
-        public static int ConstructorId { get; } = -2134272152;
+        public static int StaticConstructorId { get => -2134272152; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("missed")]
 		public bool Missed { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Missed ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

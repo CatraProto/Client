@@ -1,7 +1,8 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using System.Text.Json.Serialization;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
@@ -9,16 +10,35 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 	{
 
 
-        public static int ConstructorId { get; } = 1180140658;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => 1180140658; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase);
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonPropertyName("peer")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
+
+[JsonPropertyName("offset_id")]
 		public int OffsetId { get; set; }
+
+[JsonPropertyName("add_offset")]
 		public int AddOffset { get; set; }
+
+[JsonPropertyName("limit")]
 		public int Limit { get; set; }
+
+[JsonPropertyName("max_id")]
 		public int MaxId { get; set; }
+
+[JsonPropertyName("min_id")]
 		public int MinId { get; set; }
+
 
 		public void UpdateFlags() 
 		{

@@ -1,11 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class MessageEditData : MessageEditDataBase
+	public partial class MessageEditData : CatraProto.Client.TL.Schemas.CloudChats.Messages.MessageEditDataBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -13,10 +14,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Caption = 1 << 0
 		}
 
-        public static int ConstructorId { get; } = 649453030;
+        public static int StaticConstructorId { get => 649453030; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("caption")]
 		public override bool Caption { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Caption ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

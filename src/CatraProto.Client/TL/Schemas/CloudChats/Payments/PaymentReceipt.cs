@@ -1,13 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using System.Collections.Generic;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 {
-	public partial class PaymentReceipt : PaymentReceiptBase
+	public partial class PaymentReceipt : CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentReceiptBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,19 +15,44 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 			Shipping = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = 1342771681;
+        public static int StaticConstructorId { get => 1342771681; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("date")]
 		public override int Date { get; set; }
+
+[JsonPropertyName("bot_id")]
 		public override int BotId { get; set; }
+
+[JsonPropertyName("invoice")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.InvoiceBase Invoice { get; set; }
+
+[JsonPropertyName("provider_id")]
 		public override int ProviderId { get; set; }
+
+[JsonPropertyName("info")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase Info { get; set; }
+
+[JsonPropertyName("shipping")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.ShippingOptionBase Shipping { get; set; }
+
+[JsonPropertyName("currency")]
 		public override string Currency { get; set; }
+
+[JsonPropertyName("total_amount")]
 		public override long TotalAmount { get; set; }
+
+[JsonPropertyName("credentials_title")]
 		public override string CredentialsTitle { get; set; }
+
+[JsonPropertyName("users")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Info == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);

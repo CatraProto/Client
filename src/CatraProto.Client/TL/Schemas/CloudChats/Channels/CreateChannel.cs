@@ -1,8 +1,8 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Collections.Generic;
+using CatraProto.TL;
+using System.Text.Json.Serialization;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 {
@@ -18,18 +18,41 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 			Address = 1 << 2
 		}
 
-        public static int ConstructorId { get; } = 1029681423;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => 1029681423; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("broadcast")]
 		public bool Broadcast { get; set; }
+
+[JsonPropertyName("megagroup")]
 		public bool Megagroup { get; set; }
+
+[JsonPropertyName("for_import")]
 		public bool ForImport { get; set; }
+
+[JsonPropertyName("title")]
 		public string Title { get; set; }
+
+[JsonPropertyName("about")]
 		public string About { get; set; }
+
+[JsonPropertyName("geo_point")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase GeoPoint { get; set; }
+
+[JsonPropertyName("address")]
 		public string Address { get; set; }
+
 
 		public void UpdateFlags() 
 		{

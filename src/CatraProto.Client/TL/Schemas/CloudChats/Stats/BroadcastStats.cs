@@ -1,32 +1,65 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using System.Collections.Generic;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 {
-	public partial class BroadcastStats : BroadcastStatsBase
+	public partial class BroadcastStats : CatraProto.Client.TL.Schemas.CloudChats.Stats.BroadcastStatsBase
 	{
 
 
-        public static int ConstructorId { get; } = -1107852396;
+        public static int StaticConstructorId { get => -1107852396; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("period")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.StatsDateRangeDaysBase Period { get; set; }
+
+[JsonPropertyName("followers")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase Followers { get; set; }
+
+[JsonPropertyName("views_per_post")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase ViewsPerPost { get; set; }
+
+[JsonPropertyName("shares_per_post")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase SharesPerPost { get; set; }
+
+[JsonPropertyName("enabled_notifications")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.StatsPercentValueBase EnabledNotifications { get; set; }
+
+[JsonPropertyName("growth_graph")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase GrowthGraph { get; set; }
+
+[JsonPropertyName("followers_graph")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase FollowersGraph { get; set; }
+
+[JsonPropertyName("mute_graph")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase MuteGraph { get; set; }
+
+[JsonPropertyName("top_hours_graph")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase TopHoursGraph { get; set; }
+
+[JsonPropertyName("interactions_graph")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase InteractionsGraph { get; set; }
+
+[JsonPropertyName("iv_interactions_graph")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase IvInteractionsGraph { get; set; }
+
+[JsonPropertyName("views_by_source_graph")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase ViewsBySourceGraph { get; set; }
+
+[JsonPropertyName("new_followers_by_source_graph")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase NewFollowersBySourceGraph { get; set; }
+
+[JsonPropertyName("languages_graph")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase LanguagesGraph { get; set; }
+
+[JsonPropertyName("recent_message_interactions")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.MessageInteractionCountersBase> RecentMessageInteractions { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

@@ -1,19 +1,29 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PeerLocated : PeerLocatedBase
+	public partial class PeerLocated : CatraProto.Client.TL.Schemas.CloudChats.PeerLocatedBase
 	{
 
 
-        public static int ConstructorId { get; } = -901375139;
+        public static int StaticConstructorId { get => -901375139; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("peer")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
+
+[JsonPropertyName("expires")]
 		public override int Expires { get; set; }
+
+[JsonPropertyName("distance")]
 		public int Distance { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

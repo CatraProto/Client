@@ -1,14 +1,19 @@
 using CatraProto.TL;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
-
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
     public abstract class AutoDownloadSettingsBase : IObject
     {
+
+[JsonPropertyName("low")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase Low { get; set; }
+
+[JsonPropertyName("medium")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase Medium { get; set; }
+
+[JsonPropertyName("high")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase High { get; set; }
 
         public abstract void UpdateFlags();

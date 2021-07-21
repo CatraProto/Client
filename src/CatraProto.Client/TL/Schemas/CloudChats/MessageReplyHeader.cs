@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageReplyHeader : MessageReplyHeaderBase
+	public partial class MessageReplyHeader : CatraProto.Client.TL.Schemas.CloudChats.MessageReplyHeaderBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,12 +15,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ReplyToTopId = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = -1495959709;
+        public static int StaticConstructorId { get => -1495959709; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("reply_to_msg_id")]
 		public override int ReplyToMsgId { get; set; }
+
+[JsonPropertyName("reply_to_peer_id")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.PeerBase ReplyToPeerId { get; set; }
+
+[JsonPropertyName("reply_to_top_id")]
 		public override int? ReplyToTopId { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = ReplyToPeerId == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);

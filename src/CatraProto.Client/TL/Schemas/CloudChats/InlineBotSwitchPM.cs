@@ -1,17 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InlineBotSwitchPM : InlineBotSwitchPMBase
+	public partial class InlineBotSwitchPM : CatraProto.Client.TL.Schemas.CloudChats.InlineBotSwitchPMBase
 	{
 
 
-        public static int ConstructorId { get; } = 1008755359;
+        public static int StaticConstructorId { get => 1008755359; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("text")]
 		public override string Text { get; set; }
+
+[JsonPropertyName("start_param")]
 		public override string StartParam { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

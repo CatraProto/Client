@@ -1,13 +1,12 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats.Help;
-
+using System.Text.Json.Serialization;
+using CatraProto.TL;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-	public partial class Country : CountryBase
+	public partial class Country : CatraProto.Client.TL.Schemas.CloudChats.Help.CountryBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,14 +15,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 			Name = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = -1014526429;
+        public static int StaticConstructorId { get => -1014526429; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("hidden")]
 		public override bool Hidden { get; set; }
+
+[JsonPropertyName("iso2")]
 		public override string Iso2 { get; set; }
+
+[JsonPropertyName("default_name")]
 		public override string DefaultName { get; set; }
+
+[JsonPropertyName("name")]
 		public override string Name { get; set; }
+
+[JsonPropertyName("country_codes")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.Help.CountryCodeBase> CountryCodes { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Hidden ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

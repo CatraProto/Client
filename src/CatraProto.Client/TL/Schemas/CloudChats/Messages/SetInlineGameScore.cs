@@ -1,8 +1,8 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Collections.Generic;
+using CatraProto.TL;
+using System.Text.Json.Serialization;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
@@ -15,16 +15,35 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Force = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = 363700068;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => 363700068; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(bool);
 
-		public System.Type Type { get; init; } = typeof(bool);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("edit_message")]
 		public bool EditMessage { get; set; }
+
+[JsonPropertyName("force")]
 		public bool Force { get; set; }
+
+[JsonPropertyName("id")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageIDBase Id { get; set; }
+
+[JsonPropertyName("user_id")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase UserId { get; set; }
+
+[JsonPropertyName("score")]
 		public int Score { get; set; }
+
 
 		public void UpdateFlags() 
 		{

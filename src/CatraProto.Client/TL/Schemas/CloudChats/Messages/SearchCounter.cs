@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class SearchCounter : SearchCounterBase
+	public partial class SearchCounter : CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchCounterBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,12 +14,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Inexact = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = -398136321;
+        public static int StaticConstructorId { get => -398136321; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("inexact")]
 		public override bool Inexact { get; set; }
+
+[JsonPropertyName("filter")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase Filter { get; set; }
+
+[JsonPropertyName("count")]
 		public override int Count { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Inexact ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);

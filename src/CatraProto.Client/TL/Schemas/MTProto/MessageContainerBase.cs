@@ -1,13 +1,13 @@
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+using System.Text.Json.Serialization;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.MTProto;
-
-
+using CatraProto.TL.Interfaces;
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
     public abstract class MessageContainerBase : IObject
     {
+
+[JsonPropertyName("messages")]
 		public abstract IList<CatraProto.Client.TL.Schemas.MTProto.Message> Messages { get; set; }
 
         public abstract void UpdateFlags();

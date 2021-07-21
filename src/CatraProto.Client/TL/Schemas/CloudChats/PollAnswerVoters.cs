@@ -1,11 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PollAnswerVoters : PollAnswerVotersBase
+	public partial class PollAnswerVoters : CatraProto.Client.TL.Schemas.CloudChats.PollAnswerVotersBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,13 +15,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Correct = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = 997055186;
+        public static int StaticConstructorId { get => 997055186; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("chosen")]
 		public override bool Chosen { get; set; }
+
+[JsonPropertyName("correct")]
 		public override bool Correct { get; set; }
+
+[JsonPropertyName("option")]
 		public override byte[] Option { get; set; }
+
+[JsonPropertyName("voters")]
 		public override int Voters { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Chosen ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

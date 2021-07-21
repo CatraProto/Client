@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageActionPhoneCall : MessageActionBase
+	public partial class MessageActionPhoneCall : CatraProto.Client.TL.Schemas.CloudChats.MessageActionBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,13 +16,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Duration = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = -2132731265;
+        public static int StaticConstructorId { get => -2132731265; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("video")]
 		public bool Video { get; set; }
+
+[JsonPropertyName("call_id")]
 		public long CallId { get; set; }
+
+[JsonPropertyName("reason")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PhoneCallDiscardReasonBase Reason { get; set; }
+
+[JsonPropertyName("duration")]
 		public int? Duration { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Video ? FlagsHelper.SetFlag(Flags, 2) : FlagsHelper.UnsetFlag(Flags, 2);

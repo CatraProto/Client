@@ -1,19 +1,32 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputFile : InputFileBase
+	public partial class InputFile : CatraProto.Client.TL.Schemas.CloudChats.InputFileBase
 	{
 
 
-        public static int ConstructorId { get; } = -181407105;
+        public static int StaticConstructorId { get => -181407105; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("id")]
 		public override long Id { get; set; }
+
+[JsonPropertyName("parts")]
 		public override int Parts { get; set; }
+
+[JsonPropertyName("name")]
 		public override string Name { get; set; }
+
+[JsonPropertyName("md5_checksum")]
 		public string Md5Checksum { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

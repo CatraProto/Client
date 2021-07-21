@@ -1,14 +1,16 @@
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+using System.Text.Json.Serialization;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
-
+using CatraProto.TL.Interfaces;
 namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 {
     public abstract class ValidatedRequestedInfoBase : IObject
     {
+
+[JsonPropertyName("id")]
 		public abstract string Id { get; set; }
+
+[JsonPropertyName("shipping_options")]
 		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.ShippingOptionBase> ShippingOptions { get; set; }
 
         public abstract void UpdateFlags();

@@ -1,22 +1,38 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageMediaVenue : MessageMediaBase
+	public partial class MessageMediaVenue : CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase
 	{
 
 
-        public static int ConstructorId { get; } = 784356159;
+        public static int StaticConstructorId { get => 784356159; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("geo")]
 		public CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase Geo { get; set; }
+
+[JsonPropertyName("title")]
 		public string Title { get; set; }
+
+[JsonPropertyName("address")]
 		public string Address { get; set; }
+
+[JsonPropertyName("provider")]
 		public string Provider { get; set; }
+
+[JsonPropertyName("venue_id")]
 		public string VenueId { get; set; }
+
+[JsonPropertyName("venue_type")]
 		public string VenueType { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

@@ -1,15 +1,20 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class NotifyUsers : NotifyPeerBase
+	public partial class NotifyUsers : CatraProto.Client.TL.Schemas.CloudChats.NotifyPeerBase
 	{
 
 
-        public static int ConstructorId { get; } = -1261946036;
-
+        public static int StaticConstructorId { get => -1261946036; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+        
 		public override void UpdateFlags() 
 		{
 

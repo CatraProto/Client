@@ -1,13 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using System.Collections.Generic;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChatInvite : ChatInviteBase
+	public partial class ChatInvite : CatraProto.Client.TL.Schemas.CloudChats.ChatInviteBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -19,17 +18,38 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Participants = 1 << 4
 		}
 
-        public static int ConstructorId { get; } = -540871282;
+        public static int StaticConstructorId { get => -540871282; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("channel")]
 		public bool Channel { get; set; }
+
+[JsonPropertyName("broadcast")]
 		public bool Broadcast { get; set; }
+
+[JsonPropertyName("public")]
 		public bool Public { get; set; }
+
+[JsonPropertyName("megagroup")]
 		public bool Megagroup { get; set; }
+
+[JsonPropertyName("title")]
 		public string Title { get; set; }
+
+[JsonPropertyName("photo")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PhotoBase Photo { get; set; }
+
+[JsonPropertyName("participants_count")]
 		public int ParticipantsCount { get; set; }
+
+[JsonPropertyName("participants")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Participants { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Channel ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);

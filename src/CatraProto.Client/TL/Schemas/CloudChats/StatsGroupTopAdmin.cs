@@ -1,19 +1,32 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class StatsGroupTopAdmin : StatsGroupTopAdminBase
+	public partial class StatsGroupTopAdmin : CatraProto.Client.TL.Schemas.CloudChats.StatsGroupTopAdminBase
 	{
 
 
-        public static int ConstructorId { get; } = 1611985938;
+        public static int StaticConstructorId { get => 1611985938; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("user_id")]
 		public override int UserId { get; set; }
+
+[JsonPropertyName("deleted")]
 		public override int Deleted { get; set; }
+
+[JsonPropertyName("kicked")]
 		public override int Kicked { get; set; }
+
+[JsonPropertyName("banned")]
 		public override int Banned { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

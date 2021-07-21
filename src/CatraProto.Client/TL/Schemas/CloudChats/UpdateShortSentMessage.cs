@@ -1,13 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using System.Collections.Generic;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateShortSentMessage : UpdatesBase
+	public partial class UpdateShortSentMessage : CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -17,16 +16,35 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Entities = 1 << 7
 		}
 
-        public static int ConstructorId { get; } = 301019932;
+        public static int StaticConstructorId { get => 301019932; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("out")]
 		public bool Out { get; set; }
+
+[JsonPropertyName("id")]
 		public int Id { get; set; }
+
+[JsonPropertyName("pts")]
 		public int Pts { get; set; }
+
+[JsonPropertyName("pts_count")]
 		public int PtsCount { get; set; }
+
+[JsonPropertyName("date")]
 		public int Date { get; set; }
+
+[JsonPropertyName("media")]
 		public CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase Media { get; set; }
+
+[JsonPropertyName("entities")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Out ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);

@@ -1,9 +1,8 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
 using System.Collections.Generic;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using CatraProto.TL;
+using System.Text.Json.Serialization;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
@@ -15,14 +14,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Force = 1 << 0
 		}
 
-        public static int ConstructorId { get; } = 991616823;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => 991616823; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(bool);
 
-		public System.Type Type { get; init; } = typeof(bool);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("force")]
 		public bool Force { get; set; }
+
+[JsonPropertyName("folder_id")]
 		public int FolderId { get; set; }
+
+[JsonPropertyName("order")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputDialogPeerBase> Order { get; set; }
+
 
 		public void UpdateFlags() 
 		{

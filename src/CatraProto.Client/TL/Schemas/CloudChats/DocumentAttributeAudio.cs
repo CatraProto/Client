@@ -1,11 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class DocumentAttributeAudio : DocumentAttributeBase
+	public partial class DocumentAttributeAudio : CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,14 +17,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Waveform = 1 << 2
 		}
 
-        public static int ConstructorId { get; } = -1739392570;
+        public static int StaticConstructorId { get => -1739392570; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("voice")]
 		public bool Voice { get; set; }
+
+[JsonPropertyName("duration")]
 		public int Duration { get; set; }
+
+[JsonPropertyName("title")]
 		public string Title { get; set; }
+
+[JsonPropertyName("performer")]
 		public string Performer { get; set; }
+
+[JsonPropertyName("waveform")]
 		public byte[] Waveform { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 			Flags = Voice ? FlagsHelper.SetFlag(Flags, 10) : FlagsHelper.UnsetFlag(Flags, 10);

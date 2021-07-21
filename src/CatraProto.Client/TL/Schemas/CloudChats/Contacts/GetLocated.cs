@@ -1,8 +1,8 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Collections.Generic;
+using CatraProto.TL;
+using System.Text.Json.Serialization;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
@@ -15,14 +15,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 			SelfExpires = 1 << 0
 		}
 
-        public static int ConstructorId { get; } = -750207932;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => -750207932; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
 
-		public System.Type Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("background")]
 		public bool Background { get; set; }
+
+[JsonPropertyName("geo_point")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase GeoPoint { get; set; }
+
+[JsonPropertyName("self_expires")]
 		public int? SelfExpires { get; set; }
+
 
 		public void UpdateFlags() 
 		{

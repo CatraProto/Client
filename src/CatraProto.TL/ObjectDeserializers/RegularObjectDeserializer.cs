@@ -1,12 +1,13 @@
 using System;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Interfaces.Deserializers;
 
 namespace CatraProto.TL.ObjectDeserializers
 {
-    public class RegularObjectDeserializer<T> : ICustomDeserializer<T>
+    public class RegularObjectVectorDeserializer<T> : ICustomVectorDeserializer<T>
     {
         private Type _type;
-        public RegularObjectDeserializer(Type type)
+        public RegularObjectVectorDeserializer(Type type)
         {
             _type = type;
         }

@@ -1,17 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputPaymentCredentialsSaved : InputPaymentCredentialsBase
+	public partial class InputPaymentCredentialsSaved : CatraProto.Client.TL.Schemas.CloudChats.InputPaymentCredentialsBase
 	{
 
 
-        public static int ConstructorId { get; } = -1056001329;
+        public static int StaticConstructorId { get => -1056001329; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("id")]
 		public string Id { get; set; }
+
+[JsonPropertyName("tmp_password")]
 		public byte[] TmpPassword { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

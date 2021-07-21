@@ -1,19 +1,29 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class AutoDownloadSettings : AutoDownloadSettingsBase
+	public partial class AutoDownloadSettings : CatraProto.Client.TL.Schemas.CloudChats.Account.AutoDownloadSettingsBase
 	{
 
 
-        public static int ConstructorId { get; } = 1674235686;
+        public static int StaticConstructorId { get => 1674235686; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("low")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase Low { get; set; }
+
+[JsonPropertyName("medium")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase Medium { get; set; }
+
+[JsonPropertyName("high")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase High { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 

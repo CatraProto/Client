@@ -1,8 +1,8 @@
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 using System;
-using CatraProto.Client.TL.Schemas.CloudChats;
-
+using System.Collections.Generic;
+using CatraProto.TL;
+using System.Text.Json.Serialization;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
@@ -16,14 +16,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 			Theme = 1 << 1
 		}
 
-        public static int ConstructorId { get; } = 2061776695;
+        [JsonIgnore]
+        public static int StaticConstructorId { get => 2061776695; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(bool);
 
-		public System.Type Type { get; init; } = typeof(bool);
-		public bool IsVector { get; init; } = false;
+[JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[JsonIgnore]
 		public int Flags { get; set; }
+
+[JsonPropertyName("dark")]
 		public bool Dark { get; set; }
+
+[JsonPropertyName("format")]
 		public string Format { get; set; }
+
+[JsonPropertyName("theme")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputThemeBase Theme { get; set; }
+
 
 		public void UpdateFlags() 
 		{

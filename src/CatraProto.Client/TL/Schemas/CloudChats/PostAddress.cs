@@ -1,21 +1,38 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
-
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PostAddress : PostAddressBase
+	public partial class PostAddress : CatraProto.Client.TL.Schemas.CloudChats.PostAddressBase
 	{
 
 
-        public static int ConstructorId { get; } = 512535275;
+        public static int StaticConstructorId { get => 512535275; }
+        [JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[JsonPropertyName("street_line1")]
 		public override string StreetLine1 { get; set; }
+
+[JsonPropertyName("street_line2")]
 		public override string StreetLine2 { get; set; }
+
+[JsonPropertyName("city")]
 		public override string City { get; set; }
+
+[JsonPropertyName("state")]
 		public override string State { get; set; }
+
+[JsonPropertyName("country_iso2")]
 		public override string CountryIso2 { get; set; }
+
+[JsonPropertyName("post_code")]
 		public override string PostCode { get; set; }
 
+        
 		public override void UpdateFlags() 
 		{
 
