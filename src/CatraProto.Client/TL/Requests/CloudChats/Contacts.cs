@@ -20,10 +20,11 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 	        
 	    }
 	    
-	    		public async Task<RpcMessage<IList<int>>> GetContactIDsAsync(int hash, CancellationToken cancellationToken = default)
+	    		public async Task<RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<int>>> GetContactIDsAsync(int hash, CancellationToken cancellationToken = default)
 		{
 			
-			var rpcResponse = new RpcMessage<IList<int>>();
+			var rpcResponse = new RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<int>>();
+			rpcResponse.Response = new CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<int>();
 			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Contacts.GetContactIDs()
 			{
 				Hash = hash,
@@ -37,10 +38,11 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<IList<CatraProto.Client.TL.Schemas.CloudChats.ContactStatusBase>>> GetStatusesAsync( CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.ContactStatusBase>>> GetStatusesAsync( CancellationToken cancellationToken = default)
 		{
 			
-			var rpcResponse = new RpcMessage<IList<CatraProto.Client.TL.Schemas.CloudChats.ContactStatusBase>>();
+			var rpcResponse = new RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.ContactStatusBase>>();
+			rpcResponse.Response = new CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.ContactStatusBase>();
 			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Contacts.GetStatuses()
 			{
 			};
@@ -278,10 +280,11 @@ if(peer is null) throw new ArgumentNullException(nameof(peer));
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<IList<CatraProto.Client.TL.Schemas.CloudChats.SavedContactBase>>> GetSavedAsync( CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.SavedContactBase>>> GetSavedAsync( CancellationToken cancellationToken = default)
 		{
 			
-			var rpcResponse = new RpcMessage<IList<CatraProto.Client.TL.Schemas.CloudChats.SavedContactBase>>();
+			var rpcResponse = new RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.SavedContactBase>>();
+			rpcResponse.Response = new CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.SavedContactBase>();
 			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Contacts.GetSaved()
 			{
 			};

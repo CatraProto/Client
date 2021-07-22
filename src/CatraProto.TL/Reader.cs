@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -154,7 +155,7 @@ namespace CatraProto.TL
 
             return data;
         }
-
+        
         public IList<object> ReadVector(Type type, bool naked = false)
         {
             return ReadVector(new RegularObjectVectorDeserializer<object>(type), naked);

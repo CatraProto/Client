@@ -4,7 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using CatraProto.Client.MTProto.Rpc.RpcErrors;
 using CatraProto.Client.MTProto.Rpc.RpcErrors.Interfaces;
+using CatraProto.Client.MTProto.Rpc.Vectors;
 using CatraProto.Client.TL.Schemas.MTProto;
+using CatraProto.TL;
+using CatraProto.TL.ObjectDeserializers;
 
 namespace CatraProto.Client.MTProto.Rpc
 {
@@ -16,7 +19,7 @@ namespace CatraProto.Client.MTProto.Rpc
         }
 
         public IRpcError Error { get; private set; }
-        public T Response { get; private set; }
+        public T Response { get; internal set; }
 
         private static IRpcError ParseError(RpcError error)
         {
@@ -31,6 +34,9 @@ namespace CatraProto.Client.MTProto.Rpc
         {
             switch (o)
             {
+                case IList<object> objects:
+                    ((IRpcVector)Response).Cast(objects);
+                    break;
                 case null:
                     return;
                 case RpcError error:

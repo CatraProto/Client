@@ -1,3 +1,5 @@
+using CatraProto.TL;
+
 namespace CatraProto.Client.MTProto.Rpc
 {
     interface IRpcMessage

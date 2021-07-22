@@ -29,8 +29,11 @@ namespace CatraProto.TL.Generator.Objects
         public void WriteMethod(StringBuilder builder)
         {
             var args = new StringBuilder();
-            var returnType = Type.GetTypeName(NamingType.FullNamespace, new Parameter() { VectorInfo = new VectorInfo() { IsVector = ReturnsVector } }, true, NameContext.TypeExtends);
-
+            var returnType = Type.GetTypeName(NamingType.FullNamespace,null, false, NameContext.TypeExtends);
+            if (ReturnsVector)
+            {
+                returnType = $"CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<{returnType}>";
+            }
 
             var parametersOrdered = Parameters
                 .Where(x => x.Type is not FlagType)
@@ -51,10 +54,14 @@ namespace CatraProto.TL.Generator.Objects
             }
 
             var comma = args.Length == 0 ? "" : ",";
-            builder.AppendLine(
-                $"{StringTools.TwoTabs}public async Task<RpcMessage<{returnType}>> {NamingInfo.PascalCaseName}Async({args}{comma} CancellationToken cancellationToken = default)\n{StringTools.TwoTabs}{{");
+            builder.AppendLine($"{StringTools.TwoTabs}public async Task<RpcMessage<{returnType}>> {NamingInfo.PascalCaseName}Async({args}{comma} CancellationToken cancellationToken = default)\n{StringTools.TwoTabs}{{");
             builder.AppendLine($"{StringTools.ThreeTabs}{nullPolicies}");
             builder.AppendLine($"{StringTools.ThreeTabs}var rpcResponse = new RpcMessage<{returnType}>();");
+            if (ReturnsVector)
+            {
+                builder.AppendLine($"{StringTools.ThreeTabs}rpcResponse.Response = new {returnType}();");
+            }
+            
             builder.AppendLine($"{StringTools.ThreeTabs}var methodBody = new {Namespace.FullNamespace}()\n{StringTools.ThreeTabs}{{");
             foreach (var parameter in parametersOrdered)
             {

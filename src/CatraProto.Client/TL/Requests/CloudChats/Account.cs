@@ -571,10 +571,11 @@ if(phoneCode is null) throw new ArgumentNullException(nameof(phoneCode));
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase>>> GetAllSecureValuesAsync( CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase>>> GetAllSecureValuesAsync( CancellationToken cancellationToken = default)
 		{
 			
-			var rpcResponse = new RpcMessage<IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase>>();
+			var rpcResponse = new RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase>>();
+			rpcResponse.Response = new CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase>();
 			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Account.GetAllSecureValues()
 			{
 			};
@@ -587,11 +588,12 @@ if(phoneCode is null) throw new ArgumentNullException(nameof(phoneCode));
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase>>> GetSecureValueAsync(IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase> types, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase>>> GetSecureValueAsync(IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase> types, CancellationToken cancellationToken = default)
 		{
 			if(types is null) throw new ArgumentNullException(nameof(types));
 
-			var rpcResponse = new RpcMessage<IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase>>();
+			var rpcResponse = new RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase>>();
+			rpcResponse.Response = new CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase>();
 			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Account.GetSecureValue()
 			{
 				Types = types,
@@ -1222,11 +1224,12 @@ if(theme is null) throw new ArgumentNullException(nameof(theme));
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<IList<CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase>>> GetMultiWallPapersAsync(IList<CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase> wallpapers, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase>>> GetMultiWallPapersAsync(IList<CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase> wallpapers, CancellationToken cancellationToken = default)
 		{
 			if(wallpapers is null) throw new ArgumentNullException(nameof(wallpapers));
 
-			var rpcResponse = new RpcMessage<IList<CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase>>();
+			var rpcResponse = new RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase>>();
+			rpcResponse.Response = new CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase>();
 			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Account.GetMultiWallPapers()
 			{
 				Wallpapers = wallpapers,

@@ -123,12 +123,13 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<IList<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>>> ReuploadCdnFileAsync(byte[] fileToken, byte[] requestToken, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>>> ReuploadCdnFileAsync(byte[] fileToken, byte[] requestToken, CancellationToken cancellationToken = default)
 		{
 			if(fileToken is null) throw new ArgumentNullException(nameof(fileToken));
 if(requestToken is null) throw new ArgumentNullException(nameof(requestToken));
 
-			var rpcResponse = new RpcMessage<IList<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>>();
+			var rpcResponse = new RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>>();
+			rpcResponse.Response = new CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>();
 			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Upload.ReuploadCdnFile()
 			{
 				FileToken = fileToken,
@@ -143,11 +144,12 @@ if(requestToken is null) throw new ArgumentNullException(nameof(requestToken));
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<IList<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>>> GetCdnFileHashesAsync(byte[] fileToken, int offset, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>>> GetCdnFileHashesAsync(byte[] fileToken, int offset, CancellationToken cancellationToken = default)
 		{
 			if(fileToken is null) throw new ArgumentNullException(nameof(fileToken));
 
-			var rpcResponse = new RpcMessage<IList<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>>();
+			var rpcResponse = new RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>>();
+			rpcResponse.Response = new CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>();
 			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Upload.GetCdnFileHashes()
 			{
 				FileToken = fileToken,
@@ -162,11 +164,12 @@ if(requestToken is null) throw new ArgumentNullException(nameof(requestToken));
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<IList<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>>> GetFileHashesAsync(CatraProto.Client.TL.Schemas.CloudChats.InputFileLocationBase location, int offset, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>>> GetFileHashesAsync(CatraProto.Client.TL.Schemas.CloudChats.InputFileLocationBase location, int offset, CancellationToken cancellationToken = default)
 		{
 			if(location is null) throw new ArgumentNullException(nameof(location));
 
-			var rpcResponse = new RpcMessage<IList<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>>();
+			var rpcResponse = new RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>>();
+			rpcResponse.Response = new CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>();
 			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Upload.GetFileHashes()
 			{
 				Location = location,
