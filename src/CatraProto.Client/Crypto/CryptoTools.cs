@@ -2,18 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Security.Cryptography;
 
 namespace CatraProto.Client.Crypto
 {
     static class CryptoTools
     {
+        private static RandomNumberGenerator _cryptoRandom = new RNGCryptoServiceProvider();
         public static long CreateRandomLong()
         {
-            var random = new Random();
-            var bArray = new byte[8];
-            random.NextBytes(bArray);
-            return BitConverter.ToInt64(bArray);
+            return BitConverter.ToInt64(GenerateRandomBytes(8));
         }
+        
         public static byte[] XorBlock(byte[] first, byte[] second)
         {
             if (first.Length != second.Length)
@@ -33,7 +33,7 @@ namespace CatraProto.Client.Crypto
         public static byte[] GenerateRandomBytes(int count)
         {
             var byteArray = new byte[count];
-            new Random().NextBytes(byteArray);
+            _cryptoRandom.GetBytes(byteArray);
             return byteArray;
         }
         

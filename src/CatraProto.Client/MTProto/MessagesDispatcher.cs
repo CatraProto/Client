@@ -167,13 +167,26 @@ namespace CatraProto.Client.MTProto
                         var random = new Random();
                         for (var i = 0; i < updates.Updates.Count; i++)
                         {
+                            var update = (UpdateNewMessage)updates.Updates[i];
                             var randomInt = random.Next();
-                            
-                            _ = _connectionState.Api.CloudChatsApi.Users.GetUsersAsync(new List<InputUserBase>(){new InputUser()
+                            _ = _connectionState.Api.CloudChatsApi.Messages.SendMessageAsync(new InputPeerUser()
                             {
                                 AccessHash = ((User)updates.Users[0]).AccessHash.Value,
-                                UserId = ((User)updates.Users[0]).Id
-                            }}).ContinueWith(x => _logger.Information(x.Result.Response[0].Id.ToString()), TaskContinuationOptions.OnlyOnRanToCompletion);
+                                UserId = updates.Users[0].Id
+                            }, "This is a reply", randomInt, replyToMsgId: update.Message.Id)
+                                .ContinueWith(x =>
+                                {
+                                    if (x.Result.RpcCallFailed)
+                                    {
+                                        JsonSerializer.Serialize(x.Result.Error);
+                                    }
+                                }, TaskContinuationOptions.OnlyOnRanToCompletion);
+                            // _ = _connectionState.Api.CloudChatsApi.Users.GetUsersAsync(new List<InputUserBase>(){new InputUser()
+                            // {
+                            //     AccessHash = ((User)updates.Users[0]).AccessHash.Value,
+                            //     UserId = ((User)updates.Users[0]).Id
+                            // }}).ContinueWith(x => _logger.Information(JsonSerializer.Serialize<object>(x.Result.Response), TaskContinuationOptions
+                            // .OnlyOnRanToCompletion));
                         }
                     }
 

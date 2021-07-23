@@ -23,11 +23,18 @@ namespace CatraProto.Client.MTProto.Rpc
 
         private static IRpcError ParseError(RpcError error)
         {
-            switch (error)
+            switch (error.ErrorMessage)
             {
-                default:
-                    return new UnknownError(error.ErrorMessage, error.ErrorCode);
+                case "BOT_METHOD_INVALID":
+                    return new BotMethodInvalidError(error.ErrorMessage, error.ErrorCode);
             }
+
+            if (error.ErrorMessage.Contains("FLOOD_WAIT"))
+            {
+                return new FloodWaitError(error.ErrorMessage, error.ErrorCode);
+            }
+            
+            return new UnknownError(error.ErrorMessage, error.ErrorCode);
         }
 
         public void SetResponse(object o)
