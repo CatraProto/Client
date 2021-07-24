@@ -87,7 +87,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
 
             var messageId = _messageIdsHandler.ComputeMessageId();
             var encryptedInnerData = Pfs.Encrypt(permAuthKey, innerData, messageId);
-            var messageOptions = new MessageOptions { SendWithMessageId = messageId };
+            var messageOptions = new MessageSendingOptions { SendWithMessageId = messageId };
             var bindTempAuthKey = await _api.CloudChatsApi.Auth.BindTempAuthKeyAsync(permAuthKey.AuthKeyId, innerData.Nonce, _expiresAt, encryptedInnerData, messageOptions, token);
 
             if (bindTempAuthKey.RpcCallFailed)

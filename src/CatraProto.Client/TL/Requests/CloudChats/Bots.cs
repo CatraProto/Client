@@ -20,7 +20,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 	        
 	    }
 	    
-	    		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>> SendCustomRequestAsync(string customMethod, CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase pparams, CancellationToken cancellationToken = default)
+	    		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>> SendCustomRequestAsync(string customMethod, CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase pparams, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
 		{
 			if(customMethod is null) throw new ArgumentNullException(nameof(customMethod));
 if(pparams is null) throw new ArgumentNullException(nameof(pparams));
@@ -37,10 +37,11 @@ if(pparams is null) throw new ArgumentNullException(nameof(pparams));
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = true
+, MessageSendingOptions = messageSendingOptions
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<bool>> AnswerWebhookJSONQueryAsync(long queryId, CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase data, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<bool>> AnswerWebhookJSONQueryAsync(long queryId, CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase data, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
 		{
 			if(data is null) throw new ArgumentNullException(nameof(data));
 
@@ -56,10 +57,11 @@ if(pparams is null) throw new ArgumentNullException(nameof(pparams));
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = true
+, MessageSendingOptions = messageSendingOptions
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<bool>> SetBotCommandsAsync(IList<CatraProto.Client.TL.Schemas.CloudChats.BotCommandBase> commands, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<bool>> SetBotCommandsAsync(IList<CatraProto.Client.TL.Schemas.CloudChats.BotCommandBase> commands, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
 		{
 			if(commands is null) throw new ArgumentNullException(nameof(commands));
 
@@ -74,6 +76,7 @@ if(pparams is null) throw new ArgumentNullException(nameof(pparams));
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = true
+, MessageSendingOptions = messageSendingOptions
 				}, rpcResponse);
 			return rpcResponse;
 		}

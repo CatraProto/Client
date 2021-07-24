@@ -84,7 +84,7 @@ namespace CatraProto.Client.Connections
                 message.CancellationToken.Register(() => DequeueMessage(messageContainer, message.CancellationToken));
             OutgoingMessages.Writer.TryWrite(messageContainer);
             _logger.Information("{Type} message enqueued successfully", message.IsEncrypted ? "Encrypted" : "Unencrypted");
-            if (message.MessageOptions.AwaiterType == AwaiterType.WhenScheduled)
+            if (message.MessageSendingOptions.AwaiterType == AwaiterType.WhenScheduled)
             {
                 completionSource.TrySetResult();
             }

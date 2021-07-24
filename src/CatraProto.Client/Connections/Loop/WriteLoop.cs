@@ -174,8 +174,8 @@ namespace CatraProto.Client.Connections.Loop
                 }
 
                 var authKey = await _connection.ConnectionState.TemporaryAuthKey.GetAuthKeyAsync(forceReturn: forceAuthKey);
-                var messageId = messages[0].OutgoingMessage.MessageOptions.SendWithMessageId != 0
-                    ? messages[0].OutgoingMessage.MessageOptions.SendWithMessageId
+                var messageId = messages[0].OutgoingMessage.MessageSendingOptions.SendWithMessageId != 0
+                    ? messages[0].OutgoingMessage.MessageSendingOptions.SendWithMessageId
                     : _connectionState.MessageIdsHandler.ComputeMessageId();
                 var encryptedMessage = new EncryptedMessage(authKey)
                 {

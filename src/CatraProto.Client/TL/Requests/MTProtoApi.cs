@@ -20,7 +20,7 @@ namespace CatraProto.Client.TL.Requests
 	        
 	    }
 	    
-	    		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.ResPQBase>> ReqPqAsync(System.Numerics.BigInteger nonce, CancellationToken cancellationToken = default)
+	    		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.ResPQBase>> ReqPqAsync(System.Numerics.BigInteger nonce, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
 		{
 			
 			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.MTProto.ResPQBase>();
@@ -34,10 +34,11 @@ namespace CatraProto.Client.TL.Requests
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = false
+, MessageSendingOptions = messageSendingOptions
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.ResPQBase>> ReqPqMultiAsync(System.Numerics.BigInteger nonce, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.ResPQBase>> ReqPqMultiAsync(System.Numerics.BigInteger nonce, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
 		{
 			
 			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.MTProto.ResPQBase>();
@@ -51,10 +52,11 @@ namespace CatraProto.Client.TL.Requests
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = false
+, MessageSendingOptions = messageSendingOptions
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.ServerDHParamsBase>> ReqDHParamsAsync(System.Numerics.BigInteger nonce, System.Numerics.BigInteger serverNonce, byte[] p, byte[] q, long publicKeyFingerprint, byte[] encryptedData, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.ServerDHParamsBase>> ReqDHParamsAsync(System.Numerics.BigInteger nonce, System.Numerics.BigInteger serverNonce, byte[] p, byte[] q, long publicKeyFingerprint, byte[] encryptedData, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
 		{
 			if(p is null) throw new ArgumentNullException(nameof(p));
 if(q is null) throw new ArgumentNullException(nameof(q));
@@ -76,10 +78,11 @@ if(encryptedData is null) throw new ArgumentNullException(nameof(encryptedData))
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = false
+, MessageSendingOptions = messageSendingOptions
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.SetClientDHParamsAnswerBase>> SetClientDHParamsAsync(System.Numerics.BigInteger nonce, System.Numerics.BigInteger serverNonce, byte[] encryptedData, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.SetClientDHParamsAnswerBase>> SetClientDHParamsAsync(System.Numerics.BigInteger nonce, System.Numerics.BigInteger serverNonce, byte[] encryptedData, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
 		{
 			if(encryptedData is null) throw new ArgumentNullException(nameof(encryptedData));
 
@@ -96,10 +99,11 @@ if(encryptedData is null) throw new ArgumentNullException(nameof(encryptedData))
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = false
+, MessageSendingOptions = messageSendingOptions
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.RpcDropAnswerBase>> RpcDropAnswerAsync(long reqMsgId, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.RpcDropAnswerBase>> RpcDropAnswerAsync(long reqMsgId, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
 		{
 			
 			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.MTProto.RpcDropAnswerBase>();
@@ -113,10 +117,11 @@ if(encryptedData is null) throw new ArgumentNullException(nameof(encryptedData))
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = true
+, MessageSendingOptions = messageSendingOptions
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.FutureSaltsBase>> GetFutureSaltsAsync(int num, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.FutureSaltsBase>> GetFutureSaltsAsync(int num, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
 		{
 			
 			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.MTProto.FutureSaltsBase>();
@@ -130,10 +135,11 @@ if(encryptedData is null) throw new ArgumentNullException(nameof(encryptedData))
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = true
+, MessageSendingOptions = messageSendingOptions
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.PongBase>> PingAsync(long pingId, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.PongBase>> PingAsync(long pingId, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
 		{
 			
 			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.MTProto.PongBase>();
@@ -147,10 +153,11 @@ if(encryptedData is null) throw new ArgumentNullException(nameof(encryptedData))
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = true
+, MessageSendingOptions = messageSendingOptions
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.PongBase>> PingDelayDisconnectAsync(long pingId, int disconnectDelay, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.PongBase>> PingDelayDisconnectAsync(long pingId, int disconnectDelay, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
 		{
 			
 			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.MTProto.PongBase>();
@@ -165,10 +172,11 @@ if(encryptedData is null) throw new ArgumentNullException(nameof(encryptedData))
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = true
+, MessageSendingOptions = messageSendingOptions
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.DestroySessionResBase>> DestroySessionAsync(long sessionId, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.DestroySessionResBase>> DestroySessionAsync(long sessionId, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
 		{
 			
 			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.MTProto.DestroySessionResBase>();
@@ -182,10 +190,11 @@ if(encryptedData is null) throw new ArgumentNullException(nameof(encryptedData))
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = true
+, MessageSendingOptions = messageSendingOptions
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.HttpWaitBase>> HttpWaitAsync(int maxDelay, int waitAfter, int maxWait, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.HttpWaitBase>> HttpWaitAsync(int maxDelay, int waitAfter, int maxWait, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
 		{
 			
 			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.MTProto.HttpWaitBase>();
@@ -201,6 +210,7 @@ if(encryptedData is null) throw new ArgumentNullException(nameof(encryptedData))
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = true
+, MessageSendingOptions = messageSendingOptions
 				}, rpcResponse);
 			return rpcResponse;
 		}

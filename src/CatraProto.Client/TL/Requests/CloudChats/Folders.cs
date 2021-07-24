@@ -20,7 +20,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 	        
 	    }
 	    
-	    		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> EditPeerFoldersAsync(IList<CatraProto.Client.TL.Schemas.CloudChats.InputFolderPeerBase> folderPeers, CancellationToken cancellationToken = default)
+	    		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> EditPeerFoldersAsync(IList<CatraProto.Client.TL.Schemas.CloudChats.InputFolderPeerBase> folderPeers, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
 		{
 			if(folderPeers is null) throw new ArgumentNullException(nameof(folderPeers));
 
@@ -35,10 +35,11 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = true
+, MessageSendingOptions = messageSendingOptions
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> DeleteFolderAsync(int folderId, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> DeleteFolderAsync(int folderId, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
 		{
 			
 			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>();
@@ -52,6 +53,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = true
+, MessageSendingOptions = messageSendingOptions
 				}, rpcResponse);
 			return rpcResponse;
 		}

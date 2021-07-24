@@ -20,7 +20,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 	        
 	    }
 	    
-	    		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentFormBase>> GetPaymentFormAsync(int msgId, CancellationToken cancellationToken = default)
+	    		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentFormBase>> GetPaymentFormAsync(int msgId, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
 		{
 			
 			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentFormBase>();
@@ -34,10 +34,11 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = true
+, MessageSendingOptions = messageSendingOptions
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentReceiptBase>> GetPaymentReceiptAsync(int msgId, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentReceiptBase>> GetPaymentReceiptAsync(int msgId, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
 		{
 			
 			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentReceiptBase>();
@@ -51,10 +52,11 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = true
+, MessageSendingOptions = messageSendingOptions
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Payments.ValidatedRequestedInfoBase>> ValidateRequestedInfoAsync(int msgId, CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase info, bool save = true, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Payments.ValidatedRequestedInfoBase>> ValidateRequestedInfoAsync(int msgId, CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase info, bool save = true, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
 		{
 			if(info is null) throw new ArgumentNullException(nameof(info));
 
@@ -71,10 +73,11 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = true
+, MessageSendingOptions = messageSendingOptions
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentResultBase>> SendPaymentFormAsync(int msgId, CatraProto.Client.TL.Schemas.CloudChats.InputPaymentCredentialsBase credentials, string requestedInfoId = null, string shippingOptionId = null, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentResultBase>> SendPaymentFormAsync(int msgId, CatraProto.Client.TL.Schemas.CloudChats.InputPaymentCredentialsBase credentials, string requestedInfoId = null, string shippingOptionId = null, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
 		{
 			if(credentials is null) throw new ArgumentNullException(nameof(credentials));
 
@@ -92,10 +95,11 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = true
+, MessageSendingOptions = messageSendingOptions
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Payments.SavedInfoBase>> GetSavedInfoAsync( CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Payments.SavedInfoBase>> GetSavedInfoAsync( CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
 		{
 			
 			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Payments.SavedInfoBase>();
@@ -108,10 +112,11 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = true
+, MessageSendingOptions = messageSendingOptions
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<bool>> ClearSavedInfoAsync(bool credentials = true, bool info = true, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<bool>> ClearSavedInfoAsync(bool credentials = true, bool info = true, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
 		{
 			
 			var rpcResponse = new RpcMessage<bool>();
@@ -126,10 +131,11 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = true
+, MessageSendingOptions = messageSendingOptions
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Payments.BankCardDataBase>> GetBankCardDataAsync(string number, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Payments.BankCardDataBase>> GetBankCardDataAsync(string number, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
 		{
 			if(number is null) throw new ArgumentNullException(nameof(number));
 
@@ -144,6 +150,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = true
+, MessageSendingOptions = messageSendingOptions
 				}, rpcResponse);
 			return rpcResponse;
 		}
