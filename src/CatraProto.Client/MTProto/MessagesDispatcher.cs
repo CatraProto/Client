@@ -138,6 +138,7 @@ namespace CatraProto.Client.MTProto
             _connectionState.SaltHandler.SetSalt(newSessionCreated.ServerSalt);
             _connectionState.SessionIdHandler.SetSessionId(sessionId);
             _connectionState.SeqnoHandler.ContentRelatedReceived = 0;
+            _connectionState.SeqnoHandler.ContentRelatedSent = 0;
             _logger.Information("New session created, new server salt {Salt}, new SessionId {SessionId}", newSessionCreated.ServerSalt, sessionId);
         }
         

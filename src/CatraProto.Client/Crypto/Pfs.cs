@@ -21,13 +21,13 @@ namespace CatraProto.Client.Crypto
                     plainWriter.Write(0);
                     plainWriter.Write(40);
                     plainWriter.Write(inner.ToArray(MergedProvider.Singleton));
-                
+
                     var plainToByte = ((MemoryStream)plainWriter.BaseStream).ToArray();
                     var msgKey = SHA1.HashData(plainToByte).Skip(4).Take(16).ToArray();
-                    
+
                     CryptoTools.AddPadding(plainWriter.BaseStream, 16);
                     plainToByte = ((MemoryStream)plainWriter.BaseStream).ToArray();
-                    
+
                     using var encryptor = permAuthKey.CreateEncryptorV1(msgKey, true);
                     var encryptedData = encryptor.Encrypt(plainToByte);
 
@@ -35,11 +35,9 @@ namespace CatraProto.Client.Crypto
                     encryptedWriter.Write(msgKey);
                     encryptedWriter.Write(encryptedData);
                 }
-                
+
                 return ((MemoryStream)encryptedWriter.BaseStream).ToArray();
             }
         }
-        
-        
     }
 }
