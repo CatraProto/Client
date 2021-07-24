@@ -2,12 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using CatraProto.Client.MTProto.Rpc.Interfaces;
 using CatraProto.Client.MTProto.Rpc.RpcErrors;
-using CatraProto.Client.MTProto.Rpc.RpcErrors.Interfaces;
 using CatraProto.Client.MTProto.Rpc.Vectors;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL;
 using CatraProto.TL.ObjectDeserializers;
+using RpcError = CatraProto.Client.MTProto.Rpc.Interfaces.RpcError;
 
 namespace CatraProto.Client.MTProto.Rpc
 {
@@ -18,10 +19,10 @@ namespace CatraProto.Client.MTProto.Rpc
             get => Error != null;
         }
 
-        public IRpcError Error { get; private set; }
+        public RpcError Error { get; private set; }
         public T Response { get; internal set; }
 
-        private static IRpcError ParseError(RpcError error)
+        private static RpcError ParseError(TL.Schemas.MTProto.RpcError error)
         {
             switch (error.ErrorMessage)
             {
@@ -29,11 +30,14 @@ namespace CatraProto.Client.MTProto.Rpc
                     return new BotMethodInvalidError(error.ErrorMessage, error.ErrorCode);
             }
 
-            if (error.ErrorMessage.Contains("FLOOD_WAIT"))
+            if (error.ErrorMessage.Length > 10)
             {
-                return new FloodWaitError(error.ErrorMessage, error.ErrorCode);
+                if (error.ErrorMessage[..10] == "FLOOD_WAIT")
+                {
+                    return new FloodWaitError(error.ErrorMessage, error.ErrorCode);
+                }
             }
-            
+
             return new UnknownError(error.ErrorMessage, error.ErrorCode);
         }
 
@@ -46,7 +50,7 @@ namespace CatraProto.Client.MTProto.Rpc
                     break;
                 case null:
                     return;
-                case RpcError error:
+                case TL.Schemas.MTProto.RpcError error:
                     Error = ParseError(error);
                     break;
                 default:

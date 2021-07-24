@@ -49,7 +49,7 @@ namespace CatraProto.Client.Connections.Messages
             {
                 AuthKeyId = reader.ReadInt64();
                 MsgKey = reader.ReadBytes(16);
-                using var encryptor = _authKey.CreateEncryptor(MsgKey, false);
+                using var encryptor = _authKey.CreateEncryptorV2(MsgKey, false);
                 var encryptedBuffer = reader.ReadBytes((int)(reader.BaseStream.Length - reader.BaseStream.Position));
                 var decryptedText = encryptor.Decrypt(encryptedBuffer);
                 using (var cleanReader = new BinaryReader(decryptedText.ToMemoryStream()))
@@ -68,20 +68,20 @@ namespace CatraProto.Client.Connections.Messages
         {
             using (var writer = new BinaryWriter(new MemoryStream()))
             {
-                using (var encryptedDataWriter = new BinaryWriter(new MemoryStream()))
+                using (var plainWriter = new BinaryWriter(new MemoryStream()))
                 {
-                    encryptedDataWriter.Write(Salt);
-                    encryptedDataWriter.Write(SessionId);
-                    encryptedDataWriter.Write(MessageId);
-                    encryptedDataWriter.Write(SeqNo);
-                    encryptedDataWriter.Write(Body.Length);
-                    encryptedDataWriter.Write(Body);
-                    encryptedDataWriter.Write(CryptoTools.GenerateRandomBytes(12));
-                    encryptedDataWriter.Write(CryptoTools.GenerateRandomBytes(16 - (int)encryptedDataWriter.BaseStream.Length % 16));
+                    plainWriter.Write(Salt);
+                    plainWriter.Write(SessionId);
+                    plainWriter.Write(MessageId);
+                    plainWriter.Write(SeqNo);
+                    plainWriter.Write(Body.Length);
+                    plainWriter.Write(Body);
+                   
+                    CryptoTools.AddPadding(plainWriter.BaseStream, 16, 12);
                     
-                    var toEncryptData = ((MemoryStream)encryptedDataWriter.BaseStream).ToArray();
+                    var toEncryptData = ((MemoryStream)plainWriter.BaseStream).ToArray();
                     var msgKey = SHA256.HashData(_authKey.RawAuthKey.Skip(88).Take(32).Concat(toEncryptData).ToArray()).Skip(8).Take(16).ToArray();
-                    using var encryptor = _authKey.CreateEncryptor(msgKey, true);
+                    using var encryptor = _authKey.CreateEncryptorV2(msgKey, true);
                     
                     writer.Write(AuthKeyId);
                     writer.Write(msgKey);

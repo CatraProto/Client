@@ -1,23 +1,27 @@
 using System;
-using CatraProto.Client.MTProto.Rpc.RpcErrors.Interfaces;
+using CatraProto.Client.MTProto.Rpc.Interfaces;
 
 namespace CatraProto.Client.MTProto.Rpc.RpcErrors
 {
-    public class FloodWaitError : IRpcError
+    public class FloodWaitError : RpcError
     {
-        public int ErrorCode { get; }
-        public string ErrorMessage { get; }
-        public string ErrorDescription { get; }
+        public override int ErrorCode { get; }
+        public override string ErrorMessage { get; }
+        public override string ErrorDescription { get; }
         public TimeSpan WaitTime { get; } = new TimeSpan(-1); 
         public FloodWaitError(string errorMessage, int errorCode)
         {
             ErrorMessage = errorMessage;
             ErrorCode = errorCode;
-            var number = ErrorMessage[11..];
-            if (int.TryParse(number, out var waitTime))
+            
+            if (errorMessage.Length > 10 && int.TryParse(errorMessage[11..], out var waitTime))
             {
                 WaitTime = TimeSpan.FromSeconds(waitTime);
-                ErrorDescription = $"This error is returned whenever you call a method too many times, to use this method again, wait {waitTime} seconds";
+                ErrorDescription = $"This error is returned whenever you call a method too many times. To use this method again, wait {waitTime} seconds";
+            }
+            else
+            {
+                ErrorDescription = $"This error is returned by the server whenever you call a method too many times. It was not possible to extract the wait time from [{errorMessage}]";
             }
         }
     }

@@ -111,11 +111,15 @@ namespace CatraProto.Client.MTProto
                 HandleNewSessionCreation(newSessionCreated, message.SessionId);
             }
             
-            _connectionState.MessageIdsHandler.CheckMessageId(message.MessageId);
+            if (!_connectionState.MessageIdsHandler.CheckMessageId(message.MessageId))
+            {
+                return false;
+            }
+            
             var salt = _connectionState.SaltHandler.GetSalt();
             if (salt != message.Salt)
             {
-                _logger.Warning("Received salt {RSalt} does not equal local salt {LSalt}", salt, message.Salt);
+                _logger.Warning("Received salt {RSalt} does not equal local salt {LSalt}", message.Salt, salt);
                 return false;
             }
 
@@ -133,6 +137,7 @@ namespace CatraProto.Client.MTProto
         {
             _connectionState.SaltHandler.SetSalt(newSessionCreated.ServerSalt);
             _connectionState.SessionIdHandler.SetSessionId(sessionId);
+            _connectionState.SeqnoHandler.ContentRelatedReceived = 0;
             _logger.Information("New session created, new server salt {Salt}, new SessionId {SessionId}", newSessionCreated.ServerSalt, sessionId);
         }
         
@@ -157,7 +162,6 @@ namespace CatraProto.Client.MTProto
                             var nextType = obj.GetType();
                             if (nextType == typeof(IList<>) && method.IsVector || nextType == method.Type || nextType.IsSubclassOf(method.Type))
                             {
-                                //var response = method.IsVector ? reader.ReadVector(method.Type) : reader.Read(method.Type);
                                 _connectionState.MessagesHandler.SetMessageResult(0, obj);
                             }
                         }
@@ -181,12 +185,12 @@ namespace CatraProto.Client.MTProto
                                         JsonSerializer.Serialize(x.Result.Error);
                                     }
                                 }, TaskContinuationOptions.OnlyOnRanToCompletion);
-                            // _ = _connectionState.Api.CloudChatsApi.Users.GetUsersAsync(new List<InputUserBase>(){new InputUser()
-                            // {
-                            //     AccessHash = ((User)updates.Users[0]).AccessHash.Value,
-                            //     UserId = ((User)updates.Users[0]).Id
-                            // }}).ContinueWith(x => _logger.Information(JsonSerializer.Serialize<object>(x.Result.Response), TaskContinuationOptions
-                            // .OnlyOnRanToCompletion));
+                            _ = _connectionState.Api.CloudChatsApi.Users.GetUsersAsync(new List<InputUserBase>(){new InputUser()
+                            {
+                                AccessHash = ((User)updates.Users[0]).AccessHash.Value,
+                                UserId = ((User)updates.Users[0]).Id
+                            }}).ContinueWith(x => _logger.Information(JsonSerializer.Serialize<object>(x.Result.Response), TaskContinuationOptions
+                            .OnlyOnRanToCompletion));
                         }
                     }
 

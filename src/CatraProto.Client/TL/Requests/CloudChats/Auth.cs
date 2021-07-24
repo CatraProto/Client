@@ -157,7 +157,7 @@ if(phoneCode is null) throw new ArgumentNullException(nameof(phoneCode));
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<bool>> BindTempAuthKeyAsync(long permAuthKeyId, long nonce, int expiresAt, byte[] encryptedMessage, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<bool>> BindTempAuthKeyAsync(long permAuthKeyId, long nonce, int expiresAt, byte[] encryptedMessage, MessageOptions messageOptions = default, CancellationToken cancellationToken = default)
 		{
 			if(encryptedMessage is null) throw new ArgumentNullException(nameof(encryptedMessage));
 
@@ -174,7 +174,8 @@ if(phoneCode is null) throw new ArgumentNullException(nameof(phoneCode));
 				{
 					Body = methodBody,
 					CancellationToken = cancellationToken,
-					IsEncrypted = true
+					IsEncrypted = true,
+					MessageOptions = messageOptions
 				}, rpcResponse);
 			return rpcResponse;
 		}

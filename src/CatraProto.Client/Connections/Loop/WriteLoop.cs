@@ -15,6 +15,7 @@ using CatraProto.Client.MTProto.Rpc;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.Client.TL.Schemas.CloudChats;
 using CatraProto.Client.TL.Schemas.CloudChats.Auth;
+using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL;
 using CatraProto.TL.Exceptions;
 using CatraProto.TL.Interfaces;
@@ -74,13 +75,14 @@ namespace CatraProto.Client.Connections.Loop
 
                             if (container.OutgoingMessage.IsEncrypted)
                             {
-                                if (container.OutgoingMessage.Body is BindTempAuthKey)
+                                switch (container.OutgoingMessage.Body)
                                 {
-                                    _ = SendEncryptedMessages(new List<MessageContainer> { container });
-                                }
-                                else
-                                {
-                                    pendingMessages.Add(container);
+                                    case BindTempAuthKey:
+                                        _ = SendEncryptedMessages(new List<MessageContainer> { container }, true);
+                                        break;
+                                    default:
+                                        pendingMessages.Add(container);
+                                        break;
                                 }
                             }
                             else
@@ -125,6 +127,7 @@ namespace CatraProto.Client.Connections.Loop
                                 }
                             });
                         }
+
                         _encryptedTask = SendEncryptedMessages(newList.Concat(pendingMessages).ToList());
                         pendingMessages.Clear();
                     }
@@ -160,7 +163,7 @@ namespace CatraProto.Client.Connections.Loop
         }
 
         //TODO: This thing really needs a refactoring
-        private async Task SendEncryptedMessages(List<MessageContainer> messages)
+        private async Task SendEncryptedMessages(List<MessageContainer> messages, bool forceAuthKey = false)
         {
             await _connection.StateSignaler.WaitSignal();
             if (messages.Count == 1)
@@ -170,15 +173,18 @@ namespace CatraProto.Client.Connections.Loop
                     return;
                 }
 
-                var authKey = await _connection.ConnectionState.TemporaryAuthKey.GetAuthKeyAsync();
+                var authKey = await _connection.ConnectionState.TemporaryAuthKey.GetAuthKeyAsync(forceReturn: forceAuthKey);
+                var messageId = messages[0].OutgoingMessage.MessageOptions.SendWithMessageId != 0
+                    ? messages[0].OutgoingMessage.MessageOptions.SendWithMessageId
+                    : _connectionState.MessageIdsHandler.ComputeMessageId();
                 var encryptedMessage = new EncryptedMessage(authKey)
                 {
                     AuthKeyId = authKey.AuthKeyId,
                     Salt = _connection.ConnectionState.SaltHandler.GetSalt(),
                     SessionId = _connection.ConnectionState.SessionIdHandler.GetSessionId(),
-                    MessageId = _connection.ConnectionState.MessageIdsHandler.ComputeMessageId(),
+                    MessageId = messageId,
                     SeqNo = _connection.ConnectionState.SeqnoHandler.ComputeSeqno(messages[0].OutgoingMessage.Body),
-                    Body = GzipHandler.FromBytes(requestBody),
+                    Body = requestBody,
                 };
 
                 _connectionState.MessagesHandler.AddSentMessage(encryptedMessage.MessageId, messages[0]);
@@ -195,7 +201,7 @@ namespace CatraProto.Client.Connections.Loop
                     Salt = _connection.ConnectionState.SaltHandler.GetSalt(),
                     SessionId = _connection.ConnectionState.SessionIdHandler.GetSessionId(),
                     MessageId = _connection.ConnectionState.MessageIdsHandler.ComputeMessageId(),
-                    SeqNo = _connection.ConnectionState.SeqnoHandler.ComputeSeqno(messages[0].OutgoingMessage.Body),
+                    SeqNo = _connection.ConnectionState.SeqnoHandler.ContentRelatedSent * 2,
                     Body = writer.SerializedContainer,
                 };
 

@@ -1,12 +1,13 @@
-using CatraProto.Client.MTProto.Rpc.RpcErrors.Interfaces;
+using CatraProto.Client.MTProto.Rpc.Interfaces;
 
 namespace CatraProto.Client.MTProto.Rpc.RpcErrors
 {
-    public class BotMethodInvalidError : IRpcError
+    public class BotMethodInvalidError : RpcError
     {
-        public int ErrorCode { get; }
-        public string ErrorMessage { get; }
-        public string ErrorDescription { get => "Bots can't use this method"; }
+        public override int ErrorCode { get; }
+        public override string ErrorMessage { get; }
+        public override string ErrorDescription { get => "Bots can't use this method"; }
+
         public BotMethodInvalidError(string errorMessage, int errorCode)
         {
             ErrorMessage = errorMessage;

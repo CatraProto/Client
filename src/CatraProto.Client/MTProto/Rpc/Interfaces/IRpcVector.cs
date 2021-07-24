@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace CatraProto.Client.MTProto.Rpc.Vectors
+namespace CatraProto.Client.MTProto.Rpc.Interfaces
 {
     public interface IRpcVector
     {

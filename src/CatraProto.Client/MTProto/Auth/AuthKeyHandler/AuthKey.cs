@@ -191,7 +191,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
             return new AuthKeyFail(Errors.UnexpectedError);
         }
 
-        public IgeEncryptor CreateEncryptor(byte[] msgKey, bool fromClient)
+        public IgeEncryptor CreateEncryptorV2(byte[] msgKey, bool fromClient)
         {
             var x = fromClient ? 0 : 8;
             if (RawAuthKey == null)
@@ -201,8 +201,27 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
 
             var sha256A = SHA256.HashData(msgKey.Concat(RawAuthKey.Skip(x).Take(36)).ToArray());
             var sha256B = SHA256.HashData(RawAuthKey.Skip(40 + x).Take(36).Concat(msgKey).ToArray());
+            
             var aesKey = sha256A.Take(8).Concat(sha256B.Skip(8).Take(16).Concat(sha256A.Skip(24).Take(8))).ToArray();
             var aesIv = sha256B.Take(8).Concat(sha256A.Skip(8).Take(16).Concat(sha256B.Skip(24).Take(8))).ToArray();
+            return new IgeEncryptor(aesKey, aesIv);
+        }
+        
+        public IgeEncryptor CreateEncryptorV1(byte[] msgKey, bool fromClient)
+        {
+            var x = fromClient ? 0 : 8;
+            if (RawAuthKey == null)
+            {
+                throw new Exception("AuthKey must be generated first");
+            }
+            
+            var sha1A = SHA1.HashData(msgKey.Concat(RawAuthKey.Skip(x).Take(32)).ToArray());
+            var sha1B = SHA1.HashData(RawAuthKey.Skip(32 + x).Take(16).Concat(msgKey).Concat(RawAuthKey.Skip(48+x).Take(16)).ToArray());
+            var sha1C = SHA1.HashData(RawAuthKey.Skip(64 + x).Take(32).Concat(msgKey).ToArray());
+            var sha1D = SHA1.HashData(msgKey.Concat(RawAuthKey.Skip(96 + x).Take(32)).ToArray());
+
+            var aesKey = sha1A.Take(8).Concat(sha1B.Skip(8).Take(12).Concat(sha1C.Skip(4).Take(12))).ToArray();
+            var aesIv = sha1A.Skip(8).Take(12).Concat(sha1B.Take(8)).Concat(sha1C.Skip(16).Take(4)).Concat(sha1D.Take(8)).ToArray();
             return new IgeEncryptor(aesKey, aesIv);
         }
     }

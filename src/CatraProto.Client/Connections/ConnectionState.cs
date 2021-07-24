@@ -35,13 +35,14 @@ namespace CatraProto.Client.Connections
         {
             SessionIdHandler = new SessionIdHandler();
             PermanentAuthKey = new PermanentAuthKey(Api, _logger);
-            TemporaryAuthKey = new TemporaryAuthKey(Api, SessionIdHandler, PermanentAuthKey, 120, _logger);
             AcknowledgementHandler = new AcknowledgementHandler();
-            SaltHandler = new SaltHandler(Api, TemporaryAuthKey);
             SeqnoHandler = new SeqnoHandler(_logger);
             SessionIdHandler = new SessionIdHandler();
             
             SessionIdHandler.SetSessionId(new Random().Next());
+            TemporaryAuthKey = new TemporaryAuthKey(Api, MessageIdsHandler, SessionIdHandler, PermanentAuthKey, 1000, _logger);
+            SaltHandler = new SaltHandler(Api, TemporaryAuthKey);
+
         }
         
         public void RegisterSerializer(SessionManager manager)

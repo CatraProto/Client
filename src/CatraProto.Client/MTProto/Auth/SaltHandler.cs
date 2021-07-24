@@ -30,8 +30,11 @@ namespace CatraProto.Client.MTProto.Auth
             }
         }
 
-        private void OnAuthKeyChanged(AuthKey authKey)
+        private void OnAuthKeyChanged(AuthKey authKey, bool bindCompleted)
         {
+            //We have already received the AuthKey because the update is sent both on the generation and the binding of the key 
+            if (bindCompleted) return;
+            
             lock (_mutex)
             {
                 _currentServerSalt = authKey.ServerSalt;

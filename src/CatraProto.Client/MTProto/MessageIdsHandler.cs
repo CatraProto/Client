@@ -60,7 +60,7 @@ namespace CatraProto.Client.MTProto
             
             if (messageId % 4 == 0 && fromServer)
             {
-                _logger.Warning("Given message id {Id} is divisible by 4", messageId);
+                _logger.Warning("Given message id {Id} is divisible by 4 but it's been sent from the server", messageId);
                 return false;
             }
 

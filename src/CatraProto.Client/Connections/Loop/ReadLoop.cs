@@ -57,7 +57,7 @@ namespace CatraProto.Client.Connections.Loop
                     }
                     else
                     {
-                        var getAuthKey = await _connection.ConnectionState.TemporaryAuthKey.GetAuthKeyAsync(onlyCached: true);
+                        var getAuthKey = await _connection.ConnectionState.TemporaryAuthKey.GetAuthKeyAsync(forceReturn: true);
                         if (authKeyId == getAuthKey.AuthKeyId)
                         {
                             imported = new EncryptedMessage(getAuthKey, message);

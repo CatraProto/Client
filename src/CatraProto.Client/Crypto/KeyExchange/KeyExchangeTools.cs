@@ -6,7 +6,7 @@ using CatraProto.Client.Extensions;
 
 namespace CatraProto.Client.Crypto.KeyExchange
 {
-    class KeyExchangeTools
+    static class KeyExchangeTools
     {
         public static byte[] ComputeAesKey(BigInteger serverNonce, BigInteger newNonce)
         {

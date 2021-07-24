@@ -21,7 +21,6 @@ namespace CatraProto.Client.MTProto.Auth
             var side = computeServer ? "server" : "client";
             var add = AcknowledgementHandler.IsContentRelated(obj) ? 1 : 0;
             var currentSeqno = computeServer ? ContentRelatedReceived : ContentRelatedSent;
-            var computedNewSeqno = currentSeqno * 2 + add;
             var newSeqno = currentSeqno + add;
 
             if (computeServer)
@@ -32,8 +31,9 @@ namespace CatraProto.Client.MTProto.Auth
             {
                 ContentRelatedSent = newSeqno;
             }
-
-            _logger.Verbose("Computed {Side} seqno for object {Obj}, new value is {NSeqno}", side, obj, computedNewSeqno);
+            
+            var computedNewSeqno = currentSeqno * 2 + add;
+            _logger.Verbose("Computed {Side} seqno for object {Obj}, new value is {NSeqno}, old contentRelated {CRelated}", side, obj, computedNewSeqno, currentSeqno);
             return computedNewSeqno;
         }
     }

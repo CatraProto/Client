@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using CatraProto.Client.MTProto.Rpc.Interfaces;
 
 namespace CatraProto.Client.MTProto.Rpc.Vectors
 {

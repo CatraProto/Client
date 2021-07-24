@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using CatraProto.Client.Async.Locks;
 using CatraProto.Client.MTProto.Messages;
 using CatraProto.Client.MTProto.Rpc;
+using CatraProto.Client.MTProto.Rpc.Interfaces;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL.Interfaces;
 using Serilog;
@@ -124,10 +125,10 @@ namespace CatraProto.Client.Connections
 
             if (container != null)
             {
+                _logger.Information("Received a message of type {Type} in reply to message {Id}", response, messageId);
                 container.RpcContainer.SetResponse(response);
                 container.CancellationTokenRegistration.Unregister();
                 container.CompletionSource.TrySetResult();
-                _logger.Information("Received a message of type {Type} in reply to message {Id}", response, messageId);
             }
             else
             {
