@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Security.Cryptography;
@@ -12,6 +13,12 @@ namespace CatraProto.Client.Crypto
         public static long CreateRandomLong()
         {
             return BitConverter.ToInt64(GenerateRandomBytes(8));
+        }
+
+        public static void AddPadding(Stream stream, int divisibleBy, int minBytes = 0)
+        {
+            stream.Write(GenerateRandomBytes(minBytes));
+            stream.Write(GenerateRandomBytes(divisibleBy - (int)stream.Length % divisibleBy));
         }
         
         public static byte[] XorBlock(byte[] first, byte[] second)
@@ -33,7 +40,7 @@ namespace CatraProto.Client.Crypto
         public static byte[] GenerateRandomBytes(int count)
         {
             var byteArray = new byte[count];
-            _cryptoRandom.GetBytes(byteArray);
+            _cryptoRandom.GetNonZeroBytes(byteArray);
             return byteArray;
         }
         
