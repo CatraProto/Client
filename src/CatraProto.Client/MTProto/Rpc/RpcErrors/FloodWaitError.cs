@@ -5,15 +5,10 @@ namespace CatraProto.Client.MTProto.Rpc.RpcErrors
 {
     public class FloodWaitError : RpcError
     {
-        public override int ErrorCode { get; }
-        public override string ErrorMessage { get; }
         public override string ErrorDescription { get; }
         public TimeSpan WaitTime { get; } = new TimeSpan(-1); 
-        public FloodWaitError(string errorMessage, int errorCode)
+        public FloodWaitError(string errorMessage, int errorCode) : base(errorMessage, errorCode)
         {
-            ErrorMessage = errorMessage;
-            ErrorCode = errorCode;
-            
             if (errorMessage.Length > 10 && int.TryParse(errorMessage[11..], out var waitTime))
             {
                 WaitTime = TimeSpan.FromSeconds(waitTime);

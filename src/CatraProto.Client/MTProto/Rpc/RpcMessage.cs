@@ -22,25 +22,6 @@ namespace CatraProto.Client.MTProto.Rpc
         public RpcError Error { get; private set; }
         public T Response { get; internal set; }
 
-        private static RpcError ParseError(TL.Schemas.MTProto.RpcError error)
-        {
-            switch (error.ErrorMessage)
-            {
-                case "BOT_METHOD_INVALID":
-                    return new BotMethodInvalidError(error.ErrorMessage, error.ErrorCode);
-            }
-
-            if (error.ErrorMessage.Length > 10)
-            {
-                if (error.ErrorMessage[..10] == "FLOOD_WAIT")
-                {
-                    return new FloodWaitError(error.ErrorMessage, error.ErrorCode);
-                }
-            }
-
-            return new UnknownError(error.ErrorMessage, error.ErrorCode);
-        }
-
         public void SetResponse(object o)
         {
             switch (o)
@@ -51,7 +32,7 @@ namespace CatraProto.Client.MTProto.Rpc
                 case null:
                     return;
                 case TL.Schemas.MTProto.RpcError error:
-                    Error = ParseError(error);
+                    Error = RpcError.GetRpcError(error);
                     break;
                 default:
                     Response = (T)o;

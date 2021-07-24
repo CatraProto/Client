@@ -5,14 +5,10 @@ namespace CatraProto.Client.MTProto.Rpc.RpcErrors
 {
     public class UnknownError : RpcError
     {
-        public override int ErrorCode { get; }
-        public override string ErrorMessage { get; }
         public override string ErrorDescription { get => "This RPC error hasn't been documented yet"; }
 
-        public UnknownError(string errorMessage, int errorCode)
+        public UnknownError(string errorMessage, int errorCode) : base(errorMessage, errorCode)
         {
-            ErrorMessage = errorMessage;
-            ErrorCode = errorCode;
         }
         
         public override string ToString()
