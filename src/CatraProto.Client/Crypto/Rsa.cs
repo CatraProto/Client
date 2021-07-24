@@ -67,8 +67,8 @@ namespace CatraProto.Client.Crypto
         public byte[] EncryptData(byte[] data)
         {
             var parameters = _rsaKey.ExportParameters(false);
-            var value = new BigInteger(data.Reverse().ToArray(), true);
-            var modulus = new BigInteger(parameters.Modulus.Reverse().ToArray(), true);
+            var value = BigIntegerTools.UnsignedBigIntFromBytes(data, true);
+            var modulus = BigIntegerTools.UnsignedBigIntFromBytes(parameters.Modulus, true);
             var exponent = new BigInteger(parameters.Exponent);
 
             var byteArray = BigInteger.ModPow(value, exponent, modulus).ToByteArray(isBigEndian: true);

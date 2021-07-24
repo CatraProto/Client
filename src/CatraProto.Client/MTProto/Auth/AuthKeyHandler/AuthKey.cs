@@ -51,7 +51,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
             {
                 var isPermanent = duration <= 0;
                 _logger.Information("Generating auth {Type} key", isPermanent ? "permanent" : "temporary");
-                var nonce = CryptoTools.GenerateBigInt(128);
+                var nonce = BigIntegerTools.GenerateBigInt(128);
                 var reqPq = await _api.MtProtoApi.ReqPqMultiAsync(nonce, cancellationToken);
                 if (!reqPq.RpcCallFailed)
                 {
@@ -70,7 +70,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
                     }
 
                     var (p, q) = CryptoTools.GetFastPq(BitConverter.ToUInt64(pq.Reverse().ToArray()));
-                    var newNonce = CryptoTools.GenerateBigInt(256);
+                    var newNonce = BigIntegerTools.GenerateBigInt(256);
 
                     PQInnerDataBase toHash = isPermanent ? new PQInnerData() : new PQInnerDataTemp { ExpiresIn = duration };
                     toHash.Nonce = nonce;
@@ -109,7 +109,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
                             KeyExchangeChecks.CheckNonce(serverDhInnerData.ServerNonce, serverNonce);
 
                             var zeroByte = new byte[] { 0x00 };
-                            var b = CryptoTools.GenerateBigInt(2048, true, true);
+                            var b = BigIntegerTools.GenerateBigInt(2048, true, true);
                             var dhPrime = new BigInteger(zeroByte.Concat(serverDhInnerData.DhPrime).ToArray(), isBigEndian: true);
                             var gbMod = BigInteger
                                 .ModPow(serverDhInnerData.G, b, dhPrime)

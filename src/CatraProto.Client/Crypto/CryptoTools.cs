@@ -10,6 +10,7 @@ namespace CatraProto.Client.Crypto
     static class CryptoTools
     {
         private static RandomNumberGenerator _cryptoRandom = new RNGCryptoServiceProvider();
+
         public static long CreateRandomLong()
         {
             return BitConverter.ToInt64(GenerateRandomBytes(8));
@@ -20,7 +21,7 @@ namespace CatraProto.Client.Crypto
             stream.Write(GenerateRandomBytes(minBytes));
             stream.Write(GenerateRandomBytes(divisibleBy - (int)stream.Length % divisibleBy));
         }
-        
+
         public static byte[] XorBlock(byte[] first, byte[] second)
         {
             if (first.Length != second.Length)
@@ -37,25 +38,6 @@ namespace CatraProto.Client.Crypto
             return output;
         }
 
-        public static byte[] GenerateRandomBytes(int count)
-        {
-            var byteArray = new byte[count];
-            _cryptoRandom.GetNonZeroBytes(byteArray);
-            return byteArray;
-        }
-        
-        public static BigInteger GenerateBigInt(int size, bool unsigned = false, bool isBigEndian = false)
-        {
-            var buffer = GenerateRandomBytes(size / 8);
-            if (unsigned)
-            {
-                var zeroByte = new byte[] { 0x00 };
-                buffer = isBigEndian ? zeroByte.Concat(buffer).ToArray() : buffer.Concat(zeroByte).ToArray();
-            }
-            
-            return new BigInteger(buffer, false, isBigEndian);
-        }
-
         public static Tuple<byte[], byte[]> GetFastPq(ulong pq)
         {
             var first = FastFactor((long)pq);
@@ -63,21 +45,7 @@ namespace CatraProto.Client.Crypto
 
             var transformedFirst = RemoveFirstBytes(BitConverter.GetBytes(first).Reverse().ToArray());
             var transformedSecond = RemoveFirstBytes(BitConverter.GetBytes(second).Reverse().ToArray());
-            return first < second
-                ? new Tuple<byte[], byte[]>(transformedFirst, transformedSecond)
-                : new Tuple<byte[], byte[]>(transformedSecond, transformedFirst);
-        }
-
-        public static byte[] RemoveFirstBytes(byte[] array)
-        {
-            var result = new List<byte>(array);
-
-            while (result.Count > 0 && result[0] == 0x00)
-            {
-                result.RemoveAt(0);
-            }
-
-            return result.ToArray();
+            return first < second ? new Tuple<byte[], byte[]>(transformedFirst, transformedSecond) : new Tuple<byte[], byte[]>(transformedSecond, transformedFirst);
         }
 
         //https://github.com/UnigramDev/Unigram/blob/cd8ddb40bffd427fd9bc3fa6f2b99608e2118124/Unigram/Unigram.Api/Helpers/Utils.cs#L244
@@ -167,6 +135,25 @@ namespace CatraProto.Client.Crypto
 
             var p = what / g;
             return Math.Min(p, g);
+        }
+
+        public static byte[] GenerateRandomBytes(int count)
+        {
+            var byteArray = new byte[count];
+            CryptoTools._cryptoRandom.GetNonZeroBytes(byteArray);
+            return byteArray;
+        }
+
+        public static byte[] RemoveFirstBytes(byte[] array)
+        {
+            var result = new List<byte>(array);
+
+            while (result.Count > 0 && result[0] == 0x00)
+            {
+                result.RemoveAt(0);
+            }
+
+            return result.ToArray();
         }
     }
 }
