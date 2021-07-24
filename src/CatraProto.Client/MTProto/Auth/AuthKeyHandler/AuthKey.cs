@@ -52,7 +52,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
                 var isPermanent = duration <= 0;
                 _logger.Information("Generating auth {Type} key", isPermanent ? "permanent" : "temporary");
                 var nonce = BigIntegerTools.GenerateBigInt(128);
-                var reqPq = await _api.MtProtoApi.ReqPqMultiAsync(nonce, cancellationToken);
+                var reqPq = await _api.MtProtoApi.ReqPqMultiAsync(nonce, cancellationToken: cancellationToken);
                 if (!reqPq.RpcCallFailed)
                 {
                     KeyExchangeChecks.CheckNonce(nonce, reqPq.Response.Nonce);
@@ -85,8 +85,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
                     rsaKey.Dispose();
 
                     _logger.Information("Sending ReqDHParams request...");
-                    var reqDh = await _api.MtProtoApi.ReqDHParamsAsync(nonce, serverNonce, p, q, foundKey, encryptedData,
-                        cancellationToken);
+                    var reqDh = await _api.MtProtoApi.ReqDHParamsAsync(nonce, serverNonce, p, q, foundKey, encryptedData, cancellationToken: cancellationToken);
                     if (!reqDh.RpcCallFailed)
                     {
                         if (reqDh.Response is ServerDHParamsOk ok)
@@ -125,7 +124,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
                             var encryptedInnerData = igeEncryptor.Encrypt(hashedPadding);
                 
                             _logger.Information("gbMod computed, sending setClientDHParams...");
-                            var setDhClient = await _api.MtProtoApi.SetClientDHParamsAsync(nonce, serverNonce, encryptedInnerData, cancellationToken);
+                            var setDhClient = await _api.MtProtoApi.SetClientDHParamsAsync(nonce, serverNonce, encryptedInnerData, cancellationToken: cancellationToken);
                             if (!setDhClient.RpcCallFailed)
                             {
                                 if (setDhClient.Response is DhGenOk dhGenOk)
