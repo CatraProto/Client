@@ -4,5 +4,6 @@ namespace CatraProto.Client.MTProto.Messages
     {
         public AwaiterType AwaiterType { get; set; }
         public long SendWithMessageId { get; set; }
+        
     }
 }

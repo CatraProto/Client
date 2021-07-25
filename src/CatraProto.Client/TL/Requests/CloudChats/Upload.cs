@@ -20,7 +20,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 	        
 	    }
 	    
-	    		public async Task<RpcMessage<bool>> SaveFilePartAsync(long fileId, int filePart, byte[] bytes, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
+	    		public async Task<RpcMessage<bool>> SaveFilePartAsync(long fileId, int filePart, byte[] bytes, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			if(bytes is null) throw new ArgumentNullException(nameof(bytes));
 
@@ -37,11 +37,11 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions
+, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Upload.FileBase>> GetFileAsync(CatraProto.Client.TL.Schemas.CloudChats.InputFileLocationBase location, int offset, int limit, bool precise = true, bool cdnSupported = true, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Upload.FileBase>> GetFileAsync(CatraProto.Client.TL.Schemas.CloudChats.InputFileLocationBase location, int offset, int limit, bool precise = true, bool cdnSupported = true, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			if(location is null) throw new ArgumentNullException(nameof(location));
 
@@ -60,11 +60,11 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions
+, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<bool>> SaveBigFilePartAsync(long fileId, int filePart, int fileTotalParts, byte[] bytes, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<bool>> SaveBigFilePartAsync(long fileId, int filePart, int fileTotalParts, byte[] bytes, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			if(bytes is null) throw new ArgumentNullException(nameof(bytes));
 
@@ -82,11 +82,11 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions
+, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Upload.WebFileBase>> GetWebFileAsync(CatraProto.Client.TL.Schemas.CloudChats.InputWebFileLocationBase location, int offset, int limit, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Upload.WebFileBase>> GetWebFileAsync(CatraProto.Client.TL.Schemas.CloudChats.InputWebFileLocationBase location, int offset, int limit, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			if(location is null) throw new ArgumentNullException(nameof(location));
 
@@ -103,11 +103,11 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions
+, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Upload.CdnFileBase>> GetCdnFileAsync(byte[] fileToken, int offset, int limit, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Upload.CdnFileBase>> GetCdnFileAsync(byte[] fileToken, int offset, int limit, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			if(fileToken is null) throw new ArgumentNullException(nameof(fileToken));
 
@@ -124,11 +124,11 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions
+, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>>> ReuploadCdnFileAsync(byte[] fileToken, byte[] requestToken, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>>> ReuploadCdnFileAsync(byte[] fileToken, byte[] requestToken, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			if(fileToken is null) throw new ArgumentNullException(nameof(fileToken));
 if(requestToken is null) throw new ArgumentNullException(nameof(requestToken));
@@ -146,11 +146,11 @@ if(requestToken is null) throw new ArgumentNullException(nameof(requestToken));
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions
+, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>>> GetCdnFileHashesAsync(byte[] fileToken, int offset, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>>> GetCdnFileHashesAsync(byte[] fileToken, int offset, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			if(fileToken is null) throw new ArgumentNullException(nameof(fileToken));
 
@@ -167,11 +167,11 @@ if(requestToken is null) throw new ArgumentNullException(nameof(requestToken));
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions
+, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>>> GetFileHashesAsync(CatraProto.Client.TL.Schemas.CloudChats.InputFileLocationBase location, int offset, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>>> GetFileHashesAsync(CatraProto.Client.TL.Schemas.CloudChats.InputFileLocationBase location, int offset, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			if(location is null) throw new ArgumentNullException(nameof(location));
 
@@ -188,7 +188,7 @@ if(requestToken is null) throw new ArgumentNullException(nameof(requestToken));
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions
+, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
 				}, rpcResponse);
 			return rpcResponse;
 		}

@@ -20,7 +20,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 	        
 	    }
 	    
-	    		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.LangPackDifferenceBase>> GetLangPackAsync(string langPack, string langCode, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
+	    		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.LangPackDifferenceBase>> GetLangPackAsync(string langPack, string langCode, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			if(langPack is null) throw new ArgumentNullException(nameof(langPack));
 if(langCode is null) throw new ArgumentNullException(nameof(langCode));
@@ -37,11 +37,11 @@ if(langCode is null) throw new ArgumentNullException(nameof(langCode));
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions
+, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.LangPackStringBase>>> GetStringsAsync(string langPack, string langCode, IList<string> keys, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.LangPackStringBase>>> GetStringsAsync(string langPack, string langCode, IList<string> keys, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			if(langPack is null) throw new ArgumentNullException(nameof(langPack));
 if(langCode is null) throw new ArgumentNullException(nameof(langCode));
@@ -61,11 +61,11 @@ if(keys is null) throw new ArgumentNullException(nameof(keys));
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions
+, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.LangPackDifferenceBase>> GetDifferenceAsync(string langPack, string langCode, int fromVersion, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.LangPackDifferenceBase>> GetDifferenceAsync(string langPack, string langCode, int fromVersion, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			if(langPack is null) throw new ArgumentNullException(nameof(langPack));
 if(langCode is null) throw new ArgumentNullException(nameof(langCode));
@@ -83,11 +83,11 @@ if(langCode is null) throw new ArgumentNullException(nameof(langCode));
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions
+, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.LangPackLanguageBase>>> GetLanguagesAsync(string langPack, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.LangPackLanguageBase>>> GetLanguagesAsync(string langPack, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			if(langPack is null) throw new ArgumentNullException(nameof(langPack));
 
@@ -103,11 +103,11 @@ if(langCode is null) throw new ArgumentNullException(nameof(langCode));
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions
+, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
 				}, rpcResponse);
 			return rpcResponse;
 		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.LangPackLanguageBase>> GetLanguageAsync(string langPack, string langCode, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)
+		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.LangPackLanguageBase>> GetLanguageAsync(string langPack, string langCode, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			if(langPack is null) throw new ArgumentNullException(nameof(langPack));
 if(langCode is null) throw new ArgumentNullException(nameof(langCode));
@@ -124,7 +124,7 @@ if(langCode is null) throw new ArgumentNullException(nameof(langCode));
 					Body = methodBody,
 					CancellationToken = cancellationToken,
 					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions
+, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
 				}, rpcResponse);
 			return rpcResponse;
 		}

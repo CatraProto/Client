@@ -7,8 +7,6 @@ namespace CatraProto.Client.MTProto.Containers
 {
     class ContainerMessage : IObject
     {
-
-
         public static int ConstructorId { get; } = 0;
         public MessageContainer MessageContainer { get; set; }
         public long MsgId { get; set; }

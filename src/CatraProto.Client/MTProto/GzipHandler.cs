@@ -25,7 +25,6 @@ namespace CatraProto.Client.MTProto
             return reader.Read<IObject>();
         }
         
-        
         public static byte[] FromBytes(byte[] original)
         {
             if (original.Length <= 255)

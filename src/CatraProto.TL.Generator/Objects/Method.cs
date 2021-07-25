@@ -54,7 +54,7 @@ namespace CatraProto.TL.Generator.Objects
             }
 
             var comma = args.Length == 0 ? "" : ",";
-            builder.AppendLine($"{StringTools.TwoTabs}public async Task<RpcMessage<{returnType}>> {NamingInfo.PascalCaseName}Async({args}{comma} CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = default, CancellationToken cancellationToken = default)\n{StringTools.TwoTabs}{{");
+            builder.AppendLine($"{StringTools.TwoTabs}public async Task<RpcMessage<{returnType}>> {NamingInfo.PascalCaseName}Async({args}{comma} CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)\n{StringTools.TwoTabs}{{");
             builder.AppendLine($"{StringTools.ThreeTabs}{nullPolicies}");
             builder.AppendLine($"{StringTools.ThreeTabs}var rpcResponse = new RpcMessage<{returnType}>();");
             if (ReturnsVector)
@@ -71,7 +71,7 @@ namespace CatraProto.TL.Generator.Objects
             builder.AppendLine($"{StringTools.ThreeTabs}}};");
             builder.AppendLine();
             builder.AppendLine(
-                $"{StringTools.ThreeTabs}await await _messagesHandler.EnqueueMessage(new OutgoingMessage\n{StringTools.FourTabs}{{\n{StringTools.FiveTabs}Body = methodBody,\n{StringTools.FiveTabs}CancellationToken = cancellationToken,\n{StringTools.FiveTabs}IsEncrypted = {(MethodCompletionType == MethodCompletionType.ReturnsUnencrypted ? "false" : "true")}\n, MessageSendingOptions = messageSendingOptions\n{StringTools.FourTabs}}}, rpcResponse);");
+                $"{StringTools.ThreeTabs}await await _messagesHandler.EnqueueMessage(new OutgoingMessage\n{StringTools.FourTabs}{{\n{StringTools.FiveTabs}Body = methodBody,\n{StringTools.FiveTabs}CancellationToken = cancellationToken,\n{StringTools.FiveTabs}IsEncrypted = {(MethodCompletionType == MethodCompletionType.ReturnsUnencrypted ? "false" : "true")}\n, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()\n{StringTools.FourTabs}}}, rpcResponse);");
             builder.AppendLine($"{StringTools.ThreeTabs}return rpcResponse;");
             builder.AppendLine($"{StringTools.TwoTabs}}}");
         }
