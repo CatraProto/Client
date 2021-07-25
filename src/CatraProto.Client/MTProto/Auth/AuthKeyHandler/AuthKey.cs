@@ -129,9 +129,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
                             {
                                 if (setDhClient.Response is DhGenOk dhGenOk)
                                 {
-                                    _logger.Information("Received dhGenOk checking nonce ({SSNonce} == {Nonce}) and serverNonce ({SSSNonce} == {SNonce})",
-                                        dhGenOk.Nonce,
-                                        nonce, dhGenOk.ServerNonce, serverNonce);
+                                    _logger.Information("Received dhGenOk checking nonce ({SSNonce} == {Nonce}) and serverNonce ({SSSNonce} == {SNonce})", dhGenOk.Nonce, nonce, dhGenOk.ServerNonce, serverNonce);
                                     KeyExchangeChecks.CheckNonce(dhGenOk.Nonce, nonce);
                                     KeyExchangeChecks.CheckNonce(dhGenOk.ServerNonce, serverNonce);
                                     
