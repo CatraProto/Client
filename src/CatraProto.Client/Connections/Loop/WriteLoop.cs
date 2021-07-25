@@ -114,21 +114,8 @@ namespace CatraProto.Client.Connections.Loop
                     //then resetting it
                     if (pendingMessages.Count > 0 && _encryptedTask == null)
                     {
-                        var newList = new List<MessageContainer>();
-                        var ack = _connectionState.AcknowledgementHandler.GetAckMessage();
-                        if (ack != null)
-                        {
-                            newList.Add(new MessageContainer()
-                            {
-                                OutgoingMessage = new OutgoingMessage()
-                                {
-                                    IsEncrypted = true,
-                                    Body = ack
-                                }
-                            });
-                        }
-
-                        _encryptedTask = SendEncryptedMessages(newList.Concat(pendingMessages).ToList());
+                        var acks = _connectionState.AcknowledgementHandler.GetAckMessages();
+                        _encryptedTask = SendEncryptedMessages(acks.Concat(pendingMessages).ToList());
                         pendingMessages.Clear();
                     }
                 }

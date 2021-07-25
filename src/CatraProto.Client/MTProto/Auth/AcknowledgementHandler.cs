@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using CatraProto.Client.Async.Signalers;
 using CatraProto.Client.Connections;
+using CatraProto.Client.MTProto.Messages;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL.Interfaces;
 
@@ -11,22 +12,7 @@ namespace CatraProto.Client.MTProto.Auth
     class AcknowledgementHandler
     {
         private List<long> _toAcknowledge = new List<long>();
-        private List<long> _mustReceiveAcknowledge = new List<long>();
-
-        public void AddWaitAck(long messageId)
-        {
-            _mustReceiveAcknowledge.Add(messageId);
-        }
-
-        public bool WaitingAck(long messageId)
-        {
-            return _mustReceiveAcknowledge.Remove(messageId);
-        }
-        
-        public void AddToAck(long messageId)
-        {
-            _toAcknowledge.Add(messageId);
-        }
+        private List<long> _waitingForAck = new List<long>();
 
         public MsgsAck GetAckMessage()
         {
@@ -46,6 +32,45 @@ namespace CatraProto.Client.MTProto.Auth
             {
                 MsgIds = newList
             };
+        }
+
+        public List<MessageContainer> GetAckMessages()
+        {
+            var result = new List<MessageContainer>();
+            while (true)
+            {
+                var ack = GetAckMessage();
+                if (ack == null)
+                {
+                    break;
+                }
+
+                result.Add(new MessageContainer
+                {
+                    OutgoingMessage = new OutgoingMessage()
+                    {
+                        IsEncrypted = true,
+                        Body = ack
+                    }
+                });
+            }
+
+            return result;
+        }
+        
+        public void AddWaitAck(long messageId)
+        {
+            _waitingForAck.Add(messageId);
+        }
+
+        public bool SetAsReceived(long messageId)
+        {
+            return _waitingForAck.Remove(messageId);
+        }
+        
+        public void AddToAck(long messageId)
+        {
+            _toAcknowledge.Add(messageId);
         }
         
         public static bool IsContentRelated(IObject obj)
