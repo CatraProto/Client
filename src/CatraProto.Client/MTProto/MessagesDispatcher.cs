@@ -138,7 +138,6 @@ namespace CatraProto.Client.MTProto
             _connectionState.SaltHandler.SetSalt(newSessionCreated.ServerSalt);
             _connectionState.SessionIdHandler.SetSessionId(sessionId);
             _connectionState.SeqnoHandler.ContentRelatedReceived = 0;
-            _connectionState.SeqnoHandler.ContentRelatedSent = 0;
             _logger.Information("New session created, new server salt {Salt}, new SessionId {SessionId}", newSessionCreated.ServerSalt, sessionId);
         }
         
@@ -178,21 +177,27 @@ namespace CatraProto.Client.MTProto
                             {
                                 AccessHash = ((User)updates.Users[0]).AccessHash.Value,
                                 UserId = updates.Users[0].Id
-                            }, "This is a reply", randomInt, replyToMsgId: update.Message.Id)
-                                .ContinueWith(x =>
-                                {
-                                    if (x.Result.RpcCallFailed)
-                                    {
-                                        JsonSerializer.Serialize(x.Result.Error);
-                                    }
-                                }, TaskContinuationOptions.OnlyOnRanToCompletion);
-                            _ = _connectionState.Api.CloudChatsApi.Users.GetUsersAsync(new List<InputUserBase>(){new InputUser()
+                            }, "This is a reply", randomInt, replyToMsgId: update.Message.Id).ContinueWith(x =>
                             {
-                                AccessHash = ((User)updates.Users[0]).AccessHash.Value,
-                                UserId = ((User)updates.Users[0]).Id
-                            }}).ContinueWith(x => _logger.Information(JsonSerializer.Serialize<object>(x.Result.Response), TaskContinuationOptions
-                            .OnlyOnRanToCompletion));
+                                if (x.Result.RpcCallFailed)
+                                {
+                                    JsonSerializer.Serialize(x.Result.Error);
+                                }
+                            }, TaskContinuationOptions.OnlyOnRanToCompletion);
+                            _ = _connectionState.Api.CloudChatsApi.Users.GetUsersAsync(new List<InputUserBase>()
+                            {
+                                new InputUser()
+                                {
+                                    AccessHash = ((User)updates.Users[0]).AccessHash.Value,
+                                    UserId = ((User)updates.Users[0]).Id
+                                }
+                            }).ContinueWith(x => _logger.Information(JsonSerializer.Serialize<object>(x.Result.Response), TaskContinuationOptions.OnlyOnRanToCompletion));
                         }
+                    }
+                    else
+                    {
+                        _logger.Information($"Couldn't handle message of type {obj}");
+                        _logger.Information(JsonSerializer.Serialize(obj));
                     }
 
                     break;
