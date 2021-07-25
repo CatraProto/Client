@@ -56,7 +56,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
 
                 if (_generationTask.IsCompleted)
                 {
-                    if (DateTimeOffset.Now.ToUnixTimeSeconds() - _expiresAt < _duration)
+                    if (DateTimeOffset.Now.ToUnixTimeSeconds() - _expiresAt >= _duration)
                     {
                         return _generationTask = InternalGetAuthKey(token);
                     }
