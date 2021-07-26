@@ -153,10 +153,11 @@ namespace CatraProto.Client.Connections.Loop
         private async Task SendEncryptedMessages(List<MessageContainer> messages, bool forceAuthKey = false)
         {
             await _connection.StateSignaler.WaitSignal();
+            var authKey = await _connection.ConnectionState.TemporaryAuthKey.GetAuthKeyAsync(forceReturn: forceAuthKey);
+            
             byte[] body;
             int seqno;
             long messageId;
-
             if (messages.Count == 1)
             {
                 if (!SocketTools.TrySerialize(messages[0], _logger, out body))
@@ -182,7 +183,6 @@ namespace CatraProto.Client.Connections.Loop
                 }
             }
 
-            var authKey = await _connection.ConnectionState.TemporaryAuthKey.GetAuthKeyAsync(forceReturn: forceAuthKey);
             var encryptedMessage = new EncryptedMessage(authKey)
             {
                 AuthKeyId = authKey.AuthKeyId,
