@@ -50,7 +50,8 @@ namespace CatraProto.Client.MTProto.Auth
                     OutgoingMessage = new OutgoingMessage()
                     {
                         IsEncrypted = true,
-                        Body = ack
+                        Body = ack,
+                        MessageSendingOptions = new MessageSendingOptions()
                     }
                 });
             }
@@ -72,7 +73,7 @@ namespace CatraProto.Client.MTProto.Auth
         {
             _toAcknowledge.Add(messageId);
         }
-        
+
         public static bool IsContentRelated(IObject obj)
         {
             switch (obj)

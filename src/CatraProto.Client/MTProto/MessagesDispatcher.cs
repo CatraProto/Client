@@ -52,7 +52,7 @@ namespace CatraProto.Client.MTProto
             try
             {
                 var deserialized = reader.Read<IObject>();
-                
+
                 _logger.Information("Handling message of type {T}", deserialized);
                 if (message.AuthKeyId != 0)
                 {
@@ -62,7 +62,7 @@ namespace CatraProto.Client.MTProto
                         reader = new Reader(MergedProvider.Singleton, GzipHandler.ReadGzipPacket(gzipPacked.PackedData));
                         deserialized = reader.Read<IObject>();
                     }
-                    
+
                     if (CheckMessageValidity((EncryptedMessage)message, deserialized))
                     {
                         HandleObject(deserialized, reader, message.AuthKeyId == 0);
@@ -72,6 +72,7 @@ namespace CatraProto.Client.MTProto
                 {
                     HandleObject(deserialized, reader, message.AuthKeyId == 0);
                 }
+
                 reader.Dispose();
             }
             catch (DeserializationException e)
@@ -111,12 +112,12 @@ namespace CatraProto.Client.MTProto
             {
                 HandleNewSessionCreation(newSessionCreated, message.SessionId);
             }
-            
+
             if (!_connectionState.MessageIdsHandler.CheckMessageId(message.MessageId))
             {
                 return false;
             }
-            
+
             var salt = _connectionState.SaltHandler.GetSalt();
             if (salt != message.Salt)
             {
@@ -129,7 +130,11 @@ namespace CatraProto.Client.MTProto
             {
                 _logger.Warning("Received seqno {RSeqno} does not equal computed seqno {CSeqno} ({Obj})", message.SeqNo, shouldSeqno, serialized);
             }
-            
+
+            if (message.AuthKeyId != 0)
+            {
+                _connectionState.AcknowledgementHandler.AddToAck(message.MessageId);
+            }
             return true;
         }
 
@@ -141,12 +146,12 @@ namespace CatraProto.Client.MTProto
                 _logger.Warning("Received new session created but the id is the same as the old one, new server salt {Salt}, new SessionId {SessionId}", newSessionCreated.ServerSalt, sessionId);
                 return;
             }
-            
+
             _connectionState.SessionIdHandler.SetSessionId(sessionId);
             _connectionState.SeqnoHandler.ContentRelatedReceived = 0;
             _logger.Information("New session created, new server salt {Salt}, new SessionId {SessionId}", newSessionCreated.ServerSalt, sessionId);
         }
-        
+
         private void HandleObject(IObject obj, Reader reader, bool isUnencrypted)
         {
             switch (obj)
@@ -179,7 +184,7 @@ namespace CatraProto.Client.MTProto
                         {
                             var update = (UpdateNewMessage)updates.Updates[i];
                             var randomInt = random.Next();
-                            _ = _connectionState.Api.CloudChatsApi.Messages.SendMessageAsync(new InputPeerUser()
+                            _ = _connectionState.Api.CloudChatsApi.Messages.SendMessageAsync(new InputPeerUser
                             {
                                 AccessHash = ((User)updates.Users[0]).AccessHash.Value,
                                 UserId = updates.Users[0].Id
@@ -190,19 +195,8 @@ namespace CatraProto.Client.MTProto
                                     JsonSerializer.Serialize(x.Result.Error);
                                 }
                             }, TaskContinuationOptions.OnlyOnRanToCompletion);
-                            _ = _connectionState.Api.CloudChatsApi.Users.GetUsersAsync(new List<InputUserBase>()
-                            {
-                                new InputUser()
-                                {
-                                    AccessHash = ((User)updates.Users[0]).AccessHash.Value,
-                                    UserId = ((User)updates.Users[0]).Id
-                                }
-                            }).ContinueWith(x => _logger.Information(JsonSerializer.Serialize(x.Result.Response.Cast<object>().ToList()), 
-                            TaskContinuationOptions
-                            .OnlyOnRanToCompletion));
                         }
                     }
-
                     break;
             }
         }
@@ -224,7 +218,6 @@ namespace CatraProto.Client.MTProto
         {
             _logger.Information("Handling rpc message in response to id {Id}", rpcObject.MessageId);
             _connectionState.MessagesHandler.SetMessageResult(rpcObject.MessageId, rpcObject.Response);
-
         }
     }
 }
