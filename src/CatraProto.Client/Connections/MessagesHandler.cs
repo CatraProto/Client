@@ -20,7 +20,7 @@ namespace CatraProto.Client.Connections
         {
             get => OutgoingMessages.Reader.Count;
         }
-        
+
         public Channel<MessageContainer> OutgoingMessages { get; } = Channel.CreateUnbounded<MessageContainer>();
         private readonly ILogger _logger;
         private MessageContainer _oldMessage;
@@ -63,7 +63,7 @@ namespace CatraProto.Client.Connections
                             if (!_oldMessage.CompletionSource.Task.IsCompletedSuccessfully)
                             {
                                 _logger.Information("The old message got cancelled, proceeding to enqueue...");
-                            } 
+                            }
                         }
                     }
 
@@ -74,14 +74,12 @@ namespace CatraProto.Client.Connections
             if (message.CancellationToken.IsCancellationRequested)
             {
                 //This is because the registration doesn't get called if the token is already cancelled
-                _logger.Information(
-                    "Cancellation of the message got requested just before registering a callback, cancelling...");
+                _logger.Information("Cancellation of the message got requested just before registering a callback, cancelling...");
                 DequeueMessage(messageContainer, message.CancellationToken);
                 return Task.FromCanceled(message.CancellationToken);
             }
 
-            messageContainer.CancellationTokenRegistration =
-                message.CancellationToken.Register(() => DequeueMessage(messageContainer, message.CancellationToken));
+            messageContainer.CancellationTokenRegistration = message.CancellationToken.Register(() => DequeueMessage(messageContainer, message.CancellationToken));
             OutgoingMessages.Writer.TryWrite(messageContainer);
             _logger.Information("{Type} message enqueued successfully", message.IsEncrypted ? "Encrypted" : "Unencrypted");
             if (message.MessageSendingOptions.AwaiterType == AwaiterType.WhenScheduled)
@@ -94,9 +92,7 @@ namespace CatraProto.Client.Connections
 
         public void DequeueMessage(MessageContainer message, CancellationToken? token = null)
         {
-            _logger.Information(
-                "Dequeuing message {Message}, IsEncrypted: {Encrypted}, CancellationRequested: {Requested}",
-                message.OutgoingMessage.Body, message.OutgoingMessage.IsEncrypted, token != null);
+            _logger.Information("Dequeuing message {Message}, IsEncrypted: {Encrypted}, CancellationRequested: {Requested}", message.OutgoingMessage.Body, message.OutgoingMessage.IsEncrypted, token != null);
             message.CancellationTokenRegistration.Unregister();
             if (token != null)
             {
@@ -138,7 +134,7 @@ namespace CatraProto.Client.Connections
 
             return true;
         }
-        
+
         public bool AddSentMessage(long messageId, MessageContainer message)
         {
             return _sentMessages.TryAdd(messageId, message);

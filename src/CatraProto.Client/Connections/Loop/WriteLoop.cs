@@ -153,54 +153,47 @@ namespace CatraProto.Client.Connections.Loop
         private async Task SendEncryptedMessages(List<MessageContainer> messages, bool forceAuthKey = false)
         {
             await _connection.StateSignaler.WaitSignal();
+            byte[] body;
+            int seqno;
+            long messageId;
+
             if (messages.Count == 1)
             {
-                if (!SocketTools.TrySerialize(messages[0], _logger, out var requestBody))
+                if (!SocketTools.TrySerialize(messages[0], _logger, out body))
                 {
                     return;
                 }
 
-                var authKey = await _connection.ConnectionState.TemporaryAuthKey.GetAuthKeyAsync(forceReturn: forceAuthKey);
-                var messageId = messages[0].OutgoingMessage.MessageSendingOptions.SendWithMessageId != 0
-                    ? messages[0].OutgoingMessage.MessageSendingOptions.SendWithMessageId
-                    : _connectionState.MessageIdsHandler.ComputeMessageId();
-                var encryptedMessage = new EncryptedMessage(authKey)
-                {
-                    AuthKeyId = authKey.AuthKeyId,
-                    Salt = _connection.ConnectionState.SaltHandler.GetSalt(),
-                    SessionId = _connection.ConnectionState.SessionIdHandler.GetSessionId(),
-                    MessageId = messageId,
-                    SeqNo = _connection.ConnectionState.SeqnoHandler.ComputeSeqno(messages[0].OutgoingMessage.Body),
-                    Body = requestBody,
-                };
-
-                _connectionState.MessagesHandler.AddSentMessage(encryptedMessage.MessageId, messages[0]);
-                await _connection.Protocol.Writer.SendWithTimeoutAsync(encryptedMessage.Export(), _logger);
+                messageId = messages[0].OutgoingMessage.MessageSendingOptions.SendWithMessageId != 0 ? messages[0].OutgoingMessage.MessageSendingOptions.SendWithMessageId : _connectionState.MessageIdsHandler.ComputeMessageId();
+                seqno = _connectionState.SeqnoHandler.ComputeSeqno(messages[0].OutgoingMessage.Body);
+                _connectionState.MessagesHandler.AddSentMessage(messageId, messages[0]);
             }
             else
             {
                 var writer = new ContainersWriter(_logger);
                 writer.CreateContainer(messages, _connectionState);
-                var authKey = await _connection.ConnectionState.TemporaryAuthKey.GetAuthKeyAsync();
-                var encryptedMessage = new EncryptedMessage(authKey)
-                {
-                    AuthKeyId = authKey.AuthKeyId,
-                    Salt = _connection.ConnectionState.SaltHandler.GetSalt(),
-                    SessionId = _connection.ConnectionState.SessionIdHandler.GetSessionId(),
-                    MessageId = _connection.ConnectionState.MessageIdsHandler.ComputeMessageId(),
-                    SeqNo = _connection.ConnectionState.SeqnoHandler.ContentRelatedSent * 2,
-                    Body = writer.SerializedContainer,
-                };
-
-                _logger.Information("Container {Id}", encryptedMessage.MessageId);
+                body = writer.SerializedContainer;
+                messageId = _connectionState.MessageIdsHandler.ComputeMessageId();
+                seqno = _connectionState.SeqnoHandler.ContentRelatedSent * 2;
+                
                 for (var i = 0; i < writer.Messages.Count; i++)
                 {
-                    _logger.Information("Adding {Id}", writer.Messages[i].MsgId);
                     _connectionState.MessagesHandler.AddSentMessage(writer.Messages[i].MsgId, writer.MessageContainers[i]);
                 }
-
-                await _connection.Protocol.Writer.SendWithTimeoutAsync(encryptedMessage.Export(), _logger);
             }
+
+            var authKey = await _connection.ConnectionState.TemporaryAuthKey.GetAuthKeyAsync(forceReturn: forceAuthKey);
+            var encryptedMessage = new EncryptedMessage(authKey)
+            {
+                AuthKeyId = authKey.AuthKeyId,
+                Salt = _connection.ConnectionState.SaltHandler.GetSalt(),
+                SessionId = _connection.ConnectionState.SessionIdHandler.GetSessionId(),
+                MessageId = messageId,
+                SeqNo = seqno,
+                Body = body,
+            };
+            
+            await _connection.Protocol.Writer.SendWithTimeoutAsync(encryptedMessage.Export(), _logger);
         }
 
         protected override void StopSignal()

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections;
@@ -127,7 +128,6 @@ namespace CatraProto.Client.MTProto
             if (shouldSeqno != message.SeqNo)
             {
                 _logger.Warning("Received seqno {RSeqno} does not equal computed seqno {CSeqno} ({Obj})", message.SeqNo, shouldSeqno, serialized);
-                //return false;
             }
             
             return true;
@@ -136,6 +136,12 @@ namespace CatraProto.Client.MTProto
         private void HandleNewSessionCreation(NewSessionCreated newSessionCreated, long sessionId)
         {
             _connectionState.SaltHandler.SetSalt(newSessionCreated.ServerSalt);
+            if (_connectionState.SessionIdHandler.GetSessionId() == sessionId)
+            {
+                _logger.Warning("Received new session created but the id is the same as the old one, new server salt {Salt}, new SessionId {SessionId}", newSessionCreated.ServerSalt, sessionId);
+                return;
+            }
+            
             _connectionState.SessionIdHandler.SetSessionId(sessionId);
             _connectionState.SeqnoHandler.ContentRelatedReceived = 0;
             _logger.Information("New session created, new server salt {Salt}, new SessionId {SessionId}", newSessionCreated.ServerSalt, sessionId);
@@ -191,13 +197,10 @@ namespace CatraProto.Client.MTProto
                                     AccessHash = ((User)updates.Users[0]).AccessHash.Value,
                                     UserId = ((User)updates.Users[0]).Id
                                 }
-                            }).ContinueWith(x => _logger.Information(JsonSerializer.Serialize<object>(x.Result.Response), TaskContinuationOptions.OnlyOnRanToCompletion));
+                            }).ContinueWith(x => _logger.Information(JsonSerializer.Serialize(x.Result.Response.Cast<object>().ToList()), 
+                            TaskContinuationOptions
+                            .OnlyOnRanToCompletion));
                         }
-                    }
-                    else
-                    {
-                        _logger.Information($"Couldn't handle message of type {obj}");
-                        _logger.Information(JsonSerializer.Serialize(obj));
                     }
 
                     break;
