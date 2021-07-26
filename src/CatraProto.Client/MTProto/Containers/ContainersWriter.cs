@@ -76,7 +76,7 @@ namespace CatraProto.Client.MTProto.Containers
             }
             
             SaveContainer();
-            _logger.Information("Created a container of {Count} messages and size {Size}", Messages.Count, SerializedContainer.Length);
+            _logger.Information("Created a container of {Count} messages and size {Size}bytes", Messages.Count, SerializedContainer.Length);
         }
     }
 }

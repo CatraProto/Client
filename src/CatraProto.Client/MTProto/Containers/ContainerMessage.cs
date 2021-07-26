@@ -8,7 +8,6 @@ namespace CatraProto.Client.MTProto.Containers
     class ContainerMessage : IObject
     {
         public static int ConstructorId { get; } = 0;
-        public MessageContainer MessageContainer { get; set; }
         public long MsgId { get; set; }
         public int Seqno { get; set; }
         public byte[] Body { get; set; }
@@ -23,7 +22,7 @@ namespace CatraProto.Client.MTProto.Containers
             writer.Write(MsgId);
             writer.Write(Seqno);
             writer.Write(Body.Length);
-            writer.Write(Body);
+            writer.Stream.Write(Body);
 
         }
 
