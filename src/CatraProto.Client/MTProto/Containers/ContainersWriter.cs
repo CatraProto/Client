@@ -61,10 +61,10 @@ namespace CatraProto.Client.MTProto.Containers
                         continue;
                     }
 
-                    var msgId = connectionState.MessageIdsHandler.ComputeMessageId();
-                    Messages.Add(new ContainerMessage()
+                    var sendingOptions = messageContainer.OutgoingMessage.MessageSendingOptions;
+                    Messages.Add(new ContainerMessage
                     {
-                        MsgId = msgId,
+                        MsgId = sendingOptions.SendWithMessageId != 0 ? sendingOptions.SendWithMessageId : connectionState.MessageIdsHandler.ComputeMessageId(),
                         Seqno = connectionState.SeqnoHandler.ComputeSeqno(messageContainer.OutgoingMessage.Body),
                         Body = serialized
                     });
@@ -76,7 +76,7 @@ namespace CatraProto.Client.MTProto.Containers
             }
             
             SaveContainer();
-            _logger.Information("Created a container of {Count} messages", Messages.Count);
+            _logger.Information("Created a container of {Count} messages and size {Size}", Messages.Count, SerializedContainer.Length);
         }
     }
 }
