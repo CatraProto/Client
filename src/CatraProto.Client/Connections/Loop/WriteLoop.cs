@@ -77,6 +77,16 @@ namespace CatraProto.Client.Connections.Loop
                             {
                                 switch (container.OutgoingMessage.Body)
                                 {
+                                    case InvokeWithLayer invokeWithLayer:
+                                        if (invokeWithLayer.Query is InitConnection)
+                                        {
+                                            _ = SendEncryptedMessages(new List<MessageContainer> { container }, true);
+                                        }
+                                        else
+                                        {
+                                            pendingMessages.Add(container);
+                                        }
+                                        break;
                                     case BindTempAuthKey:
                                         _ = SendEncryptedMessages(new List<MessageContainer> { container }, true);
                                         break;
@@ -149,10 +159,9 @@ namespace CatraProto.Client.Connections.Loop
             }
         }
 
-        //TODO: This thing really needs a refactoring
         private async Task SendEncryptedMessages(List<MessageContainer> messages, bool forceAuthKey = false)
         {
-            await _connection.StateSignaler.WaitSignal();
+            await _connection.StateSignaler.WaitAndSignalAsync();
             var authKey = await _connection.ConnectionState.TemporaryAuthKey.GetAuthKeyAsync(forceReturn: forceAuthKey);
             
             byte[] body;
@@ -194,6 +203,7 @@ namespace CatraProto.Client.Connections.Loop
             };
             
             await _connection.Protocol.Writer.SendWithTimeoutAsync(encryptedMessage.Export(), _logger);
+            _connection.StateSignaler.SetSignal(true);
         }
 
         protected override void StopSignal()
