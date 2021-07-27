@@ -22,7 +22,6 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
         private int _duration;
 
         public delegate void AuthKeyChanged(AuthKey authKey, bool bindCompleted);
-
         public event AuthKeyChanged OnAuthKeyChanged;
 
         public TemporaryAuthKey(Api api, MessageIdsHandler messageIdsHandler, SessionIdHandler sessionIdHandler, PermanentAuthKey permAuthKey, int duration, ILogger logger)
@@ -51,14 +50,14 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
 
                 if (_generationTask == null || forceGeneration)
                 {
-                    return _generationTask = InternalGetAuthKey(token);
+                    return _generationTask = InternalGetAuthKeyAsync(token);
                 }
 
                 if (_generationTask.IsCompleted)
                 {
                     if (DateTimeOffset.Now.ToUnixTimeSeconds() - _expiresAt >= _duration)
                     {
-                        return _generationTask = InternalGetAuthKey(token);
+                        return _generationTask = InternalGetAuthKeyAsync(token);
                     }
                 }
 
@@ -66,7 +65,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
             }
         }
 
-        private async Task<AuthKey> InternalGetAuthKey(CancellationToken token = default)
+        private async Task<AuthKey> InternalGetAuthKeyAsync(CancellationToken token = default)
         {
             _tempAuthKey = new AuthKey(_api, _logger);
             await _tempAuthKey.ComputeAuthKey(_duration, token);
@@ -98,7 +97,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
             {
                 _logger.Information("TempAuthKey successfully ({TempId}) bound until {Time} to permanent key {PermKey}", _tempAuthKey.AuthKeyId, _expiresAt, permAuthKey.AuthKeyId);
             }
-
+            
             OnAuthKeyChanged?.Invoke(_tempAuthKey, true);
             return _tempAuthKey;
         }
