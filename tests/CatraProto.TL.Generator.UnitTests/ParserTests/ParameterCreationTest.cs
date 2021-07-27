@@ -88,10 +88,10 @@ namespace CatraProto.TL.Generator.UnitTests.ParserTests
 		[InlineData("test#123 parameterName:flags.1?long = EtheriaType;", 64, false, "long", 1)]
 		[InlineData("test#123 parameterName:Vector<long> = EtheriaType;", 64, true, "long")]
 		[InlineData("test#123 parameterName:flags.1?Vector<long> = EtheriaType;", 64, true, "long", 1)]
-		[InlineData("test#123 parameterName:int128 = EtheriaType;", 128, false, "BigInteger")]
-		[InlineData("test#123 parameterName:flags.1?int128 = EtheriaType;", 128, false, "BigInteger", 1)]
-		[InlineData("test#123 parameterName:Vector<int128> = EtheriaType;", 128, true, "BigInteger")]
-		[InlineData("test#123 parameterName:flags.1?Vector<int128> = EtheriaType;", 128, true, "BigInteger", 1)]
+		[InlineData("test#123 parameterName:int128 = EtheriaType;", 128, false, "System.Numerics.BigInteger")]
+		[InlineData("test#123 parameterName:flags.1?int128 = EtheriaType;", 128, false, "System.Numerics.BigInteger", 1)]
+		[InlineData("test#123 parameterName:Vector<int128> = EtheriaType;", 128, true, "System.Numerics.BigInteger")]
+		[InlineData("test#123 parameterName:flags.1?Vector<int128> = EtheriaType;", 128, true, "System.Numerics.BigInteger", 1)]
 		public void IntegerCreationTests(string testString, int expectedBitSize, bool expectedIsVector,
 			string expectedTypeName, int? expectedFlagBit = null)
 		{
