@@ -9,7 +9,7 @@ namespace CatraProto.Client
         public string SessionPath { get; init; }
         public Settings(string sessionName, string sessionPath = null)
         {
-            if (sessionName == null) throw new ArgumentNullException(nameof(sessionName));
+            SessionName = sessionName ?? throw new ArgumentNullException(nameof(sessionName));
             if (sessionPath == null)
             {
                 SessionPath = sessionName + ".catra";
