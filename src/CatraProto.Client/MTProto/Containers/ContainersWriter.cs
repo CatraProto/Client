@@ -47,7 +47,7 @@ namespace CatraProto.Client.MTProto.Containers
 
         public void CreateContainer(List<MessageContainer> messages, ConnectionState connectionState)
         {
-            _logger.Information("Converting {Count} messages to containers", messages.Count);
+            _logger.Information("Creating a container of {Count} messages", messages.Count);
             
             for (var i = 0; i < messages.Count; i++)
             {
