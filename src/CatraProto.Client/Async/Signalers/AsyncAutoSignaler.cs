@@ -32,7 +32,7 @@ namespace CatraProto.Client.Async.Signalers
 
         public Task WaitSignal()
         {
-            return _signaler.WaitSignal();
+            return _signaler.WaitAsync();
         }
 
         public void Dispose()

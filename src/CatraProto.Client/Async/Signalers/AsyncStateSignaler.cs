@@ -40,12 +40,18 @@ namespace CatraProto.Client.Async.Signalers
             }
         }
 
-        public Task WaitSignal()
+        public Task WaitAsync()
         {
             lock (_mutex)
             {
                 return _taskCompletionSource.Task;
             }
+        }
+        
+        public async Task WaitAndSignalAsync()
+        {
+            await WaitAsync();
+            SetSignal(false);
         }
 
         public void Dispose()
