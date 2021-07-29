@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using CatraProto.Client.Settings;
 using Serilog;
 
 namespace CatraProto.Client.MTProto.Session
@@ -11,9 +12,9 @@ namespace CatraProto.Client.MTProto.Session
         }
 
         public ILogger Logger { get; }
-        public Settings Settings { get; }
+        public ClientSettings Settings { get; }
 
-        public ClientSession(Settings settings, ILogger logger)
+        public ClientSession(ClientSettings settings, ILogger logger)
         {
             Settings = settings;
             Logger = logger.ForContext<ClientSession>().ForContext("Session", Name);
