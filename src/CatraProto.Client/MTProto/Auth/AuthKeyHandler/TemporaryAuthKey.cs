@@ -66,6 +66,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
 
         private async Task<AuthKey> InternalGetAuthKeyAsync(CancellationToken token = default)
         {
+            _logger.Information("Generating temporary authkey");
             _tempAuthKey = new AuthKey(_connectionState.Api, _logger);
             await _tempAuthKey.ComputeAuthKey(_duration, token);
 
@@ -73,7 +74,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
             _expiresAt = (int)(DateTimeOffset.Now.ToUnixTimeSeconds() + _duration);
 
             OnAuthKeyChanged?.Invoke(_tempAuthKey, false);
-
+            _logger.Information("Binding temp authkey with permanent authkey");
             var innerData = new BindAuthKeyInner
             {
                 Nonce = CryptoTools.CreateRandomLong(),
@@ -96,7 +97,8 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
             {
                 _logger.Information("TempAuthKey successfully ({TempId}) bound until {Time} to permanent key {PermKey}", _tempAuthKey.AuthKeyId, _expiresAt, permAuthKey.AuthKeyId);
             }
-
+            
+            _logger.Information("Writing client information");
             var apiSettings = _connectionState.Settings.ApiSettings;
             await _connectionState.Api.CloudChatsApi.InvokeWithLayerAsync(121, new InitConnection
             {
@@ -110,6 +112,8 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
                 Query = new GetConfig()
             });
             OnAuthKeyChanged?.Invoke(_tempAuthKey, true);
+            
+            _logger.Information("Successfully wrote client information");
             return _tempAuthKey;
         }
     }
