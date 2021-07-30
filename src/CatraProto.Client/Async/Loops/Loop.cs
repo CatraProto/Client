@@ -4,10 +4,8 @@ namespace CatraProto.Client.Async.Loops
 {
     public enum LoopState
     {
-        Stopped = -3,
-        Stopping = -2,
-        Starting = -1,
-        Running = 0
+        Stopped = 0,
+        Running = 1
     }
 
     public abstract class Loop
@@ -16,10 +14,9 @@ namespace CatraProto.Client.Async.Loops
         {
             get => _shutdownSource.Task;
         }
-
-        private TaskCompletionSource _shutdownSource { get; set; } = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
-
+        
         public LoopState State { get; protected set; } = LoopState.Stopped;
+        private TaskCompletionSource _shutdownSource { get; set; } = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
 
         protected abstract void StopSignal();
         protected abstract Task StartSignal();
@@ -28,7 +25,6 @@ namespace CatraProto.Client.Async.Loops
         {
             if (State == LoopState.Running)
             {
-                State = LoopState.Stopping;
                 StopSignal();
                 await ShutdownTask;
                 State = LoopState.Stopped;
@@ -44,7 +40,6 @@ namespace CatraProto.Client.Async.Loops
                     _shutdownSource = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
                 }
                 
-                State = LoopState.Starting;
                 await StartSignal();
                 State = LoopState.Running;
             }
