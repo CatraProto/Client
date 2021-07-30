@@ -39,6 +39,7 @@ namespace CatraProto.Client.Async.Locks
                 }
                 else
                 {
+                    counter.DecreaseCount();
                     counter.Item.Release();
                 }
             }
