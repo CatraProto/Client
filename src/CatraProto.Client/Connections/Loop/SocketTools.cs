@@ -17,21 +17,6 @@ namespace CatraProto.Client.Connections.Loop
 {
     static class SocketTools
     {
-        public static async Task<bool> SendWithTimeoutAsync(this IProtocolWriter writer, byte[] array, ILogger logger)
-        {
-            var timeoutToken = new CancellationTokenSource(TimeSpan.FromSeconds(10));
-            try
-            {
-                await writer.SendAsync(array, timeoutToken.Token);
-                return true;
-            }
-            catch (OperationCanceledException e) when (e.CancellationToken == timeoutToken.Token)
-            {
-                logger.Error("Write to socket operation timed out after 10 seconds");
-                return false;
-            }
-        }
-
         public static bool TrySerialize(MessageContainer container, ILogger logger, out byte[] serialized)
         {
             logger.Information("Serializing message of type {Type}", container.OutgoingMessage.Body);
