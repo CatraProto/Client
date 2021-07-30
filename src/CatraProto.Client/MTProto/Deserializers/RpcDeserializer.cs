@@ -1,4 +1,5 @@
 using CatraProto.Client.Connections;
+using CatraProto.Client.MTProto.Rpc;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL;
@@ -6,7 +7,7 @@ using CatraProto.TL.Interfaces;
 using CatraProto.TL.Interfaces.Deserializers;
 using Serilog;
 
-namespace CatraProto.Client.MTProto.Rpc
+namespace CatraProto.Client.MTProto.Deserializers
 {
     class RpcDeserializer : ICustomObjectDeserializer
     {

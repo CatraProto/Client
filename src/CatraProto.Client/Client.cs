@@ -14,16 +14,16 @@ namespace CatraProto.Client
     public class Client
     {
         public Api Api { get; private set; }
+        private SessionManager _sessionManager;
+        private ClientSession _clientSession;
+        private FileStream _fileStream;
         private Connection _connection;
         private ILogger _logger;
-        private ClientSession _clientSession;
-        private SessionManager _sessionManager;
-        private FileStream _fileStream;
         public Client(ClientSession clientSession)
         {
             _clientSession = clientSession;
             _logger = _clientSession.Logger.ForContext<Client>();
-            _connection = new Connection(new ConnectionInfo(IPAddress.Parse(/*"149.154.167.50"*/ "149.154.167.91"), 443, 2), new ConnectionState(_logger), ConnectionProtocol.TcpAbridged, _logger);
+            _connection = new Connection(new ConnectionInfo(IPAddress.Parse(/*"149.154.167.50"*/ "149.154.167.91"), 443, 2), new ConnectionState(_clientSession.Settings, _logger), ConnectionProtocol.TcpAbridged, _logger);
             _sessionManager = new SessionManager();
             _fileStream = _clientSession.GetSessionStream();
         }
