@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using CatraProto.Client.Async.Awaiters;
+using CatraProto.Client.Connections.Exceptions;
 using CatraProto.Client.Connections.Messages;
 using CatraProto.Client.Connections.Messages.Interfaces;
 using CatraProto.Client.Extensions;
@@ -30,11 +30,12 @@ namespace CatraProto.Client.Connections.Loop
         private CancellationTokenSource _cancellationToken = new CancellationTokenSource();
         private ConnectionState _connectionState;
         private Connection _connection;
-        private Task _encryptedTask;
+        private Task[] _encryptedTasks;
         private ILogger _logger;
 
         public WriteLoop(Connection connection, ILogger logger)
         {
+            _encryptedTasks = new Task[2];
             _connection = connection;
             _connectionState = _connection.ConnectionState;
             _logger = logger.ForContext<WriteLoop>();
@@ -45,7 +46,6 @@ namespace CatraProto.Client.Connections.Loop
             _logger.Information("Listening for outgoing messages...");
             var pendingMessages = new List<MessageContainer>();
             Task<MessageContainer> containerTask = null;
-
             while (!_cancellationToken.IsCancellationRequested)
             {
                 //All of this is because we need unencrypted and encrypted messages and some special encrypted messages to be independent from each other
@@ -62,8 +62,7 @@ namespace CatraProto.Client.Connections.Loop
                         //the loop is going to run again, without resetting the task
                         //The generated container might be smaller because of the lost task, but it's not a big deal.
                         containerTask ??= _connectionState.MessagesHandler.OutgoingMessages.Reader.ReadAsync(_cancellationToken.Token).AsTask();
-                        await Task.WhenAny(containerTask, _encryptedTask ?? containerTask);
-
+                        await Task.WhenAny(containerTask, _encryptedTasks[1] ?? containerTask, _encryptedTasks[0] ?? containerTask);
                         if (containerTask.IsCompleted)
                         {
                             var container = containerTask.Result;
@@ -80,7 +79,7 @@ namespace CatraProto.Client.Connections.Loop
                                     case InvokeWithLayer invokeWithLayer:
                                         if (invokeWithLayer.Query is InitConnection)
                                         {
-                                            _ = SendEncryptedMessages(new List<MessageContainer> { container }, true);
+                                            _encryptedTasks[1] = SendEncryptedMessages(new List<MessageContainer> { container }, true);
                                         }
                                         else
                                         {
@@ -88,7 +87,7 @@ namespace CatraProto.Client.Connections.Loop
                                         }
                                         break;
                                     case BindTempAuthKey:
-                                        _ = SendEncryptedMessages(new List<MessageContainer> { container }, true);
+                                        _encryptedTasks[1] = SendEncryptedMessages(new List<MessageContainer> { container }, true);
                                         break;
                                     default:
                                         pendingMessages.Add(container);
@@ -103,14 +102,17 @@ namespace CatraProto.Client.Connections.Loop
                             containerTask = null;
                         }
 
-                        if (_encryptedTask?.IsCompleted == true)
+                        for (var i1 = 0; i1 < _encryptedTasks.Length; i1++)
                         {
-                            if (_encryptedTask.IsFaulted)
+                            if (_encryptedTasks[i1]?.IsCompleted == true)
                             {
-                                throw _encryptedTask.Exception;
-                            }
+                                if (_encryptedTasks[i1].IsFaulted)
+                                {
+                                    throw _encryptedTasks[i1].Exception;
+                                }
 
-                            _encryptedTask = null;
+                                _encryptedTasks[i1] = null;
+                            }
                         }
                     }
 
@@ -122,16 +124,26 @@ namespace CatraProto.Client.Connections.Loop
 
                     //We don't risk to accumulate pendingMessages here, because we are sending a copy of the queue and
                     //then resetting it
-                    if (pendingMessages.Count > 0 && _encryptedTask == null)
+                    if (pendingMessages.Count > 0 && _encryptedTasks[0] == null)
                     {
                         var acks = _connectionState.AcknowledgementHandler.GetAckMessages();
-                        _encryptedTask = SendEncryptedMessages(acks.Concat(pendingMessages).ToList());
+                        _encryptedTasks[0] = SendEncryptedMessages(acks.Concat(pendingMessages).ToList());
                         pendingMessages.Clear();
                     }
                 }
                 catch (OperationCanceledException e) when (e.CancellationToken == _cancellationToken.Token)
                 {
                     //Ignored on purpose
+                }
+                catch (ConnectionClosedException)
+                {
+                    _ = _connection.ConnectAsync();
+                    break;
+                }
+                catch (System.IO.IOException)
+                {
+                    _ = _connection.ConnectAsync();
+                    break;
                 }
                 catch (Exception e)
                 {
@@ -142,7 +154,8 @@ namespace CatraProto.Client.Connections.Loop
             _logger.Information("WriteLoop for connection {Info} shutdown", _connection.ConnectionInfo);
             SetLoopStopped();
         }
-
+        
+        
         private async Task SendUnencryptedMessage(MessageContainer message)
         {
             if (SocketTools.TrySerialize(message, _logger, out var body))
@@ -161,9 +174,9 @@ namespace CatraProto.Client.Connections.Loop
 
         private async Task SendEncryptedMessages(List<MessageContainer> messages, bool forceAuthKey = false)
         {
-            await _connection.StateSignaler.WaitAndSignalAsync();
+            await _connection.Signaler.WaitAsync();
             var authKey = await _connection.ConnectionState.TemporaryAuthKey.GetAuthKeyAsync(forceReturn: forceAuthKey);
-            
+
             byte[] body;
             int seqno;
             long messageId;
@@ -185,7 +198,7 @@ namespace CatraProto.Client.Connections.Loop
                 body = writer.SerializedContainer;
                 messageId = _connectionState.MessageIdsHandler.ComputeMessageId();
                 seqno = _connectionState.SeqnoHandler.ContentRelatedSent * 2;
-                
+
                 for (var i = 0; i < writer.Messages.Count; i++)
                 {
                     _connectionState.MessagesHandler.AddSentMessage(writer.Messages[i].MsgId, writer.MessageContainers[i]);
@@ -201,9 +214,8 @@ namespace CatraProto.Client.Connections.Loop
                 SeqNo = seqno,
                 Body = body,
             };
-            
-            await _connection.Protocol.Writer.SendWithTimeoutAsync(encryptedMessage.Export(), _logger);
-            _connection.StateSignaler.SetSignal(true);
+
+            await _connection.Protocol.Writer.SendAsync(encryptedMessage.Export());
         }
 
         protected override void StopSignal()

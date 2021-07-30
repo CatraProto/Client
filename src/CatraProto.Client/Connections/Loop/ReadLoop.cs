@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using CatraProto.Client.Connections.Exceptions;
 using CatraProto.Client.Connections.Messages;
 using CatraProto.Client.Extensions;
-using CatraProto.Client.MTProto.Messages.Interfaces;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.TL;
 using Serilog;
@@ -35,7 +34,7 @@ namespace CatraProto.Client.Connections.Loop
                 try
                 {
                     var message = await protocol.Reader.ReadMessageAsync(_cancellationToken.Token);
-                    _connection.StateSignaler.SetSignal(false);
+                    _connection.Signaler.SetSignal(false);
                     using var reader = new Reader(MergedProvider.Singleton, message.ToMemoryStream());
 
                     switch (message.Length)
@@ -45,7 +44,7 @@ namespace CatraProto.Client.Connections.Loop
                             continue;
                         case 4:
                             _connectionState.MessagesDispatcher.DispatchMessage(new UnencryptedMessage { Body = message });
-                            _connection.StateSignaler.SetSignal(true);
+                            _connection.Signaler.SetSignal(true);
                             continue;
                     }
 
@@ -70,7 +69,6 @@ namespace CatraProto.Client.Connections.Loop
                     }
 
                     _connectionState.MessagesDispatcher.DispatchMessage(imported);
-                    _connection.StateSignaler.SetSignal(true);
                 }
                 catch (OperationCanceledException e) when (e.CancellationToken == _cancellationToken.Token)
                 {
@@ -78,13 +76,20 @@ namespace CatraProto.Client.Connections.Loop
                 }
                 catch (ConnectionClosedException)
                 {
-                    await _connection.ConnectAsync();
+                    _ = _connection.ConnectAsync();
+                    break;
+                }
+                catch (System.IO.IOException e)
+                {
+                    _ = _connection.ConnectAsync();
+                    break;
                 }
                 catch (Exception e)
                 {
                     _logger.Error(e, "Exception thrown on ReadLoop for {Info}", _connection.ConnectionInfo);
                     break;
                 }
+                _connection.Signaler.SetSignal(true);
             }
 
             _logger.Information("ReadLoop for connection {Info} shutdown", _connection.ConnectionInfo);

@@ -3,6 +3,7 @@ using CatraProto.Client.MTProto;
 using CatraProto.Client.MTProto.Auth;
 using CatraProto.Client.MTProto.Auth.AuthKeyHandler;
 using CatraProto.Client.MTProto.Session;
+using CatraProto.Client.Settings;
 using CatraProto.TL;
 using Serilog;
 
@@ -19,11 +20,13 @@ namespace CatraProto.Client.Connections
         public AcknowledgementHandler AcknowledgementHandler { get; set; }
         public SessionIdHandler SessionIdHandler { get; set; }
         public SaltHandler SaltHandler { get; set; }
+        public ClientSettings Settings { get; set; }
         public Api Api { get; }
         private ILogger _logger;
         
-        public ConnectionState(ILogger logger)
+        public ConnectionState(ClientSettings settings, ILogger logger)
         {
+            Settings = settings;
             MessageIdsHandler = new MessageIdsHandler(logger);
             MessagesHandler = new MessagesHandler(logger);
             Api = new Api(MessagesHandler);
@@ -40,7 +43,7 @@ namespace CatraProto.Client.Connections
             SessionIdHandler = new SessionIdHandler();
             
             SessionIdHandler.SetSessionId(new Random().Next());
-            TemporaryAuthKey = new TemporaryAuthKey(Api, MessageIdsHandler, SessionIdHandler, PermanentAuthKey, 1000, _logger);
+            TemporaryAuthKey = new TemporaryAuthKey(this, 1000, _logger);
             SaltHandler = new SaltHandler(Api, TemporaryAuthKey);
 
         }
