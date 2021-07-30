@@ -1,62 +1,69 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CatraProto.Client.Async.Signalers
 {
-    public class AsyncStateSignaler : IDisposable
+    public class AsyncStateSignaler<T> where T : System.Enum, IDisposable
     {
-        private TaskCompletionSource _taskCompletionSource = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        private T _currentState;
+        private TaskCompletionSource<T> _taskCompletionSource = new TaskCompletionSource<T>(TaskCreationOptions.RunContinuationsAsynchronously);
         private object _mutex = new object();
-        
-        public AsyncStateSignaler(bool released)
+
+        public AsyncStateSignaler(T currentState)
         {
-            if (released)
-            {
-                SetSignal(true);
-            }
+            _currentState = currentState;
         }
 
-        public void SignalOnce()
-        {
-            SetSignal(true);
-            SetSignal(false);
-        }
-        
-        public void SetSignal(bool release)
+        public Task<T> WaitAsync(CancellationToken token = default)
         {
             lock (_mutex)
             {
-                if (release)
+                return _taskCompletionSource.Task.WithCancellationToken(token);
+            }
+        }
+
+        public async Task WaitForState(T state, CancellationToken token = default)
+        {
+            while (true)
+            {
+                if ((await WaitAsync(token)).Equals(state))
                 {
-                    _taskCompletionSource.TrySetResult();
-                }
-                else
-                {
-                    if (_taskCompletionSource.Task.IsCompleted)
-                    {
-                        _taskCompletionSource = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
-                    }
+                    return;
                 }
             }
         }
 
-        public Task WaitAsync()
+        public T GetCurrentState()
         {
             lock (_mutex)
             {
-                return _taskCompletionSource.Task;
+                return _currentState;
             }
         }
-        
-        public async Task WaitAndSignalAsync()
+
+        public void Set(T state, bool force = false)
         {
-            await WaitAsync();
-            SetSignal(false);
+            lock (_mutex)
+            {
+                if (_currentState.Equals(state) && !force)
+                {
+                    return;
+                }
+
+                _currentState = state;
+                _taskCompletionSource.TrySetResult(state);
+                _taskCompletionSource = new TaskCompletionSource<T>(TaskCreationOptions.RunContinuationsAsynchronously);
+            }
         }
 
         public void Dispose()
         {
-            _taskCompletionSource.TrySetCanceled();
+            lock (_mutex)
+            {
+                _taskCompletionSource.TrySetCanceled();
+                _taskCompletionSource = null;
+            }
         }
     }
 }

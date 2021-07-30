@@ -6,7 +6,7 @@ namespace CatraProto.Client.Async.Signalers
 {
     public class AsyncAutoSignaler : IDisposable
     {
-        private AsyncStateSignaler _signaler = new AsyncStateSignaler(true);
+        private AsyncSignaler _signaler = new AsyncSignaler(true);
         private Timer _timer;
         private int _interval;
         private object _mutex = new object();
