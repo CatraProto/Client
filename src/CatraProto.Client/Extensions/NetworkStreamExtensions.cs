@@ -8,8 +8,7 @@ namespace CatraProto.Client.Extensions
 {
     public static class NetworkStreamExtensions
     {
-        public static ValueTask WriteAsync(this NetworkStream stream, byte data,
-            CancellationToken cancellationToken = default)
+        public static ValueTask WriteAsync(this NetworkStream stream, byte data, CancellationToken cancellationToken = default)
         {
             var bArray = new byte[1] { data };
             return stream.WriteAsync(bArray, cancellationToken);
@@ -39,7 +38,7 @@ namespace CatraProto.Client.Extensions
 
         public static async Task<byte> ReadByte(this NetworkStream stream, CancellationToken cancellationToken = default)
         {
-            return (await stream.ReadBytesAsync(1, cancellationToken: cancellationToken))[0];
+            return (await stream.ReadBytesAsync(1, cancellationToken))[0];
         }
     }
 }
