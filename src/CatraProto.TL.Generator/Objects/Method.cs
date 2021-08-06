@@ -45,8 +45,7 @@ namespace CatraProto.TL.Generator.Objects
             for (var index = 0; index < parametersOrdered.Count; index++)
             {
                 var parameter = parametersOrdered[index];
-                parameter.Type.WriteMethodParameter(args, parameter);
-                parameter.Type.WriteNullPolicy(nullPolicies, parameter);
+                parameter.Type.WriteMethodParameter(args, parameter, true);
                 if (index < parametersOrdered.Count - 1)
                 {
                     args.Append(", ");
@@ -54,26 +53,27 @@ namespace CatraProto.TL.Generator.Objects
             }
 
             var comma = args.Length == 0 ? "" : ",";
-            builder.AppendLine($"{StringTools.TwoTabs}public async Task<RpcMessage<{returnType}>> {NamingInfo.PascalCaseName}Async({args}{comma} CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)\n{StringTools.TwoTabs}{{");
-            builder.AppendLine($"{StringTools.ThreeTabs}{nullPolicies}");
-            builder.AppendLine($"{StringTools.ThreeTabs}var rpcResponse = new RpcMessage<{returnType}>();");
+            builder.AppendLine($"public async Task<RpcMessage<{returnType}>> {NamingInfo.PascalCaseName}Async({args}{comma} CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)\n{StringTools.TwoTabs}{{");
+            builder.AppendLine(nullPolicies.ToString());
+            builder.AppendLine($"var rpcResponse = new RpcMessage<{returnType}>();");
             if (ReturnsVector)
             {
-                builder.AppendLine($"{StringTools.ThreeTabs}rpcResponse.Response = new {returnType}();");
-            }
-            
-            builder.AppendLine($"{StringTools.ThreeTabs}var methodBody = new {Namespace.FullNamespace}()\n{StringTools.ThreeTabs}{{");
-            foreach (var parameter in parametersOrdered)
-            {
-                builder.AppendLine($"{StringTools.FourTabs}{parameter.NamingInfo.PascalCaseName} = {parameter.NamingInfo.CamelCaseName},");
+                builder.AppendLine($"rpcResponse.Response = new {returnType}();");
             }
 
-            builder.AppendLine($"{StringTools.ThreeTabs}}};");
+            builder.AppendLine($"messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: {(MethodCompletionType == MethodCompletionType.ReturnsUnencrypted ? "false" : "true")});");
+            builder.AppendLine($"var methodBody = new {Namespace.FullNamespace}(){{");
+            foreach (var parameter in parametersOrdered)
+            {
+                builder.AppendLine($"{parameter.NamingInfo.PascalCaseName} = {parameter.NamingInfo.CamelCaseName},");
+            }
+
+            builder.AppendLine("};");
             builder.AppendLine();
-            builder.AppendLine(
-                $"{StringTools.ThreeTabs}await await _messagesHandler.EnqueueMessage(new OutgoingMessage\n{StringTools.FourTabs}{{\n{StringTools.FiveTabs}Body = methodBody,\n{StringTools.FiveTabs}CancellationToken = cancellationToken,\n{StringTools.FiveTabs}IsEncrypted = {(MethodCompletionType == MethodCompletionType.ReturnsUnencrypted ? "false" : "true")}\n, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()\n{StringTools.FourTabs}}}, rpcResponse);");
-            builder.AppendLine($"{StringTools.ThreeTabs}return rpcResponse;");
-            builder.AppendLine($"{StringTools.TwoTabs}}}");
+            builder.AppendLine($"_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);");
+            builder.AppendLine("await taskCompletionSource;");
+            builder.AppendLine($"return rpcResponse;");
+            builder.AppendLine("}");
         }
     }
 }

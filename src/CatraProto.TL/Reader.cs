@@ -16,11 +16,11 @@ namespace CatraProto.TL
         {
             get => _reader.BaseStream;
         }
-        
+
         private Dictionary<Type, ICustomObjectDeserializer> _customObjectDeserializers = new Dictionary<Type, ICustomObjectDeserializer>();
         private ObjectProvider _provider;
         private BinaryReader _reader;
-        
+
         public Reader(ObjectProvider provider, Stream stream, bool leaveOpen = false)
         {
             _provider = provider;
@@ -31,7 +31,7 @@ namespace CatraProto.TL
         {
             _customObjectDeserializers.TryAdd(type, deserializer);
         }
-        
+
         public T Read<T>(int? bitSize = null)
         {
             return (T)Read(typeof(T), bitSize);
@@ -71,8 +71,7 @@ namespace CatraProto.TL
             {
                 if (bitSize == null)
                 {
-                    throw new DeserializationException("Missing parameter bitSize",
-                        DeserializationException.DeserializationErrors.MissingParameter);
+                    throw new DeserializationException("Missing parameter bitSize", DeserializationException.DeserializationErrors.MissingParameter);
                 }
 
                 return BigInteger.ReadBytes(bitSize.Value, this);
@@ -83,8 +82,7 @@ namespace CatraProto.TL
                 var instance = _provider.ResolveConstructorId(id);
                 if (instance == null)
                 {
-                    throw new DeserializationException($"The provider couldn't provide an instance for {id}",
-                        DeserializationException.DeserializationErrors.ProviderReturnedNull);
+                    throw new DeserializationException($"The provider couldn't provide an instance for {id}", DeserializationException.DeserializationErrors.ProviderReturnedNull);
                 }
 
                 if (_customObjectDeserializers.TryGetValue(instance.GetType(), out var deserializer))
@@ -95,14 +93,14 @@ namespace CatraProto.TL
                 {
                     instance.Deserialize(this);
                 }
+
                 return instance;
             }
 
-            throw new DeserializationException($"The type {type} is not supported",
-                DeserializationException.DeserializationErrors.TypeNotFound);
+            throw new DeserializationException($"The type {type} is not supported", DeserializationException.DeserializationErrors.TypeNotFound);
         }
 
-        public Type GetNextType()
+        public Type? GetNextType()
         {
             var id = _reader.ReadInt32();
             _reader.BaseStream.Position -= 4;
@@ -122,8 +120,7 @@ namespace CatraProto.TL
 
             if (boolTrue is null)
             {
-                throw new DeserializationException("The provided boolTrue type is null",
-                    DeserializationException.DeserializationErrors.BoolTrueNull);
+                throw new DeserializationException("The provided boolTrue type is null", DeserializationException.DeserializationErrors.BoolTrueNull);
             }
 
             return _provider.BoolTrue == value;
@@ -155,7 +152,7 @@ namespace CatraProto.TL
 
             return data;
         }
-        
+
         public IList<object> ReadVector(Type type, bool naked = false)
         {
             return ReadVector(new RegularObjectVectorDeserializer<object>(type), naked);
@@ -165,15 +162,16 @@ namespace CatraProto.TL
         {
             return ReadVector(new RegularObjectVectorDeserializer<T>(typeof(T)), naked);
         }
-        
+
         public IList<T> ReadVector<T>(ICustomVectorDeserializer<T> vectorDeserializer, bool naked = false)
         {
             if (!naked)
             {
                 _reader.BaseStream.Seek(4, SeekOrigin.Current);
             }
+
             var size = _reader.ReadInt32();
-            
+
             var list = new List<T>();
             for (var i = 0; i < size; i++)
             {
@@ -182,7 +180,7 @@ namespace CatraProto.TL
 
             return list;
         }
-        
+
         public void Dispose()
         {
             _reader?.Dispose();

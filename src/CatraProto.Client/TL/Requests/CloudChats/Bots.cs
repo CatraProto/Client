@@ -1,85 +1,65 @@
-using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using CatraProto.Client.Connections;
+using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.MTProto.Messages;
 using CatraProto.Client.MTProto.Rpc;
-using CatraProto.TL.Interfaces;
-using System.Collections.Generic;
-using System.Numerics;
+using CatraProto.Client.TL.Schemas.CloudChats;
+using CatraProto.Client.TL.Schemas.CloudChats.Bots;
 
 namespace CatraProto.Client.TL.Requests.CloudChats
 {
-	public partial class Bots
-	{
-		
-	    private MessagesHandler _messagesHandler;
-	    internal Bots(MessagesHandler messagesHandler)
-	    {
-	        _messagesHandler = messagesHandler;
-	        
-	    }
-	    
-	    		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>> SendCustomRequestAsync(string customMethod, CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase pparams, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
-		{
-			if(customMethod is null) throw new ArgumentNullException(nameof(customMethod));
-if(pparams is null) throw new ArgumentNullException(nameof(pparams));
+    public partial class Bots
+    {
+        private readonly MessagesQueue _messagesQueue;
 
-			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Bots.SendCustomRequest()
-			{
-				CustomMethod = customMethod,
-				Params = pparams,
-			};
+        internal Bots(MessagesQueue messagesQueue)
+        {
+            _messagesQueue = messagesQueue;
+        }
 
-			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
-				}, rpcResponse);
-			return rpcResponse;
-		}
-		public async Task<RpcMessage<bool>> AnswerWebhookJSONQueryAsync(long queryId, CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase data, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
-		{
-			if(data is null) throw new ArgumentNullException(nameof(data));
+        public async Task<RpcMessage<DataJSONBase>> SendCustomRequestAsync(string customMethod, DataJSONBase pparams, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        {
+            var rpcResponse = new RpcMessage<DataJSONBase>();
+            messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+            var methodBody = new SendCustomRequest
+            {
+                CustomMethod = customMethod,
+                Params = pparams
+            };
 
-			var rpcResponse = new RpcMessage<bool>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Bots.AnswerWebhookJSONQuery()
-			{
-				QueryId = queryId,
-				Data = data,
-			};
+            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+            await taskCompletionSource;
+            return rpcResponse;
+        }
 
-			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
-				}, rpcResponse);
-			return rpcResponse;
-		}
-		public async Task<RpcMessage<bool>> SetBotCommandsAsync(IList<CatraProto.Client.TL.Schemas.CloudChats.BotCommandBase> commands, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
-		{
-			if(commands is null) throw new ArgumentNullException(nameof(commands));
+        public async Task<RpcMessage<bool>> AnswerWebhookJSONQueryAsync(long queryId, DataJSONBase data, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        {
+            var rpcResponse = new RpcMessage<bool>();
+            messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+            var methodBody = new AnswerWebhookJSONQuery
+            {
+                QueryId = queryId,
+                Data = data
+            };
 
-			var rpcResponse = new RpcMessage<bool>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Bots.SetBotCommands()
-			{
-				Commands = commands,
-			};
+            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+            await taskCompletionSource;
+            return rpcResponse;
+        }
 
-			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
-				}, rpcResponse);
-			return rpcResponse;
-		}
+        public async Task<RpcMessage<bool>> SetBotCommandsAsync(IList<BotCommandBase> commands, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        {
+            var rpcResponse = new RpcMessage<bool>();
+            messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+            var methodBody = new SetBotCommands
+            {
+                Commands = commands
+            };
 
-	}
+            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+            await taskCompletionSource;
+            return rpcResponse;
+        }
+    }
 }

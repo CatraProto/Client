@@ -16,7 +16,7 @@ namespace CatraProto.TL.Generator.Objects.Types
 			NamingInfo = "bool";
 		}
 		
-		public override void WriteMethodParameter(StringBuilder stringBuilder, Parameter parameter)
+		public override void WriteMethodParameter(StringBuilder stringBuilder, Parameter parameter, bool nullableContext = false)
 		{
 			var writtenType = parameter.Type.GetTypeName(NamingType.FullNamespace, parameter, true);
 			var after = "";

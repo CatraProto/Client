@@ -1,7 +1,7 @@
 using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-
+#nullable disable
 namespace CatraProto.Client.MTProto.Rpc
 {
     public class RpcObject : IObject

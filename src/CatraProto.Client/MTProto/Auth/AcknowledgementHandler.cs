@@ -1,8 +1,9 @@
-using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using CatraProto.Client.Async.Signalers;
 using CatraProto.Client.Connections;
+using CatraProto.Client.Connections.MessageScheduling;
+using CatraProto.Client.Connections.MessageScheduling.Enums;
+using CatraProto.Client.Connections.MessageScheduling.Items;
+using CatraProto.Client.Connections.MessageScheduling.Trackers;
 using CatraProto.Client.MTProto.Messages;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL.Interfaces;
@@ -11,67 +12,72 @@ namespace CatraProto.Client.MTProto.Auth
 {
     class AcknowledgementHandler
     {
-        private List<long> _toAcknowledge = new List<long>();
-        private List<long> _waitingForAck = new List<long>();
-
-        public MsgsAck GetAckMessage()
+        private readonly List<long> _ackIds = new List<long>();
+        private readonly object _mutex = new object();
+        public MsgsAck? GetAckObject()
         {
-            if (_toAcknowledge.Count == 0)
+            lock (_mutex)
             {
-                return null;
-            }
-            
-            var newList = new List<long>();
-            for (var i = (_toAcknowledge.Count > 8192 ? 8192 : _toAcknowledge.Count) - 1; i >= 0; i--)
-            {
-                newList.Add(_toAcknowledge[i]);
-                _toAcknowledge.Remove(_toAcknowledge[i]);
-            }
-
-            return new MsgsAck
-            {
-                MsgIds = newList
-            };
-        }
-
-        public List<MessageContainer> GetAckMessages()
-        {
-            var result = new List<MessageContainer>();
-            while (true)
-            {
-                var ack = GetAckMessage();
-                if (ack == null)
+                if (_ackIds.Count == 0)
                 {
-                    break;
+                    return null;
+                }
+            
+                var newList = new List<long>();
+                for (var i = (_ackIds.Count > 8192 ? 8192 : _ackIds.Count) - 1; i >= 0; i--)
+                {
+                    newList.Add(_ackIds[i]);
+                    _ackIds.Remove(_ackIds[i]);
                 }
 
-                result.Add(new MessageContainer
+                return new MsgsAck
                 {
-                    OutgoingMessage = new OutgoingMessage()
-                    {
-                        IsEncrypted = true,
-                        Body = ack,
-                        MessageSendingOptions = new MessageSendingOptions()
-                    }
-                });
+                    MsgIds = newList
+                };   
             }
-
-            return result;
         }
-        
-        public void AddWaitAck(long messageId)
+
+        public IEnumerable<MessageItem> GetAckMessages()
         {
-            _waitingForAck.Add(messageId);
+            lock (_mutex)
+            {
+                var result = new List<MessageItem>();
+                while (true)
+                {
+                    var ack = GetAckObject();
+                    if (ack == null)
+                    {
+                        break;
+                    }
+
+                    result.Add(
+                        new MessageItem(
+                            ack, 
+                            new MessageSendingOptions(true), 
+                            new MessageStatus(new MessageCompletion(null, null, null)), 
+                            default
+                            )
+                        );
+                }
+
+                return result;
+            }
+        }
+
+        public void SetAsNeedsAck(long messageId)
+        {
+            lock (_mutex)
+            {
+                _ackIds.Add(messageId);
+            }
         }
 
         public bool SetAsReceived(long messageId)
         {
-            return _waitingForAck.Remove(messageId);
-        }
-        
-        public void AddToAck(long messageId)
-        {
-            _toAcknowledge.Add(messageId);
+            lock (_mutex)
+            {
+                return _ackIds.Remove(messageId);
+            }
         }
 
         public static bool IsContentRelated(IObject obj)

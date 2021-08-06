@@ -69,17 +69,16 @@ namespace CatraProto.TL.Generator.Objects.Types.Interfaces
             stringBuilder.AppendLine($"\n[JsonPropertyName(\"{parameter.NamingInfo.OriginalName}\")]\n{StringTools.TwoTabs}{GetParameterAccessibility(parameter, isAbstract)} {typeName} {parameter.NamingInfo.PascalCaseName} {{ get; set; }}");
         }
 
-        public virtual void WriteNullPolicy(StringBuilder builder, Parameter parameter)
-        {
-            if (!parameter.HasFlag && (this is GenericType || this is RuntimeDefinedType || this is StringType || this is BytesType))
-            {
-                builder.AppendLine($"if({parameter.NamingInfo.CamelCaseName} is null) throw new ArgumentNullException(nameof({parameter.NamingInfo.CamelCaseName}));");
-            }
-        }
-
-        public virtual void WriteMethodParameter(StringBuilder stringBuilder, Parameter parameter)
+        public virtual void WriteMethodParameter(StringBuilder stringBuilder, Parameter parameter, bool nullableContext = false)
         {
             var writtenType = GetTypeName(NamingType.FullNamespace, parameter, true);
+            if (nullableContext)
+            {
+                writtenType = parameter.HasFlag ? $"{writtenType}? {parameter.NamingInfo.CamelCaseName} = null" : $"{writtenType} {parameter.NamingInfo.CamelCaseName}";
+                stringBuilder.Append(writtenType);
+                return;
+            }
+            
             if (parameter.Flag != null && this is not StringType && this is not GenericType && this is not RuntimeDefinedType && this is not BytesType)
             {
                 writtenType += "?";

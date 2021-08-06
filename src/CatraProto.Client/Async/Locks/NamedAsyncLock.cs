@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace CatraProto.Client.Async.Locks
 {
-    public class NamedAsyncLock<T> : IDisposable
+    public class NamedAsyncLock<T> : IDisposable where T : notnull
     {
-        private object _lock = new object();
-        private Dictionary<T, Counter<SemaphoreSlim>> _semaphores = new Dictionary<T, Counter<SemaphoreSlim>>();
+        private readonly object _lock = new object();
+        private readonly Dictionary<T, Counter<SemaphoreSlim>> _semaphores = new Dictionary<T, Counter<SemaphoreSlim>>();
 
         private SemaphoreSlim GetLock(T key)
         {
@@ -51,7 +51,7 @@ namespace CatraProto.Client.Async.Locks
             return new Releaser<T>(key, this);
         }
 
-        private readonly struct Releaser<R> : IDisposable
+        private readonly struct Releaser<R> : IDisposable where R : notnull
         {
             private readonly R _releaseKey;
             private readonly NamedAsyncLock<R> _asyncLock;

@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections;
+using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.MTProto.Messages;
 using CatraProto.Client.MTProto.Rpc;
 using CatraProto.TL.Interfaces;
@@ -30,184 +31,135 @@ public CatraProto.Client.TL.Requests.CloudChats.Phone Phone { get; }
 public CatraProto.Client.TL.Requests.CloudChats.Langpack Langpack { get; }
 public CatraProto.Client.TL.Requests.CloudChats.Folders Folders { get; }
 public CatraProto.Client.TL.Requests.CloudChats.Stats Stats { get; }
-	    private MessagesHandler _messagesHandler;
-	    internal CloudChatsApi(MessagesHandler messagesHandler)
+	    private readonly MessagesQueue _messagesQueue;
+	    internal CloudChatsApi(MessagesQueue messagesQueue)
 	    {
-	        _messagesHandler = messagesHandler;
+	        _messagesQueue = messagesQueue;
 	        
-Auth = new CatraProto.Client.TL.Requests.CloudChats.Auth(messagesHandler);
-Account = new CatraProto.Client.TL.Requests.CloudChats.Account(messagesHandler);
-Users = new CatraProto.Client.TL.Requests.CloudChats.Users(messagesHandler);
-Contacts = new CatraProto.Client.TL.Requests.CloudChats.Contacts(messagesHandler);
-Messages = new CatraProto.Client.TL.Requests.CloudChats.Messages(messagesHandler);
-Updates = new CatraProto.Client.TL.Requests.CloudChats.Updates(messagesHandler);
-Photos = new CatraProto.Client.TL.Requests.CloudChats.Photos(messagesHandler);
-Upload = new CatraProto.Client.TL.Requests.CloudChats.Upload(messagesHandler);
-Help = new CatraProto.Client.TL.Requests.CloudChats.Help(messagesHandler);
-Channels = new CatraProto.Client.TL.Requests.CloudChats.Channels(messagesHandler);
-Bots = new CatraProto.Client.TL.Requests.CloudChats.Bots(messagesHandler);
-Payments = new CatraProto.Client.TL.Requests.CloudChats.Payments(messagesHandler);
-Stickers = new CatraProto.Client.TL.Requests.CloudChats.Stickers(messagesHandler);
-Phone = new CatraProto.Client.TL.Requests.CloudChats.Phone(messagesHandler);
-Langpack = new CatraProto.Client.TL.Requests.CloudChats.Langpack(messagesHandler);
-Folders = new CatraProto.Client.TL.Requests.CloudChats.Folders(messagesHandler);
-Stats = new CatraProto.Client.TL.Requests.CloudChats.Stats(messagesHandler);
+Auth = new CatraProto.Client.TL.Requests.CloudChats.Auth(messagesQueue);
+Account = new CatraProto.Client.TL.Requests.CloudChats.Account(messagesQueue);
+Users = new CatraProto.Client.TL.Requests.CloudChats.Users(messagesQueue);
+Contacts = new CatraProto.Client.TL.Requests.CloudChats.Contacts(messagesQueue);
+Messages = new CatraProto.Client.TL.Requests.CloudChats.Messages(messagesQueue);
+Updates = new CatraProto.Client.TL.Requests.CloudChats.Updates(messagesQueue);
+Photos = new CatraProto.Client.TL.Requests.CloudChats.Photos(messagesQueue);
+Upload = new CatraProto.Client.TL.Requests.CloudChats.Upload(messagesQueue);
+Help = new CatraProto.Client.TL.Requests.CloudChats.Help(messagesQueue);
+Channels = new CatraProto.Client.TL.Requests.CloudChats.Channels(messagesQueue);
+Bots = new CatraProto.Client.TL.Requests.CloudChats.Bots(messagesQueue);
+Payments = new CatraProto.Client.TL.Requests.CloudChats.Payments(messagesQueue);
+Stickers = new CatraProto.Client.TL.Requests.CloudChats.Stickers(messagesQueue);
+Phone = new CatraProto.Client.TL.Requests.CloudChats.Phone(messagesQueue);
+Langpack = new CatraProto.Client.TL.Requests.CloudChats.Langpack(messagesQueue);
+Folders = new CatraProto.Client.TL.Requests.CloudChats.Folders(messagesQueue);
+Stats = new CatraProto.Client.TL.Requests.CloudChats.Stats(messagesQueue);
 	    }
 	    
-	    		public async Task<RpcMessage<IObject>> InvokeAfterMsgAsync(long msgId, IObject query, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
+	    public async Task<RpcMessage<IObject>> InvokeAfterMsgAsync(long msgId, IObject query, CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-			if(query is null) throw new ArgumentNullException(nameof(query));
 
-			var rpcResponse = new RpcMessage<IObject>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.InvokeAfterMsg()
-			{
-				MsgId = msgId,
-				Query = query,
-			};
+var rpcResponse = new RpcMessage<IObject>();
+messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.InvokeAfterMsg(){
+MsgId = msgId,
+Query = query,
+};
 
-			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
-				}, rpcResponse);
-			return rpcResponse;
-		}
-		public async Task<RpcMessage<IObject>> InvokeAfterMsgsAsync(IList<long> msgIds, IObject query, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource;
+return rpcResponse;
+}
+public async Task<RpcMessage<IObject>> InvokeAfterMsgsAsync(IList<long> msgIds, IObject query, CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-			if(query is null) throw new ArgumentNullException(nameof(query));
 
-			var rpcResponse = new RpcMessage<IObject>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.InvokeAfterMsgs()
-			{
-				MsgIds = msgIds,
-				Query = query,
-			};
+var rpcResponse = new RpcMessage<IObject>();
+messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.InvokeAfterMsgs(){
+MsgIds = msgIds,
+Query = query,
+};
 
-			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
-				}, rpcResponse);
-			return rpcResponse;
-		}
-		public async Task<RpcMessage<IObject>> InitConnectionAsync(int apiId, string deviceModel, string systemVersion, string appVersion, string systemLangCode, string langPack, string langCode, IObject query, CatraProto.Client.TL.Schemas.CloudChats.InputClientProxyBase proxy = null, CatraProto.Client.TL.Schemas.CloudChats.JSONValueBase pparams = null, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource;
+return rpcResponse;
+}
+public async Task<RpcMessage<IObject>> InitConnectionAsync(int apiId, string deviceModel, string systemVersion, string appVersion, string systemLangCode, string langPack, string langCode, IObject query, CatraProto.Client.TL.Schemas.CloudChats.InputClientProxyBase? proxy = null, CatraProto.Client.TL.Schemas.CloudChats.JSONValueBase? pparams = null, CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-			if(deviceModel is null) throw new ArgumentNullException(nameof(deviceModel));
-if(systemVersion is null) throw new ArgumentNullException(nameof(systemVersion));
-if(appVersion is null) throw new ArgumentNullException(nameof(appVersion));
-if(systemLangCode is null) throw new ArgumentNullException(nameof(systemLangCode));
-if(langPack is null) throw new ArgumentNullException(nameof(langPack));
-if(langCode is null) throw new ArgumentNullException(nameof(langCode));
-if(query is null) throw new ArgumentNullException(nameof(query));
 
-			var rpcResponse = new RpcMessage<IObject>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.InitConnection()
-			{
-				ApiId = apiId,
-				DeviceModel = deviceModel,
-				SystemVersion = systemVersion,
-				AppVersion = appVersion,
-				SystemLangCode = systemLangCode,
-				LangPack = langPack,
-				LangCode = langCode,
-				Query = query,
-				Proxy = proxy,
-				Params = pparams,
-			};
+var rpcResponse = new RpcMessage<IObject>();
+messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.InitConnection(){
+ApiId = apiId,
+DeviceModel = deviceModel,
+SystemVersion = systemVersion,
+AppVersion = appVersion,
+SystemLangCode = systemLangCode,
+LangPack = langPack,
+LangCode = langCode,
+Query = query,
+Proxy = proxy,
+Params = pparams,
+};
 
-			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
-				}, rpcResponse);
-			return rpcResponse;
-		}
-		public async Task<RpcMessage<IObject>> InvokeWithLayerAsync(int layer, IObject query, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource;
+return rpcResponse;
+}
+public async Task<RpcMessage<IObject>> InvokeWithLayerAsync(int layer, IObject query, CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-			if(query is null) throw new ArgumentNullException(nameof(query));
 
-			var rpcResponse = new RpcMessage<IObject>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.InvokeWithLayer()
-			{
-				Layer = layer,
-				Query = query,
-			};
+var rpcResponse = new RpcMessage<IObject>();
+messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.InvokeWithLayer(){
+Layer = layer,
+Query = query,
+};
 
-			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
-				}, rpcResponse);
-			return rpcResponse;
-		}
-		public async Task<RpcMessage<IObject>> InvokeWithoutUpdatesAsync(IObject query, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource;
+return rpcResponse;
+}
+public async Task<RpcMessage<IObject>> InvokeWithoutUpdatesAsync(IObject query, CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-			if(query is null) throw new ArgumentNullException(nameof(query));
 
-			var rpcResponse = new RpcMessage<IObject>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.InvokeWithoutUpdates()
-			{
-				Query = query,
-			};
+var rpcResponse = new RpcMessage<IObject>();
+messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.InvokeWithoutUpdates(){
+Query = query,
+};
 
-			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
-				}, rpcResponse);
-			return rpcResponse;
-		}
-		public async Task<RpcMessage<IObject>> InvokeWithMessagesRangeAsync(CatraProto.Client.TL.Schemas.CloudChats.MessageRangeBase range, IObject query, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource;
+return rpcResponse;
+}
+public async Task<RpcMessage<IObject>> InvokeWithMessagesRangeAsync(CatraProto.Client.TL.Schemas.CloudChats.MessageRangeBase range, IObject query, CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-			if(range is null) throw new ArgumentNullException(nameof(range));
-if(query is null) throw new ArgumentNullException(nameof(query));
 
-			var rpcResponse = new RpcMessage<IObject>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.InvokeWithMessagesRange()
-			{
-				Range = range,
-				Query = query,
-			};
+var rpcResponse = new RpcMessage<IObject>();
+messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.InvokeWithMessagesRange(){
+Range = range,
+Query = query,
+};
 
-			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
-				}, rpcResponse);
-			return rpcResponse;
-		}
-		public async Task<RpcMessage<IObject>> InvokeWithTakeoutAsync(long takeoutId, IObject query, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource;
+return rpcResponse;
+}
+public async Task<RpcMessage<IObject>> InvokeWithTakeoutAsync(long takeoutId, IObject query, CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-			if(query is null) throw new ArgumentNullException(nameof(query));
 
-			var rpcResponse = new RpcMessage<IObject>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.InvokeWithTakeout()
-			{
-				TakeoutId = takeoutId,
-				Query = query,
-			};
+var rpcResponse = new RpcMessage<IObject>();
+messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.InvokeWithTakeout(){
+TakeoutId = takeoutId,
+Query = query,
+};
 
-			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
-				}, rpcResponse);
-			return rpcResponse;
-		}
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource;
+return rpcResponse;
+}
 
 	}
 }

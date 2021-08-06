@@ -11,19 +11,20 @@ using Serilog;
 
 namespace CatraProto.Client
 {
-    public class Client
+    public class TelegramClient
     {
         public Api Api { get; private set; }
-        private SessionManager _sessionManager;
-        private ClientSession _clientSession;
-        private FileStream _fileStream;
-        private Connection _connection;
-        private ILogger _logger;
-        public Client(ClientSession clientSession)
+        private readonly SessionManager _sessionManager;
+        private readonly ClientSession _clientSession;
+        private readonly FileStream _fileStream;
+        private readonly Connection _connection;
+        private readonly ILogger _logger;
+        public TelegramClient(ClientSession clientSession)
         {
             _clientSession = clientSession;
-            _logger = _clientSession.Logger.ForContext<Client>();
-            _connection = new Connection(new ConnectionInfo(IPAddress.Parse(/*"149.154.167.50"*/ "149.154.167.91"), 443, 2), new ConnectionState(_clientSession.Settings, _logger), ConnectionProtocol.TcpAbridged, _logger);
+            _logger = _clientSession.Logger.ForContext<TelegramClient>();
+            var connectionInfo = new ConnectionInfo(IPAddress.Parse(clientSession.Settings.DatacenterAddress), 443, 2);
+            _connection = new Connection(connectionInfo, clientSession.Settings, ConnectionProtocol.TcpAbridged, _logger);
             _sessionManager = new SessionManager();
             _fileStream = _clientSession.GetSessionStream();
         }
@@ -31,9 +32,10 @@ namespace CatraProto.Client
         public async Task StartAsync()
         {
             _logger.Information("Initializing CatraProto, the gayest MTProto client in the world");
-            _connection.ConnectionState.RegisterSerializer(_sessionManager);
+            _connection.MtProtoState.RegisterSerializer(_sessionManager);
             await _sessionManager.ReadAsync(_fileStream);
-            Api = _connection.ConnectionState.Api;
+            _connection.MtProtoState.StartLoops();
+            Api = _connection.MtProtoState.Api;
             await _connection.ConnectAsync();
         }
 

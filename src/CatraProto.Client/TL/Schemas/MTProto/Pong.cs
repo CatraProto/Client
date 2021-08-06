@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-
+#nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
 	public partial class Pong : CatraProto.Client.TL.Schemas.MTProto.PongBase

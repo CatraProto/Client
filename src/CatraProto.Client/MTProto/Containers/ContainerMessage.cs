@@ -2,7 +2,7 @@ using System;
 using CatraProto.Client.Connections;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-
+#nullable disable
 namespace CatraProto.Client.MTProto.Containers
 {
     class ContainerMessage : IObject

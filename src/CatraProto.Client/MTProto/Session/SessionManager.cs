@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -9,11 +10,11 @@ namespace CatraProto.Client.MTProto.Session
 {
     class SessionManager
     {
-        private const double CatraProtoVersion = 1.0f;
+        private const double CatraProtoVersion = 1.0d;
         private const int SessionVersion = 1;
-        private List<ISessionSerializer> _sessionSerializers = new List<ISessionSerializer>();
-        
-        public void AddSerializer(ISessionSerializer serializer)
+        private List<ISerializer> _sessionSerializers = new List<ISerializer>();
+
+        public void AddSerializer(ISerializer serializer)
         {
             if (_sessionSerializers.IndexOf(serializer) == -1)
             {
@@ -28,7 +29,17 @@ namespace CatraProto.Client.MTProto.Session
             writer.Write(SessionVersion);
             foreach (var sessionSerializer in _sessionSerializers)
             {
-                sessionSerializer.Save(writer);
+                switch (sessionSerializer)
+                {
+                    case ISessionSerializer serializer:
+                        serializer.Save(writer);
+                        break;
+                    case IAsyncSessionSerializer serializer:
+                        await serializer.SaveAsync(writer);
+                        break;
+                    default:
+                        throw new NotSupportedException();
+                }
             }
 
             await targetStream.WriteAsync(((MemoryStream)writer.Stream).ToArray());
@@ -50,7 +61,17 @@ namespace CatraProto.Client.MTProto.Session
             var sessionVersion = reader.Read<int>();
             foreach (var sessionSerializer in _sessionSerializers)
             {
-                sessionSerializer.Read(reader);
+                switch (sessionSerializer)
+                {
+                    case ISessionSerializer serializer:
+                        serializer.Read(reader);
+                        break;
+                    case IAsyncSessionSerializer serializer:
+                        await serializer.ReadAsync(reader);
+                        break;
+                    default:
+                        throw new NotSupportedException();
+                }
             }
         }
     }

@@ -15,9 +15,9 @@ namespace CatraProto.TL.Interfaces
 		/// <returns>
 		///     Returns null if the constructorId is not assigned to any class otherwise, an instance of the class.
 		/// </returns>
-		public abstract IObject ResolveConstructorId(int constructorId);
+		public abstract IObject? ResolveConstructorId(int constructorId);
 
-		protected virtual bool InternalResolveConstructorId(int constructorId, out IObject obj)
+		protected virtual bool InternalResolveConstructorId(int constructorId, out IObject? obj)
 		{
 			obj = null;
 			return false;

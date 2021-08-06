@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections;
+using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.MTProto.Messages;
 using CatraProto.Client.MTProto.Rpc;
 using CatraProto.TL.Interfaces;
@@ -13,376 +14,263 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 	public partial class Auth
 	{
 		
-	    private MessagesHandler _messagesHandler;
-	    internal Auth(MessagesHandler messagesHandler)
+	    private readonly MessagesQueue _messagesQueue;
+	    internal Auth(MessagesQueue messagesQueue)
 	    {
-	        _messagesHandler = messagesHandler;
+	        _messagesQueue = messagesQueue;
 	        
 	    }
 	    
-	    		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeBase>> SendCodeAsync(string phoneNumber, int apiId, string apiHash, CatraProto.Client.TL.Schemas.CloudChats.CodeSettingsBase settings, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
+	    public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeBase>> SendCodeAsync(string phoneNumber, int apiId, string apiHash, CatraProto.Client.TL.Schemas.CloudChats.CodeSettingsBase settings, CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-			if(phoneNumber is null) throw new ArgumentNullException(nameof(phoneNumber));
-if(apiHash is null) throw new ArgumentNullException(nameof(apiHash));
-if(settings is null) throw new ArgumentNullException(nameof(settings));
 
-			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeBase>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.SendCode()
-			{
-				PhoneNumber = phoneNumber,
-				ApiId = apiId,
-				ApiHash = apiHash,
-				Settings = settings,
-			};
+var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeBase>();
+messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.SendCode(){
+PhoneNumber = phoneNumber,
+ApiId = apiId,
+ApiHash = apiHash,
+Settings = settings,
+};
 
-			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
-				}, rpcResponse);
-			return rpcResponse;
-		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>> SignUpAsync(string phoneNumber, string phoneCodeHash, string firstName, string lastName, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource;
+return rpcResponse;
+}
+public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>> SignUpAsync(string phoneNumber, string phoneCodeHash, string firstName, string lastName, CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-			if(phoneNumber is null) throw new ArgumentNullException(nameof(phoneNumber));
-if(phoneCodeHash is null) throw new ArgumentNullException(nameof(phoneCodeHash));
-if(firstName is null) throw new ArgumentNullException(nameof(firstName));
-if(lastName is null) throw new ArgumentNullException(nameof(lastName));
 
-			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.SignUp()
-			{
-				PhoneNumber = phoneNumber,
-				PhoneCodeHash = phoneCodeHash,
-				FirstName = firstName,
-				LastName = lastName,
-			};
+var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>();
+messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.SignUp(){
+PhoneNumber = phoneNumber,
+PhoneCodeHash = phoneCodeHash,
+FirstName = firstName,
+LastName = lastName,
+};
 
-			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
-				}, rpcResponse);
-			return rpcResponse;
-		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>> SignInAsync(string phoneNumber, string phoneCodeHash, string phoneCode, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource;
+return rpcResponse;
+}
+public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>> SignInAsync(string phoneNumber, string phoneCodeHash, string phoneCode, CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-			if(phoneNumber is null) throw new ArgumentNullException(nameof(phoneNumber));
-if(phoneCodeHash is null) throw new ArgumentNullException(nameof(phoneCodeHash));
-if(phoneCode is null) throw new ArgumentNullException(nameof(phoneCode));
 
-			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.SignIn()
-			{
-				PhoneNumber = phoneNumber,
-				PhoneCodeHash = phoneCodeHash,
-				PhoneCode = phoneCode,
-			};
+var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>();
+messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.SignIn(){
+PhoneNumber = phoneNumber,
+PhoneCodeHash = phoneCodeHash,
+PhoneCode = phoneCode,
+};
 
-			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
-				}, rpcResponse);
-			return rpcResponse;
-		}
-		public async Task<RpcMessage<bool>> LogOutAsync( CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource;
+return rpcResponse;
+}
+public async Task<RpcMessage<bool>> LogOutAsync( CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-			
-			var rpcResponse = new RpcMessage<bool>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.LogOut()
-			{
-			};
 
-			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
-				}, rpcResponse);
-			return rpcResponse;
-		}
-		public async Task<RpcMessage<bool>> ResetAuthorizationsAsync( CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
+var rpcResponse = new RpcMessage<bool>();
+messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.LogOut(){
+};
+
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource;
+return rpcResponse;
+}
+public async Task<RpcMessage<bool>> ResetAuthorizationsAsync( CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-			
-			var rpcResponse = new RpcMessage<bool>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.ResetAuthorizations()
-			{
-			};
 
-			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
-				}, rpcResponse);
-			return rpcResponse;
-		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.ExportedAuthorizationBase>> ExportAuthorizationAsync(int dcId, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
+var rpcResponse = new RpcMessage<bool>();
+messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.ResetAuthorizations(){
+};
+
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource;
+return rpcResponse;
+}
+public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.ExportedAuthorizationBase>> ExportAuthorizationAsync(int dcId, CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-			
-			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.ExportedAuthorizationBase>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.ExportAuthorization()
-			{
-				DcId = dcId,
-			};
 
-			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
-				}, rpcResponse);
-			return rpcResponse;
-		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>> ImportAuthorizationAsync(int id, byte[] bytes, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
+var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.ExportedAuthorizationBase>();
+messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.ExportAuthorization(){
+DcId = dcId,
+};
+
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource;
+return rpcResponse;
+}
+public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>> ImportAuthorizationAsync(int id, byte[] bytes, CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-			if(bytes is null) throw new ArgumentNullException(nameof(bytes));
 
-			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.ImportAuthorization()
-			{
-				Id = id,
-				Bytes = bytes,
-			};
+var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>();
+messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.ImportAuthorization(){
+Id = id,
+Bytes = bytes,
+};
 
-			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
-				}, rpcResponse);
-			return rpcResponse;
-		}
-		public async Task<RpcMessage<bool>> BindTempAuthKeyAsync(long permAuthKeyId, long nonce, int expiresAt, byte[] encryptedMessage, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource;
+return rpcResponse;
+}
+public async Task<RpcMessage<bool>> BindTempAuthKeyAsync(long permAuthKeyId, long nonce, int expiresAt, byte[] encryptedMessage, CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-			if(encryptedMessage is null) throw new ArgumentNullException(nameof(encryptedMessage));
 
-			var rpcResponse = new RpcMessage<bool>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.BindTempAuthKey()
-			{
-				PermAuthKeyId = permAuthKeyId,
-				Nonce = nonce,
-				ExpiresAt = expiresAt,
-				EncryptedMessage = encryptedMessage,
-			};
+var rpcResponse = new RpcMessage<bool>();
+messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.BindTempAuthKey(){
+PermAuthKeyId = permAuthKeyId,
+Nonce = nonce,
+ExpiresAt = expiresAt,
+EncryptedMessage = encryptedMessage,
+};
 
-			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
-				}, rpcResponse);
-			return rpcResponse;
-		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>> ImportBotAuthorizationAsync(int flags, int apiId, string apiHash, string botAuthToken, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource;
+return rpcResponse;
+}
+public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>> ImportBotAuthorizationAsync(int flags, int apiId, string apiHash, string botAuthToken, CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-			if(apiHash is null) throw new ArgumentNullException(nameof(apiHash));
-if(botAuthToken is null) throw new ArgumentNullException(nameof(botAuthToken));
 
-			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.ImportBotAuthorization()
-			{
-				Flags = flags,
-				ApiId = apiId,
-				ApiHash = apiHash,
-				BotAuthToken = botAuthToken,
-			};
+var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>();
+messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.ImportBotAuthorization(){
+Flags = flags,
+ApiId = apiId,
+ApiHash = apiHash,
+BotAuthToken = botAuthToken,
+};
 
-			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
-				}, rpcResponse);
-			return rpcResponse;
-		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>> CheckPasswordAsync(CatraProto.Client.TL.Schemas.CloudChats.InputCheckPasswordSRPBase password, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource;
+return rpcResponse;
+}
+public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>> CheckPasswordAsync(CatraProto.Client.TL.Schemas.CloudChats.InputCheckPasswordSRPBase password, CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-			if(password is null) throw new ArgumentNullException(nameof(password));
 
-			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.CheckPassword()
-			{
-				Password = password,
-			};
+var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>();
+messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.CheckPassword(){
+Password = password,
+};
 
-			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
-				}, rpcResponse);
-			return rpcResponse;
-		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.PasswordRecoveryBase>> RequestPasswordRecoveryAsync( CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource;
+return rpcResponse;
+}
+public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.PasswordRecoveryBase>> RequestPasswordRecoveryAsync( CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-			
-			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.PasswordRecoveryBase>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.RequestPasswordRecovery()
-			{
-			};
 
-			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
-				}, rpcResponse);
-			return rpcResponse;
-		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>> RecoverPasswordAsync(string code, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
+var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.PasswordRecoveryBase>();
+messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.RequestPasswordRecovery(){
+};
+
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource;
+return rpcResponse;
+}
+public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>> RecoverPasswordAsync(string code, CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-			if(code is null) throw new ArgumentNullException(nameof(code));
 
-			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.RecoverPassword()
-			{
-				Code = code,
-			};
+var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>();
+messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.RecoverPassword(){
+Code = code,
+};
 
-			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
-				}, rpcResponse);
-			return rpcResponse;
-		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeBase>> ResendCodeAsync(string phoneNumber, string phoneCodeHash, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource;
+return rpcResponse;
+}
+public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeBase>> ResendCodeAsync(string phoneNumber, string phoneCodeHash, CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-			if(phoneNumber is null) throw new ArgumentNullException(nameof(phoneNumber));
-if(phoneCodeHash is null) throw new ArgumentNullException(nameof(phoneCodeHash));
 
-			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeBase>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.ResendCode()
-			{
-				PhoneNumber = phoneNumber,
-				PhoneCodeHash = phoneCodeHash,
-			};
+var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeBase>();
+messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.ResendCode(){
+PhoneNumber = phoneNumber,
+PhoneCodeHash = phoneCodeHash,
+};
 
-			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
-				}, rpcResponse);
-			return rpcResponse;
-		}
-		public async Task<RpcMessage<bool>> CancelCodeAsync(string phoneNumber, string phoneCodeHash, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource;
+return rpcResponse;
+}
+public async Task<RpcMessage<bool>> CancelCodeAsync(string phoneNumber, string phoneCodeHash, CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-			if(phoneNumber is null) throw new ArgumentNullException(nameof(phoneNumber));
-if(phoneCodeHash is null) throw new ArgumentNullException(nameof(phoneCodeHash));
 
-			var rpcResponse = new RpcMessage<bool>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.CancelCode()
-			{
-				PhoneNumber = phoneNumber,
-				PhoneCodeHash = phoneCodeHash,
-			};
+var rpcResponse = new RpcMessage<bool>();
+messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.CancelCode(){
+PhoneNumber = phoneNumber,
+PhoneCodeHash = phoneCodeHash,
+};
 
-			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
-				}, rpcResponse);
-			return rpcResponse;
-		}
-		public async Task<RpcMessage<bool>> DropTempAuthKeysAsync(IList<long> exceptAuthKeys, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource;
+return rpcResponse;
+}
+public async Task<RpcMessage<bool>> DropTempAuthKeysAsync(IList<long> exceptAuthKeys, CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-			
-			var rpcResponse = new RpcMessage<bool>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.DropTempAuthKeys()
-			{
-				ExceptAuthKeys = exceptAuthKeys,
-			};
 
-			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
-				}, rpcResponse);
-			return rpcResponse;
-		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.LoginTokenBase>> ExportLoginTokenAsync(int apiId, string apiHash, IList<int> exceptIds, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
+var rpcResponse = new RpcMessage<bool>();
+messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.DropTempAuthKeys(){
+ExceptAuthKeys = exceptAuthKeys,
+};
+
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource;
+return rpcResponse;
+}
+public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.LoginTokenBase>> ExportLoginTokenAsync(int apiId, string apiHash, IList<int> exceptIds, CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-			if(apiHash is null) throw new ArgumentNullException(nameof(apiHash));
 
-			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.LoginTokenBase>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.ExportLoginToken()
-			{
-				ApiId = apiId,
-				ApiHash = apiHash,
-				ExceptIds = exceptIds,
-			};
+var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.LoginTokenBase>();
+messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.ExportLoginToken(){
+ApiId = apiId,
+ApiHash = apiHash,
+ExceptIds = exceptIds,
+};
 
-			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
-				}, rpcResponse);
-			return rpcResponse;
-		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.LoginTokenBase>> ImportLoginTokenAsync(byte[] token, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource;
+return rpcResponse;
+}
+public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.LoginTokenBase>> ImportLoginTokenAsync(byte[] token, CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-			if(token is null) throw new ArgumentNullException(nameof(token));
 
-			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.LoginTokenBase>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.ImportLoginToken()
-			{
-				Token = token,
-			};
+var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Auth.LoginTokenBase>();
+messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.ImportLoginToken(){
+Token = token,
+};
 
-			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
-				}, rpcResponse);
-			return rpcResponse;
-		}
-		public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.AuthorizationBase>> AcceptLoginTokenAsync(byte[] token, CatraProto.Client.MTProto.Messages.MessageSendingOptions messageSendingOptions = null, CancellationToken cancellationToken = default)
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource;
+return rpcResponse;
+}
+public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.AuthorizationBase>> AcceptLoginTokenAsync(byte[] token, CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-			if(token is null) throw new ArgumentNullException(nameof(token));
 
-			var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.AuthorizationBase>();
-			var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.AcceptLoginToken()
-			{
-				Token = token,
-			};
+var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.AuthorizationBase>();
+messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.AcceptLoginToken(){
+Token = token,
+};
 
-			await await _messagesHandler.EnqueueMessage(new OutgoingMessage
-				{
-					Body = methodBody,
-					CancellationToken = cancellationToken,
-					IsEncrypted = true
-, MessageSendingOptions = messageSendingOptions ?? new CatraProto.Client.MTProto.Messages.MessageSendingOptions()
-				}, rpcResponse);
-			return rpcResponse;
-		}
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource;
+return rpcResponse;
+}
 
 	}
 }

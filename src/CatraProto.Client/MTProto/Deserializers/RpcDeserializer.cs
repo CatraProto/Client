@@ -1,4 +1,6 @@
 using CatraProto.Client.Connections;
+using CatraProto.Client.Connections.MessageScheduling;
+using CatraProto.Client.Connections.MessageScheduling.Trackers;
 using CatraProto.Client.MTProto.Rpc;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.Client.TL.Schemas.MTProto;
@@ -11,12 +13,12 @@ namespace CatraProto.Client.MTProto.Deserializers
 {
     class RpcDeserializer : ICustomObjectDeserializer
     {
-        private MessagesHandler _messagesHandler;
-        private ILogger _logger;
+        private readonly MessageCompletionTracker _messageCompletionTracker;
+        private readonly ILogger _logger;
 
-        public RpcDeserializer(MessagesHandler messagesHandler, ILogger logger)
+        public RpcDeserializer(MessageCompletionTracker messageCompletionTracker, ILogger logger)
         {
-            _messagesHandler = messagesHandler;
+            _messageCompletionTracker = messageCompletionTracker;
             _logger = logger.ForContext<RpcDeserializer>();
         }
         
@@ -25,7 +27,7 @@ namespace CatraProto.Client.MTProto.Deserializers
             if (obj is RpcObject rpcObject)
             {
                 rpcObject.MessageId = reader.Read<long>();
-                if (_messagesHandler.GetMethod(rpcObject.MessageId, out var method))
+                if (_messageCompletionTracker.GetRpcMethod(rpcObject.MessageId, out var method))
                 {
                     var toDispose = false;
                     var nextType = reader.GetNextType();
@@ -36,14 +38,7 @@ namespace CatraProto.Client.MTProto.Deserializers
                         toDispose = true;
                     }
 
-                    if (method.IsVector)
-                    {
-                        rpcObject.Response = reader.ReadVector(method.Type);
-                    }
-                    else
-                    {
-                        rpcObject.Response = reader.Read(method.Type);
-                    }
+                    rpcObject.Response = method!.IsVector ? reader.ReadVector(method.Type) : reader.Read(method.Type);
 
                     if (toDispose)
                     {

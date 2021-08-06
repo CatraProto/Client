@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using CatraProto.TL;
 using System.Text.Json.Serialization;
 using CatraProto.TL.Interfaces;
+#nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 {

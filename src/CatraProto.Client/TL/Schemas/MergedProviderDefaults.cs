@@ -13,7 +13,7 @@ namespace CatraProto.Client.TL.Schemas
         public override Type BoolFalse { get; init; } = typeof(BoolFalse);
         public override int VectorId { get; init; } = 481674261;
         
-        protected override bool InternalResolveConstructorId(int constructorId, out IObject obj)
+        protected override bool InternalResolveConstructorId(int constructorId, out IObject? obj)
         {
             switch (constructorId)
             {

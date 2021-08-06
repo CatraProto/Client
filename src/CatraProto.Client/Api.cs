@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using CatraProto.Client.Connections;
+using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.TL.Requests;
 
 namespace CatraProto.Client
@@ -9,10 +10,10 @@ namespace CatraProto.Client
         public CloudChatsApi CloudChatsApi { get; }
         public MTProtoApi MtProtoApi { get; }
 
-        internal Api(MessagesHandler messagesHandler)
+        internal Api(MessagesQueue messagesQueue)
         {
-            CloudChatsApi = new CloudChatsApi(messagesHandler);
-            MtProtoApi = new MTProtoApi(messagesHandler);
+            CloudChatsApi = new CloudChatsApi(messagesQueue);
+            MtProtoApi = new MTProtoApi(messagesQueue);
         }
     }
 }
