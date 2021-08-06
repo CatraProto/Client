@@ -6,7 +6,7 @@ namespace CatraProto.Client
 {
     public static class Logger
     {
-        public static ILogger CreateDefaultLogger(LoggingLevelSwitch levelSwitch = null)
+        public static ILogger CreateDefaultLogger(LoggingLevelSwitch? levelSwitch = null)
         {
             levelSwitch ??= new LoggingLevelSwitch();
             return new LoggerConfiguration()

@@ -2,6 +2,7 @@
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
         <LangVersion>9</LangVersion>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
@@ -15,6 +16,10 @@
         <InternalsVisibleTo Include="CatraProto.Client.UnitTests" />
         <InternalsVisibleTo Include="CatraProto.Client.Benchmark" />
         <ProjectReference Include="..\CatraProto.TL\CatraProto.TL.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Connections\MessageScheduling\Handlers" />
     </ItemGroup>
 
 </Project>

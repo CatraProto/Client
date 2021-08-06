@@ -31,8 +31,8 @@ namespace CatraProto.Client.Crypto
             using var writer = new Writer(null, new MemoryStream());
             var rsaParameters = _rsaKey.ExportParameters(false);
 
-            var modulus = new BigInteger(rsaParameters.Modulus);
-            var exponent = new BigInteger(rsaParameters.Exponent);
+            var modulus = new BigInteger(rsaParameters.Modulus!);
+            var exponent = new BigInteger(rsaParameters.Exponent!);
 
             writer.Write(modulus.ToByteArray());
             writer.Write(exponent.ToByteArray());
@@ -43,33 +43,41 @@ namespace CatraProto.Client.Crypto
             return BitConverter.ToInt64(lowerOrderBits, 0);
         }
 
-        public static Rsa FindByFingerprint(long fingerprint)
+        public static bool FindByFingerprint(long fingerprint, out Rsa? rsa)
         {
-            return RsaKeys.TryGetValue(fingerprint, out var key) ? new Rsa(key) : null;
+            if (RsaKeys.TryGetValue(fingerprint, out var key))
+            {
+                rsa = new Rsa(key);
+                return true;
+            }
+
+            rsa = null;
+            return false;
         }
 
 
-        public static Tuple<long, Rsa> FindByFingerprints(IList<long> fingerprints)
+        public static bool FindByFingerprints(IList<long> fingerprints, out Tuple<long, Rsa>? found)
         {
             for (var index = 0; index < fingerprints.Count; index++)
             {
                 var fingerprint = fingerprints[index];
-                var tryFind = FindByFingerprint(fingerprint);
-                if (tryFind != null)
+                if (FindByFingerprint(fingerprint, out var rsa))
                 {
-                    return Tuple.Create(fingerprint, tryFind);
+                    found = Tuple.Create(fingerprint, rsa!);
+                    return true;
                 }
             }
 
-            return new Tuple<long, Rsa>(0, null);
+            found = null;
+            return false;
         }
 
         public byte[] EncryptData(byte[] data)
         {
             var parameters = _rsaKey.ExportParameters(false);
             var value = BigIntegerTools.UnsignedBigIntFromBytes(data, true);
-            var modulus = BigIntegerTools.UnsignedBigIntFromBytes(parameters.Modulus, true);
-            var exponent = new BigInteger(parameters.Exponent);
+            var modulus = BigIntegerTools.UnsignedBigIntFromBytes(parameters.Modulus!, true);
+            var exponent = new BigInteger(parameters.Exponent!);
 
             var byteArray = BigInteger.ModPow(value, exponent, modulus).ToByteArray(isBigEndian: true);
             if (byteArray.Length > 256)

@@ -15,11 +15,11 @@ namespace CatraProto.Client.Connections.Protocols.TcpAbridged
             get => _client.Connected;
         }
 
-        public IProtocolWriter Writer { get; set; }
-        public IProtocolReader Reader { get; set; }
+        public IProtocolWriter? Writer { get; set; }
+        public IProtocolReader? Reader { get; set; }
         public ConnectionInfo ConnectionInfo { get; init; }
-        private TcpClient _client;
-        private ILogger _logger;
+        private readonly TcpClient _client;
+        private readonly ILogger _logger;
 
         public Abridged(ConnectionInfo connectionInfo, ILogger logger)
         {

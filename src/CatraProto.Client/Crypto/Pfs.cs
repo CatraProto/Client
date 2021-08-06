@@ -31,7 +31,7 @@ namespace CatraProto.Client.Crypto
                     using var encryptor = permAuthKey.CreateEncryptorV1(msgKey, true);
                     var encryptedData = encryptor.Encrypt(plainToByte);
 
-                    encryptedWriter.Write(permAuthKey.AuthKeyId);
+                    encryptedWriter.Write(permAuthKey.AuthKeyId!.Value);
                     encryptedWriter.Write(msgKey);
                     encryptedWriter.Write(encryptedData);
                 }
