@@ -19,11 +19,11 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
 {
     class AuthKey : ISessionSerializer
     {
-        public byte[] RawAuthKey { get; private set; }
-        public long AuthKeyId { get; set; }
-        public long ServerSalt { get; private set; }
-        private ILogger _logger;
-        private Api _api;
+        public byte[]? RawAuthKey { get; private set; }
+        public long? AuthKeyId { get; set; }
+        public long? ServerSalt { get; private set; }
+        private readonly ILogger _logger;
+        private readonly Api _api;
 
         public AuthKey(Api api, ILogger logger)
         {
@@ -55,20 +55,20 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
                 var reqPq = await _api.MtProtoApi.ReqPqMultiAsync(nonce, cancellationToken: cancellationToken);
                 if (!reqPq.RpcCallFailed)
                 {
-                    KeyExchangeChecks.CheckNonce(nonce, reqPq.Response.Nonce);
+                    KeyExchangeChecks.CheckNonce(nonce, reqPq.Response!.Nonce);
 
                     var serverNonce = reqPq.Response.ServerNonce;
                     var pq = reqPq.Response.Pq;
 
                     _logger.Information("Received ServerNonce from server with value {SNonce} and Pq with value {Pq}", serverNonce, pq);
                     _logger.Information("Server RSA Fingerprints: {Fingerprints}", reqPq.Response.ServerPublicKeyFingerprints);
-                    var (foundKey, rsaKey) = Rsa.FindByFingerprints(reqPq.Response.ServerPublicKeyFingerprints);
-                    if (rsaKey == null)
+                    if (!Rsa.FindByFingerprints(reqPq.Response.ServerPublicKeyFingerprints, out var found))
                     {
                         _logger.Error("None of the fingerprints provided were found in the array of RSA keys");
                         return new AuthKeyFail(Errors.RsaNotFound);
                     }
 
+                    var rsaKey = found!.Item2;
                     var (p, q) = CryptoTools.GetFastPq(BitConverter.ToUInt64(pq.Reverse().ToArray()));
                     var newNonce = BigIntegerTools.GenerateBigInt(256);
 
@@ -85,7 +85,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
                     rsaKey.Dispose();
 
                     _logger.Information("Sending ReqDHParams request...");
-                    var reqDh = await _api.MtProtoApi.ReqDHParamsAsync(nonce, serverNonce, p, q, foundKey, encryptedData, cancellationToken: cancellationToken);
+                    var reqDh = await _api.MtProtoApi.ReqDHParamsAsync(nonce, serverNonce, p, q, found.Item1, encryptedData, cancellationToken: cancellationToken);
                     if (!reqDh.RpcCallFailed)
                     {
                         if (reqDh.Response is ServerDHParamsOk ok)
@@ -161,7 +161,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
                     }
                     else
                     {
-                        _logger.Error("Received {ErrorCode} as a result of ReqDhParams", reqDh.Error.ErrorCode);
+                        _logger.Error("Received {ErrorCode} as a result of ReqDhParams", reqDh.Error!.ErrorCode);
                         return new AuthKeyFail(Errors.ServerCallFail);
                     }
                 }
