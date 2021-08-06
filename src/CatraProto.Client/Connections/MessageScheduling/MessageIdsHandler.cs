@@ -1,13 +1,13 @@
 using System;
 using Serilog;
 
-namespace CatraProto.Client.MTProto
+namespace CatraProto.Client.Connections.MessageScheduling
 {
     class MessageIdsHandler
     {
         private long _lastGeneratedId;
-        private ILogger _logger;
-        private object _mutex = new object();
+        private readonly ILogger _logger;
+        private readonly object _mutex = new object();
 
         public MessageIdsHandler(ILogger logger)
         {
@@ -32,7 +32,7 @@ namespace CatraProto.Client.MTProto
             }
         }
 
-        public static bool IsMessageIdOld(long messageId)
+        public static bool IsMessageIdTooOld(long messageId)
         {
             var toSeconds = messageId / 4294967296;
             return DateTimeOffset.Now.ToUnixTimeSeconds() - toSeconds >= 300;
@@ -46,7 +46,7 @@ namespace CatraProto.Client.MTProto
 
         public bool CheckMessageId(long messageId, bool fromServer = true)
         {
-            if (IsMessageIdOld(messageId))
+            if (IsMessageIdTooOld(messageId))
             {
                 _logger.Warning("Given message id {Id} is too old", messageId);
                 return false;

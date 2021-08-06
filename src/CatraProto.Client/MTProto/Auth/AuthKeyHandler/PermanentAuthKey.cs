@@ -8,7 +8,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
 {
     class PermanentAuthKey : ISessionSerializer
     {
-        private AuthKey _authKey;
+        private readonly AuthKey _authKey;
 
         public PermanentAuthKey(Api api, ILogger logger)
         {
@@ -27,7 +27,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
 
         public async Task<AuthKey> GetAuthKeyAsync(CancellationToken cancellationToken = default)
         {
-            if (_authKey.RawAuthKey == null)
+            if (_authKey.RawAuthKey is null)
             {
                 await _authKey.ComputeAuthKey(-1, cancellationToken);
             }

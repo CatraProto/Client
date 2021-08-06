@@ -4,8 +4,11 @@ using System.Threading.Tasks;
 using CatraProto.Client.Async.Locks;
 using CatraProto.Client.Async.Signalers;
 using CatraProto.Client.Connections.Loop;
+using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.Connections.Protocols.Interfaces;
 using CatraProto.Client.Connections.Protocols.TcpAbridged;
+using CatraProto.Client.MTProto.Session;
+using CatraProto.Client.Settings;
 using Serilog;
 
 namespace CatraProto.Client.Connections
@@ -13,20 +16,25 @@ namespace CatraProto.Client.Connections
     class Connection : IAsyncDisposable
     {
         public AsyncSignaler Signaler { get; } = new AsyncSignaler(true);
-        public ConnectionState ConnectionState { get; set; }
+        public MTProtoState MtProtoState { get; }
+        public MessagesHandler MessagesHandler { get; }
+        public MessagesDispatcher MessagesDispatcher { get; }
         public ConnectionInfo ConnectionInfo { get; }
-        public IProtocol Protocol { get; private set; }
-        private SingleCallAsync<CancellationToken> _singleCallAsync;
-        private ConnectionProtocol _protocolType;
-        private WriteLoop _writeLoop;
-        private ReadLoop _readLoop;
-        private ILogger _logger;
+        public IProtocol? Protocol { get; private set; }
+        
+        private readonly SingleCallAsync<CancellationToken> _singleCallAsync;
+        private readonly ConnectionProtocol _protocolType;
+        private SendLoop? _writeLoop;
+        private ReceiveLoop? _readLoop;
+        private readonly ILogger _logger;
 
-        public Connection(ConnectionInfo connectionInfo, ConnectionState connectionState, ConnectionProtocol protocolType, ILogger logger)
+        public Connection(ConnectionInfo connectionInfo, ClientSettings clientSettings, ConnectionProtocol protocolType, ILogger logger)
         {
             _logger = logger.ForContext<Connection>();
             ConnectionInfo = connectionInfo;
-            ConnectionState = connectionState;
+            MessagesHandler = new MessagesHandler(logger);
+            MtProtoState = new MTProtoState(new Api(MessagesHandler.MessagesQueue), clientSettings, logger);
+            MessagesDispatcher = new MessagesDispatcher(MessagesHandler, MtProtoState, logger);
             _singleCallAsync = new SingleCallAsync<CancellationToken>(InternalConnectAsync);
             _protocolType = protocolType;
         }
@@ -51,12 +59,14 @@ namespace CatraProto.Client.Connections
         {
             if (_writeLoop != null)
             {
-                await _writeLoop.StopAsync();
+                _writeLoop.Stop();
+                await _writeLoop.GetShutdownTask();
             }
 
             if (_readLoop != null)
             {
-                await _readLoop.StopAsync();
+                _readLoop.Stop();
+                await _readLoop.GetShutdownTask();
             }
 
             if (Protocol != null)
@@ -71,7 +81,7 @@ namespace CatraProto.Client.Connections
                 {
                     _logger.Information("Connecting to {Connection}", ConnectionInfo);
                     await Protocol.ConnectAsync(token);
-                    await StartLoops();
+                    StartLoops();
                     break;
                 }
                 catch (Exception e)
@@ -83,25 +93,27 @@ namespace CatraProto.Client.Connections
             _logger.Information("Successfully connected to {Connection}", ConnectionInfo);
         }
 
-        private async Task StartLoops()
+        private void StartLoops()
         {
-            _writeLoop ??= new WriteLoop(this, _logger);
-            _readLoop ??= new ReadLoop(this, _logger);
+            _writeLoop ??= new SendLoop(this, _logger);
+            _readLoop ??= new ReceiveLoop(this, _logger);
 
-            await _writeLoop.StartAsync();
-            await _readLoop.StartAsync();
+            _writeLoop.Start();
+            _readLoop.Start();
         }
 
         public async ValueTask DisposeAsync()
         {
             if (_writeLoop != null)
             {
-                await _writeLoop.StopAsync();
+                _writeLoop.Stop();
+                await _writeLoop.GetShutdownTask();
             }
 
             if (_readLoop != null)
             {
-                await _readLoop.StopAsync();
+                _readLoop.Stop();
+                await _readLoop.GetShutdownTask();
             }
 
             Signaler.Dispose();
