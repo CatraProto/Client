@@ -5,9 +5,9 @@ namespace CatraProto.Client.Async.Locks
 {
     public class SingleCallAsync<T>
     {
-        private object _mutex = new object();
-        private Task _currentCall;
-        private Func<T, Task> _getTask;
+        private readonly object _mutex = new object();
+        private Task? _currentCall;
+        private readonly Func<T, Task> _getTask;
 
         public SingleCallAsync(Func<T, Task> getTask)
         {
