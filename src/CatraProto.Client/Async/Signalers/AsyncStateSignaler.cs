@@ -1,15 +1,17 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using CatraProto.Client.Async.Signalers.Interfaces;
 
 namespace CatraProto.Client.Async.Signalers
 {
-    public class AsyncStateSignaler<T> where T : System.Enum, IDisposable
+    public class AsyncStateSignaler<T> : IStateSignaler<T>, IDisposable where T : Enum
     {
         private T _currentState;
         private TaskCompletionSource<T> _taskCompletionSource = new TaskCompletionSource<T>(TaskCreationOptions.RunContinuationsAsynchronously);
-        private object _mutex = new object();
-
+        private readonly object _mutex = new object();
+        private CancellationToken? _cancellationToken;
+        
         public AsyncStateSignaler(T currentState)
         {
             _currentState = currentState;
@@ -19,34 +21,46 @@ namespace CatraProto.Client.Async.Signalers
         {
             lock (_mutex)
             {
-                return _taskCompletionSource.Task.WithCancellationToken(token);
+                ThrowIfCancelled();
+                return _taskCompletionSource.Task;
             }
         }
 
-        public async Task WaitForState(T state, CancellationToken token = default)
+        private void ThrowIfCancelled()
         {
-            while (true)
+            lock (_mutex)
             {
-                if ((await WaitAsync(token)).Equals(state))
+                if (_taskCompletionSource is null)
                 {
-                    return;
+                    throw new ObjectDisposedException("Object disposed");
+                }
+                
+                if (_taskCompletionSource.Task.IsCanceled)
+                {
+                    _taskCompletionSource.Task.GetAwaiter().GetResult();
                 }
             }
         }
-
+        
         public T GetCurrentState()
         {
             lock (_mutex)
             {
+                ThrowIfCancelled();
                 return _currentState;
             }
         }
 
-        public void Set(T state, bool force = false)
+        public void Signal(T state)
+        {
+            Signal(state, false);
+        }
+        
+        public void Signal(T state, bool force)
         {
             lock (_mutex)
             {
-                if (_currentState.Equals(state) && !force)
+                if (GetCurrentState().Equals(state) && !force)
                 {
                     return;
                 }
@@ -57,12 +71,19 @@ namespace CatraProto.Client.Async.Signalers
             }
         }
 
+        public void SetCancellationToken(CancellationToken? cancellationToken)
+        {
+            lock (_mutex)
+            {
+                _cancellationToken = cancellationToken;
+            }
+        }
+        
         public void Dispose()
         {
             lock (_mutex)
             {
-                _taskCompletionSource.TrySetCanceled();
-                _taskCompletionSource = null;
+                _taskCompletionSource.TrySetCanceled(_cancellationToken ?? CancellationToken.None);
             }
         }
     }
