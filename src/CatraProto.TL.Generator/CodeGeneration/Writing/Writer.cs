@@ -86,7 +86,7 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
                 {
                     var ns = Namespace.ArrayToString(fixedNamespace.PartialNamespaceArray[..6]);
                     var writtenProp = $"\npublic {fixedNamespace.PartialNamespace} {fixedNamespace.PartialNamespaceArray[^1]} {{ get; }}";
-                    var writtenInit = $"\n{fixedNamespace.PartialNamespaceArray[^1]} = new {fixedNamespace.PartialNamespace}(messagesHandler);";
+                    var writtenInit = $"\n{fixedNamespace.PartialNamespaceArray[^1]} = new {fixedNamespace.PartialNamespace}(messagesQueue);";
                     if (writtenNamespaces.Contains(ns))
                     {
                         continue;
