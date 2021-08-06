@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using CatraProto.Client.Async.Signalers.Interfaces;
 
 namespace CatraProto.Client.Async.Signalers
 {
@@ -19,8 +20,11 @@ namespace CatraProto.Client.Async.Signalers
 
         public void SignalOnce()
         {
-            SetSignal(true);
-            SetSignal(false);
+            lock (_mutex)
+            {
+                SetSignal(true);
+                SetSignal(false);   
+            }
         }
 
         public void SetSignal(bool release)
@@ -41,18 +45,12 @@ namespace CatraProto.Client.Async.Signalers
             }
         }
 
-        public Task WaitAsync(CancellationToken token = default)
+        public Task WaitAsync()
         {
             lock (_mutex)
             {
-                return new Task(async() => await _taskCompletionSource.Task, token);
+                return _taskCompletionSource.Task;
             }
-        }
-
-        public async Task WaitAndSignalAsync()
-        {
-            await WaitAsync();
-            SetSignal(false);
         }
 
         public void Dispose()
