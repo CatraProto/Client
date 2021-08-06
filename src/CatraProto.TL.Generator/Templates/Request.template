@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections;
+using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.MTProto.Messages;
 using CatraProto.Client.MTProto.Rpc;
 using CatraProto.TL.Interfaces;
@@ -13,10 +14,10 @@ namespace ^Namespace^
 	public partial class ^Class^
 	{
 		^Other^
-	    private MessagesHandler _messagesHandler;
-	    internal ^Class^(MessagesHandler messagesHandler)
+	    private readonly MessagesQueue _messagesQueue;
+	    internal ^Class^(MessagesQueue messagesQueue)
 	    {
-	        _messagesHandler = messagesHandler;
+	        _messagesQueue = messagesQueue;
 	        ^Inits^
 	    }
 	    

@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
+#nullable disable
 namespace ^Namespace^
 {
     public abstract class ^Type^ : IObject
