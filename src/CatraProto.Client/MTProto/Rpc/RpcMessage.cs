@@ -19,15 +19,15 @@ namespace CatraProto.Client.MTProto.Rpc
             get => Error != null;
         }
 
-        public RpcError Error { get; private set; }
-        public T Response { get; internal set; }
+        public RpcError? Error { get; private set; }
+        public T? Response { get; internal set; }
 
         public void SetResponse(object o)
         {
             switch (o)
             {
                 case IList<object> objects:
-                    ((IRpcVector)Response).Cast(objects);
+                    ((IRpcVector)Response!).Cast(objects);
                     break;
                 case null:
                     return;
