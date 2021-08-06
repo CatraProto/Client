@@ -19,9 +19,9 @@ namespace CatraProto.Client.Async.Locks
             _releaser = new Releaser(this);
         }
 
-        public async Task<IDisposable> LockAsync()
+        public async Task<IDisposable> LockAsync(CancellationToken token = default)
         {
-            await _semaphoreSlim.WaitAsync().ConfigureAwait(false);
+            await _semaphoreSlim.WaitAsync(token);
             return _releaser;
         }
 
