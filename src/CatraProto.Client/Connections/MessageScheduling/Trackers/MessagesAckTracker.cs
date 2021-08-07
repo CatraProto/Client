@@ -2,7 +2,10 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using CatraProto.Client.Async.Loops;
+using CatraProto.Client.Async.Loops.Enums.Generic;
+using CatraProto.Client.Async.Loops.Enums.Resumable;
 using CatraProto.Client.Connections.MessageScheduling.Items;
 using CatraProto.Client.MTProto.Auth;
 using CatraProto.TL.Interfaces;
@@ -22,8 +25,23 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
         {
             _logger = logger.ForContext<MessagesAckTracker>();
             _messagesQueue = messagesQueue;
+            Task.Run(Loop);
         }
 
+        public async Task Loop()
+        {
+            while (true)
+            {
+                if (StateSignaler.GetCurrentState() is ResumableSignalState.Stop or ResumableSignalState.Suspend)
+                {
+                    if (await StateSignaler.WaitAsync() is ResumableSignalState.Stop or ResumableSignalState.Suspend)
+                    {
+                        continue;
+                    }
+                }
+            }
+        }
+        
         public void AcknowledgeAndReschedule(List<long> ids)
         {
             foreach (var id in ids)
@@ -55,6 +73,11 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
             _clientAcksHandler.SetAsNeedsAck(messageItem.MessageStatus.MessageId.Value);
         }
 
+        public void StopTracking(long messageId)
+        {
+            _messages.TryRemove(messageId, out _);
+        }
+
         public IEnumerable<MessageItem> GetAcknowledgements()
         {
             return _serverAcksHandler.GetAckMessages();
@@ -65,6 +88,10 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
             if (AcknowledgementHandler.IsContentRelated(body))
             {
                 _serverAcksHandler.SetAsNeedsAck(messageId);
+            }
+            else
+            {
+                _logger.Information("Not acknowledging message ({MObj}){MId} because it's not content related", body, messageId);
             }
         }
     }

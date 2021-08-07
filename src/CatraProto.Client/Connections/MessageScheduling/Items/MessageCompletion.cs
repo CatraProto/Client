@@ -10,6 +10,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
         public TaskCompletionSource? TaskCompletionSource { get; }
         public IRpcMessage? RpcMessage { get; }
         public IMethod? Method { get; }
+        private MessagesHandler? _messagesHandler;
         public MessageCompletion(TaskCompletionSource? taskCompletionSource, IRpcMessage? rpcMessage, IMethod? method)
         {
             if (rpcMessage is null && taskCompletionSource is not null)
@@ -20,6 +21,16 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
             Method = method;
             RpcMessage = rpcMessage;
             TaskCompletionSource = taskCompletionSource;
+        }
+
+        public void SetSent(long messageId)
+        {
+            _messagesHandler?.MessagesTrackers.MessageCompletionTracker.AddCompletion(messageId, this);
+        }
+        
+        public void BindTo(MessagesHandler messagesHandler)
+        {
+            _messagesHandler = messagesHandler;
         }
     }
 }

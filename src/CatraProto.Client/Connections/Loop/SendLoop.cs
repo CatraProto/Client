@@ -172,7 +172,7 @@ namespace CatraProto.Client.Connections.Loop
                 var socketMessage = new UnencryptedConnectionMessage(_mtProtoState.MessageIdsHandler.ComputeMessageId(), body!);
                 var serialized = socketMessage.Export();
                 _logger.Information("Sending unencrypted message {Type} of size {Size} bytes", message.Body, serialized.Length);
-                _messagesHandler.MessagesTrackers.MessageCompletionTracker.AddCompletion(0, message.MessageStatus.MessageCompletion);
+                message.SetSent(0);
                 await _connection.Protocol!.Writer!.SendAsync(serialized);
             }
         }
@@ -187,17 +187,16 @@ namespace CatraProto.Client.Connections.Loop
             long messageId;
             if (messages.Count == 1)
             {
-                if (!SocketTools.TrySerialize(messages[0], _logger, out body!))
+                var message = messages[0];
+                if (!SocketTools.TrySerialize(message, _logger, out body!))
                 {
                     return;
                 }
 
-                var messageSendingOptions = messages[0].MessageSendingOptions;
+                var messageSendingOptions = message.MessageSendingOptions;
                 messageId = messageSendingOptions.SendWithMessageId ?? _mtProtoState.MessageIdsHandler.ComputeMessageId();
-                seqno = _mtProtoState.SeqnoHandler.ComputeSeqno(messages[0].Body);
-                _messagesHandler.MessagesTrackers.MessageCompletionTracker.AddCompletion(messageId, messages[0].MessageStatus.MessageCompletion);
-                messages[0].MessageStatus.MessageId = messageId;
-                messages[0].MessageStatus.MessageState = MessageState.MessageSent;           
+                seqno = _mtProtoState.SeqnoHandler.ComputeSeqno(message.Body);
+                message.SetSent(messageId);
             }
             else
             {
@@ -210,13 +209,11 @@ namespace CatraProto.Client.Connections.Loop
                 for (var i = 0; i < writer.MessageItems.Count; i++)
                 {
                     var messageItem = writer.MessageItems[i].Item2;
-                    _messagesHandler.MessagesTrackers.MessageCompletionTracker.AddCompletion(messageId, messageItem.MessageStatus.MessageCompletion);
-                    messageItem.MessageStatus.MessageId = messageId;
-                    messageItem.MessageStatus.MessageState = MessageState.MessageSent;
+                    messageItem.SetSent(writer.MessageItems[i].Item1.MsgId);
                 }
             }
 
-            var encryptedMessage = new EncryptedConnectionMessage(authKey, messageId, _mtProtoState.SaltHandler.GetSalt(), _mtProtoState.SaltHandler.GetSalt(), seqno, body);
+            var encryptedMessage = new EncryptedConnectionMessage(authKey, messageId, _mtProtoState.SaltHandler.GetSalt(), _mtProtoState.SessionIdHandler.GetSessionId(), seqno, body);
             await _connection.Protocol!.Writer!.SendAsync(encryptedMessage.Export());
         }
     }

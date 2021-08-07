@@ -25,23 +25,25 @@ namespace CatraProto.Client.Connections.MessageScheduling
         }
 
         private readonly AsyncQueue<MessageItem> _asyncQueue = new AsyncQueue<MessageItem>();
-        private readonly ILogger _logger;
+        private readonly MessagesHandler _messagesHandler;
 
-        public MessagesQueue(ILogger logger)
+        public MessagesQueue(MessagesHandler messagesHandler)
         {
-            _logger = logger.ForContext<MessagesQueue>();
+            _messagesHandler = messagesHandler;
         }
 
         public void EnqueueMessage(IObject body, MessageSendingOptions messageSendingOptions, IRpcMessage rpcMessage, out Task completionTask, CancellationToken requestCancellationToken)
         {
             requestCancellationToken.ThrowIfCancellationRequested();
-            
+               
             var taskCompletionSource = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
             completionTask = taskCompletionSource.Task;
             
             var messageCompletion = new MessageCompletion(taskCompletionSource, rpcMessage, body is IMethod method ? method : null);
             var messageStatusTracker = new MessageStatus(messageCompletion);
             var messageItem = new MessageItem(body, messageSendingOptions, messageStatusTracker, requestCancellationToken);
+            messageItem.BindTo(_messagesHandler);
+
             _asyncQueue.Enqueue(messageItem);
         }
         

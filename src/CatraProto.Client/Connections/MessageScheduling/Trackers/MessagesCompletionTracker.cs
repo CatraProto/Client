@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using CatraProto.Client.Connections.MessageScheduling.Items;
 using CatraProto.TL.Interfaces;
@@ -9,6 +12,8 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
     class MessageCompletionTracker
     {
         private readonly ConcurrentDictionary<long, MessageCompletion> _messageCompletions = new ConcurrentDictionary<long, MessageCompletion>();
+        private readonly List<MessageCompletion> _unencryptedCompletions = new List<MessageCompletion>();
+        private readonly object _mutex = new object();
         private readonly ILogger _logger;
 
         public MessageCompletionTracker(ILogger logger)
@@ -18,6 +23,15 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
 
         public void AddCompletion(long messageId, MessageCompletion messageCompletion)
         {
+            if (messageId == 0)
+            {
+                lock (_mutex)
+                {
+                    _unencryptedCompletions.Add(messageCompletion);
+                }
+
+                return;
+            }
             _messageCompletions.TryAdd(messageId, messageCompletion);
         }
 
@@ -34,18 +48,52 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
             }
         }
 
-        public void SetCompletion(long messageId, object response)
+        public bool SetCompletion(long messageId, object response)
         {
+            if (messageId == 0)
+            {
+                lock (_mutex)
+                {
+                    var responseType = response.GetType();
+                    var completionIndex = _unencryptedCompletions.FindIndex(x =>
+                    {
+                        if (x.Method is not null)
+                        {
+                            if (responseType.IsSubclassOf(x.Method.Type) || responseType == x.Method.Type)
+                            {
+                                return true;
+                            }
+                        }
+
+                        return false;
+                    });
+
+                    if (completionIndex == -1)
+                    {
+                        return false;
+                    }
+                    
+                    var completion = _unencryptedCompletions[completionIndex];
+                    completion.RpcMessage!.SetResponse(response);
+                    completion.TaskCompletionSource?.TrySetResult();
+                    
+                    _unencryptedCompletions.RemoveAt(completionIndex);
+                    return true;
+                }
+            }
+            
             if (GetMessageCompletion(messageId, out var messageCompletion))
             {
                 if (messageCompletion!.TaskCompletionSource is null)
                 {
-                    return;
+                    return false;
                 }
 
                 messageCompletion.RpcMessage!.SetResponse(response);
                 messageCompletion.TaskCompletionSource.TrySetResult();
             }
+
+            return true;
         }
 
         public bool GetRpcMethod(long messageId, out IMethod? method)

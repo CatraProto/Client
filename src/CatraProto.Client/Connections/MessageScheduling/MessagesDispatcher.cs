@@ -37,7 +37,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
         {
             var reader = new Reader(MergedProvider.Singleton, connectionMessage.Body.ToMemoryStream());
             reader.AddCustomObjectDeserializer(typeof(RpcObject), _rpcDeserializer);
-            
+
             if (connectionMessage.Body.Length == 4)
             {
                 var error = reader.Read<int>();
@@ -67,19 +67,19 @@ namespace CatraProto.Client.Connections.MessageScheduling
 
                     if (CheckMessageValidity((EncryptedConnectionMessage)connectionMessage, deserialized))
                     {
-                        HandleObject(connectionMessage, deserialized, reader);
+                        HandleObject(deserialized, reader, true);
                     }
                 }
                 else
                 {
-                    HandleObject(connectionMessage, deserialized, reader);
+                    HandleObject(deserialized, reader, false);
                 }
-
             }
             catch (DeserializationException e)
             {
                 _logger.Error(e, "Failed to deserialize received message");
             }
+
             reader.Dispose();
         }
 
@@ -106,13 +106,13 @@ namespace CatraProto.Client.Connections.MessageScheduling
             {
                 return false;
             }
-            
+
             var shouldSeqno = _mtProtoState.SeqnoHandler.ComputeSeqno(deserialized, true);
             if (shouldSeqno != connectionMessage.SeqNo)
             {
                 _logger.Warning("Received seqno {RSeqno} does not equal computed seqno {CSeqno} ({Obj})", connectionMessage.SeqNo, shouldSeqno, deserialized);
             }
-            
+
             switch (deserialized)
             {
                 case NewSessionCreated newSessionCreated:
@@ -129,7 +129,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
                 _logger.Warning("Local session {LSession} is not equal to the remote session {RSession}", sessionId, connectionMessage.SessionId);
                 return false;
             }
-            
+
             if (!_mtProtoState.SaltHandler.IsSaltValid(connectionMessage.Salt))
             {
                 return false;
@@ -139,69 +139,58 @@ namespace CatraProto.Client.Connections.MessageScheduling
             {
                 _messagesHandler.MessagesTrackers.MessagesAckTracker.AcknowledgeNext(deserialized, connectionMessage.MessageId);
             }
+
             return true;
         }
 
-        private void HandleObject(IConnectionMessage connectionMessage, IObject obj, Reader reader)
+        private void HandleObject(IObject obj, Reader reader, bool isEncrypted)
         {
-            switch (connectionMessage)
+            if (isEncrypted)
             {
-                case UnencryptedConnectionMessage unencryptedConnectionMessage:
+                switch (obj)
                 {
-                    if (_messagesHandler.MessagesTrackers.MessageCompletionTracker.GetRpcMethod(0, out var method))
-                    {
-                        var nextType = obj.GetType();
-                        if (nextType == typeof(IList<>) && method!.IsVector || nextType == method!.Type || nextType.IsSubclassOf(method.Type))
+                    case FutureSalts futureSalts:
+                        HandleFutureSalts(futureSalts);
+                        break;
+                    case RpcObject rpcResult:
+                        HandleRpcResult(rpcResult);
+                        break;
+                    case MsgContainer msgContainer:
+                        HandleContainer(msgContainer, reader);
+                        break;
+                    case UUpdates updates:
+                        var random = new Random();
+                        foreach (var t in updates.Updates)
                         {
-                            _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(0, obj);
-                        }
-                    }
-
-                    break;
-                }
-                case EncryptedConnectionMessage encryptedConnectionMessage:
-                    switch (obj)
-                    {
-                        case FutureSalts futureSalts:
-                            HandleFutureSalts(futureSalts);
-                            break;
-                        case RpcObject rpcResult:
-                            HandleRpcResult(rpcResult);
-                            break;
-                        case MsgContainer msgContainer:
-                            HandleContainer(msgContainer, reader);
-                            break;
-                        case UUpdates updates:
-                            var random = new Random();
-                            foreach (var t in updates.Updates)
+                            var update = (UpdateNewMessage)t;
+                            var randomInt = random.Next();
+                            _ = _mtProtoState.Api.CloudChatsApi.Messages.SendMessageAsync(new InputPeerUser
                             {
-                                var update = (UpdateNewMessage)t;
-                                var randomInt = random.Next();
-                                _ = _mtProtoState.Api.CloudChatsApi.Messages.SendMessageAsync(new InputPeerUser
+                                AccessHash = ((User)updates.Users[0]).AccessHash!.Value,
+                                UserId = updates.Users[0].Id
+                            }, "This is a reply", randomInt, replyToMsgId: update.Message.Id).ContinueWith(x =>
+                            {
+                                if (x.Result.RpcCallFailed)
                                 {
-                                    AccessHash = ((User)updates.Users[0]).AccessHash!.Value,
-                                    UserId = updates.Users[0].Id
-                                }, "This is a reply", randomInt, replyToMsgId: update.Message.Id).ContinueWith(x =>
-                                {
-                                    if (x.Result.RpcCallFailed)
-                                    {
-                                        JsonSerializer.Serialize(x.Result.Error);
-                                    }
-                                }, TaskContinuationOptions.OnlyOnRanToCompletion);
-                            }
-                            break;
-                        default:
-                            _logger.Warning("Couldn't handle message of type {obj}", obj);
-                            break;
-                    }
+                                    JsonSerializer.Serialize(x.Result.Error);
+                                }
+                            }, TaskContinuationOptions.OnlyOnRanToCompletion);
+                        }
 
-                    break;
+                        break;
+                    default:
+                        _logger.Warning("Couldn't handle message of type {obj}", obj);
+                        break;
+                }
+            }
+            else
+            {
+                _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(0, obj);
             }
         }
-        
+
         private void HandleNewSessionCreation(NewSessionCreated newSessionCreated, long sessionId)
         {
-            _mtProtoState.SaltHandler.SetSalt(newSessionCreated.ServerSalt, true);
             if (_mtProtoState.SessionIdHandler.GetSessionId() == sessionId)
             {
                 _logger.Warning("Received new session created but the id is the same as the old one, new server salt {Salt}, new SessionId {SessionId}", newSessionCreated.ServerSalt, sessionId);
@@ -209,6 +198,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
             }
 
             _mtProtoState.SessionIdHandler.SetSessionId(sessionId);
+            _mtProtoState.SaltHandler.SetSalt(newSessionCreated.ServerSalt, true);
             _mtProtoState.SeqnoHandler.ContentRelatedReceived = 0;
             _logger.Information("New session created, new server salt {Salt}, new SessionId {SessionId}", newSessionCreated.ServerSalt, sessionId);
         }
@@ -222,7 +212,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
         {
             foreach (var message in container.Messages)
             {
-                //HandleObject(message.Body, reader, false);
+                HandleObject(message.Body, reader, true);
             }
         }
 
