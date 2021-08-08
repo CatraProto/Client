@@ -90,6 +90,9 @@ namespace CatraProto.Client.Connections.MessageScheduling
             {
                 switch (obj)
                 {
+                    case MsgsAck msgsAck:
+                        _messagesHandler.MessagesTrackers.MessagesAckTracker.ServerSentAcks(msgsAck);
+                        break;
                     case FutureSalts futureSalts:
                         HandleFutureSalts(futureSalts);
                         break;

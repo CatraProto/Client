@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using CatraProto.Client.Async.Loops;
 using CatraProto.Client.Async.Loops.Enums.Resumable;
+using CatraProto.Client.Connections.MessageScheduling.Enums;
 using CatraProto.Client.Connections.MessageScheduling.Items;
 using CatraProto.Client.MTProto.Auth;
+using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL.Interfaces;
 using Serilog;
 
@@ -73,6 +75,23 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
         public void StopTracking(long messageId)
         {
             _messages.TryRemove(messageId, out _);
+        }
+
+        public void ServerSentAcks(MsgsAck msgsAck)
+        {
+            foreach (var msgsAckMsgId in msgsAck.MsgIds)
+            {
+                if (_messages.TryRemove(msgsAckMsgId, out var item))
+                {
+                    _logger.Information("Received acknowledgment for message {Id} by the server", msgsAckMsgId);
+                    if (item.MessageSendingOptions.AwaiterType == AwaiterType.OnAcknowledgement)
+                    {
+                        //TODO: Complete
+                    }
+
+                    item.MessageStatus.MessageState = MessageState.Acknowledged;
+                }
+            }
         }
 
         public IEnumerable<MessageItem> GetAcknowledgements()
