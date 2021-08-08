@@ -1,12 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class FeaturedStickers : CatraProto.Client.TL.Schemas.CloudChats.Messages.FeaturedStickersBase
+	public partial class FeaturedStickers : FeaturedStickersBase
 	{
 
 
@@ -21,7 +20,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public override int Count { get; set; }
 
 [JsonPropertyName("sets")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.StickerSetCoveredBase> Sets { get; set; }
+		public IList<StickerSetCoveredBase> Sets { get; set; }
 
 [JsonPropertyName("unread")]
 		public IList<long> Unread { get; set; }
@@ -46,7 +45,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		{
 			Hash = reader.Read<int>();
 			Count = reader.Read<int>();
-			Sets = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.StickerSetCoveredBase>();
+			Sets = reader.ReadVector<StickerSetCoveredBase>();
 			Unread = reader.ReadVector<long>();
 
 		}

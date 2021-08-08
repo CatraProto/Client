@@ -1,12 +1,11 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class RpcResult : CatraProto.Client.TL.Schemas.MTProto.RpcResultBase
+	public partial class RpcResult : RpcResultBase
 	{
 
 

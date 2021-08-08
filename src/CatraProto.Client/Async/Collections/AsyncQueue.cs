@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,7 +10,8 @@ namespace CatraProto.Client.Async.Collections
         private readonly Queue<T> _queue = new Queue<T>();
         private readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(0, 1);
         private readonly object _mutex = new object();
-        private int _releaseCount = 0; 
+        private int _releaseCount;
+
         public void Enqueue(T item)
         {
             lock (_mutex)
@@ -34,7 +34,6 @@ namespace CatraProto.Client.Async.Collections
                 _releaseCount--;
                 ReleaseIfNecessary();
                 return true;
-
             }
         }
 
@@ -67,7 +66,7 @@ namespace CatraProto.Client.Async.Collections
                 }
             }
         }
-        
+
         public void Dispose()
         {
             _semaphoreSlim?.Dispose();

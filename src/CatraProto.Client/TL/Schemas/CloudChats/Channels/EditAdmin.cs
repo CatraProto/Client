@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
@@ -17,19 +17,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
+		Type IMethod.Type { get; init; } = typeof(UpdatesBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
 [JsonPropertyName("channel")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase Channel { get; set; }
+		public InputChannelBase Channel { get; set; }
 
 [JsonPropertyName("user_id")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase UserId { get; set; }
+		public InputUserBase UserId { get; set; }
 
 [JsonPropertyName("admin_rights")]
-		public CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase AdminRights { get; set; }
+		public ChatAdminRightsBase AdminRights { get; set; }
 
 [JsonPropertyName("rank")]
 		public string Rank { get; set; }
@@ -52,9 +52,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 
 		public void Deserialize(Reader reader)
 		{
-			Channel = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
-			UserId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
-			AdminRights = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase>();
+			Channel = reader.Read<InputChannelBase>();
+			UserId = reader.Read<InputUserBase>();
+			AdminRights = reader.Read<ChatAdminRightsBase>();
 			Rank = reader.Read<string>();
 
 		}

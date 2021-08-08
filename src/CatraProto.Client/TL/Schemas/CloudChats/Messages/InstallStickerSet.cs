@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
@@ -17,13 +17,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetInstallResultBase);
+		Type IMethod.Type { get; init; } = typeof(StickerSetInstallResultBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
 [JsonPropertyName("stickerset")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase Stickerset { get; set; }
+		public InputStickerSetBase Stickerset { get; set; }
 
 [JsonPropertyName("archived")]
 		public bool Archived { get; set; }
@@ -44,7 +44,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 		public void Deserialize(Reader reader)
 		{
-			Stickerset = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase>();
+			Stickerset = reader.Read<InputStickerSetBase>();
 			Archived = reader.Read<bool>();
 
 		}

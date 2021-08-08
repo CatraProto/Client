@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
@@ -17,16 +17,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
+		Type IMethod.Type { get; init; } = typeof(bool);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
 [JsonPropertyName("peer")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputNotifyPeerBase Peer { get; set; }
+		public InputNotifyPeerBase Peer { get; set; }
 
 [JsonPropertyName("settings")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerNotifySettingsBase Settings { get; set; }
+		public InputPeerNotifySettingsBase Settings { get; set; }
 
 
 		public void UpdateFlags() 
@@ -44,8 +44,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 		public void Deserialize(Reader reader)
 		{
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputNotifyPeerBase>();
-			Settings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerNotifySettingsBase>();
+			Peer = reader.Read<InputNotifyPeerBase>();
+			Settings = reader.Read<InputPeerNotifySettingsBase>();
 
 		}
 	}

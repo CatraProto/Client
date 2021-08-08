@@ -1,12 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class BotInlineMessageMediaContact : CatraProto.Client.TL.Schemas.CloudChats.BotInlineMessageBase
+	public partial class BotInlineMessageMediaContact : BotInlineMessageBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -34,7 +33,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public string Vcard { get; set; }
 
 [JsonPropertyName("reply_markup")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase ReplyMarkup { get; set; }
+		public override ReplyMarkupBase ReplyMarkup { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -69,7 +68,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Vcard = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				ReplyMarkup = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase>();
+				ReplyMarkup = reader.Read<ReplyMarkupBase>();
 			}
 
 

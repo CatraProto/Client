@@ -1,12 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageMediaInvoice : CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase
+	public partial class MessageMediaInvoice : MessageMediaBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -37,7 +36,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public string Description { get; set; }
 
 [JsonPropertyName("photo")]
-		public CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase Photo { get; set; }
+		public WebDocumentBase Photo { get; set; }
 
 [JsonPropertyName("receipt_msg_id")]
 		public int? ReceiptMsgId { get; set; }
@@ -93,7 +92,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Description = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase>();
+				Photo = reader.Read<WebDocumentBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))

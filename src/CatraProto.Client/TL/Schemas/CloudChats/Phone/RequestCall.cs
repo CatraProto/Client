@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
@@ -21,7 +21,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Phone.PhoneCallBase);
+		Type IMethod.Type { get; init; } = typeof(PhoneCallBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -33,7 +33,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 		public bool Video { get; set; }
 
 [JsonPropertyName("user_id")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase UserId { get; set; }
+		public InputUserBase UserId { get; set; }
 
 [JsonPropertyName("random_id")]
 		public int RandomId { get; set; }
@@ -42,7 +42,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 		public byte[] GAHash { get; set; }
 
 [JsonPropertyName("protocol")]
-		public CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase Protocol { get; set; }
+		public PhoneCallProtocolBase Protocol { get; set; }
 
 
 		public void UpdateFlags() 
@@ -67,10 +67,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 		{
 			Flags = reader.Read<int>();
 			Video = FlagsHelper.IsFlagSet(Flags, 0);
-			UserId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
+			UserId = reader.Read<InputUserBase>();
 			RandomId = reader.Read<int>();
 			GAHash = reader.Read<byte[]>();
-			Protocol = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase>();
+			Protocol = reader.Read<PhoneCallProtocolBase>();
 
 		}
 	}

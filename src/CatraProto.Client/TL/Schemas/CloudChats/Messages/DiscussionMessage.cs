@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class DiscussionMessage : CatraProto.Client.TL.Schemas.CloudChats.Messages.DiscussionMessageBase
+	public partial class DiscussionMessage : DiscussionMessageBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -24,7 +24,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public int Flags { get; set; }
 
 [JsonPropertyName("messages")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.MessageBase> Messages { get; set; }
+		public override IList<MessageBase> Messages { get; set; }
 
 [JsonPropertyName("max_id")]
 		public override int? MaxId { get; set; }
@@ -36,10 +36,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public override int? ReadOutboxMaxId { get; set; }
 
 [JsonPropertyName("chats")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
+		public override IList<ChatBase> Chats { get; set; }
 
 [JsonPropertyName("users")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+		public override IList<UserBase> Users { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -79,7 +79,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			Messages = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageBase>();
+			Messages = reader.ReadVector<MessageBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				MaxId = reader.Read<int>();
@@ -95,8 +95,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 				ReadOutboxMaxId = reader.Read<int>();
 			}
 
-			Chats = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
-			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+			Chats = reader.ReadVector<ChatBase>();
+			Users = reader.ReadVector<UserBase>();
 
 		}
 	}

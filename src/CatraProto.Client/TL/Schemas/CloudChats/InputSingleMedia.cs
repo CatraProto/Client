@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputSingleMedia : CatraProto.Client.TL.Schemas.CloudChats.InputSingleMediaBase
+	public partial class InputSingleMedia : InputSingleMediaBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -22,7 +22,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Flags { get; set; }
 
 [JsonPropertyName("media")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase Media { get; set; }
+		public override InputMediaBase Media { get; set; }
 
 [JsonPropertyName("random_id")]
 		public override long RandomId { get; set; }
@@ -31,7 +31,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override string Message { get; set; }
 
 [JsonPropertyName("entities")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
+		public override IList<MessageEntityBase> Entities { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -59,12 +59,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			Media = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase>();
+			Media = reader.Read<InputMediaBase>();
 			RandomId = reader.Read<long>();
 			Message = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
+				Entities = reader.ReadVector<MessageEntityBase>();
 			}
 
 

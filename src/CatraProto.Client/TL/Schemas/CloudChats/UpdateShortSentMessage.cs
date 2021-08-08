@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateShortSentMessage : CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase
+	public partial class UpdateShortSentMessage : UpdatesBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -39,10 +39,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Date { get; set; }
 
 [JsonPropertyName("media")]
-		public CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase Media { get; set; }
+		public MessageMediaBase Media { get; set; }
 
 [JsonPropertyName("entities")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
+		public IList<MessageEntityBase> Entities { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -85,12 +85,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Date = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 9))
 			{
-				Media = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase>();
+				Media = reader.Read<MessageMediaBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 7))
 			{
-				Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
+				Entities = reader.ReadVector<MessageEntityBase>();
 			}
 
 

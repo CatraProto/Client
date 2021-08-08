@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelAdminLogEventActionChangePhoto : CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionBase
+	public partial class ChannelAdminLogEventActionChangePhoto : ChannelAdminLogEventActionBase
 	{
 
 
@@ -15,10 +13,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("prev_photo")]
-		public CatraProto.Client.TL.Schemas.CloudChats.PhotoBase PrevPhoto { get; set; }
+		public PhotoBase PrevPhoto { get; set; }
 
 [JsonPropertyName("new_photo")]
-		public CatraProto.Client.TL.Schemas.CloudChats.PhotoBase NewPhoto { get; set; }
+		public PhotoBase NewPhoto { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -36,8 +34,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			PrevPhoto = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
-			NewPhoto = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
+			PrevPhoto = reader.Read<PhotoBase>();
+			NewPhoto = reader.Read<PhotoBase>();
 
 		}
 	}

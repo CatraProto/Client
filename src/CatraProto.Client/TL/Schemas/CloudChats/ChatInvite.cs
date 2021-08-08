@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChatInvite : CatraProto.Client.TL.Schemas.CloudChats.ChatInviteBase
+	public partial class ChatInvite : ChatInviteBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -41,13 +41,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public string Title { get; set; }
 
 [JsonPropertyName("photo")]
-		public CatraProto.Client.TL.Schemas.CloudChats.PhotoBase Photo { get; set; }
+		public PhotoBase Photo { get; set; }
 
 [JsonPropertyName("participants_count")]
 		public int ParticipantsCount { get; set; }
 
 [JsonPropertyName("participants")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Participants { get; set; }
+		public IList<UserBase> Participants { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -84,11 +84,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Public = FlagsHelper.IsFlagSet(Flags, 2);
 			Megagroup = FlagsHelper.IsFlagSet(Flags, 3);
 			Title = reader.Read<string>();
-			Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
+			Photo = reader.Read<PhotoBase>();
 			ParticipantsCount = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				Participants = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+				Participants = reader.ReadVector<UserBase>();
 			}
 
 

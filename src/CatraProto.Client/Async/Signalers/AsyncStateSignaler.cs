@@ -11,19 +11,10 @@ namespace CatraProto.Client.Async.Signalers
         private TaskCompletionSource<T> _taskCompletionSource = new TaskCompletionSource<T>(TaskCreationOptions.RunContinuationsAsynchronously);
         private readonly object _mutex = new object();
         private CancellationToken? _cancellationToken;
-        
+
         public AsyncStateSignaler(T currentState)
         {
             _currentState = currentState;
-        }
-
-        public Task<T> WaitAsync(CancellationToken token = default)
-        {
-            lock (_mutex)
-            {
-                ThrowIfCancelled();
-                return _taskCompletionSource.Task;
-            }
         }
 
         private void ThrowIfCancelled()
@@ -34,14 +25,14 @@ namespace CatraProto.Client.Async.Signalers
                 {
                     throw new ObjectDisposedException("Object disposed");
                 }
-                
+
                 if (_taskCompletionSource.Task.IsCanceled)
                 {
                     _taskCompletionSource.Task.GetAwaiter().GetResult();
                 }
             }
         }
-        
+
         public T GetCurrentState()
         {
             lock (_mutex)
@@ -51,11 +42,6 @@ namespace CatraProto.Client.Async.Signalers
             }
         }
 
-        public void Signal(T state)
-        {
-            Signal(state, false);
-        }
-        
         public void Signal(T state, bool force)
         {
             lock (_mutex)
@@ -78,13 +64,27 @@ namespace CatraProto.Client.Async.Signalers
                 _cancellationToken = cancellationToken;
             }
         }
-        
+
         public void Dispose()
         {
             lock (_mutex)
             {
                 _taskCompletionSource.TrySetCanceled(_cancellationToken ?? CancellationToken.None);
             }
+        }
+
+        public Task<T> WaitAsync(CancellationToken token = default)
+        {
+            lock (_mutex)
+            {
+                ThrowIfCancelled();
+                return _taskCompletionSource.Task;
+            }
+        }
+
+        public void Signal(T state)
+        {
+            Signal(state, false);
         }
     }
 }

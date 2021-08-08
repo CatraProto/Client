@@ -1,13 +1,11 @@
-using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using CatraProto.Client.Connections;
 using CatraProto.Client.Connections.MessageScheduling;
-using CatraProto.Client.MTProto.Messages;
 using CatraProto.Client.MTProto.Rpc;
-using CatraProto.TL.Interfaces;
-using System.Collections.Generic;
-using System.Numerics;
+using CatraProto.Client.MTProto.Rpc.Vectors;
+using CatraProto.Client.TL.Schemas.CloudChats;
+using CatraProto.Client.TL.Schemas.CloudChats.Users;
 
 namespace CatraProto.Client.TL.Requests.CloudChats
 {
@@ -20,14 +18,14 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 	        _messagesQueue = messagesQueue;
 	        
 	    }
-	    
-	    public async Task<RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>>> GetUsersAsync(IList<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase> id, CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+
+	    public async Task<RpcMessage<RpcVector<UserBase>>> GetUsersAsync(IList<InputUserBase> id, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>>();
-rpcResponse.Response = new CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
-messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
-var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Users.GetUsers(){
+var rpcResponse = new RpcMessage<RpcVector<UserBase>>();
+rpcResponse.Response = new RpcVector<UserBase>();
+messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+var methodBody = new GetUsers(){
 Id = id,
 };
 
@@ -35,12 +33,13 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource;
 return rpcResponse;
 }
-public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.UserFullBase>> GetFullUserAsync(CatraProto.Client.TL.Schemas.CloudChats.InputUserBase id, CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+
+	    public async Task<RpcMessage<UserFullBase>> GetFullUserAsync(InputUserBase id, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.UserFullBase>();
-messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
-var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Users.GetFullUser(){
+var rpcResponse = new RpcMessage<UserFullBase>();
+messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+var methodBody = new GetFullUser(){
 Id = id,
 };
 
@@ -48,12 +47,13 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource;
 return rpcResponse;
 }
-public async Task<RpcMessage<bool>> SetSecureValueErrorsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputUserBase id, IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase> errors, CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+
+	    public async Task<RpcMessage<bool>> SetSecureValueErrorsAsync(InputUserBase id, IList<SecureValueErrorBase> errors, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
 var rpcResponse = new RpcMessage<bool>();
-messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
-var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Users.SetSecureValueErrors(){
+messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+var methodBody = new SetSecureValueErrors(){
 Id = id,
 Errors = errors,
 };

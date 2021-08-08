@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
@@ -22,7 +22,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedHistoryBase);
+		Type IMethod.Type { get; init; } = typeof(AffectedHistoryBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -37,7 +37,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public bool Revoke { get; set; }
 
 [JsonPropertyName("peer")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
+		public InputPeerBase Peer { get; set; }
 
 [JsonPropertyName("max_id")]
 		public int MaxId { get; set; }
@@ -65,7 +65,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Flags = reader.Read<int>();
 			JustClear = FlagsHelper.IsFlagSet(Flags, 0);
 			Revoke = FlagsHelper.IsFlagSet(Flags, 1);
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+			Peer = reader.Read<InputPeerBase>();
 			MaxId = reader.Read<int>();
 
 		}

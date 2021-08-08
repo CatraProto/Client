@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class SentEncryptedFile : CatraProto.Client.TL.Schemas.CloudChats.Messages.SentEncryptedMessageBase
+	public partial class SentEncryptedFile : SentEncryptedMessageBase
 	{
 
 
@@ -18,7 +16,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public override int Date { get; set; }
 
 [JsonPropertyName("file")]
-		public CatraProto.Client.TL.Schemas.CloudChats.EncryptedFileBase File { get; set; }
+		public EncryptedFileBase File { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -37,7 +35,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public override void Deserialize(Reader reader)
 		{
 			Date = reader.Read<int>();
-			File = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.EncryptedFileBase>();
+			File = reader.Read<EncryptedFileBase>();
 
 		}
 	}

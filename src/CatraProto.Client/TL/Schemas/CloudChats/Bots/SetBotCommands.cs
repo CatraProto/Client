@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Bots
@@ -17,13 +18,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Bots
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
+		Type IMethod.Type { get; init; } = typeof(bool);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
 [JsonPropertyName("commands")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.BotCommandBase> Commands { get; set; }
+		public IList<BotCommandBase> Commands { get; set; }
 
 
 		public void UpdateFlags() 
@@ -40,7 +41,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Bots
 
 		public void Deserialize(Reader reader)
 		{
-			Commands = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.BotCommandBase>();
+			Commands = reader.ReadVector<BotCommandBase>();
 
 		}
 	}

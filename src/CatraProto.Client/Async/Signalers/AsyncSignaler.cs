@@ -1,7 +1,5 @@
 using System;
-using System.Threading;
 using System.Threading.Tasks;
-using CatraProto.Client.Async.Signalers.Interfaces;
 
 namespace CatraProto.Client.Async.Signalers
 {
@@ -23,7 +21,7 @@ namespace CatraProto.Client.Async.Signalers
             lock (_mutex)
             {
                 SetSignal(true);
-                SetSignal(false);   
+                SetSignal(false);
             }
         }
 

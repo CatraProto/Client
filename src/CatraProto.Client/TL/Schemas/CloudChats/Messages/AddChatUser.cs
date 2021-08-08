@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
@@ -17,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
+		Type IMethod.Type { get; init; } = typeof(UpdatesBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -26,7 +26,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public int ChatId { get; set; }
 
 [JsonPropertyName("user_id")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase UserId { get; set; }
+		public InputUserBase UserId { get; set; }
 
 [JsonPropertyName("fwd_limit")]
 		public int FwdLimit { get; set; }
@@ -49,7 +49,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public void Deserialize(Reader reader)
 		{
 			ChatId = reader.Read<int>();
-			UserId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
+			UserId = reader.Read<InputUserBase>();
 			FwdLimit = reader.Read<int>();
 
 		}

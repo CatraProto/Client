@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PollResults : CatraProto.Client.TL.Schemas.CloudChats.PollResultsBase
+	public partial class PollResults : PollResultsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -30,7 +30,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override bool Min { get; set; }
 
 [JsonPropertyName("results")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.PollAnswerVotersBase> Results { get; set; }
+		public override IList<PollAnswerVotersBase> Results { get; set; }
 
 [JsonPropertyName("total_voters")]
 		public override int? TotalVoters { get; set; }
@@ -42,7 +42,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override string Solution { get; set; }
 
 [JsonPropertyName("solution_entities")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> SolutionEntities { get; set; }
+		public override IList<MessageEntityBase> SolutionEntities { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -95,7 +95,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Min = FlagsHelper.IsFlagSet(Flags, 0);
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Results = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PollAnswerVotersBase>();
+				Results = reader.ReadVector<PollAnswerVotersBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
@@ -115,7 +115,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				SolutionEntities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
+				SolutionEntities = reader.ReadVector<MessageEntityBase>();
 			}
 
 

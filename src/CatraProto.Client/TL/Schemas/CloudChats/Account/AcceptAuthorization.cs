@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
@@ -17,7 +18,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
+		Type IMethod.Type { get; init; } = typeof(bool);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -32,10 +33,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		public string PublicKey { get; set; }
 
 [JsonPropertyName("value_hashes")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueHashBase> ValueHashes { get; set; }
+		public IList<SecureValueHashBase> ValueHashes { get; set; }
 
 [JsonPropertyName("credentials")]
-		public CatraProto.Client.TL.Schemas.CloudChats.SecureCredentialsEncryptedBase Credentials { get; set; }
+		public SecureCredentialsEncryptedBase Credentials { get; set; }
 
 
 		public void UpdateFlags() 
@@ -59,8 +60,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 			BotId = reader.Read<int>();
 			Scope = reader.Read<string>();
 			PublicKey = reader.Read<string>();
-			ValueHashes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SecureValueHashBase>();
-			Credentials = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SecureCredentialsEncryptedBase>();
+			ValueHashes = reader.ReadVector<SecureValueHashBase>();
+			Credentials = reader.Read<SecureCredentialsEncryptedBase>();
 
 		}
 	}

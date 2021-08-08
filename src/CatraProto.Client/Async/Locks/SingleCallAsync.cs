@@ -13,7 +13,7 @@ namespace CatraProto.Client.Async.Locks
         {
             _getTask = getTask;
         }
-        
+
         public Task GetCall(T parameter)
         {
             lock (_mutex)

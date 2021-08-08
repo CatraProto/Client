@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateShortMessage : CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase
+	public partial class UpdateShortMessage : UpdatesBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -59,16 +59,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Date { get; set; }
 
 [JsonPropertyName("fwd_from")]
-		public CatraProto.Client.TL.Schemas.CloudChats.MessageFwdHeaderBase FwdFrom { get; set; }
+		public MessageFwdHeaderBase FwdFrom { get; set; }
 
 [JsonPropertyName("via_bot_id")]
 		public int? ViaBotId { get; set; }
 
 [JsonPropertyName("reply_to")]
-		public CatraProto.Client.TL.Schemas.CloudChats.MessageReplyHeaderBase ReplyTo { get; set; }
+		public MessageReplyHeaderBase ReplyTo { get; set; }
 
 [JsonPropertyName("entities")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
+		public IList<MessageEntityBase> Entities { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -133,7 +133,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Date = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				FwdFrom = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageFwdHeaderBase>();
+				FwdFrom = reader.Read<MessageFwdHeaderBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 11))
@@ -143,12 +143,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				ReplyTo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageReplyHeaderBase>();
+				ReplyTo = reader.Read<MessageReplyHeaderBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 7))
 			{
-				Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
+				Entities = reader.ReadVector<MessageEntityBase>();
 			}
 
 

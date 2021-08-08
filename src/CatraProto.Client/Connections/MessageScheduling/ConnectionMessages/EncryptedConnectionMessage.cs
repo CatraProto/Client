@@ -41,7 +41,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.ConnectionMessages
             Body = body;
             AuthKeyId = AuthKey.AuthKeyId!.Value;
         }
-        
+
         public void Import(byte[] message)
         {
             using (var reader = new BinaryReader(message.ToMemoryStream()))
@@ -75,17 +75,18 @@ namespace CatraProto.Client.Connections.MessageScheduling.ConnectionMessages
                     plainWriter.Write(SeqNo);
                     plainWriter.Write(Body.Length);
                     plainWriter.Write(Body);
-                   
+
                     CryptoTools.AddPadding(plainWriter.BaseStream, 16, 12);
-                    
+
                     var toEncryptData = ((MemoryStream)plainWriter.BaseStream).ToArray();
                     var msgKey = SHA256.HashData(AuthKey.RawAuthKey!.Skip(88).Take(32).Concat(toEncryptData).ToArray()).Skip(8).Take(16).ToArray();
                     using var encryptor = AuthKey.CreateEncryptorV2(msgKey, true);
-                    
+
                     writer.Write(AuthKeyId);
                     writer.Write(msgKey);
                     writer.Write(encryptor.Encrypt(toEncryptData));
                 }
+
                 return ((MemoryStream)writer.BaseStream).ToArray();
             }
         }

@@ -1,12 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 {
-	public partial class Difference : CatraProto.Client.TL.Schemas.CloudChats.Updates.DifferenceBase
+	public partial class Difference : DifferenceBase
 	{
 
 
@@ -15,22 +14,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("new_messages")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageBase> NewMessages { get; set; }
+		public IList<MessageBase> NewMessages { get; set; }
 
 [JsonPropertyName("new_encrypted_messages")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.EncryptedMessageBase> NewEncryptedMessages { get; set; }
+		public IList<EncryptedMessageBase> NewEncryptedMessages { get; set; }
 
 [JsonPropertyName("other_updates")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.UpdateBase> OtherUpdates { get; set; }
+		public IList<UpdateBase> OtherUpdates { get; set; }
 
 [JsonPropertyName("chats")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
+		public IList<ChatBase> Chats { get; set; }
 
 [JsonPropertyName("users")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+		public IList<UserBase> Users { get; set; }
 
 [JsonPropertyName("state")]
-		public CatraProto.Client.TL.Schemas.CloudChats.Updates.StateBase State { get; set; }
+		public StateBase State { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -52,12 +51,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 
 		public override void Deserialize(Reader reader)
 		{
-			NewMessages = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageBase>();
-			NewEncryptedMessages = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.EncryptedMessageBase>();
-			OtherUpdates = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UpdateBase>();
-			Chats = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
-			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
-			State = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.Updates.StateBase>();
+			NewMessages = reader.ReadVector<MessageBase>();
+			NewEncryptedMessages = reader.ReadVector<EncryptedMessageBase>();
+			OtherUpdates = reader.ReadVector<UpdateBase>();
+			Chats = reader.ReadVector<ChatBase>();
+			Users = reader.ReadVector<UserBase>();
+			State = reader.Read<StateBase>();
 
 		}
 	}

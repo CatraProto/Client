@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
@@ -17,16 +17,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetBase);
+		Type IMethod.Type { get; init; } = typeof(Messages.StickerSetBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
 [JsonPropertyName("stickerset")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase Stickerset { get; set; }
+		public InputStickerSetBase Stickerset { get; set; }
 
 [JsonPropertyName("thumb")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase Thumb { get; set; }
+		public InputDocumentBase Thumb { get; set; }
 
 
 		public void UpdateFlags() 
@@ -44,8 +44,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 
 		public void Deserialize(Reader reader)
 		{
-			Stickerset = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase>();
-			Thumb = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
+			Stickerset = reader.Read<InputStickerSetBase>();
+			Thumb = reader.Read<InputDocumentBase>();
 
 		}
 	}

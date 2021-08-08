@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
@@ -24,7 +25,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
+		Type IMethod.Type { get; init; } = typeof(UpdatesBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -42,7 +43,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public bool WithMyScore { get; set; }
 
 [JsonPropertyName("from_peer")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase FromPeer { get; set; }
+		public InputPeerBase FromPeer { get; set; }
 
 [JsonPropertyName("id")]
 		public IList<int> Id { get; set; }
@@ -51,7 +52,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public IList<long> RandomId { get; set; }
 
 [JsonPropertyName("to_peer")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase ToPeer { get; set; }
+		public InputPeerBase ToPeer { get; set; }
 
 [JsonPropertyName("schedule_date")]
 		public int? ScheduleDate { get; set; }
@@ -89,10 +90,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Silent = FlagsHelper.IsFlagSet(Flags, 5);
 			Background = FlagsHelper.IsFlagSet(Flags, 6);
 			WithMyScore = FlagsHelper.IsFlagSet(Flags, 8);
-			FromPeer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+			FromPeer = reader.Read<InputPeerBase>();
 			Id = reader.ReadVector<int>();
 			RandomId = reader.ReadVector<long>();
-			ToPeer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+			ToPeer = reader.Read<InputPeerBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 10))
 			{
 				ScheduleDate = reader.Read<int>();

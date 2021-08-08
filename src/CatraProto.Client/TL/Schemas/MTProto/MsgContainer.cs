@@ -1,12 +1,14 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Serialization;
+using CatraProto.Client.MTProto.Deserializers;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+using CatraProto.TL.ObjectDeserializers;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class MsgContainer : CatraProto.Client.TL.Schemas.MTProto.MessageContainerBase
+	public partial class MsgContainer : MessageContainerBase
 	{
 
 
@@ -15,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("messages")]
-		public override IList<CatraProto.Client.TL.Schemas.MTProto.Message> Messages { get; set; }
+		public override IList<Message> Messages { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -32,7 +34,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
 		public override void Deserialize(Reader reader)
 		{
-			Messages = reader.ReadVector(new CatraProto.TL.ObjectDeserializers.NakedObjectVectorDeserializer<CatraProto.Client.TL.Schemas.MTProto.Message>(), true);
+			Messages = reader.ReadVector(new NakedObjectVectorDeserializer<MsgContainerDeserializer>(), true).Cast<Message>().ToList();
 
 		}
 	}

@@ -20,7 +20,7 @@ namespace CatraProto.Client.Crypto
         };
 
         private readonly RsaImplementation _rsaKey = RsaImplementation.Create();
-        
+
         public Rsa(string key)
         {
             _rsaKey.ImportFromPem(key);

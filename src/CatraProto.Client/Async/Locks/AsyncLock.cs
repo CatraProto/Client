@@ -6,6 +6,21 @@ namespace CatraProto.Client.Async.Locks
 {
     public class AsyncLock : IDisposable
     {
+        private readonly struct Releaser : IDisposable
+        {
+            private readonly AsyncLock _asyncLock;
+
+            internal Releaser(AsyncLock asyncLock)
+            {
+                _asyncLock = asyncLock;
+            }
+
+            public void Dispose()
+            {
+                _asyncLock.ReleaseLock();
+            }
+        }
+
         public bool IsTaken
         {
             get => _semaphoreSlim.CurrentCount == 0;
@@ -30,21 +45,6 @@ namespace CatraProto.Client.Async.Locks
             _semaphoreSlim.Release();
         }
 
-        private readonly struct Releaser : IDisposable
-        {
-            private readonly AsyncLock _asyncLock;
-
-            internal Releaser(AsyncLock asyncLock)
-            {
-                _asyncLock = asyncLock;
-            }
-
-            public void Dispose()
-            {
-                _asyncLock.ReleaseLock();
-            }
-        }
-        
         public void Dispose()
         {
             _semaphoreSlim?.Dispose();

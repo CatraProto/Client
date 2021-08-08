@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateUserPhoto : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
+	public partial class UpdateUserPhoto : UpdateBase
 	{
 
 
@@ -21,7 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Date { get; set; }
 
 [JsonPropertyName("photo")]
-		public CatraProto.Client.TL.Schemas.CloudChats.UserProfilePhotoBase Photo { get; set; }
+		public UserProfilePhotoBase Photo { get; set; }
 
 [JsonPropertyName("previous")]
 		public bool Previous { get; set; }
@@ -46,7 +44,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			UserId = reader.Read<int>();
 			Date = reader.Read<int>();
-			Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.UserProfilePhotoBase>();
+			Photo = reader.Read<UserProfilePhotoBase>();
 			Previous = reader.Read<bool>();
 
 		}

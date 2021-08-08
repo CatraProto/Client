@@ -1,12 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateFolderPeers : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
+	public partial class UpdateFolderPeers : UpdateBase
 	{
 
 
@@ -15,7 +14,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("folder_peers")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.FolderPeerBase> FolderPeers { get; set; }
+		public IList<FolderPeerBase> FolderPeers { get; set; }
 
 [JsonPropertyName("pts")]
 		public int Pts { get; set; }
@@ -40,7 +39,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			FolderPeers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.FolderPeerBase>();
+			FolderPeers = reader.ReadVector<FolderPeerBase>();
 			Pts = reader.Read<int>();
 			PtsCount = reader.Read<int>();
 

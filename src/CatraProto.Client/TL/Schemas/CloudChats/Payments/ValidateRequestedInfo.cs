@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
@@ -21,7 +21,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Payments.ValidatedRequestedInfoBase);
+		Type IMethod.Type { get; init; } = typeof(ValidatedRequestedInfoBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -36,7 +36,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 		public int MsgId { get; set; }
 
 [JsonPropertyName("info")]
-		public CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase Info { get; set; }
+		public PaymentRequestedInfoBase Info { get; set; }
 
 
 		public void UpdateFlags() 
@@ -60,7 +60,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 			Flags = reader.Read<int>();
 			Save = FlagsHelper.IsFlagSet(Flags, 0);
 			MsgId = reader.Read<int>();
-			Info = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase>();
+			Info = reader.Read<PaymentRequestedInfoBase>();
 
 		}
 	}

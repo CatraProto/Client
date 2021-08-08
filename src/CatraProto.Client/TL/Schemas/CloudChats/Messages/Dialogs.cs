@@ -1,12 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class Dialogs : CatraProto.Client.TL.Schemas.CloudChats.Messages.DialogsBase
+	public partial class Dialogs : DialogsBase
 	{
 
 
@@ -15,16 +14,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("Dialogs_")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.DialogBase> Dialogs_ { get; set; }
+		public IList<DialogBase> Dialogs_ { get; set; }
 
 [JsonPropertyName("messages")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageBase> Messages { get; set; }
+		public IList<MessageBase> Messages { get; set; }
 
 [JsonPropertyName("chats")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
+		public IList<ChatBase> Chats { get; set; }
 
 [JsonPropertyName("users")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+		public IList<UserBase> Users { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -44,10 +43,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 		public override void Deserialize(Reader reader)
 		{
-			Dialogs_ = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DialogBase>();
-			Messages = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageBase>();
-			Chats = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
-			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+			Dialogs_ = reader.ReadVector<DialogBase>();
+			Messages = reader.ReadVector<MessageBase>();
+			Chats = reader.ReadVector<ChatBase>();
+			Users = reader.ReadVector<UserBase>();
 
 		}
 	}

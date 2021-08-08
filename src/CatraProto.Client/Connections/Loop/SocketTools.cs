@@ -1,4 +1,3 @@
-using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.Connections.MessageScheduling.Items;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.TL;

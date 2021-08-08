@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
@@ -21,7 +21,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase);
+		Type IMethod.Type { get; init; } = typeof(MessagesBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -36,7 +36,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public string Q { get; set; }
 
 [JsonPropertyName("filter")]
-		public CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase Filter { get; set; }
+		public MessagesFilterBase Filter { get; set; }
 
 [JsonPropertyName("min_date")]
 		public int MinDate { get; set; }
@@ -48,7 +48,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public int OffsetRate { get; set; }
 
 [JsonPropertyName("offset_peer")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase OffsetPeer { get; set; }
+		public InputPeerBase OffsetPeer { get; set; }
 
 [JsonPropertyName("offset_id")]
 		public int OffsetId { get; set; }
@@ -93,11 +93,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			}
 
 			Q = reader.Read<string>();
-			Filter = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase>();
+			Filter = reader.Read<MessagesFilterBase>();
 			MinDate = reader.Read<int>();
 			MaxDate = reader.Read<int>();
 			OffsetRate = reader.Read<int>();
-			OffsetPeer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+			OffsetPeer = reader.Read<InputPeerBase>();
 			OffsetId = reader.Read<int>();
 			Limit = reader.Read<int>();
 

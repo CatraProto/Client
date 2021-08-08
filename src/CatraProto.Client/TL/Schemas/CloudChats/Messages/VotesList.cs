@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class VotesList : CatraProto.Client.TL.Schemas.CloudChats.Messages.VotesListBase
+	public partial class VotesList : VotesListBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -25,10 +25,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public override int Count { get; set; }
 
 [JsonPropertyName("votes")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.MessageUserVoteBase> Votes { get; set; }
+		public override IList<MessageUserVoteBase> Votes { get; set; }
 
 [JsonPropertyName("users")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+		public override IList<UserBase> Users { get; set; }
 
 [JsonPropertyName("next_offset")]
 		public override string NextOffset { get; set; }
@@ -60,8 +60,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		{
 			Flags = reader.Read<int>();
 			Count = reader.Read<int>();
-			Votes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageUserVoteBase>();
-			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+			Votes = reader.ReadVector<MessageUserVoteBase>();
+			Users = reader.ReadVector<UserBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				NextOffset = reader.Read<string>();

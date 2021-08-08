@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdatePinnedDialogs : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
+	public partial class UpdatePinnedDialogs : UpdateBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -26,7 +26,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int? FolderId { get; set; }
 
 [JsonPropertyName("order")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.DialogPeerBase> Order { get; set; }
+		public IList<DialogPeerBase> Order { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -64,7 +64,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Order = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DialogPeerBase>();
+				Order = reader.ReadVector<DialogPeerBase>();
 			}
 
 

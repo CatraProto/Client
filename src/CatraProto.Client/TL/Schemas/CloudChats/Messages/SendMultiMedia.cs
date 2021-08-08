@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
@@ -25,7 +26,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
+		Type IMethod.Type { get; init; } = typeof(UpdatesBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -43,13 +44,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public bool ClearDraft { get; set; }
 
 [JsonPropertyName("peer")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
+		public InputPeerBase Peer { get; set; }
 
 [JsonPropertyName("reply_to_msg_id")]
 		public int? ReplyToMsgId { get; set; }
 
 [JsonPropertyName("multi_media")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputSingleMediaBase> MultiMedia { get; set; }
+		public IList<InputSingleMediaBase> MultiMedia { get; set; }
 
 [JsonPropertyName("schedule_date")]
 		public int? ScheduleDate { get; set; }
@@ -91,13 +92,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Silent = FlagsHelper.IsFlagSet(Flags, 5);
 			Background = FlagsHelper.IsFlagSet(Flags, 6);
 			ClearDraft = FlagsHelper.IsFlagSet(Flags, 7);
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+			Peer = reader.Read<InputPeerBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				ReplyToMsgId = reader.Read<int>();
 			}
 
-			MultiMedia = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputSingleMediaBase>();
+			MultiMedia = reader.ReadVector<InputSingleMediaBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 10))
 			{
 				ScheduleDate = reader.Read<int>();

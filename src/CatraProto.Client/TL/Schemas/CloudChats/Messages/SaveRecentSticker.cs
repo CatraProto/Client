@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
@@ -21,7 +21,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
+		Type IMethod.Type { get; init; } = typeof(bool);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -33,7 +33,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public bool Attached { get; set; }
 
 [JsonPropertyName("id")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase Id { get; set; }
+		public InputDocumentBase Id { get; set; }
 
 [JsonPropertyName("unsave")]
 		public bool Unsave { get; set; }
@@ -59,7 +59,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		{
 			Flags = reader.Read<int>();
 			Attached = FlagsHelper.IsFlagSet(Flags, 0);
-			Id = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
+			Id = reader.Read<InputDocumentBase>();
 			Unsave = reader.Read<bool>();
 
 		}

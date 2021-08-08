@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PhotoCachedSize : CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase
+	public partial class PhotoCachedSize : PhotoSizeBase
 	{
 
 
@@ -18,7 +16,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override string Type { get; set; }
 
 [JsonPropertyName("location")]
-		public CatraProto.Client.TL.Schemas.CloudChats.FileLocationBase Location { get; set; }
+		public FileLocationBase Location { get; set; }
 
 [JsonPropertyName("w")]
 		public int W { get; set; }
@@ -49,7 +47,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Type = reader.Read<string>();
-			Location = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.FileLocationBase>();
+			Location = reader.Read<FileLocationBase>();
 			W = reader.Read<int>();
 			H = reader.Read<int>();
 			Bytes = reader.Read<byte[]>();

@@ -1,12 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageViews : CatraProto.Client.TL.Schemas.CloudChats.MessageViewsBase
+	public partial class MessageViews : MessageViewsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -30,7 +29,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override int? Forwards { get; set; }
 
 [JsonPropertyName("replies")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.MessageRepliesBase Replies { get; set; }
+		public override MessageRepliesBase Replies { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -79,7 +78,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				Replies = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageRepliesBase>();
+				Replies = reader.Read<MessageRepliesBase>();
 			}
 
 

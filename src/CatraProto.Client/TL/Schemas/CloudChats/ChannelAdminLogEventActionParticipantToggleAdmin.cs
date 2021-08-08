@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelAdminLogEventActionParticipantToggleAdmin : CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionBase
+	public partial class ChannelAdminLogEventActionParticipantToggleAdmin : ChannelAdminLogEventActionBase
 	{
 
 
@@ -15,10 +13,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("prev_participant")]
-		public CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantBase PrevParticipant { get; set; }
+		public ChannelParticipantBase PrevParticipant { get; set; }
 
 [JsonPropertyName("new_participant")]
-		public CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantBase NewParticipant { get; set; }
+		public ChannelParticipantBase NewParticipant { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -36,8 +34,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			PrevParticipant = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantBase>();
-			NewParticipant = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantBase>();
+			PrevParticipant = reader.Read<ChannelParticipantBase>();
+			NewParticipant = reader.Read<ChannelParticipantBase>();
 
 		}
 	}

@@ -2,9 +2,8 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections;
-using CatraProto.Client.Connections.MessageScheduling.Enums;
+using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.Crypto;
-using CatraProto.Client.MTProto.Messages;
 using CatraProto.Client.Settings;
 using CatraProto.Client.TL.Schemas.CloudChats;
 using CatraProto.Client.TL.Schemas.CloudChats.Help;
@@ -15,6 +14,8 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
 {
     class TemporaryAuthKey
     {
+        public delegate void AuthKeyChanged(AuthKey authKey, bool bindCompleted);
+
         private readonly PermanentAuthKey _permanentAuthKey;
         private readonly ClientSettings _clientSettings;
         private readonly object _mutex = new object();
@@ -25,9 +26,6 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
         private AuthKey? _tempAuthKey;
         private readonly Api _api;
         private int _expiresAt;
-
-        public delegate void AuthKeyChanged(AuthKey authKey, bool bindCompleted);
-
         public event AuthKeyChanged? OnAuthKeyChanged;
 
         public TemporaryAuthKey(MTProtoState mtProtoState, PermanentAuthKey permanentAuthKey, Api api, ClientSettings clientSettings, int duration, ILogger logger)
@@ -73,11 +71,11 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
 
         private async Task<AuthKey> InternalGetAuthKeyAsync(CancellationToken token = default)
         {
-            _logger.Information("Generating temporary auth key");
+            var permAuthKey = await _permanentAuthKey.GetAuthKeyAsync(token);
+
             _tempAuthKey = new AuthKey(_api, _logger);
             await _tempAuthKey.ComputeAuthKey(_duration, token);
 
-            var permAuthKey = await _permanentAuthKey.GetAuthKeyAsync(token);
             _expiresAt = (int)(DateTimeOffset.Now.ToUnixTimeSeconds() + _duration);
 
             OnAuthKeyChanged?.Invoke(_tempAuthKey, false);
@@ -94,7 +92,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
 
             var messageId = _mtProtoState.MessageIdsHandler.ComputeMessageId();
             var encryptedInnerData = Pfs.Encrypt(permAuthKey, innerData, messageId);
-            var messageOptions = new MessageSendingOptions(true, messageId);
+            var messageOptions = new MessageSendingOptions(true, _tempAuthKey, messageId);
             var bindTempAuthKey = await _mtProtoState.Api.CloudChatsApi.Auth.BindTempAuthKeyAsync(permAuthKey.AuthKeyId.Value, innerData.Nonce, _expiresAt, encryptedInnerData, messageOptions, token);
 
             if (bindTempAuthKey.RpcCallFailed)
@@ -108,8 +106,10 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
 
 
             _logger.Information("Writing client information");
+            OnAuthKeyChanged?.Invoke(_tempAuthKey, true);
+
             var apiSettings = _clientSettings.ApiSettings;
-            await _mtProtoState.Api.CloudChatsApi.InvokeWithLayerAsync(121, new InitConnection
+            var response = await _mtProtoState.Api.CloudChatsApi.InvokeWithLayerAsync(121, new InitConnection
             {
                 ApiId = apiSettings.ApiId,
                 AppVersion = apiSettings.AppVersion,
@@ -119,10 +119,17 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
                 SystemLangCode = apiSettings.SystemLangCode,
                 SystemVersion = apiSettings.SystemVersion,
                 Query = new GetConfig()
-            }, cancellationToken: token);
-            OnAuthKeyChanged?.Invoke(_tempAuthKey, true);
+            }, cancellationToken: token, messageSendingOptions: new MessageSendingOptions(true, _tempAuthKey));
 
-            _logger.Information("Successfully wrote client information");
+            if (response.Error != null)
+            {
+                _logger.Error("Couldn't write client information due to {Error}", bindTempAuthKey.Error);
+            }
+            else
+            {
+                _logger.Information("Successfully wrote client information");
+            }
+
             return _tempAuthKey;
         }
     }

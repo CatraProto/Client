@@ -1,12 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ThemeSettings : CatraProto.Client.TL.Schemas.CloudChats.ThemeSettingsBase
+	public partial class ThemeSettings : ThemeSettingsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -24,7 +23,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Flags { get; set; }
 
 [JsonPropertyName("base_theme")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.BaseThemeBase BaseTheme { get; set; }
+		public override BaseThemeBase BaseTheme { get; set; }
 
 [JsonPropertyName("accent_color")]
 		public override int AccentColor { get; set; }
@@ -36,7 +35,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override int? MessageBottomColor { get; set; }
 
 [JsonPropertyName("wallpaper")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase Wallpaper { get; set; }
+		public override WallPaperBase Wallpaper { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -75,7 +74,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			BaseTheme = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.BaseThemeBase>();
+			BaseTheme = reader.Read<BaseThemeBase>();
 			AccentColor = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
@@ -89,7 +88,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Wallpaper = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase>();
+				Wallpaper = reader.Read<WallPaperBase>();
 			}
 
 

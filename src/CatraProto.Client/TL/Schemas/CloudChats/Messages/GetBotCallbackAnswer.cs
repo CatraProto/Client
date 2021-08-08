@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
@@ -23,7 +23,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.BotCallbackAnswerBase);
+		Type IMethod.Type { get; init; } = typeof(BotCallbackAnswerBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -35,7 +35,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public bool Game { get; set; }
 
 [JsonPropertyName("peer")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
+		public InputPeerBase Peer { get; set; }
 
 [JsonPropertyName("msg_id")]
 		public int MsgId { get; set; }
@@ -44,7 +44,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public byte[] Data { get; set; }
 
 [JsonPropertyName("password")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputCheckPasswordSRPBase Password { get; set; }
+		public InputCheckPasswordSRPBase Password { get; set; }
 
 
 		public void UpdateFlags() 
@@ -79,7 +79,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		{
 			Flags = reader.Read<int>();
 			Game = FlagsHelper.IsFlagSet(Flags, 1);
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+			Peer = reader.Read<InputPeerBase>();
 			MsgId = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
@@ -88,7 +88,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				Password = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputCheckPasswordSRPBase>();
+				Password = reader.Read<InputCheckPasswordSRPBase>();
 			}
 
 

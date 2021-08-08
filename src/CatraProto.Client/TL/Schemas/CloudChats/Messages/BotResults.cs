@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class BotResults : CatraProto.Client.TL.Schemas.CloudChats.Messages.BotResultsBase
+	public partial class BotResults : BotResultsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -33,16 +33,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public override string NextOffset { get; set; }
 
 [JsonPropertyName("switch_pm")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.InlineBotSwitchPMBase SwitchPm { get; set; }
+		public override InlineBotSwitchPMBase SwitchPm { get; set; }
 
 [JsonPropertyName("results")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.BotInlineResultBase> Results { get; set; }
+		public override IList<BotInlineResultBase> Results { get; set; }
 
 [JsonPropertyName("cache_time")]
 		public override int CacheTime { get; set; }
 
 [JsonPropertyName("users")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+		public override IList<UserBase> Users { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -87,12 +87,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				SwitchPm = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InlineBotSwitchPMBase>();
+				SwitchPm = reader.Read<InlineBotSwitchPMBase>();
 			}
 
-			Results = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.BotInlineResultBase>();
+			Results = reader.ReadVector<BotInlineResultBase>();
 			CacheTime = reader.Read<int>();
-			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+			Users = reader.ReadVector<UserBase>();
 
 		}
 	}

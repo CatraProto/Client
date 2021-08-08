@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputMessagesFilterVoice : CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase
+	public partial class InputMessagesFilterVoice : MessagesFilterBase
 	{
 
 

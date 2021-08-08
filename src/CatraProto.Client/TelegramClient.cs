@@ -1,11 +1,7 @@
-using System;
 using System.IO;
 using System.Net;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using CatraProto.Client.Async.Signalers;
 using CatraProto.Client.Connections;
-using CatraProto.Client.MTProto;
 using CatraProto.Client.MTProto.Session;
 using Serilog;
 
@@ -13,7 +9,7 @@ namespace CatraProto.Client
 {
     public class TelegramClient
     {
-        public Api Api { get; private set; }
+        public Api? Api { get; private set; }
         private readonly SessionManager _sessionManager;
         private readonly ClientSession _clientSession;
         private readonly FileStream _fileStream;

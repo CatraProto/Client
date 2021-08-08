@@ -1,12 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class WebPageNotModified : CatraProto.Client.TL.Schemas.CloudChats.WebPageBase
+	public partial class WebPageNotModified : WebPageBase
 	{
 		[Flags]
 		public enum FlagsEnum 

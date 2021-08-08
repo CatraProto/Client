@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-	public partial class TermsOfService : CatraProto.Client.TL.Schemas.CloudChats.Help.TermsOfServiceBase
+	public partial class TermsOfService : TermsOfServiceBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -26,13 +26,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 		public override bool Popup { get; set; }
 
 [JsonPropertyName("id")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase Id { get; set; }
+		public override DataJSONBase Id { get; set; }
 
 [JsonPropertyName("text")]
 		public override string Text { get; set; }
 
 [JsonPropertyName("entities")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
+		public override IList<MessageEntityBase> Entities { get; set; }
 
 [JsonPropertyName("min_age_confirm")]
 		public override int? MinAgeConfirm { get; set; }
@@ -65,9 +65,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 		{
 			Flags = reader.Read<int>();
 			Popup = FlagsHelper.IsFlagSet(Flags, 0);
-			Id = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
+			Id = reader.Read<DataJSONBase>();
 			Text = reader.Read<string>();
-			Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
+			Entities = reader.ReadVector<MessageEntityBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
 				MinAgeConfirm = reader.Read<int>();

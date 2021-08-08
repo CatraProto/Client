@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
-	public partial class LoginTokenSuccess : CatraProto.Client.TL.Schemas.CloudChats.Auth.LoginTokenBase
+	public partial class LoginTokenSuccess : LoginTokenBase
 	{
 
 
@@ -15,7 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("authorization")]
-		public CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase Authorization { get; set; }
+		public AuthorizationBase Authorization { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -32,7 +30,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 
 		public override void Deserialize(Reader reader)
 		{
-			Authorization = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>();
+			Authorization = reader.Read<AuthorizationBase>();
 
 		}
 	}

@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdatePeerSettings : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
+	public partial class UpdatePeerSettings : UpdateBase
 	{
 
 
@@ -15,10 +13,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("peer")]
-		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
+		public PeerBase Peer { get; set; }
 
 [JsonPropertyName("settings")]
-		public CatraProto.Client.TL.Schemas.CloudChats.PeerSettingsBase Settings { get; set; }
+		public PeerSettingsBase Settings { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -36,8 +34,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
-			Settings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerSettingsBase>();
+			Peer = reader.Read<PeerBase>();
+			Settings = reader.Read<PeerSettingsBase>();
 
 		}
 	}

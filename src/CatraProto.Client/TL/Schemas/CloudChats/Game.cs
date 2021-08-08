@@ -1,12 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class Game : CatraProto.Client.TL.Schemas.CloudChats.GameBase
+	public partial class Game : GameBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -37,10 +36,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override string Description { get; set; }
 
 [JsonPropertyName("photo")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.PhotoBase Photo { get; set; }
+		public override PhotoBase Photo { get; set; }
 
 [JsonPropertyName("document")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.DocumentBase Document { get; set; }
+		public override DocumentBase Document { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -76,10 +75,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ShortName = reader.Read<string>();
 			Title = reader.Read<string>();
 			Description = reader.Read<string>();
-			Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
+			Photo = reader.Read<PhotoBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Document = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
+				Document = reader.Read<DocumentBase>();
 			}
 
 

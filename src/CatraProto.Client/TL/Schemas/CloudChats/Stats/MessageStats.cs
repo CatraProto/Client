@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 {
-	public partial class MessageStats : CatraProto.Client.TL.Schemas.CloudChats.Stats.MessageStatsBase
+	public partial class MessageStats : MessageStatsBase
 	{
 
 
@@ -15,7 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("views_graph")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase ViewsGraph { get; set; }
+		public override StatsGraphBase ViewsGraph { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -32,7 +30,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 
 		public override void Deserialize(Reader reader)
 		{
-			ViewsGraph = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
+			ViewsGraph = reader.Read<StatsGraphBase>();
 
 		}
 	}

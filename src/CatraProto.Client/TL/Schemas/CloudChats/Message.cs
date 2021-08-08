@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class Message : CatraProto.Client.TL.Schemas.CloudChats.MessageBase
+	public partial class Message : MessageBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -74,19 +74,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override int Id { get; set; }
 
 [JsonPropertyName("from_id")]
-		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase FromId { get; set; }
+		public PeerBase FromId { get; set; }
 
 [JsonPropertyName("peer_id")]
-		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase PeerId { get; set; }
+		public PeerBase PeerId { get; set; }
 
 [JsonPropertyName("fwd_from")]
-		public CatraProto.Client.TL.Schemas.CloudChats.MessageFwdHeaderBase FwdFrom { get; set; }
+		public MessageFwdHeaderBase FwdFrom { get; set; }
 
 [JsonPropertyName("via_bot_id")]
 		public int? ViaBotId { get; set; }
 
 [JsonPropertyName("reply_to")]
-		public CatraProto.Client.TL.Schemas.CloudChats.MessageReplyHeaderBase ReplyTo { get; set; }
+		public MessageReplyHeaderBase ReplyTo { get; set; }
 
 [JsonPropertyName("date")]
 		public int Date { get; set; }
@@ -95,13 +95,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public string Message_ { get; set; }
 
 [JsonPropertyName("media")]
-		public CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase Media { get; set; }
+		public MessageMediaBase Media { get; set; }
 
 [JsonPropertyName("reply_markup")]
-		public CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase ReplyMarkup { get; set; }
+		public ReplyMarkupBase ReplyMarkup { get; set; }
 
 [JsonPropertyName("entities")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
+		public IList<MessageEntityBase> Entities { get; set; }
 
 [JsonPropertyName("views")]
 		public int? Views { get; set; }
@@ -110,7 +110,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int? Forwards { get; set; }
 
 [JsonPropertyName("replies")]
-		public CatraProto.Client.TL.Schemas.CloudChats.MessageRepliesBase Replies { get; set; }
+		public MessageRepliesBase Replies { get; set; }
 
 [JsonPropertyName("edit_date")]
 		public int? EditDate { get; set; }
@@ -122,7 +122,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public long? GroupedId { get; set; }
 
 [JsonPropertyName("restriction_reason")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase> RestrictionReason { get; set; }
+		public IList<RestrictionReasonBase> RestrictionReason { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -250,13 +250,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Id = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 8))
 			{
-				FromId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+				FromId = reader.Read<PeerBase>();
 			}
 
-			PeerId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+			PeerId = reader.Read<PeerBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				FwdFrom = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageFwdHeaderBase>();
+				FwdFrom = reader.Read<MessageFwdHeaderBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 11))
@@ -266,24 +266,24 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				ReplyTo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageReplyHeaderBase>();
+				ReplyTo = reader.Read<MessageReplyHeaderBase>();
 			}
 
 			Date = reader.Read<int>();
 			Message_ = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 9))
 			{
-				Media = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase>();
+				Media = reader.Read<MessageMediaBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
-				ReplyMarkup = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase>();
+				ReplyMarkup = reader.Read<ReplyMarkupBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 7))
 			{
-				Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
+				Entities = reader.ReadVector<MessageEntityBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 10))
@@ -298,7 +298,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 23))
 			{
-				Replies = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageRepliesBase>();
+				Replies = reader.Read<MessageRepliesBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 15))
@@ -318,7 +318,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 22))
 			{
-				RestrictionReason = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase>();
+				RestrictionReason = reader.ReadVector<RestrictionReasonBase>();
 			}
 
 

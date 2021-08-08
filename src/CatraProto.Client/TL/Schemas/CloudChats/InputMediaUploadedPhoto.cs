@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputMediaUploadedPhoto : CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase
+	public partial class InputMediaUploadedPhoto : InputMediaBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -23,10 +23,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Flags { get; set; }
 
 [JsonPropertyName("file")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase File { get; set; }
+		public InputFileBase File { get; set; }
 
 [JsonPropertyName("stickers")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase> Stickers { get; set; }
+		public IList<InputDocumentBase> Stickers { get; set; }
 
 [JsonPropertyName("ttl_seconds")]
 		public int? TtlSeconds { get; set; }
@@ -61,10 +61,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			File = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
+			File = reader.Read<InputFileBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Stickers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
+				Stickers = reader.ReadVector<InputDocumentBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))

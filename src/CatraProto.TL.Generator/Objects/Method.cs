@@ -1,10 +1,9 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 using CatraProto.TL.Generator.CodeGeneration.Parsing;
 using CatraProto.TL.Generator.DeclarationInfo;
+using CatraProto.TL.Generator.Objects.Interfaces;
 using CatraProto.TL.Generator.Objects.Types;
-using Object = CatraProto.TL.Generator.Objects.Interfaces.Object;
 
 namespace CatraProto.TL.Generator.Objects
 {
@@ -53,7 +52,7 @@ namespace CatraProto.TL.Generator.Objects
             }
 
             var comma = args.Length == 0 ? "" : ",";
-            builder.AppendLine($"public async Task<RpcMessage<{returnType}>> {NamingInfo.PascalCaseName}Async({args}{comma} CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)\n{StringTools.TwoTabs}{{");
+            builder.AppendLine($"public async Task<RpcMessage<{returnType}>> {NamingInfo.PascalCaseName}Async({args}{comma} CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)\n{StringTools.TwoTabs}{{");
             builder.AppendLine(nullPolicies.ToString());
             builder.AppendLine($"var rpcResponse = new RpcMessage<{returnType}>();");
             if (ReturnsVector)
@@ -61,7 +60,7 @@ namespace CatraProto.TL.Generator.Objects
                 builder.AppendLine($"rpcResponse.Response = new {returnType}();");
             }
 
-            builder.AppendLine($"messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: {(MethodCompletionType == MethodCompletionType.ReturnsUnencrypted ? "false" : "true")});");
+            builder.AppendLine($"messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: {(MethodCompletionType == MethodCompletionType.ReturnsUnencrypted ? "false" : "true")});");
             builder.AppendLine($"var methodBody = new {Namespace.FullNamespace}(){{");
             foreach (var parameter in parametersOrdered)
             {

@@ -7,7 +7,7 @@ namespace CatraProto.Client.MTProto.Auth
     {
         public int ContentRelatedReceived { get; set; }
         public int ContentRelatedSent { get; set; }
-        private ILogger _logger;
+        private readonly ILogger _logger;
 
         public SeqnoHandler(ILogger logger, int clientInitialState = 0, int serverInitialState = 0)
         {

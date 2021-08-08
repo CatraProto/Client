@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class SecureFile : CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase
+	public partial class SecureFile : SecureFileBase
 	{
 
 

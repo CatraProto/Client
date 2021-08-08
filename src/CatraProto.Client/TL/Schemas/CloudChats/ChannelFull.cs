@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelFull : CatraProto.Client.TL.Schemas.CloudChats.ChatFullBase
+	public partial class ChannelFull : ChatFullBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -101,16 +101,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int UnreadCount { get; set; }
 
 [JsonPropertyName("chat_photo")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.PhotoBase ChatPhoto { get; set; }
+		public override PhotoBase ChatPhoto { get; set; }
 
 [JsonPropertyName("notify_settings")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase NotifySettings { get; set; }
+		public override PeerNotifySettingsBase NotifySettings { get; set; }
 
 [JsonPropertyName("exported_invite")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.ExportedChatInviteBase ExportedInvite { get; set; }
+		public override ExportedChatInviteBase ExportedInvite { get; set; }
 
 [JsonPropertyName("bot_info")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase> BotInfo { get; set; }
+		public override IList<BotInfoBase> BotInfo { get; set; }
 
 [JsonPropertyName("migrated_from_chat_id")]
 		public int? MigratedFromChatId { get; set; }
@@ -122,7 +122,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override int? PinnedMsgId { get; set; }
 
 [JsonPropertyName("stickerset")]
-		public CatraProto.Client.TL.Schemas.CloudChats.StickerSetBase Stickerset { get; set; }
+		public StickerSetBase Stickerset { get; set; }
 
 [JsonPropertyName("available_min_id")]
 		public int? AvailableMinId { get; set; }
@@ -134,7 +134,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int? LinkedChatId { get; set; }
 
 [JsonPropertyName("location")]
-		public CatraProto.Client.TL.Schemas.CloudChats.ChannelLocationBase Location { get; set; }
+		public ChannelLocationBase Location { get; set; }
 
 [JsonPropertyName("slowmode_seconds")]
 		public int? SlowmodeSeconds { get; set; }
@@ -329,14 +329,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			UnreadCount = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				ChatPhoto = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
+				ChatPhoto = reader.Read<PhotoBase>();
 			}
 
-			NotifySettings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase>();
-			ExportedInvite = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ExportedChatInviteBase>();
+			NotifySettings = reader.Read<PeerNotifySettingsBase>();
+			ExportedInvite = reader.Read<ExportedChatInviteBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				BotInfo = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase>();
+				BotInfo = reader.ReadVector<BotInfoBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
@@ -356,7 +356,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 8))
 			{
-				Stickerset = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StickerSetBase>();
+				Stickerset = reader.Read<StickerSetBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 9))
@@ -376,7 +376,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 15))
 			{
-				Location = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChannelLocationBase>();
+				Location = reader.Read<ChannelLocationBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 17))

@@ -1,13 +1,10 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
-using CatraProto.Client.Connections;
 using CatraProto.Client.Connections.MessageScheduling;
-using CatraProto.Client.MTProto.Messages;
 using CatraProto.Client.MTProto.Rpc;
-using CatraProto.TL.Interfaces;
-using System.Collections.Generic;
-using System.Numerics;
+using CatraProto.Client.TL.Schemas.CloudChats;
+using CatraProto.Client.TL.Schemas.CloudChats.Phone;
+using PhoneCallBase = CatraProto.Client.TL.Schemas.CloudChats.Phone.PhoneCallBase;
 
 namespace CatraProto.Client.TL.Requests.CloudChats
 {
@@ -20,25 +17,26 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 	        _messagesQueue = messagesQueue;
 	        
 	    }
-	    
-	    public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>> GetCallConfigAsync( CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+
+	    public async Task<RpcMessage<DataJSONBase>> GetCallConfigAsync(MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
-messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
-var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Phone.GetCallConfig(){
+var rpcResponse = new RpcMessage<DataJSONBase>();
+messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+var methodBody = new GetCallConfig(){
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
 await taskCompletionSource;
 return rpcResponse;
 }
-public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Phone.PhoneCallBase>> RequestCallAsync(CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId, int randomId, byte[] gAHash, CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase protocol, bool video = true, CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+
+	    public async Task<RpcMessage<PhoneCallBase>> RequestCallAsync(InputUserBase userId, int randomId, byte[] gAHash, PhoneCallProtocolBase protocol, bool video = true, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Phone.PhoneCallBase>();
-messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
-var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Phone.RequestCall(){
+var rpcResponse = new RpcMessage<PhoneCallBase>();
+messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+var methodBody = new RequestCall(){
 UserId = userId,
 RandomId = randomId,
 GAHash = gAHash,
@@ -50,12 +48,13 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource;
 return rpcResponse;
 }
-public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Phone.PhoneCallBase>> AcceptCallAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPhoneCallBase peer, byte[] gB, CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase protocol, CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+
+	    public async Task<RpcMessage<PhoneCallBase>> AcceptCallAsync(InputPhoneCallBase peer, byte[] gB, PhoneCallProtocolBase protocol, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Phone.PhoneCallBase>();
-messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
-var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Phone.AcceptCall(){
+var rpcResponse = new RpcMessage<PhoneCallBase>();
+messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+var methodBody = new AcceptCall(){
 Peer = peer,
 GB = gB,
 Protocol = protocol,
@@ -65,12 +64,13 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource;
 return rpcResponse;
 }
-public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Phone.PhoneCallBase>> ConfirmCallAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPhoneCallBase peer, byte[] gA, long keyFingerprint, CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase protocol, CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+
+	    public async Task<RpcMessage<PhoneCallBase>> ConfirmCallAsync(InputPhoneCallBase peer, byte[] gA, long keyFingerprint, PhoneCallProtocolBase protocol, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Phone.PhoneCallBase>();
-messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
-var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Phone.ConfirmCall(){
+var rpcResponse = new RpcMessage<PhoneCallBase>();
+messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+var methodBody = new ConfirmCall(){
 Peer = peer,
 GA = gA,
 KeyFingerprint = keyFingerprint,
@@ -81,12 +81,13 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource;
 return rpcResponse;
 }
-public async Task<RpcMessage<bool>> ReceivedCallAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPhoneCallBase peer, CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+
+	    public async Task<RpcMessage<bool>> ReceivedCallAsync(InputPhoneCallBase peer, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
 var rpcResponse = new RpcMessage<bool>();
-messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
-var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Phone.ReceivedCall(){
+messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+var methodBody = new ReceivedCall(){
 Peer = peer,
 };
 
@@ -94,12 +95,13 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource;
 return rpcResponse;
 }
-public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> DiscardCallAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPhoneCallBase peer, int duration, CatraProto.Client.TL.Schemas.CloudChats.PhoneCallDiscardReasonBase reason, long connectionId, bool video = true, CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+
+	    public async Task<RpcMessage<UpdatesBase>> DiscardCallAsync(InputPhoneCallBase peer, int duration, PhoneCallDiscardReasonBase reason, long connectionId, bool video = true, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>();
-messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
-var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Phone.DiscardCall(){
+var rpcResponse = new RpcMessage<UpdatesBase>();
+messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+var methodBody = new DiscardCall(){
 Peer = peer,
 Duration = duration,
 Reason = reason,
@@ -111,12 +113,13 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource;
 return rpcResponse;
 }
-public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> SetCallRatingAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPhoneCallBase peer, int rating, string comment, bool userInitiative = true, CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+
+	    public async Task<RpcMessage<UpdatesBase>> SetCallRatingAsync(InputPhoneCallBase peer, int rating, string comment, bool userInitiative = true, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>();
-messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
-var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Phone.SetCallRating(){
+var rpcResponse = new RpcMessage<UpdatesBase>();
+messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+var methodBody = new SetCallRating(){
 Peer = peer,
 Rating = rating,
 Comment = comment,
@@ -127,12 +130,13 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource;
 return rpcResponse;
 }
-public async Task<RpcMessage<bool>> SaveCallDebugAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPhoneCallBase peer, CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase debug, CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+
+	    public async Task<RpcMessage<bool>> SaveCallDebugAsync(InputPhoneCallBase peer, DataJSONBase debug, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
 var rpcResponse = new RpcMessage<bool>();
-messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
-var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Phone.SaveCallDebug(){
+messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+var methodBody = new SaveCallDebug(){
 Peer = peer,
 Debug = debug,
 };
@@ -141,12 +145,13 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource;
 return rpcResponse;
 }
-public async Task<RpcMessage<bool>> SendSignalingDataAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPhoneCallBase peer, byte[] data, CatraProto.Client.MTProto.Messages.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+
+	    public async Task<RpcMessage<bool>> SendSignalingDataAsync(InputPhoneCallBase peer, byte[] data, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
 var rpcResponse = new RpcMessage<bool>();
-messageSendingOptions ??= new CatraProto.Client.MTProto.Messages.MessageSendingOptions(isEncrypted: true);
-var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Phone.SendSignalingData(){
+messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+var methodBody = new SendSignalingData(){
 Peer = peer,
 Data = data,
 };

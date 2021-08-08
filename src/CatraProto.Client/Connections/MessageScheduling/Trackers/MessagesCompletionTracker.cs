@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using CatraProto.Client.Connections.MessageScheduling.Items;
 using CatraProto.TL.Interfaces;
@@ -32,6 +30,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
 
                 return;
             }
+
             _messageCompletions.TryAdd(messageId, messageCompletion);
         }
 
@@ -72,16 +71,16 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
                     {
                         return false;
                     }
-                    
+
                     var completion = _unencryptedCompletions[completionIndex];
                     completion.RpcMessage!.SetResponse(response);
                     completion.TaskCompletionSource?.TrySetResult();
-                    
+
                     _unencryptedCompletions.RemoveAt(completionIndex);
                     return true;
                 }
             }
-            
+
             if (GetMessageCompletion(messageId, out var messageCompletion))
             {
                 if (messageCompletion!.TaskCompletionSource is null)
@@ -116,7 +115,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
                 {
                     _messageCompletions.TryRemove(messageId, out _);
                 }
-                
+
                 return true;
             }
 

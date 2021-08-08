@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 {
-	public partial class ValidatedRequestedInfo : CatraProto.Client.TL.Schemas.CloudChats.Payments.ValidatedRequestedInfoBase
+	public partial class ValidatedRequestedInfo : ValidatedRequestedInfoBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -26,7 +26,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 		public override string Id { get; set; }
 
 [JsonPropertyName("shipping_options")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.ShippingOptionBase> ShippingOptions { get; set; }
+		public override IList<ShippingOptionBase> ShippingOptions { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -64,7 +64,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				ShippingOptions = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ShippingOptionBase>();
+				ShippingOptions = reader.ReadVector<ShippingOptionBase>();
 			}
 
 

@@ -1,12 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class ChatsSlice : CatraProto.Client.TL.Schemas.CloudChats.Messages.ChatsBase
+	public partial class ChatsSlice : ChatsBase
 	{
 
 
@@ -18,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public int Count { get; set; }
 
 [JsonPropertyName("Chats_")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats_ { get; set; }
+		public override IList<ChatBase> Chats_ { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -37,7 +36,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public override void Deserialize(Reader reader)
 		{
 			Count = reader.Read<int>();
-			Chats_ = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
+			Chats_ = reader.ReadVector<ChatBase>();
 
 		}
 	}

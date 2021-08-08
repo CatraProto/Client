@@ -6,19 +6,19 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Serilog" Version="2.10.0" />
-        <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+        <PackageReference Include="Serilog" Version="2.10.0"/>
+        <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1"/>
     </ItemGroup>
 
     <ItemGroup>
-        <InternalsVisibleTo Include="CatraProto.Start" />
-        <InternalsVisibleTo Include="CatraProto.Client.UnitTests" />
-        <InternalsVisibleTo Include="CatraProto.Client.Benchmark" />
-        <ProjectReference Include="..\CatraProto.TL\CatraProto.TL.csproj" />
+        <InternalsVisibleTo Include="CatraProto.Start"/>
+        <InternalsVisibleTo Include="CatraProto.Client.UnitTests"/>
+        <InternalsVisibleTo Include="CatraProto.Client.Benchmark"/>
+        <ProjectReference Include="..\CatraProto.TL\CatraProto.TL.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Updates" />
+        <Folder Include="Updates"/>
     </ItemGroup>
 
 </Project>

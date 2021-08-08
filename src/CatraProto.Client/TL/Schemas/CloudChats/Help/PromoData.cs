@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-	public partial class PromoData : CatraProto.Client.TL.Schemas.CloudChats.Help.PromoDataBase
+	public partial class PromoData : PromoDataBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -30,13 +30,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 		public override int Expires { get; set; }
 
 [JsonPropertyName("peer")]
-		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
+		public PeerBase Peer { get; set; }
 
 [JsonPropertyName("chats")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
+		public IList<ChatBase> Chats { get; set; }
 
 [JsonPropertyName("users")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+		public IList<UserBase> Users { get; set; }
 
 [JsonPropertyName("psa_type")]
 		public string PsaType { get; set; }
@@ -80,9 +80,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 			Flags = reader.Read<int>();
 			Proxy = FlagsHelper.IsFlagSet(Flags, 0);
 			Expires = reader.Read<int>();
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
-			Chats = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
-			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+			Peer = reader.Read<PeerBase>();
+			Chats = reader.ReadVector<ChatBase>();
+			Users = reader.ReadVector<UserBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
 				PsaType = reader.Read<string>();

@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
@@ -21,7 +21,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
+		Type IMethod.Type { get; init; } = typeof(bool);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -30,13 +30,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public int Flags { get; set; }
 
 [JsonPropertyName("peer")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
+		public InputPeerBase Peer { get; set; }
 
 [JsonPropertyName("top_msg_id")]
 		public int? TopMsgId { get; set; }
 
 [JsonPropertyName("action")]
-		public CatraProto.Client.TL.Schemas.CloudChats.SendMessageActionBase Action { get; set; }
+		public SendMessageActionBase Action { get; set; }
 
 
 		public void UpdateFlags() 
@@ -63,13 +63,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+			Peer = reader.Read<InputPeerBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				TopMsgId = reader.Read<int>();
 			}
 
-			Action = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SendMessageActionBase>();
+			Action = reader.Read<SendMessageActionBase>();
 
 		}
 	}

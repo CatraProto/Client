@@ -1,33 +1,23 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
+using CatraProto.Client.Async.Loops;
 using CatraProto.Client.Async.Loops.Enums.Generic;
 using CatraProto.Client.Connections.Exceptions;
 using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.Connections.MessageScheduling.ConnectionMessages;
-using CatraProto.Client.Connections.MessageScheduling.Enums;
 using CatraProto.Client.Connections.MessageScheduling.Items;
-using CatraProto.Client.Extensions;
-using CatraProto.Client.MTProto;
+using CatraProto.Client.MTProto.Auth.AuthKeyHandler;
 using CatraProto.Client.MTProto.Containers;
-using CatraProto.Client.MTProto.Messages;
-using CatraProto.Client.MTProto.Rpc;
-using CatraProto.Client.TL.Schemas;
 using CatraProto.Client.TL.Schemas.CloudChats;
 using CatraProto.Client.TL.Schemas.CloudChats.Auth;
-using CatraProto.Client.TL.Schemas.MTProto;
-using CatraProto.TL;
-using CatraProto.TL.Exceptions;
-using CatraProto.TL.Interfaces;
 using Serilog;
-using Authorization = CatraProto.Client.TL.Schemas.CloudChats.Authorization;
 
 namespace CatraProto.Client.Connections.Loop
 {
-    class SendLoop : Async.Loops.GenericLoop
+    class SendLoop : GenericLoop
     {
         private readonly MessagesHandler _messagesHandler;
         private readonly MTProtoState _mtProtoState;
@@ -58,7 +48,7 @@ namespace CatraProto.Client.Connections.Loop
                 }
 
                 var shutdownToken = GetShutdownToken();
-                
+
                 //All of this is because we need unencrypted and encrypted messages and some special encrypted messages to be independent from each other
                 try
                 {
@@ -90,15 +80,16 @@ namespace CatraProto.Client.Connections.Loop
                                     case InvokeWithLayer invokeWithLayer:
                                         if (invokeWithLayer.Query is InitConnection)
                                         {
-                                            _encryptedTasks[1] = SendEncryptedMessages(new List<MessageItem> { item }, true);
+                                            _encryptedTasks[1] = SendEncryptedMessages(new List<MessageItem> { item });
                                         }
                                         else
                                         {
                                             pendingMessages.Add(item);
                                         }
+
                                         break;
                                     case BindTempAuthKey:
-                                        _encryptedTasks[1] = SendEncryptedMessages(new List<MessageItem> { item  }, true);
+                                        _encryptedTasks[1] = SendEncryptedMessages(new List<MessageItem> { item });
                                         break;
                                     default:
                                         pendingMessages.Add(item);
@@ -135,8 +126,7 @@ namespace CatraProto.Client.Connections.Loop
                     //then resetting it
                     if (pendingMessages.Count > 0 && _encryptedTasks[0] == null)
                     {
-                        var acks = _messagesHandler.MessagesTrackers.MessagesAckTracker.GetAcknowledgements();
-                        _encryptedTasks[0] = SendEncryptedMessages(acks.Concat(pendingMessages).ToList());
+                        _encryptedTasks[0] = SendEncryptedMessages(_messagesHandler.MessagesTrackers.MessagesAckTracker.GetAcknowledgements().Concat(pendingMessages).ToList());
                         pendingMessages.Clear();
                     }
                 }
@@ -149,7 +139,7 @@ namespace CatraProto.Client.Connections.Loop
                     _ = _connection.ConnectAsync(shutdownToken);
                     break;
                 }
-                catch (System.IO.IOException)
+                catch (IOException)
                 {
                     _ = _connection.ConnectAsync(shutdownToken);
                     break;
@@ -163,8 +153,8 @@ namespace CatraProto.Client.Connections.Loop
             _logger.Information("WriteLoop for connection {Info} shutdown", _connection.ConnectionInfo);
             SetLoopStopped();
         }
-        
-        
+
+
         private async Task SendUnencryptedMessage(MessageItem message)
         {
             if (SocketTools.TrySerialize(message, _logger, out var body))
@@ -177,14 +167,23 @@ namespace CatraProto.Client.Connections.Loop
             }
         }
 
-        private async Task SendEncryptedMessages(List<MessageItem> messages, bool forceAuthKey = false)
+        private async Task SendEncryptedMessages(List<MessageItem> messages)
         {
             await _connection.Signaler.WaitAsync();
-            var authKey = await _mtProtoState.KeysHandler.TemporaryAuthKey.GetAuthKeyAsync(forceReturn: forceAuthKey);
+            AuthKey authKey;
+            if (messages.Count == 1 && messages[0].MessageSendingOptions.SendWithAuthKey is not null)
+            {
+                authKey = messages[0].MessageSendingOptions.SendWithAuthKey!;
+            }
+            else
+            {
+                authKey = await _mtProtoState.KeysHandler.TemporaryAuthKey.GetAuthKeyAsync();
+            }
 
             byte[] body;
             int seqno;
             long messageId;
+
             if (messages.Count == 1)
             {
                 var message = messages[0];
@@ -206,14 +205,15 @@ namespace CatraProto.Client.Connections.Loop
                 messageId = _mtProtoState.MessageIdsHandler.ComputeMessageId();
                 seqno = _mtProtoState.SeqnoHandler.ContentRelatedSent * 2;
 
-                for (var i = 0; i < writer.MessageItems.Count; i++)
+                foreach (var t in writer.MessageItems)
                 {
-                    var messageItem = writer.MessageItems[i].Item2;
-                    messageItem.SetSent(writer.MessageItems[i].Item1.MsgId);
+                    var messageItem = t.Item2;
+                    messageItem.SetSent(t.Item1.MsgId);
                 }
             }
 
             var encryptedMessage = new EncryptedConnectionMessage(authKey, messageId, _mtProtoState.SaltHandler.GetSalt(), _mtProtoState.SessionIdHandler.GetSessionId(), seqno, body);
+            _logger.Information($"Sending message with authkeyid: {encryptedMessage.AuthKeyId} {encryptedMessage.Salt} {encryptedMessage.SessionId} {encryptedMessage.SeqNo}");
             await _connection.Protocol!.Writer!.SendAsync(encryptedMessage.Export());
         }
     }

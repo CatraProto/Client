@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PopularContact : CatraProto.Client.TL.Schemas.CloudChats.PopularContactBase
+	public partial class PopularContact : PopularContactBase
 	{
 
 

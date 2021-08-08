@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputPrivacyValueAllowAll : CatraProto.Client.TL.Schemas.CloudChats.InputPrivacyRuleBase
+	public partial class InputPrivacyValueAllowAll : InputPrivacyRuleBase
 	{
 
 

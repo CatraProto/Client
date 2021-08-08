@@ -1,8 +1,9 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.Client.TL.Schemas.CloudChats.Auth;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
@@ -17,7 +18,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeBase);
+		Type IMethod.Type { get; init; } = typeof(SentCodeBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -26,7 +27,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		public string PhoneNumber { get; set; }
 
 [JsonPropertyName("settings")]
-		public CatraProto.Client.TL.Schemas.CloudChats.CodeSettingsBase Settings { get; set; }
+		public CodeSettingsBase Settings { get; set; }
 
 
 		public void UpdateFlags() 
@@ -45,7 +46,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		public void Deserialize(Reader reader)
 		{
 			PhoneNumber = reader.Read<string>();
-			Settings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.CodeSettingsBase>();
+			Settings = reader.Read<CodeSettingsBase>();
 
 		}
 	}

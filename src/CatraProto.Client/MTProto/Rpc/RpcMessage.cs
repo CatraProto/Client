@@ -1,14 +1,5 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using CatraProto.Client.MTProto.Rpc.Interfaces;
-using CatraProto.Client.MTProto.Rpc.RpcErrors;
-using CatraProto.Client.MTProto.Rpc.Vectors;
-using CatraProto.Client.TL.Schemas.MTProto;
-using CatraProto.TL;
-using CatraProto.TL.ObjectDeserializers;
-using RpcError = CatraProto.Client.MTProto.Rpc.Interfaces.RpcError;
 
 namespace CatraProto.Client.MTProto.Rpc
 {
@@ -32,6 +23,7 @@ namespace CatraProto.Client.MTProto.Rpc
                 case null:
                     return;
                 case TL.Schemas.MTProto.RpcError error:
+                    Response = default;
                     Error = RpcError.GetRpcError(error);
                     break;
                 default:

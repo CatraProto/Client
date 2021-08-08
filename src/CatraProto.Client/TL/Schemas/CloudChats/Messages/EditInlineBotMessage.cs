@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
@@ -25,7 +26,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
+		Type IMethod.Type { get; init; } = typeof(bool);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -37,19 +38,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public bool NoWebpage { get; set; }
 
 [JsonPropertyName("id")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageIDBase Id { get; set; }
+		public InputBotInlineMessageIDBase Id { get; set; }
 
 [JsonPropertyName("message")]
 		public string Message { get; set; }
 
 [JsonPropertyName("media")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase Media { get; set; }
+		public InputMediaBase Media { get; set; }
 
 [JsonPropertyName("reply_markup")]
-		public CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase ReplyMarkup { get; set; }
+		public ReplyMarkupBase ReplyMarkup { get; set; }
 
 [JsonPropertyName("entities")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
+		public IList<MessageEntityBase> Entities { get; set; }
 
 
 		public void UpdateFlags() 
@@ -95,7 +96,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		{
 			Flags = reader.Read<int>();
 			NoWebpage = FlagsHelper.IsFlagSet(Flags, 1);
-			Id = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageIDBase>();
+			Id = reader.Read<InputBotInlineMessageIDBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 11))
 			{
 				Message = reader.Read<string>();
@@ -103,17 +104,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 			if(FlagsHelper.IsFlagSet(Flags, 14))
 			{
-				Media = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase>();
+				Media = reader.Read<InputMediaBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				ReplyMarkup = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase>();
+				ReplyMarkup = reader.Read<ReplyMarkupBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
+				Entities = reader.ReadVector<MessageEntityBase>();
 			}
 
 

@@ -1,12 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class SavedGifs : CatraProto.Client.TL.Schemas.CloudChats.Messages.SavedGifsBase
+	public partial class SavedGifs : SavedGifsBase
 	{
 
 
@@ -18,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public int Hash { get; set; }
 
 [JsonPropertyName("gifs")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase> Gifs { get; set; }
+		public IList<DocumentBase> Gifs { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -37,7 +36,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public override void Deserialize(Reader reader)
 		{
 			Hash = reader.Read<int>();
-			Gifs = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
+			Gifs = reader.ReadVector<DocumentBase>();
 
 		}
 	}

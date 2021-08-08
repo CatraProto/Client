@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class MessagesSlice : CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase
+	public partial class MessagesSlice : MessagesBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -36,13 +36,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public int? OffsetIdOffset { get; set; }
 
 [JsonPropertyName("messages")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageBase> Messages { get; set; }
+		public IList<MessageBase> Messages { get; set; }
 
 [JsonPropertyName("chats")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
+		public IList<ChatBase> Chats { get; set; }
 
 [JsonPropertyName("users")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+		public IList<UserBase> Users { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -90,9 +90,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 				OffsetIdOffset = reader.Read<int>();
 			}
 
-			Messages = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageBase>();
-			Chats = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
-			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+			Messages = reader.ReadVector<MessageBase>();
+			Chats = reader.ReadVector<ChatBase>();
+			Users = reader.ReadVector<UserBase>();
 
 		}
 	}

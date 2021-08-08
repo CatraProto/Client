@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PageBlockAuthorDate : CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase
+	public partial class PageBlockAuthorDate : PageBlockBase
 	{
 
 
@@ -15,7 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("author")]
-		public CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Author { get; set; }
+		public RichTextBase Author { get; set; }
 
 [JsonPropertyName("published_date")]
 		public int PublishedDate { get; set; }
@@ -36,7 +34,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Author = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
+			Author = reader.Read<RichTextBase>();
 			PublishedDate = reader.Read<int>();
 
 		}

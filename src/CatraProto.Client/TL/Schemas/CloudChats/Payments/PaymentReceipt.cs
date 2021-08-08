@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 {
-	public partial class PaymentReceipt : CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentReceiptBase
+	public partial class PaymentReceipt : PaymentReceiptBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -29,16 +29,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 		public override int BotId { get; set; }
 
 [JsonPropertyName("invoice")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.InvoiceBase Invoice { get; set; }
+		public override InvoiceBase Invoice { get; set; }
 
 [JsonPropertyName("provider_id")]
 		public override int ProviderId { get; set; }
 
 [JsonPropertyName("info")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase Info { get; set; }
+		public override PaymentRequestedInfoBase Info { get; set; }
 
 [JsonPropertyName("shipping")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.ShippingOptionBase Shipping { get; set; }
+		public override ShippingOptionBase Shipping { get; set; }
 
 [JsonPropertyName("currency")]
 		public override string Currency { get; set; }
@@ -50,7 +50,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 		public override string CredentialsTitle { get; set; }
 
 [JsonPropertyName("users")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+		public override IList<UserBase> Users { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -91,22 +91,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 			Flags = reader.Read<int>();
 			Date = reader.Read<int>();
 			BotId = reader.Read<int>();
-			Invoice = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InvoiceBase>();
+			Invoice = reader.Read<InvoiceBase>();
 			ProviderId = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Info = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase>();
+				Info = reader.Read<PaymentRequestedInfoBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Shipping = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ShippingOptionBase>();
+				Shipping = reader.Read<ShippingOptionBase>();
 			}
 
 			Currency = reader.Read<string>();
 			TotalAmount = reader.Read<long>();
 			CredentialsTitle = reader.Read<string>();
-			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+			Users = reader.ReadVector<UserBase>();
 
 		}
 	}

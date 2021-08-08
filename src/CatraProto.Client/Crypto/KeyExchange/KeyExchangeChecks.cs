@@ -1,7 +1,5 @@
-using System;
 using System.Linq;
 using System.Numerics;
-using System.Runtime.Intrinsics.Arm;
 using System.Security;
 using System.Security.Cryptography;
 using CatraProto.Client.TL.Schemas;
@@ -22,7 +20,7 @@ namespace CatraProto.Client.Crypto.KeyExchange
 
         public static void CheckHashData(byte[] sha, ServerDHInnerData data)
         {
-            if(!sha.SequenceEqual(SHA1.HashData(data.ToArray(MergedProvider.Singleton))))
+            if (!sha.SequenceEqual(SHA1.HashData(data.ToArray(MergedProvider.Singleton))))
             {
                 throw new SecurityException("Hash mismatch");
             }

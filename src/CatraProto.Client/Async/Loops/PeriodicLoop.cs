@@ -22,7 +22,7 @@ namespace CatraProto.Client.Async.Loops
                 base.Resume();
                 _ignoreTimer = false;
                 _asyncAutoSignaler.ResetTimer();
-                
+
                 return true;
             }
         }
@@ -76,10 +76,10 @@ namespace CatraProto.Client.Async.Loops
                 if (!stopped)
                 {
                     IgnoreTimer(false);
-                    
+
                     ChangeLoopState(ResumableLoopState.Running);
                     StateSignaler.Signal(ResumableSignalState.Start);
-                    
+
                     base.Suspend();
                 }
                 else
@@ -87,7 +87,6 @@ namespace CatraProto.Client.Async.Loops
                     IgnoreTimer(true);
                     base.OnLoopNewState(true);
                 }
-
             }
         }
 

@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageActionGeoProximityReached : CatraProto.Client.TL.Schemas.CloudChats.MessageActionBase
+	public partial class MessageActionGeoProximityReached : MessageActionBase
 	{
 
 
@@ -15,10 +13,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("from_id")]
-		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase FromId { get; set; }
+		public PeerBase FromId { get; set; }
 
 [JsonPropertyName("to_id")]
-		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase ToId { get; set; }
+		public PeerBase ToId { get; set; }
 
 [JsonPropertyName("distance")]
 		public int Distance { get; set; }
@@ -40,8 +38,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			FromId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
-			ToId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+			FromId = reader.Read<PeerBase>();
+			ToId = reader.Read<PeerBase>();
 			Distance = reader.Read<int>();
 
 		}

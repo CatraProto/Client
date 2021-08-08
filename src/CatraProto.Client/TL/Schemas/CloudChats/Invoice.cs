@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class Invoice : CatraProto.Client.TL.Schemas.CloudChats.InvoiceBase
+	public partial class Invoice : InvoiceBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -56,7 +56,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override string Currency { get; set; }
 
 [JsonPropertyName("prices")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase> Prices { get; set; }
+		public override IList<LabeledPriceBase> Prices { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -94,7 +94,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			PhoneToProvider = FlagsHelper.IsFlagSet(Flags, 6);
 			EmailToProvider = FlagsHelper.IsFlagSet(Flags, 7);
 			Currency = reader.Read<string>();
-			Prices = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase>();
+			Prices = reader.ReadVector<LabeledPriceBase>();
 
 		}
 	}

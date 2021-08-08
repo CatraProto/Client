@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Folders
@@ -17,13 +18,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Folders
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
+		Type IMethod.Type { get; init; } = typeof(UpdatesBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
 [JsonPropertyName("folder_peers")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputFolderPeerBase> FolderPeers { get; set; }
+		public IList<InputFolderPeerBase> FolderPeers { get; set; }
 
 
 		public void UpdateFlags() 
@@ -40,7 +41,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Folders
 
 		public void Deserialize(Reader reader)
 		{
-			FolderPeers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputFolderPeerBase>();
+			FolderPeers = reader.ReadVector<InputFolderPeerBase>();
 
 		}
 	}

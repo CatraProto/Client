@@ -1,10 +1,6 @@
 using System.Collections.Generic;
-using CatraProto.Client.Connections;
 using CatraProto.Client.Connections.MessageScheduling;
-using CatraProto.Client.Connections.MessageScheduling.Enums;
 using CatraProto.Client.Connections.MessageScheduling.Items;
-using CatraProto.Client.Connections.MessageScheduling.Trackers;
-using CatraProto.Client.MTProto.Messages;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL.Interfaces;
 
@@ -14,6 +10,7 @@ namespace CatraProto.Client.MTProto.Auth
     {
         private readonly List<long> _ackIds = new List<long>();
         private readonly object _mutex = new object();
+
         public MsgsAck? GetAckObject()
         {
             lock (_mutex)
@@ -22,7 +19,7 @@ namespace CatraProto.Client.MTProto.Auth
                 {
                     return null;
                 }
-            
+
                 var newList = new List<long>();
                 for (var i = (_ackIds.Count > 8192 ? 8192 : _ackIds.Count) - 1; i >= 0; i--)
                 {
@@ -33,7 +30,7 @@ namespace CatraProto.Client.MTProto.Auth
                 return new MsgsAck
                 {
                     MsgIds = newList
-                };   
+                };
             }
         }
 
@@ -47,20 +44,11 @@ namespace CatraProto.Client.MTProto.Auth
                     var ack = GetAckObject();
                     if (ack == null)
                     {
-                        break;
+                        return result;
                     }
 
-                    result.Add(
-                        new MessageItem(
-                            ack, 
-                            new MessageSendingOptions(true), 
-                            new MessageStatus(new MessageCompletion(null, null, null)), 
-                            default
-                            )
-                        );
+                    result.Add(new MessageItem(ack, new MessageSendingOptions(true), new MessageStatus(new MessageCompletion(null, null, null)), default));
                 }
-
-                return result;
             }
         }
 
@@ -85,7 +73,7 @@ namespace CatraProto.Client.MTProto.Auth
             switch (obj)
             {
                 case MsgsAck:
-                case RpcAnswerUnknown:    
+                case RpcAnswerUnknown:
                 case RpcAnswerDroppedRunning:
                 case RpcAnswerDropped:
                 case GetFutureSalts:

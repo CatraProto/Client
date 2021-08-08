@@ -1,12 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class SearchCounter : CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchCounterBase
+	public partial class SearchCounter : SearchCounterBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -25,7 +24,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public override bool Inexact { get; set; }
 
 [JsonPropertyName("filter")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase Filter { get; set; }
+		public override MessagesFilterBase Filter { get; set; }
 
 [JsonPropertyName("count")]
 		public override int Count { get; set; }
@@ -51,7 +50,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		{
 			Flags = reader.Read<int>();
 			Inexact = FlagsHelper.IsFlagSet(Flags, 1);
-			Filter = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase>();
+			Filter = reader.Read<MessagesFilterBase>();
 			Count = reader.Read<int>();
 
 		}

@@ -1,12 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelParticipantCreator : CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantBase
+	public partial class ChannelParticipantCreator : ChannelParticipantBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -25,7 +24,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override int UserId { get; set; }
 
 [JsonPropertyName("admin_rights")]
-		public CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase AdminRights { get; set; }
+		public ChatAdminRightsBase AdminRights { get; set; }
 
 [JsonPropertyName("rank")]
 		public string Rank { get; set; }
@@ -56,7 +55,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Flags = reader.Read<int>();
 			UserId = reader.Read<int>();
-			AdminRights = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase>();
+			AdminRights = reader.Read<ChatAdminRightsBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				Rank = reader.Read<string>();

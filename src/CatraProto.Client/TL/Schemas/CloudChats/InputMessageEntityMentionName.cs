@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputMessageEntityMentionName : CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase
+	public partial class InputMessageEntityMentionName : MessageEntityBase
 	{
 
 
@@ -21,7 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override int Length { get; set; }
 
 [JsonPropertyName("user_id")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase UserId { get; set; }
+		public InputUserBase UserId { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -42,7 +40,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Offset = reader.Read<int>();
 			Length = reader.Read<int>();
-			UserId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
+			UserId = reader.Read<InputUserBase>();
 
 		}
 	}

@@ -1,12 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PageBlockEmbedPost : CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase
+	public partial class PageBlockEmbedPost : PageBlockBase
 	{
 
 
@@ -30,10 +29,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Date { get; set; }
 
 [JsonPropertyName("blocks")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase> Blocks { get; set; }
+		public IList<PageBlockBase> Blocks { get; set; }
 
 [JsonPropertyName("caption")]
-		public CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase Caption { get; set; }
+		public PageCaptionBase Caption { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -61,8 +60,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			AuthorPhotoId = reader.Read<long>();
 			Author = reader.Read<string>();
 			Date = reader.Read<int>();
-			Blocks = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase>();
-			Caption = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase>();
+			Blocks = reader.ReadVector<PageBlockBase>();
+			Caption = reader.Read<PageCaptionBase>();
 
 		}
 	}

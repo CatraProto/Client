@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
@@ -17,16 +17,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase);
+		Type IMethod.Type { get; init; } = typeof(MessageMediaBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
 [JsonPropertyName("peer")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
+		public InputPeerBase Peer { get; set; }
 
 [JsonPropertyName("media")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase Media { get; set; }
+		public InputMediaBase Media { get; set; }
 
 
 		public void UpdateFlags() 
@@ -44,8 +44,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 		public void Deserialize(Reader reader)
 		{
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
-			Media = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase>();
+			Peer = reader.Read<InputPeerBase>();
+			Media = reader.Read<InputMediaBase>();
 
 		}
 	}

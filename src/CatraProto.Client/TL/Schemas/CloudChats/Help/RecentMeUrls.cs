@@ -1,12 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-	public partial class RecentMeUrls : CatraProto.Client.TL.Schemas.CloudChats.Help.RecentMeUrlsBase
+	public partial class RecentMeUrls : RecentMeUrlsBase
 	{
 
 
@@ -15,13 +14,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("urls")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.RecentMeUrlBase> Urls { get; set; }
+		public override IList<RecentMeUrlBase> Urls { get; set; }
 
 [JsonPropertyName("chats")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
+		public override IList<ChatBase> Chats { get; set; }
 
 [JsonPropertyName("users")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+		public override IList<UserBase> Users { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -40,9 +39,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 
 		public override void Deserialize(Reader reader)
 		{
-			Urls = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.RecentMeUrlBase>();
-			Chats = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
-			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+			Urls = reader.ReadVector<RecentMeUrlBase>();
+			Chats = reader.ReadVector<ChatBase>();
+			Users = reader.ReadVector<UserBase>();
 
 		}
 	}

@@ -1,8 +1,6 @@
 using System;
 using CatraProto.Client.Connections.MessageScheduling;
-using CatraProto.Client.MTProto;
 using CatraProto.Client.MTProto.Auth;
-using CatraProto.Client.MTProto.Auth.AuthKeyHandler;
 using CatraProto.Client.MTProto.Session;
 using CatraProto.Client.Settings;
 using Serilog;

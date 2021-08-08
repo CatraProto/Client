@@ -1,12 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class PasswordInputSettings : CatraProto.Client.TL.Schemas.CloudChats.Account.PasswordInputSettingsBase
+	public partial class PasswordInputSettings : PasswordInputSettingsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -26,7 +25,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		public int Flags { get; set; }
 
 [JsonPropertyName("new_algo")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase NewAlgo { get; set; }
+		public override PasswordKdfAlgoBase NewAlgo { get; set; }
 
 [JsonPropertyName("new_password_hash")]
 		public override byte[] NewPasswordHash { get; set; }
@@ -38,7 +37,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		public override string Email { get; set; }
 
 [JsonPropertyName("new_secure_settings")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.SecureSecretSettingsBase NewSecureSettings { get; set; }
+		public override SecureSecretSettingsBase NewSecureSettings { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -89,7 +88,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 			Flags = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				NewAlgo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase>();
+				NewAlgo = reader.Read<PasswordKdfAlgoBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 0))
@@ -109,7 +108,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				NewSecureSettings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SecureSecretSettingsBase>();
+				NewSecureSettings = reader.Read<SecureSecretSettingsBase>();
 			}
 
 

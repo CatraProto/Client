@@ -6,7 +6,11 @@ namespace CatraProto.Client.Connections.MessageScheduling.ConnectionMessages
 {
     sealed class UnencryptedConnectionMessage : IConnectionMessage
     {
-        public long AuthKeyId { get => 0; }
+        public long AuthKeyId
+        {
+            get => 0;
+        }
+
         public long MessageId { get; private set; }
         public byte[] Body { get; private set; }
 
@@ -15,7 +19,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.ConnectionMessages
             MessageId = messageId;
             Body = body;
         }
-        
+
         public UnencryptedConnectionMessage(byte[] payload)
         {
             Body = null!;

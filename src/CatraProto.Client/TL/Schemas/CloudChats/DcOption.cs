@@ -1,12 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class DcOption : CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase
+	public partial class DcOption : DcOptionBase
 	{
 		[Flags]
 		public enum FlagsEnum 

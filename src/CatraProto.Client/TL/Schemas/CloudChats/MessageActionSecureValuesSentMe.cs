@@ -1,12 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageActionSecureValuesSentMe : CatraProto.Client.TL.Schemas.CloudChats.MessageActionBase
+	public partial class MessageActionSecureValuesSentMe : MessageActionBase
 	{
 
 
@@ -15,10 +14,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("values")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase> Values { get; set; }
+		public IList<SecureValueBase> Values { get; set; }
 
 [JsonPropertyName("credentials")]
-		public CatraProto.Client.TL.Schemas.CloudChats.SecureCredentialsEncryptedBase Credentials { get; set; }
+		public SecureCredentialsEncryptedBase Credentials { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -36,8 +35,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Values = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase>();
-			Credentials = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SecureCredentialsEncryptedBase>();
+			Values = reader.ReadVector<SecureValueBase>();
+			Credentials = reader.Read<SecureCredentialsEncryptedBase>();
 
 		}
 	}

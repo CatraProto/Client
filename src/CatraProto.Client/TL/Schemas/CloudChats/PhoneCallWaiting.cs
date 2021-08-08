@@ -1,12 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PhoneCallWaiting : CatraProto.Client.TL.Schemas.CloudChats.PhoneCallBase
+	public partial class PhoneCallWaiting : PhoneCallBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -41,7 +40,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int ParticipantId { get; set; }
 
 [JsonPropertyName("protocol")]
-		public CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase Protocol { get; set; }
+		public PhoneCallProtocolBase Protocol { get; set; }
 
 [JsonPropertyName("receive_date")]
 		public int? ReceiveDate { get; set; }
@@ -82,7 +81,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Date = reader.Read<int>();
 			AdminId = reader.Read<int>();
 			ParticipantId = reader.Read<int>();
-			Protocol = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase>();
+			Protocol = reader.Read<PhoneCallProtocolBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				ReceiveDate = reader.Read<int>();

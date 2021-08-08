@@ -1,7 +1,5 @@
 using System.Threading;
 using CatraProto.Client.Connections.MessageScheduling.Enums;
-using CatraProto.Client.Connections.MessageScheduling.Trackers;
-using CatraProto.Client.MTProto.Messages;
 using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.Connections.MessageScheduling.Items
@@ -14,6 +12,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
         public IObject Body { get; }
         private MessagesHandler? _messagesHandler;
         private readonly object _mutex = new object();
+
         public MessageItem(IObject body, MessageSendingOptions messageSendingOptions, MessageStatus messageStatus, CancellationToken cancellationToken)
         {
             Body = body;
@@ -27,10 +26,10 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
             lock (_mutex)
             {
                 MessageStatus.SetSent(messageId);
-                _messagesHandler?.MessagesTrackers.MessagesAckTracker.TrackMessage(this);   
+                _messagesHandler?.MessagesTrackers.MessagesAckTracker.TrackMessage(this);
             }
         }
-        
+
         public void Resend()
         {
             lock (_mutex)
@@ -46,10 +45,10 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
             lock (_mutex)
             {
                 MessageStatus.Reset();
-                MessageStatus.MessageState = MessageState.NotYetSent;   
+                MessageStatus.MessageState = MessageState.NotYetSent;
             }
         }
-        
+
         public void BindTo(MessagesHandler messagesHandler)
         {
             lock (_mutex)
@@ -57,7 +56,6 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
                 _messagesHandler = messagesHandler;
                 MessageStatus.BindTo(messagesHandler);
             }
-
         }
     }
 }

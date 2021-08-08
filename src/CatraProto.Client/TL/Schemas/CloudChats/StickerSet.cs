@@ -1,12 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class StickerSet : CatraProto.Client.TL.Schemas.CloudChats.StickerSetBase
+	public partial class StickerSet : StickerSetBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -55,7 +54,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override string ShortName { get; set; }
 
 [JsonPropertyName("thumb")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase Thumb { get; set; }
+		public override PhotoSizeBase Thumb { get; set; }
 
 [JsonPropertyName("thumb_dc_id")]
 		public override int? ThumbDcId { get; set; }
@@ -126,7 +125,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ShortName = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				Thumb = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase>();
+				Thumb = reader.Read<PhotoSizeBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))

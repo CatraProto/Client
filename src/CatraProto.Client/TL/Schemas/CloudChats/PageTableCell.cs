@@ -1,12 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PageTableCell : CatraProto.Client.TL.Schemas.CloudChats.PageTableCellBase
+	public partial class PageTableCell : PageTableCellBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -44,7 +43,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override bool ValignBottom { get; set; }
 
 [JsonPropertyName("text")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Text { get; set; }
+		public override RichTextBase Text { get; set; }
 
 [JsonPropertyName("colspan")]
 		public override int? Colspan { get; set; }
@@ -99,7 +98,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ValignBottom = FlagsHelper.IsFlagSet(Flags, 6);
 			if(FlagsHelper.IsFlagSet(Flags, 7))
 			{
-				Text = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
+				Text = reader.Read<RichTextBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))

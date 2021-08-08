@@ -1,12 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputPaymentCredentials : CatraProto.Client.TL.Schemas.CloudChats.InputPaymentCredentialsBase
+	public partial class InputPaymentCredentials : InputPaymentCredentialsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -25,7 +24,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public bool Save { get; set; }
 
 [JsonPropertyName("data")]
-		public CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase Data { get; set; }
+		public DataJSONBase Data { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -47,7 +46,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Flags = reader.Read<int>();
 			Save = FlagsHelper.IsFlagSet(Flags, 0);
-			Data = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
+			Data = reader.Read<DataJSONBase>();
 
 		}
 	}

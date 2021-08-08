@@ -2,7 +2,7 @@ namespace CatraProto.Client.MTProto.Auth
 {
     public class SessionIdHandler
     {
-        private object _mutex = new object();
+        private readonly object _mutex = new object();
         private long _sessionId;
         
         public long GetSessionId()

@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
@@ -22,7 +22,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase);
+		Type IMethod.Type { get; init; } = typeof(MessagesBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -31,19 +31,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public int Flags { get; set; }
 
 [JsonPropertyName("peer")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
+		public InputPeerBase Peer { get; set; }
 
 [JsonPropertyName("q")]
 		public string Q { get; set; }
 
 [JsonPropertyName("from_id")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase FromId { get; set; }
+		public InputPeerBase FromId { get; set; }
 
 [JsonPropertyName("top_msg_id")]
 		public int? TopMsgId { get; set; }
 
 [JsonPropertyName("filter")]
-		public CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase Filter { get; set; }
+		public MessagesFilterBase Filter { get; set; }
 
 [JsonPropertyName("min_date")]
 		public int MinDate { get; set; }
@@ -109,11 +109,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+			Peer = reader.Read<InputPeerBase>();
 			Q = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				FromId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+				FromId = reader.Read<InputPeerBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
@@ -121,7 +121,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 				TopMsgId = reader.Read<int>();
 			}
 
-			Filter = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase>();
+			Filter = reader.Read<MessagesFilterBase>();
 			MinDate = reader.Read<int>();
 			MaxDate = reader.Read<int>();
 			OffsetId = reader.Read<int>();

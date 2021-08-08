@@ -1,12 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class PasswordSettings : CatraProto.Client.TL.Schemas.CloudChats.Account.PasswordSettingsBase
+	public partial class PasswordSettings : PasswordSettingsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -26,7 +25,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		public override string Email { get; set; }
 
 [JsonPropertyName("secure_settings")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.SecureSecretSettingsBase SecureSettings { get; set; }
+		public override SecureSecretSettingsBase SecureSettings { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -64,7 +63,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				SecureSettings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SecureSecretSettingsBase>();
+				SecureSettings = reader.Read<SecureSecretSettingsBase>();
 			}
 
 

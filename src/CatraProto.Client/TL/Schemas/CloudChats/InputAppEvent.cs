@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputAppEvent : CatraProto.Client.TL.Schemas.CloudChats.InputAppEventBase
+	public partial class InputAppEvent : InputAppEventBase
 	{
 
 
@@ -24,7 +22,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override long Peer { get; set; }
 
 [JsonPropertyName("data")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.JSONValueBase Data { get; set; }
+		public override JSONValueBase Data { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -47,7 +45,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Time = reader.Read<double>();
 			Type = reader.Read<string>();
 			Peer = reader.Read<long>();
-			Data = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.JSONValueBase>();
+			Data = reader.Read<JSONValueBase>();
 
 		}
 	}

@@ -1,12 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdatesCombined : CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase
+	public partial class UpdatesCombined : UpdatesBase
 	{
 
 
@@ -15,13 +14,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("updates")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.UpdateBase> Updates { get; set; }
+		public IList<UpdateBase> Updates { get; set; }
 
 [JsonPropertyName("users")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+		public IList<UserBase> Users { get; set; }
 
 [JsonPropertyName("chats")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
+		public IList<ChatBase> Chats { get; set; }
 
 [JsonPropertyName("date")]
 		public int Date { get; set; }
@@ -52,9 +51,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Updates = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UpdateBase>();
-			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
-			Chats = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
+			Updates = reader.ReadVector<UpdateBase>();
+			Users = reader.ReadVector<UserBase>();
+			Chats = reader.ReadVector<ChatBase>();
 			Date = reader.Read<int>();
 			SeqStart = reader.Read<int>();
 			Seq = reader.Read<int>();

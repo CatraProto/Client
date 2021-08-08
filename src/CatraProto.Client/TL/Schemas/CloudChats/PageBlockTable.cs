@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PageBlockTable : CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase
+	public partial class PageBlockTable : PageBlockBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -29,10 +29,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public bool Striped { get; set; }
 
 [JsonPropertyName("title")]
-		public CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Title { get; set; }
+		public RichTextBase Title { get; set; }
 
 [JsonPropertyName("rows")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.PageTableRowBase> Rows { get; set; }
+		public IList<PageTableRowBase> Rows { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -57,8 +57,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = reader.Read<int>();
 			Bordered = FlagsHelper.IsFlagSet(Flags, 0);
 			Striped = FlagsHelper.IsFlagSet(Flags, 1);
-			Title = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
-			Rows = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PageTableRowBase>();
+			Title = reader.Read<RichTextBase>();
+			Rows = reader.ReadVector<PageTableRowBase>();
 
 		}
 	}

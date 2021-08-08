@@ -1,12 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class CdnConfig : CatraProto.Client.TL.Schemas.CloudChats.CdnConfigBase
+	public partial class CdnConfig : CdnConfigBase
 	{
 
 
@@ -15,7 +14,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("public_keys")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.CdnPublicKeyBase> PublicKeys { get; set; }
+		public override IList<CdnPublicKeyBase> PublicKeys { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -32,7 +31,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			PublicKeys = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.CdnPublicKeyBase>();
+			PublicKeys = reader.ReadVector<CdnPublicKeyBase>();
 
 		}
 	}

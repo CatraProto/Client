@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
@@ -17,13 +17,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetBase);
+		Type IMethod.Type { get; init; } = typeof(Messages.StickerSetBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
 [JsonPropertyName("sticker")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase Sticker { get; set; }
+		public InputDocumentBase Sticker { get; set; }
 
 [JsonPropertyName("position")]
 		public int Position { get; set; }
@@ -44,7 +44,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 
 		public void Deserialize(Reader reader)
 		{
-			Sticker = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
+			Sticker = reader.Read<InputDocumentBase>();
 			Position = reader.Read<int>();
 
 		}

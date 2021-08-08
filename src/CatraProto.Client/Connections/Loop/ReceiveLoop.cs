@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Threading;
+using System.IO;
 using System.Threading.Tasks;
+using CatraProto.Client.Async.Loops;
 using CatraProto.Client.Async.Loops.Enums.Generic;
 using CatraProto.Client.Connections.Exceptions;
 using CatraProto.Client.Connections.MessageScheduling;
@@ -13,7 +14,7 @@ using Serilog;
 
 namespace CatraProto.Client.Connections.Loop
 {
-    class ReceiveLoop : Async.Loops.GenericLoop
+    class ReceiveLoop : GenericLoop
     {
         private readonly MessagesDispatcher _messagesDispatcher;
         private readonly MTProtoState _mtProtoState;
@@ -89,7 +90,7 @@ namespace CatraProto.Client.Connections.Loop
                     _ = _connection.ConnectAsync(shutdownToken);
                     break;
                 }
-                catch (System.IO.IOException)
+                catch (IOException)
                 {
                     _ = _connection.ConnectAsync(shutdownToken);
                     break;

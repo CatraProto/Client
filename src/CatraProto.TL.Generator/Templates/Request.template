@@ -3,11 +3,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections;
 using CatraProto.Client.Connections.MessageScheduling;
-using CatraProto.Client.MTProto.Messages;
 using CatraProto.Client.MTProto.Rpc;
 using CatraProto.TL.Interfaces;
 using System.Collections.Generic;
 using System.Numerics;
+
 
 namespace ^Namespace^
 {

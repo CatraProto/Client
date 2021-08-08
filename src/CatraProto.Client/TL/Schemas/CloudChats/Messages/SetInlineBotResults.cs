@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
@@ -24,7 +25,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
+		Type IMethod.Type { get; init; } = typeof(bool);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -42,7 +43,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public long QueryId { get; set; }
 
 [JsonPropertyName("results")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineResultBase> Results { get; set; }
+		public IList<InputBotInlineResultBase> Results { get; set; }
 
 [JsonPropertyName("cache_time")]
 		public int CacheTime { get; set; }
@@ -51,7 +52,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public string NextOffset { get; set; }
 
 [JsonPropertyName("switch_pm")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InlineBotSwitchPMBase SwitchPm { get; set; }
+		public InlineBotSwitchPMBase SwitchPm { get; set; }
 
 
 		public void UpdateFlags() 
@@ -90,7 +91,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Gallery = FlagsHelper.IsFlagSet(Flags, 0);
 			Private = FlagsHelper.IsFlagSet(Flags, 1);
 			QueryId = reader.Read<long>();
-			Results = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineResultBase>();
+			Results = reader.ReadVector<InputBotInlineResultBase>();
 			CacheTime = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
@@ -99,7 +100,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				SwitchPm = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InlineBotSwitchPMBase>();
+				SwitchPm = reader.Read<InlineBotSwitchPMBase>();
 			}
 
 

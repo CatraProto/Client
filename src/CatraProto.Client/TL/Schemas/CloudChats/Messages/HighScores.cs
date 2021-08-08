@@ -1,12 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class HighScores : CatraProto.Client.TL.Schemas.CloudChats.Messages.HighScoresBase
+	public partial class HighScores : HighScoresBase
 	{
 
 
@@ -15,10 +14,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("scores")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.HighScoreBase> Scores { get; set; }
+		public override IList<HighScoreBase> Scores { get; set; }
 
 [JsonPropertyName("users")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+		public override IList<UserBase> Users { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -36,8 +35,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 		public override void Deserialize(Reader reader)
 		{
-			Scores = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.HighScoreBase>();
-			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+			Scores = reader.ReadVector<HighScoreBase>();
+			Users = reader.ReadVector<UserBase>();
 
 		}
 	}

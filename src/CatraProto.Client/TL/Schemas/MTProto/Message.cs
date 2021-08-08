@@ -1,12 +1,11 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class Message : CatraProto.Client.TL.Schemas.MTProto.MessageBase
+	public partial class Message : MessageBase
 	{
 
 

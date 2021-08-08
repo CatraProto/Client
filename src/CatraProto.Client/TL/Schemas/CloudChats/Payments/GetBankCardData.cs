@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
@@ -17,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Payments.BankCardDataBase);
+		Type IMethod.Type { get; init; } = typeof(BankCardDataBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;

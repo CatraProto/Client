@@ -1,12 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateChannelParticipant : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
+	public partial class UpdateChannelParticipant : UpdateBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -32,10 +31,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int UserId { get; set; }
 
 [JsonPropertyName("prev_participant")]
-		public CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantBase PrevParticipant { get; set; }
+		public ChannelParticipantBase PrevParticipant { get; set; }
 
 [JsonPropertyName("new_participant")]
-		public CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantBase NewParticipant { get; set; }
+		public ChannelParticipantBase NewParticipant { get; set; }
 
 [JsonPropertyName("qts")]
 		public int Qts { get; set; }
@@ -78,12 +77,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			UserId = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				PrevParticipant = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantBase>();
+				PrevParticipant = reader.Read<ChannelParticipantBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				NewParticipant = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantBase>();
+				NewParticipant = reader.Read<ChannelParticipantBase>();
 			}
 
 			Qts = reader.Read<int>();

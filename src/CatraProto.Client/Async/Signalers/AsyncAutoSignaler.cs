@@ -1,16 +1,16 @@
 using System;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace CatraProto.Client.Async.Signalers
 {
     public class AsyncAutoSignaler : IDisposable
     {
+        public delegate void SignalEvent();
+
         private readonly AsyncSignaler _signaler = new AsyncSignaler(false);
         private readonly object _mutex = new object();
         private readonly Timer _timer;
         private int _interval;
-        public delegate void SignalEvent();
         public event SignalEvent? OnSignal;
 
         public AsyncAutoSignaler(TimeSpan timeSpan)

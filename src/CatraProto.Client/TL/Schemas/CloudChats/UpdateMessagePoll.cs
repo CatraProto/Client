@@ -1,12 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateMessagePoll : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
+	public partial class UpdateMessagePoll : UpdateBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -25,10 +24,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public long PollId { get; set; }
 
 [JsonPropertyName("poll")]
-		public CatraProto.Client.TL.Schemas.CloudChats.PollBase Poll { get; set; }
+		public PollBase Poll { get; set; }
 
 [JsonPropertyName("results")]
-		public CatraProto.Client.TL.Schemas.CloudChats.PollResultsBase Results { get; set; }
+		public PollResultsBase Results { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -58,10 +57,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			PollId = reader.Read<long>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Poll = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PollBase>();
+				Poll = reader.Read<PollBase>();
 			}
 
-			Results = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PollResultsBase>();
+			Results = reader.Read<PollResultsBase>();
 
 		}
 	}

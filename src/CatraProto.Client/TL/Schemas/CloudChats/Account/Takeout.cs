@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class Takeout : CatraProto.Client.TL.Schemas.CloudChats.Account.TakeoutBase
+	public partial class Takeout : TakeoutBase
 	{
 
 

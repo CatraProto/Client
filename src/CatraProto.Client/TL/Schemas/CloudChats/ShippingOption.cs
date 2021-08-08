@@ -1,12 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ShippingOption : CatraProto.Client.TL.Schemas.CloudChats.ShippingOptionBase
+	public partial class ShippingOption : ShippingOptionBase
 	{
 
 
@@ -21,7 +20,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override string Title { get; set; }
 
 [JsonPropertyName("prices")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase> Prices { get; set; }
+		public override IList<LabeledPriceBase> Prices { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -42,7 +41,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Id = reader.Read<string>();
 			Title = reader.Read<string>();
-			Prices = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase>();
+			Prices = reader.ReadVector<LabeledPriceBase>();
 
 		}
 	}

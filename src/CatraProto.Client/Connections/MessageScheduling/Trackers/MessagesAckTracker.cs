@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Async.Loops;
-using CatraProto.Client.Async.Loops.Enums.Generic;
 using CatraProto.Client.Async.Loops.Enums.Resumable;
 using CatraProto.Client.Connections.MessageScheduling.Items;
 using CatraProto.Client.MTProto.Auth;
@@ -36,12 +34,11 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
                 {
                     if (await StateSignaler.WaitAsync() is ResumableSignalState.Stop or ResumableSignalState.Suspend)
                     {
-                        continue;
                     }
                 }
             }
         }
-        
+
         public void AcknowledgeAndReschedule(List<long> ids)
         {
             foreach (var id in ids)
@@ -58,7 +55,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
                 _logger.Information("Not keeping track of message {Message} because it's unencrypted", messageBody);
                 return;
             }
-            
+
             if (!AcknowledgementHandler.IsContentRelated(messageBody))
             {
                 _logger.Information("Not keeping track of message {Message} because it's not content related", messageBody);
@@ -69,7 +66,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
             {
                 throw new InvalidOperationException("Can't track a message without messageId");
             }
-            
+
             _clientAcksHandler.SetAsNeedsAck(messageItem.MessageStatus.MessageId.Value);
         }
 
@@ -82,7 +79,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
         {
             return _serverAcksHandler.GetAckMessages();
         }
-        
+
         public void AcknowledgeNext(IObject body, long messageId)
         {
             if (AcknowledgementHandler.IsContentRelated(body))
@@ -91,7 +88,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
             }
             else
             {
-                _logger.Information("Not acknowledging message ({MObj}){MId} because it's not content related", body, messageId);
+                _logger.Information("Not acknowledging message [{MId}]({MObj}) because it's not content related", body, messageId);
             }
         }
     }

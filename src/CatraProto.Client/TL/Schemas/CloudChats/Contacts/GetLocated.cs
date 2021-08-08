@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
@@ -22,7 +22,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
+		Type IMethod.Type { get; init; } = typeof(UpdatesBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -34,7 +34,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 		public bool Background { get; set; }
 
 [JsonPropertyName("geo_point")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase GeoPoint { get; set; }
+		public InputGeoPointBase GeoPoint { get; set; }
 
 [JsonPropertyName("self_expires")]
 		public int? SelfExpires { get; set; }
@@ -65,7 +65,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 		{
 			Flags = reader.Read<int>();
 			Background = FlagsHelper.IsFlagSet(Flags, 1);
-			GeoPoint = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase>();
+			GeoPoint = reader.Read<InputGeoPointBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				SelfExpires = reader.Read<int>();

@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
@@ -22,7 +22,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.DialogsBase);
+		Type IMethod.Type { get; init; } = typeof(DialogsBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -43,7 +43,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public int OffsetId { get; set; }
 
 [JsonPropertyName("offset_peer")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase OffsetPeer { get; set; }
+		public InputPeerBase OffsetPeer { get; set; }
 
 [JsonPropertyName("limit")]
 		public int Limit { get; set; }
@@ -88,7 +88,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 			OffsetDate = reader.Read<int>();
 			OffsetId = reader.Read<int>();
-			OffsetPeer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+			OffsetPeer = reader.Read<InputPeerBase>();
 			Limit = reader.Read<int>();
 			Hash = reader.Read<int>();
 

@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-	public partial class PassportConfigNotModified : CatraProto.Client.TL.Schemas.CloudChats.Help.PassportConfigBase
+	public partial class PassportConfigNotModified : PassportConfigBase
 	{
 
 

@@ -15,16 +15,6 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
             _authKey = new AuthKey(api, logger);
         }
 
-        public void Read(Reader reader)
-        {
-            _authKey.Read(reader);
-        }
-
-        public void Save(Writer writer)
-        {
-            _authKey.Save(writer);
-        }
-
         public async Task<AuthKey> GetAuthKeyAsync(CancellationToken cancellationToken = default)
         {
             if (_authKey.RawAuthKey is null)
@@ -33,6 +23,16 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
             }
 
             return _authKey;
+        }
+
+        public void Read(Reader reader)
+        {
+            _authKey.Read(reader);
+        }
+
+        public void Save(Writer writer)
+        {
+            _authKey.Save(writer);
         }
     }
 }

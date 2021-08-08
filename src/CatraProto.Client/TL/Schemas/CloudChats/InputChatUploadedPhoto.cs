@@ -1,12 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputChatUploadedPhoto : CatraProto.Client.TL.Schemas.CloudChats.InputChatPhotoBase
+	public partial class InputChatUploadedPhoto : InputChatPhotoBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -24,10 +23,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Flags { get; set; }
 
 [JsonPropertyName("file")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase File { get; set; }
+		public InputFileBase File { get; set; }
 
 [JsonPropertyName("video")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase Video { get; set; }
+		public InputFileBase Video { get; set; }
 
 [JsonPropertyName("video_start_ts")]
 		public double? VideoStartTs { get; set; }
@@ -69,12 +68,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				File = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
+				File = reader.Read<InputFileBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Video = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
+				Video = reader.Read<InputFileBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))

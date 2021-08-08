@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class RecentMeUrlChatInvite : CatraProto.Client.TL.Schemas.CloudChats.RecentMeUrlBase
+	public partial class RecentMeUrlChatInvite : RecentMeUrlBase
 	{
 
 
@@ -18,7 +16,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override string Url { get; set; }
 
 [JsonPropertyName("chat_invite")]
-		public CatraProto.Client.TL.Schemas.CloudChats.ChatInviteBase ChatInvite { get; set; }
+		public ChatInviteBase ChatInvite { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -37,7 +35,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Url = reader.Read<string>();
-			ChatInvite = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatInviteBase>();
+			ChatInvite = reader.Read<ChatInviteBase>();
 
 		}
 	}

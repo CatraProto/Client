@@ -1,12 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PageBlockEmbed : CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase
+	public partial class PageBlockEmbed : PageBlockBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -49,7 +48,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int? H { get; set; }
 
 [JsonPropertyName("caption")]
-		public CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase Caption { get; set; }
+		public PageCaptionBase Caption { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -128,7 +127,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 				H = reader.Read<int>();
 			}
 
-			Caption = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase>();
+			Caption = reader.Read<PageCaptionBase>();
 
 		}
 	}

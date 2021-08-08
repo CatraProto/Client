@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
@@ -21,7 +21,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
+		Type IMethod.Type { get; init; } = typeof(UpdatesBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -33,7 +33,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 		public bool AddPhonePrivacyException { get; set; }
 
 [JsonPropertyName("id")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase Id { get; set; }
+		public InputUserBase Id { get; set; }
 
 [JsonPropertyName("first_name")]
 		public string FirstName { get; set; }
@@ -67,7 +67,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 		{
 			Flags = reader.Read<int>();
 			AddPhonePrivacyException = FlagsHelper.IsFlagSet(Flags, 0);
-			Id = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
+			Id = reader.Read<InputUserBase>();
 			FirstName = reader.Read<string>();
 			LastName = reader.Read<string>();
 			Phone = reader.Read<string>();

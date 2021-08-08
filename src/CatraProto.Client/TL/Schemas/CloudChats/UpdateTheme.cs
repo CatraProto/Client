@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateTheme : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
+	public partial class UpdateTheme : UpdateBase
 	{
 
 
@@ -15,7 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("theme")]
-		public CatraProto.Client.TL.Schemas.CloudChats.ThemeBase Theme { get; set; }
+		public ThemeBase Theme { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -32,7 +30,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Theme = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ThemeBase>();
+			Theme = reader.Read<ThemeBase>();
 
 		}
 	}

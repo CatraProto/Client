@@ -1,12 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 {
-	public partial class SavedInfo : CatraProto.Client.TL.Schemas.CloudChats.Payments.SavedInfoBase
+	public partial class SavedInfo : SavedInfoBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -26,7 +25,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 		public override bool HasSavedCredentials { get; set; }
 
 [JsonPropertyName("SavedInfo_")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase SavedInfo_ { get; set; }
+		public override PaymentRequestedInfoBase SavedInfo_ { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -55,7 +54,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 			HasSavedCredentials = FlagsHelper.IsFlagSet(Flags, 1);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				SavedInfo_ = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase>();
+				SavedInfo_ = reader.Read<PaymentRequestedInfoBase>();
 			}
 
 

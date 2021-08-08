@@ -37,7 +37,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
             var toSeconds = messageId / 4294967296;
             return DateTimeOffset.Now.ToUnixTimeSeconds() - toSeconds >= 300;
         }
-        
+
         public static bool IsMessageIdTooNew(long messageId)
         {
             var toSeconds = messageId / 4294967296;
@@ -57,7 +57,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
                 _logger.Warning("Given message id {Id} is too young", messageId);
                 return false;
             }
-            
+
             if (messageId % 4 == 0 && fromServer)
             {
                 _logger.Warning("Given message id {Id} is divisible by 4 but it's been sent from the server", messageId);

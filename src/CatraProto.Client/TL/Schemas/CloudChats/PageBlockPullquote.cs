@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PageBlockPullquote : CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase
+	public partial class PageBlockPullquote : PageBlockBase
 	{
 
 
@@ -15,10 +13,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("text")]
-		public CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Text { get; set; }
+		public RichTextBase Text { get; set; }
 
 [JsonPropertyName("caption")]
-		public CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Caption { get; set; }
+		public RichTextBase Caption { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -36,8 +34,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Text = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
-			Caption = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
+			Text = reader.Read<RichTextBase>();
+			Caption = reader.Read<RichTextBase>();
 
 		}
 	}

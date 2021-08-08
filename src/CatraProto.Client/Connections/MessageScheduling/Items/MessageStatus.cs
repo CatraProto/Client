@@ -1,15 +1,14 @@
 using CatraProto.Client.Connections.MessageScheduling.Enums;
-using CatraProto.Client.Connections.MessageScheduling.Trackers;
 
 namespace CatraProto.Client.Connections.MessageScheduling.Items
-{ 
+{
     class MessageStatus
     {
         public MessageCompletion MessageCompletion { get; }
         public MessageState MessageState { get; set; }
         public long? MessageId { get; set; }
         private MessagesHandler? _messagesHandler;
-        
+
         public MessageStatus(MessageCompletion messageCompletion)
         {
             MessageCompletion = messageCompletion;
@@ -30,7 +29,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
             MessageId = messageId;
             MessageCompletion.SetSent(messageId);
         }
-        
+
         public void BindTo(MessagesHandler messagesHandler)
         {
             _messagesHandler = messagesHandler;

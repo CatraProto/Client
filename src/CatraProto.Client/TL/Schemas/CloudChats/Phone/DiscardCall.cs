@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
@@ -21,7 +21,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
+		Type IMethod.Type { get; init; } = typeof(UpdatesBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -33,13 +33,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 		public bool Video { get; set; }
 
 [JsonPropertyName("peer")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputPhoneCallBase Peer { get; set; }
+		public InputPhoneCallBase Peer { get; set; }
 
 [JsonPropertyName("duration")]
 		public int Duration { get; set; }
 
 [JsonPropertyName("reason")]
-		public CatraProto.Client.TL.Schemas.CloudChats.PhoneCallDiscardReasonBase Reason { get; set; }
+		public PhoneCallDiscardReasonBase Reason { get; set; }
 
 [JsonPropertyName("connection_id")]
 		public long ConnectionId { get; set; }
@@ -67,9 +67,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 		{
 			Flags = reader.Read<int>();
 			Video = FlagsHelper.IsFlagSet(Flags, 0);
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPhoneCallBase>();
+			Peer = reader.Read<InputPhoneCallBase>();
 			Duration = reader.Read<int>();
-			Reason = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhoneCallDiscardReasonBase>();
+			Reason = reader.Read<PhoneCallDiscardReasonBase>();
 			ConnectionId = reader.Read<long>();
 
 		}

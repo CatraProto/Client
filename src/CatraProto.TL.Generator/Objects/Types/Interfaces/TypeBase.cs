@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Text;
 using CatraProto.TL.Generator.DeclarationInfo;
-using Object = CatraProto.TL.Generator.Objects.Interfaces.Object;
+using CatraProto.TL.Generator.Objects.Interfaces;
 
 namespace CatraProto.TL.Generator.Objects.Types.Interfaces
 {
@@ -26,7 +25,14 @@ namespace CatraProto.TL.Generator.Objects.Types.Interfaces
                 
                 if (parameter.VectorInfo.IsNaked)
                 {
-                    text = $"{spacing}{parameter.NamingInfo.PascalCaseName} = reader.ReadVector(new CatraProto.TL.ObjectDeserializers.NakedObjectVectorDeserializer<{typeName}>(), {parameter.VectorInfo.IsNaked.ToString().ToLower()});";
+                    if (parameter.NamingInfo.OriginalName == "messages" && parameter.Type.Namespace.FullNamespace == "CatraProto.Client.TL.Schemas.MTProto.Message")
+                    {
+                        text = $"{spacing}{parameter.NamingInfo.PascalCaseName} = reader.ReadVector(new CatraProto.TL.ObjectDeserializers.NakedObjectVectorDeserializer<CatraProto.Client.MTProto.Deserializers.MsgContainerDeserializer>(), {parameter.VectorInfo.IsNaked.ToString().ToLower()}).Cast<CatraProto.Client.TL.Schemas.MTProto.Message>().ToList();";
+                    }
+                    else
+                    {
+                        text = $"{spacing}{parameter.NamingInfo.PascalCaseName} = reader.ReadVector(new CatraProto.TL.ObjectDeserializers.NakedObjectVectorDeserializer<{typeName}>(), {parameter.VectorInfo.IsNaked.ToString().ToLower()});";
+                    }
                 }
                 else
                 {

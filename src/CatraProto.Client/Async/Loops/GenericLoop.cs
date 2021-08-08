@@ -1,18 +1,16 @@
-using CatraProto.Client.Async.Loops.Enums;
 using CatraProto.Client.Async.Loops.Enums.Generic;
 using CatraProto.Client.Async.Signalers;
-using CatraProto.TL;
 
 namespace CatraProto.Client.Async.Loops
 {
     public class GenericLoop : BaseLoop<LoopState, SignalState>
     {
         private LoopState _loopState = LoopState.Stopped;
-        
+
         public GenericLoop() : base(new AsyncStateSignaler<SignalState>(SignalState.Stop))
         {
         }
-        
+
         protected override bool CanStartLoop()
         {
             lock (SharedLock)
@@ -41,7 +39,7 @@ namespace CatraProto.Client.Async.Loops
                 else
                 {
                     _loopState = LoopState.Running;
-                    StateSignaler.Signal(SignalState.Start);  
+                    StateSignaler.Signal(SignalState.Start);
                 }
             }
         }

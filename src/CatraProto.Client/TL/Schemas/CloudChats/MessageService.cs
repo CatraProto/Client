@@ -1,12 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageService : CatraProto.Client.TL.Schemas.CloudChats.MessageBase
+	public partial class MessageService : MessageBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -50,19 +49,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override int Id { get; set; }
 
 [JsonPropertyName("from_id")]
-		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase FromId { get; set; }
+		public PeerBase FromId { get; set; }
 
 [JsonPropertyName("peer_id")]
-		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase PeerId { get; set; }
+		public PeerBase PeerId { get; set; }
 
 [JsonPropertyName("reply_to")]
-		public CatraProto.Client.TL.Schemas.CloudChats.MessageReplyHeaderBase ReplyTo { get; set; }
+		public MessageReplyHeaderBase ReplyTo { get; set; }
 
 [JsonPropertyName("date")]
 		public int Date { get; set; }
 
 [JsonPropertyName("action")]
-		public CatraProto.Client.TL.Schemas.CloudChats.MessageActionBase Action { get; set; }
+		public MessageActionBase Action { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -112,17 +111,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Id = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 8))
 			{
-				FromId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+				FromId = reader.Read<PeerBase>();
 			}
 
-			PeerId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+			PeerId = reader.Read<PeerBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				ReplyTo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageReplyHeaderBase>();
+				ReplyTo = reader.Read<MessageReplyHeaderBase>();
 			}
 
 			Date = reader.Read<int>();
-			Action = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageActionBase>();
+			Action = reader.Read<MessageActionBase>();
 
 		}
 	}

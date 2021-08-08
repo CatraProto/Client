@@ -1,6 +1,3 @@
-using System;
-using System.Threading.Tasks;
-using CatraProto.Client.Async.Loops.Enums.Generic;
 using CatraProto.Client.Async.Loops.Enums.Resumable;
 using CatraProto.Client.Async.Signalers;
 
@@ -9,10 +6,11 @@ namespace CatraProto.Client.Async.Loops
     public abstract class ResumableLoop : BaseLoop<ResumableLoopState, ResumableSignalState>
     {
         private ResumableLoopState _loopState = ResumableLoopState.Stopped;
+
         protected ResumableLoop() : base(new AsyncStateSignaler<ResumableSignalState>(ResumableSignalState.Stop))
         {
         }
-        
+
         public virtual bool Suspend()
         {
             lock (SharedLock)
@@ -21,13 +19,13 @@ namespace CatraProto.Client.Async.Loops
                 {
                     return false;
                 }
-                
+
                 StateSignaler.Signal(ResumableSignalState.Suspend);
                 _loopState = ResumableLoopState.Suspended;
                 return true;
             }
         }
-        
+
         public virtual bool Resume()
         {
             lock (SharedLock)
@@ -35,14 +33,14 @@ namespace CatraProto.Client.Async.Loops
                 if (_loopState != ResumableLoopState.Suspended)
                 {
                     return false;
-                }   
-                
+                }
+
                 StateSignaler.Signal(ResumableSignalState.Resume);
                 _loopState = ResumableLoopState.Running;
                 return true;
             }
         }
-        
+
         protected override bool CanStartLoop()
         {
             lock (SharedLock)
@@ -71,7 +69,7 @@ namespace CatraProto.Client.Async.Loops
                 else
                 {
                     _loopState = ResumableLoopState.Running;
-                    StateSignaler.Signal(ResumableSignalState.Start);  
+                    StateSignaler.Signal(ResumableSignalState.Start);
                 }
             }
         }
@@ -91,7 +89,7 @@ namespace CatraProto.Client.Async.Loops
                 _loopState = newState;
             }
         }
-        
+
         protected override void SetLoopStopped()
         {
             lock (SharedLock)

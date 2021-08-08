@@ -1,12 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateChannelUserTyping : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
+	public partial class UpdateChannelUserTyping : UpdateBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -31,7 +30,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int UserId { get; set; }
 
 [JsonPropertyName("action")]
-		public CatraProto.Client.TL.Schemas.CloudChats.SendMessageActionBase Action { get; set; }
+		public SendMessageActionBase Action { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -66,7 +65,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			}
 
 			UserId = reader.Read<int>();
-			Action = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SendMessageActionBase>();
+			Action = reader.Read<SendMessageActionBase>();
 
 		}
 	}

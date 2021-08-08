@@ -1,12 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class DialogFolder : CatraProto.Client.TL.Schemas.CloudChats.DialogBase
+	public partial class DialogFolder : DialogBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -25,10 +24,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override bool Pinned { get; set; }
 
 [JsonPropertyName("folder")]
-		public CatraProto.Client.TL.Schemas.CloudChats.FolderBase Folder { get; set; }
+		public FolderBase Folder { get; set; }
 
 [JsonPropertyName("peer")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
+		public override PeerBase Peer { get; set; }
 
 [JsonPropertyName("top_message")]
 		public override int TopMessage { get; set; }
@@ -71,8 +70,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Flags = reader.Read<int>();
 			Pinned = FlagsHelper.IsFlagSet(Flags, 2);
-			Folder = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.FolderBase>();
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+			Folder = reader.Read<FolderBase>();
+			Peer = reader.Read<PeerBase>();
 			TopMessage = reader.Read<int>();
 			UnreadMutedPeersCount = reader.Read<int>();
 			UnreadUnmutedPeersCount = reader.Read<int>();

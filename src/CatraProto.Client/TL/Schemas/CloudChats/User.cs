@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class User : CatraProto.Client.TL.Schemas.CloudChats.UserBase
+	public partial class User : UserBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -106,16 +106,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public string Phone { get; set; }
 
 [JsonPropertyName("photo")]
-		public CatraProto.Client.TL.Schemas.CloudChats.UserProfilePhotoBase Photo { get; set; }
+		public UserProfilePhotoBase Photo { get; set; }
 
 [JsonPropertyName("status")]
-		public CatraProto.Client.TL.Schemas.CloudChats.UserStatusBase Status { get; set; }
+		public UserStatusBase Status { get; set; }
 
 [JsonPropertyName("bot_info_version")]
 		public int? BotInfoVersion { get; set; }
 
 [JsonPropertyName("restriction_reason")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase> RestrictionReason { get; set; }
+		public IList<RestrictionReasonBase> RestrictionReason { get; set; }
 
 [JsonPropertyName("bot_inline_placeholder")]
 		public string BotInlinePlaceholder { get; set; }
@@ -263,12 +263,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.UserProfilePhotoBase>();
+				Photo = reader.Read<UserProfilePhotoBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
-				Status = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.UserStatusBase>();
+				Status = reader.Read<UserStatusBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 14))
@@ -278,7 +278,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 18))
 			{
-				RestrictionReason = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase>();
+				RestrictionReason = reader.ReadVector<RestrictionReasonBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 19))

@@ -4,7 +4,7 @@ namespace CatraProto.Client.Settings
 {
     public class ClientSettings
     {
-        public string DatacenterAddress { get; set; } = "149.154.167.51";
+        public string DatacenterAddress { get; set; } = "149.154.167.92";
         public ApiSettings ApiSettings { get; init; }
         public string SessionName { get; init; }
         public string SessionPath { get; init; }

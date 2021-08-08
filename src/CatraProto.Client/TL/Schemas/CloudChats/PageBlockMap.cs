@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PageBlockMap : CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase
+	public partial class PageBlockMap : PageBlockBase
 	{
 
 
@@ -15,7 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("geo")]
-		public CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase Geo { get; set; }
+		public GeoPointBase Geo { get; set; }
 
 [JsonPropertyName("zoom")]
 		public int Zoom { get; set; }
@@ -27,7 +25,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int H { get; set; }
 
 [JsonPropertyName("caption")]
-		public CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase Caption { get; set; }
+		public PageCaptionBase Caption { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -48,11 +46,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Geo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase>();
+			Geo = reader.Read<GeoPointBase>();
 			Zoom = reader.Read<int>();
 			W = reader.Read<int>();
 			H = reader.Read<int>();
-			Caption = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase>();
+			Caption = reader.Read<PageCaptionBase>();
 
 		}
 	}

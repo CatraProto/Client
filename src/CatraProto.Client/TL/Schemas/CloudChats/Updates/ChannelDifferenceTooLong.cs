@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 {
-	public partial class ChannelDifferenceTooLong : CatraProto.Client.TL.Schemas.CloudChats.Updates.ChannelDifferenceBase
+	public partial class ChannelDifferenceTooLong : ChannelDifferenceBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -29,16 +29,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 		public override int? Timeout { get; set; }
 
 [JsonPropertyName("dialog")]
-		public CatraProto.Client.TL.Schemas.CloudChats.DialogBase Dialog { get; set; }
+		public DialogBase Dialog { get; set; }
 
 [JsonPropertyName("messages")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageBase> Messages { get; set; }
+		public IList<MessageBase> Messages { get; set; }
 
 [JsonPropertyName("chats")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
+		public IList<ChatBase> Chats { get; set; }
 
 [JsonPropertyName("users")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+		public IList<UserBase> Users { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -74,10 +74,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 				Timeout = reader.Read<int>();
 			}
 
-			Dialog = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DialogBase>();
-			Messages = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageBase>();
-			Chats = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
-			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+			Dialog = reader.Read<DialogBase>();
+			Messages = reader.ReadVector<MessageBase>();
+			Chats = reader.ReadVector<ChatBase>();
+			Users = reader.ReadVector<UserBase>();
 
 		}
 	}

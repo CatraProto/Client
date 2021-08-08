@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputStickeredMediaDocument : CatraProto.Client.TL.Schemas.CloudChats.InputStickeredMediaBase
+	public partial class InputStickeredMediaDocument : InputStickeredMediaBase
 	{
 
 
@@ -15,7 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("id")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase Id { get; set; }
+		public InputDocumentBase Id { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -32,7 +30,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Id = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
+			Id = reader.Read<InputDocumentBase>();
 
 		}
 	}

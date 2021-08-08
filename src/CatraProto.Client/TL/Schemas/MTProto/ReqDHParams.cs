@@ -1,8 +1,10 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
+using System.Numerics;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
+using CatraProto.TL.Exceptions;
 using CatraProto.TL.Interfaces;
+
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.MTProto
@@ -17,16 +19,16 @@ namespace CatraProto.Client.TL.Schemas.MTProto
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.ServerDHParamsBase);
+		Type IMethod.Type { get; init; } = typeof(ServerDHParamsBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
 [JsonPropertyName("nonce")]
-		public System.Numerics.BigInteger Nonce { get; set; }
+		public BigInteger Nonce { get; set; }
 
 [JsonPropertyName("server_nonce")]
-		public System.Numerics.BigInteger ServerNonce { get; set; }
+		public BigInteger ServerNonce { get; set; }
 
 [JsonPropertyName("p")]
 		public byte[] P { get; set; }
@@ -51,12 +53,12 @@ namespace CatraProto.Client.TL.Schemas.MTProto
             if(ConstructorId != 0) writer.Write(ConstructorId);
 			var sizeNonce = Nonce.GetByteCount();
 			if(sizeNonce != 16){
-				throw new CatraProto.TL.Exceptions.SerializationException($"ByteSize mismatch, should be 16bytes got {sizeNonce}bytes", CatraProto.TL.Exceptions.SerializationException.SerializationErrors.BitSizeMismatch);
+				throw new SerializationException($"ByteSize mismatch, should be 16bytes got {sizeNonce}bytes", SerializationException.SerializationErrors.BitSizeMismatch);
 			}
 			writer.Write(Nonce);
 			var sizeServerNonce = ServerNonce.GetByteCount();
 			if(sizeServerNonce != 16){
-				throw new CatraProto.TL.Exceptions.SerializationException($"ByteSize mismatch, should be 16bytes got {sizeServerNonce}bytes", CatraProto.TL.Exceptions.SerializationException.SerializationErrors.BitSizeMismatch);
+				throw new SerializationException($"ByteSize mismatch, should be 16bytes got {sizeServerNonce}bytes", SerializationException.SerializationErrors.BitSizeMismatch);
 			}
 			writer.Write(ServerNonce);
 			writer.Write(P);
@@ -68,8 +70,8 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
 		public void Deserialize(Reader reader)
 		{
-			Nonce = reader.Read<System.Numerics.BigInteger>(128);
-			ServerNonce = reader.Read<System.Numerics.BigInteger>(128);
+			Nonce = reader.Read<BigInteger>(128);
+			ServerNonce = reader.Read<BigInteger>(128);
 			P = reader.Read<byte[]>();
 			Q = reader.Read<byte[]>();
 			PublicKeyFingerprint = reader.Read<long>();

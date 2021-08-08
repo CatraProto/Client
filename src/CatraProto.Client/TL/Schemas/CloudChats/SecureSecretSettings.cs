@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class SecureSecretSettings : CatraProto.Client.TL.Schemas.CloudChats.SecureSecretSettingsBase
+	public partial class SecureSecretSettings : SecureSecretSettingsBase
 	{
 
 
@@ -15,7 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("secure_algo")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.SecurePasswordKdfAlgoBase SecureAlgo { get; set; }
+		public override SecurePasswordKdfAlgoBase SecureAlgo { get; set; }
 
 [JsonPropertyName("secure_secret")]
 		public override byte[] SecureSecret { get; set; }
@@ -40,7 +38,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			SecureAlgo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SecurePasswordKdfAlgoBase>();
+			SecureAlgo = reader.Read<SecurePasswordKdfAlgoBase>();
 			SecureSecret = reader.Read<byte[]>();
 			SecureSecretId = reader.Read<long>();
 

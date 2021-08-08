@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-	public partial class TermsOfServiceUpdate : CatraProto.Client.TL.Schemas.CloudChats.Help.TermsOfServiceUpdateBase
+	public partial class TermsOfServiceUpdate : TermsOfServiceUpdateBase
 	{
 
 
@@ -18,7 +16,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 		public override int Expires { get; set; }
 
 [JsonPropertyName("terms_of_service")]
-		public CatraProto.Client.TL.Schemas.CloudChats.Help.TermsOfServiceBase TermsOfService { get; set; }
+		public TermsOfServiceBase TermsOfService { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -37,7 +35,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 		public override void Deserialize(Reader reader)
 		{
 			Expires = reader.Read<int>();
-			TermsOfService = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.Help.TermsOfServiceBase>();
+			TermsOfService = reader.Read<TermsOfServiceBase>();
 
 		}
 	}

@@ -9,9 +9,9 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler.Results
         ReqPqFail,
         ServerDhFail,
         DhGenFail,
-        HashMismatch,
+        HashMismatch
     }
-    
+
     class AuthKeyFail : AuthKeyResult
     {
         public Errors Error { get; init; }

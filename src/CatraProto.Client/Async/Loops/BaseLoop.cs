@@ -18,48 +18,6 @@ namespace CatraProto.Client.Async.Loops
             StateSignaler = stateSignaler;
         }
 
-        public bool Start()
-        {
-            lock (SharedLock)
-            {
-                if (!CanStartLoop())
-                {
-                    return false;
-                }
-                
-                if (_shutdownSource.Task.IsCompleted)
-                {
-                    _shutdownSource = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
-                }
-                if (_cancellationTokenSource is null || _cancellationTokenSource.IsCancellationRequested)
-                {
-                    _cancellationTokenSource?.Dispose();
-                    _cancellationTokenSource = new CancellationTokenSource();
-                }
-                
-                StateSignaler.SetCancellationToken(_cancellationTokenSource.Token);
-                OnLoopNewState(false);
-
-                return true;
-            }
-        }
-
-        public bool Stop()
-        {
-            lock (SharedLock)
-            {
-                if (!CanStopLoop())
-                {
-                    return false;
-                }
-                
-                _cancellationTokenSource?.Cancel();
-                OnLoopNewState(true);
-
-                return true;
-            }
-        }
-
         protected virtual void SetLoopStopped()
         {
             lock (SharedLock)
@@ -75,7 +33,7 @@ namespace CatraProto.Client.Async.Loops
                 return _shutdownSource.Task;
             }
         }
-        
+
         public CancellationToken GetShutdownToken()
         {
             lock (SharedLock)
@@ -84,11 +42,10 @@ namespace CatraProto.Client.Async.Loops
             }
         }
 
-        
+
         protected abstract bool CanStartLoop();
         protected abstract bool CanStopLoop();
         protected abstract void OnLoopNewState(bool stopped);
-        public abstract TLoopState GetCurrentState();
 
         public virtual void Dispose()
         {
@@ -99,5 +56,50 @@ namespace CatraProto.Client.Async.Loops
                 GC.SuppressFinalize(this);
             }
         }
+
+        public bool Start()
+        {
+            lock (SharedLock)
+            {
+                if (!CanStartLoop())
+                {
+                    return false;
+                }
+
+                if (_shutdownSource.Task.IsCompleted)
+                {
+                    _shutdownSource = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+                }
+
+                if (_cancellationTokenSource is null || _cancellationTokenSource.IsCancellationRequested)
+                {
+                    _cancellationTokenSource?.Dispose();
+                    _cancellationTokenSource = new CancellationTokenSource();
+                }
+
+                StateSignaler.SetCancellationToken(_cancellationTokenSource.Token);
+                OnLoopNewState(false);
+
+                return true;
+            }
+        }
+
+        public bool Stop()
+        {
+            lock (SharedLock)
+            {
+                if (!CanStopLoop())
+                {
+                    return false;
+                }
+
+                _cancellationTokenSource?.Cancel();
+                OnLoopNewState(true);
+
+                return true;
+            }
+        }
+
+        public abstract TLoopState GetCurrentState();
     }
 }

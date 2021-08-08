@@ -2,14 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Numerics;
 using System.Security.Cryptography;
 
 namespace CatraProto.Client.Crypto
 {
     static class CryptoTools
     {
-        private static RandomNumberGenerator _cryptoRandom = new RNGCryptoServiceProvider();
+        private static readonly RandomNumberGenerator CryptoRandom = new RNGCryptoServiceProvider();
 
         public static long CreateRandomLong()
         {
@@ -140,7 +139,7 @@ namespace CatraProto.Client.Crypto
         public static byte[] GenerateRandomBytes(int count)
         {
             var byteArray = new byte[count];
-            CryptoTools._cryptoRandom.GetNonZeroBytes(byteArray);
+            CryptoRandom.GetNonZeroBytes(byteArray);
             return byteArray;
         }
 

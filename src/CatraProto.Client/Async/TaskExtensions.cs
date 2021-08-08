@@ -1,5 +1,3 @@
-using System;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,7 +9,7 @@ namespace CatraProto.Client.Async
         {
             using var cancelDelay = new CancellationTokenSource();
             using var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(token, cancelDelay.Token);
-            
+
             var result = await Task.WhenAny(task, Task.Delay(-1, linkedTokenSource.Token));
             if (result == task)
             {
@@ -21,7 +19,7 @@ namespace CatraProto.Client.Async
             else
             {
                 await task;
-                
+
                 //This return will never be reached because awaiting the Delay task will throw an exception
                 return default!;
             }

@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
@@ -21,7 +21,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.SentEncryptedMessageBase);
+		Type IMethod.Type { get; init; } = typeof(SentEncryptedMessageBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -33,7 +33,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public bool Silent { get; set; }
 
 [JsonPropertyName("peer")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedChatBase Peer { get; set; }
+		public InputEncryptedChatBase Peer { get; set; }
 
 [JsonPropertyName("random_id")]
 		public long RandomId { get; set; }
@@ -42,7 +42,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public byte[] Data { get; set; }
 
 [JsonPropertyName("file")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedFileBase File { get; set; }
+		public InputEncryptedFileBase File { get; set; }
 
 
 		public void UpdateFlags() 
@@ -67,10 +67,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		{
 			Flags = reader.Read<int>();
 			Silent = FlagsHelper.IsFlagSet(Flags, 0);
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedChatBase>();
+			Peer = reader.Read<InputEncryptedChatBase>();
 			RandomId = reader.Read<long>();
 			Data = reader.Read<byte[]>();
-			File = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedFileBase>();
+			File = reader.Read<InputEncryptedFileBase>();
 
 		}
 	}

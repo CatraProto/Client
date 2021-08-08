@@ -1,19 +1,10 @@
 using System;
-using System.Collections.Concurrent;
-using System.Globalization;
-using System.Linq;
 using System.Threading;
-using System.Threading.Channels;
 using System.Threading.Tasks;
 using CatraProto.Client.Async.Collections;
-using CatraProto.Client.Async.Locks;
 using CatraProto.Client.Connections.MessageScheduling.Items;
-using CatraProto.Client.Connections.MessageScheduling.Trackers;
-using CatraProto.Client.MTProto.Messages;
-using CatraProto.Client.MTProto.Rpc;
 using CatraProto.Client.MTProto.Rpc.Interfaces;
 using CatraProto.TL.Interfaces;
-using Serilog;
 
 namespace CatraProto.Client.Connections.MessageScheduling
 {
@@ -35,10 +26,10 @@ namespace CatraProto.Client.Connections.MessageScheduling
         public void EnqueueMessage(IObject body, MessageSendingOptions messageSendingOptions, IRpcMessage rpcMessage, out Task completionTask, CancellationToken requestCancellationToken)
         {
             requestCancellationToken.ThrowIfCancellationRequested();
-               
+
             var taskCompletionSource = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
             completionTask = taskCompletionSource.Task;
-            
+
             var messageCompletion = new MessageCompletion(taskCompletionSource, rpcMessage, body is IMethod method ? method : null);
             var messageStatusTracker = new MessageStatus(messageCompletion);
             var messageItem = new MessageItem(body, messageSendingOptions, messageStatusTracker, requestCancellationToken);
@@ -46,7 +37,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
 
             _asyncQueue.Enqueue(messageItem);
         }
-        
+
         public void EnqueueMessage(MessageItem item)
         {
             _asyncQueue.Enqueue(item);
