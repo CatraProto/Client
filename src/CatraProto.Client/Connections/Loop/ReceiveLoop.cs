@@ -32,7 +32,6 @@ namespace CatraProto.Client.Connections.Loop
 
         private async Task Loop()
         {
-            var protocol = _connection.Protocol!;
             _logger.Information("Listening for incoming messages from {Connection}...", _connection.ConnectionInfo);
             while (true)
             {
@@ -41,6 +40,7 @@ namespace CatraProto.Client.Connections.Loop
                     await StateSignaler.WaitAsync();
                 }
 
+                var protocol = _connection.Protocol!;
                 var shutdownToken = GetShutdownToken();
                 try
                 {
