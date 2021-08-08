@@ -37,7 +37,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
             {
                 var isPermanent = duration <= 0;
                 _logger.Information("Generating auth {Type} key", isPermanent ? "permanent" : "temporary");
-                var nonce = BigIntegerTools.GenerateBigInt(128);
+                var nonce = BigIntegerTools.GenerateBigInt(128, true);
                 var reqPq = await _api.MtProtoApi.ReqPqMultiAsync(nonce, cancellationToken: cancellationToken);
                 if (!reqPq.RpcCallFailed)
                 {
@@ -56,7 +56,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
 
                     var rsaKey = found!.Item2;
                     var (p, q) = CryptoTools.GetFastPq(BitConverter.ToUInt64(pq.Reverse().ToArray()));
-                    var newNonce = BigIntegerTools.GenerateBigInt(256);
+                    var newNonce = BigIntegerTools.GenerateBigInt(256, true);
 
                     PQInnerDataBase toHash = isPermanent ? new PQInnerData() : new PQInnerDataTemp { ExpiresIn = duration };
                     toHash.Nonce = nonce;
