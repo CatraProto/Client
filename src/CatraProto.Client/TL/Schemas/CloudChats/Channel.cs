@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class Channel : ChatBase
+	public partial class Channel : CatraProto.Client.TL.Schemas.CloudChats.ChatBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -96,7 +98,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public string Username { get; set; }
 
 [JsonPropertyName("photo")]
-		public ChatPhotoBase Photo { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.ChatPhotoBase Photo { get; set; }
 
 [JsonPropertyName("date")]
 		public int Date { get; set; }
@@ -105,16 +107,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Version { get; set; }
 
 [JsonPropertyName("restriction_reason")]
-		public IList<RestrictionReasonBase> RestrictionReason { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase> RestrictionReason { get; set; }
 
 [JsonPropertyName("admin_rights")]
-		public ChatAdminRightsBase AdminRights { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase AdminRights { get; set; }
 
 [JsonPropertyName("banned_rights")]
-		public ChatBannedRightsBase BannedRights { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase BannedRights { get; set; }
 
 [JsonPropertyName("default_banned_rights")]
-		public ChatBannedRightsBase DefaultBannedRights { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase DefaultBannedRights { get; set; }
 
 [JsonPropertyName("participants_count")]
 		public int? ParticipantsCount { get; set; }
@@ -223,27 +225,27 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 				Username = reader.Read<string>();
 			}
 
-			Photo = reader.Read<ChatPhotoBase>();
+			Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatPhotoBase>();
 			Date = reader.Read<int>();
 			Version = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 9))
 			{
-				RestrictionReason = reader.ReadVector<RestrictionReasonBase>();
+				RestrictionReason = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 14))
 			{
-				AdminRights = reader.Read<ChatAdminRightsBase>();
+				AdminRights = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 15))
 			{
-				BannedRights = reader.Read<ChatBannedRightsBase>();
+				BannedRights = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 18))
 			{
-				DefaultBannedRights = reader.Read<ChatBannedRightsBase>();
+				DefaultBannedRights = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 17))

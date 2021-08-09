@@ -67,7 +67,7 @@ namespace CatraProto.TL
                     WriteBool(b);
                     break;
                 case System.Numerics.BigInteger bigInteger:
-                    _writer.Write(bigInteger.ToByteArray());
+                    _writer.Write(bigInteger.ToByteArray().RemoveTrailingZeros());
                     break;
                 case IObject obj:
                     obj.Serialize(this);

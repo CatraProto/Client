@@ -1,11 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class Themes : ThemesBase
+	public partial class Themes : CatraProto.Client.TL.Schemas.CloudChats.Account.ThemesBase
 	{
 
 
@@ -17,7 +20,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		public int Hash { get; set; }
 
 [JsonPropertyName("Themes_")]
-		public IList<ThemeBase> Themes_ { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.ThemeBase> Themes_ { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -36,7 +39,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		public override void Deserialize(Reader reader)
 		{
 			Hash = reader.Read<int>();
-			Themes_ = reader.ReadVector<ThemeBase>();
+			Themes_ = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ThemeBase>();
 
 		}
 	}

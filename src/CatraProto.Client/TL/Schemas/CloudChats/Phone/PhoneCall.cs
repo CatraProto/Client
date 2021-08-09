@@ -1,11 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 {
-	public partial class PhoneCall : PhoneCallBase
+	public partial class PhoneCall : CatraProto.Client.TL.Schemas.CloudChats.Phone.PhoneCallBase
 	{
 
 
@@ -14,10 +17,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("PhoneCall_")]
-		public override CloudChats.PhoneCallBase PhoneCall_ { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.PhoneCallBase PhoneCall_ { get; set; }
 
 [JsonPropertyName("users")]
-		public override IList<UserBase> Users { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -35,8 +38,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 
 		public override void Deserialize(Reader reader)
 		{
-			PhoneCall_ = reader.Read<CloudChats.PhoneCallBase>();
-			Users = reader.ReadVector<UserBase>();
+			PhoneCall_ = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhoneCallBase>();
+			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 
 		}
 	}

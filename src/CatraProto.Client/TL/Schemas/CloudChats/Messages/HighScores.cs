@@ -13,11 +13,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("scores")]
-		public override IList<HighScoreBase> Scores { get; set; }
+[JsonPropertyName("scores")] public override IList<HighScoreBase> Scores { get; set; }
 
-[JsonPropertyName("users")]
-		public override IList<UserBase> Users { get; set; }
+[JsonPropertyName("users")] public override IList<UserBase> Users { get; set; }
 
         
 		public override void UpdateFlags() 

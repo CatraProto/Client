@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputBotInlineResultDocument : InputBotInlineResultBase
+	public partial class InputBotInlineResultDocument : CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineResultBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -34,10 +37,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public string Description { get; set; }
 
 [JsonPropertyName("document")]
-		public InputDocumentBase Document { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase Document { get; set; }
 
 [JsonPropertyName("send_message")]
-		public override InputBotInlineMessageBase SendMessage { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageBase SendMessage { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -84,8 +87,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 				Description = reader.Read<string>();
 			}
 
-			Document = reader.Read<InputDocumentBase>();
-			SendMessage = reader.Read<InputBotInlineMessageBase>();
+			Document = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
+			SendMessage = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageBase>();
 
 		}
 	}

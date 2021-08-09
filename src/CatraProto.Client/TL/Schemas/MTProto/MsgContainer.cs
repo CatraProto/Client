@@ -16,8 +16,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("messages")]
-		public override IList<Message> Messages { get; set; }
+[JsonPropertyName("messages")] public override IList<Message> Messages { get; set; }
 
         
 		public override void UpdateFlags() 

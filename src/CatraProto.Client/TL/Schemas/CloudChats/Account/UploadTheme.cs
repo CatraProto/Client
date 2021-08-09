@@ -1,7 +1,9 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using System.Text.Json.Serialization;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -21,7 +23,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(DocumentBase);
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.DocumentBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -30,10 +32,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		public int Flags { get; set; }
 
 [JsonPropertyName("file")]
-		public InputFileBase File { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase File { get; set; }
 
 [JsonPropertyName("thumb")]
-		public InputFileBase Thumb { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase Thumb { get; set; }
 
 [JsonPropertyName("file_name")]
 		public string FileName { get; set; }
@@ -67,10 +69,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		public void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			File = reader.Read<InputFileBase>();
+			File = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Thumb = reader.Read<InputFileBase>();
+				Thumb = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
 			}
 
 			FileName = reader.Read<string>();

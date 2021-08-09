@@ -1,10 +1,14 @@
+using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-	public partial class PassportConfig : PassportConfigBase
+	public partial class PassportConfig : CatraProto.Client.TL.Schemas.CloudChats.Help.PassportConfigBase
 	{
 
 
@@ -16,7 +20,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 		public int Hash { get; set; }
 
 [JsonPropertyName("countries_langs")]
-		public DataJSONBase CountriesLangs { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase CountriesLangs { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -35,7 +39,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 		public override void Deserialize(Reader reader)
 		{
 			Hash = reader.Read<int>();
-			CountriesLangs = reader.Read<DataJSONBase>();
+			CountriesLangs = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
 
 		}
 	}

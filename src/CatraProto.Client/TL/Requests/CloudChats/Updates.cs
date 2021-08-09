@@ -19,10 +19,10 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 
 	    public async Task<RpcMessage<StateBase>> GetStateAsync(MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<StateBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetState(){
+			var rpcResponse = new RpcMessage<StateBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetState
+			{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -32,10 +32,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<DifferenceBase>> GetDifferenceAsync(int pts, int date, int qts, int? ptsTotalLimit = null, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<DifferenceBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetDifference(){
+			var rpcResponse = new RpcMessage<DifferenceBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetDifference
+			{
 Pts = pts,
 Date = date,
 Qts = qts,
@@ -49,10 +49,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<ChannelDifferenceBase>> GetChannelDifferenceAsync(InputChannelBase channel, ChannelMessagesFilterBase filter, int pts, int limit, bool force = true, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<ChannelDifferenceBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetChannelDifference(){
+			var rpcResponse = new RpcMessage<ChannelDifferenceBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetChannelDifference
+			{
 Channel = channel,
 Filter = filter,
 Pts = pts,

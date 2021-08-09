@@ -20,10 +20,10 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 
 	    public async Task<RpcMessage<ConfigBase>> GetConfigAsync(MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<ConfigBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetConfig(){
+			var rpcResponse = new RpcMessage<ConfigBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetConfig
+			{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -33,10 +33,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<NearestDcBase>> GetNearestDcAsync(MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<NearestDcBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetNearestDc(){
+			var rpcResponse = new RpcMessage<NearestDcBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetNearestDc
+			{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -46,10 +46,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<AppUpdateBase>> GetAppUpdateAsync(string source, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<AppUpdateBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetAppUpdate(){
+			var rpcResponse = new RpcMessage<AppUpdateBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetAppUpdate
+			{
 Source = source,
 };
 
@@ -60,10 +60,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<InviteTextBase>> GetInviteTextAsync(MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<InviteTextBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetInviteText(){
+			var rpcResponse = new RpcMessage<InviteTextBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetInviteText
+			{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -73,10 +73,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<SupportBase>> GetSupportAsync(MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<SupportBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetSupport(){
+			var rpcResponse = new RpcMessage<SupportBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetSupport
+			{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -86,10 +86,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UpdatesBase>> GetAppChangelogAsync(string prevAppVersion, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UpdatesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetAppChangelog(){
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetAppChangelog
+			{
 PrevAppVersion = prevAppVersion,
 };
 
@@ -103,7 +103,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SetBotUpdatesStatus(){
+var methodBody = new SetBotUpdatesStatus
+{
 PendingUpdatesCount = pendingUpdatesCount,
 Message = message,
 };
@@ -115,10 +116,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<CdnConfigBase>> GetCdnConfigAsync(MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<CdnConfigBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetCdnConfig(){
+			var rpcResponse = new RpcMessage<CdnConfigBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetCdnConfig
+			{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -128,10 +129,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<RecentMeUrlsBase>> GetRecentMeUrlsAsync(string referer, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<RecentMeUrlsBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetRecentMeUrls(){
+			var rpcResponse = new RpcMessage<RecentMeUrlsBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetRecentMeUrls
+			{
 Referer = referer,
 };
 
@@ -142,10 +143,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<TermsOfServiceUpdateBase>> GetTermsOfServiceUpdateAsync(MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<TermsOfServiceUpdateBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetTermsOfServiceUpdate(){
+			var rpcResponse = new RpcMessage<TermsOfServiceUpdateBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetTermsOfServiceUpdate
+			{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -158,7 +159,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new AcceptTermsOfService(){
+var methodBody = new AcceptTermsOfService
+{
 Id = id,
 };
 
@@ -169,10 +171,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<DeepLinkInfoBase>> GetDeepLinkInfoAsync(string path, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<DeepLinkInfoBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetDeepLinkInfo(){
+			var rpcResponse = new RpcMessage<DeepLinkInfoBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetDeepLinkInfo
+			{
 Path = path,
 };
 
@@ -183,10 +185,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<JSONValueBase>> GetAppConfigAsync(MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<JSONValueBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetAppConfig(){
+			var rpcResponse = new RpcMessage<JSONValueBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetAppConfig
+			{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -199,7 +201,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SaveAppLog(){
+var methodBody = new SaveAppLog
+{
 Events = events,
 };
 
@@ -210,10 +213,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<PassportConfigBase>> GetPassportConfigAsync(int hash, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<PassportConfigBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetPassportConfig(){
+			var rpcResponse = new RpcMessage<PassportConfigBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetPassportConfig
+			{
 Hash = hash,
 };
 
@@ -224,10 +227,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<SupportNameBase>> GetSupportNameAsync(MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<SupportNameBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetSupportName(){
+			var rpcResponse = new RpcMessage<SupportNameBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetSupportName
+			{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -237,10 +240,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UserInfoBase>> GetUserInfoAsync(InputUserBase userId, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UserInfoBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetUserInfo(){
+			var rpcResponse = new RpcMessage<UserInfoBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetUserInfo
+			{
 UserId = userId,
 };
 
@@ -251,10 +254,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UserInfoBase>> EditUserInfoAsync(InputUserBase userId, string message, IList<MessageEntityBase> entities, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UserInfoBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new EditUserInfo(){
+			var rpcResponse = new RpcMessage<UserInfoBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new EditUserInfo
+			{
 UserId = userId,
 Message = message,
 Entities = entities,
@@ -267,10 +270,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<PromoDataBase>> GetPromoDataAsync(MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<PromoDataBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetPromoData(){
+			var rpcResponse = new RpcMessage<PromoDataBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetPromoData
+			{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -283,7 +286,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new HidePromoData(){
+var methodBody = new HidePromoData
+{
 Peer = peer,
 };
 
@@ -297,7 +301,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new DismissSuggestion(){
+var methodBody = new DismissSuggestion
+{
 Suggestion = suggestion,
 };
 
@@ -308,10 +313,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<CountriesListBase>> GetCountriesListAsync(string langCode, int hash, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<CountriesListBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetCountriesList(){
+			var rpcResponse = new RpcMessage<CountriesListBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetCountriesList
+			{
 LangCode = langCode,
 Hash = hash,
 };

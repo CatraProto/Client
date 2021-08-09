@@ -1,7 +1,9 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using System.Text.Json.Serialization;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -17,13 +19,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(PhoneCallBase);
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Phone.PhoneCallBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
 [JsonPropertyName("peer")]
-		public InputPhoneCallBase Peer { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPhoneCallBase Peer { get; set; }
 
 [JsonPropertyName("g_a")]
 		public byte[] GA { get; set; }
@@ -32,7 +34,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 		public long KeyFingerprint { get; set; }
 
 [JsonPropertyName("protocol")]
-		public PhoneCallProtocolBase Protocol { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase Protocol { get; set; }
 
 
 		public void UpdateFlags() 
@@ -52,10 +54,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 
 		public void Deserialize(Reader reader)
 		{
-			Peer = reader.Read<InputPhoneCallBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPhoneCallBase>();
 			GA = reader.Read<byte[]>();
 			KeyFingerprint = reader.Read<long>();
-			Protocol = reader.Read<PhoneCallProtocolBase>();
+			Protocol = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase>();
 
 		}
 	}

@@ -21,8 +21,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(bool);
+[JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;

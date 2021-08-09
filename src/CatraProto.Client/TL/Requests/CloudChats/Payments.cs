@@ -19,10 +19,10 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 
 	    public async Task<RpcMessage<PaymentFormBase>> GetPaymentFormAsync(int msgId, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<PaymentFormBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetPaymentForm(){
+			var rpcResponse = new RpcMessage<PaymentFormBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetPaymentForm
+			{
 MsgId = msgId,
 };
 
@@ -33,10 +33,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<PaymentReceiptBase>> GetPaymentReceiptAsync(int msgId, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<PaymentReceiptBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetPaymentReceipt(){
+			var rpcResponse = new RpcMessage<PaymentReceiptBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetPaymentReceipt
+			{
 MsgId = msgId,
 };
 
@@ -47,10 +47,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<ValidatedRequestedInfoBase>> ValidateRequestedInfoAsync(int msgId, PaymentRequestedInfoBase info, bool save = true, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<ValidatedRequestedInfoBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ValidateRequestedInfo(){
+			var rpcResponse = new RpcMessage<ValidatedRequestedInfoBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new ValidateRequestedInfo
+			{
 MsgId = msgId,
 Info = info,
 Save = save,
@@ -63,10 +63,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<PaymentResultBase>> SendPaymentFormAsync(int msgId, InputPaymentCredentialsBase credentials, string? requestedInfoId = null, string? shippingOptionId = null, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<PaymentResultBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SendPaymentForm(){
+			var rpcResponse = new RpcMessage<PaymentResultBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new SendPaymentForm
+			{
 MsgId = msgId,
 Credentials = credentials,
 RequestedInfoId = requestedInfoId,
@@ -80,10 +80,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<SavedInfoBase>> GetSavedInfoAsync(MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<SavedInfoBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetSavedInfo(){
+			var rpcResponse = new RpcMessage<SavedInfoBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetSavedInfo
+			{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -96,7 +96,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ClearSavedInfo(){
+var methodBody = new ClearSavedInfo
+{
 Credentials = credentials,
 Info = info,
 };
@@ -108,10 +109,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<BankCardDataBase>> GetBankCardDataAsync(string number, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<BankCardDataBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetBankCardData(){
+			var rpcResponse = new RpcMessage<BankCardDataBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetBankCardData
+			{
 Number = number,
 };
 

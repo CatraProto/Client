@@ -21,10 +21,10 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 
 	    public async Task<RpcMessage<LangPackDifferenceBase>> GetLangPackAsync(string langPack, string langCode, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<LangPackDifferenceBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetLangPack(){
+			var rpcResponse = new RpcMessage<LangPackDifferenceBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetLangPack
+			{
 LangPack = langPack,
 LangCode = langCode,
 };
@@ -36,11 +36,11 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<RpcVector<LangPackStringBase>>> GetStringsAsync(string langPack, string langCode, IList<string> keys, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<RpcVector<LangPackStringBase>>();
-rpcResponse.Response = new RpcVector<LangPackStringBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetStrings(){
+			var rpcResponse = new RpcMessage<RpcVector<LangPackStringBase>>();
+			rpcResponse.Response = new RpcVector<LangPackStringBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetStrings
+			{
 LangPack = langPack,
 LangCode = langCode,
 Keys = keys,
@@ -53,10 +53,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<LangPackDifferenceBase>> GetDifferenceAsync(string langPack, string langCode, int fromVersion, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<LangPackDifferenceBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetDifference(){
+			var rpcResponse = new RpcMessage<LangPackDifferenceBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetDifference
+			{
 LangPack = langPack,
 LangCode = langCode,
 FromVersion = fromVersion,
@@ -69,11 +69,11 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<RpcVector<LangPackLanguageBase>>> GetLanguagesAsync(string langPack, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<RpcVector<LangPackLanguageBase>>();
-rpcResponse.Response = new RpcVector<LangPackLanguageBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetLanguages(){
+			var rpcResponse = new RpcMessage<RpcVector<LangPackLanguageBase>>();
+			rpcResponse.Response = new RpcVector<LangPackLanguageBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetLanguages
+			{
 LangPack = langPack,
 };
 
@@ -84,10 +84,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<LangPackLanguageBase>> GetLanguageAsync(string langPack, string langCode, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<LangPackLanguageBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetLanguage(){
+			var rpcResponse = new RpcMessage<LangPackLanguageBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetLanguage
+			{
 LangPack = langPack,
 LangCode = langCode,
 };

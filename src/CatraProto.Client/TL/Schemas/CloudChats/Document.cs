@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class Document : DocumentBase
+	public partial class Document : CatraProto.Client.TL.Schemas.CloudChats.DocumentBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -41,16 +43,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Size { get; set; }
 
 [JsonPropertyName("thumbs")]
-		public IList<PhotoSizeBase> Thumbs { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase> Thumbs { get; set; }
 
 [JsonPropertyName("video_thumbs")]
-		public IList<VideoSizeBase> VideoThumbs { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.VideoSizeBase> VideoThumbs { get; set; }
 
 [JsonPropertyName("dc_id")]
 		public int DcId { get; set; }
 
 [JsonPropertyName("attributes")]
-		public IList<DocumentAttributeBase> Attributes { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase> Attributes { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -97,16 +99,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Size = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Thumbs = reader.ReadVector<PhotoSizeBase>();
+				Thumbs = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				VideoThumbs = reader.ReadVector<VideoSizeBase>();
+				VideoThumbs = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.VideoSizeBase>();
 			}
 
 			DcId = reader.Read<int>();
-			Attributes = reader.ReadVector<DocumentAttributeBase>();
+			Attributes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase>();
 
 		}
 	}

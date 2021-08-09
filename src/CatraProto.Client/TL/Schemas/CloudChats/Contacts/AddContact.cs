@@ -20,8 +20,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(UpdatesBase);
+[JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -32,8 +31,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 [JsonPropertyName("add_phone_privacy_exception")]
 		public bool AddPhonePrivacyException { get; set; }
 
-[JsonPropertyName("id")]
-		public InputUserBase Id { get; set; }
+[JsonPropertyName("id")] public InputUserBase Id { get; set; }
 
 [JsonPropertyName("first_name")]
 		public string FirstName { get; set; }

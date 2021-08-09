@@ -1,11 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 {
-	public partial class PhotosSlice : PhotosBase
+	public partial class PhotosSlice : CatraProto.Client.TL.Schemas.CloudChats.Photos.PhotosBase
 	{
 
 
@@ -17,10 +20,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 		public int Count { get; set; }
 
 [JsonPropertyName("photos")]
-		public override IList<CloudChats.PhotoBase> Photos { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase> Photos { get; set; }
 
 [JsonPropertyName("users")]
-		public override IList<UserBase> Users { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -40,8 +43,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 		public override void Deserialize(Reader reader)
 		{
 			Count = reader.Read<int>();
-			Photos = reader.ReadVector<CloudChats.PhotoBase>();
-			Users = reader.ReadVector<UserBase>();
+			Photos = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
+			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 
 		}
 	}

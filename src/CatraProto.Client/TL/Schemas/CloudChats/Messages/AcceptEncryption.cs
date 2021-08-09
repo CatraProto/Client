@@ -16,14 +16,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(EncryptedChatBase);
+[JsonIgnore] Type IMethod.Type { get; init; } = typeof(EncryptedChatBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("peer")]
-		public InputEncryptedChatBase Peer { get; set; }
+[JsonPropertyName("peer")] public InputEncryptedChatBase Peer { get; set; }
 
 [JsonPropertyName("g_b")]
 		public byte[] GB { get; set; }

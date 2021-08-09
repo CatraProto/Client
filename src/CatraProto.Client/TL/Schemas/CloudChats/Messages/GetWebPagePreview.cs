@@ -21,8 +21,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(MessageMediaBase);
+[JsonIgnore] Type IMethod.Type { get; init; } = typeof(MessageMediaBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -33,8 +32,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("message")]
 		public string Message { get; set; }
 
-[JsonPropertyName("entities")]
-		public IList<MessageEntityBase> Entities { get; set; }
+[JsonPropertyName("entities")] public IList<MessageEntityBase> Entities { get; set; }
 
 
 		public void UpdateFlags() 

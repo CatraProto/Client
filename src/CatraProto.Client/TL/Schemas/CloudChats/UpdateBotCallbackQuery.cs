@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateBotCallbackQuery : UpdateBase
+	public partial class UpdateBotCallbackQuery : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -28,7 +31,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int UserId { get; set; }
 
 [JsonPropertyName("peer")]
-		public PeerBase Peer { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
 
 [JsonPropertyName("msg_id")]
 		public int MsgId { get; set; }
@@ -78,7 +81,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = reader.Read<int>();
 			QueryId = reader.Read<long>();
 			UserId = reader.Read<int>();
-			Peer = reader.Read<PeerBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
 			MsgId = reader.Read<int>();
 			ChatInstance = reader.Read<long>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))

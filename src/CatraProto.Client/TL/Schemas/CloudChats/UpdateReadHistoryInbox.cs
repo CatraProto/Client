@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateReadHistoryInbox : UpdateBase
+	public partial class UpdateReadHistoryInbox : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -24,7 +27,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int? FolderId { get; set; }
 
 [JsonPropertyName("peer")]
-		public PeerBase Peer { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
 
 [JsonPropertyName("max_id")]
 		public int MaxId { get; set; }
@@ -71,7 +74,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 				FolderId = reader.Read<int>();
 			}
 
-			Peer = reader.Read<PeerBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
 			MaxId = reader.Read<int>();
 			StillUnreadCount = reader.Read<int>();
 			Pts = reader.Read<int>();

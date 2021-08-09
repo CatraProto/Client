@@ -1,7 +1,9 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using System.Text.Json.Serialization;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -17,7 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(JSONValueBase);
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.JSONValueBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;

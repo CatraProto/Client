@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageActionPaymentSentMe : MessageActionBase
+	public partial class MessageActionPaymentSentMe : CatraProto.Client.TL.Schemas.CloudChats.MessageActionBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -31,13 +34,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public byte[] Payload { get; set; }
 
 [JsonPropertyName("info")]
-		public PaymentRequestedInfoBase Info { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase Info { get; set; }
 
 [JsonPropertyName("shipping_option_id")]
 		public string ShippingOptionId { get; set; }
 
 [JsonPropertyName("charge")]
-		public PaymentChargeBase Charge { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PaymentChargeBase Charge { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -77,7 +80,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Payload = reader.Read<byte[]>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Info = reader.Read<PaymentRequestedInfoBase>();
+				Info = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
@@ -85,7 +88,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 				ShippingOptionId = reader.Read<string>();
 			}
 
-			Charge = reader.Read<PaymentChargeBase>();
+			Charge = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PaymentChargeBase>();
 
 		}
 	}

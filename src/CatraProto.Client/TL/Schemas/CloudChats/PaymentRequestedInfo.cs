@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PaymentRequestedInfo : PaymentRequestedInfoBase
+	public partial class PaymentRequestedInfo : CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -33,7 +36,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override string Email { get; set; }
 
 [JsonPropertyName("shipping_address")]
-		public override PostAddressBase ShippingAddress { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.PostAddressBase ShippingAddress { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -93,7 +96,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				ShippingAddress = reader.Read<PostAddressBase>();
+				ShippingAddress = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PostAddressBase>();
 			}
 
 

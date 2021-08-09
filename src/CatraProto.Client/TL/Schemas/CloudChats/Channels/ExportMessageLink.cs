@@ -1,7 +1,9 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using System.Text.Json.Serialization;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -22,7 +24,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(ExportedMessageLinkBase);
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.ExportedMessageLinkBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -37,7 +39,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 		public bool Thread { get; set; }
 
 [JsonPropertyName("channel")]
-		public InputChannelBase Channel { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase Channel { get; set; }
 
 [JsonPropertyName("id")]
 		public int Id { get; set; }
@@ -65,7 +67,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 			Flags = reader.Read<int>();
 			Grouped = FlagsHelper.IsFlagSet(Flags, 0);
 			Thread = FlagsHelper.IsFlagSet(Flags, 1);
-			Channel = reader.Read<InputChannelBase>();
+			Channel = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
 			Id = reader.Read<int>();
 
 		}

@@ -17,14 +17,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(UpdatesBase);
+[JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("id")]
-		public IList<InputUserBase> Id { get; set; }
+[JsonPropertyName("id")] public IList<InputUserBase> Id { get; set; }
 
 
 		public void UpdateFlags() 

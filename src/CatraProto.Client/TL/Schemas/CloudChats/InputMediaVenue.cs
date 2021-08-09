@@ -1,10 +1,14 @@
+using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputMediaVenue : InputMediaBase
+	public partial class InputMediaVenue : CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase
 	{
 
 
@@ -13,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("geo_point")]
-		public InputGeoPointBase GeoPoint { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase GeoPoint { get; set; }
 
 [JsonPropertyName("title")]
 		public string Title { get; set; }
@@ -50,7 +54,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			GeoPoint = reader.Read<InputGeoPointBase>();
+			GeoPoint = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase>();
 			Title = reader.Read<string>();
 			Address = reader.Read<string>();
 			Provider = reader.Read<string>();

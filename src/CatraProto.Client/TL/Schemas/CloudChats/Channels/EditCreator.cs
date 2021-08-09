@@ -1,7 +1,9 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using System.Text.Json.Serialization;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -17,19 +19,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(UpdatesBase);
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
 [JsonPropertyName("channel")]
-		public InputChannelBase Channel { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase Channel { get; set; }
 
 [JsonPropertyName("user_id")]
-		public InputUserBase UserId { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase UserId { get; set; }
 
 [JsonPropertyName("password")]
-		public InputCheckPasswordSRPBase Password { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputCheckPasswordSRPBase Password { get; set; }
 
 
 		public void UpdateFlags() 
@@ -48,9 +50,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 
 		public void Deserialize(Reader reader)
 		{
-			Channel = reader.Read<InputChannelBase>();
-			UserId = reader.Read<InputUserBase>();
-			Password = reader.Read<InputCheckPasswordSRPBase>();
+			Channel = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
+			UserId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
+			Password = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputCheckPasswordSRPBase>();
 
 		}
 	}

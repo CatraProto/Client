@@ -13,14 +13,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("Blocked_")]
-		public override IList<PeerBlockedBase> Blocked_ { get; set; }
+[JsonPropertyName("Blocked_")] public override IList<PeerBlockedBase> Blocked_ { get; set; }
 
-[JsonPropertyName("chats")]
-		public override IList<ChatBase> Chats { get; set; }
+[JsonPropertyName("chats")] public override IList<ChatBase> Chats { get; set; }
 
-[JsonPropertyName("users")]
-		public override IList<UserBase> Users { get; set; }
+[JsonPropertyName("users")] public override IList<UserBase> Users { get; set; }
 
         
 		public override void UpdateFlags() 

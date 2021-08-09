@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using System.Text.Json.Serialization;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -18,16 +19,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(PrivacyRulesBase);
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Account.PrivacyRulesBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
 [JsonPropertyName("key")]
-		public InputPrivacyKeyBase Key { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPrivacyKeyBase Key { get; set; }
 
 [JsonPropertyName("rules")]
-		public IList<InputPrivacyRuleBase> Rules { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputPrivacyRuleBase> Rules { get; set; }
 
 
 		public void UpdateFlags() 
@@ -45,8 +46,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 		public void Deserialize(Reader reader)
 		{
-			Key = reader.Read<InputPrivacyKeyBase>();
-			Rules = reader.ReadVector<InputPrivacyRuleBase>();
+			Key = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPrivacyKeyBase>();
+			Rules = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputPrivacyRuleBase>();
 
 		}
 	}

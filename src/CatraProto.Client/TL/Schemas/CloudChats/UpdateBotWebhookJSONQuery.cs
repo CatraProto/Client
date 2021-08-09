@@ -1,10 +1,14 @@
+using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateBotWebhookJSONQuery : UpdateBase
+	public partial class UpdateBotWebhookJSONQuery : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 
 
@@ -16,7 +20,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public long QueryId { get; set; }
 
 [JsonPropertyName("data")]
-		public DataJSONBase Data { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase Data { get; set; }
 
 [JsonPropertyName("timeout")]
 		public int Timeout { get; set; }
@@ -39,7 +43,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			QueryId = reader.Read<long>();
-			Data = reader.Read<DataJSONBase>();
+			Data = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
 			Timeout = reader.Read<int>();
 
 		}

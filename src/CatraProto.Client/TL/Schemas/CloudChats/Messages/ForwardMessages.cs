@@ -24,8 +24,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(UpdatesBase);
+[JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -42,8 +41,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("with_my_score")]
 		public bool WithMyScore { get; set; }
 
-[JsonPropertyName("from_peer")]
-		public InputPeerBase FromPeer { get; set; }
+[JsonPropertyName("from_peer")] public InputPeerBase FromPeer { get; set; }
 
 [JsonPropertyName("id")]
 		public IList<int> Id { get; set; }
@@ -51,8 +49,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("random_id")]
 		public IList<long> RandomId { get; set; }
 
-[JsonPropertyName("to_peer")]
-		public InputPeerBase ToPeer { get; set; }
+[JsonPropertyName("to_peer")] public InputPeerBase ToPeer { get; set; }
 
 [JsonPropertyName("schedule_date")]
 		public int? ScheduleDate { get; set; }

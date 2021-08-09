@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelMessagesFilter : ChannelMessagesFilterBase
+	public partial class ChannelMessagesFilter : CatraProto.Client.TL.Schemas.CloudChats.ChannelMessagesFilterBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -25,7 +27,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public bool ExcludeNewMessages { get; set; }
 
 [JsonPropertyName("ranges")]
-		public IList<MessageRangeBase> Ranges { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageRangeBase> Ranges { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -47,7 +49,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Flags = reader.Read<int>();
 			ExcludeNewMessages = FlagsHelper.IsFlagSet(Flags, 1);
-			Ranges = reader.ReadVector<MessageRangeBase>();
+			Ranges = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageRangeBase>();
 
 		}
 	}

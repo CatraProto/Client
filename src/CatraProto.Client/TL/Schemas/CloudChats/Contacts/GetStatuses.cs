@@ -16,8 +16,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(ContactStatusBase);
+[JsonIgnore] Type IMethod.Type { get; init; } = typeof(ContactStatusBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = true;

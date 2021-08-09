@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UserFull : UserFullBase
+	public partial class UserFull : CatraProto.Client.TL.Schemas.CloudChats.UserFullBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -49,22 +52,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override bool VideoCallsAvailable { get; set; }
 
 [JsonPropertyName("user")]
-		public override UserBase User { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.UserBase User { get; set; }
 
 [JsonPropertyName("about")]
 		public override string About { get; set; }
 
 [JsonPropertyName("settings")]
-		public override PeerSettingsBase Settings { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.PeerSettingsBase Settings { get; set; }
 
 [JsonPropertyName("profile_photo")]
-		public override PhotoBase ProfilePhoto { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.PhotoBase ProfilePhoto { get; set; }
 
 [JsonPropertyName("notify_settings")]
-		public override PeerNotifySettingsBase NotifySettings { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase NotifySettings { get; set; }
 
 [JsonPropertyName("bot_info")]
-		public override BotInfoBase BotInfo { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase BotInfo { get; set; }
 
 [JsonPropertyName("pinned_msg_id")]
 		public override int? PinnedMsgId { get; set; }
@@ -138,22 +141,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			CanPinMessage = FlagsHelper.IsFlagSet(Flags, 7);
 			HasScheduled = FlagsHelper.IsFlagSet(Flags, 12);
 			VideoCallsAvailable = FlagsHelper.IsFlagSet(Flags, 13);
-			User = reader.Read<UserBase>();
+			User = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
 				About = reader.Read<string>();
 			}
 
-			Settings = reader.Read<PeerSettingsBase>();
+			Settings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerSettingsBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				ProfilePhoto = reader.Read<PhotoBase>();
+				ProfilePhoto = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
 			}
 
-			NotifySettings = reader.Read<PeerNotifySettingsBase>();
+			NotifySettings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				BotInfo = reader.Read<BotInfoBase>();
+				BotInfo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 6))

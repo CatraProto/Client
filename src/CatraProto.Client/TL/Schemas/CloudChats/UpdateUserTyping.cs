@@ -1,10 +1,14 @@
+using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateUserTyping : UpdateBase
+	public partial class UpdateUserTyping : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 
 
@@ -16,7 +20,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int UserId { get; set; }
 
 [JsonPropertyName("action")]
-		public SendMessageActionBase Action { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.SendMessageActionBase Action { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -35,7 +39,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			UserId = reader.Read<int>();
-			Action = reader.Read<SendMessageActionBase>();
+			Action = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SendMessageActionBase>();
 
 		}
 	}

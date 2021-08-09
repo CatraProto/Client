@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class VideoSize : VideoSizeBase
+	public partial class VideoSize : CatraProto.Client.TL.Schemas.CloudChats.VideoSizeBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -24,7 +27,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override string Type { get; set; }
 
 [JsonPropertyName("location")]
-		public override FileLocationBase Location { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.FileLocationBase Location { get; set; }
 
 [JsonPropertyName("w")]
 		public override int W { get; set; }
@@ -67,7 +70,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Flags = reader.Read<int>();
 			Type = reader.Read<string>();
-			Location = reader.Read<FileLocationBase>();
+			Location = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.FileLocationBase>();
 			W = reader.Read<int>();
 			H = reader.Read<int>();
 			Size = reader.Read<int>();

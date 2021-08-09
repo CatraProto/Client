@@ -23,8 +23,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("inexact")]
 		public override bool Inexact { get; set; }
 
-[JsonPropertyName("filter")]
-		public override MessagesFilterBase Filter { get; set; }
+[JsonPropertyName("filter")] public override MessagesFilterBase Filter { get; set; }
 
 [JsonPropertyName("count")]
 		public override int Count { get; set; }

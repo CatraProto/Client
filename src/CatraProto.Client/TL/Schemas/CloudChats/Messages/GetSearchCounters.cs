@@ -17,17 +17,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(SearchCounterBase);
+[JsonIgnore] Type IMethod.Type { get; init; } = typeof(SearchCounterBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = true;
 
-[JsonPropertyName("peer")]
-		public InputPeerBase Peer { get; set; }
+[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
 
-[JsonPropertyName("filters")]
-		public IList<MessagesFilterBase> Filters { get; set; }
+[JsonPropertyName("filters")] public IList<MessagesFilterBase> Filters { get; set; }
 
 
 		public void UpdateFlags() 

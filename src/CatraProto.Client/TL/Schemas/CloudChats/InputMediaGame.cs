@@ -1,10 +1,14 @@
+using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputMediaGame : InputMediaBase
+	public partial class InputMediaGame : CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase
 	{
 
 
@@ -13,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("id")]
-		public InputGameBase Id { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputGameBase Id { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -30,7 +34,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Id = reader.Read<InputGameBase>();
+			Id = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputGameBase>();
 
 		}
 	}

@@ -1,7 +1,9 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using System.Text.Json.Serialization;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -17,13 +19,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(PhotosBase);
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Photos.PhotosBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
 [JsonPropertyName("user_id")]
-		public InputUserBase UserId { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase UserId { get; set; }
 
 [JsonPropertyName("offset")]
 		public int Offset { get; set; }
@@ -52,7 +54,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 
 		public void Deserialize(Reader reader)
 		{
-			UserId = reader.Read<InputUserBase>();
+			UserId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
 			Offset = reader.Read<int>();
 			MaxId = reader.Read<long>();
 			Limit = reader.Read<int>();

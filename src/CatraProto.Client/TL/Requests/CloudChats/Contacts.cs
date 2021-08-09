@@ -21,11 +21,11 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 
 	    public async Task<RpcMessage<RpcVector<int>>> GetContactIDsAsync(int hash, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<RpcVector<int>>();
-rpcResponse.Response = new RpcVector<int>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetContactIDs(){
+			var rpcResponse = new RpcMessage<RpcVector<int>>();
+			rpcResponse.Response = new RpcVector<int>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetContactIDs
+			{
 Hash = hash,
 };
 
@@ -36,11 +36,11 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<RpcVector<ContactStatusBase>>> GetStatusesAsync(MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<RpcVector<ContactStatusBase>>();
-rpcResponse.Response = new RpcVector<ContactStatusBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetStatuses(){
+			var rpcResponse = new RpcMessage<RpcVector<ContactStatusBase>>();
+			rpcResponse.Response = new RpcVector<ContactStatusBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetStatuses
+			{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -50,10 +50,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<ContactsBase>> GetContactsAsync(int hash, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<ContactsBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetContacts(){
+			var rpcResponse = new RpcMessage<ContactsBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetContacts
+			{
 Hash = hash,
 };
 
@@ -64,10 +64,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<ImportedContactsBase>> ImportContactsAsync(IList<InputContactBase> contacts, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<ImportedContactsBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ImportContacts(){
+			var rpcResponse = new RpcMessage<ImportedContactsBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new ImportContacts
+			{
 Contacts = contacts,
 };
 
@@ -78,10 +78,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UpdatesBase>> DeleteContactsAsync(IList<InputUserBase> id, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UpdatesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new DeleteContacts(){
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new DeleteContacts
+			{
 Id = id,
 };
 
@@ -95,7 +95,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new DeleteByPhones(){
+var methodBody = new DeleteByPhones
+{
 Phones = phones,
 };
 
@@ -109,7 +110,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new Block(){
+var methodBody = new Block
+{
 Id = id,
 };
 
@@ -123,7 +125,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new Unblock(){
+var methodBody = new Unblock
+{
 Id = id,
 };
 
@@ -134,10 +137,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<BlockedBase>> GetBlockedAsync(int offset, int limit, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<BlockedBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetBlocked(){
+			var rpcResponse = new RpcMessage<BlockedBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetBlocked
+			{
 Offset = offset,
 Limit = limit,
 };
@@ -149,10 +152,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<FoundBase>> SearchAsync(string q, int limit, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<FoundBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new Search(){
+			var rpcResponse = new RpcMessage<FoundBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new Search
+			{
 Q = q,
 Limit = limit,
 };
@@ -164,10 +167,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<ResolvedPeerBase>> ResolveUsernameAsync(string username, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<ResolvedPeerBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ResolveUsername(){
+			var rpcResponse = new RpcMessage<ResolvedPeerBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new ResolveUsername
+			{
 Username = username,
 };
 
@@ -178,10 +181,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<TopPeersBase>> GetTopPeersAsync(int offset, int limit, int hash, bool correspondents = true, bool botsPm = true, bool botsInline = true, bool phoneCalls = true, bool forwardUsers = true, bool forwardChats = true, bool groups = true, bool channels = true, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<TopPeersBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetTopPeers(){
+			var rpcResponse = new RpcMessage<TopPeersBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetTopPeers
+			{
 Offset = offset,
 Limit = limit,
 Hash = hash,
@@ -205,7 +208,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ResetTopPeerRating(){
+var methodBody = new ResetTopPeerRating
+{
 Category = category,
 Peer = peer,
 };
@@ -220,7 +224,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ResetSaved(){
+var methodBody = new ResetSaved
+{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -230,11 +235,11 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<RpcVector<SavedContactBase>>> GetSavedAsync(MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<RpcVector<SavedContactBase>>();
-rpcResponse.Response = new RpcVector<SavedContactBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetSaved(){
+			var rpcResponse = new RpcMessage<RpcVector<SavedContactBase>>();
+			rpcResponse.Response = new RpcVector<SavedContactBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetSaved
+			{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -247,7 +252,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ToggleTopPeers(){
+var methodBody = new ToggleTopPeers
+{
 Enabled = enabled,
 };
 
@@ -258,10 +264,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UpdatesBase>> AddContactAsync(InputUserBase id, string firstName, string lastName, string phone, bool addPhonePrivacyException = true, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UpdatesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new AddContact(){
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new AddContact
+			{
 Id = id,
 FirstName = firstName,
 LastName = lastName,
@@ -276,10 +282,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UpdatesBase>> AcceptContactAsync(InputUserBase id, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UpdatesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new AcceptContact(){
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new AcceptContact
+			{
 Id = id,
 };
 
@@ -290,10 +296,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UpdatesBase>> GetLocatedAsync(InputGeoPointBase geoPoint, bool background = true, int? selfExpires = null, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UpdatesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetLocated(){
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetLocated
+			{
 GeoPoint = geoPoint,
 Background = background,
 SelfExpires = selfExpires,
@@ -306,10 +312,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UpdatesBase>> BlockFromRepliesAsync(int msgId, bool deleteMessage = true, bool deleteHistory = true, bool reportSpam = true, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UpdatesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new BlockFromReplies(){
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new BlockFromReplies
+			{
 MsgId = msgId,
 DeleteMessage = deleteMessage,
 DeleteHistory = deleteHistory,

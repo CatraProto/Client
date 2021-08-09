@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChatFull : ChatFullBase
+	public partial class ChatFull : CatraProto.Client.TL.Schemas.CloudChats.ChatFullBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -39,19 +41,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override string About { get; set; }
 
 [JsonPropertyName("participants")]
-		public ChatParticipantsBase Participants { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantsBase Participants { get; set; }
 
 [JsonPropertyName("chat_photo")]
-		public override PhotoBase ChatPhoto { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.PhotoBase ChatPhoto { get; set; }
 
 [JsonPropertyName("notify_settings")]
-		public override PeerNotifySettingsBase NotifySettings { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase NotifySettings { get; set; }
 
 [JsonPropertyName("exported_invite")]
-		public override ExportedChatInviteBase ExportedInvite { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.ExportedChatInviteBase ExportedInvite { get; set; }
 
 [JsonPropertyName("bot_info")]
-		public override IList<BotInfoBase> BotInfo { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase> BotInfo { get; set; }
 
 [JsonPropertyName("pinned_msg_id")]
 		public override int? PinnedMsgId { get; set; }
@@ -111,17 +113,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			HasScheduled = FlagsHelper.IsFlagSet(Flags, 8);
 			Id = reader.Read<int>();
 			About = reader.Read<string>();
-			Participants = reader.Read<ChatParticipantsBase>();
+			Participants = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantsBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				ChatPhoto = reader.Read<PhotoBase>();
+				ChatPhoto = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
 			}
 
-			NotifySettings = reader.Read<PeerNotifySettingsBase>();
-			ExportedInvite = reader.Read<ExportedChatInviteBase>();
+			NotifySettings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase>();
+			ExportedInvite = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ExportedChatInviteBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				BotInfo = reader.ReadVector<BotInfoBase>();
+				BotInfo = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 6))

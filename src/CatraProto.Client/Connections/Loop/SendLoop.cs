@@ -213,7 +213,6 @@ namespace CatraProto.Client.Connections.Loop
             }
 
             var encryptedMessage = new EncryptedConnectionMessage(authKey, messageId, _mtProtoState.SaltHandler.GetSalt(), _mtProtoState.SessionIdHandler.GetSessionId(), seqno, body);
-            _logger.Information($"Sending message with authkeyid: {encryptedMessage.AuthKeyId} {encryptedMessage.Salt} {encryptedMessage.SessionId} {encryptedMessage.SeqNo}");
             await _connection.Protocol!.Writer!.SendAsync(encryptedMessage.Export());
         }
     }

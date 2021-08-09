@@ -28,7 +28,8 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new RegisterDevice(){
+var methodBody = new RegisterDevice
+{
 TokenType = tokenType,
 Token = token,
 AppSandbox = appSandbox,
@@ -47,7 +48,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new UnregisterDevice(){
+var methodBody = new UnregisterDevice
+{
 TokenType = tokenType,
 Token = token,
 OtherUids = otherUids,
@@ -63,7 +65,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new UpdateNotifySettings(){
+var methodBody = new UpdateNotifySettings
+{
 Peer = peer,
 Settings = settings,
 };
@@ -75,10 +78,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<PeerNotifySettingsBase>> GetNotifySettingsAsync(InputNotifyPeerBase peer, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<PeerNotifySettingsBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetNotifySettings(){
+			var rpcResponse = new RpcMessage<PeerNotifySettingsBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetNotifySettings
+			{
 Peer = peer,
 };
 
@@ -92,7 +95,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ResetNotifySettings(){
+var methodBody = new ResetNotifySettings
+{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -102,10 +106,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UserBase>> UpdateProfileAsync(string? firstName = null, string? lastName = null, string? about = null, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UserBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new UpdateProfile(){
+			var rpcResponse = new RpcMessage<UserBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new UpdateProfile
+			{
 FirstName = firstName,
 LastName = lastName,
 About = about,
@@ -121,7 +125,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new UpdateStatus(){
+var methodBody = new UpdateStatus
+{
 Offline = offline,
 };
 
@@ -132,10 +137,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<WallPapersBase>> GetWallPapersAsync(int hash, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<WallPapersBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetWallPapers(){
+			var rpcResponse = new RpcMessage<WallPapersBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetWallPapers
+			{
 Hash = hash,
 };
 
@@ -149,7 +154,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ReportPeer(){
+var methodBody = new ReportPeer
+{
 Peer = peer,
 Reason = reason,
 };
@@ -164,7 +170,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new CheckUsername(){
+var methodBody = new CheckUsername
+{
 Username = username,
 };
 
@@ -175,10 +182,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UserBase>> UpdateUsernameAsync(string username, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UserBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new UpdateUsername(){
+			var rpcResponse = new RpcMessage<UserBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new UpdateUsername
+			{
 Username = username,
 };
 
@@ -189,10 +196,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<PrivacyRulesBase>> GetPrivacyAsync(InputPrivacyKeyBase key, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<PrivacyRulesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetPrivacy(){
+			var rpcResponse = new RpcMessage<PrivacyRulesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetPrivacy
+			{
 Key = key,
 };
 
@@ -203,10 +210,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<PrivacyRulesBase>> SetPrivacyAsync(InputPrivacyKeyBase key, IList<InputPrivacyRuleBase> rules, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<PrivacyRulesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SetPrivacy(){
+			var rpcResponse = new RpcMessage<PrivacyRulesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new SetPrivacy
+			{
 Key = key,
 Rules = rules,
 };
@@ -221,7 +228,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new DeleteAccount(){
+var methodBody = new DeleteAccount
+{
 Reason = reason,
 };
 
@@ -232,10 +240,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<AccountDaysTTLBase>> GetAccountTTLAsync(MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<AccountDaysTTLBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetAccountTTL(){
+			var rpcResponse = new RpcMessage<AccountDaysTTLBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetAccountTTL
+			{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -248,7 +256,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SetAccountTTL(){
+var methodBody = new SetAccountTTL
+{
 Ttl = ttl,
 };
 
@@ -259,10 +268,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<SentCodeBase>> SendChangePhoneCodeAsync(string phoneNumber, CodeSettingsBase settings, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<SentCodeBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SendChangePhoneCode(){
+			var rpcResponse = new RpcMessage<SentCodeBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new SendChangePhoneCode
+			{
 PhoneNumber = phoneNumber,
 Settings = settings,
 };
@@ -274,10 +283,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UserBase>> ChangePhoneAsync(string phoneNumber, string phoneCodeHash, string phoneCode, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UserBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ChangePhone(){
+			var rpcResponse = new RpcMessage<UserBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new ChangePhone
+			{
 PhoneNumber = phoneNumber,
 PhoneCodeHash = phoneCodeHash,
 PhoneCode = phoneCode,
@@ -293,7 +302,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new UpdateDeviceLocked(){
+var methodBody = new UpdateDeviceLocked
+{
 Period = period,
 };
 
@@ -304,10 +314,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<AuthorizationsBase>> GetAuthorizationsAsync(MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<AuthorizationsBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetAuthorizations(){
+			var rpcResponse = new RpcMessage<AuthorizationsBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetAuthorizations
+			{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -320,7 +330,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ResetAuthorization(){
+var methodBody = new ResetAuthorization
+{
 Hash = hash,
 };
 
@@ -331,10 +342,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<PasswordBase>> GetPasswordAsync(MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<PasswordBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetPassword(){
+			var rpcResponse = new RpcMessage<PasswordBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetPassword
+			{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -344,10 +355,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<PasswordSettingsBase>> GetPasswordSettingsAsync(InputCheckPasswordSRPBase password, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<PasswordSettingsBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetPasswordSettings(){
+			var rpcResponse = new RpcMessage<PasswordSettingsBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetPasswordSettings
+			{
 Password = password,
 };
 
@@ -361,7 +372,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new UpdatePasswordSettings(){
+var methodBody = new UpdatePasswordSettings
+{
 Password = password,
 NewSettings = newSettings,
 };
@@ -373,10 +385,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<SentCodeBase>> SendConfirmPhoneCodeAsync(string hash, CodeSettingsBase settings, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<SentCodeBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SendConfirmPhoneCode(){
+			var rpcResponse = new RpcMessage<SentCodeBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new SendConfirmPhoneCode
+			{
 Hash = hash,
 Settings = settings,
 };
@@ -391,7 +403,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ConfirmPhone(){
+var methodBody = new ConfirmPhone
+{
 PhoneCodeHash = phoneCodeHash,
 PhoneCode = phoneCode,
 };
@@ -403,10 +416,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<TmpPasswordBase>> GetTmpPasswordAsync(InputCheckPasswordSRPBase password, int period, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<TmpPasswordBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetTmpPassword(){
+			var rpcResponse = new RpcMessage<TmpPasswordBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetTmpPassword
+			{
 Password = password,
 Period = period,
 };
@@ -418,10 +431,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<WebAuthorizationsBase>> GetWebAuthorizationsAsync(MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<WebAuthorizationsBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetWebAuthorizations(){
+			var rpcResponse = new RpcMessage<WebAuthorizationsBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetWebAuthorizations
+			{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -434,7 +447,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ResetWebAuthorization(){
+var methodBody = new ResetWebAuthorization
+{
 Hash = hash,
 };
 
@@ -448,7 +462,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ResetWebAuthorizations(){
+var methodBody = new ResetWebAuthorizations
+{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -458,11 +473,11 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<RpcVector<SecureValueBase>>> GetAllSecureValuesAsync(MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<RpcVector<SecureValueBase>>();
-rpcResponse.Response = new RpcVector<SecureValueBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetAllSecureValues(){
+			var rpcResponse = new RpcMessage<RpcVector<SecureValueBase>>();
+			rpcResponse.Response = new RpcVector<SecureValueBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetAllSecureValues
+			{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -472,11 +487,11 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<RpcVector<SecureValueBase>>> GetSecureValueAsync(IList<SecureValueTypeBase> types, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<RpcVector<SecureValueBase>>();
-rpcResponse.Response = new RpcVector<SecureValueBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetSecureValue(){
+			var rpcResponse = new RpcMessage<RpcVector<SecureValueBase>>();
+			rpcResponse.Response = new RpcVector<SecureValueBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetSecureValue
+			{
 Types = types,
 };
 
@@ -487,10 +502,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<SecureValueBase>> SaveSecureValueAsync(InputSecureValueBase value, long secureSecretId, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<SecureValueBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SaveSecureValue(){
+			var rpcResponse = new RpcMessage<SecureValueBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new SaveSecureValue
+			{
 Value = value,
 SecureSecretId = secureSecretId,
 };
@@ -505,7 +520,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new DeleteSecureValue(){
+var methodBody = new DeleteSecureValue
+{
 Types = types,
 };
 
@@ -516,10 +532,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<AuthorizationFormBase>> GetAuthorizationFormAsync(int botId, string scope, string publicKey, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<AuthorizationFormBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetAuthorizationForm(){
+			var rpcResponse = new RpcMessage<AuthorizationFormBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetAuthorizationForm
+			{
 BotId = botId,
 Scope = scope,
 PublicKey = publicKey,
@@ -535,7 +551,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new AcceptAuthorization(){
+var methodBody = new AcceptAuthorization
+{
 BotId = botId,
 Scope = scope,
 PublicKey = publicKey,
@@ -550,10 +567,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<SentCodeBase>> SendVerifyPhoneCodeAsync(string phoneNumber, CodeSettingsBase settings, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<SentCodeBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SendVerifyPhoneCode(){
+			var rpcResponse = new RpcMessage<SentCodeBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new SendVerifyPhoneCode
+			{
 PhoneNumber = phoneNumber,
 Settings = settings,
 };
@@ -568,7 +585,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new VerifyPhone(){
+var methodBody = new VerifyPhone
+{
 PhoneNumber = phoneNumber,
 PhoneCodeHash = phoneCodeHash,
 PhoneCode = phoneCode,
@@ -581,10 +599,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<SentEmailCodeBase>> SendVerifyEmailCodeAsync(string email, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<SentEmailCodeBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SendVerifyEmailCode(){
+			var rpcResponse = new RpcMessage<SentEmailCodeBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new SendVerifyEmailCode
+			{
 Email = email,
 };
 
@@ -598,7 +616,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new VerifyEmail(){
+var methodBody = new VerifyEmail
+{
 Email = email,
 Code = code,
 };
@@ -610,10 +629,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<TakeoutBase>> InitTakeoutSessionAsync(bool contacts = true, bool messageUsers = true, bool messageChats = true, bool messageMegagroups = true, bool messageChannels = true, bool files = true, int? fileMaxSize = null, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<TakeoutBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new InitTakeoutSession(){
+			var rpcResponse = new RpcMessage<TakeoutBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new InitTakeoutSession
+			{
 Contacts = contacts,
 MessageUsers = messageUsers,
 MessageChats = messageChats,
@@ -633,7 +652,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new FinishTakeoutSession(){
+var methodBody = new FinishTakeoutSession
+{
 Success = success,
 };
 
@@ -647,7 +667,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ConfirmPasswordEmail(){
+var methodBody = new ConfirmPasswordEmail
+{
 Code = code,
 };
 
@@ -661,7 +682,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ResendPasswordEmail(){
+var methodBody = new ResendPasswordEmail
+{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -674,7 +696,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new CancelPasswordEmail(){
+var methodBody = new CancelPasswordEmail
+{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -687,7 +710,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetContactSignUpNotification(){
+var methodBody = new GetContactSignUpNotification
+{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -700,7 +724,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SetContactSignUpNotification(){
+var methodBody = new SetContactSignUpNotification
+{
 Silent = silent,
 };
 
@@ -711,10 +736,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UpdatesBase>> GetNotifyExceptionsAsync(bool compareSound = true, InputNotifyPeerBase? peer = null, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UpdatesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetNotifyExceptions(){
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetNotifyExceptions
+			{
 CompareSound = compareSound,
 Peer = peer,
 };
@@ -726,10 +751,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<WallPaperBase>> GetWallPaperAsync(InputWallPaperBase wallpaper, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<WallPaperBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetWallPaper(){
+			var rpcResponse = new RpcMessage<WallPaperBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetWallPaper
+			{
 Wallpaper = wallpaper,
 };
 
@@ -740,10 +765,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<WallPaperBase>> UploadWallPaperAsync(InputFileBase file, string mimeType, WallPaperSettingsBase settings, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<WallPaperBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new UploadWallPaper(){
+			var rpcResponse = new RpcMessage<WallPaperBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new UploadWallPaper
+			{
 File = file,
 MimeType = mimeType,
 Settings = settings,
@@ -759,7 +784,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SaveWallPaper(){
+var methodBody = new SaveWallPaper
+{
 Wallpaper = wallpaper,
 Unsave = unsave,
 Settings = settings,
@@ -775,7 +801,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new InstallWallPaper(){
+var methodBody = new InstallWallPaper
+{
 Wallpaper = wallpaper,
 Settings = settings,
 };
@@ -790,7 +817,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ResetWallPapers(){
+var methodBody = new ResetWallPapers
+{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -800,10 +828,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<AutoDownloadSettingsBase>> GetAutoDownloadSettingsAsync(MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<AutoDownloadSettingsBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetAutoDownloadSettings(){
+			var rpcResponse = new RpcMessage<AutoDownloadSettingsBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetAutoDownloadSettings
+			{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -816,7 +844,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SaveAutoDownloadSettings(){
+var methodBody = new SaveAutoDownloadSettings
+{
 Settings = settings,
 Low = low,
 High = high,
@@ -829,10 +858,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<DocumentBase>> UploadThemeAsync(InputFileBase file, string fileName, string mimeType, InputFileBase? thumb = null, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<DocumentBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new UploadTheme(){
+			var rpcResponse = new RpcMessage<DocumentBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new UploadTheme
+			{
 File = file,
 FileName = fileName,
 MimeType = mimeType,
@@ -846,10 +875,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<ThemeBase>> CreateThemeAsync(string slug, string title, InputDocumentBase? document = null, InputThemeSettingsBase? settings = null, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<ThemeBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new CreateTheme(){
+			var rpcResponse = new RpcMessage<ThemeBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new CreateTheme
+			{
 Slug = slug,
 Title = title,
 Document = document,
@@ -863,10 +892,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<ThemeBase>> UpdateThemeAsync(string format, InputThemeBase theme, string? slug = null, string? title = null, InputDocumentBase? document = null, InputThemeSettingsBase? settings = null, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<ThemeBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new UpdateTheme(){
+			var rpcResponse = new RpcMessage<ThemeBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new UpdateTheme
+			{
 Format = format,
 Theme = theme,
 Slug = slug,
@@ -885,7 +914,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SaveTheme(){
+var methodBody = new SaveTheme
+{
 Theme = theme,
 Unsave = unsave,
 };
@@ -900,7 +930,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new InstallTheme(){
+var methodBody = new InstallTheme
+{
 Dark = dark,
 Format = format,
 Theme = theme,
@@ -913,10 +944,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<ThemeBase>> GetThemeAsync(string format, InputThemeBase theme, long documentId, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<ThemeBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetTheme(){
+			var rpcResponse = new RpcMessage<ThemeBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetTheme
+			{
 Format = format,
 Theme = theme,
 DocumentId = documentId,
@@ -929,10 +960,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<ThemesBase>> GetThemesAsync(string format, int hash, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<ThemesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetThemes(){
+			var rpcResponse = new RpcMessage<ThemesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetThemes
+			{
 Format = format,
 Hash = hash,
 };
@@ -947,7 +978,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SetContentSettings(){
+var methodBody = new SetContentSettings
+{
 SensitiveEnabled = sensitiveEnabled,
 };
 
@@ -958,10 +990,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<ContentSettingsBase>> GetContentSettingsAsync(MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<ContentSettingsBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetContentSettings(){
+			var rpcResponse = new RpcMessage<ContentSettingsBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetContentSettings
+			{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -971,11 +1003,11 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<RpcVector<WallPaperBase>>> GetMultiWallPapersAsync(IList<InputWallPaperBase> wallpapers, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<RpcVector<WallPaperBase>>();
-rpcResponse.Response = new RpcVector<WallPaperBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetMultiWallPapers(){
+			var rpcResponse = new RpcMessage<RpcVector<WallPaperBase>>();
+			rpcResponse.Response = new RpcVector<WallPaperBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetMultiWallPapers
+			{
 Wallpapers = wallpapers,
 };
 
@@ -986,10 +1018,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<GlobalPrivacySettingsBase>> GetGlobalPrivacySettingsAsync(MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<GlobalPrivacySettingsBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetGlobalPrivacySettings(){
+			var rpcResponse = new RpcMessage<GlobalPrivacySettingsBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetGlobalPrivacySettings
+			{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -999,10 +1031,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<GlobalPrivacySettingsBase>> SetGlobalPrivacySettingsAsync(GlobalPrivacySettingsBase settings, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<GlobalPrivacySettingsBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SetGlobalPrivacySettings(){
+			var rpcResponse = new RpcMessage<GlobalPrivacySettingsBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new SetGlobalPrivacySettings
+			{
 Settings = settings,
 };
 

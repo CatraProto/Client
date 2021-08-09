@@ -1,7 +1,9 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using System.Text.Json.Serialization;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -22,7 +24,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(UpdatesBase);
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -34,7 +36,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		public bool CompareSound { get; set; }
 
 [JsonPropertyName("peer")]
-		public InputNotifyPeerBase Peer { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputNotifyPeerBase Peer { get; set; }
 
 
 		public void UpdateFlags() 
@@ -63,7 +65,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 			CompareSound = FlagsHelper.IsFlagSet(Flags, 1);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Peer = reader.Read<InputNotifyPeerBase>();
+				Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputNotifyPeerBase>();
 			}
 
 

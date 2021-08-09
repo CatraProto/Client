@@ -1,10 +1,14 @@
+using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-	public partial class Support : SupportBase
+	public partial class Support : CatraProto.Client.TL.Schemas.CloudChats.Help.SupportBase
 	{
 
 
@@ -16,7 +20,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 		public override string PhoneNumber { get; set; }
 
 [JsonPropertyName("user")]
-		public override UserBase User { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.UserBase User { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -35,7 +39,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 		public override void Deserialize(Reader reader)
 		{
 			PhoneNumber = reader.Read<string>();
-			User = reader.Read<UserBase>();
+			User = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 
 		}
 	}

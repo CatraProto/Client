@@ -1,11 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class LangPackDifference : LangPackDifferenceBase
+	public partial class LangPackDifference : CatraProto.Client.TL.Schemas.CloudChats.LangPackDifferenceBase
 	{
 
 
@@ -23,7 +26,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override int Version { get; set; }
 
 [JsonPropertyName("strings")]
-		public override IList<LangPackStringBase> Strings { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.LangPackStringBase> Strings { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -46,7 +49,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			LangCode = reader.Read<string>();
 			FromVersion = reader.Read<int>();
 			Version = reader.Read<int>();
-			Strings = reader.ReadVector<LangPackStringBase>();
+			Strings = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.LangPackStringBase>();
 
 		}
 	}

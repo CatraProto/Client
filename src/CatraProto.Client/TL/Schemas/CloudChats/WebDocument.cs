@@ -1,11 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class WebDocument : WebDocumentBase
+	public partial class WebDocument : CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase
 	{
 
 
@@ -26,7 +29,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override string MimeType { get; set; }
 
 [JsonPropertyName("attributes")]
-		public override IList<DocumentAttributeBase> Attributes { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase> Attributes { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -51,7 +54,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			AccessHash = reader.Read<long>();
 			Size = reader.Read<int>();
 			MimeType = reader.Read<string>();
-			Attributes = reader.ReadVector<DocumentAttributeBase>();
+			Attributes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase>();
 
 		}
 	}

@@ -16,8 +16,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("hash")]
 		public int Hash { get; set; }
 
-[JsonPropertyName("sets")]
-		public IList<StickerSetCoveredBase> Sets { get; set; }
+[JsonPropertyName("sets")] public IList<StickerSetCoveredBase> Sets { get; set; }
 
         
 		public override void UpdateFlags() 

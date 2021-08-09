@@ -16,14 +16,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(bool);
+[JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("id")]
-		public InputDocumentBase Id { get; set; }
+[JsonPropertyName("id")] public InputDocumentBase Id { get; set; }
 
 [JsonPropertyName("unsave")]
 		public bool Unsave { get; set; }

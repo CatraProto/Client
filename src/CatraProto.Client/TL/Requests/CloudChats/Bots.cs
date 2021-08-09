@@ -60,5 +60,6 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 			await taskCompletionSource;
 			return rpcResponse;
 		}
+
 	}
 }

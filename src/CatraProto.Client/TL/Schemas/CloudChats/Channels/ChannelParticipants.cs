@@ -1,11 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 {
-	public partial class ChannelParticipants : ChannelParticipantsBase
+	public partial class ChannelParticipants : CatraProto.Client.TL.Schemas.CloudChats.Channels.ChannelParticipantsBase
 	{
 
 
@@ -17,10 +20,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 		public int Count { get; set; }
 
 [JsonPropertyName("participants")]
-		public IList<CloudChats.ChannelParticipantBase> Participants { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantBase> Participants { get; set; }
 
 [JsonPropertyName("users")]
-		public IList<UserBase> Users { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -40,8 +43,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 		public override void Deserialize(Reader reader)
 		{
 			Count = reader.Read<int>();
-			Participants = reader.ReadVector<CloudChats.ChannelParticipantBase>();
-			Users = reader.ReadVector<UserBase>();
+			Participants = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantBase>();
+			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 
 		}
 	}

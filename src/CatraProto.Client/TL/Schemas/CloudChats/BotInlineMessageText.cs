@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class BotInlineMessageText : BotInlineMessageBase
+	public partial class BotInlineMessageText : CatraProto.Client.TL.Schemas.CloudChats.BotInlineMessageBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -30,10 +32,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public string Message { get; set; }
 
 [JsonPropertyName("entities")]
-		public IList<MessageEntityBase> Entities { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
 
 [JsonPropertyName("reply_markup")]
-		public override ReplyMarkupBase ReplyMarkup { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase ReplyMarkup { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -70,12 +72,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Message = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Entities = reader.ReadVector<MessageEntityBase>();
+				Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				ReplyMarkup = reader.Read<ReplyMarkupBase>();
+				ReplyMarkup = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase>();
 			}
 
 

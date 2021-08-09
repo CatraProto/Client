@@ -23,8 +23,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(Messages.StickerSetBase);
+[JsonIgnore] Type IMethod.Type { get; init; } = typeof(Messages.StickerSetBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -38,8 +37,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 [JsonPropertyName("animated")]
 		public bool Animated { get; set; }
 
-[JsonPropertyName("user_id")]
-		public InputUserBase UserId { get; set; }
+[JsonPropertyName("user_id")] public InputUserBase UserId { get; set; }
 
 [JsonPropertyName("title")]
 		public string Title { get; set; }
@@ -47,11 +45,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 [JsonPropertyName("short_name")]
 		public string ShortName { get; set; }
 
-[JsonPropertyName("thumb")]
-		public InputDocumentBase Thumb { get; set; }
+[JsonPropertyName("thumb")] public InputDocumentBase Thumb { get; set; }
 
-[JsonPropertyName("stickers")]
-		public IList<InputStickerSetItemBase> Stickers { get; set; }
+[JsonPropertyName("stickers")] public IList<InputStickerSetItemBase> Stickers { get; set; }
 
 
 		public void UpdateFlags() 

@@ -1,12 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.ObjectDeserializers;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class FutureSalts : FutureSaltsBase
+	public partial class FutureSalts : CatraProto.Client.TL.Schemas.MTProto.FutureSaltsBase
 	{
 
 
@@ -21,7 +23,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 		public override int Now { get; set; }
 
 [JsonPropertyName("salts")]
-		public override IList<FutureSalt> Salts { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.MTProto.FutureSalt> Salts { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -42,7 +44,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 		{
 			ReqMsgId = reader.Read<long>();
 			Now = reader.Read<int>();
-			Salts = reader.ReadVector(new NakedObjectVectorDeserializer<FutureSalt>(), true);
+			Salts = reader.ReadVector(new CatraProto.TL.ObjectDeserializers.NakedObjectVectorDeserializer<CatraProto.Client.TL.Schemas.MTProto.FutureSalt>(), true);
 
 		}
 	}

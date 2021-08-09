@@ -16,8 +16,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("hash")]
 		public int Hash { get; set; }
 
-[JsonPropertyName("gifs")]
-		public IList<DocumentBase> Gifs { get; set; }
+[JsonPropertyName("gifs")] public IList<DocumentBase> Gifs { get; set; }
 
         
 		public override void UpdateFlags() 

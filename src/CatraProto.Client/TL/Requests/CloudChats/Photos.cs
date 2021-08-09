@@ -22,10 +22,10 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 
 	    public async Task<RpcMessage<PhotoBase>> UpdateProfilePhotoAsync(InputPhotoBase id, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<PhotoBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new UpdateProfilePhoto(){
+			var rpcResponse = new RpcMessage<PhotoBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new UpdateProfilePhoto
+			{
 Id = id,
 };
 
@@ -36,10 +36,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<PhotoBase>> UploadProfilePhotoAsync(InputFileBase? file = null, InputFileBase? video = null, double? videoStartTs = null, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<PhotoBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new UploadProfilePhoto(){
+			var rpcResponse = new RpcMessage<PhotoBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new UploadProfilePhoto
+			{
 File = file,
 Video = video,
 VideoStartTs = videoStartTs,
@@ -52,11 +52,11 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<RpcVector<long>>> DeletePhotosAsync(IList<InputPhotoBase> id, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<RpcVector<long>>();
-rpcResponse.Response = new RpcVector<long>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new DeletePhotos(){
+			var rpcResponse = new RpcMessage<RpcVector<long>>();
+			rpcResponse.Response = new RpcVector<long>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new DeletePhotos
+			{
 Id = id,
 };
 
@@ -67,10 +67,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<PhotosBase>> GetUserPhotosAsync(InputUserBase userId, int offset, long maxId, int limit, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<PhotosBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetUserPhotos(){
+			var rpcResponse = new RpcMessage<PhotosBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetUserPhotos
+			{
 UserId = userId,
 Offset = offset,
 MaxId = maxId,

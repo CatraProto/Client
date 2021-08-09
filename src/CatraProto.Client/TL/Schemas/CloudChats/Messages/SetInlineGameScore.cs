@@ -21,8 +21,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(bool);
+[JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -36,11 +35,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("force")]
 		public bool Force { get; set; }
 
-[JsonPropertyName("id")]
-		public InputBotInlineMessageIDBase Id { get; set; }
+[JsonPropertyName("id")] public InputBotInlineMessageIDBase Id { get; set; }
 
-[JsonPropertyName("user_id")]
-		public InputUserBase UserId { get; set; }
+[JsonPropertyName("user_id")] public InputUserBase UserId { get; set; }
 
 [JsonPropertyName("score")]
 		public int Score { get; set; }

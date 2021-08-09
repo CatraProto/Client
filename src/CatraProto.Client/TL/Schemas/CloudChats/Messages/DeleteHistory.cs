@@ -21,8 +21,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(AffectedHistoryBase);
+[JsonIgnore] Type IMethod.Type { get; init; } = typeof(AffectedHistoryBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -36,8 +35,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("revoke")]
 		public bool Revoke { get; set; }
 
-[JsonPropertyName("peer")]
-		public InputPeerBase Peer { get; set; }
+[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
 
 [JsonPropertyName("max_id")]
 		public int MaxId { get; set; }

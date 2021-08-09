@@ -1,139 +1,126 @@
 using System;
-using System.Collections.Generic;
 using System.Text;
 using CatraProto.TL.Generator.DeclarationInfo;
 using CatraProto.TL.Generator.Objects.Types.Interfaces;
 
 namespace CatraProto.TL.Generator.Objects.Types
 {
-	class IntegerType : TypeBase
-	{
-		public int BitSize { get; }
-		public IntegerType(int bitSize)
-		{
-			BitSize = bitSize;
-			TypeInfo.IsBare = true;
-			switch (BitSize)
-			{
-				case > 64:
-					NamingInfo = "BigInteger";
-					Namespace = new Namespace("System.Numerics.BigInteger", false);
-					break;
-				case 64:
-					NamingInfo = "long";
-					break;
-				default:
-					NamingInfo = "int";
-					break;
-			}
-		}
-		
-		public override void WriteDeserializer(StringBuilder stringBuilder, Parameter parameter)
-		{
-			WriteFlagStart(stringBuilder, out var spacing, parameter);
-			var method = parameter.VectorInfo.IsVector ? "ReadVector" : "Read";
-			switch (BitSize)
-			{
-				case > 64:
-					stringBuilder.AppendLine($"{spacing}{parameter.NamingInfo.PascalCaseName} = reader.{method}<System.Numerics.BigInteger>({BitSize});");
-					break;
-				default:
-					stringBuilder.AppendLine($"{spacing}{parameter.NamingInfo.PascalCaseName} = reader.{method}<{NamingInfo.OriginalName}>();");
-					break;
-			}
+    class IntegerType : TypeBase
+    {
+        public int BitSize { get; }
 
-			WriteFlagEnd(stringBuilder, spacing, parameter);
-		}
+        public IntegerType(int bitSize)
+        {
+            BitSize = bitSize;
+            TypeInfo.IsBare = true;
+            switch (BitSize)
+            {
+                case > 64:
+                    NamingInfo = "BigInteger";
+                    Namespace = new Namespace("System.Numerics.BigInteger", false);
+                    break;
+                case 64:
+                    NamingInfo = "long";
+                    break;
+                default:
+                    NamingInfo = "int";
+                    break;
+            }
+        }
 
-		public override void WriteSerializer(StringBuilder stringBuilder, Parameter parameter)
-		{
-			WriteFlagStart(stringBuilder, out var spacing, parameter);
-			var propertyValue = parameter.HasFlag && !parameter.VectorInfo.IsVector ? parameter.NamingInfo.PascalCaseName + ".Value" : parameter.NamingInfo.PascalCaseName;
+        public override void WriteDeserializer(StringBuilder stringBuilder, Parameter parameter)
+        {
+            WriteFlagStart(stringBuilder, out var spacing, parameter);
+            var method = parameter.VectorInfo.IsVector ? "ReadVector" : "Read";
+            switch (BitSize)
+            {
+                case > 64:
+                    stringBuilder.AppendLine($"{spacing}{parameter.NamingInfo.PascalCaseName} = reader.{method}<System.Numerics.BigInteger>({BitSize});");
+                    break;
+                default:
+                    stringBuilder.AppendLine($"{spacing}{parameter.NamingInfo.PascalCaseName} = reader.{method}<{NamingInfo.OriginalName}>();");
+                    break;
+            }
 
-			switch (BitSize)
-			{
-				case > 64:
-					stringBuilder.AppendLine($"{spacing}var size{parameter.NamingInfo.PascalCaseName} = {parameter.NamingInfo.PascalCaseName}.GetByteCount();");
-					stringBuilder.AppendLine($"{spacing}if(size{parameter.NamingInfo.PascalCaseName} != {BitSize / 8}){{");
-					stringBuilder.AppendLine(
-						$"{spacing}{StringTools.OneTabs}throw new CatraProto.TL.Exceptions.SerializationException($\"ByteSize mismatch, should be {BitSize / 8}bytes got {{size{parameter.NamingInfo.PascalCaseName}}}bytes\", CatraProto.TL.Exceptions.SerializationException.SerializationErrors.BitSizeMismatch);");
-					stringBuilder.AppendLine($"{spacing}}}");
-					stringBuilder.AppendLine($"{spacing}writer.Write({parameter.NamingInfo.PascalCaseName});");
-					break;
-				default:
-					stringBuilder.AppendLine($"{spacing}writer.Write({propertyValue});");
-					break;
-			}
+            WriteFlagEnd(stringBuilder, spacing, parameter);
+        }
 
-			WriteFlagEnd(stringBuilder, spacing, parameter);
-		}
+        public override void WriteSerializer(StringBuilder stringBuilder, Parameter parameter)
+        {
+            WriteFlagStart(stringBuilder, out var spacing, parameter);
+            var propertyValue = parameter.HasFlag && !parameter.VectorInfo.IsVector ? parameter.NamingInfo.PascalCaseName + ".Value" : parameter.NamingInfo.PascalCaseName;
 
-		public override void WriteParameter(StringBuilder stringBuilder, Parameter parameter, string customTypeName = null, bool isAbstract = false)
-		{
-			var type = GetTypeName(NamingType.FullNamespace, parameter, true);
-			type = parameter.HasFlag && parameter.VectorInfo.IsVector == false ? type + "?" : type;
-			stringBuilder.Append($"\n[JsonPropertyName(\"{parameter.NamingInfo.OriginalName}\")]\n{StringTools.TwoTabs}{GetParameterAccessibility(parameter, isAbstract)} {type}");
-			stringBuilder.AppendLine($" {parameter.NamingInfo.PascalCaseName} {{ get; set; }}");
-		}
+            stringBuilder.AppendLine($"{spacing}writer.Write({propertyValue});");
 
-		public override void WriteBaseParameters(StringBuilder stringBuilder, bool isAbstract = false)
-		{
-			throw new NotSupportedException("Bare types don't have a Base implementation.");
-		}
+            WriteFlagEnd(stringBuilder, spacing, parameter);
+        }
 
-		public static bool operator ==(IntegerType integer1, IntegerType integer2)
-		{
-			if (integer1 is null || integer2 is null)
-			{
-				return false;
-			}
+        public override void WriteParameter(StringBuilder stringBuilder, Parameter parameter, string customTypeName = null, bool isAbstract = false)
+        {
+            var type = GetTypeName(NamingType.FullNamespace, parameter, true);
+            type = parameter.HasFlag && parameter.VectorInfo.IsVector == false ? type + "?" : type;
+            stringBuilder.Append($"\n[JsonPropertyName(\"{parameter.NamingInfo.OriginalName}\")]\n{StringTools.TwoTabs}{GetParameterAccessibility(parameter, isAbstract)} {type}");
+            stringBuilder.AppendLine($" {parameter.NamingInfo.PascalCaseName} {{ get; set; }}");
+        }
 
-			return integer1.BitSize == integer2.BitSize;
-		}
+        public override void WriteBaseParameters(StringBuilder stringBuilder, bool isAbstract = false)
+        {
+            throw new NotSupportedException("Bare types don't have a Base implementation.");
+        }
 
-		public static bool operator !=(IntegerType integer1, IntegerType integer2)
-		{
-			if (integer1 is null || integer2 is null)
-			{
-				return false;
-			}
+        public static bool operator ==(IntegerType integer1, IntegerType integer2)
+        {
+            if (integer1 is null || integer2 is null)
+            {
+                return false;
+            }
 
-			if (integer1 == integer2)
-			{
-				return false;
-			}
+            return integer1.BitSize == integer2.BitSize;
+        }
 
-			return true;
-		}
+        public static bool operator !=(IntegerType integer1, IntegerType integer2)
+        {
+            if (integer1 is null || integer2 is null)
+            {
+                return false;
+            }
 
-		protected bool Equals(IntegerType other)
-		{
-			return base.Equals(other) && other == this;
-		}
+            if (integer1 == integer2)
+            {
+                return false;
+            }
 
-		public override bool Equals(object obj)
-		{
-			if (ReferenceEquals(null, obj))
-			{
-				return false;
-			}
+            return true;
+        }
 
-			if (ReferenceEquals(this, obj))
-			{
-				return true;
-			}
+        protected bool Equals(IntegerType other)
+        {
+            return base.Equals(other) && other == this;
+        }
 
-			if (obj.GetType() != GetType())
-			{
-				return false;
-			}
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
 
-			return Equals((IntegerType)obj);
-		}
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
 
-		public override int GetHashCode()
-		{
-			return BitSize;
-		}
-	}
+            if (obj.GetType() != GetType())
+            {
+                return false;
+            }
+
+            return Equals((IntegerType)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return BitSize;
+        }
+    }
 }

@@ -12,8 +12,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("updates")]
-		public UpdatesBase Updates { get; set; }
+[JsonPropertyName("updates")] public UpdatesBase Updates { get; set; }
 
         
 		public override void UpdateFlags() 

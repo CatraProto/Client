@@ -1,10 +1,14 @@
+using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputFileBig : InputFileBase
+	public partial class InputFileBig : CatraProto.Client.TL.Schemas.CloudChats.InputFileBase
 	{
 
 

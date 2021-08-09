@@ -16,17 +16,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(Messages.StickerSetBase);
+[JsonIgnore] Type IMethod.Type { get; init; } = typeof(Messages.StickerSetBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("stickerset")]
-		public InputStickerSetBase Stickerset { get; set; }
+[JsonPropertyName("stickerset")] public InputStickerSetBase Stickerset { get; set; }
 
-[JsonPropertyName("sticker")]
-		public InputStickerSetItemBase Sticker { get; set; }
+[JsonPropertyName("sticker")] public InputStickerSetItemBase Sticker { get; set; }
 
 
 		public void UpdateFlags() 

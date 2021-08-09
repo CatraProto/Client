@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-	public partial class AppUpdate : AppUpdateBase
+	public partial class AppUpdate : CatraProto.Client.TL.Schemas.CloudChats.Help.AppUpdateBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -36,10 +38,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 		public string Text { get; set; }
 
 [JsonPropertyName("entities")]
-		public IList<MessageEntityBase> Entities { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
 
 [JsonPropertyName("document")]
-		public DocumentBase Document { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.DocumentBase Document { get; set; }
 
 [JsonPropertyName("url")]
 		public string Url { get; set; }
@@ -82,10 +84,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 			Id = reader.Read<int>();
 			Version = reader.Read<string>();
 			Text = reader.Read<string>();
-			Entities = reader.ReadVector<MessageEntityBase>();
+			Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Document = reader.Read<DocumentBase>();
+				Document = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))

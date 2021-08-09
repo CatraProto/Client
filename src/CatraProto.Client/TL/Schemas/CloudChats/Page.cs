@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class Page : PageBase
+	public partial class Page : CatraProto.Client.TL.Schemas.CloudChats.PageBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -37,13 +39,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override string Url { get; set; }
 
 [JsonPropertyName("blocks")]
-		public override IList<PageBlockBase> Blocks { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase> Blocks { get; set; }
 
 [JsonPropertyName("photos")]
-		public override IList<PhotoBase> Photos { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase> Photos { get; set; }
 
 [JsonPropertyName("documents")]
-		public override IList<DocumentBase> Documents { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase> Documents { get; set; }
 
 [JsonPropertyName("views")]
 		public override int? Views { get; set; }
@@ -82,9 +84,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Rtl = FlagsHelper.IsFlagSet(Flags, 1);
 			V2 = FlagsHelper.IsFlagSet(Flags, 2);
 			Url = reader.Read<string>();
-			Blocks = reader.ReadVector<PageBlockBase>();
-			Photos = reader.ReadVector<PhotoBase>();
-			Documents = reader.ReadVector<DocumentBase>();
+			Blocks = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase>();
+			Photos = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
+			Documents = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
 				Views = reader.Read<int>();

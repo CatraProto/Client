@@ -1,4 +1,6 @@
-﻿namespace CatraProto.TL
+﻿using System.Linq;
+
+namespace CatraProto.TL
 {
 	static class BigInteger
 	{
@@ -13,6 +15,11 @@
 			}
 
 			return new System.Numerics.BigInteger(bytes);
+		}
+
+		public static byte[] RemoveTrailingZeros(this byte[] array)
+		{
+			return array.Reverse().SkipWhile(x => x == 0).Reverse().ToArray();
 		}
 	}
 }

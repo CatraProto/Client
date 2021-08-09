@@ -1,11 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class PrivacyRules : PrivacyRulesBase
+	public partial class PrivacyRules : CatraProto.Client.TL.Schemas.CloudChats.Account.PrivacyRulesBase
 	{
 
 
@@ -14,13 +17,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("rules")]
-		public override IList<PrivacyRuleBase> Rules { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.PrivacyRuleBase> Rules { get; set; }
 
 [JsonPropertyName("chats")]
-		public override IList<ChatBase> Chats { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
 
 [JsonPropertyName("users")]
-		public override IList<UserBase> Users { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -39,9 +42,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 		public override void Deserialize(Reader reader)
 		{
-			Rules = reader.ReadVector<PrivacyRuleBase>();
-			Chats = reader.ReadVector<ChatBase>();
-			Users = reader.ReadVector<UserBase>();
+			Rules = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PrivacyRuleBase>();
+			Chats = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
+			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 
 		}
 	}

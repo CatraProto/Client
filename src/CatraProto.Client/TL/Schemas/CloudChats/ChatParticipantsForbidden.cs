@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChatParticipantsForbidden : ChatParticipantsBase
+	public partial class ChatParticipantsForbidden : CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -24,7 +27,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override int ChatId { get; set; }
 
 [JsonPropertyName("self_participant")]
-		public ChatParticipantBase SelfParticipant { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantBase SelfParticipant { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -53,7 +56,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ChatId = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				SelfParticipant = reader.Read<ChatParticipantBase>();
+				SelfParticipant = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantBase>();
 			}
 
 

@@ -20,8 +20,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(StatsURLBase);
+[JsonIgnore] Type IMethod.Type { get; init; } = typeof(StatsURLBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -32,8 +31,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("dark")]
 		public bool Dark { get; set; }
 
-[JsonPropertyName("peer")]
-		public InputPeerBase Peer { get; set; }
+[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
 
 [JsonPropertyName("params")]
 		public string Params { get; set; }

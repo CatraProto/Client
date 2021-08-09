@@ -16,11 +16,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("hash")]
 		public int Hash { get; set; }
 
-[JsonPropertyName("packs")]
-		public IList<StickerPackBase> Packs { get; set; }
+[JsonPropertyName("packs")] public IList<StickerPackBase> Packs { get; set; }
 
-[JsonPropertyName("stickers")]
-		public IList<DocumentBase> Stickers { get; set; }
+[JsonPropertyName("stickers")] public IList<DocumentBase> Stickers { get; set; }
 
 [JsonPropertyName("dates")]
 		public IList<int> Dates { get; set; }

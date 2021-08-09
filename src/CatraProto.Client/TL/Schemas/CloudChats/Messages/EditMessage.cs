@@ -26,8 +26,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(UpdatesBase);
+[JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -38,8 +37,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("no_webpage")]
 		public bool NoWebpage { get; set; }
 
-[JsonPropertyName("peer")]
-		public InputPeerBase Peer { get; set; }
+[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
 
 [JsonPropertyName("id")]
 		public int Id { get; set; }
@@ -47,14 +45,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("message")]
 		public string Message { get; set; }
 
-[JsonPropertyName("media")]
-		public InputMediaBase Media { get; set; }
+[JsonPropertyName("media")] public InputMediaBase Media { get; set; }
 
-[JsonPropertyName("reply_markup")]
-		public ReplyMarkupBase ReplyMarkup { get; set; }
+[JsonPropertyName("reply_markup")] public ReplyMarkupBase ReplyMarkup { get; set; }
 
-[JsonPropertyName("entities")]
-		public IList<MessageEntityBase> Entities { get; set; }
+[JsonPropertyName("entities")] public IList<MessageEntityBase> Entities { get; set; }
 
 [JsonPropertyName("schedule_date")]
 		public int? ScheduleDate { get; set; }

@@ -20,10 +20,10 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 
 	    public async Task<RpcMessage<DataJSONBase>> GetCallConfigAsync(MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<DataJSONBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetCallConfig(){
+			var rpcResponse = new RpcMessage<DataJSONBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetCallConfig
+			{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -33,10 +33,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<PhoneCallBase>> RequestCallAsync(InputUserBase userId, int randomId, byte[] gAHash, PhoneCallProtocolBase protocol, bool video = true, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<PhoneCallBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new RequestCall(){
+			var rpcResponse = new RpcMessage<PhoneCallBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new RequestCall
+			{
 UserId = userId,
 RandomId = randomId,
 GAHash = gAHash,
@@ -51,10 +51,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<PhoneCallBase>> AcceptCallAsync(InputPhoneCallBase peer, byte[] gB, PhoneCallProtocolBase protocol, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<PhoneCallBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new AcceptCall(){
+			var rpcResponse = new RpcMessage<PhoneCallBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new AcceptCall
+			{
 Peer = peer,
 GB = gB,
 Protocol = protocol,
@@ -67,10 +67,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<PhoneCallBase>> ConfirmCallAsync(InputPhoneCallBase peer, byte[] gA, long keyFingerprint, PhoneCallProtocolBase protocol, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<PhoneCallBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ConfirmCall(){
+			var rpcResponse = new RpcMessage<PhoneCallBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new ConfirmCall
+			{
 Peer = peer,
 GA = gA,
 KeyFingerprint = keyFingerprint,
@@ -87,7 +87,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ReceivedCall(){
+var methodBody = new ReceivedCall
+{
 Peer = peer,
 };
 
@@ -98,10 +99,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UpdatesBase>> DiscardCallAsync(InputPhoneCallBase peer, int duration, PhoneCallDiscardReasonBase reason, long connectionId, bool video = true, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UpdatesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new DiscardCall(){
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new DiscardCall
+			{
 Peer = peer,
 Duration = duration,
 Reason = reason,
@@ -116,10 +117,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UpdatesBase>> SetCallRatingAsync(InputPhoneCallBase peer, int rating, string comment, bool userInitiative = true, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UpdatesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SetCallRating(){
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new SetCallRating
+			{
 Peer = peer,
 Rating = rating,
 Comment = comment,
@@ -136,7 +137,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SaveCallDebug(){
+var methodBody = new SaveCallDebug
+{
 Peer = peer,
 Debug = debug,
 };
@@ -151,7 +153,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SendSignalingData(){
+var methodBody = new SendSignalingData
+{
 Peer = peer,
 Data = data,
 };

@@ -1,10 +1,14 @@
+using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateShort : UpdatesBase
+	public partial class UpdateShort : CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase
 	{
 
 
@@ -13,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("update")]
-		public UpdateBase Update { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.UpdateBase Update { get; set; }
 
 [JsonPropertyName("date")]
 		public int Date { get; set; }
@@ -34,7 +38,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Update = reader.Read<UpdateBase>();
+			Update = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.UpdateBase>();
 			Date = reader.Read<int>();
 
 		}

@@ -20,10 +20,10 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 
 	    public async Task<RpcMessage<UpdatesBase>> EditPeerFoldersAsync(IList<InputFolderPeerBase> folderPeers, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UpdatesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new EditPeerFolders(){
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new EditPeerFolders
+			{
 FolderPeers = folderPeers,
 };
 
@@ -34,10 +34,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UpdatesBase>> DeleteFolderAsync(int folderId, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UpdatesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new DeleteFolder(){
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new DeleteFolder
+			{
 FolderId = folderId,
 };
 

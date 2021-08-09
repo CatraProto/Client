@@ -1,7 +1,9 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using System.Text.Json.Serialization;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -17,13 +19,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(TmpPasswordBase);
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Account.TmpPasswordBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
 [JsonPropertyName("password")]
-		public InputCheckPasswordSRPBase Password { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputCheckPasswordSRPBase Password { get; set; }
 
 [JsonPropertyName("period")]
 		public int Period { get; set; }
@@ -44,7 +46,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 		public void Deserialize(Reader reader)
 		{
-			Password = reader.Read<InputCheckPasswordSRPBase>();
+			Password = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputCheckPasswordSRPBase>();
 			Period = reader.Read<int>();
 
 		}

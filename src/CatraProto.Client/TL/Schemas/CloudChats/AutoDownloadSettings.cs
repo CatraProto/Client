@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class AutoDownloadSettings : AutoDownloadSettingsBase
+	public partial class AutoDownloadSettings : CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase
 	{
 		[Flags]
 		public enum FlagsEnum 

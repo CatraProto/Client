@@ -1,11 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class EmojiKeywordsDifference : EmojiKeywordsDifferenceBase
+	public partial class EmojiKeywordsDifference : CatraProto.Client.TL.Schemas.CloudChats.EmojiKeywordsDifferenceBase
 	{
 
 
@@ -23,7 +26,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override int Version { get; set; }
 
 [JsonPropertyName("keywords")]
-		public override IList<EmojiKeywordBase> Keywords { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.EmojiKeywordBase> Keywords { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -46,7 +49,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			LangCode = reader.Read<string>();
 			FromVersion = reader.Read<int>();
 			Version = reader.Read<int>();
-			Keywords = reader.ReadVector<EmojiKeywordBase>();
+			Keywords = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.EmojiKeywordBase>();
 
 		}
 	}

@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageService : MessageBase
+	public partial class MessageService : CatraProto.Client.TL.Schemas.CloudChats.MessageBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -49,19 +52,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override int Id { get; set; }
 
 [JsonPropertyName("from_id")]
-		public PeerBase FromId { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase FromId { get; set; }
 
 [JsonPropertyName("peer_id")]
-		public PeerBase PeerId { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase PeerId { get; set; }
 
 [JsonPropertyName("reply_to")]
-		public MessageReplyHeaderBase ReplyTo { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.MessageReplyHeaderBase ReplyTo { get; set; }
 
 [JsonPropertyName("date")]
 		public int Date { get; set; }
 
 [JsonPropertyName("action")]
-		public MessageActionBase Action { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.MessageActionBase Action { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -111,17 +114,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Id = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 8))
 			{
-				FromId = reader.Read<PeerBase>();
+				FromId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
 			}
 
-			PeerId = reader.Read<PeerBase>();
+			PeerId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				ReplyTo = reader.Read<MessageReplyHeaderBase>();
+				ReplyTo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageReplyHeaderBase>();
 			}
 
 			Date = reader.Read<int>();
-			Action = reader.Read<MessageActionBase>();
+			Action = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageActionBase>();
 
 		}
 	}

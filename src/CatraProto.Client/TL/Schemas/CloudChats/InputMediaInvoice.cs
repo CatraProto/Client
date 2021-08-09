@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputMediaInvoice : InputMediaBase
+	public partial class InputMediaInvoice : CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -27,10 +30,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public string Description { get; set; }
 
 [JsonPropertyName("photo")]
-		public InputWebDocumentBase Photo { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputWebDocumentBase Photo { get; set; }
 
 [JsonPropertyName("invoice")]
-		public InvoiceBase Invoice { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InvoiceBase Invoice { get; set; }
 
 [JsonPropertyName("payload")]
 		public byte[] Payload { get; set; }
@@ -39,7 +42,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public string Provider { get; set; }
 
 [JsonPropertyName("provider_data")]
-		public DataJSONBase ProviderData { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase ProviderData { get; set; }
 
 [JsonPropertyName("start_param")]
 		public string StartParam { get; set; }
@@ -78,13 +81,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Description = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Photo = reader.Read<InputWebDocumentBase>();
+				Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputWebDocumentBase>();
 			}
 
-			Invoice = reader.Read<InvoiceBase>();
+			Invoice = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InvoiceBase>();
 			Payload = reader.Read<byte[]>();
 			Provider = reader.Read<string>();
-			ProviderData = reader.Read<DataJSONBase>();
+			ProviderData = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
 			StartParam = reader.Read<string>();
 
 		}

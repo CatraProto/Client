@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class BotInlineMediaResult : BotInlineResultBase
+	public partial class BotInlineMediaResult : CatraProto.Client.TL.Schemas.CloudChats.BotInlineResultBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -30,10 +33,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override string Type { get; set; }
 
 [JsonPropertyName("photo")]
-		public PhotoBase Photo { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PhotoBase Photo { get; set; }
 
 [JsonPropertyName("document")]
-		public DocumentBase Document { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.DocumentBase Document { get; set; }
 
 [JsonPropertyName("title")]
 		public override string Title { get; set; }
@@ -42,7 +45,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override string Description { get; set; }
 
 [JsonPropertyName("send_message")]
-		public override BotInlineMessageBase SendMessage { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.BotInlineMessageBase SendMessage { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -92,12 +95,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Type = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Photo = reader.Read<PhotoBase>();
+				Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Document = reader.Read<DocumentBase>();
+				Document = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
@@ -110,7 +113,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 				Description = reader.Read<string>();
 			}
 
-			SendMessage = reader.Read<BotInlineMessageBase>();
+			SendMessage = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.BotInlineMessageBase>();
 
 		}
 	}

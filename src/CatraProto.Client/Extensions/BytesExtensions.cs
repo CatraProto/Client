@@ -1,4 +1,7 @@
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using CatraProto.Client.Crypto;
 
 namespace CatraProto.Client.Extensions
 {
@@ -8,5 +11,7 @@ namespace CatraProto.Client.Extensions
         {
             return new MemoryStream(data);
         }
+
+
     }
 }

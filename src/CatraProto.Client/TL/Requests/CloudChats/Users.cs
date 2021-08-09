@@ -21,11 +21,11 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 
 	    public async Task<RpcMessage<RpcVector<UserBase>>> GetUsersAsync(IList<InputUserBase> id, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<RpcVector<UserBase>>();
-rpcResponse.Response = new RpcVector<UserBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetUsers(){
+			var rpcResponse = new RpcMessage<RpcVector<UserBase>>();
+			rpcResponse.Response = new RpcVector<UserBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetUsers
+			{
 Id = id,
 };
 
@@ -36,10 +36,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UserFullBase>> GetFullUserAsync(InputUserBase id, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UserFullBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetFullUser(){
+			var rpcResponse = new RpcMessage<UserFullBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetFullUser
+			{
 Id = id,
 };
 
@@ -53,7 +53,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SetSecureValueErrors(){
+var methodBody = new SetSecureValueErrors
+{
 Id = id,
 Errors = errors,
 };

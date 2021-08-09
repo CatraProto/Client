@@ -35,14 +35,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("offset_id_offset")]
 		public int? OffsetIdOffset { get; set; }
 
-[JsonPropertyName("messages")]
-		public IList<MessageBase> Messages { get; set; }
+[JsonPropertyName("messages")] public IList<MessageBase> Messages { get; set; }
 
-[JsonPropertyName("chats")]
-		public IList<ChatBase> Chats { get; set; }
+[JsonPropertyName("chats")] public IList<ChatBase> Chats { get; set; }
 
-[JsonPropertyName("users")]
-		public IList<UserBase> Users { get; set; }
+[JsonPropertyName("users")] public IList<UserBase> Users { get; set; }
 
         
 		public override void UpdateFlags() 

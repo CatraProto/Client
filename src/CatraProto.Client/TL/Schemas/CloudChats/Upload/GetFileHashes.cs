@@ -1,7 +1,9 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using System.Text.Json.Serialization;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -17,13 +19,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(FileHashBase);
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.FileHashBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = true;
 
 [JsonPropertyName("location")]
-		public InputFileLocationBase Location { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputFileLocationBase Location { get; set; }
 
 [JsonPropertyName("offset")]
 		public int Offset { get; set; }
@@ -44,7 +46,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 
 		public void Deserialize(Reader reader)
 		{
-			Location = reader.Read<InputFileLocationBase>();
+			Location = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputFileLocationBase>();
 			Offset = reader.Read<int>();
 
 		}

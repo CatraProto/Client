@@ -1,7 +1,9 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using System.Text.Json.Serialization;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -17,7 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(ThemeBase);
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.ThemeBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -26,7 +28,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		public string Format { get; set; }
 
 [JsonPropertyName("theme")]
-		public InputThemeBase Theme { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputThemeBase Theme { get; set; }
 
 [JsonPropertyName("document_id")]
 		public long DocumentId { get; set; }
@@ -49,7 +51,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		public void Deserialize(Reader reader)
 		{
 			Format = reader.Read<string>();
-			Theme = reader.Read<InputThemeBase>();
+			Theme = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputThemeBase>();
 			DocumentId = reader.Read<long>();
 
 		}

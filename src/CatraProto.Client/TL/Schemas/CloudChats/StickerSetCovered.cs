@@ -1,10 +1,14 @@
+using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class StickerSetCovered : StickerSetCoveredBase
+	public partial class StickerSetCovered : CatraProto.Client.TL.Schemas.CloudChats.StickerSetCoveredBase
 	{
 
 
@@ -13,10 +17,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("set")]
-		public override StickerSetBase Set { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.StickerSetBase Set { get; set; }
 
 [JsonPropertyName("cover")]
-		public DocumentBase Cover { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.DocumentBase Cover { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -34,8 +38,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Set = reader.Read<StickerSetBase>();
-			Cover = reader.Read<DocumentBase>();
+			Set = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StickerSetBase>();
+			Cover = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
 
 		}
 	}

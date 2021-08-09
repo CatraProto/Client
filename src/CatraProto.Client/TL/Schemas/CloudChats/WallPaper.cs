@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class WallPaper : WallPaperBase
+	public partial class WallPaper : CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -46,10 +49,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public string Slug { get; set; }
 
 [JsonPropertyName("document")]
-		public DocumentBase Document { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.DocumentBase Document { get; set; }
 
 [JsonPropertyName("settings")]
-		public override WallPaperSettingsBase Settings { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase Settings { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -89,10 +92,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Dark = FlagsHelper.IsFlagSet(Flags, 4);
 			AccessHash = reader.Read<long>();
 			Slug = reader.Read<string>();
-			Document = reader.Read<DocumentBase>();
+			Document = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				Settings = reader.Read<WallPaperSettingsBase>();
+				Settings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase>();
 			}
 
 

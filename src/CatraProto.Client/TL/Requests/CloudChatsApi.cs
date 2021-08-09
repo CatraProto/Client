@@ -11,46 +11,45 @@ namespace CatraProto.Client.TL.Requests
 {
 	public partial class CloudChatsApi
 	{
-		
-public Auth Auth { get; }
-public Account Account { get; }
-public Users Users { get; }
-public Contacts Contacts { get; }
-public Messages Messages { get; }
-public Updates Updates { get; }
-public Photos Photos { get; }
-public Upload Upload { get; }
-public Help Help { get; }
-public Channels Channels { get; }
-public Bots Bots { get; }
-public Payments Payments { get; }
-public Stickers Stickers { get; }
-public Phone Phone { get; }
-public Langpack Langpack { get; }
-public Folders Folders { get; }
-public Stats Stats { get; }
+		public Auth Auth { get; }
+		public Account Account { get; }
+		public Users Users { get; }
+		public Contacts Contacts { get; }
+		public Messages Messages { get; }
+		public Updates Updates { get; }
+		public Photos Photos { get; }
+		public Upload Upload { get; }
+		public Help Help { get; }
+		public Channels Channels { get; }
+		public Bots Bots { get; }
+		public Payments Payments { get; }
+		public Stickers Stickers { get; }
+		public Phone Phone { get; }
+		public Langpack Langpack { get; }
+		public Folders Folders { get; }
+		public Stats Stats { get; }
 	    private readonly MessagesQueue _messagesQueue;
 	    internal CloudChatsApi(MessagesQueue messagesQueue)
 	    {
 	        _messagesQueue = messagesQueue;
-	        
-Auth = new Auth(messagesQueue);
-Account = new Account(messagesQueue);
-Users = new Users(messagesQueue);
-Contacts = new Contacts(messagesQueue);
-Messages = new Messages(messagesQueue);
-Updates = new Updates(messagesQueue);
-Photos = new Photos(messagesQueue);
-Upload = new Upload(messagesQueue);
-Help = new Help(messagesQueue);
-Channels = new Channels(messagesQueue);
-Bots = new Bots(messagesQueue);
-Payments = new Payments(messagesQueue);
-Stickers = new Stickers(messagesQueue);
-Phone = new Phone(messagesQueue);
-Langpack = new Langpack(messagesQueue);
-Folders = new Folders(messagesQueue);
-Stats = new Stats(messagesQueue);
+
+	        Auth = new Auth(messagesQueue);
+	        Account = new Account(messagesQueue);
+	        Users = new Users(messagesQueue);
+	        Contacts = new Contacts(messagesQueue);
+	        Messages = new Messages(messagesQueue);
+	        Updates = new Updates(messagesQueue);
+	        Photos = new Photos(messagesQueue);
+	        Upload = new Upload(messagesQueue);
+	        Help = new Help(messagesQueue);
+	        Channels = new Channels(messagesQueue);
+	        Bots = new Bots(messagesQueue);
+	        Payments = new Payments(messagesQueue);
+	        Stickers = new Stickers(messagesQueue);
+	        Phone = new Phone(messagesQueue);
+	        Langpack = new Langpack(messagesQueue);
+	        Folders = new Folders(messagesQueue);
+	        Stats = new Stats(messagesQueue);
 	    }
 
 	    public async Task<RpcMessage<IObject>> InvokeAfterMsgAsync(long msgId, IObject query, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
@@ -58,7 +57,8 @@ Stats = new Stats(messagesQueue);
 
 var rpcResponse = new RpcMessage<IObject>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new InvokeAfterMsg(){
+var methodBody = new InvokeAfterMsg
+{
 MsgId = msgId,
 Query = query,
 };
@@ -73,7 +73,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<IObject>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new InvokeAfterMsgs(){
+var methodBody = new InvokeAfterMsgs
+{
 MsgIds = msgIds,
 Query = query,
 };
@@ -88,7 +89,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<IObject>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new InitConnection(){
+var methodBody = new InitConnection
+{
 ApiId = apiId,
 DeviceModel = deviceModel,
 SystemVersion = systemVersion,
@@ -111,7 +113,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<IObject>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new InvokeWithLayer(){
+var methodBody = new InvokeWithLayer
+{
 Layer = layer,
 Query = query,
 };
@@ -126,7 +129,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<IObject>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new InvokeWithoutUpdates(){
+var methodBody = new InvokeWithoutUpdates
+{
 Query = query,
 };
 
@@ -140,7 +144,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<IObject>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new InvokeWithMessagesRange(){
+var methodBody = new InvokeWithMessagesRange
+{
 Range = range,
 Query = query,
 };
@@ -155,7 +160,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<IObject>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new InvokeWithTakeout(){
+var methodBody = new InvokeWithTakeout
+{
 TakeoutId = takeoutId,
 Query = query,
 };

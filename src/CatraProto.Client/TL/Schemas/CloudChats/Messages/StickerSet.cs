@@ -13,14 +13,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("set")]
-		public override CloudChats.StickerSetBase Set { get; set; }
+[JsonPropertyName("set")] public override CloudChats.StickerSetBase Set { get; set; }
 
-[JsonPropertyName("packs")]
-		public override IList<StickerPackBase> Packs { get; set; }
+[JsonPropertyName("packs")] public override IList<StickerPackBase> Packs { get; set; }
 
-[JsonPropertyName("documents")]
-		public override IList<DocumentBase> Documents { get; set; }
+[JsonPropertyName("documents")] public override IList<DocumentBase> Documents { get; set; }
 
         
 		public override void UpdateFlags() 

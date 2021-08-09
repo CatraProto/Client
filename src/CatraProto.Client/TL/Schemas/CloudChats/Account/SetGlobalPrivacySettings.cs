@@ -1,7 +1,9 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using System.Text.Json.Serialization;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -17,13 +19,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(GlobalPrivacySettingsBase);
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.GlobalPrivacySettingsBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
 [JsonPropertyName("settings")]
-		public GlobalPrivacySettingsBase Settings { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.GlobalPrivacySettingsBase Settings { get; set; }
 
 
 		public void UpdateFlags() 
@@ -40,7 +42,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 		public void Deserialize(Reader reader)
 		{
-			Settings = reader.Read<GlobalPrivacySettingsBase>();
+			Settings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.GlobalPrivacySettingsBase>();
 
 		}
 	}

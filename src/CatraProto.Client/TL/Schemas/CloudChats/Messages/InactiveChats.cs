@@ -16,11 +16,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("dates")]
 		public override IList<int> Dates { get; set; }
 
-[JsonPropertyName("chats")]
-		public override IList<ChatBase> Chats { get; set; }
+[JsonPropertyName("chats")] public override IList<ChatBase> Chats { get; set; }
 
-[JsonPropertyName("users")]
-		public override IList<UserBase> Users { get; set; }
+[JsonPropertyName("users")] public override IList<UserBase> Users { get; set; }
 
         
 		public override void UpdateFlags() 

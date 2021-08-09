@@ -13,17 +13,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("Dialogs_")]
-		public IList<DialogBase> Dialogs_ { get; set; }
+[JsonPropertyName("Dialogs_")] public IList<DialogBase> Dialogs_ { get; set; }
 
-[JsonPropertyName("messages")]
-		public IList<MessageBase> Messages { get; set; }
+[JsonPropertyName("messages")] public IList<MessageBase> Messages { get; set; }
 
-[JsonPropertyName("chats")]
-		public IList<ChatBase> Chats { get; set; }
+[JsonPropertyName("chats")] public IList<ChatBase> Chats { get; set; }
 
-[JsonPropertyName("users")]
-		public IList<UserBase> Users { get; set; }
+[JsonPropertyName("users")] public IList<UserBase> Users { get; set; }
 
         
 		public override void UpdateFlags() 

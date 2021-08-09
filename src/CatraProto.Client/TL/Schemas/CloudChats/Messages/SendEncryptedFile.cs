@@ -20,8 +20,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(SentEncryptedMessageBase);
+[JsonIgnore] Type IMethod.Type { get; init; } = typeof(SentEncryptedMessageBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -32,8 +31,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("silent")]
 		public bool Silent { get; set; }
 
-[JsonPropertyName("peer")]
-		public InputEncryptedChatBase Peer { get; set; }
+[JsonPropertyName("peer")] public InputEncryptedChatBase Peer { get; set; }
 
 [JsonPropertyName("random_id")]
 		public long RandomId { get; set; }
@@ -41,8 +39,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("data")]
 		public byte[] Data { get; set; }
 
-[JsonPropertyName("file")]
-		public InputEncryptedFileBase File { get; set; }
+[JsonPropertyName("file")] public InputEncryptedFileBase File { get; set; }
 
 
 		public void UpdateFlags() 

@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputBotInlineMessageMediaGeo : InputBotInlineMessageBase
+	public partial class InputBotInlineMessageMediaGeo : CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -24,7 +27,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Flags { get; set; }
 
 [JsonPropertyName("geo_point")]
-		public InputGeoPointBase GeoPoint { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase GeoPoint { get; set; }
 
 [JsonPropertyName("heading")]
 		public int? Heading { get; set; }
@@ -36,7 +39,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int? ProximityNotificationRadius { get; set; }
 
 [JsonPropertyName("reply_markup")]
-		public override ReplyMarkupBase ReplyMarkup { get; set; }
+		public override CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase ReplyMarkup { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -80,7 +83,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			GeoPoint = reader.Read<InputGeoPointBase>();
+			GeoPoint = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				Heading = reader.Read<int>();
@@ -98,7 +101,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				ReplyMarkup = reader.Read<ReplyMarkupBase>();
+				ReplyMarkup = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase>();
 			}
 
 

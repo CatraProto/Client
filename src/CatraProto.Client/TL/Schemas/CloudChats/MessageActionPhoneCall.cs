@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageActionPhoneCall : MessageActionBase
+	public partial class MessageActionPhoneCall : CatraProto.Client.TL.Schemas.CloudChats.MessageActionBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -29,7 +32,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public long CallId { get; set; }
 
 [JsonPropertyName("reason")]
-		public PhoneCallDiscardReasonBase Reason { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PhoneCallDiscardReasonBase Reason { get; set; }
 
 [JsonPropertyName("duration")]
 		public int? Duration { get; set; }
@@ -69,7 +72,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			CallId = reader.Read<long>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Reason = reader.Read<PhoneCallDiscardReasonBase>();
+				Reason = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhoneCallDiscardReasonBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))

@@ -1,10 +1,14 @@
+using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelAdminLogEventActionDefaultBannedRights : ChannelAdminLogEventActionBase
+	public partial class ChannelAdminLogEventActionDefaultBannedRights : CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionBase
 	{
 
 
@@ -13,10 +17,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("prev_banned_rights")]
-		public ChatBannedRightsBase PrevBannedRights { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase PrevBannedRights { get; set; }
 
 [JsonPropertyName("new_banned_rights")]
-		public ChatBannedRightsBase NewBannedRights { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase NewBannedRights { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -34,8 +38,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			PrevBannedRights = reader.Read<ChatBannedRightsBase>();
-			NewBannedRights = reader.Read<ChatBannedRightsBase>();
+			PrevBannedRights = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase>();
+			NewBannedRights = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase>();
 
 		}
 	}

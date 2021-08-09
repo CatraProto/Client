@@ -15,8 +15,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("date")]
 		public override int Date { get; set; }
 
-[JsonPropertyName("file")]
-		public EncryptedFileBase File { get; set; }
+[JsonPropertyName("file")] public EncryptedFileBase File { get; set; }
 
         
 		public override void UpdateFlags() 

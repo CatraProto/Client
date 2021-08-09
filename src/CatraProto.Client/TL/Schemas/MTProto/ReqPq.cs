@@ -1,9 +1,9 @@
 using System;
-using System.Numerics;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
-using CatraProto.TL.Exceptions;
+using System.Text.Json.Serialization;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -19,13 +19,13 @@ namespace CatraProto.Client.TL.Schemas.MTProto
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(ResPQBase);
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.ResPQBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
 [JsonPropertyName("nonce")]
-		public BigInteger Nonce { get; set; }
+		public System.Numerics.BigInteger Nonce { get; set; }
 
 
 		public void UpdateFlags() 
@@ -36,17 +36,13 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 		public void Serialize(Writer writer)
 		{
             if(ConstructorId != 0) writer.Write(ConstructorId);
-			var sizeNonce = Nonce.GetByteCount();
-			if(sizeNonce != 16){
-				throw new SerializationException($"ByteSize mismatch, should be 16bytes got {sizeNonce}bytes", SerializationException.SerializationErrors.BitSizeMismatch);
-			}
 			writer.Write(Nonce);
 
 		}
 
 		public void Deserialize(Reader reader)
 		{
-			Nonce = reader.Read<BigInteger>(128);
+			Nonce = reader.Read<System.Numerics.BigInteger>(128);
 
 		}
 	}

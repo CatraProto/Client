@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class DialogFilter : DialogFilterBase
+	public partial class DialogFilter : CatraProto.Client.TL.Schemas.CloudChats.DialogFilterBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -63,13 +65,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override string Emoticon { get; set; }
 
 [JsonPropertyName("pinned_peers")]
-		public override IList<InputPeerBase> PinnedPeers { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> PinnedPeers { get; set; }
 
 [JsonPropertyName("include_peers")]
-		public override IList<InputPeerBase> IncludePeers { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> IncludePeers { get; set; }
 
 [JsonPropertyName("exclude_peers")]
-		public override IList<InputPeerBase> ExcludePeers { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> ExcludePeers { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -122,9 +124,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 				Emoticon = reader.Read<string>();
 			}
 
-			PinnedPeers = reader.ReadVector<InputPeerBase>();
-			IncludePeers = reader.ReadVector<InputPeerBase>();
-			ExcludePeers = reader.ReadVector<InputPeerBase>();
+			PinnedPeers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+			IncludePeers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+			ExcludePeers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
 
 		}
 	}

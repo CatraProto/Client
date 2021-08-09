@@ -16,8 +16,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Langpack
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(LangPackLanguageBase);
+[JsonIgnore] Type IMethod.Type { get; init; } = typeof(LangPackLanguageBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;

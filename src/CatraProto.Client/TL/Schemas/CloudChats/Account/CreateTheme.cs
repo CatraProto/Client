@@ -1,7 +1,9 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using System.Text.Json.Serialization;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -22,7 +24,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(ThemeBase);
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.ThemeBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -37,10 +39,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		public string Title { get; set; }
 
 [JsonPropertyName("document")]
-		public InputDocumentBase Document { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase Document { get; set; }
 
 [JsonPropertyName("settings")]
-		public InputThemeSettingsBase Settings { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputThemeSettingsBase Settings { get; set; }
 
 
 		public void UpdateFlags() 
@@ -77,12 +79,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 			Title = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				Document = reader.Read<InputDocumentBase>();
+				Document = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				Settings = reader.Read<InputThemeSettingsBase>();
+				Settings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputThemeSettingsBase>();
 			}
 
 

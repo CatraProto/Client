@@ -20,8 +20,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(bool);
+[JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -32,8 +31,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("unread")]
 		public bool Unread { get; set; }
 
-[JsonPropertyName("peer")]
-		public InputDialogPeerBase Peer { get; set; }
+[JsonPropertyName("peer")] public InputDialogPeerBase Peer { get; set; }
 
 
 		public void UpdateFlags() 

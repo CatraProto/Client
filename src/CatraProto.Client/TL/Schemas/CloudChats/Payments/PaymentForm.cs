@@ -35,8 +35,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 [JsonPropertyName("bot_id")]
 		public override int BotId { get; set; }
 
-[JsonPropertyName("invoice")]
-		public override InvoiceBase Invoice { get; set; }
+[JsonPropertyName("invoice")] public override InvoiceBase Invoice { get; set; }
 
 [JsonPropertyName("provider_id")]
 		public override int ProviderId { get; set; }
@@ -47,17 +46,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 [JsonPropertyName("native_provider")]
 		public override string NativeProvider { get; set; }
 
-[JsonPropertyName("native_params")]
-		public override DataJSONBase NativeParams { get; set; }
+[JsonPropertyName("native_params")] public override DataJSONBase NativeParams { get; set; }
 
-[JsonPropertyName("saved_info")]
-		public override PaymentRequestedInfoBase SavedInfo { get; set; }
+[JsonPropertyName("saved_info")] public override PaymentRequestedInfoBase SavedInfo { get; set; }
 
 [JsonPropertyName("saved_credentials")]
-		public override PaymentSavedCredentialsBase SavedCredentials { get; set; }
+public override PaymentSavedCredentialsBase SavedCredentials { get; set; }
 
-[JsonPropertyName("users")]
-		public override IList<UserBase> Users { get; set; }
+[JsonPropertyName("users")] public override IList<UserBase> Users { get; set; }
 
         
 		public override void UpdateFlags() 

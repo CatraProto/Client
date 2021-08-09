@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-	public partial class Country : CountryBase
+	public partial class Country : CatraProto.Client.TL.Schemas.CloudChats.Help.CountryBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -35,7 +37,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 		public override string Name { get; set; }
 
 [JsonPropertyName("country_codes")]
-		public override IList<CountryCodeBase> CountryCodes { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.Help.CountryCodeBase> CountryCodes { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -72,7 +74,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 				Name = reader.Read<string>();
 			}
 
-			CountryCodes = reader.ReadVector<CountryCodeBase>();
+			CountryCodes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.Help.CountryCodeBase>();
 
 		}
 	}

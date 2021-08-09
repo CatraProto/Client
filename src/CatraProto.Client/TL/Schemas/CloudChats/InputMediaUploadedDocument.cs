@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputMediaUploadedDocument : InputMediaBase
+	public partial class InputMediaUploadedDocument : CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -32,19 +34,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public bool ForceFile { get; set; }
 
 [JsonPropertyName("file")]
-		public InputFileBase File { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase File { get; set; }
 
 [JsonPropertyName("thumb")]
-		public InputFileBase Thumb { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase Thumb { get; set; }
 
 [JsonPropertyName("mime_type")]
 		public string MimeType { get; set; }
 
 [JsonPropertyName("attributes")]
-		public IList<DocumentAttributeBase> Attributes { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase> Attributes { get; set; }
 
 [JsonPropertyName("stickers")]
-		public IList<InputDocumentBase> Stickers { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase> Stickers { get; set; }
 
 [JsonPropertyName("ttl_seconds")]
 		public int? TtlSeconds { get; set; }
@@ -91,17 +93,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = reader.Read<int>();
 			NosoundVideo = FlagsHelper.IsFlagSet(Flags, 3);
 			ForceFile = FlagsHelper.IsFlagSet(Flags, 4);
-			File = reader.Read<InputFileBase>();
+			File = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				Thumb = reader.Read<InputFileBase>();
+				Thumb = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
 			}
 
 			MimeType = reader.Read<string>();
-			Attributes = reader.ReadVector<DocumentAttributeBase>();
+			Attributes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Stickers = reader.ReadVector<InputDocumentBase>();
+				Stickers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))

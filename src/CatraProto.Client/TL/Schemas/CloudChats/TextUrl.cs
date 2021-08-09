@@ -1,10 +1,14 @@
+using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class TextUrl : RichTextBase
+	public partial class TextUrl : CatraProto.Client.TL.Schemas.CloudChats.RichTextBase
 	{
 
 
@@ -13,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("text")]
-		public RichTextBase Text { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Text { get; set; }
 
 [JsonPropertyName("url")]
 		public string Url { get; set; }
@@ -38,7 +42,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Text = reader.Read<RichTextBase>();
+			Text = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
 			Url = reader.Read<string>();
 			WebpageId = reader.Read<long>();
 

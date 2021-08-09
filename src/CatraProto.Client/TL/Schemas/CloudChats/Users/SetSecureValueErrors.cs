@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using System.Text.Json.Serialization;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -18,16 +19,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Users
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(bool);
+		System.Type IMethod.Type { get; init; } = typeof(bool);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
 [JsonPropertyName("id")]
-		public InputUserBase Id { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase Id { get; set; }
 
 [JsonPropertyName("errors")]
-		public IList<SecureValueErrorBase> Errors { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase> Errors { get; set; }
 
 
 		public void UpdateFlags() 
@@ -45,8 +46,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Users
 
 		public void Deserialize(Reader reader)
 		{
-			Id = reader.Read<InputUserBase>();
-			Errors = reader.ReadVector<SecureValueErrorBase>();
+			Id = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
+			Errors = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase>();
 
 		}
 	}

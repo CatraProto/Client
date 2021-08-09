@@ -25,10 +25,10 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 
 	    public async Task<RpcMessage<MessagesBase>> GetMessagesAsync(IList<InputMessageBase> id, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<MessagesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetMessages(){
+			var rpcResponse = new RpcMessage<MessagesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetMessages
+			{
 Id = id,
 };
 
@@ -39,10 +39,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<DialogsBase>> GetDialogsAsync(int offsetDate, int offsetId, InputPeerBase offsetPeer, int limit, int hash, bool excludePinned = true, int? folderId = null, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<DialogsBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetDialogs(){
+			var rpcResponse = new RpcMessage<DialogsBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetDialogs
+			{
 OffsetDate = offsetDate,
 OffsetId = offsetId,
 OffsetPeer = offsetPeer,
@@ -59,10 +59,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<MessagesBase>> GetHistoryAsync(InputPeerBase peer, int offsetId, int offsetDate, int addOffset, int limit, int maxId, int minId, int hash, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<MessagesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetHistory(){
+			var rpcResponse = new RpcMessage<MessagesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetHistory
+			{
 Peer = peer,
 OffsetId = offsetId,
 OffsetDate = offsetDate,
@@ -80,10 +80,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<MessagesBase>> SearchAsync(InputPeerBase peer, string q, MessagesFilterBase filter, int minDate, int maxDate, int offsetId, int addOffset, int limit, int maxId, int minId, int hash, InputPeerBase? fromId = null, int? topMsgId = null, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<MessagesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new Search(){
+			var rpcResponse = new RpcMessage<MessagesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new Search
+			{
 Peer = peer,
 Q = q,
 Filter = filter,
@@ -106,10 +106,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<AffectedMessagesBase>> ReadHistoryAsync(InputPeerBase peer, int maxId, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<AffectedMessagesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ReadHistory(){
+			var rpcResponse = new RpcMessage<AffectedMessagesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new ReadHistory
+			{
 Peer = peer,
 MaxId = maxId,
 };
@@ -121,10 +121,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<AffectedHistoryBase>> DeleteHistoryAsync(InputPeerBase peer, int maxId, bool justClear = true, bool revoke = true, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<AffectedHistoryBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new DeleteHistory(){
+			var rpcResponse = new RpcMessage<AffectedHistoryBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new DeleteHistory
+			{
 Peer = peer,
 MaxId = maxId,
 JustClear = justClear,
@@ -138,10 +138,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<AffectedMessagesBase>> DeleteMessagesAsync(IList<int> id, bool revoke = true, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<AffectedMessagesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new DeleteMessages(){
+			var rpcResponse = new RpcMessage<AffectedMessagesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new DeleteMessages
+			{
 Id = id,
 Revoke = revoke,
 };
@@ -153,11 +153,11 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<RpcVector<ReceivedNotifyMessageBase>>> ReceivedMessagesAsync(int maxId, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<RpcVector<ReceivedNotifyMessageBase>>();
-rpcResponse.Response = new RpcVector<ReceivedNotifyMessageBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ReceivedMessages(){
+			var rpcResponse = new RpcMessage<RpcVector<ReceivedNotifyMessageBase>>();
+			rpcResponse.Response = new RpcVector<ReceivedNotifyMessageBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new ReceivedMessages
+			{
 MaxId = maxId,
 };
 
@@ -171,7 +171,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SetTyping(){
+var methodBody = new SetTyping
+{
 Peer = peer,
 Action = action,
 TopMsgId = topMsgId,
@@ -184,10 +185,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UpdatesBase>> SendMessageAsync(InputPeerBase peer, string message, long randomId, bool noWebpage = true, bool silent = true, bool background = true, bool clearDraft = true, int? replyToMsgId = null, ReplyMarkupBase? replyMarkup = null, IList<MessageEntityBase>? entities = null, int? scheduleDate = null, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UpdatesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SendMessage(){
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new SendMessage
+			{
 Peer = peer,
 Message = message,
 RandomId = randomId,
@@ -208,10 +209,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UpdatesBase>> SendMediaAsync(InputPeerBase peer, InputMediaBase media, string message, long randomId, bool silent = true, bool background = true, bool clearDraft = true, int? replyToMsgId = null, ReplyMarkupBase? replyMarkup = null, IList<MessageEntityBase>? entities = null, int? scheduleDate = null, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UpdatesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SendMedia(){
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new SendMedia
+			{
 Peer = peer,
 Media = media,
 Message = message,
@@ -232,10 +233,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UpdatesBase>> ForwardMessagesAsync(InputPeerBase fromPeer, IList<int> id, IList<long> randomId, InputPeerBase toPeer, bool silent = true, bool background = true, bool withMyScore = true, int? scheduleDate = null, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UpdatesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ForwardMessages(){
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new ForwardMessages
+			{
 FromPeer = fromPeer,
 Id = id,
 RandomId = randomId,
@@ -256,7 +257,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ReportSpam(){
+var methodBody = new ReportSpam
+{
 Peer = peer,
 };
 
@@ -267,10 +269,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<PeerSettingsBase>> GetPeerSettingsAsync(InputPeerBase peer, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<PeerSettingsBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetPeerSettings(){
+			var rpcResponse = new RpcMessage<PeerSettingsBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetPeerSettings
+			{
 Peer = peer,
 };
 
@@ -284,7 +286,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new Report(){
+var methodBody = new Report
+{
 Peer = peer,
 Id = id,
 Reason = reason,
@@ -297,10 +300,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<ChatsBase>> GetChatsAsync(IList<int> id, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<ChatsBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetChats(){
+			var rpcResponse = new RpcMessage<ChatsBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetChats
+			{
 Id = id,
 };
 
@@ -311,10 +314,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<ChatFullBase>> GetFullChatAsync(int chatId, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<ChatFullBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetFullChat(){
+			var rpcResponse = new RpcMessage<ChatFullBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetFullChat
+			{
 ChatId = chatId,
 };
 
@@ -325,10 +328,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UpdatesBase>> EditChatTitleAsync(int chatId, string title, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UpdatesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new EditChatTitle(){
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new EditChatTitle
+			{
 ChatId = chatId,
 Title = title,
 };
@@ -340,10 +343,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UpdatesBase>> EditChatPhotoAsync(int chatId, InputChatPhotoBase photo, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UpdatesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new EditChatPhoto(){
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new EditChatPhoto
+			{
 ChatId = chatId,
 Photo = photo,
 };
@@ -355,10 +358,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UpdatesBase>> AddChatUserAsync(int chatId, InputUserBase userId, int fwdLimit, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UpdatesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new AddChatUser(){
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new AddChatUser
+			{
 ChatId = chatId,
 UserId = userId,
 FwdLimit = fwdLimit,
@@ -371,10 +374,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UpdatesBase>> DeleteChatUserAsync(int chatId, InputUserBase userId, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UpdatesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new DeleteChatUser(){
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new DeleteChatUser
+			{
 ChatId = chatId,
 UserId = userId,
 };
@@ -386,10 +389,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UpdatesBase>> CreateChatAsync(IList<InputUserBase> users, string title, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UpdatesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new CreateChat(){
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new CreateChat
+			{
 Users = users,
 Title = title,
 };
@@ -401,10 +404,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<DhConfigBase>> GetDhConfigAsync(int version, int randomLength, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<DhConfigBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetDhConfig(){
+			var rpcResponse = new RpcMessage<DhConfigBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetDhConfig
+			{
 Version = version,
 RandomLength = randomLength,
 };
@@ -416,10 +419,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<EncryptedChatBase>> RequestEncryptionAsync(InputUserBase userId, int randomId, byte[] gA, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<EncryptedChatBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new RequestEncryption(){
+			var rpcResponse = new RpcMessage<EncryptedChatBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new RequestEncryption
+			{
 UserId = userId,
 RandomId = randomId,
 GA = gA,
@@ -432,10 +435,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<EncryptedChatBase>> AcceptEncryptionAsync(InputEncryptedChatBase peer, byte[] gB, long keyFingerprint, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<EncryptedChatBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new AcceptEncryption(){
+			var rpcResponse = new RpcMessage<EncryptedChatBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new AcceptEncryption
+			{
 Peer = peer,
 GB = gB,
 KeyFingerprint = keyFingerprint,
@@ -451,7 +454,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new DiscardEncryption(){
+var methodBody = new DiscardEncryption
+{
 ChatId = chatId,
 };
 
@@ -465,7 +469,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SetEncryptedTyping(){
+var methodBody = new SetEncryptedTyping
+{
 Peer = peer,
 Typing = typing,
 };
@@ -480,7 +485,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ReadEncryptedHistory(){
+var methodBody = new ReadEncryptedHistory
+{
 Peer = peer,
 MaxDate = maxDate,
 };
@@ -492,10 +498,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<SentEncryptedMessageBase>> SendEncryptedAsync(InputEncryptedChatBase peer, long randomId, byte[] data, bool silent = true, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<SentEncryptedMessageBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SendEncrypted(){
+			var rpcResponse = new RpcMessage<SentEncryptedMessageBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new SendEncrypted
+			{
 Peer = peer,
 RandomId = randomId,
 Data = data,
@@ -509,10 +515,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<SentEncryptedMessageBase>> SendEncryptedFileAsync(InputEncryptedChatBase peer, long randomId, byte[] data, InputEncryptedFileBase file, bool silent = true, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<SentEncryptedMessageBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SendEncryptedFile(){
+			var rpcResponse = new RpcMessage<SentEncryptedMessageBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new SendEncryptedFile
+			{
 Peer = peer,
 RandomId = randomId,
 Data = data,
@@ -527,10 +533,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<SentEncryptedMessageBase>> SendEncryptedServiceAsync(InputEncryptedChatBase peer, long randomId, byte[] data, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<SentEncryptedMessageBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SendEncryptedService(){
+			var rpcResponse = new RpcMessage<SentEncryptedMessageBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new SendEncryptedService
+			{
 Peer = peer,
 RandomId = randomId,
 Data = data,
@@ -543,11 +549,11 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<RpcVector<long>>> ReceivedQueueAsync(int maxQts, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<RpcVector<long>>();
-rpcResponse.Response = new RpcVector<long>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ReceivedQueue(){
+			var rpcResponse = new RpcMessage<RpcVector<long>>();
+			rpcResponse.Response = new RpcVector<long>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new ReceivedQueue
+			{
 MaxQts = maxQts,
 };
 
@@ -561,7 +567,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ReportEncryptedSpam(){
+var methodBody = new ReportEncryptedSpam
+{
 Peer = peer,
 };
 
@@ -572,10 +579,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<AffectedMessagesBase>> ReadMessageContentsAsync(IList<int> id, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<AffectedMessagesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ReadMessageContents(){
+			var rpcResponse = new RpcMessage<AffectedMessagesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new ReadMessageContents
+			{
 Id = id,
 };
 
@@ -586,10 +593,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<StickersBase>> GetStickersAsync(string emoticon, int hash, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<StickersBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetStickers(){
+			var rpcResponse = new RpcMessage<StickersBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetStickers
+			{
 Emoticon = emoticon,
 Hash = hash,
 };
@@ -601,10 +608,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<AllStickersBase>> GetAllStickersAsync(int hash, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<AllStickersBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetAllStickers(){
+			var rpcResponse = new RpcMessage<AllStickersBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetAllStickers
+			{
 Hash = hash,
 };
 
@@ -615,10 +622,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<MessageMediaBase>> GetWebPagePreviewAsync(string message, IList<MessageEntityBase>? entities = null, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<MessageMediaBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetWebPagePreview(){
+			var rpcResponse = new RpcMessage<MessageMediaBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetWebPagePreview
+			{
 Message = message,
 Entities = entities,
 };
@@ -630,10 +637,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<ExportedChatInviteBase>> ExportChatInviteAsync(InputPeerBase peer, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<ExportedChatInviteBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ExportChatInvite(){
+			var rpcResponse = new RpcMessage<ExportedChatInviteBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new ExportChatInvite
+			{
 Peer = peer,
 };
 
@@ -644,10 +651,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<ChatInviteBase>> CheckChatInviteAsync(string hash, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<ChatInviteBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new CheckChatInvite(){
+			var rpcResponse = new RpcMessage<ChatInviteBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new CheckChatInvite
+			{
 Hash = hash,
 };
 
@@ -658,10 +665,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UpdatesBase>> ImportChatInviteAsync(string hash, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UpdatesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ImportChatInvite(){
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new ImportChatInvite
+			{
 Hash = hash,
 };
 
@@ -672,10 +679,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<StickerSetBase>> GetStickerSetAsync(InputStickerSetBase stickerset, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<StickerSetBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetStickerSet(){
+			var rpcResponse = new RpcMessage<StickerSetBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetStickerSet
+			{
 Stickerset = stickerset,
 };
 
@@ -686,10 +693,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<StickerSetInstallResultBase>> InstallStickerSetAsync(InputStickerSetBase stickerset, bool archived, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<StickerSetInstallResultBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new InstallStickerSet(){
+			var rpcResponse = new RpcMessage<StickerSetInstallResultBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new InstallStickerSet
+			{
 Stickerset = stickerset,
 Archived = archived,
 };
@@ -704,7 +711,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new UninstallStickerSet(){
+var methodBody = new UninstallStickerSet
+{
 Stickerset = stickerset,
 };
 
@@ -715,10 +723,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UpdatesBase>> StartBotAsync(InputUserBase bot, InputPeerBase peer, long randomId, string startParam, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UpdatesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new StartBot(){
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new StartBot
+			{
 Bot = bot,
 Peer = peer,
 RandomId = randomId,
@@ -732,10 +740,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<MessageViewsBase>> GetMessagesViewsAsync(InputPeerBase peer, IList<int> id, bool increment, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<MessageViewsBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetMessagesViews(){
+			var rpcResponse = new RpcMessage<MessageViewsBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetMessagesViews
+			{
 Peer = peer,
 Id = id,
 Increment = increment,
@@ -751,7 +759,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new EditChatAdmin(){
+var methodBody = new EditChatAdmin
+{
 ChatId = chatId,
 UserId = userId,
 IsAdmin = isAdmin,
@@ -764,10 +773,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UpdatesBase>> MigrateChatAsync(int chatId, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UpdatesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new MigrateChat(){
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new MigrateChat
+			{
 ChatId = chatId,
 };
 
@@ -778,10 +787,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<MessagesBase>> SearchGlobalAsync(string q, MessagesFilterBase filter, int minDate, int maxDate, int offsetRate, InputPeerBase offsetPeer, int offsetId, int limit, int? folderId = null, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<MessagesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SearchGlobal(){
+			var rpcResponse = new RpcMessage<MessagesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new SearchGlobal
+			{
 Q = q,
 Filter = filter,
 MinDate = minDate,
@@ -803,7 +812,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ReorderStickerSets(){
+var methodBody = new ReorderStickerSets
+{
 Order = order,
 Masks = masks,
 };
@@ -815,10 +825,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<DocumentBase>> GetDocumentByHashAsync(byte[] sha256, int size, string mimeType, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<DocumentBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetDocumentByHash(){
+			var rpcResponse = new RpcMessage<DocumentBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetDocumentByHash
+			{
 Sha256 = sha256,
 Size = size,
 MimeType = mimeType,
@@ -831,10 +841,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<SavedGifsBase>> GetSavedGifsAsync(int hash, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<SavedGifsBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetSavedGifs(){
+			var rpcResponse = new RpcMessage<SavedGifsBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetSavedGifs
+			{
 Hash = hash,
 };
 
@@ -848,7 +858,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SaveGif(){
+var methodBody = new SaveGif
+{
 Id = id,
 Unsave = unsave,
 };
@@ -860,10 +871,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<BotResultsBase>> GetInlineBotResultsAsync(InputUserBase bot, InputPeerBase peer, string query, string offset, InputGeoPointBase? geoPoint = null, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<BotResultsBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetInlineBotResults(){
+			var rpcResponse = new RpcMessage<BotResultsBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetInlineBotResults
+			{
 Bot = bot,
 Peer = peer,
 Query = query,
@@ -881,7 +892,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SetInlineBotResults(){
+var methodBody = new SetInlineBotResults
+{
 QueryId = queryId,
 Results = results,
 CacheTime = cacheTime,
@@ -898,10 +910,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UpdatesBase>> SendInlineBotResultAsync(InputPeerBase peer, long randomId, long queryId, string id, bool silent = true, bool background = true, bool clearDraft = true, bool hideVia = true, int? replyToMsgId = null, int? scheduleDate = null, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UpdatesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SendInlineBotResult(){
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new SendInlineBotResult
+			{
 Peer = peer,
 RandomId = randomId,
 QueryId = queryId,
@@ -921,10 +933,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<MessageEditDataBase>> GetMessageEditDataAsync(InputPeerBase peer, int id, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<MessageEditDataBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetMessageEditData(){
+			var rpcResponse = new RpcMessage<MessageEditDataBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetMessageEditData
+			{
 Peer = peer,
 Id = id,
 };
@@ -936,10 +948,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UpdatesBase>> EditMessageAsync(InputPeerBase peer, int id, bool noWebpage = true, string? message = null, InputMediaBase? media = null, ReplyMarkupBase? replyMarkup = null, IList<MessageEntityBase>? entities = null, int? scheduleDate = null, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UpdatesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new EditMessage(){
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new EditMessage
+			{
 Peer = peer,
 Id = id,
 NoWebpage = noWebpage,
@@ -960,7 +972,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new EditInlineBotMessage(){
+var methodBody = new EditInlineBotMessage
+{
 Id = id,
 NoWebpage = noWebpage,
 Message = message,
@@ -976,10 +989,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<BotCallbackAnswerBase>> GetBotCallbackAnswerAsync(InputPeerBase peer, int msgId, bool game = true, byte[]? data = null, InputCheckPasswordSRPBase? password = null, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<BotCallbackAnswerBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetBotCallbackAnswer(){
+			var rpcResponse = new RpcMessage<BotCallbackAnswerBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetBotCallbackAnswer
+			{
 Peer = peer,
 MsgId = msgId,
 Game = game,
@@ -997,7 +1010,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SetBotCallbackAnswer(){
+var methodBody = new SetBotCallbackAnswer
+{
 QueryId = queryId,
 CacheTime = cacheTime,
 Alert = alert,
@@ -1012,10 +1026,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<PeerDialogsBase>> GetPeerDialogsAsync(IList<InputDialogPeerBase> peers, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<PeerDialogsBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetPeerDialogs(){
+			var rpcResponse = new RpcMessage<PeerDialogsBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetPeerDialogs
+			{
 Peers = peers,
 };
 
@@ -1029,7 +1043,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SaveDraft(){
+var methodBody = new SaveDraft
+{
 Peer = peer,
 Message = message,
 NoWebpage = noWebpage,
@@ -1044,10 +1059,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UpdatesBase>> GetAllDraftsAsync(MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UpdatesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetAllDrafts(){
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetAllDrafts
+			{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -1057,10 +1072,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<FeaturedStickersBase>> GetFeaturedStickersAsync(int hash, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<FeaturedStickersBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetFeaturedStickers(){
+			var rpcResponse = new RpcMessage<FeaturedStickersBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetFeaturedStickers
+			{
 Hash = hash,
 };
 
@@ -1074,7 +1089,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ReadFeaturedStickers(){
+var methodBody = new ReadFeaturedStickers
+{
 Id = id,
 };
 
@@ -1085,10 +1101,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<RecentStickersBase>> GetRecentStickersAsync(int hash, bool attached = true, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<RecentStickersBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetRecentStickers(){
+			var rpcResponse = new RpcMessage<RecentStickersBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetRecentStickers
+			{
 Hash = hash,
 Attached = attached,
 };
@@ -1103,7 +1119,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SaveRecentSticker(){
+var methodBody = new SaveRecentSticker
+{
 Id = id,
 Unsave = unsave,
 Attached = attached,
@@ -1119,7 +1136,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ClearRecentStickers(){
+var methodBody = new ClearRecentStickers
+{
 Attached = attached,
 };
 
@@ -1130,10 +1148,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<ArchivedStickersBase>> GetArchivedStickersAsync(long offsetId, int limit, bool masks = true, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<ArchivedStickersBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetArchivedStickers(){
+			var rpcResponse = new RpcMessage<ArchivedStickersBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetArchivedStickers
+			{
 OffsetId = offsetId,
 Limit = limit,
 Masks = masks,
@@ -1146,10 +1164,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<AllStickersBase>> GetMaskStickersAsync(int hash, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<AllStickersBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetMaskStickers(){
+			var rpcResponse = new RpcMessage<AllStickersBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetMaskStickers
+			{
 Hash = hash,
 };
 
@@ -1160,11 +1178,11 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<RpcVector<StickerSetCoveredBase>>> GetAttachedStickersAsync(InputStickeredMediaBase media, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<RpcVector<StickerSetCoveredBase>>();
-rpcResponse.Response = new RpcVector<StickerSetCoveredBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetAttachedStickers(){
+			var rpcResponse = new RpcMessage<RpcVector<StickerSetCoveredBase>>();
+			rpcResponse.Response = new RpcVector<StickerSetCoveredBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetAttachedStickers
+			{
 Media = media,
 };
 
@@ -1175,10 +1193,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UpdatesBase>> SetGameScoreAsync(InputPeerBase peer, int id, InputUserBase userId, int score, bool editMessage = true, bool force = true, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UpdatesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SetGameScore(){
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new SetGameScore
+			{
 Peer = peer,
 Id = id,
 UserId = userId,
@@ -1197,7 +1215,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SetInlineGameScore(){
+var methodBody = new SetInlineGameScore
+{
 Id = id,
 UserId = userId,
 Score = score,
@@ -1212,10 +1231,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<HighScoresBase>> GetGameHighScoresAsync(InputPeerBase peer, int id, InputUserBase userId, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<HighScoresBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetGameHighScores(){
+			var rpcResponse = new RpcMessage<HighScoresBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetGameHighScores
+			{
 Peer = peer,
 Id = id,
 UserId = userId,
@@ -1228,10 +1247,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<HighScoresBase>> GetInlineGameHighScoresAsync(InputBotInlineMessageIDBase id, InputUserBase userId, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<HighScoresBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetInlineGameHighScores(){
+			var rpcResponse = new RpcMessage<HighScoresBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetInlineGameHighScores
+			{
 Id = id,
 UserId = userId,
 };
@@ -1243,10 +1262,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<ChatsBase>> GetCommonChatsAsync(InputUserBase userId, int maxId, int limit, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<ChatsBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetCommonChats(){
+			var rpcResponse = new RpcMessage<ChatsBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetCommonChats
+			{
 UserId = userId,
 MaxId = maxId,
 Limit = limit,
@@ -1259,10 +1278,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<ChatsBase>> GetAllChatsAsync(IList<int> exceptIds, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<ChatsBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetAllChats(){
+			var rpcResponse = new RpcMessage<ChatsBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetAllChats
+			{
 ExceptIds = exceptIds,
 };
 
@@ -1273,10 +1292,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<WebPageBase>> GetWebPageAsync(string url, int hash, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<WebPageBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetWebPage(){
+			var rpcResponse = new RpcMessage<WebPageBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetWebPage
+			{
 Url = url,
 Hash = hash,
 };
@@ -1291,7 +1310,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ToggleDialogPin(){
+var methodBody = new ToggleDialogPin
+{
 Peer = peer,
 Pinned = pinned,
 };
@@ -1306,7 +1326,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ReorderPinnedDialogs(){
+var methodBody = new ReorderPinnedDialogs
+{
 FolderId = folderId,
 Order = order,
 Force = force,
@@ -1319,10 +1340,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<PeerDialogsBase>> GetPinnedDialogsAsync(int folderId, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<PeerDialogsBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetPinnedDialogs(){
+			var rpcResponse = new RpcMessage<PeerDialogsBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetPinnedDialogs
+			{
 FolderId = folderId,
 };
 
@@ -1336,7 +1357,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SetBotShippingResults(){
+var methodBody = new SetBotShippingResults
+{
 QueryId = queryId,
 Error = error,
 ShippingOptions = shippingOptions,
@@ -1352,7 +1374,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SetBotPrecheckoutResults(){
+var methodBody = new SetBotPrecheckoutResults
+{
 QueryId = queryId,
 Success = success,
 Error = error,
@@ -1365,10 +1388,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<MessageMediaBase>> UploadMediaAsync(InputPeerBase peer, InputMediaBase media, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<MessageMediaBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new UploadMedia(){
+			var rpcResponse = new RpcMessage<MessageMediaBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new UploadMedia
+			{
 Peer = peer,
 Media = media,
 };
@@ -1380,10 +1403,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UpdatesBase>> SendScreenshotNotificationAsync(InputPeerBase peer, int replyToMsgId, long randomId, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UpdatesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SendScreenshotNotification(){
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new SendScreenshotNotification
+			{
 Peer = peer,
 ReplyToMsgId = replyToMsgId,
 RandomId = randomId,
@@ -1396,10 +1419,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<FavedStickersBase>> GetFavedStickersAsync(int hash, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<FavedStickersBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetFavedStickers(){
+			var rpcResponse = new RpcMessage<FavedStickersBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetFavedStickers
+			{
 Hash = hash,
 };
 
@@ -1413,7 +1436,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new FaveSticker(){
+var methodBody = new FaveSticker
+{
 Id = id,
 Unfave = unfave,
 };
@@ -1425,10 +1449,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<MessagesBase>> GetUnreadMentionsAsync(InputPeerBase peer, int offsetId, int addOffset, int limit, int maxId, int minId, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<MessagesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetUnreadMentions(){
+			var rpcResponse = new RpcMessage<MessagesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetUnreadMentions
+			{
 Peer = peer,
 OffsetId = offsetId,
 AddOffset = addOffset,
@@ -1444,10 +1468,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<AffectedHistoryBase>> ReadMentionsAsync(InputPeerBase peer, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<AffectedHistoryBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ReadMentions(){
+			var rpcResponse = new RpcMessage<AffectedHistoryBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new ReadMentions
+			{
 Peer = peer,
 };
 
@@ -1458,10 +1482,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<MessagesBase>> GetRecentLocationsAsync(InputPeerBase peer, int limit, int hash, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<MessagesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetRecentLocations(){
+			var rpcResponse = new RpcMessage<MessagesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetRecentLocations
+			{
 Peer = peer,
 Limit = limit,
 Hash = hash,
@@ -1474,10 +1498,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UpdatesBase>> SendMultiMediaAsync(InputPeerBase peer, IList<InputSingleMediaBase> multiMedia, bool silent = true, bool background = true, bool clearDraft = true, int? replyToMsgId = null, int? scheduleDate = null, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UpdatesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SendMultiMedia(){
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new SendMultiMedia
+			{
 Peer = peer,
 MultiMedia = multiMedia,
 Silent = silent,
@@ -1494,10 +1518,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<EncryptedFileBase>> UploadEncryptedFileAsync(InputEncryptedChatBase peer, InputEncryptedFileBase file, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<EncryptedFileBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new UploadEncryptedFile(){
+			var rpcResponse = new RpcMessage<EncryptedFileBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new UploadEncryptedFile
+			{
 Peer = peer,
 File = file,
 };
@@ -1509,10 +1533,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<FoundStickerSetsBase>> SearchStickerSetsAsync(string q, int hash, bool excludeFeatured = true, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<FoundStickerSetsBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SearchStickerSets(){
+			var rpcResponse = new RpcMessage<FoundStickerSetsBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new SearchStickerSets
+			{
 Q = q,
 Hash = hash,
 ExcludeFeatured = excludeFeatured,
@@ -1525,11 +1549,11 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<RpcVector<MessageRangeBase>>> GetSplitRangesAsync(MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<RpcVector<MessageRangeBase>>();
-rpcResponse.Response = new RpcVector<MessageRangeBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetSplitRanges(){
+			var rpcResponse = new RpcMessage<RpcVector<MessageRangeBase>>();
+			rpcResponse.Response = new RpcVector<MessageRangeBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetSplitRanges
+			{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -1542,7 +1566,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new MarkDialogUnread(){
+var methodBody = new MarkDialogUnread
+{
 Peer = peer,
 Unread = unread,
 };
@@ -1554,11 +1579,11 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<RpcVector<DialogPeerBase>>> GetDialogUnreadMarksAsync(MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<RpcVector<DialogPeerBase>>();
-rpcResponse.Response = new RpcVector<DialogPeerBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetDialogUnreadMarks(){
+			var rpcResponse = new RpcMessage<RpcVector<DialogPeerBase>>();
+			rpcResponse.Response = new RpcVector<DialogPeerBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetDialogUnreadMarks
+			{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -1571,7 +1596,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ClearAllDrafts(){
+var methodBody = new ClearAllDrafts
+{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -1581,10 +1607,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UpdatesBase>> UpdatePinnedMessageAsync(InputPeerBase peer, int id, bool silent = true, bool unpin = true, bool pmOneside = true, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UpdatesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new UpdatePinnedMessage(){
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new UpdatePinnedMessage
+			{
 Peer = peer,
 Id = id,
 Silent = silent,
@@ -1599,10 +1625,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UpdatesBase>> SendVoteAsync(InputPeerBase peer, int msgId, IList<byte[]> options, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UpdatesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SendVote(){
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new SendVote
+			{
 Peer = peer,
 MsgId = msgId,
 Options = options,
@@ -1615,10 +1641,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UpdatesBase>> GetPollResultsAsync(InputPeerBase peer, int msgId, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UpdatesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetPollResults(){
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetPollResults
+			{
 Peer = peer,
 MsgId = msgId,
 };
@@ -1630,10 +1656,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<ChatOnlinesBase>> GetOnlinesAsync(InputPeerBase peer, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<ChatOnlinesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetOnlines(){
+			var rpcResponse = new RpcMessage<ChatOnlinesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetOnlines
+			{
 Peer = peer,
 };
 
@@ -1644,10 +1670,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<StatsURLBase>> GetStatsURLAsync(InputPeerBase peer, string pparams, bool dark = true, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<StatsURLBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetStatsURL(){
+			var rpcResponse = new RpcMessage<StatsURLBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetStatsURL
+			{
 Peer = peer,
 Params = pparams,
 Dark = dark,
@@ -1663,7 +1689,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new EditChatAbout(){
+var methodBody = new EditChatAbout
+{
 Peer = peer,
 About = about,
 };
@@ -1675,10 +1702,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UpdatesBase>> EditChatDefaultBannedRightsAsync(InputPeerBase peer, ChatBannedRightsBase bannedRights, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UpdatesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new EditChatDefaultBannedRights(){
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new EditChatDefaultBannedRights
+			{
 Peer = peer,
 BannedRights = bannedRights,
 };
@@ -1690,10 +1717,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<EmojiKeywordsDifferenceBase>> GetEmojiKeywordsAsync(string langCode, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<EmojiKeywordsDifferenceBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetEmojiKeywords(){
+			var rpcResponse = new RpcMessage<EmojiKeywordsDifferenceBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetEmojiKeywords
+			{
 LangCode = langCode,
 };
 
@@ -1704,10 +1731,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<EmojiKeywordsDifferenceBase>> GetEmojiKeywordsDifferenceAsync(string langCode, int fromVersion, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<EmojiKeywordsDifferenceBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetEmojiKeywordsDifference(){
+			var rpcResponse = new RpcMessage<EmojiKeywordsDifferenceBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetEmojiKeywordsDifference
+			{
 LangCode = langCode,
 FromVersion = fromVersion,
 };
@@ -1719,11 +1746,11 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<RpcVector<EmojiLanguageBase>>> GetEmojiKeywordsLanguagesAsync(IList<string> langCodes, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<RpcVector<EmojiLanguageBase>>();
-rpcResponse.Response = new RpcVector<EmojiLanguageBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetEmojiKeywordsLanguages(){
+			var rpcResponse = new RpcMessage<RpcVector<EmojiLanguageBase>>();
+			rpcResponse.Response = new RpcVector<EmojiLanguageBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetEmojiKeywordsLanguages
+			{
 LangCodes = langCodes,
 };
 
@@ -1734,10 +1761,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<EmojiURLBase>> GetEmojiURLAsync(string langCode, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<EmojiURLBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetEmojiURL(){
+			var rpcResponse = new RpcMessage<EmojiURLBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetEmojiURL
+			{
 LangCode = langCode,
 };
 
@@ -1748,11 +1775,11 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<RpcVector<SearchCounterBase>>> GetSearchCountersAsync(InputPeerBase peer, IList<MessagesFilterBase> filters, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<RpcVector<SearchCounterBase>>();
-rpcResponse.Response = new RpcVector<SearchCounterBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetSearchCounters(){
+			var rpcResponse = new RpcMessage<RpcVector<SearchCounterBase>>();
+			rpcResponse.Response = new RpcVector<SearchCounterBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetSearchCounters
+			{
 Peer = peer,
 Filters = filters,
 };
@@ -1764,10 +1791,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UrlAuthResultBase>> RequestUrlAuthAsync(InputPeerBase peer, int msgId, int buttonId, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UrlAuthResultBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new RequestUrlAuth(){
+			var rpcResponse = new RpcMessage<UrlAuthResultBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new RequestUrlAuth
+			{
 Peer = peer,
 MsgId = msgId,
 ButtonId = buttonId,
@@ -1780,10 +1807,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UrlAuthResultBase>> AcceptUrlAuthAsync(InputPeerBase peer, int msgId, int buttonId, bool writeAllowed = true, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UrlAuthResultBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new AcceptUrlAuth(){
+			var rpcResponse = new RpcMessage<UrlAuthResultBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new AcceptUrlAuth
+			{
 Peer = peer,
 MsgId = msgId,
 ButtonId = buttonId,
@@ -1800,7 +1827,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new HidePeerSettingsBar(){
+var methodBody = new HidePeerSettingsBar
+{
 Peer = peer,
 };
 
@@ -1811,10 +1839,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<MessagesBase>> GetScheduledHistoryAsync(InputPeerBase peer, int hash, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<MessagesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetScheduledHistory(){
+			var rpcResponse = new RpcMessage<MessagesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetScheduledHistory
+			{
 Peer = peer,
 Hash = hash,
 };
@@ -1826,10 +1854,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<MessagesBase>> GetScheduledMessagesAsync(InputPeerBase peer, IList<int> id, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<MessagesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetScheduledMessages(){
+			var rpcResponse = new RpcMessage<MessagesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetScheduledMessages
+			{
 Peer = peer,
 Id = id,
 };
@@ -1841,10 +1869,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UpdatesBase>> SendScheduledMessagesAsync(InputPeerBase peer, IList<int> id, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UpdatesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new SendScheduledMessages(){
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new SendScheduledMessages
+			{
 Peer = peer,
 Id = id,
 };
@@ -1856,10 +1884,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<UpdatesBase>> DeleteScheduledMessagesAsync(InputPeerBase peer, IList<int> id, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<UpdatesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new DeleteScheduledMessages(){
+			var rpcResponse = new RpcMessage<UpdatesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new DeleteScheduledMessages
+			{
 Peer = peer,
 Id = id,
 };
@@ -1871,10 +1899,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<VotesListBase>> GetPollVotesAsync(InputPeerBase peer, int id, int limit, byte[]? option = null, string? offset = null, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<VotesListBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetPollVotes(){
+			var rpcResponse = new RpcMessage<VotesListBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetPollVotes
+			{
 Peer = peer,
 Id = id,
 Limit = limit,
@@ -1892,7 +1920,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ToggleStickerSets(){
+var methodBody = new ToggleStickerSets
+{
 Stickersets = stickersets,
 Uninstall = uninstall,
 Archive = archive,
@@ -1906,11 +1935,11 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<RpcVector<DialogFilterBase>>> GetDialogFiltersAsync(MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<RpcVector<DialogFilterBase>>();
-rpcResponse.Response = new RpcVector<DialogFilterBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetDialogFilters(){
+			var rpcResponse = new RpcMessage<RpcVector<DialogFilterBase>>();
+			rpcResponse.Response = new RpcVector<DialogFilterBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetDialogFilters
+			{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -1920,11 +1949,11 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<RpcVector<DialogFilterSuggestedBase>>> GetSuggestedDialogFiltersAsync(MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<RpcVector<DialogFilterSuggestedBase>>();
-rpcResponse.Response = new RpcVector<DialogFilterSuggestedBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetSuggestedDialogFilters(){
+			var rpcResponse = new RpcMessage<RpcVector<DialogFilterSuggestedBase>>();
+			rpcResponse.Response = new RpcVector<DialogFilterSuggestedBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetSuggestedDialogFilters
+			{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -1937,7 +1966,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new UpdateDialogFilter(){
+var methodBody = new UpdateDialogFilter
+{
 Id = id,
 Filter = filter,
 };
@@ -1952,7 +1982,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new UpdateDialogFiltersOrder(){
+var methodBody = new UpdateDialogFiltersOrder
+{
 Order = order,
 };
 
@@ -1963,10 +1994,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<FeaturedStickersBase>> GetOldFeaturedStickersAsync(int offset, int limit, int hash, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<FeaturedStickersBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetOldFeaturedStickers(){
+			var rpcResponse = new RpcMessage<FeaturedStickersBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetOldFeaturedStickers
+			{
 Offset = offset,
 Limit = limit,
 Hash = hash,
@@ -1979,10 +2010,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<MessagesBase>> GetRepliesAsync(InputPeerBase peer, int msgId, int offsetId, int offsetDate, int addOffset, int limit, int maxId, int minId, int hash, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<MessagesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetReplies(){
+			var rpcResponse = new RpcMessage<MessagesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetReplies
+			{
 Peer = peer,
 MsgId = msgId,
 OffsetId = offsetId,
@@ -2001,10 +2032,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<DiscussionMessageBase>> GetDiscussionMessageAsync(InputPeerBase peer, int msgId, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<DiscussionMessageBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetDiscussionMessage(){
+			var rpcResponse = new RpcMessage<DiscussionMessageBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetDiscussionMessage
+			{
 Peer = peer,
 MsgId = msgId,
 };
@@ -2019,7 +2050,8 @@ return rpcResponse;
 
 var rpcResponse = new RpcMessage<bool>();
 messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new ReadDiscussion(){
+var methodBody = new ReadDiscussion
+{
 Peer = peer,
 MsgId = msgId,
 ReadMaxId = readMaxId,
@@ -2032,10 +2064,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<AffectedHistoryBase>> UnpinAllMessagesAsync(InputPeerBase peer, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<AffectedHistoryBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new UnpinAllMessages(){
+			var rpcResponse = new RpcMessage<AffectedHistoryBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new UnpinAllMessages
+			{
 Peer = peer,
 };
 

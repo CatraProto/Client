@@ -1,11 +1,14 @@
+using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using CatraProto.Client.TL.Schemas.CloudChats.Storage;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 {
-	public partial class File : FileBase
+	public partial class File : CatraProto.Client.TL.Schemas.CloudChats.Upload.FileBase
 	{
 
 
@@ -14,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("type")]
-		public FileTypeBase Type { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.Storage.FileTypeBase Type { get; set; }
 
 [JsonPropertyName("mtime")]
 		public int Mtime { get; set; }
@@ -39,7 +42,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 
 		public override void Deserialize(Reader reader)
 		{
-			Type = reader.Read<FileTypeBase>();
+			Type = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.Storage.FileTypeBase>();
 			Mtime = reader.Read<int>();
 			Bytes = reader.Read<byte[]>();
 

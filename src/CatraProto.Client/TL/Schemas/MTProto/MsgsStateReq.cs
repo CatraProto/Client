@@ -1,11 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class MsgsStateReq : MsgsStateReqBase
+	public partial class MsgsStateReq : CatraProto.Client.TL.Schemas.MTProto.MsgsStateReqBase
 	{
 
 

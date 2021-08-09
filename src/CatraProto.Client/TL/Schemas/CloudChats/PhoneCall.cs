@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PhoneCall : PhoneCallBase
+	public partial class PhoneCall : CatraProto.Client.TL.Schemas.CloudChats.PhoneCallBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -50,10 +52,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public long KeyFingerprint { get; set; }
 
 [JsonPropertyName("protocol")]
-		public PhoneCallProtocolBase Protocol { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase Protocol { get; set; }
 
 [JsonPropertyName("connections")]
-		public IList<PhoneConnectionBase> Connections { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.PhoneConnectionBase> Connections { get; set; }
 
 [JsonPropertyName("start_date")]
 		public int StartDate { get; set; }
@@ -96,8 +98,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ParticipantId = reader.Read<int>();
 			GAOrB = reader.Read<byte[]>();
 			KeyFingerprint = reader.Read<long>();
-			Protocol = reader.Read<PhoneCallProtocolBase>();
-			Connections = reader.ReadVector<PhoneConnectionBase>();
+			Protocol = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase>();
+			Connections = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PhoneConnectionBase>();
 			StartDate = reader.Read<int>();
 
 		}

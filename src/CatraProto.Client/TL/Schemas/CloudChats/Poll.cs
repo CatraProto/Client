@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class Poll : PollBase
+	public partial class Poll : CatraProto.Client.TL.Schemas.CloudChats.PollBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -45,7 +47,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override string Question { get; set; }
 
 [JsonPropertyName("answers")]
-		public override IList<PollAnswerBase> Answers { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.PollAnswerBase> Answers { get; set; }
 
 [JsonPropertyName("close_period")]
 		public override int? ClosePeriod { get; set; }
@@ -95,7 +97,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			MultipleChoice = FlagsHelper.IsFlagSet(Flags, 2);
 			Quiz = FlagsHelper.IsFlagSet(Flags, 3);
 			Question = reader.Read<string>();
-			Answers = reader.ReadVector<PollAnswerBase>();
+			Answers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PollAnswerBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
 				ClosePeriod = reader.Read<int>();

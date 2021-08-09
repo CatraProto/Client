@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using System.Text.Json.Serialization;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -18,13 +19,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(bool);
+		System.Type IMethod.Type { get; init; } = typeof(bool);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
 [JsonPropertyName("events")]
-		public IList<InputAppEventBase> Events { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputAppEventBase> Events { get; set; }
 
 
 		public void UpdateFlags() 
@@ -41,7 +42,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 
 		public void Deserialize(Reader reader)
 		{
-			Events = reader.ReadVector<InputAppEventBase>();
+			Events = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputAppEventBase>();
 
 		}
 	}

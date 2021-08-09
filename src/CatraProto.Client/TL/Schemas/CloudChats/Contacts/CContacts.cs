@@ -1,11 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
-	public partial class CContacts : ContactsBase
+	public partial class CContacts : CatraProto.Client.TL.Schemas.CloudChats.Contacts.ContactsBase
 	{
 
 
@@ -14,13 +17,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("contacts")]
-		public IList<ContactBase> Contacts { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.ContactBase> Contacts { get; set; }
 
 [JsonPropertyName("saved_count")]
 		public int SavedCount { get; set; }
 
 [JsonPropertyName("users")]
-		public IList<UserBase> Users { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -39,9 +42,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 
 		public override void Deserialize(Reader reader)
 		{
-			Contacts = reader.ReadVector<ContactBase>();
+			Contacts = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ContactBase>();
 			SavedCount = reader.Read<int>();
-			Users = reader.ReadVector<UserBase>();
+			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 
 		}
 	}

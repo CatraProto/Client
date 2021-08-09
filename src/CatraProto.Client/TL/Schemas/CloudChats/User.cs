@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class User : UserBase
+	public partial class User : CatraProto.Client.TL.Schemas.CloudChats.UserBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -106,16 +108,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public string Phone { get; set; }
 
 [JsonPropertyName("photo")]
-		public UserProfilePhotoBase Photo { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.UserProfilePhotoBase Photo { get; set; }
 
 [JsonPropertyName("status")]
-		public UserStatusBase Status { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.UserStatusBase Status { get; set; }
 
 [JsonPropertyName("bot_info_version")]
 		public int? BotInfoVersion { get; set; }
 
 [JsonPropertyName("restriction_reason")]
-		public IList<RestrictionReasonBase> RestrictionReason { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase> RestrictionReason { get; set; }
 
 [JsonPropertyName("bot_inline_placeholder")]
 		public string BotInlinePlaceholder { get; set; }
@@ -263,12 +265,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				Photo = reader.Read<UserProfilePhotoBase>();
+				Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.UserProfilePhotoBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
-				Status = reader.Read<UserStatusBase>();
+				Status = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.UserStatusBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 14))
@@ -278,7 +280,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 18))
 			{
-				RestrictionReason = reader.ReadVector<RestrictionReasonBase>();
+				RestrictionReason = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 19))

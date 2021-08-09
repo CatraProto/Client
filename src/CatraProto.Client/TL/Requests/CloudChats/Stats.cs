@@ -20,10 +20,10 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 
 	    public async Task<RpcMessage<BroadcastStatsBase>> GetBroadcastStatsAsync(InputChannelBase channel, bool dark = true, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<BroadcastStatsBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetBroadcastStats(){
+			var rpcResponse = new RpcMessage<BroadcastStatsBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetBroadcastStats
+			{
 Channel = channel,
 Dark = dark,
 };
@@ -35,10 +35,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<StatsGraphBase>> LoadAsyncGraphAsync(string token, long? x = null, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<StatsGraphBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new LoadAsyncGraph(){
+			var rpcResponse = new RpcMessage<StatsGraphBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new LoadAsyncGraph
+			{
 Token = token,
 X = x,
 };
@@ -50,10 +50,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<MegagroupStatsBase>> GetMegagroupStatsAsync(InputChannelBase channel, bool dark = true, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<MegagroupStatsBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetMegagroupStats(){
+			var rpcResponse = new RpcMessage<MegagroupStatsBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetMegagroupStats
+			{
 Channel = channel,
 Dark = dark,
 };
@@ -65,10 +65,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<MessagesBase>> GetMessagePublicForwardsAsync(InputChannelBase channel, int msgId, int offsetRate, InputPeerBase offsetPeer, int offsetId, int limit, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<MessagesBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetMessagePublicForwards(){
+			var rpcResponse = new RpcMessage<MessagesBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetMessagePublicForwards
+			{
 Channel = channel,
 MsgId = msgId,
 OffsetRate = offsetRate,
@@ -84,10 +84,10 @@ return rpcResponse;
 
 	    public async Task<RpcMessage<MessageStatsBase>> GetMessageStatsAsync(InputChannelBase channel, int msgId, bool dark = true, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
-
-var rpcResponse = new RpcMessage<MessageStatsBase>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-var methodBody = new GetMessageStats(){
+			var rpcResponse = new RpcMessage<MessageStatsBase>();
+			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			var methodBody = new GetMessageStats
+			{
 Channel = channel,
 MsgId = msgId,
 Dark = dark,

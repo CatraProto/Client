@@ -20,8 +20,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(ValidatedRequestedInfoBase);
+[JsonIgnore] Type IMethod.Type { get; init; } = typeof(ValidatedRequestedInfoBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -35,8 +34,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 [JsonPropertyName("msg_id")]
 		public int MsgId { get; set; }
 
-[JsonPropertyName("info")]
-		public PaymentRequestedInfoBase Info { get; set; }
+[JsonPropertyName("info")] public PaymentRequestedInfoBase Info { get; set; }
 
 
 		public void UpdateFlags() 

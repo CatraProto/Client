@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class SecureRequiredType : SecureRequiredTypeBase
+	public partial class SecureRequiredType : CatraProto.Client.TL.Schemas.CloudChats.SecureRequiredTypeBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -32,7 +35,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public bool TranslationRequired { get; set; }
 
 [JsonPropertyName("type")]
-		public SecureValueTypeBase Type { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase Type { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -58,7 +61,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			NativeNames = FlagsHelper.IsFlagSet(Flags, 0);
 			SelfieRequired = FlagsHelper.IsFlagSet(Flags, 1);
 			TranslationRequired = FlagsHelper.IsFlagSet(Flags, 2);
-			Type = reader.Read<SecureValueTypeBase>();
+			Type = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase>();
 
 		}
 	}

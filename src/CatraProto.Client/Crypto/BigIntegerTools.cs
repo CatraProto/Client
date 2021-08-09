@@ -1,5 +1,8 @@
+using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
+using System.Text;
 
 namespace CatraProto.Client.Crypto
 {
@@ -10,23 +13,11 @@ namespace CatraProto.Client.Crypto
             var buffer = CryptoTools.GenerateRandomBytes(size / 8);
             if (positive)
             {
-                if (isBigEndian)
-                {
-                    if (buffer[0] == 255)
-                    {
-                        buffer[0] -= 1;
-                    }
-                }
-                else
-                {
-                    if (buffer[^1] == 255)
-                    {
-                        buffer[^1] -= 1;
-                    }
-                }
+                var zeroByte = new byte[] { 0x00 };
+                buffer = isBigEndian ? zeroByte.Concat(buffer).ToArray() : buffer.Concat(zeroByte).ToArray();
             }
 
-            
+
             return new BigInteger(buffer, false, isBigEndian);
         }
 

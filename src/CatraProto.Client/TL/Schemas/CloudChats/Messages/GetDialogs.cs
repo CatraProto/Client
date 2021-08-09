@@ -21,8 +21,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(DialogsBase);
+[JsonIgnore] Type IMethod.Type { get; init; } = typeof(DialogsBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -42,8 +41,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("offset_id")]
 		public int OffsetId { get; set; }
 
-[JsonPropertyName("offset_peer")]
-		public InputPeerBase OffsetPeer { get; set; }
+[JsonPropertyName("offset_peer")] public InputPeerBase OffsetPeer { get; set; }
 
 [JsonPropertyName("limit")]
 		public int Limit { get; set; }

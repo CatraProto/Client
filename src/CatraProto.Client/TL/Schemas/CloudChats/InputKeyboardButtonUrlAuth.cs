@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputKeyboardButtonUrlAuth : KeyboardButtonBase
+	public partial class InputKeyboardButtonUrlAuth : CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -34,7 +37,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public string Url { get; set; }
 
 [JsonPropertyName("bot")]
-		public InputUserBase Bot { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase Bot { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -71,7 +74,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			}
 
 			Url = reader.Read<string>();
-			Bot = reader.Read<InputUserBase>();
+			Bot = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
 
 		}
 	}

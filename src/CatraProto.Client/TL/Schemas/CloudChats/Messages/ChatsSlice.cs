@@ -16,8 +16,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("count")]
 		public int Count { get; set; }
 
-[JsonPropertyName("Chats_")]
-		public override IList<ChatBase> Chats_ { get; set; }
+[JsonPropertyName("Chats_")] public override IList<ChatBase> Chats_ { get; set; }
 
         
 		public override void UpdateFlags() 

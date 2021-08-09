@@ -1,11 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
-	public partial class ImportedContacts : ImportedContactsBase
+	public partial class ImportedContacts : CatraProto.Client.TL.Schemas.CloudChats.Contacts.ImportedContactsBase
 	{
 
 
@@ -14,16 +17,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("imported")]
-		public override IList<ImportedContactBase> Imported { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.ImportedContactBase> Imported { get; set; }
 
 [JsonPropertyName("popular_invites")]
-		public override IList<PopularContactBase> PopularInvites { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.PopularContactBase> PopularInvites { get; set; }
 
 [JsonPropertyName("retry_contacts")]
 		public override IList<long> RetryContacts { get; set; }
 
 [JsonPropertyName("users")]
-		public override IList<UserBase> Users { get; set; }
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -43,10 +46,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 
 		public override void Deserialize(Reader reader)
 		{
-			Imported = reader.ReadVector<ImportedContactBase>();
-			PopularInvites = reader.ReadVector<PopularContactBase>();
+			Imported = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ImportedContactBase>();
+			PopularInvites = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PopularContactBase>();
 			RetryContacts = reader.ReadVector<long>();
-			Users = reader.ReadVector<UserBase>();
+			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 
 		}
 	}

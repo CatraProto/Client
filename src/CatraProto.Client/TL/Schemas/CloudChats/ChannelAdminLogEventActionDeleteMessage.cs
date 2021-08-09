@@ -1,10 +1,14 @@
+using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelAdminLogEventActionDeleteMessage : ChannelAdminLogEventActionBase
+	public partial class ChannelAdminLogEventActionDeleteMessage : CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionBase
 	{
 
 
@@ -13,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("message")]
-		public MessageBase Message { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.MessageBase Message { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -30,7 +34,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Message = reader.Read<MessageBase>();
+			Message = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageBase>();
 
 		}
 	}

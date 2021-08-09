@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateBotInlineQuery : UpdateBase
+	public partial class UpdateBotInlineQuery : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -30,7 +33,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public string Query { get; set; }
 
 [JsonPropertyName("geo")]
-		public GeoPointBase Geo { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase Geo { get; set; }
 
 [JsonPropertyName("offset")]
 		public string Offset { get; set; }
@@ -67,7 +70,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Query = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Geo = reader.Read<GeoPointBase>();
+				Geo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase>();
 			}
 
 			Offset = reader.Read<string>();
