@@ -5,15 +5,28 @@ namespace CatraProto.Client.Crypto
 {
     static class BigIntegerTools
     {
-        public static BigInteger GenerateBigInt(int size, bool unsigned = false, bool isBigEndian = false)
+        public static BigInteger GenerateBigInt(int size, bool positive = false, bool isBigEndian = false)
         {
             var buffer = CryptoTools.GenerateRandomBytes(size / 8);
-            if (unsigned)
+            if (positive)
             {
-                var zeroByte = new byte[] { 0x00 };
-                buffer = isBigEndian ? zeroByte.Concat(buffer).ToArray() : buffer.Concat(zeroByte).ToArray();
+                if (isBigEndian)
+                {
+                    if (buffer[0] == 255)
+                    {
+                        buffer[0] -= 1;
+                    }
+                }
+                else
+                {
+                    if (buffer[^1] == 255)
+                    {
+                        buffer[^1] -= 1;
+                    }
+                }
             }
 
+            
             return new BigInteger(buffer, false, isBigEndian);
         }
 
