@@ -114,15 +114,8 @@ namespace CatraProto.TL
 
         private bool ReadBool()
         {
-            var value = Read<IObject>().GetType();
-            var boolTrue = _provider.BoolTrue;
-
-            if (boolTrue is null)
-            {
-                throw new DeserializationException("The provided boolTrue type is null", DeserializationException.DeserializationErrors.BoolTrueNull);
-            }
-
-            return _provider.BoolTrue == value;
+            var value = _reader.ReadInt32();
+            return value == _provider.BoolTrueId;
         }
 
         private byte[] ReadBytes()

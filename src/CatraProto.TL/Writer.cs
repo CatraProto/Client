@@ -9,6 +9,15 @@ namespace CatraProto.TL
 {
     public class Writer : IDisposable
     {
+        public Stream Stream
+        {
+            get
+            {
+                _writer.Flush();
+                return _writer.BaseStream;
+            }
+        }
+
         private readonly ObjectProvider? _provider;
         private readonly BinaryWriter _writer;
 
@@ -20,20 +29,6 @@ namespace CatraProto.TL
         {
             _provider = provider;
             _writer = new BinaryWriter(stream, encoding, leaveOpen);
-        }
-
-        public Stream Stream
-        {
-            get
-            {
-                _writer.Flush();
-                return _writer.BaseStream;
-            }
-        }
-
-        public void Dispose()
-        {
-            _writer?.Dispose();
         }
 
         public void Write<T>(T value)
@@ -80,13 +75,7 @@ namespace CatraProto.TL
         private void WriteBool(bool value)
         {
             ThrowIfProviderNull();
-            var type = value ? _provider!.BoolTrue : _provider!.BoolFalse;
-            if (type == null)
-            {
-                throw new SerializationException("The provider returned a null value for BoolTrue or BoolFalse", SerializationException.SerializationErrors.BoolNull);
-            }
-
-            ((IObject)Activator.CreateInstance(type)!).Serialize(this);
+            _writer.Write(value ? _provider!.BoolTrueId : _provider!.BoolFalseId);
         }
 
 
@@ -143,6 +132,11 @@ namespace CatraProto.TL
             {
                 throw new NullReferenceException("Provide an object provider in the constructor");
             }
+        }
+
+        public void Dispose()
+        {
+            _writer?.Dispose();
         }
     }
 }
