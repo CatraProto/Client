@@ -1,76 +1,57 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
-using CatraProto.Client.MTProto.Session.Interfaces;
+using CatraProto.Client.MTProto.Session.Models;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.TL;
 
 namespace CatraProto.Client.MTProto.Session
 {
-    class SessionManager
+    public class SessionManager
     {
-        private const double CatraProtoVersion = 1.0d;
-        private const int SessionVersion = 1;
-        private List<ISerializer> _sessionSerializers = new List<ISerializer>();
+        internal SessionData SessionData { get; } = new SessionData();
+        private readonly object _mutex = new object();
+        private bool _hasRead;
 
-        public void AddSerializer(ISerializer serializer)
+        public byte[] Save()
         {
-            if (_sessionSerializers.IndexOf(serializer) == -1)
+            using (var writer = new Writer(MergedProvider.Singleton, new MemoryStream()))
             {
-                _sessionSerializers.Add(serializer);
+                SessionData.Save(writer);
+                return ((MemoryStream)writer.Stream).ToArray();
             }
         }
 
-        public async Task SaveAsync(Stream targetStream)
+        public void Read(byte[] serializedData)
         {
-            using var writer = new Writer(MergedProvider.Singleton, new MemoryStream());
-            writer.Write(CatraProtoVersion);
-            writer.Write(SessionVersion);
-            foreach (var sessionSerializer in _sessionSerializers)
+            lock (_mutex)
             {
-                switch (sessionSerializer)
+                if (serializedData.Length > 0)
                 {
-                    case ISessionSerializer serializer:
-                        serializer.Save(writer);
-                        break;
-                    case IAsyncSessionSerializer serializer:
-                        await serializer.SaveAsync(writer);
-                        break;
-                    default:
-                        throw new NotSupportedException();
+                    using (var reader = new Reader(MergedProvider.Singleton, new MemoryStream(serializedData)))
+                    {
+                        SessionData.Read(reader);
+                    }
                 }
-            }
 
-            await targetStream.WriteAsync(((MemoryStream)writer.Stream).ToArray());
-        }
-        
-        public async Task ReadAsync(Stream fromStream)
-        {
-            if (fromStream.Length == 0)
-            {
-                return;
+                _hasRead = true;
             }
-            
-            var ms = new MemoryStream();
-            await fromStream.CopyToAsync(ms);
-            ms.Seek(0, SeekOrigin.Begin);
-            
-            using var reader = new Reader(MergedProvider.Singleton, ms);
-            var catraProtoVersion = reader.Read<double>();
-            var sessionVersion = reader.Read<int>();
-            foreach (var sessionSerializer in _sessionSerializers)
+        }
+
+        internal bool GetHasRead()
+        {
+            lock (_mutex)
             {
-                switch (sessionSerializer)
+                return _hasRead;
+            }
+        }
+
+        internal void ThrowIfNotRead()
+        {
+            lock (_mutex)
+            {
+                if (!_hasRead)
                 {
-                    case ISessionSerializer serializer:
-                        serializer.Read(reader);
-                        break;
-                    case IAsyncSessionSerializer serializer:
-                        await serializer.ReadAsync(reader);
-                        break;
-                    default:
-                        throw new NotSupportedException();
+                    throw new Exception("Please deserialize the session first");
                 }
             }
         }

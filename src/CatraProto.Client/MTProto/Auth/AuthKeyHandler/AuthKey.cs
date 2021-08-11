@@ -8,23 +8,29 @@ using System.Threading.Tasks;
 using CatraProto.Client.Crypto;
 using CatraProto.Client.Crypto.Aes;
 using CatraProto.Client.Crypto.KeyExchange;
-using CatraProto.Client.Extensions;
 using CatraProto.Client.MTProto.Auth.AuthKeyHandler.Results;
-using CatraProto.Client.MTProto.Session.Interfaces;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
 using Serilog;
 
 namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
 {
-    class AuthKey : ISessionSerializer
+    class AuthKey : IObject
     {
         public byte[]? RawAuthKey { get; private set; }
-        public long? AuthKeyId { get; set; }
+        public long? AuthKeyId { get; private set; }
         public long? ServerSalt { get; private set; }
         private readonly ILogger _logger;
         private readonly Api _api;
+
+        public AuthKey(byte[] authKey, long authKeyId, long serverSalt, Api api, ILogger logger) : this(api, logger)
+        {
+            RawAuthKey = authKey;
+            AuthKeyId = authKeyId;
+            ServerSalt = serverSalt;
+        }
 
         public AuthKey(Api api, ILogger logger)
         {
@@ -55,7 +61,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
                         return new AuthKeyFail(Errors.RsaNotFound);
                     }
 
-                    var rsaKey = found!.Item2;
+                    var rsaKey = found.Item2;
                     var (p, q) = CryptoTools.GetFastPq(BitConverter.ToUInt64(pq.Reverse().ToArray()));
                     var newNonce = BigIntegerTools.GenerateBigInt(256);
 
@@ -201,18 +207,31 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
             return new IgeEncryptor(aesKey, aesIv);
         }
 
-        public void Read(Reader reader)
+
+        public void Deserialize(Reader reader)
         {
-            RawAuthKey = reader.Read<byte[]>();
-            AuthKeyId = reader.Read<long>();
-            ServerSalt = reader.Read<long>();
+            var canRead = reader.Read<bool>();
+            if (canRead)
+            {
+                RawAuthKey = reader.Read<byte[]>();
+                AuthKeyId = reader.Read<long>();
+                ServerSalt = reader.Read<long>();
+            }
         }
 
-        public void Save(Writer writer)
+        public void Serialize(Writer writer)
         {
-            writer.Write(RawAuthKey);
-            writer.Write(AuthKeyId);
-            writer.Write(ServerSalt);
+            if (ServerSalt.HasValue && AuthKeyId.HasValue && RawAuthKey is not null)
+            {
+                writer.Write(true);
+                writer.Write(RawAuthKey);
+                writer.Write(AuthKeyId);
+                writer.Write(ServerSalt);
+            }
+            else
+            {
+                writer.Write(false);
+            }
         }
     }
 }
