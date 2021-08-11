@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Numerics;
@@ -43,7 +44,7 @@ namespace CatraProto.Client.Crypto
             return BitConverter.ToInt64(lowerOrderBits, 0);
         }
 
-        public static bool FindByFingerprint(long fingerprint, out Rsa? rsa)
+        public static bool FindByFingerprint(long fingerprint, [MaybeNullWhen(false)] out Rsa rsa)
         {
             if (RsaKeys.TryGetValue(fingerprint, out var key))
             {
@@ -56,7 +57,7 @@ namespace CatraProto.Client.Crypto
         }
 
 
-        public static bool FindByFingerprints(IList<long> fingerprints, out Tuple<long, Rsa>? found)
+        public static bool FindByFingerprints(IList<long> fingerprints, [MaybeNullWhen(false)] out Tuple<long, Rsa> found)
         {
             for (var index = 0; index < fingerprints.Count; index++)
             {
