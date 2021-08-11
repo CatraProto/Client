@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -17,9 +16,9 @@ namespace CatraProto.TL
             get => _reader.BaseStream;
         }
 
-        private Dictionary<Type, ICustomObjectDeserializer> _customObjectDeserializers = new Dictionary<Type, ICustomObjectDeserializer>();
-        private ObjectProvider _provider;
-        private BinaryReader _reader;
+        private readonly Dictionary<Type, ICustomObjectDeserializer> _customObjectDeserializers = new Dictionary<Type, ICustomObjectDeserializer>();
+        private readonly ObjectProvider _provider;
+        private readonly BinaryReader _reader;
 
         public Reader(ObjectProvider provider, Stream stream, bool leaveOpen = false)
         {
