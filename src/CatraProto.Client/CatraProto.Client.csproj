@@ -20,5 +20,4 @@
     <ItemGroup>
         <Folder Include="Updates"/>
     </ItemGroup>
-
 </Project>
