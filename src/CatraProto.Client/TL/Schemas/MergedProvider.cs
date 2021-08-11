@@ -4,7 +4,7 @@ namespace CatraProto.Client.TL.Schemas
 {
     partial class MergedProvider : ObjectProvider
     {
-        public override IObject ResolveConstructorId(int constructorId)
+        public override IObject? ResolveConstructorId(int constructorId)
         {
             if (InternalResolveConstructorId(constructorId, out var obj))
             {

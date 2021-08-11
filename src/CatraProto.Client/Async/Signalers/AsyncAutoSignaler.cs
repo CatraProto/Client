@@ -50,7 +50,7 @@ namespace CatraProto.Client.Async.Signalers
         {
             lock (_mutex)
             {
-                _timer?.Dispose();
+                _timer.Dispose();
                 _signaler.Dispose();
             }
         }

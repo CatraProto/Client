@@ -136,7 +136,7 @@ namespace CatraProto.TL
 
         public void Dispose()
         {
-            _writer?.Dispose();
+            _writer.Dispose();
         }
     }
 }

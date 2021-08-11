@@ -9,6 +9,7 @@ namespace CatraProto.Client.Async.Locks
     {
         private readonly object _lock = new object();
         private readonly Dictionary<T, Counter<SemaphoreSlim>> _semaphores = new Dictionary<T, Counter<SemaphoreSlim>>();
+
         private SemaphoreSlim GetLock(T key)
         {
             lock (_lock)

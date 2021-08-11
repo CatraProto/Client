@@ -6,7 +6,7 @@ namespace CatraProto.Client.Async.Signalers
     public class AsyncSignaler : IDisposable
     {
         private TaskCompletionSource _taskCompletionSource = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
-        private object _mutex = new object();
+        private readonly object _mutex = new object();
 
         public AsyncSignaler(bool released)
         {
@@ -23,7 +23,7 @@ namespace CatraProto.Client.Async.Signalers
                 return _taskCompletionSource.Task.IsCompleted;
             }
         }
-        
+
         public void SignalOnce()
         {
             lock (_mutex)

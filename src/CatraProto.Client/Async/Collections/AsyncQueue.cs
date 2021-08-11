@@ -69,7 +69,7 @@ namespace CatraProto.Client.Async.Collections
 
         public void Dispose()
         {
-            _semaphoreSlim?.Dispose();
+            _semaphoreSlim.Dispose();
         }
     }
 }

@@ -30,7 +30,7 @@ namespace CatraProto.Client.Connections.Protocols.TcpAbridged
 
         public void Dispose()
         {
-            _client?.Dispose();
+            _client.Dispose();
         }
 
         public async Task ConnectAsync(CancellationToken token = default)

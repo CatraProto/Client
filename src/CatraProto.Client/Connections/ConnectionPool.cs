@@ -67,22 +67,6 @@ namespace CatraProto.Client.Connections
             return connection;
         }
 
-        public Connection? GetAccountConnection()
-        {
-            lock (_mutex)
-            {
-                return _accountConnection;
-            }
-        }
-
-        public void SetAccountConnection(Connection connection)
-        {
-            lock (_mutex)
-            {
-                _accountConnection = connection;
-            }
-        }
-
         public Connection CreateConnection(ConnectionInfo connectionInfo, out bool justCreated)
         {
             lock (_mutex)
@@ -108,6 +92,22 @@ namespace CatraProto.Client.Connections
             lock (_mutex)
             {
                 return _connections.TryGetValue(dcId, out connection);
+            }
+        }
+
+        public Connection? GetAccountConnection()
+        {
+            lock (_mutex)
+            {
+                return _accountConnection;
+            }
+        }
+
+        public void SetAccountConnection(Connection connection)
+        {
+            lock (_mutex)
+            {
+                _accountConnection = connection;
             }
         }
     }
