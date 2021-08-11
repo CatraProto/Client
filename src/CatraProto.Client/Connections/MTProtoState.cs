@@ -1,8 +1,8 @@
 using System;
 using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.MTProto.Auth;
-using CatraProto.Client.MTProto.Session;
-using CatraProto.Client.Settings;
+using CatraProto.Client.MTProto.Session.Models;
+using CatraProto.Client.MTProto.Settings;
 using Serilog;
 
 namespace CatraProto.Client.Connections
@@ -11,15 +11,18 @@ namespace CatraProto.Client.Connections
     {
         public KeysHandler KeysHandler { get; }
         public MessageIdsHandler MessageIdsHandler { get; }
+        public SessionData SessionData { get; }
         public SeqnoHandler SeqnoHandler { get; }
         public SessionIdHandler SessionIdHandler { get; }
         public SaltHandler SaltHandler { get; }
+        public ConnectionInfo ConnectionInfo { get; }
         public Api Api { get; }
-        private readonly ILogger _logger;
 
-        public MTProtoState(Api api, ClientSettings settings, ILogger logger)
+        public MTProtoState(ConnectionInfo connectionInfo, Api api, ClientSettings settings, SessionData sessionData, ILogger logger)
         {
             Api = api;
+            SessionData = sessionData;
+            ConnectionInfo = connectionInfo;
             MessageIdsHandler = new MessageIdsHandler(logger);
             SessionIdHandler = new SessionIdHandler();
             SeqnoHandler = new SeqnoHandler(logger);
@@ -27,17 +30,11 @@ namespace CatraProto.Client.Connections
             SessionIdHandler.SetSessionId(new Random().Next());
             KeysHandler = new KeysHandler(this, api, settings, logger);
             SaltHandler = new SaltHandler(api, KeysHandler.TemporaryAuthKey, logger);
-            _logger = logger;
         }
 
         public void StartLoops()
         {
             SaltHandler.Start();
-        }
-
-        public void RegisterSerializer(SessionManager manager)
-        {
-            manager.AddSerializer(KeysHandler.PermanentAuthKey);
         }
     }
 }
