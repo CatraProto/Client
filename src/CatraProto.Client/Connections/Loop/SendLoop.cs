@@ -42,11 +42,7 @@ namespace CatraProto.Client.Connections.Loop
             Task<MessageItem>? itemTask = null;
             while (true)
             {
-                if (StateSignaler.GetCurrentState() != SignalState.Start)
-                {
-                    await StateSignaler.WaitAsync();
-                }
-
+                await StateSignaler.IsStateWaitAsync(SignalState.Start);
                 var shutdownToken = GetShutdownToken();
 
                 //All of this is because we need unencrypted and encrypted messages and some special encrypted messages to be independent from each other

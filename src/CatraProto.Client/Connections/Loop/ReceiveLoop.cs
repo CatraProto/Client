@@ -35,11 +35,7 @@ namespace CatraProto.Client.Connections.Loop
             _logger.Information("Listening for incoming messages from {Connection}...", _connection.ConnectionInfo);
             while (true)
             {
-                if (StateSignaler.GetCurrentState() != SignalState.Start)
-                {
-                    await StateSignaler.WaitAsync();
-                }
-
+                await StateSignaler.IsStateWaitAsync(SignalState.Start);
                 var protocol = _connection.Protocol!;
                 var shutdownToken = GetShutdownToken();
                 try

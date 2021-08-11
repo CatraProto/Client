@@ -33,6 +33,14 @@ namespace CatraProto.Client.Async.Signalers
             }
         }
 
+        public Task IsStateWaitAsync(T state)
+        {
+            lock (_mutex)
+            {
+                return _currentState.Equals(state) ? Task.CompletedTask : WaitAsync();
+            }
+        }
+
         public T GetCurrentState()
         {
             lock (_mutex)
@@ -78,13 +86,16 @@ namespace CatraProto.Client.Async.Signalers
             lock (_mutex)
             {
                 ThrowIfCancelled();
-                return _taskCompletionSource.Task;
+                return _taskCompletionSource.Task.WithCancellationToken(token);
             }
         }
 
         public void Signal(T state)
         {
-            Signal(state, false);
+            lock (_mutex)
+            {
+                Signal(state, false);
+            }
         }
     }
 }
