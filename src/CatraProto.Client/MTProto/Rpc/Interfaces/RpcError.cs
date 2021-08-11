@@ -1,5 +1,4 @@
 using CatraProto.Client.MTProto.Rpc.RpcErrors;
-using CatraProto.Client.TL.Schemas.CloudChats;
 
 namespace CatraProto.Client.MTProto.Rpc.Interfaces
 {
@@ -29,6 +28,14 @@ namespace CatraProto.Client.MTProto.Rpc.Interfaces
                 {
                     return new FloodWaitError(error.ErrorMessage, error.ErrorCode);
                 }
+
+                if (error.ErrorMessage.Length > 12)
+                {
+                    if (error.ErrorMessage[..12] == "USER_MIGRATE")
+                    {
+                        return new UserMigrateError(error.ErrorMessage, error.ErrorCode);
+                    }
+                }
             }
 
             return new UnknownError(error.ErrorMessage, error.ErrorCode);
@@ -36,7 +43,7 @@ namespace CatraProto.Client.MTProto.Rpc.Interfaces
 
         public override string ToString()
         {
-            return $"[{ErrorCode}][{ErrorDescription}]";
+            return $"[{ErrorCode}][{ErrorMessage}][{ErrorDescription}]";
         }
     }
 }
