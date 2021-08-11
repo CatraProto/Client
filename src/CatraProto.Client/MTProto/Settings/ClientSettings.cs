@@ -1,15 +1,18 @@
 ﻿using System;
 
-namespace CatraProto.Client.Settings
+namespace CatraProto.Client.MTProto.Settings
 {
     public class ClientSettings
     {
-        public string DatacenterAddress { get; set; } = /*"149.154.167.92"*/"149.154.167.50";
+        public ConnectionSettings ConnectionSettings { get; }
         public ApiSettings ApiSettings { get; init; }
         public string SessionName { get; init; }
         public string SessionPath { get; init; }
-        public ClientSettings(ApiSettings apiSettings, string sessionName, string? sessionPath = null)
+
+        public ClientSettings(ApiSettings apiSettings, string? sessionName, ConnectionSettings? connectionSetting = null, string? sessionPath = null)
         {
+            ConnectionSettings = connectionSetting ?? new ConnectionSettings();
+            
             SessionName = sessionName ?? throw new ArgumentNullException(nameof(sessionName));
             ApiSettings = apiSettings;
             if (sessionPath == null)

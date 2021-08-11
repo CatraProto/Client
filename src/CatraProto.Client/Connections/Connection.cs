@@ -7,8 +7,8 @@ using CatraProto.Client.Connections.Loop;
 using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.Connections.Protocols.Interfaces;
 using CatraProto.Client.Connections.Protocols.TcpAbridged;
-using CatraProto.Client.MTProto.Session;
-using CatraProto.Client.Settings;
+using CatraProto.Client.MTProto.Session.Models;
+using CatraProto.Client.MTProto.Settings;
 using Serilog;
 
 namespace CatraProto.Client.Connections
@@ -21,24 +21,24 @@ namespace CatraProto.Client.Connections
         public MessagesDispatcher MessagesDispatcher { get; }
         public ConnectionInfo ConnectionInfo { get; }
         public IProtocol? Protocol { get; private set; }
-        
+
         private readonly SingleCallAsync<CancellationToken> _singleCallAsync;
         private readonly ConnectionProtocol _protocolType;
         private SendLoop? _writeLoop;
         private ReceiveLoop? _readLoop;
         private readonly ILogger _logger;
 
-        public Connection(ConnectionInfo connectionInfo, ClientSettings clientSettings, ConnectionProtocol protocolType, ILogger logger)
+        public Connection(ConnectionInfo connectionInfo, ClientSettings clientSettings, ConnectionProtocol protocolType, SessionData sessionData, ILogger logger)
         {
             _logger = logger.ForContext<Connection>();
             ConnectionInfo = connectionInfo;
             MessagesHandler = new MessagesHandler(logger);
-            MtProtoState = new MTProtoState(new Api(MessagesHandler.MessagesQueue), clientSettings, logger);
+            MtProtoState = new MTProtoState(connectionInfo, new Api(MessagesHandler.MessagesQueue), clientSettings, sessionData, logger);
             MessagesDispatcher = new MessagesDispatcher(MessagesHandler, MtProtoState, logger);
             _singleCallAsync = new SingleCallAsync<CancellationToken>(InternalConnectAsync);
             _protocolType = protocolType;
         }
-        
+
         public Task ConnectAsync(CancellationToken token = default)
         {
             return _singleCallAsync.GetCall(token);
@@ -90,6 +90,7 @@ namespace CatraProto.Client.Connections
                     await Task.Delay(3000, token);
                 }
             }
+
             _logger.Information("Successfully connected to {Connection}", ConnectionInfo);
         }
 

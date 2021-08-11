@@ -1,4 +1,4 @@
-namespace CatraProto.Client.Settings
+namespace CatraProto.Client.MTProto.Settings
 {
     public class ApiSettings
     {

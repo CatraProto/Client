@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using CatraProto.Client.Connections;
 using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.Crypto;
-using CatraProto.Client.Settings;
+using CatraProto.Client.MTProto.Settings;
 using CatraProto.Client.TL.Schemas.CloudChats;
 using CatraProto.Client.TL.Schemas.CloudChats.Help;
 using CatraProto.Client.TL.Schemas.MTProto;

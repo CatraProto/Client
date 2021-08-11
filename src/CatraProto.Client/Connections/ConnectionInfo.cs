@@ -3,7 +3,7 @@ using System.Net;
 
 namespace CatraProto.Client.Connections
 {
-    class ConnectionInfo
+    public class ConnectionInfo
     {
         public IPAddress IpAddress { get; init; }
         public int Port { get; init; }
