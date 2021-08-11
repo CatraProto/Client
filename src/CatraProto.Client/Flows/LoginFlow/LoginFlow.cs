@@ -4,6 +4,7 @@ using CatraProto.Client.Flows.LoginFlow.Interfaces;
 using CatraProto.Client.Flows.LoginFlow.Results;
 using CatraProto.Client.MTProto.Rpc.RpcErrors;
 using CatraProto.Client.MTProto.Session;
+using CatraProto.Client.MTProto.Session.Models;
 using CatraProto.Client.MTProto.Settings;
 using CatraProto.Client.TL.Schemas.CloudChats;
 using Serilog;
@@ -15,12 +16,14 @@ namespace CatraProto.Client.Flows.LoginFlow
     {
         private readonly ConnectionPool _connectionPool;
         private readonly ClientSettings _clientSettings;
+        private readonly SessionData _sessionData;
         private readonly ILogger _logger;
 
         internal LoginFlow(ConnectionPool connectionPool, ClientSession clientSession)
         {
             _connectionPool = connectionPool;
             _clientSettings = clientSession.Settings;
+            _sessionData = clientSession.SessionManager.SessionData;
             _logger = clientSession.Logger.ForContext<LoginFlow>();
         }
 
@@ -56,8 +59,10 @@ namespace CatraProto.Client.Flows.LoginFlow
                 }
             }
 
+            var user = (User)((Authorization)auth.Response!).User;
             _connectionPool.SetAccountConnection(connection);
-            _logger.Information("Successfully logged in as @{BotUsername}", ((User)((Authorization)auth.Response!).User).Username);
+            _sessionData.Authorization.SetAuthorized(true, connection.ConnectionInfo.DcId, user.Id);
+            _logger.Information("Successfully logged in as @{BotUsername}", user.Username);
             return new LoginSuccessful();
         }
     }

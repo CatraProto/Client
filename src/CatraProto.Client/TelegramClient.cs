@@ -30,7 +30,7 @@ namespace CatraProto.Client
             var sessionData = _clientSession.SessionManager.SessionData;
             var defaultConnection = await _connectionPool.GetConnectionAsync();
 
-            if (!sessionData.Authorization.IsAuthorized(out var dcId))
+            if (!sessionData.Authorization.IsAuthorized(out var dcId, out var userId))
             {
                 return ClientState.NeedsLogin;
             }

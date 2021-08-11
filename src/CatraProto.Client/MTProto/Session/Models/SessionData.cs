@@ -45,7 +45,7 @@ namespace CatraProto.Client.MTProto.Session.Models
         {
             lock (_mutex)
             {
-                writer.Write(_sessionVersion);
+                writer.Write(1);
                 Authorization.Save(writer);
                 AuthorizationKeys.Save(writer);
             }

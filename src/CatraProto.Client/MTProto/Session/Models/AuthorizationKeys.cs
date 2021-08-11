@@ -58,7 +58,7 @@ namespace CatraProto.Client.MTProto.Session.Models
                 foreach (var (dc, key) in _authKeys)
                 {
                     writer.Write(dc);
-                    writer.Write(key);
+                    key.Save(writer);
                 }
             }
         }

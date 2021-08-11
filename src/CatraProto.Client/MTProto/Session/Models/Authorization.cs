@@ -10,6 +10,7 @@ namespace CatraProto.Client.MTProto.Session.Models
     {
         private readonly AsyncSignaler _asyncSignaler = new AsyncSignaler(false);
         private readonly object _mutex;
+        private int _userId;
         private int _dcId;
 
         public Authorization(object mutex)
@@ -17,26 +18,29 @@ namespace CatraProto.Client.MTProto.Session.Models
             _mutex = mutex;
         }
 
-        public void SetAuthorized(bool authorized, int dcId)
+        public void SetAuthorized(bool authorized, int dcId, int userId)
         {
             lock (_mutex)
             {
+                _userId = userId;
                 _dcId = dcId;
                 _asyncSignaler.SetSignal(authorized);
             }
         }
 
-        public bool IsAuthorized(out int? dcId)
+        public bool IsAuthorized(out int? dcId, out int? userId)
         {
             lock (_mutex)
             {
                 if (_asyncSignaler.IsReleased())
                 {
                     dcId = _dcId;
+                    userId = _userId;
                     return true;
                 }
 
                 dcId = null;
+                userId = null;
                 return false;
             }
         }
@@ -70,6 +74,7 @@ namespace CatraProto.Client.MTProto.Session.Models
                 if (_asyncSignaler.IsReleased())
                 {
                     _dcId = reader.Read<int>();
+                    _userId = reader.Read<int>();
                 }
             }
         }
@@ -78,11 +83,12 @@ namespace CatraProto.Client.MTProto.Session.Models
         {
             lock (_mutex)
             {
-                var isAuth = IsAuthorized(out var dcId);
+                var isAuth = IsAuthorized(out var dcId, out var userId);
                 writer.Write(isAuth);
                 if (isAuth)
                 {
                     writer.Write(dcId!.Value);
+                    writer.Write(userId);
                 }
             }
         }
