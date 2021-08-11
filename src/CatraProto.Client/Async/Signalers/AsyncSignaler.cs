@@ -16,6 +16,14 @@ namespace CatraProto.Client.Async.Signalers
             }
         }
 
+        public bool IsReleased()
+        {
+            lock (_mutex)
+            {
+                return _taskCompletionSource.Task.IsCompleted;
+            }
+        }
+        
         public void SignalOnce()
         {
             lock (_mutex)
