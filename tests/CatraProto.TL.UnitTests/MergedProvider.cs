@@ -8,7 +8,7 @@ namespace CatraProto.TL.UnitTests
 	{
 		public static readonly MergedProvider DefaultInstance = new MergedProvider();
 		public override Type BoolTrue { get; init; } = typeof(BoolFalse);
-		public override Type BoolFalse { get; init; } = typeof(BoolFalse);
+		public override Type BoolFalse { get; init; } = typeof(BoolTrue);
 		public override int VectorId { get; init; } = 481674261;
 
 		public override IObject ResolveConstructorId(int constructorId)
