@@ -34,5 +34,10 @@ namespace ^Namespace^
 		{
 ^Deserialization^
 		}
+		
+		public override string ToString()
+		{
+		    return "^ObjectRawName^";
+		}
 	}
 }

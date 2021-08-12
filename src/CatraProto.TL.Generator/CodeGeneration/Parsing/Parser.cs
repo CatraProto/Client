@@ -93,6 +93,7 @@ namespace CatraProto.TL.Generator.CodeGeneration.Parsing
                 var foundType = analyzer.FindType();
                 var isVector = FindVector(foundType, out foundType);
                 constructor.NamingInfo = name.Split('.')[^1];
+                constructor.NamingInfo.OriginalNamespacedName = name;
                 constructor.Type = Tools.CreateType(foundType, new TypeInfo
                 {
                     IsNaked = naked,
@@ -208,10 +209,7 @@ namespace CatraProto.TL.Generator.CodeGeneration.Parsing
             var match = Regex.Match(_line, @"= (.*?);");
             if (match.Success)
             {
-                return match.Groups[0].Value
-                    .Replace(";", string.Empty)
-                    .Replace("=", string.Empty)
-                    .Replace(" ", string.Empty);
+                return match.Groups[0].Value.Replace(";", string.Empty).Replace("=", string.Empty).Replace(" ", string.Empty);
             }
 
             return null;

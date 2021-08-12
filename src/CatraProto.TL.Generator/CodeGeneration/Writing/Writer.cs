@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CatraProto.TL.Generator.DeclarationInfo;
 using CatraProto.TL.Generator.Objects;
+using CatraProto.TL.Generator.Objects.Interfaces;
 using CatraProto.TL.Generator.Settings;
-using Object = CatraProto.TL.Generator.Objects.Interfaces.Object;
 using Type = CatraProto.TL.Generator.Objects.Types.Interfaces.TypeBase;
 
 namespace CatraProto.TL.Generator.CodeGeneration.Writing
@@ -116,13 +115,7 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
                 };
 
                 Directory.CreateDirectory(StringTools.NamespaceToDirectory(ns.PartialNamespace).Replace(".", "/"));
-                taskList.Add(File.WriteAllTextAsync(ns.FullNamespace.Replace(".", "/") + ".cs", template
-                    .Replace("^Namespace^", ns.PartialNamespace)
-                    .Replace("^Class^", ns.Class)
-                    .Replace("^Other^", pair.Value[0])
-                    .Replace("^Methods^", pair.Value[1])
-                    .Replace("^Inits^", pair.Value[2])
-                ));
+                taskList.Add(File.WriteAllTextAsync(ns.FullNamespace.Replace(".", "/") + ".cs", template.Replace("^Namespace^", ns.PartialNamespace).Replace("^Class^", ns.Class).Replace("^Other^", pair.Value[0]).Replace("^Methods^", pair.Value[1]).Replace("^Inits^", pair.Value[2])));
             }
 
             await Task.WhenAll(taskList);
@@ -141,17 +134,7 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
             obj.WriteSerializer(serializer);
             obj.WriteDeserializer(deserializer);
             var template = obj is Method ? _methodTemplate : _constructorTemplate;
-            var copy = template
-                .Replace("^Class^", obj.NamingInfo.PascalCaseName)
-                .Replace("^Namespace^", obj.Namespace.PartialNamespace)
-                .Replace("^Properties^", parameters.ToString())
-                .Replace("^Deserialization^", deserializer.ToString())
-                .Replace("^Serialization^", serializer.ToString())
-                .Replace("^Type^", obj.Type.GetTypeName(NamingType.FullNamespace, null, false, NameContext.TypeExtends))
-                .Replace("^FlagsEnums^", flagsEnum.ToString())
-                .Replace("^FlagsUpdate^", flagsUpdating.ToString())
-                .Replace("^ConstructorId^", obj.Id.ToString())
-                .Replace("^MethodAccessibility^", obj.GetMethodsAccessibility());
+            var copy = template.Replace("^Class^", obj.NamingInfo.PascalCaseName).Replace("^Namespace^", obj.Namespace.PartialNamespace).Replace("^Properties^", parameters.ToString()).Replace("^Deserialization^", deserializer.ToString()).Replace("^Serialization^", serializer.ToString()).Replace("^Type^", obj.Type.GetTypeName(NamingType.FullNamespace, null, false, NameContext.TypeExtends)).Replace("^FlagsEnums^", flagsEnum.ToString()).Replace("^FlagsUpdate^", flagsUpdating.ToString()).Replace("^ConstructorId^", obj.Id.ToString()).Replace("^MethodAccessibility^", obj.GetMethodsAccessibility()).Replace("^ObjectRawName^", obj.NamingInfo.OriginalNamespacedName);
             Directory.CreateDirectory(StringTools.NamespaceToDirectory(obj.Namespace.PartialNamespace));
             if (obj is Method method)
             {
@@ -167,10 +150,7 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
         {
             var baseParameters = new StringBuilder();
             type.WriteBaseParameters(baseParameters, true);
-            var copy = _typeTemplate
-                .Replace("^Type^", type.GetTypeName(NamingType.PascalCase, null, false, NameContext.TypeExtends))
-                .Replace("^Namespace^", type.Namespace.PartialNamespace)
-                .Replace("^Properties^", baseParameters.ToString());
+            var copy = _typeTemplate.Replace("^Type^", type.GetTypeName(NamingType.PascalCase, null, false, NameContext.TypeExtends)).Replace("^Namespace^", type.Namespace.PartialNamespace).Replace("^Properties^", baseParameters.ToString());
             Directory.CreateDirectory(StringTools.NamespaceToDirectory(type.Namespace.PartialNamespace));
             return File.WriteAllTextAsync(StringTools.NamespaceToDirectory(type.GetTypeName(NamingType.FullNamespace, null, false, NameContext.TypeExtends)) + ".cs", copy);
         }

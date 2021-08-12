@@ -19,7 +19,7 @@ namespace CatraProto.TL.Generator.Objects
 
         public override void WriteParameters(StringBuilder builder)
         {
-            var type = Type.GetTypeName(NamingType.FullNamespace, null ,false, NameContext.TypeExtends);
+            var type = Type.GetTypeName(NamingType.FullNamespace, null, false, NameContext.TypeExtends);
             builder.AppendLine($"\n[JsonIgnore]\n{StringTools.TwoTabs}System.Type IMethod.Type {{ get; init; }} = typeof({type});");
             builder.AppendLine($"\n[JsonIgnore]\n{StringTools.TwoTabs}bool IMethod.IsVector {{ get; init; }} = {ReturnsVector.ToString().ToLower()};");
             base.WriteParameters(builder);
@@ -28,17 +28,13 @@ namespace CatraProto.TL.Generator.Objects
         public void WriteMethod(StringBuilder builder)
         {
             var args = new StringBuilder();
-            var returnType = Type.GetTypeName(NamingType.FullNamespace,null, false, NameContext.TypeExtends);
+            var returnType = Type.GetTypeName(NamingType.FullNamespace, null, false, NameContext.TypeExtends);
             if (ReturnsVector)
             {
                 returnType = $"CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<{returnType}>";
             }
 
-            var parametersOrdered = Parameters
-                .Where(x => x.Type is not FlagType)
-                .Where(x => !x.HasFlag)
-                .Concat(Parameters.Where(x => x.HasFlag))
-                .ToList();
+            var parametersOrdered = Parameters.Where(x => x.Type is not FlagType).Where(x => !x.HasFlag).Concat(Parameters.Where(x => x.HasFlag)).ToList();
 
             var nullPolicies = new StringBuilder();
             for (var index = 0; index < parametersOrdered.Count; index++)
@@ -70,7 +66,7 @@ namespace CatraProto.TL.Generator.Objects
             builder.AppendLine("};");
             builder.AppendLine();
             builder.AppendLine($"_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);");
-            builder.AppendLine("await taskCompletionSource;");
+            builder.AppendLine("await taskCompletionSource!;");
             builder.AppendLine($"return rpcResponse;");
             builder.AppendLine("}");
         }
