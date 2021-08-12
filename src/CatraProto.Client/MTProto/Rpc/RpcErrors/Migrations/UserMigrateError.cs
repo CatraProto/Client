@@ -1,8 +1,9 @@
 using CatraProto.Client.MTProto.Rpc.Interfaces;
+using CatraProto.Client.MTProto.Rpc.RpcErrors.Migrations.Interfaces;
 
-namespace CatraProto.Client.MTProto.Rpc.RpcErrors
+namespace CatraProto.Client.MTProto.Rpc.RpcErrors.Migrations
 {
-    public class UserMigrateError : RpcError
+    public class UserMigrateError : RpcError, IMigrateError
     {
         public override string ErrorDescription { get; }
         public int DcId { get; }
