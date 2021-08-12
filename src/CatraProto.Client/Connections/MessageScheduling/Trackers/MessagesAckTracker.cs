@@ -32,12 +32,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
         {
             while (true)
             {
-                if (StateSignaler.GetCurrentState() is ResumableSignalState.Stop or ResumableSignalState.Suspend)
-                {
-                    if (await StateSignaler.WaitAsync() is ResumableSignalState.Stop or ResumableSignalState.Suspend)
-                    {
-                    }
-                }
+                await StateSignaler.WaitStateAsync(default, ResumableSignalState.Resume, ResumableSignalState.Start);
             }
         }
 
