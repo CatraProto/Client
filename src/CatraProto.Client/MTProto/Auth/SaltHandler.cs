@@ -1,18 +1,11 @@
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using CatraProto.Client.Async.Locks;
 using CatraProto.Client.Async.Loops;
-using CatraProto.Client.Async.Loops.Enums.Generic;
 using CatraProto.Client.Async.Loops.Enums.Resumable;
-using CatraProto.Client.Async.Signalers;
 using CatraProto.Client.MTProto.Auth.AuthKeyHandler;
-using CatraProto.Client.MTProto.Session.Interfaces;
 using CatraProto.Client.TL.Schemas.MTProto;
-using CatraProto.TL;
 using Serilog;
 
 namespace CatraProto.Client.MTProto.Auth
@@ -20,8 +13,8 @@ namespace CatraProto.Client.MTProto.Auth
     class SaltHandler : PeriodicLoop
     {
         private readonly ConcurrentDictionary<long, FutureSalt> _futureSalts = new ConcurrentDictionary<long, FutureSalt>();
-        private ILogger _logger;
-        private Api _api;
+        private readonly ILogger _logger;
+        private readonly Api _api;
 
         public SaltHandler(Api api, TemporaryAuthKey? temporaryAuthKey, ILogger logger) : base(TimeSpan.FromMinutes(1))
         {
@@ -39,14 +32,7 @@ namespace CatraProto.Client.MTProto.Auth
         {
             while (true)
             {
-                if (StateSignaler.GetCurrentState() is ResumableSignalState.Stop or ResumableSignalState.Suspend)
-                {
-                    if (await StateSignaler.WaitAsync() is ResumableSignalState.Stop or ResumableSignalState.Suspend)
-                    {
-                        continue;
-                    }
-                }
-
+                await StateSignaler.WaitStateAsync(default, ResumableSignalState.Resume, ResumableSignalState.Start);
                 _logger.Information("Cleaning up salts...");
                 foreach (var (key, value) in _futureSalts)
                 {
@@ -147,7 +133,7 @@ namespace CatraProto.Client.MTProto.Auth
             {
                 return;
             }
-            
+
             SetSalt(authKey.ServerSalt!.Value, false);
         }
     }
