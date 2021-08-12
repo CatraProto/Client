@@ -10,6 +10,7 @@ namespace CatraProto.Client.MTProto.Session.Models
     {
         private readonly AsyncSignaler _asyncSignaler = new AsyncSignaler(false);
         private readonly object _mutex;
+        private long _userAccessHash;
         private int _userId;
         private int _dcId;
 
@@ -18,17 +19,18 @@ namespace CatraProto.Client.MTProto.Session.Models
             _mutex = mutex;
         }
 
-        public void SetAuthorized(bool authorized, int dcId, int userId)
+        public void SetAuthorized(bool authorized, int dcId, int userId, long userAccessHash)
         {
             lock (_mutex)
             {
+                _userAccessHash = userAccessHash;
                 _userId = userId;
                 _dcId = dcId;
                 _asyncSignaler.SetSignal(authorized);
             }
         }
 
-        public bool IsAuthorized(out int? dcId, out int? userId)
+        public bool IsAuthorized(out int? dcId, out int? userId, out long? userAccessHash)
         {
             lock (_mutex)
             {
@@ -36,11 +38,13 @@ namespace CatraProto.Client.MTProto.Session.Models
                 {
                     dcId = _dcId;
                     userId = _userId;
+                    userAccessHash = _userAccessHash;
                     return true;
                 }
 
                 dcId = null;
                 userId = null;
+                userAccessHash = null;
                 return false;
             }
         }
@@ -75,6 +79,7 @@ namespace CatraProto.Client.MTProto.Session.Models
                 {
                     _dcId = reader.Read<int>();
                     _userId = reader.Read<int>();
+                    _userAccessHash = reader.Read<long>();
                 }
             }
         }
@@ -83,12 +88,13 @@ namespace CatraProto.Client.MTProto.Session.Models
         {
             lock (_mutex)
             {
-                var isAuth = IsAuthorized(out var dcId, out var userId);
+                var isAuth = IsAuthorized(out var dcId, out var userId, out var userAccessHash);
                 writer.Write(isAuth);
                 if (isAuth)
                 {
                     writer.Write(dcId!.Value);
                     writer.Write(userId);
+                    writer.Write(userAccessHash!.Value);
                 }
             }
         }
