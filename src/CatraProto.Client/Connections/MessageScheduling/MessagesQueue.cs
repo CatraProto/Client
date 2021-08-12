@@ -23,7 +23,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
             _messagesHandler = messagesHandler;
         }
 
-        public void EnqueueMessage(IObject body, MessageSendingOptions messageSendingOptions, IRpcMessage rpcMessage, out Task completionTask, CancellationToken requestCancellationToken)
+        public void EnqueueMessage(IObject body, MessageSendingOptions messageSendingOptions, IRpcMessage? rpcMessage, out Task? completionTask, CancellationToken requestCancellationToken)
         {
             requestCancellationToken.ThrowIfCancellationRequested();
 

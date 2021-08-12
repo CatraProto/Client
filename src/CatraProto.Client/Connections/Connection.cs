@@ -26,6 +26,7 @@ namespace CatraProto.Client.Connections
         private readonly ConnectionProtocol _protocolType;
         private SendLoop? _writeLoop;
         private ReceiveLoop? _readLoop;
+        private PingLoop? _pingLoop;
         private readonly ILogger _logger;
 
         public Connection(ConnectionInfo connectionInfo, ClientSettings clientSettings, ConnectionProtocol protocolType, SessionData sessionData, ILogger logger)
@@ -57,6 +58,7 @@ namespace CatraProto.Client.Connections
 
         private async Task InternalConnectAsync(CancellationToken token)
         {
+            _logger.Information("Stopping loops and creating protocol");
             if (_writeLoop != null)
             {
                 _writeLoop.Stop();
@@ -67,6 +69,12 @@ namespace CatraProto.Client.Connections
             {
                 _readLoop.Stop();
                 await _readLoop.GetShutdownTask();
+            }
+
+            if (_pingLoop != null)
+            {
+                _pingLoop.Stop();
+                await _pingLoop.GetShutdownTask();
             }
 
             if (Protocol != null)
@@ -98,7 +106,9 @@ namespace CatraProto.Client.Connections
         {
             _writeLoop ??= new SendLoop(this, _logger);
             _readLoop ??= new ReceiveLoop(this, _logger);
+            _pingLoop ??= new PingLoop(MtProtoState.Api, _logger);
 
+            _pingLoop.Start();
             _writeLoop.Start();
             _readLoop.Start();
         }
@@ -115,6 +125,12 @@ namespace CatraProto.Client.Connections
             {
                 _readLoop.Stop();
                 await _readLoop.GetShutdownTask();
+            }
+
+            if (_pingLoop != null)
+            {
+                _pingLoop.Stop();
+                await _pingLoop.GetShutdownTask();
             }
 
             Signaler.Dispose();

@@ -90,6 +90,12 @@ namespace CatraProto.Client.Connections.MessageScheduling
             {
                 switch (obj)
                 {
+                    case Ping ping:
+                        HandlePing(ping);
+                        break;
+                    case Pong pong:
+                        HandlePong(pong);
+                        break;
                     case MsgsAck msgsAck:
                         _messagesHandler.MessagesTrackers.MessagesAckTracker.ServerSentAcks(msgsAck);
                         break;
@@ -131,6 +137,20 @@ namespace CatraProto.Client.Connections.MessageScheduling
             {
                 _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(0, obj);
             }
+        }
+
+        private void HandlePing(Ping ping)
+        {
+            _logger.Information("Replying to ping from server with Id {Id}", ping);
+            _messagesHandler.MessagesQueue.EnqueueMessage(new Pong()
+            {
+                PingId = ping.PingId
+            }, new MessageSendingOptions(true), null, out _, default);
+        }
+
+        private void HandlePong(Pong pong)
+        {
+            _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(pong.MsgId, pong);
         }
 
         private void HandleContainer(MsgContainer container, Reader reader)
