@@ -7,18 +7,34 @@ namespace CatraProto.Client.Async.Collections
 {
     public class AsyncQueue<T> : IDisposable
     {
-        private readonly Queue<T> _queue = new Queue<T>();
         private readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(0, 1);
+        private readonly List<T> _list = new List<T>();
         private readonly object _mutex = new object();
+        private T? _lastReadElement;
         private int _releaseCount;
 
         public void Enqueue(T item)
         {
             lock (_mutex)
             {
-                _queue.Enqueue(item);
+                _list.Add(item);
                 _releaseCount++;
                 ReleaseIfNecessary();
+            }
+        }
+
+        public T Dequeue()
+        {
+            lock (_mutex)
+            {
+                var temp = _list[0];
+                _list.RemoveAt(0);
+
+                _lastReadElement = temp;
+
+                _releaseCount--;
+                ReleaseIfNecessary();
+                return temp;
             }
         }
 
@@ -26,25 +42,64 @@ namespace CatraProto.Client.Async.Collections
         {
             lock (_mutex)
             {
-                if (!_queue.TryDequeue(out item))
+                if (_list.Count == 0)
                 {
+                    item = default;
                     return false;
                 }
 
-                _releaseCount--;
-                ReleaseIfNecessary();
+                item = Dequeue();
                 return true;
             }
         }
 
         public async Task<T> DequeueAsync(CancellationToken token = default)
         {
-            await _semaphoreSlim.WaitAsync(token);
+            while (true)
+            {
+                await _semaphoreSlim.WaitAsync(token);
+                if (TryDequeue(out var item))
+                {
+                    return item!;
+                }
+            }
+        }
+
+        public T? GetLastReadElement()
+        {
             lock (_mutex)
             {
-                _releaseCount--;
-                ReleaseIfNecessary();
-                return _queue.Dequeue();
+                return _lastReadElement;
+            }
+        }
+
+        public bool TryGetLastElement(out T? item)
+        {
+            lock (_mutex)
+            {
+                if (_list.Count == 0)
+                {
+                    item = default;
+                    return false;
+                }
+
+                item = _list[^1];
+                return true;
+            }
+        }
+
+        public bool TryGetFirstElement(out T? item)
+        {
+            lock (_mutex)
+            {
+                if (_list.Count == 0)
+                {
+                    item = default;
+                    return false;
+                }
+
+                item = _list[0];
+                return true;
             }
         }
 
@@ -52,7 +107,7 @@ namespace CatraProto.Client.Async.Collections
         {
             lock (_mutex)
             {
-                return _queue.Count;
+                return _list.Count;
             }
         }
 
