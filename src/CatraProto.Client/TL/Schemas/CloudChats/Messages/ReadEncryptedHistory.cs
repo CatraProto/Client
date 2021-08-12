@@ -15,13 +15,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => 2135648522; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("peer")] public InputEncryptedChatBase Peer { get; set; }
+		[JsonPropertyName("peer")] public InputEncryptedChatBase Peer { get; set; }
 
 [JsonPropertyName("max_date")]
 		public int MaxDate { get; set; }
@@ -44,7 +44,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		{
 			Peer = reader.Read<InputEncryptedChatBase>();
 			MaxDate = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.readEncryptedHistory";
 		}
 	}
 }

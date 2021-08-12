@@ -15,15 +15,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => 258170395; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(HighScoresBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(HighScoresBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("id")] public InputBotInlineMessageIDBase Id { get; set; }
+		[JsonPropertyName("id")] public InputBotInlineMessageIDBase Id { get; set; }
 
-[JsonPropertyName("user_id")] public InputUserBase UserId { get; set; }
+		[JsonPropertyName("user_id")] public InputUserBase UserId { get; set; }
 
 
 		public void UpdateFlags() 
@@ -43,7 +43,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		{
 			Id = reader.Read<InputBotInlineMessageIDBase>();
 			UserId = reader.Read<InputUserBase>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.getInlineGameHighScores";
 		}
 	}
 }

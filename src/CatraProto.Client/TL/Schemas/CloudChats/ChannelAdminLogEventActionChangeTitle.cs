@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelAdminLogEventActionChangeTitle : CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionBase
+	public partial class ChannelAdminLogEventActionChangeTitle : ChannelAdminLogEventActionBase
 	{
 
 
@@ -40,7 +36,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			PrevValue = reader.Read<string>();
 			NewValue = reader.Read<string>();
+		}
 
+		public override string ToString()
+		{
+			return "channelAdminLogEventActionChangeTitle";
 		}
 	}
 }

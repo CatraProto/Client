@@ -2,13 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateServiceNotification : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
+	public partial class UpdateServiceNotification : UpdateBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -37,10 +35,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public string Message { get; set; }
 
 [JsonPropertyName("media")]
-		public CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase Media { get; set; }
+		public MessageMediaBase Media { get; set; }
 
 [JsonPropertyName("entities")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
+		public IList<MessageEntityBase> Entities { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -78,9 +76,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			Type = reader.Read<string>();
 			Message = reader.Read<string>();
-			Media = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase>();
-			Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
+			Media = reader.Read<MessageMediaBase>();
+			Entities = reader.ReadVector<MessageEntityBase>();
+		}
 
+		public override string ToString()
+		{
+			return "updateServiceNotification";
 		}
 	}
 }

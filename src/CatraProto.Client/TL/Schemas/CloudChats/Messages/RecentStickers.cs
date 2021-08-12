@@ -16,9 +16,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("hash")]
 		public int Hash { get; set; }
 
-[JsonPropertyName("packs")] public IList<StickerPackBase> Packs { get; set; }
+		[JsonPropertyName("packs")] public IList<StickerPackBase> Packs { get; set; }
 
-[JsonPropertyName("stickers")] public IList<DocumentBase> Stickers { get; set; }
+		[JsonPropertyName("stickers")] public IList<DocumentBase> Stickers { get; set; }
 
 [JsonPropertyName("dates")]
 		public IList<int> Dates { get; set; }
@@ -45,7 +45,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Packs = reader.ReadVector<StickerPackBase>();
 			Stickers = reader.ReadVector<DocumentBase>();
 			Dates = reader.ReadVector<int>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.recentStickers";
 		}
 	}
 }

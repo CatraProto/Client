@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputMediaDocument : CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase
+	public partial class InputMediaDocument : InputMediaBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -24,7 +21,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Flags { get; set; }
 
 [JsonPropertyName("id")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase Id { get; set; }
+		public InputDocumentBase Id { get; set; }
 
 [JsonPropertyName("ttl_seconds")]
 		public int? TtlSeconds { get; set; }
@@ -53,13 +50,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			Id = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
+			Id = reader.Read<InputDocumentBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				TtlSeconds = reader.Read<int>();
 			}
+		}
 
-
+		public override string ToString()
+		{
+			return "inputMediaDocument";
 		}
 	}
 }

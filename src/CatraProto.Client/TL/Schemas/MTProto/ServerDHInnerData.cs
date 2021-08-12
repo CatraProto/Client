@@ -1,14 +1,11 @@
-using System;
-using System.Collections.Generic;
+using System.Numerics;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class ServerDHInnerData : CatraProto.Client.TL.Schemas.MTProto.ServerDHInnerDataBase
+	public partial class ServerDHInnerData : ServerDHInnerDataBase
 	{
 
 
@@ -17,10 +14,10 @@ namespace CatraProto.Client.TL.Schemas.MTProto
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("nonce")]
-		public override System.Numerics.BigInteger Nonce { get; set; }
+		public override BigInteger Nonce { get; set; }
 
 [JsonPropertyName("server_nonce")]
-		public override System.Numerics.BigInteger ServerNonce { get; set; }
+		public override BigInteger ServerNonce { get; set; }
 
 [JsonPropertyName("g")]
 		public override int G { get; set; }
@@ -54,13 +51,17 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
 		public override void Deserialize(Reader reader)
 		{
-			Nonce = reader.Read<System.Numerics.BigInteger>(128);
-			ServerNonce = reader.Read<System.Numerics.BigInteger>(128);
+			Nonce = reader.Read<BigInteger>(128);
+			ServerNonce = reader.Read<BigInteger>(128);
 			G = reader.Read<int>();
 			DhPrime = reader.Read<byte[]>();
 			GA = reader.Read<byte[]>();
 			ServerTime = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "server_DH_inner_data";
 		}
 	}
 }

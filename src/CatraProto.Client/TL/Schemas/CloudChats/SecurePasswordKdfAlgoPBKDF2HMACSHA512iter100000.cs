@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class SecurePasswordKdfAlgoPBKDF2HMACSHA512iter100000 : CatraProto.Client.TL.Schemas.CloudChats.SecurePasswordKdfAlgoBase
+	public partial class SecurePasswordKdfAlgoPBKDF2HMACSHA512iter100000 : SecurePasswordKdfAlgoBase
 	{
 
 
@@ -35,7 +31,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Salt = reader.Read<byte[]>();
+		}
 
+		public override string ToString()
+		{
+			return "securePasswordKdfAlgoPBKDF2HMACSHA512iter100000";
 		}
 	}
 }

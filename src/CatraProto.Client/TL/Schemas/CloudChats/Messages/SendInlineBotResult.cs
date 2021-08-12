@@ -24,8 +24,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => 570955184; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -45,7 +45,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("hide_via")]
 		public bool HideVia { get; set; }
 
-[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
+		[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
 
 [JsonPropertyName("reply_to_msg_id")]
 		public int? ReplyToMsgId { get; set; }
@@ -116,8 +116,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			{
 				ScheduleDate = reader.Read<int>();
 			}
+		}
 
-
+		public override string ToString()
+		{
+			return "messages.sendInlineBotResult";
 		}
 	}
 }

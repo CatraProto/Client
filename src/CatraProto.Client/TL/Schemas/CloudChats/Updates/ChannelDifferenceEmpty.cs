@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 {
-	public partial class ChannelDifferenceEmpty : CatraProto.Client.TL.Schemas.CloudChats.Updates.ChannelDifferenceBase
+	public partial class ChannelDifferenceEmpty : ChannelDifferenceBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -64,8 +61,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 			{
 				Timeout = reader.Read<int>();
 			}
+		}
 
-
+		public override string ToString()
+		{
+			return "updates.channelDifferenceEmpty";
 		}
 	}
 }

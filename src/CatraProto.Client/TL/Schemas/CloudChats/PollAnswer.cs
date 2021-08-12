@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PollAnswer : CatraProto.Client.TL.Schemas.CloudChats.PollAnswerBase
+	public partial class PollAnswer : PollAnswerBase
 	{
 
 
@@ -40,7 +36,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Text = reader.Read<string>();
 			Option = reader.Read<byte[]>();
+		}
 
+		public override string ToString()
+		{
+			return "pollAnswer";
 		}
 	}
 }

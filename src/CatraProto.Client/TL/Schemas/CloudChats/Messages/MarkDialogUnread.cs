@@ -19,8 +19,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => -1031349873; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -31,7 +31,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("unread")]
 		public bool Unread { get; set; }
 
-[JsonPropertyName("peer")] public InputDialogPeerBase Peer { get; set; }
+		[JsonPropertyName("peer")] public InputDialogPeerBase Peer { get; set; }
 
 
 		public void UpdateFlags() 
@@ -54,7 +54,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Flags = reader.Read<int>();
 			Unread = FlagsHelper.IsFlagSet(Flags, 0);
 			Peer = reader.Read<InputDialogPeerBase>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.markDialogUnread";
 		}
 	}
 }

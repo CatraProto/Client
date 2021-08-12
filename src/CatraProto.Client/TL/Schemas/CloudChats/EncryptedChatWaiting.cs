@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class EncryptedChatWaiting : CatraProto.Client.TL.Schemas.CloudChats.EncryptedChatBase
+	public partial class EncryptedChatWaiting : EncryptedChatBase
 	{
 
 
@@ -55,7 +51,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Date = reader.Read<int>();
 			AdminId = reader.Read<int>();
 			ParticipantId = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "encryptedChatWaiting";
 		}
 	}
 }

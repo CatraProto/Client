@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 
@@ -24,7 +22,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Upload.FileBase);
+		Type IMethod.Type { get; init; } = typeof(FileBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -39,7 +37,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 		public bool CdnSupported { get; set; }
 
 [JsonPropertyName("location")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputFileLocationBase Location { get; set; }
+		public InputFileLocationBase Location { get; set; }
 
 [JsonPropertyName("offset")]
 		public int Offset { get; set; }
@@ -71,10 +69,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 			Flags = reader.Read<int>();
 			Precise = FlagsHelper.IsFlagSet(Flags, 0);
 			CdnSupported = FlagsHelper.IsFlagSet(Flags, 1);
-			Location = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputFileLocationBase>();
+			Location = reader.Read<InputFileLocationBase>();
 			Offset = reader.Read<int>();
 			Limit = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "upload.getFile";
 		}
 	}
 }

@@ -21,20 +21,20 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 	    public async Task<RpcMessage<DataJSONBase>> GetCallConfigAsync(MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			var rpcResponse = new RpcMessage<DataJSONBase>();
-			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			messageSendingOptions ??= new MessageSendingOptions(true);
 			var methodBody = new GetCallConfig
 			{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
 	    public async Task<RpcMessage<PhoneCallBase>> RequestCallAsync(InputUserBase userId, int randomId, byte[] gAHash, PhoneCallProtocolBase protocol, bool video = true, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			var rpcResponse = new RpcMessage<PhoneCallBase>();
-			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			messageSendingOptions ??= new MessageSendingOptions(true);
 			var methodBody = new RequestCall
 			{
 UserId = userId,
@@ -45,14 +45,14 @@ Video = video,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
 	    public async Task<RpcMessage<PhoneCallBase>> AcceptCallAsync(InputPhoneCallBase peer, byte[] gB, PhoneCallProtocolBase protocol, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			var rpcResponse = new RpcMessage<PhoneCallBase>();
-			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			messageSendingOptions ??= new MessageSendingOptions(true);
 			var methodBody = new AcceptCall
 			{
 Peer = peer,
@@ -61,14 +61,14 @@ Protocol = protocol,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
 	    public async Task<RpcMessage<PhoneCallBase>> ConfirmCallAsync(InputPhoneCallBase peer, byte[] gA, long keyFingerprint, PhoneCallProtocolBase protocol, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			var rpcResponse = new RpcMessage<PhoneCallBase>();
-			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			messageSendingOptions ??= new MessageSendingOptions(true);
 			var methodBody = new ConfirmCall
 			{
 Peer = peer,
@@ -78,7 +78,7 @@ Protocol = protocol,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
@@ -86,21 +86,21 @@ return rpcResponse;
 		{
 
 var rpcResponse = new RpcMessage<bool>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new MessageSendingOptions(true);
 var methodBody = new ReceivedCall
 {
 Peer = peer,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
 	    public async Task<RpcMessage<UpdatesBase>> DiscardCallAsync(InputPhoneCallBase peer, int duration, PhoneCallDiscardReasonBase reason, long connectionId, bool video = true, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			var rpcResponse = new RpcMessage<UpdatesBase>();
-			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			messageSendingOptions ??= new MessageSendingOptions(true);
 			var methodBody = new DiscardCall
 			{
 Peer = peer,
@@ -111,14 +111,14 @@ Video = video,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
 	    public async Task<RpcMessage<UpdatesBase>> SetCallRatingAsync(InputPhoneCallBase peer, int rating, string comment, bool userInitiative = true, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			var rpcResponse = new RpcMessage<UpdatesBase>();
-			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			messageSendingOptions ??= new MessageSendingOptions(true);
 			var methodBody = new SetCallRating
 			{
 Peer = peer,
@@ -128,7 +128,7 @@ UserInitiative = userInitiative,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
@@ -136,7 +136,7 @@ return rpcResponse;
 		{
 
 var rpcResponse = new RpcMessage<bool>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new MessageSendingOptions(true);
 var methodBody = new SaveCallDebug
 {
 Peer = peer,
@@ -144,7 +144,7 @@ Debug = debug,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
@@ -152,7 +152,7 @@ return rpcResponse;
 		{
 
 var rpcResponse = new RpcMessage<bool>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new MessageSendingOptions(true);
 var methodBody = new SendSignalingData
 {
 Peer = peer,
@@ -160,7 +160,7 @@ Data = data,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 

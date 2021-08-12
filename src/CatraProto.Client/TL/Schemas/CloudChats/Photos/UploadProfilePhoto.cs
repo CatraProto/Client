@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 
@@ -25,7 +23,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Photos.PhotoBase);
+		Type IMethod.Type { get; init; } = typeof(PhotoBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -34,10 +32,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 		public int Flags { get; set; }
 
 [JsonPropertyName("file")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase File { get; set; }
+		public InputFileBase File { get; set; }
 
 [JsonPropertyName("video")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase Video { get; set; }
+		public InputFileBase Video { get; set; }
 
 [JsonPropertyName("video_start_ts")]
 		public double? VideoStartTs { get; set; }
@@ -79,20 +77,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 			Flags = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				File = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
+				File = reader.Read<InputFileBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Video = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
+				Video = reader.Read<InputFileBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
 				VideoStartTs = reader.Read<double>();
 			}
+		}
 
-
+		public override string ToString()
+		{
+			return "photos.uploadProfilePhoto";
 		}
 	}
 }

@@ -15,15 +15,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => -1517917375; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
+		[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
 
-[JsonPropertyName("banned_rights")] public ChatBannedRightsBase BannedRights { get; set; }
+		[JsonPropertyName("banned_rights")] public ChatBannedRightsBase BannedRights { get; set; }
 
 
 		public void UpdateFlags() 
@@ -43,7 +43,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		{
 			Peer = reader.Read<InputPeerBase>();
 			BannedRights = reader.Read<ChatBannedRightsBase>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.editChatDefaultBannedRights";
 		}
 	}
 }

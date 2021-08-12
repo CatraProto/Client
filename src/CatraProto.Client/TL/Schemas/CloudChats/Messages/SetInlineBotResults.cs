@@ -23,8 +23,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => -346119674; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -41,7 +41,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("query_id")]
 		public long QueryId { get; set; }
 
-[JsonPropertyName("results")] public IList<InputBotInlineResultBase> Results { get; set; }
+		[JsonPropertyName("results")] public IList<InputBotInlineResultBase> Results { get; set; }
 
 [JsonPropertyName("cache_time")]
 		public int CacheTime { get; set; }
@@ -49,7 +49,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("next_offset")]
 		public string NextOffset { get; set; }
 
-[JsonPropertyName("switch_pm")] public InlineBotSwitchPMBase SwitchPm { get; set; }
+		[JsonPropertyName("switch_pm")] public InlineBotSwitchPMBase SwitchPm { get; set; }
 
 
 		public void UpdateFlags() 
@@ -99,8 +99,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			{
 				SwitchPm = reader.Read<InlineBotSwitchPMBase>();
 			}
+		}
 
-
+		public override string ToString()
+		{
+			return "messages.setInlineBotResults";
 		}
 	}
 }

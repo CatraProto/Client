@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 
@@ -19,19 +17,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase);
+		Type IMethod.Type { get; init; } = typeof(WallPaperBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
 [JsonPropertyName("file")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase File { get; set; }
+		public InputFileBase File { get; set; }
 
 [JsonPropertyName("mime_type")]
 		public string MimeType { get; set; }
 
 [JsonPropertyName("settings")]
-		public CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase Settings { get; set; }
+		public WallPaperSettingsBase Settings { get; set; }
 
 
 		public void UpdateFlags() 
@@ -50,10 +48,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 		public void Deserialize(Reader reader)
 		{
-			File = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
+			File = reader.Read<InputFileBase>();
 			MimeType = reader.Read<string>();
-			Settings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase>();
+			Settings = reader.Read<WallPaperSettingsBase>();
+		}
 
+		public override string ToString()
+		{
+			return "account.uploadWallPaper";
 		}
 	}
 }

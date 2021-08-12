@@ -20,8 +20,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
         public static int StaticConstructorId { get => 730364339; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(PaymentResultBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(PaymentResultBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -38,7 +38,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 [JsonPropertyName("shipping_option_id")]
 		public string ShippingOptionId { get; set; }
 
-[JsonPropertyName("credentials")] public InputPaymentCredentialsBase Credentials { get; set; }
+		[JsonPropertyName("credentials")] public InputPaymentCredentialsBase Credentials { get; set; }
 
 
 		public void UpdateFlags() 
@@ -83,7 +83,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 			}
 
 			Credentials = reader.Read<InputPaymentCredentialsBase>();
+		}
 
+		public override string ToString()
+		{
+			return "payments.sendPaymentForm";
 		}
 	}
 }

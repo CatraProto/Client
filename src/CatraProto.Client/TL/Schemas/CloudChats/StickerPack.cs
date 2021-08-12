@@ -1,14 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class StickerPack : CatraProto.Client.TL.Schemas.CloudChats.StickerPackBase
+	public partial class StickerPack : StickerPackBase
 	{
 
 
@@ -40,7 +37,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Emoticon = reader.Read<string>();
 			Documents = reader.ReadVector<long>();
+		}
 
+		public override string ToString()
+		{
+			return "stickerPack";
 		}
 	}
 }

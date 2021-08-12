@@ -16,7 +16,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("count")]
 		public override int Count { get; set; }
 
-[JsonPropertyName("sets")] public override IList<StickerSetCoveredBase> Sets { get; set; }
+		[JsonPropertyName("sets")] public override IList<StickerSetCoveredBase> Sets { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -36,7 +36,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		{
 			Count = reader.Read<int>();
 			Sets = reader.ReadVector<StickerSetCoveredBase>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.archivedStickers";
 		}
 	}
 }

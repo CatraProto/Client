@@ -1,14 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-	public partial class UserInfo : CatraProto.Client.TL.Schemas.CloudChats.Help.UserInfoBase
+	public partial class UserInfo : UserInfoBase
 	{
 
 
@@ -20,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 		public string Message { get; set; }
 
 [JsonPropertyName("entities")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
+		public IList<MessageEntityBase> Entities { get; set; }
 
 [JsonPropertyName("author")]
 		public string Author { get; set; }
@@ -47,10 +44,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 		public override void Deserialize(Reader reader)
 		{
 			Message = reader.Read<string>();
-			Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
+			Entities = reader.ReadVector<MessageEntityBase>();
 			Author = reader.Read<string>();
 			Date = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "help.userInfo";
 		}
 	}
 }

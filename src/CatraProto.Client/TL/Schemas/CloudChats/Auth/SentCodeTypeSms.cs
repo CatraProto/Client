@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
-	public partial class SentCodeTypeSms : CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeTypeBase
+	public partial class SentCodeTypeSms : SentCodeTypeBase
 	{
 
 
@@ -35,7 +31,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 		public override void Deserialize(Reader reader)
 		{
 			Length = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "auth.sentCodeTypeSms";
 		}
 	}
 }

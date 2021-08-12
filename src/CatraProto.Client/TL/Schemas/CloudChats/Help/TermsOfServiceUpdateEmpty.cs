@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-	public partial class TermsOfServiceUpdateEmpty : CatraProto.Client.TL.Schemas.CloudChats.Help.TermsOfServiceUpdateBase
+	public partial class TermsOfServiceUpdateEmpty : TermsOfServiceUpdateBase
 	{
 
 
@@ -35,7 +31,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 		public override void Deserialize(Reader reader)
 		{
 			Expires = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "help.termsOfServiceUpdateEmpty";
 		}
 	}
 }

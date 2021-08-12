@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class KeyboardButtonUrl : CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonBase
+	public partial class KeyboardButtonUrl : KeyboardButtonBase
 	{
 
 
@@ -40,7 +36,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Text = reader.Read<string>();
 			Url = reader.Read<string>();
+		}
 
+		public override string ToString()
+		{
+			return "keyboardButtonUrl";
 		}
 	}
 }

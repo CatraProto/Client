@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class StatsPercentValue : CatraProto.Client.TL.Schemas.CloudChats.StatsPercentValueBase
+	public partial class StatsPercentValue : StatsPercentValueBase
 	{
 
 
@@ -40,7 +36,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Part = reader.Read<double>();
 			Total = reader.Read<double>();
+		}
 
+		public override string ToString()
+		{
+			return "statsPercentValue";
 		}
 	}
 }

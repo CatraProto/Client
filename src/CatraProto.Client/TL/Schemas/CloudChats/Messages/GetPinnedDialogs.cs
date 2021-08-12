@@ -15,8 +15,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => -692498958; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(PeerDialogsBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(PeerDialogsBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -40,7 +40,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public void Deserialize(Reader reader)
 		{
 			FolderId = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.getPinnedDialogs";
 		}
 	}
 }

@@ -11,8 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
         public static int StaticConstructorId { get => 1314881805; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonPropertyName("updates")] public UpdatesBase Updates { get; set; }
+
+        [JsonPropertyName("updates")] public UpdatesBase Updates { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -30,7 +30,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 		public override void Deserialize(Reader reader)
 		{
 			Updates = reader.Read<UpdatesBase>();
+		}
 
+		public override string ToString()
+		{
+			return "payments.paymentResult";
 		}
 	}
 }

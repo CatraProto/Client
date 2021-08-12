@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 
@@ -19,16 +18,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Users
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
+		Type IMethod.Type { get; init; } = typeof(bool);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
 [JsonPropertyName("id")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase Id { get; set; }
+		public InputUserBase Id { get; set; }
 
 [JsonPropertyName("errors")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase> Errors { get; set; }
+		public IList<SecureValueErrorBase> Errors { get; set; }
 
 
 		public void UpdateFlags() 
@@ -46,9 +45,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Users
 
 		public void Deserialize(Reader reader)
 		{
-			Id = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
-			Errors = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase>();
+			Id = reader.Read<InputUserBase>();
+			Errors = reader.ReadVector<SecureValueErrorBase>();
+		}
 
+		public override string ToString()
+		{
+			return "users.setSecureValueErrors";
 		}
 	}
 }

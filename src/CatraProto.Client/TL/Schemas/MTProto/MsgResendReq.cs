@@ -1,14 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class MsgResendReq : CatraProto.Client.TL.Schemas.MTProto.MsgResendReqBase
+	public partial class MsgResendReq : MsgResendReqBase
 	{
 
 
@@ -35,7 +32,11 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 		public override void Deserialize(Reader reader)
 		{
 			MsgIds = reader.ReadVector<long>();
+		}
 
+		public override string ToString()
+		{
+			return "msg_resend_req";
 		}
 	}
 }

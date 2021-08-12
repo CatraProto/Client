@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-	public partial class DeepLinkInfoEmpty : CatraProto.Client.TL.Schemas.CloudChats.Help.DeepLinkInfoBase
+	public partial class DeepLinkInfoEmpty : DeepLinkInfoBase
 	{
 
 
@@ -30,7 +26,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 
 		public override void Deserialize(Reader reader)
 		{
+		}
 
+		public override string ToString()
+		{
+			return "help.deepLinkInfoEmpty";
 		}
 	}
 }

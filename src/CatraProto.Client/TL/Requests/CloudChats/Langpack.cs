@@ -22,7 +22,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 	    public async Task<RpcMessage<LangPackDifferenceBase>> GetLangPackAsync(string langPack, string langCode, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			var rpcResponse = new RpcMessage<LangPackDifferenceBase>();
-			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			messageSendingOptions ??= new MessageSendingOptions(true);
 			var methodBody = new GetLangPack
 			{
 LangPack = langPack,
@@ -30,7 +30,7 @@ LangCode = langCode,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
@@ -38,7 +38,7 @@ return rpcResponse;
 		{
 			var rpcResponse = new RpcMessage<RpcVector<LangPackStringBase>>();
 			rpcResponse.Response = new RpcVector<LangPackStringBase>();
-			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			messageSendingOptions ??= new MessageSendingOptions(true);
 			var methodBody = new GetStrings
 			{
 LangPack = langPack,
@@ -47,14 +47,14 @@ Keys = keys,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
 	    public async Task<RpcMessage<LangPackDifferenceBase>> GetDifferenceAsync(string langPack, string langCode, int fromVersion, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			var rpcResponse = new RpcMessage<LangPackDifferenceBase>();
-			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			messageSendingOptions ??= new MessageSendingOptions(true);
 			var methodBody = new GetDifference
 			{
 LangPack = langPack,
@@ -63,7 +63,7 @@ FromVersion = fromVersion,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
@@ -71,21 +71,21 @@ return rpcResponse;
 		{
 			var rpcResponse = new RpcMessage<RpcVector<LangPackLanguageBase>>();
 			rpcResponse.Response = new RpcVector<LangPackLanguageBase>();
-			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			messageSendingOptions ??= new MessageSendingOptions(true);
 			var methodBody = new GetLanguages
 			{
 LangPack = langPack,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
 	    public async Task<RpcMessage<LangPackLanguageBase>> GetLanguageAsync(string langPack, string langCode, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			var rpcResponse = new RpcMessage<LangPackLanguageBase>();
-			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			messageSendingOptions ??= new MessageSendingOptions(true);
 			var methodBody = new GetLanguage
 			{
 LangPack = langPack,
@@ -93,7 +93,7 @@ LangCode = langCode,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 

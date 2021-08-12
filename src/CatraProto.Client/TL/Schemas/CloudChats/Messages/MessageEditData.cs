@@ -42,7 +42,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		{
 			Flags = reader.Read<int>();
 			Caption = FlagsHelper.IsFlagSet(Flags, 0);
+		}
 
+		public override string ToString()
+		{
+			return "messages.messageEditData";
 		}
 	}
 }

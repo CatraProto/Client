@@ -21,8 +21,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => -436833542; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -36,7 +36,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("error")]
 		public string Error { get; set; }
 
-[JsonPropertyName("shipping_options")] public IList<ShippingOptionBase> ShippingOptions { get; set; }
+		[JsonPropertyName("shipping_options")] public IList<ShippingOptionBase> ShippingOptions { get; set; }
 
 
 		public void UpdateFlags() 
@@ -78,8 +78,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			{
 				ShippingOptions = reader.ReadVector<ShippingOptionBase>();
 			}
+		}
 
-
+		public override string ToString()
+		{
+			return "messages.setBotShippingResults";
 		}
 	}
 }

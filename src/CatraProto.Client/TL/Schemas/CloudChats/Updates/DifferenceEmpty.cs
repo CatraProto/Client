@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 {
-	public partial class DifferenceEmpty : CatraProto.Client.TL.Schemas.CloudChats.Updates.DifferenceBase
+	public partial class DifferenceEmpty : DifferenceBase
 	{
 
 
@@ -40,7 +36,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 		{
 			Date = reader.Read<int>();
 			Seq = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "updates.differenceEmpty";
 		}
 	}
 }

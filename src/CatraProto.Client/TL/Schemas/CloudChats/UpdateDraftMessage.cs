@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateDraftMessage : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
+	public partial class UpdateDraftMessage : UpdateBase
 	{
 
 
@@ -17,10 +13,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("peer")]
-		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
+		public PeerBase Peer { get; set; }
 
 [JsonPropertyName("draft")]
-		public CatraProto.Client.TL.Schemas.CloudChats.DraftMessageBase Draft { get; set; }
+		public DraftMessageBase Draft { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -38,9 +34,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
-			Draft = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DraftMessageBase>();
+			Peer = reader.Read<PeerBase>();
+			Draft = reader.Read<DraftMessageBase>();
+		}
 
+		public override string ToString()
+		{
+			return "updateDraftMessage";
 		}
 	}
 }

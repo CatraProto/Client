@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class HighScore : CatraProto.Client.TL.Schemas.CloudChats.HighScoreBase
+	public partial class HighScore : HighScoreBase
 	{
 
 
@@ -45,7 +41,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Pos = reader.Read<int>();
 			UserId = reader.Read<int>();
 			Score = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "highScore";
 		}
 	}
 }

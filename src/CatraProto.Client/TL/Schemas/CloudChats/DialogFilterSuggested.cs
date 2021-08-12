@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class DialogFilterSuggested : CatraProto.Client.TL.Schemas.CloudChats.DialogFilterSuggestedBase
+	public partial class DialogFilterSuggested : DialogFilterSuggestedBase
 	{
 
 
@@ -17,7 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("filter")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.DialogFilterBase Filter { get; set; }
+		public override DialogFilterBase Filter { get; set; }
 
 [JsonPropertyName("description")]
 		public override string Description { get; set; }
@@ -38,9 +34,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Filter = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DialogFilterBase>();
+			Filter = reader.Read<DialogFilterBase>();
 			Description = reader.Read<string>();
+		}
 
+		public override string ToString()
+		{
+			return "dialogFilterSuggested";
 		}
 	}
 }

@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 
@@ -30,7 +28,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Contacts.TopPeersBase);
+		Type IMethod.Type { get; init; } = typeof(TopPeersBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -110,7 +108,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 			Offset = reader.Read<int>();
 			Limit = reader.Read<int>();
 			Hash = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "contacts.getTopPeers";
 		}
 	}
 }

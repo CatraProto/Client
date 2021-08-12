@@ -15,8 +15,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => -106911223; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -24,7 +24,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("chat_id")]
 		public int ChatId { get; set; }
 
-[JsonPropertyName("user_id")] public InputUserBase UserId { get; set; }
+		[JsonPropertyName("user_id")] public InputUserBase UserId { get; set; }
 
 [JsonPropertyName("fwd_limit")]
 		public int FwdLimit { get; set; }
@@ -49,7 +49,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			ChatId = reader.Read<int>();
 			UserId = reader.Read<InputUserBase>();
 			FwdLimit = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.addChatUser";
 		}
 	}
 }

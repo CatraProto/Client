@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class ContentSettings : CatraProto.Client.TL.Schemas.CloudChats.Account.ContentSettingsBase
+	public partial class ContentSettings : ContentSettingsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -51,7 +48,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 			Flags = reader.Read<int>();
 			SensitiveEnabled = FlagsHelper.IsFlagSet(Flags, 0);
 			SensitiveCanChange = FlagsHelper.IsFlagSet(Flags, 1);
+		}
 
+		public override string ToString()
+		{
+			return "account.contentSettings";
 		}
 	}
 }

@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class DocumentAttributeAudio : CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase
+	public partial class DocumentAttributeAudio : DocumentAttributeBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -94,8 +91,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			{
 				Waveform = reader.Read<byte[]>();
 			}
+		}
 
-
+		public override string ToString()
+		{
+			return "documentAttributeAudio";
 		}
 	}
 }

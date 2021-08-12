@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PeerSelfLocated : CatraProto.Client.TL.Schemas.CloudChats.PeerLocatedBase
+	public partial class PeerSelfLocated : PeerLocatedBase
 	{
 
 
@@ -35,7 +31,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Expires = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "peerSelfLocated";
 		}
 	}
 }

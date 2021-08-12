@@ -12,8 +12,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => 904138920; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonPropertyName("sets")] public IList<StickerSetCoveredBase> Sets { get; set; }
+
+        [JsonPropertyName("sets")] public IList<StickerSetCoveredBase> Sets { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -31,7 +31,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public override void Deserialize(Reader reader)
 		{
 			Sets = reader.ReadVector<StickerSetCoveredBase>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.stickerSetInstallResultArchive";
 		}
 	}
 }

@@ -21,8 +21,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => -1824339449; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(BotCallbackAnswerBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(BotCallbackAnswerBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -33,7 +33,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("game")]
 		public bool Game { get; set; }
 
-[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
+		[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
 
 [JsonPropertyName("msg_id")]
 		public int MsgId { get; set; }
@@ -41,7 +41,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("data")]
 		public byte[] Data { get; set; }
 
-[JsonPropertyName("password")] public InputCheckPasswordSRPBase Password { get; set; }
+		[JsonPropertyName("password")] public InputCheckPasswordSRPBase Password { get; set; }
 
 
 		public void UpdateFlags() 
@@ -87,8 +87,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			{
 				Password = reader.Read<InputCheckPasswordSRPBase>();
 			}
+		}
 
-
+		public override string ToString()
+		{
+			return "messages.getBotCallbackAnswer";
 		}
 	}
 }

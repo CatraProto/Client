@@ -15,8 +15,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => -900957736; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -24,7 +24,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("chat_id")]
 		public int ChatId { get; set; }
 
-[JsonPropertyName("photo")] public InputChatPhotoBase Photo { get; set; }
+		[JsonPropertyName("photo")] public InputChatPhotoBase Photo { get; set; }
 
 
 		public void UpdateFlags() 
@@ -44,7 +44,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		{
 			ChatId = reader.Read<int>();
 			Photo = reader.Read<InputChatPhotoBase>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.editChatPhoto";
 		}
 	}
 }

@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class LangPackStringPluralized : CatraProto.Client.TL.Schemas.CloudChats.LangPackStringBase
+	public partial class LangPackStringPluralized : LangPackStringBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -124,7 +121,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			}
 
 			OtherValue = reader.Read<string>();
+		}
 
+		public override string ToString()
+		{
+			return "langPackStringPluralized";
 		}
 	}
 }

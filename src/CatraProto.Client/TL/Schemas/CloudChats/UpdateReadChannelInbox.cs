@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateReadChannelInbox : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
+	public partial class UpdateReadChannelInbox : UpdateBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -74,7 +71,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			MaxId = reader.Read<int>();
 			StillUnreadCount = reader.Read<int>();
 			Pts = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "updateReadChannelInbox";
 		}
 	}
 }

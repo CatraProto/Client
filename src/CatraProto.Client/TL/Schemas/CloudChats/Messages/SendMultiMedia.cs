@@ -24,8 +24,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => -872345397; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -42,12 +42,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("clear_draft")]
 		public bool ClearDraft { get; set; }
 
-[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
+		[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
 
 [JsonPropertyName("reply_to_msg_id")]
 		public int? ReplyToMsgId { get; set; }
 
-[JsonPropertyName("multi_media")] public IList<InputSingleMediaBase> MultiMedia { get; set; }
+		[JsonPropertyName("multi_media")] public IList<InputSingleMediaBase> MultiMedia { get; set; }
 
 [JsonPropertyName("schedule_date")]
 		public int? ScheduleDate { get; set; }
@@ -100,8 +100,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			{
 				ScheduleDate = reader.Read<int>();
 			}
+		}
 
-
+		public override string ToString()
+		{
+			return "messages.sendMultiMedia";
 		}
 	}
 }

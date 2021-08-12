@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageFwdHeader : CatraProto.Client.TL.Schemas.CloudChats.MessageFwdHeaderBase
+	public partial class MessageFwdHeader : MessageFwdHeaderBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -34,7 +31,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override bool Imported { get; set; }
 
 [JsonPropertyName("from_id")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.PeerBase FromId { get; set; }
+		public override PeerBase FromId { get; set; }
 
 [JsonPropertyName("from_name")]
 		public override string FromName { get; set; }
@@ -49,7 +46,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override string PostAuthor { get; set; }
 
 [JsonPropertyName("saved_from_peer")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.PeerBase SavedFromPeer { get; set; }
+		public override PeerBase SavedFromPeer { get; set; }
 
 [JsonPropertyName("saved_from_msg_id")]
 		public override int? SavedFromMsgId { get; set; }
@@ -121,7 +118,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Imported = FlagsHelper.IsFlagSet(Flags, 7);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				FromId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+				FromId = reader.Read<PeerBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
@@ -142,7 +139,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				SavedFromPeer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+				SavedFromPeer = reader.Read<PeerBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
@@ -154,8 +151,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			{
 				PsaType = reader.Read<string>();
 			}
+		}
 
-
+		public override string ToString()
+		{
+			return "messageFwdHeader";
 		}
 	}
 }

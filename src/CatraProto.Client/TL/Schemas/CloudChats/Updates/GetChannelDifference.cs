@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 
@@ -23,7 +21,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Updates.ChannelDifferenceBase);
+		Type IMethod.Type { get; init; } = typeof(ChannelDifferenceBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -35,10 +33,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 		public bool Force { get; set; }
 
 [JsonPropertyName("channel")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase Channel { get; set; }
+		public InputChannelBase Channel { get; set; }
 
 [JsonPropertyName("filter")]
-		public CatraProto.Client.TL.Schemas.CloudChats.ChannelMessagesFilterBase Filter { get; set; }
+		public ChannelMessagesFilterBase Filter { get; set; }
 
 [JsonPropertyName("pts")]
 		public int Pts { get; set; }
@@ -69,11 +67,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 		{
 			Flags = reader.Read<int>();
 			Force = FlagsHelper.IsFlagSet(Flags, 0);
-			Channel = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
-			Filter = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChannelMessagesFilterBase>();
+			Channel = reader.Read<InputChannelBase>();
+			Filter = reader.Read<ChannelMessagesFilterBase>();
 			Pts = reader.Read<int>();
 			Limit = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "updates.getChannelDifference";
 		}
 	}
 }

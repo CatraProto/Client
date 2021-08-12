@@ -15,8 +15,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => 1608974939; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(FeaturedStickersBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(FeaturedStickersBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -50,7 +50,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Offset = reader.Read<int>();
 			Limit = reader.Read<int>();
 			Hash = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.getOldFeaturedStickers";
 		}
 	}
 }

@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class WallPaperNoFile : CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase
+	public partial class WallPaperNoFile : WallPaperBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -32,7 +29,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override bool Dark { get; set; }
 
 [JsonPropertyName("settings")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase Settings { get; set; }
+		public override WallPaperSettingsBase Settings { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -63,10 +60,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Dark = FlagsHelper.IsFlagSet(Flags, 4);
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				Settings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase>();
+				Settings = reader.Read<WallPaperSettingsBase>();
 			}
+		}
 
-
+		public override string ToString()
+		{
+			return "wallPaperNoFile";
 		}
 	}
 }

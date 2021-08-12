@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class NewSessionCreated : CatraProto.Client.TL.Schemas.MTProto.NewSessionBase
+	public partial class NewSessionCreated : NewSessionBase
 	{
 
 
@@ -45,7 +41,11 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 			FirstMsgId = reader.Read<long>();
 			UniqueId = reader.Read<long>();
 			ServerSalt = reader.Read<long>();
+		}
 
+		public override string ToString()
+		{
+			return "new_session_created";
 		}
 	}
 }

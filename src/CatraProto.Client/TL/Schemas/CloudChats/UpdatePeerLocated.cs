@@ -1,14 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdatePeerLocated : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
+	public partial class UpdatePeerLocated : UpdateBase
 	{
 
 
@@ -17,7 +14,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("peers")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.PeerLocatedBase> Peers { get; set; }
+		public IList<PeerLocatedBase> Peers { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -34,8 +31,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Peers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PeerLocatedBase>();
+			Peers = reader.ReadVector<PeerLocatedBase>();
+		}
 
+		public override string ToString()
+		{
+			return "updatePeerLocated";
 		}
 	}
 }

@@ -2,13 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PhoneCallProtocol : CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase
+	public partial class PhoneCallProtocol : PhoneCallProtocolBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -66,7 +64,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			MinLayer = reader.Read<int>();
 			MaxLayer = reader.Read<int>();
 			LibraryVersions = reader.ReadVector<string>();
+		}
 
+		public override string ToString()
+		{
+			return "phoneCallProtocol";
 		}
 	}
 }

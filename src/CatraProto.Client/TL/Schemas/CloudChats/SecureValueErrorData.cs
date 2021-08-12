@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class SecureValueErrorData : CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase
+	public partial class SecureValueErrorData : SecureValueErrorBase
 	{
 
 
@@ -17,7 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("type")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase Type { get; set; }
+		public override SecureValueTypeBase Type { get; set; }
 
 [JsonPropertyName("data_hash")]
 		public byte[] DataHash { get; set; }
@@ -46,11 +42,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Type = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase>();
+			Type = reader.Read<SecureValueTypeBase>();
 			DataHash = reader.Read<byte[]>();
 			Field = reader.Read<string>();
 			Text = reader.Read<string>();
+		}
 
+		public override string ToString()
+		{
+			return "secureValueErrorData";
 		}
 	}
 }

@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class CodeSettings : CatraProto.Client.TL.Schemas.CloudChats.CodeSettingsBase
+	public partial class CodeSettings : CodeSettingsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -57,7 +54,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			AllowFlashcall = FlagsHelper.IsFlagSet(Flags, 0);
 			CurrentNumber = FlagsHelper.IsFlagSet(Flags, 1);
 			AllowAppHash = FlagsHelper.IsFlagSet(Flags, 4);
+		}
 
+		public override string ToString()
+		{
+			return "codeSettings";
 		}
 	}
 }

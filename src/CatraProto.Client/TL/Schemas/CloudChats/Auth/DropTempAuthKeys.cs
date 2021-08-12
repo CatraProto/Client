@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 
@@ -19,7 +18,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
+		Type IMethod.Type { get; init; } = typeof(bool);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -43,7 +42,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 		public void Deserialize(Reader reader)
 		{
 			ExceptAuthKeys = reader.ReadVector<long>();
+		}
 
+		public override string ToString()
+		{
+			return "auth.dropTempAuthKeys";
 		}
 	}
 }

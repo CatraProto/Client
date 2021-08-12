@@ -15,13 +15,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => 1035731989; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(EncryptedChatBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(EncryptedChatBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("peer")] public InputEncryptedChatBase Peer { get; set; }
+		[JsonPropertyName("peer")] public InputEncryptedChatBase Peer { get; set; }
 
 [JsonPropertyName("g_b")]
 		public byte[] GB { get; set; }
@@ -49,7 +49,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Peer = reader.Read<InputEncryptedChatBase>();
 			GB = reader.Read<byte[]>();
 			KeyFingerprint = reader.Read<long>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.acceptEncryption";
 		}
 	}
 }

@@ -15,8 +15,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
         public static int StaticConstructorId { get => 578650699; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(SavedInfoBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(SavedInfoBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -35,7 +35,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 
 		public void Deserialize(Reader reader)
 		{
+		}
 
+		public override string ToString()
+		{
+			return "payments.getSavedInfo";
 		}
 	}
 }

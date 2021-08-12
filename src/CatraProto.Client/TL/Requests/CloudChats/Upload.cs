@@ -22,7 +22,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 		{
 
 var rpcResponse = new RpcMessage<bool>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new MessageSendingOptions(true);
 var methodBody = new SaveFilePart
 {
 FileId = fileId,
@@ -31,14 +31,14 @@ Bytes = bytes,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
 	    public async Task<RpcMessage<FileBase>> GetFileAsync(InputFileLocationBase location, int offset, int limit, bool precise = true, bool cdnSupported = true, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			var rpcResponse = new RpcMessage<FileBase>();
-			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			messageSendingOptions ??= new MessageSendingOptions(true);
 			var methodBody = new GetFile
 			{
 Location = location,
@@ -49,7 +49,7 @@ CdnSupported = cdnSupported,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
@@ -57,7 +57,7 @@ return rpcResponse;
 		{
 
 var rpcResponse = new RpcMessage<bool>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new MessageSendingOptions(true);
 var methodBody = new SaveBigFilePart
 {
 FileId = fileId,
@@ -67,14 +67,14 @@ Bytes = bytes,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
 	    public async Task<RpcMessage<WebFileBase>> GetWebFileAsync(InputWebFileLocationBase location, int offset, int limit, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			var rpcResponse = new RpcMessage<WebFileBase>();
-			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			messageSendingOptions ??= new MessageSendingOptions(true);
 			var methodBody = new GetWebFile
 			{
 Location = location,
@@ -83,14 +83,14 @@ Limit = limit,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
 	    public async Task<RpcMessage<CdnFileBase>> GetCdnFileAsync(byte[] fileToken, int offset, int limit, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			var rpcResponse = new RpcMessage<CdnFileBase>();
-			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			messageSendingOptions ??= new MessageSendingOptions(true);
 			var methodBody = new GetCdnFile
 			{
 FileToken = fileToken,
@@ -99,7 +99,7 @@ Limit = limit,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
@@ -107,7 +107,7 @@ return rpcResponse;
 		{
 			var rpcResponse = new RpcMessage<RpcVector<FileHashBase>>();
 			rpcResponse.Response = new RpcVector<FileHashBase>();
-			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			messageSendingOptions ??= new MessageSendingOptions(true);
 			var methodBody = new ReuploadCdnFile
 			{
 FileToken = fileToken,
@@ -115,7 +115,7 @@ RequestToken = requestToken,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
@@ -123,7 +123,7 @@ return rpcResponse;
 		{
 			var rpcResponse = new RpcMessage<RpcVector<FileHashBase>>();
 			rpcResponse.Response = new RpcVector<FileHashBase>();
-			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			messageSendingOptions ??= new MessageSendingOptions(true);
 			var methodBody = new GetCdnFileHashes
 			{
 FileToken = fileToken,
@@ -131,7 +131,7 @@ Offset = offset,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
@@ -139,7 +139,7 @@ return rpcResponse;
 		{
 			var rpcResponse = new RpcMessage<RpcVector<FileHashBase>>();
 			rpcResponse.Response = new RpcVector<FileHashBase>();
-			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			messageSendingOptions ??= new MessageSendingOptions(true);
 			var methodBody = new GetFileHashes
 			{
 Location = location,
@@ -147,7 +147,7 @@ Offset = offset,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 

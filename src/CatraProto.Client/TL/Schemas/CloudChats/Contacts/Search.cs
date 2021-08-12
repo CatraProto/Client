@@ -15,8 +15,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
         public static int StaticConstructorId { get => 301470424; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(FoundBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(FoundBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -45,7 +45,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 		{
 			Q = reader.Read<string>();
 			Limit = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "contacts.search";
 		}
 	}
 }

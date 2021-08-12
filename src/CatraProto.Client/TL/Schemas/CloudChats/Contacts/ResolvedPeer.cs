@@ -1,14 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
-	public partial class ResolvedPeer : CatraProto.Client.TL.Schemas.CloudChats.Contacts.ResolvedPeerBase
+	public partial class ResolvedPeer : ResolvedPeerBase
 	{
 
 
@@ -17,13 +14,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("peer")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
+		public override PeerBase Peer { get; set; }
 
 [JsonPropertyName("chats")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
+		public override IList<ChatBase> Chats { get; set; }
 
 [JsonPropertyName("users")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+		public override IList<UserBase> Users { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -42,10 +39,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 
 		public override void Deserialize(Reader reader)
 		{
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
-			Chats = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
-			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+			Peer = reader.Read<PeerBase>();
+			Chats = reader.ReadVector<ChatBase>();
+			Users = reader.ReadVector<UserBase>();
+		}
 
+		public override string ToString()
+		{
+			return "contacts.resolvedPeer";
 		}
 	}
 }

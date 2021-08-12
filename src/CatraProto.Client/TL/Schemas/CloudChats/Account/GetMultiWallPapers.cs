@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 
@@ -19,13 +18,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase);
+		Type IMethod.Type { get; init; } = typeof(WallPaperBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = true;
 
 [JsonPropertyName("wallpapers")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase> Wallpapers { get; set; }
+		public IList<InputWallPaperBase> Wallpapers { get; set; }
 
 
 		public void UpdateFlags() 
@@ -42,8 +41,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 		public void Deserialize(Reader reader)
 		{
-			Wallpapers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase>();
+			Wallpapers = reader.ReadVector<InputWallPaperBase>();
+		}
 
+		public override string ToString()
+		{
+			return "account.getMultiWallPapers";
 		}
 	}
 }

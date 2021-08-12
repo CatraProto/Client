@@ -16,7 +16,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("hash")]
 		public int Hash { get; set; }
 
-[JsonPropertyName("sets")] public IList<CloudChats.StickerSetBase> Sets { get; set; }
+		[JsonPropertyName("sets")] public IList<CloudChats.StickerSetBase> Sets { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -36,7 +36,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		{
 			Hash = reader.Read<int>();
 			Sets = reader.ReadVector<CloudChats.StickerSetBase>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.allStickers";
 		}
 	}
 }

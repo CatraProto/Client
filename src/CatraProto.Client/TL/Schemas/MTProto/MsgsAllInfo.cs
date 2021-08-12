@@ -1,14 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class MsgsAllInfo : CatraProto.Client.TL.Schemas.MTProto.MsgsAllInfoBase
+	public partial class MsgsAllInfo : MsgsAllInfoBase
 	{
 
 
@@ -40,7 +37,11 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 		{
 			MsgIds = reader.ReadVector<long>();
 			Info = reader.Read<byte[]>();
+		}
 
+		public override string ToString()
+		{
+			return "msgs_all_info";
 		}
 	}
 }

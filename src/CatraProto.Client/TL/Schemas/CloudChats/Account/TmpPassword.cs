@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class TmpPassword : CatraProto.Client.TL.Schemas.CloudChats.Account.TmpPasswordBase
+	public partial class TmpPassword : TmpPasswordBase
 	{
 
 
@@ -40,7 +36,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		{
 			TmpPassword_ = reader.Read<byte[]>();
 			ValidUntil = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "account.tmpPassword";
 		}
 	}
 }

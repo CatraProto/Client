@@ -1,14 +1,11 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class RpcResult : CatraProto.Client.TL.Schemas.MTProto.RpcResultBase
+	public partial class RpcResult : RpcResultBase
 	{
 
 
@@ -40,7 +37,11 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 		{
 			ReqMsgId = reader.Read<long>();
 			Result = reader.Read<IObject>();
+		}
 
+		public override string ToString()
+		{
+			return "rpc_result";
 		}
 	}
 }

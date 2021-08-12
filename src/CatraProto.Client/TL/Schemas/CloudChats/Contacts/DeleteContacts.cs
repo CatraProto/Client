@@ -16,13 +16,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
         public static int StaticConstructorId { get => 157945344; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("id")] public IList<InputUserBase> Id { get; set; }
+		[JsonPropertyName("id")] public IList<InputUserBase> Id { get; set; }
 
 
 		public void UpdateFlags() 
@@ -40,7 +40,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 		public void Deserialize(Reader reader)
 		{
 			Id = reader.ReadVector<InputUserBase>();
+		}
 
+		public override string ToString()
+		{
+			return "contacts.deleteContacts";
 		}
 	}
 }

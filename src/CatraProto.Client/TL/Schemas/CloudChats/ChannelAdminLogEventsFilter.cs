@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelAdminLogEventsFilter : CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventsFilterBase
+	public partial class ChannelAdminLogEventsFilter : ChannelAdminLogEventsFilterBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -135,7 +132,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Delete = FlagsHelper.IsFlagSet(Flags, 13);
 			GroupCall = FlagsHelper.IsFlagSet(Flags, 14);
 			Invites = FlagsHelper.IsFlagSet(Flags, 15);
+		}
 
+		public override string ToString()
+		{
+			return "channelAdminLogEventsFilter";
 		}
 	}
 }

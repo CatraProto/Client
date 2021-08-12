@@ -1,14 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputPrivacyValueDisallowUsers : CatraProto.Client.TL.Schemas.CloudChats.InputPrivacyRuleBase
+	public partial class InputPrivacyValueDisallowUsers : InputPrivacyRuleBase
 	{
 
 
@@ -17,7 +14,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("users")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase> Users { get; set; }
+		public IList<InputUserBase> Users { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -34,8 +31,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
+			Users = reader.ReadVector<InputUserBase>();
+		}
 
+		public override string ToString()
+		{
+			return "inputPrivacyValueDisallowUsers";
 		}
 	}
 }

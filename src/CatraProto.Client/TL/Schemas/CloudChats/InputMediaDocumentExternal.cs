@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputMediaDocumentExternal : CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase
+	public partial class InputMediaDocumentExternal : InputMediaBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -58,8 +55,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			{
 				TtlSeconds = reader.Read<int>();
 			}
+		}
 
-
+		public override string ToString()
+		{
+			return "inputMediaDocumentExternal";
 		}
 	}
 }

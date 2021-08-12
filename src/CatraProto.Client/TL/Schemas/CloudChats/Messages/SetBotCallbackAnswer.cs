@@ -21,8 +21,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => -712043766; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -90,7 +90,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			}
 
 			CacheTime = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.setBotCallbackAnswer";
 		}
 	}
 }

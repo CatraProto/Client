@@ -15,8 +15,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => 94983360; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(ReceivedNotifyMessageBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(ReceivedNotifyMessageBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = true;
@@ -40,7 +40,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public void Deserialize(Reader reader)
 		{
 			MaxId = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.receivedMessages";
 		}
 	}
 }

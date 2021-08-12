@@ -15,8 +15,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Langpack
         public static int StaticConstructorId { get => 1784243458; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(LangPackLanguageBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(LangPackLanguageBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -45,7 +45,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Langpack
 		{
 			LangPack = reader.Read<string>();
 			LangCode = reader.Read<string>();
+		}
 
+		public override string ToString()
+		{
+			return "langpack.getLanguage";
 		}
 	}
 }

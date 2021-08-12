@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PhotoStrippedSize : CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase
+	public partial class PhotoStrippedSize : PhotoSizeBase
 	{
 
 
@@ -40,7 +36,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Type = reader.Read<string>();
 			Bytes = reader.Read<byte[]>();
+		}
 
+		public override string ToString()
+		{
+			return "photoStrippedSize";
 		}
 	}
 }

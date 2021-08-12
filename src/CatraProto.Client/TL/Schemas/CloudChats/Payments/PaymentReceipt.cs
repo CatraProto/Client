@@ -28,14 +28,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 [JsonPropertyName("bot_id")]
 		public override int BotId { get; set; }
 
-[JsonPropertyName("invoice")] public override InvoiceBase Invoice { get; set; }
+		[JsonPropertyName("invoice")] public override InvoiceBase Invoice { get; set; }
 
 [JsonPropertyName("provider_id")]
 		public override int ProviderId { get; set; }
 
-[JsonPropertyName("info")] public override PaymentRequestedInfoBase Info { get; set; }
+		[JsonPropertyName("info")] public override PaymentRequestedInfoBase Info { get; set; }
 
-[JsonPropertyName("shipping")] public override ShippingOptionBase Shipping { get; set; }
+		[JsonPropertyName("shipping")] public override ShippingOptionBase Shipping { get; set; }
 
 [JsonPropertyName("currency")]
 		public override string Currency { get; set; }
@@ -46,7 +46,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 [JsonPropertyName("credentials_title")]
 		public override string CredentialsTitle { get; set; }
 
-[JsonPropertyName("users")] public override IList<UserBase> Users { get; set; }
+		[JsonPropertyName("users")] public override IList<UserBase> Users { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -103,7 +103,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 			TotalAmount = reader.Read<long>();
 			CredentialsTitle = reader.Read<string>();
 			Users = reader.ReadVector<UserBase>();
+		}
 
+		public override string ToString()
+		{
+			return "payments.paymentReceipt";
 		}
 	}
 }

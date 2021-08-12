@@ -16,9 +16,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("hash")]
 		public int Hash { get; set; }
 
-[JsonPropertyName("packs")] public IList<StickerPackBase> Packs { get; set; }
+		[JsonPropertyName("packs")] public IList<StickerPackBase> Packs { get; set; }
 
-[JsonPropertyName("stickers")] public IList<DocumentBase> Stickers { get; set; }
+		[JsonPropertyName("stickers")] public IList<DocumentBase> Stickers { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -40,7 +40,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Hash = reader.Read<int>();
 			Packs = reader.ReadVector<StickerPackBase>();
 			Stickers = reader.ReadVector<DocumentBase>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.favedStickers";
 		}
 	}
 }

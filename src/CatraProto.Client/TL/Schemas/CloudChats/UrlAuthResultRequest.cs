@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UrlAuthResultRequest : CatraProto.Client.TL.Schemas.CloudChats.UrlAuthResultBase
+	public partial class UrlAuthResultRequest : UrlAuthResultBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -27,7 +24,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public bool RequestWriteAccess { get; set; }
 
 [JsonPropertyName("bot")]
-		public CatraProto.Client.TL.Schemas.CloudChats.UserBase Bot { get; set; }
+		public UserBase Bot { get; set; }
 
 [JsonPropertyName("domain")]
 		public string Domain { get; set; }
@@ -53,9 +50,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Flags = reader.Read<int>();
 			RequestWriteAccess = FlagsHelper.IsFlagSet(Flags, 0);
-			Bot = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+			Bot = reader.Read<UserBase>();
 			Domain = reader.Read<string>();
+		}
 
+		public override string ToString()
+		{
+			return "urlAuthResultRequest";
 		}
 	}
 }

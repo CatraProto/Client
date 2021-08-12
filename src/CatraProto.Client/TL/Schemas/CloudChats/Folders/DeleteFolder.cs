@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 
@@ -19,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Folders
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
+		Type IMethod.Type { get; init; } = typeof(UpdatesBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -43,7 +41,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Folders
 		public void Deserialize(Reader reader)
 		{
 			FolderId = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "folders.deleteFolder";
 		}
 	}
 }

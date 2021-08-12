@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChatAdminRights : CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase
+	public partial class ChatAdminRights : ChatAdminRightsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -99,7 +96,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			AddAdmins = FlagsHelper.IsFlagSet(Flags, 9);
 			Anonymous = FlagsHelper.IsFlagSet(Flags, 10);
 			ManageCall = FlagsHelper.IsFlagSet(Flags, 11);
+		}
 
+		public override string ToString()
+		{
+			return "chatAdminRights";
 		}
 	}
 }

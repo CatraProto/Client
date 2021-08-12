@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class TextAnchor : CatraProto.Client.TL.Schemas.CloudChats.RichTextBase
+	public partial class TextAnchor : RichTextBase
 	{
 
 
@@ -17,7 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("text")]
-		public CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Text { get; set; }
+		public RichTextBase Text { get; set; }
 
 [JsonPropertyName("name")]
 		public string Name { get; set; }
@@ -38,9 +34,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Text = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
+			Text = reader.Read<RichTextBase>();
 			Name = reader.Read<string>();
+		}
 
+		public override string ToString()
+		{
+			return "textAnchor";
 		}
 	}
 }

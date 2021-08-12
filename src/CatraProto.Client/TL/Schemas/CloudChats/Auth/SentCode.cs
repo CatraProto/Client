@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
-	public partial class SentCode : CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeBase
+	public partial class SentCode : SentCodeBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -25,13 +22,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 		public int Flags { get; set; }
 
 [JsonPropertyName("type")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeTypeBase Type { get; set; }
+		public override SentCodeTypeBase Type { get; set; }
 
 [JsonPropertyName("phone_code_hash")]
 		public override string PhoneCodeHash { get; set; }
 
 [JsonPropertyName("next_type")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.Auth.CodeTypeBase NextType { get; set; }
+		public override CodeTypeBase NextType { get; set; }
 
 [JsonPropertyName("timeout")]
 		public override int? Timeout { get; set; }
@@ -67,19 +64,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			Type = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeTypeBase>();
+			Type = reader.Read<SentCodeTypeBase>();
 			PhoneCodeHash = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				NextType = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.Auth.CodeTypeBase>();
+				NextType = reader.Read<CodeTypeBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
 				Timeout = reader.Read<int>();
 			}
+		}
 
-
+		public override string ToString()
+		{
+			return "auth.sentCode";
 		}
 	}
 }

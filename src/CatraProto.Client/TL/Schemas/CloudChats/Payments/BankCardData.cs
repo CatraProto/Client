@@ -16,7 +16,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 [JsonPropertyName("title")]
 		public override string Title { get; set; }
 
-[JsonPropertyName("open_urls")] public override IList<BankCardOpenUrlBase> OpenUrls { get; set; }
+		[JsonPropertyName("open_urls")] public override IList<BankCardOpenUrlBase> OpenUrls { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -36,7 +36,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 		{
 			Title = reader.Read<string>();
 			OpenUrls = reader.ReadVector<BankCardOpenUrlBase>();
+		}
 
+		public override string ToString()
+		{
+			return "payments.bankCardData";
 		}
 	}
 }

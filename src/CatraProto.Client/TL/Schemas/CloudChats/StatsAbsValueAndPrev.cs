@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class StatsAbsValueAndPrev : CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase
+	public partial class StatsAbsValueAndPrev : StatsAbsValueAndPrevBase
 	{
 
 
@@ -40,7 +36,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Current = reader.Read<double>();
 			Previous = reader.Read<double>();
+		}
 
+		public override string ToString()
+		{
+			return "statsAbsValueAndPrev";
 		}
 	}
 }

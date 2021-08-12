@@ -24,8 +24,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => -2091549254; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -36,16 +36,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("no_webpage")]
 		public bool NoWebpage { get; set; }
 
-[JsonPropertyName("id")] public InputBotInlineMessageIDBase Id { get; set; }
+		[JsonPropertyName("id")] public InputBotInlineMessageIDBase Id { get; set; }
 
 [JsonPropertyName("message")]
 		public string Message { get; set; }
 
-[JsonPropertyName("media")] public InputMediaBase Media { get; set; }
+		[JsonPropertyName("media")] public InputMediaBase Media { get; set; }
 
-[JsonPropertyName("reply_markup")] public ReplyMarkupBase ReplyMarkup { get; set; }
+		[JsonPropertyName("reply_markup")] public ReplyMarkupBase ReplyMarkup { get; set; }
 
-[JsonPropertyName("entities")] public IList<MessageEntityBase> Entities { get; set; }
+		[JsonPropertyName("entities")] public IList<MessageEntityBase> Entities { get; set; }
 
 
 		public void UpdateFlags() 
@@ -111,8 +111,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			{
 				Entities = reader.ReadVector<MessageEntityBase>();
 			}
+		}
 
-
+		public override string ToString()
+		{
+			return "messages.editInlineBotMessage";
 		}
 	}
 }

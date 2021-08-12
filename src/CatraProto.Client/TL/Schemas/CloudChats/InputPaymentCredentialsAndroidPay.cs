@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputPaymentCredentialsAndroidPay : CatraProto.Client.TL.Schemas.CloudChats.InputPaymentCredentialsBase
+	public partial class InputPaymentCredentialsAndroidPay : InputPaymentCredentialsBase
 	{
 
 
@@ -17,7 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("payment_token")]
-		public CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase PaymentToken { get; set; }
+		public DataJSONBase PaymentToken { get; set; }
 
 [JsonPropertyName("google_transaction_id")]
 		public string GoogleTransactionId { get; set; }
@@ -38,9 +34,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			PaymentToken = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
+			PaymentToken = reader.Read<DataJSONBase>();
 			GoogleTransactionId = reader.Read<string>();
+		}
 
+		public override string ToString()
+		{
+			return "inputPaymentCredentialsAndroidPay";
 		}
 	}
 }

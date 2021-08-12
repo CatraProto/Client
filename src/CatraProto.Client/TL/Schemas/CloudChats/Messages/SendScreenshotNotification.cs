@@ -15,13 +15,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => -914493408; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
+		[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
 
 [JsonPropertyName("reply_to_msg_id")]
 		public int ReplyToMsgId { get; set; }
@@ -49,7 +49,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Peer = reader.Read<InputPeerBase>();
 			ReplyToMsgId = reader.Read<int>();
 			RandomId = reader.Read<long>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.sendScreenshotNotification";
 		}
 	}
 }

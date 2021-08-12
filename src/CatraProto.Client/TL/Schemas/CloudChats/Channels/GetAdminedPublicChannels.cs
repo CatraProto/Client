@@ -1,9 +1,8 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.Client.TL.Schemas.CloudChats.Messages;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 
@@ -24,7 +23,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.ChatsBase);
+		Type IMethod.Type { get; init; } = typeof(ChatsBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -59,7 +58,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 			Flags = reader.Read<int>();
 			ByLocation = FlagsHelper.IsFlagSet(Flags, 0);
 			CheckLimit = FlagsHelper.IsFlagSet(Flags, 1);
+		}
 
+		public override string ToString()
+		{
+			return "channels.getAdminedPublicChannels";
 		}
 	}
 }

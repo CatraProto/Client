@@ -1,14 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageActionChatCreate : CatraProto.Client.TL.Schemas.CloudChats.MessageActionBase
+	public partial class MessageActionChatCreate : MessageActionBase
 	{
 
 
@@ -40,7 +37,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Title = reader.Read<string>();
 			Users = reader.ReadVector<int>();
+		}
 
+		public override string ToString()
+		{
+			return "messageActionChatCreate";
 		}
 	}
 }

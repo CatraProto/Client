@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageEntityMentionName : CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase
+	public partial class MessageEntityMentionName : MessageEntityBase
 	{
 
 
@@ -45,7 +41,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Offset = reader.Read<int>();
 			Length = reader.Read<int>();
 			UserId = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "messageEntityMentionName";
 		}
 	}
 }

@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PostAddress : CatraProto.Client.TL.Schemas.CloudChats.PostAddressBase
+	public partial class PostAddress : PostAddressBase
 	{
 
 
@@ -60,7 +56,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			State = reader.Read<string>();
 			CountryIso2 = reader.Read<string>();
 			PostCode = reader.Read<string>();
+		}
 
+		public override string ToString()
+		{
+			return "postAddress";
 		}
 	}
 }

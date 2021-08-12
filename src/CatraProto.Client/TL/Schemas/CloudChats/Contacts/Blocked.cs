@@ -12,12 +12,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
         public static int StaticConstructorId { get => 182326673; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonPropertyName("Blocked_")] public override IList<PeerBlockedBase> Blocked_ { get; set; }
 
-[JsonPropertyName("chats")] public override IList<ChatBase> Chats { get; set; }
+        [JsonPropertyName("Blocked_")] public override IList<PeerBlockedBase> Blocked_ { get; set; }
 
-[JsonPropertyName("users")] public override IList<UserBase> Users { get; set; }
+        [JsonPropertyName("chats")] public override IList<ChatBase> Chats { get; set; }
+
+        [JsonPropertyName("users")] public override IList<UserBase> Users { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -39,7 +39,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 			Blocked_ = reader.ReadVector<PeerBlockedBase>();
 			Chats = reader.ReadVector<ChatBase>();
 			Users = reader.ReadVector<UserBase>();
+		}
 
+		public override string ToString()
+		{
+			return "contacts.blocked";
 		}
 	}
 }

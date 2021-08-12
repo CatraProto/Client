@@ -15,13 +15,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => 218777796; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(ChatsBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(ChatsBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("user_id")] public InputUserBase UserId { get; set; }
+		[JsonPropertyName("user_id")] public InputUserBase UserId { get; set; }
 
 [JsonPropertyName("max_id")]
 		public int MaxId { get; set; }
@@ -49,7 +49,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			UserId = reader.Read<InputUserBase>();
 			MaxId = reader.Read<int>();
 			Limit = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.getCommonChats";
 		}
 	}
 }

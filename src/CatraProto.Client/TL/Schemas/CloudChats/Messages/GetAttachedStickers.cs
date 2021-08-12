@@ -15,13 +15,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => -866424884; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(StickerSetCoveredBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(StickerSetCoveredBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = true;
 
-[JsonPropertyName("media")] public InputStickeredMediaBase Media { get; set; }
+		[JsonPropertyName("media")] public InputStickeredMediaBase Media { get; set; }
 
 
 		public void UpdateFlags() 
@@ -39,7 +39,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public void Deserialize(Reader reader)
 		{
 			Media = reader.Read<InputStickeredMediaBase>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.getAttachedStickers";
 		}
 	}
 }

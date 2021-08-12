@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class SecureFile : CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase
+	public partial class SecureFile : SecureFileBase
 	{
 
 
@@ -65,7 +61,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Date = reader.Read<int>();
 			FileHash = reader.Read<byte[]>();
 			Secret = reader.Read<byte[]>();
+		}
 
+		public override string ToString()
+		{
+			return "secureFile";
 		}
 	}
 }

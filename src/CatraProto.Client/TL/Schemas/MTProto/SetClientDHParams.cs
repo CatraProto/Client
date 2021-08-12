@@ -1,9 +1,8 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
+using System.Numerics;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 
@@ -19,16 +18,16 @@ namespace CatraProto.Client.TL.Schemas.MTProto
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.SetClientDHParamsAnswerBase);
+		Type IMethod.Type { get; init; } = typeof(SetClientDHParamsAnswerBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
 [JsonPropertyName("nonce")]
-		public System.Numerics.BigInteger Nonce { get; set; }
+		public BigInteger Nonce { get; set; }
 
 [JsonPropertyName("server_nonce")]
-		public System.Numerics.BigInteger ServerNonce { get; set; }
+		public BigInteger ServerNonce { get; set; }
 
 [JsonPropertyName("encrypted_data")]
 		public byte[] EncryptedData { get; set; }
@@ -50,10 +49,14 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
 		public void Deserialize(Reader reader)
 		{
-			Nonce = reader.Read<System.Numerics.BigInteger>(128);
-			ServerNonce = reader.Read<System.Numerics.BigInteger>(128);
+			Nonce = reader.Read<BigInteger>(128);
+			ServerNonce = reader.Read<BigInteger>(128);
 			EncryptedData = reader.Read<byte[]>();
+		}
 
+		public override string ToString()
+		{
+			return "set_client_DH_params";
 		}
 	}
 }

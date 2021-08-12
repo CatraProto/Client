@@ -1,9 +1,8 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
+using System.Numerics;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 
@@ -19,13 +18,13 @@ namespace CatraProto.Client.TL.Schemas.MTProto
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.ResPQBase);
+		Type IMethod.Type { get; init; } = typeof(ResPQBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
 [JsonPropertyName("nonce")]
-		public System.Numerics.BigInteger Nonce { get; set; }
+		public BigInteger Nonce { get; set; }
 
 
 		public void UpdateFlags() 
@@ -42,8 +41,12 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
 		public void Deserialize(Reader reader)
 		{
-			Nonce = reader.Read<System.Numerics.BigInteger>(128);
+			Nonce = reader.Read<BigInteger>(128);
+		}
 
+		public override string ToString()
+		{
+			return "req_pq";
 		}
 	}
 }

@@ -16,8 +16,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => 1318675378; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(EmojiLanguageBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(EmojiLanguageBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = true;
@@ -41,7 +41,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public void Deserialize(Reader reader)
 		{
 			LangCodes = reader.ReadVector<string>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.getEmojiKeywordsLanguages";
 		}
 	}
 }

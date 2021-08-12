@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChatPhoto : CatraProto.Client.TL.Schemas.CloudChats.ChatPhotoBase
+	public partial class ChatPhoto : ChatPhotoBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -27,10 +24,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public bool HasVideo { get; set; }
 
 [JsonPropertyName("photo_small")]
-		public CatraProto.Client.TL.Schemas.CloudChats.FileLocationBase PhotoSmall { get; set; }
+		public FileLocationBase PhotoSmall { get; set; }
 
 [JsonPropertyName("photo_big")]
-		public CatraProto.Client.TL.Schemas.CloudChats.FileLocationBase PhotoBig { get; set; }
+		public FileLocationBase PhotoBig { get; set; }
 
 [JsonPropertyName("dc_id")]
 		public int DcId { get; set; }
@@ -57,10 +54,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Flags = reader.Read<int>();
 			HasVideo = FlagsHelper.IsFlagSet(Flags, 0);
-			PhotoSmall = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.FileLocationBase>();
-			PhotoBig = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.FileLocationBase>();
+			PhotoSmall = reader.Read<FileLocationBase>();
+			PhotoBig = reader.Read<FileLocationBase>();
 			DcId = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "chatPhoto";
 		}
 	}
 }

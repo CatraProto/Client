@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class DocumentAttributeVideo : CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase
+	public partial class DocumentAttributeVideo : DocumentAttributeBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -66,7 +63,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Duration = reader.Read<int>();
 			W = reader.Read<int>();
 			H = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "documentAttributeVideo";
 		}
 	}
 }

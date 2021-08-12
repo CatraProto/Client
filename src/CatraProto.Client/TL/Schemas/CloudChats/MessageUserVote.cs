@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageUserVote : CatraProto.Client.TL.Schemas.CloudChats.MessageUserVoteBase
+	public partial class MessageUserVote : MessageUserVoteBase
 	{
 
 
@@ -45,7 +41,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			UserId = reader.Read<int>();
 			Option = reader.Read<byte[]>();
 			Date = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "messageUserVote";
 		}
 	}
 }

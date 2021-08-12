@@ -20,8 +20,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
         public static int StaticConstructorId { get => -750207932; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -32,7 +32,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 [JsonPropertyName("background")]
 		public bool Background { get; set; }
 
-[JsonPropertyName("geo_point")] public InputGeoPointBase GeoPoint { get; set; }
+		[JsonPropertyName("geo_point")] public InputGeoPointBase GeoPoint { get; set; }
 
 [JsonPropertyName("self_expires")]
 		public int? SelfExpires { get; set; }
@@ -68,8 +68,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 			{
 				SelfExpires = reader.Read<int>();
 			}
+		}
 
-
+		public override string ToString()
+		{
+			return "contacts.getLocated";
 		}
 	}
 }

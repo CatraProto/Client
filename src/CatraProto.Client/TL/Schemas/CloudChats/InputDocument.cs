@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputDocument : CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase
+	public partial class InputDocument : InputDocumentBase
 	{
 
 
@@ -45,7 +41,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Id = reader.Read<long>();
 			AccessHash = reader.Read<long>();
 			FileReference = reader.Read<byte[]>();
+		}
 
+		public override string ToString()
+		{
+			return "inputDocument";
 		}
 	}
 }

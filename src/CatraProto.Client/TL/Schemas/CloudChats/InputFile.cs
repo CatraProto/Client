@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputFile : CatraProto.Client.TL.Schemas.CloudChats.InputFileBase
+	public partial class InputFile : InputFileBase
 	{
 
 
@@ -50,7 +46,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Parts = reader.Read<int>();
 			Name = reader.Read<string>();
 			Md5Checksum = reader.Read<string>();
+		}
 
+		public override string ToString()
+		{
+			return "inputFile";
 		}
 	}
 }

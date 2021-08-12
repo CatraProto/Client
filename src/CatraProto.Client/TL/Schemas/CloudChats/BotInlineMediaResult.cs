@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class BotInlineMediaResult : CatraProto.Client.TL.Schemas.CloudChats.BotInlineResultBase
+	public partial class BotInlineMediaResult : BotInlineResultBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -33,10 +30,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override string Type { get; set; }
 
 [JsonPropertyName("photo")]
-		public CatraProto.Client.TL.Schemas.CloudChats.PhotoBase Photo { get; set; }
+		public PhotoBase Photo { get; set; }
 
 [JsonPropertyName("document")]
-		public CatraProto.Client.TL.Schemas.CloudChats.DocumentBase Document { get; set; }
+		public DocumentBase Document { get; set; }
 
 [JsonPropertyName("title")]
 		public override string Title { get; set; }
@@ -45,7 +42,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override string Description { get; set; }
 
 [JsonPropertyName("send_message")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.BotInlineMessageBase SendMessage { get; set; }
+		public override BotInlineMessageBase SendMessage { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -95,12 +92,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Type = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
+				Photo = reader.Read<PhotoBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Document = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
+				Document = reader.Read<DocumentBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
@@ -113,8 +110,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 				Description = reader.Read<string>();
 			}
 
-			SendMessage = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.BotInlineMessageBase>();
+			SendMessage = reader.Read<BotInlineMessageBase>();
+		}
 
+		public override string ToString()
+		{
+			return "botInlineMediaResult";
 		}
 	}
 }

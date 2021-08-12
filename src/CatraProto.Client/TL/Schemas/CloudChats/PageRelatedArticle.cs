@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PageRelatedArticle : CatraProto.Client.TL.Schemas.CloudChats.PageRelatedArticleBase
+	public partial class PageRelatedArticle : PageRelatedArticleBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -123,8 +120,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			{
 				PublishedDate = reader.Read<int>();
 			}
+		}
 
-
+		public override string ToString()
+		{
+			return "pageRelatedArticle";
 		}
 	}
 }

@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageInteractionCounters : CatraProto.Client.TL.Schemas.CloudChats.MessageInteractionCountersBase
+	public partial class MessageInteractionCounters : MessageInteractionCountersBase
 	{
 
 
@@ -45,7 +41,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			MsgId = reader.Read<int>();
 			Views = reader.Read<int>();
 			Forwards = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "messageInteractionCounters";
 		}
 	}
 }

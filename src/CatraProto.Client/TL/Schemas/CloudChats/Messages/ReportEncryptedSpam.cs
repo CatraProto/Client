@@ -15,13 +15,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => 1259113487; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("peer")] public InputEncryptedChatBase Peer { get; set; }
+		[JsonPropertyName("peer")] public InputEncryptedChatBase Peer { get; set; }
 
 
 		public void UpdateFlags() 
@@ -39,7 +39,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public void Deserialize(Reader reader)
 		{
 			Peer = reader.Read<InputEncryptedChatBase>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.reportEncryptedSpam";
 		}
 	}
 }

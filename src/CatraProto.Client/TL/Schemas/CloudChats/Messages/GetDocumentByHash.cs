@@ -15,8 +15,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => 864953444; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(DocumentBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(DocumentBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -50,7 +50,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Sha256 = reader.Read<byte[]>();
 			Size = reader.Read<int>();
 			MimeType = reader.Read<string>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.getDocumentByHash";
 		}
 	}
 }

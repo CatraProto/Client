@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageRange : CatraProto.Client.TL.Schemas.CloudChats.MessageRangeBase
+	public partial class MessageRange : MessageRangeBase
 	{
 
 
@@ -40,7 +36,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			MinId = reader.Read<int>();
 			MaxId = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "messageRange";
 		}
 	}
 }

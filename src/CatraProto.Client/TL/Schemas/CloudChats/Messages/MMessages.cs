@@ -12,12 +12,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => -1938715001; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonPropertyName("messages")] public IList<MessageBase> Messages { get; set; }
 
-[JsonPropertyName("chats")] public IList<ChatBase> Chats { get; set; }
+        [JsonPropertyName("messages")] public IList<MessageBase> Messages { get; set; }
 
-[JsonPropertyName("users")] public IList<UserBase> Users { get; set; }
+        [JsonPropertyName("chats")] public IList<ChatBase> Chats { get; set; }
+
+        [JsonPropertyName("users")] public IList<UserBase> Users { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -39,7 +39,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Messages = reader.ReadVector<MessageBase>();
 			Chats = reader.ReadVector<ChatBase>();
 			Users = reader.ReadVector<UserBase>();
+		}
 
+		public override string ToString()
+		{
+			return "";
 		}
 	}
 }

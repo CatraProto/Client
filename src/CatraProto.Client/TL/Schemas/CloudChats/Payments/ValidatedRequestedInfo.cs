@@ -25,7 +25,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 [JsonPropertyName("id")]
 		public override string Id { get; set; }
 
-[JsonPropertyName("shipping_options")] public override IList<ShippingOptionBase> ShippingOptions { get; set; }
+		[JsonPropertyName("shipping_options")] public override IList<ShippingOptionBase> ShippingOptions { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -65,8 +65,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 			{
 				ShippingOptions = reader.ReadVector<ShippingOptionBase>();
 			}
+		}
 
-
+		public override string ToString()
+		{
+			return "payments.validatedRequestedInfo";
 		}
 	}
 }

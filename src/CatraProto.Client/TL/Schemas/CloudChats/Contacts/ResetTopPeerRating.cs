@@ -15,15 +15,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
         public static int StaticConstructorId { get => 451113900; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("category")] public TopPeerCategoryBase Category { get; set; }
+		[JsonPropertyName("category")] public TopPeerCategoryBase Category { get; set; }
 
-[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
+		[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
 
 
 		public void UpdateFlags() 
@@ -43,7 +43,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 		{
 			Category = reader.Read<TopPeerCategoryBase>();
 			Peer = reader.Read<InputPeerBase>();
+		}
 
+		public override string ToString()
+		{
+			return "contacts.resetTopPeerRating";
 		}
 	}
 }

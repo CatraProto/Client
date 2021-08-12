@@ -1,14 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 {
-	public partial class Photo : CatraProto.Client.TL.Schemas.CloudChats.Photos.PhotoBase
+	public partial class Photo : PhotoBase
 	{
 
 
@@ -17,10 +14,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("Photo_")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.PhotoBase Photo_ { get; set; }
+		public override CloudChats.PhotoBase Photo_ { get; set; }
 
 [JsonPropertyName("users")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+		public override IList<UserBase> Users { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -38,9 +35,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 
 		public override void Deserialize(Reader reader)
 		{
-			Photo_ = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
-			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+			Photo_ = reader.Read<CloudChats.PhotoBase>();
+			Users = reader.ReadVector<UserBase>();
+		}
 
+		public override string ToString()
+		{
+			return "photos.photo";
 		}
 	}
 }

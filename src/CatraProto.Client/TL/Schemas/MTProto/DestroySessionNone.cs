@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class DestroySessionNone : CatraProto.Client.TL.Schemas.MTProto.DestroySessionResBase
+	public partial class DestroySessionNone : DestroySessionResBase
 	{
 
 
@@ -35,7 +31,11 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 		public override void Deserialize(Reader reader)
 		{
 			SessionId = reader.Read<long>();
+		}
 
+		public override string ToString()
+		{
+			return "destroy_session_none";
 		}
 	}
 }

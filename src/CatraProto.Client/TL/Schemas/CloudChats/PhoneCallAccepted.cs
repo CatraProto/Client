@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PhoneCallAccepted : CatraProto.Client.TL.Schemas.CloudChats.PhoneCallBase
+	public partial class PhoneCallAccepted : PhoneCallBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -45,7 +42,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public byte[] GB { get; set; }
 
 [JsonPropertyName("protocol")]
-		public CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase Protocol { get; set; }
+		public PhoneCallProtocolBase Protocol { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -79,8 +76,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			AdminId = reader.Read<int>();
 			ParticipantId = reader.Read<int>();
 			GB = reader.Read<byte[]>();
-			Protocol = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase>();
+			Protocol = reader.Read<PhoneCallProtocolBase>();
+		}
 
+		public override string ToString()
+		{
+			return "phoneCallAccepted";
 		}
 	}
 }

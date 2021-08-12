@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MaskCoords : CatraProto.Client.TL.Schemas.CloudChats.MaskCoordsBase
+	public partial class MaskCoords : MaskCoordsBase
 	{
 
 
@@ -50,7 +46,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			X = reader.Read<double>();
 			Y = reader.Read<double>();
 			Zoom = reader.Read<double>();
+		}
 
+		public override string ToString()
+		{
+			return "maskCoords";
 		}
 	}
 }

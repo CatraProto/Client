@@ -20,7 +20,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 		public async Task<RpcMessage<DataJSONBase>> SendCustomRequestAsync(string customMethod, DataJSONBase pparams, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			var rpcResponse = new RpcMessage<DataJSONBase>();
-			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			messageSendingOptions ??= new MessageSendingOptions(true);
 			var methodBody = new SendCustomRequest
 			{
 				CustomMethod = customMethod,
@@ -28,14 +28,14 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 			};
 
 			_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-			await taskCompletionSource;
+			await taskCompletionSource!;
 			return rpcResponse;
 		}
 
 		public async Task<RpcMessage<bool>> AnswerWebhookJSONQueryAsync(long queryId, DataJSONBase data, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			var rpcResponse = new RpcMessage<bool>();
-			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			messageSendingOptions ??= new MessageSendingOptions(true);
 			var methodBody = new AnswerWebhookJSONQuery
 			{
 				QueryId = queryId,
@@ -43,21 +43,21 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 			};
 
 			_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-			await taskCompletionSource;
+			await taskCompletionSource!;
 			return rpcResponse;
 		}
 
 		public async Task<RpcMessage<bool>> SetBotCommandsAsync(IList<BotCommandBase> commands, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			var rpcResponse = new RpcMessage<bool>();
-			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			messageSendingOptions ??= new MessageSendingOptions(true);
 			var methodBody = new SetBotCommands
 			{
 				Commands = commands
 			};
 
 			_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-			await taskCompletionSource;
+			await taskCompletionSource!;
 			return rpcResponse;
 		}
 

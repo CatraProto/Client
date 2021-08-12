@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PasswordKdfAlgoUnknown : CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase
+	public partial class PasswordKdfAlgoUnknown : PasswordKdfAlgoBase
 	{
 
 
@@ -30,7 +26,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
+		}
 
+		public override string ToString()
+		{
+			return "passwordKdfAlgoUnknown";
 		}
 	}
 }

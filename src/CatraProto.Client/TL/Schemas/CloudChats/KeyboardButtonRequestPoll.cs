@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class KeyboardButtonRequestPoll : CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonBase
+	public partial class KeyboardButtonRequestPoll : KeyboardButtonBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -51,7 +48,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = reader.Read<int>();
 			Quiz = reader.Read<bool>();
 			Text = reader.Read<string>();
+		}
 
+		public override string ToString()
+		{
+			return "keyboardButtonRequestPoll";
 		}
 	}
 }

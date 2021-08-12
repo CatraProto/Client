@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageMediaPoll : CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase
+	public partial class MessageMediaPoll : MessageMediaBase
 	{
 
 
@@ -17,10 +13,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("poll")]
-		public CatraProto.Client.TL.Schemas.CloudChats.PollBase Poll { get; set; }
+		public PollBase Poll { get; set; }
 
 [JsonPropertyName("results")]
-		public CatraProto.Client.TL.Schemas.CloudChats.PollResultsBase Results { get; set; }
+		public PollResultsBase Results { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -38,9 +34,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Poll = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PollBase>();
-			Results = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PollResultsBase>();
+			Poll = reader.Read<PollBase>();
+			Results = reader.Read<PollResultsBase>();
+		}
 
+		public override string ToString()
+		{
+			return "messageMediaPoll";
 		}
 	}
 }

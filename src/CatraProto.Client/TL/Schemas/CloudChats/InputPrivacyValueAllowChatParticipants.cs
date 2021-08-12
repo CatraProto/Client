@@ -1,14 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputPrivacyValueAllowChatParticipants : CatraProto.Client.TL.Schemas.CloudChats.InputPrivacyRuleBase
+	public partial class InputPrivacyValueAllowChatParticipants : InputPrivacyRuleBase
 	{
 
 
@@ -35,7 +32,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Chats = reader.ReadVector<int>();
+		}
 
+		public override string ToString()
+		{
+			return "inputPrivacyValueAllowChatParticipants";
 		}
 	}
 }

@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateBotShippingQuery : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
+	public partial class UpdateBotShippingQuery : UpdateBase
 	{
 
 
@@ -26,7 +22,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public byte[] Payload { get; set; }
 
 [JsonPropertyName("shipping_address")]
-		public CatraProto.Client.TL.Schemas.CloudChats.PostAddressBase ShippingAddress { get; set; }
+		public PostAddressBase ShippingAddress { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -49,8 +45,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			QueryId = reader.Read<long>();
 			UserId = reader.Read<int>();
 			Payload = reader.Read<byte[]>();
-			ShippingAddress = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PostAddressBase>();
+			ShippingAddress = reader.Read<PostAddressBase>();
+		}
 
+		public override string ToString()
+		{
+			return "updateBotShippingQuery";
 		}
 	}
 }

@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class Password : CatraProto.Client.TL.Schemas.CloudChats.Account.PasswordBase
+	public partial class Password : PasswordBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -40,7 +37,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		public override bool HasPassword { get; set; }
 
 [JsonPropertyName("current_algo")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase CurrentAlgo { get; set; }
+		public override PasswordKdfAlgoBase CurrentAlgo { get; set; }
 
 [JsonPropertyName("srp_B")]
 		public override byte[] SrpB { get; set; }
@@ -55,10 +52,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		public override string EmailUnconfirmedPattern { get; set; }
 
 [JsonPropertyName("new_algo")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase NewAlgo { get; set; }
+		public override PasswordKdfAlgoBase NewAlgo { get; set; }
 
 [JsonPropertyName("new_secure_algo")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.SecurePasswordKdfAlgoBase NewSecureAlgo { get; set; }
+		public override SecurePasswordKdfAlgoBase NewSecureAlgo { get; set; }
 
 [JsonPropertyName("secure_random")]
 		public override byte[] SecureRandom { get; set; }
@@ -121,7 +118,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 			HasPassword = FlagsHelper.IsFlagSet(Flags, 2);
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				CurrentAlgo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase>();
+				CurrentAlgo = reader.Read<PasswordKdfAlgoBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
@@ -144,10 +141,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 				EmailUnconfirmedPattern = reader.Read<string>();
 			}
 
-			NewAlgo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase>();
-			NewSecureAlgo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SecurePasswordKdfAlgoBase>();
+			NewAlgo = reader.Read<PasswordKdfAlgoBase>();
+			NewSecureAlgo = reader.Read<SecurePasswordKdfAlgoBase>();
 			SecureRandom = reader.Read<byte[]>();
+		}
 
+		public override string ToString()
+		{
+			return "account.password";
 		}
 	}
 }

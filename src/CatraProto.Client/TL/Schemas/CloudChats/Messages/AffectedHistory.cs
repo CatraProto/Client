@@ -41,7 +41,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Pts = reader.Read<int>();
 			PtsCount = reader.Read<int>();
 			Offset = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.affectedHistory";
 		}
 	}
 }

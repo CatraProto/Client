@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 
@@ -19,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Bots
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
+		Type IMethod.Type { get; init; } = typeof(bool);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -28,7 +26,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Bots
 		public long QueryId { get; set; }
 
 [JsonPropertyName("data")]
-		public CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase Data { get; set; }
+		public DataJSONBase Data { get; set; }
 
 
 		public void UpdateFlags() 
@@ -47,8 +45,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Bots
 		public void Deserialize(Reader reader)
 		{
 			QueryId = reader.Read<long>();
-			Data = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
+			Data = reader.Read<DataJSONBase>();
+		}
 
+		public override string ToString()
+		{
+			return "bots.answerWebhookJSONQuery";
 		}
 	}
 }

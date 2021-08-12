@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 {
-	public partial class CdnFileReuploadNeeded : CatraProto.Client.TL.Schemas.CloudChats.Upload.CdnFileBase
+	public partial class CdnFileReuploadNeeded : CdnFileBase
 	{
 
 
@@ -35,7 +31,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 		public override void Deserialize(Reader reader)
 		{
 			RequestToken = reader.Read<byte[]>();
+		}
 
+		public override string ToString()
+		{
+			return "upload.cdnFileReuploadNeeded";
 		}
 	}
 }

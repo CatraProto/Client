@@ -20,8 +20,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => 2016638777; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -56,7 +56,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Flags = reader.Read<int>();
 			Masks = FlagsHelper.IsFlagSet(Flags, 0);
 			Order = reader.ReadVector<long>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.reorderStickerSets";
 		}
 	}
 }

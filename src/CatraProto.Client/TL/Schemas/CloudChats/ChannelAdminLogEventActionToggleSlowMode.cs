@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelAdminLogEventActionToggleSlowMode : CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionBase
+	public partial class ChannelAdminLogEventActionToggleSlowMode : ChannelAdminLogEventActionBase
 	{
 
 
@@ -40,7 +36,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			PrevValue = reader.Read<int>();
 			NewValue = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "channelAdminLogEventActionToggleSlowMode";
 		}
 	}
 }

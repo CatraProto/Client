@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputPhoneContact : CatraProto.Client.TL.Schemas.CloudChats.InputContactBase
+	public partial class InputPhoneContact : InputContactBase
 	{
 
 
@@ -50,7 +46,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Phone = reader.Read<string>();
 			FirstName = reader.Read<string>();
 			LastName = reader.Read<string>();
+		}
 
+		public override string ToString()
+		{
+			return "inputPhoneContact";
 		}
 	}
 }

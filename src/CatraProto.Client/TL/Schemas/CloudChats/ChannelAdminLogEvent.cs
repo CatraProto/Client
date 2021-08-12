@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelAdminLogEvent : CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventBase
+	public partial class ChannelAdminLogEvent : ChannelAdminLogEventBase
 	{
 
 
@@ -26,7 +22,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override int UserId { get; set; }
 
 [JsonPropertyName("action")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionBase Action { get; set; }
+		public override ChannelAdminLogEventActionBase Action { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -49,8 +45,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Id = reader.Read<long>();
 			Date = reader.Read<int>();
 			UserId = reader.Read<int>();
-			Action = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionBase>();
+			Action = reader.Read<ChannelAdminLogEventActionBase>();
+		}
 
+		public override string ToString()
+		{
+			return "channelAdminLogEvent";
 		}
 	}
 }

@@ -15,13 +15,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => -946871200; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(StickerSetInstallResultBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(StickerSetInstallResultBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("stickerset")] public InputStickerSetBase Stickerset { get; set; }
+		[JsonPropertyName("stickerset")] public InputStickerSetBase Stickerset { get; set; }
 
 [JsonPropertyName("archived")]
 		public bool Archived { get; set; }
@@ -44,7 +44,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		{
 			Stickerset = reader.Read<InputStickerSetBase>();
 			Archived = reader.Read<bool>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.installStickerSet";
 		}
 	}
 }

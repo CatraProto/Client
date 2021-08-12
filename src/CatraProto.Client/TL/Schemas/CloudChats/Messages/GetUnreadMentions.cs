@@ -15,13 +15,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => 1180140658; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(MessagesBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(MessagesBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
+		[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
 
 [JsonPropertyName("offset_id")]
 		public int OffsetId { get; set; }
@@ -64,7 +64,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Limit = reader.Read<int>();
 			MaxId = reader.Read<int>();
 			MinId = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.getUnreadMentions";
 		}
 	}
 }

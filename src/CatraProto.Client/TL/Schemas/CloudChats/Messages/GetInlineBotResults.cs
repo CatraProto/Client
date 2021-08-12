@@ -19,8 +19,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => 1364105629; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(BotResultsBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(BotResultsBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -28,11 +28,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("bot")] public InputUserBase Bot { get; set; }
+		[JsonPropertyName("bot")] public InputUserBase Bot { get; set; }
 
-[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
+		[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
 
-[JsonPropertyName("geo_point")] public InputGeoPointBase GeoPoint { get; set; }
+		[JsonPropertyName("geo_point")] public InputGeoPointBase GeoPoint { get; set; }
 
 [JsonPropertyName("query")]
 		public string Query { get; set; }
@@ -76,7 +76,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 			Query = reader.Read<string>();
 			Offset = reader.Read<string>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.getInlineBotResults";
 		}
 	}
 }

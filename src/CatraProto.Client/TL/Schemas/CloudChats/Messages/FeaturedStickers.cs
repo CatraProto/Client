@@ -19,7 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("count")]
 		public override int Count { get; set; }
 
-[JsonPropertyName("sets")] public IList<StickerSetCoveredBase> Sets { get; set; }
+		[JsonPropertyName("sets")] public IList<StickerSetCoveredBase> Sets { get; set; }
 
 [JsonPropertyName("unread")]
 		public IList<long> Unread { get; set; }
@@ -46,7 +46,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Count = reader.Read<int>();
 			Sets = reader.ReadVector<StickerSetCoveredBase>();
 			Unread = reader.ReadVector<long>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.featuredStickers";
 		}
 	}
 }

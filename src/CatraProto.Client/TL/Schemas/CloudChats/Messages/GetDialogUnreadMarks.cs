@@ -15,8 +15,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => 585256482; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(DialogPeerBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(DialogPeerBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = true;
@@ -35,7 +35,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 		public void Deserialize(Reader reader)
 		{
+		}
 
+		public override string ToString()
+		{
+			return "messages.getDialogUnreadMarks";
 		}
 	}
 }

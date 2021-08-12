@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputChannel : CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase
+	public partial class InputChannel : InputChannelBase
 	{
 
 
@@ -40,7 +36,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			ChannelId = reader.Read<int>();
 			AccessHash = reader.Read<long>();
+		}
 
+		public override string ToString()
+		{
+			return "inputChannel";
 		}
 	}
 }

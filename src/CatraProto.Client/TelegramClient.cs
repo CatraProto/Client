@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using CatraProto.Client.Connections;
 using CatraProto.Client.Flows.LoginFlow;
 using CatraProto.Client.MTProto.Session;
+using CatraProto.Client.TL.Schemas.CloudChats;
 using Serilog;
 
 namespace CatraProto.Client
@@ -30,7 +31,7 @@ namespace CatraProto.Client
             var sessionData = _clientSession.SessionManager.SessionData;
             var defaultConnection = await _connectionPool.GetConnectionAsync();
 
-            if (!sessionData.Authorization.IsAuthorized(out var dcId, out var userId))
+            if (!sessionData.Authorization.IsAuthorized(out var dcId, out var userId, out var accessHash))
             {
                 return ClientState.NeedsLogin;
             }
@@ -43,6 +44,12 @@ namespace CatraProto.Client
 
             var newConnection = await _connectionPool.GetConnectionByDcAsync(dcId!.Value);
             _connectionPool.SetAccountConnection(newConnection);
+            var rpc = await _connectionPool.GetAccountConnection()!.MtProtoState.Api.CloudChatsApi.Users.GetFullUserAsync(new InputUser
+            {
+                UserId = userId!.Value,
+                AccessHash = 0
+            });
+            
             return ClientState.ReadyToUse;
         }
 

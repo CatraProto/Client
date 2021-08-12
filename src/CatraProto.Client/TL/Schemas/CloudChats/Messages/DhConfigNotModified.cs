@@ -31,7 +31,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public override void Deserialize(Reader reader)
 		{
 			Random = reader.Read<byte[]>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.dhConfigNotModified";
 		}
 	}
 }

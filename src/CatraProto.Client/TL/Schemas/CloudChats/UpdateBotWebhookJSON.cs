@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateBotWebhookJSON : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
+	public partial class UpdateBotWebhookJSON : UpdateBase
 	{
 
 
@@ -17,7 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("data")]
-		public CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase Data { get; set; }
+		public DataJSONBase Data { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -34,8 +30,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Data = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
+			Data = reader.Read<DataJSONBase>();
+		}
 
+		public override string ToString()
+		{
+			return "updateBotWebhookJSON";
 		}
 	}
 }

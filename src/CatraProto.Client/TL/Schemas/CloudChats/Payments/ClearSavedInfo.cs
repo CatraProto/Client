@@ -20,8 +20,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
         public static int StaticConstructorId { get => -667062079; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -56,7 +56,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 			Flags = reader.Read<int>();
 			Credentials = FlagsHelper.IsFlagSet(Flags, 0);
 			Info = FlagsHelper.IsFlagSet(Flags, 1);
+		}
 
+		public override string ToString()
+		{
+			return "payments.clearSavedInfo";
 		}
 	}
 }

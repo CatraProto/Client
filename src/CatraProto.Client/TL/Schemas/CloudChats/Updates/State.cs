@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 {
-	public partial class State : CatraProto.Client.TL.Schemas.CloudChats.Updates.StateBase
+	public partial class State : StateBase
 	{
 
 
@@ -55,7 +51,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 			Date = reader.Read<int>();
 			Seq = reader.Read<int>();
 			UnreadCount = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "updates.state";
 		}
 	}
 }

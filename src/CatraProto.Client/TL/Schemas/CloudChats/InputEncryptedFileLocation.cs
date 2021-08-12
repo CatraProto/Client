@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputEncryptedFileLocation : CatraProto.Client.TL.Schemas.CloudChats.InputFileLocationBase
+	public partial class InputEncryptedFileLocation : InputFileLocationBase
 	{
 
 
@@ -40,7 +36,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Id = reader.Read<long>();
 			AccessHash = reader.Read<long>();
+		}
 
+		public override string ToString()
+		{
+			return "inputEncryptedFileLocation";
 		}
 	}
 }

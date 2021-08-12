@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class FutureSalt : CatraProto.Client.TL.Schemas.MTProto.FutureSaltBase
+	public partial class FutureSalt : FutureSaltBase
 	{
 
 
@@ -45,7 +41,11 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 			ValidSince = reader.Read<int>();
 			ValidUntil = reader.Read<int>();
 			Salt = reader.Read<long>();
+		}
 
+		public override string ToString()
+		{
+			return "future_salt";
 		}
 	}
 }

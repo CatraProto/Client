@@ -1,14 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 {
-	public partial class BroadcastStats : CatraProto.Client.TL.Schemas.CloudChats.Stats.BroadcastStatsBase
+	public partial class BroadcastStats : BroadcastStatsBase
 	{
 
 
@@ -17,49 +14,49 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("period")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.StatsDateRangeDaysBase Period { get; set; }
+		public override StatsDateRangeDaysBase Period { get; set; }
 
 [JsonPropertyName("followers")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase Followers { get; set; }
+		public override StatsAbsValueAndPrevBase Followers { get; set; }
 
 [JsonPropertyName("views_per_post")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase ViewsPerPost { get; set; }
+		public override StatsAbsValueAndPrevBase ViewsPerPost { get; set; }
 
 [JsonPropertyName("shares_per_post")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase SharesPerPost { get; set; }
+		public override StatsAbsValueAndPrevBase SharesPerPost { get; set; }
 
 [JsonPropertyName("enabled_notifications")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.StatsPercentValueBase EnabledNotifications { get; set; }
+		public override StatsPercentValueBase EnabledNotifications { get; set; }
 
 [JsonPropertyName("growth_graph")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase GrowthGraph { get; set; }
+		public override StatsGraphBase GrowthGraph { get; set; }
 
 [JsonPropertyName("followers_graph")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase FollowersGraph { get; set; }
+		public override StatsGraphBase FollowersGraph { get; set; }
 
 [JsonPropertyName("mute_graph")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase MuteGraph { get; set; }
+		public override StatsGraphBase MuteGraph { get; set; }
 
 [JsonPropertyName("top_hours_graph")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase TopHoursGraph { get; set; }
+		public override StatsGraphBase TopHoursGraph { get; set; }
 
 [JsonPropertyName("interactions_graph")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase InteractionsGraph { get; set; }
+		public override StatsGraphBase InteractionsGraph { get; set; }
 
 [JsonPropertyName("iv_interactions_graph")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase IvInteractionsGraph { get; set; }
+		public override StatsGraphBase IvInteractionsGraph { get; set; }
 
 [JsonPropertyName("views_by_source_graph")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase ViewsBySourceGraph { get; set; }
+		public override StatsGraphBase ViewsBySourceGraph { get; set; }
 
 [JsonPropertyName("new_followers_by_source_graph")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase NewFollowersBySourceGraph { get; set; }
+		public override StatsGraphBase NewFollowersBySourceGraph { get; set; }
 
 [JsonPropertyName("languages_graph")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase LanguagesGraph { get; set; }
+		public override StatsGraphBase LanguagesGraph { get; set; }
 
 [JsonPropertyName("recent_message_interactions")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.MessageInteractionCountersBase> RecentMessageInteractions { get; set; }
+		public override IList<MessageInteractionCountersBase> RecentMessageInteractions { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -90,22 +87,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 
 		public override void Deserialize(Reader reader)
 		{
-			Period = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsDateRangeDaysBase>();
-			Followers = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase>();
-			ViewsPerPost = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase>();
-			SharesPerPost = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase>();
-			EnabledNotifications = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsPercentValueBase>();
-			GrowthGraph = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
-			FollowersGraph = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
-			MuteGraph = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
-			TopHoursGraph = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
-			InteractionsGraph = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
-			IvInteractionsGraph = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
-			ViewsBySourceGraph = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
-			NewFollowersBySourceGraph = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
-			LanguagesGraph = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
-			RecentMessageInteractions = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageInteractionCountersBase>();
+			Period = reader.Read<StatsDateRangeDaysBase>();
+			Followers = reader.Read<StatsAbsValueAndPrevBase>();
+			ViewsPerPost = reader.Read<StatsAbsValueAndPrevBase>();
+			SharesPerPost = reader.Read<StatsAbsValueAndPrevBase>();
+			EnabledNotifications = reader.Read<StatsPercentValueBase>();
+			GrowthGraph = reader.Read<StatsGraphBase>();
+			FollowersGraph = reader.Read<StatsGraphBase>();
+			MuteGraph = reader.Read<StatsGraphBase>();
+			TopHoursGraph = reader.Read<StatsGraphBase>();
+			InteractionsGraph = reader.Read<StatsGraphBase>();
+			IvInteractionsGraph = reader.Read<StatsGraphBase>();
+			ViewsBySourceGraph = reader.Read<StatsGraphBase>();
+			NewFollowersBySourceGraph = reader.Read<StatsGraphBase>();
+			LanguagesGraph = reader.Read<StatsGraphBase>();
+			RecentMessageInteractions = reader.ReadVector<MessageInteractionCountersBase>();
+		}
 
+		public override string ToString()
+		{
+			return "stats.broadcastStats";
 		}
 	}
 }

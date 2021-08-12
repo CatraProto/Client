@@ -1,14 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 {
-	public partial class FileCdnRedirect : CatraProto.Client.TL.Schemas.CloudChats.Upload.FileBase
+	public partial class FileCdnRedirect : FileBase
 	{
 
 
@@ -29,7 +26,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 		public byte[] EncryptionIv { get; set; }
 
 [JsonPropertyName("file_hashes")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase> FileHashes { get; set; }
+		public IList<FileHashBase> FileHashes { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -54,8 +51,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 			FileToken = reader.Read<byte[]>();
 			EncryptionKey = reader.Read<byte[]>();
 			EncryptionIv = reader.Read<byte[]>();
-			FileHashes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>();
+			FileHashes = reader.ReadVector<FileHashBase>();
+		}
 
+		public override string ToString()
+		{
+			return "upload.fileCdnRedirect";
 		}
 	}
 }

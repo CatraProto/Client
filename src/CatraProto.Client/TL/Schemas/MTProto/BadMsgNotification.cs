@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class BadMsgNotification : CatraProto.Client.TL.Schemas.MTProto.BadMsgNotificationBase
+	public partial class BadMsgNotification : BadMsgNotificationBase
 	{
 
 
@@ -45,7 +41,11 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 			BadMsgId = reader.Read<long>();
 			BadMsgSeqno = reader.Read<int>();
 			ErrorCode = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "bad_msg_notification";
 		}
 	}
 }

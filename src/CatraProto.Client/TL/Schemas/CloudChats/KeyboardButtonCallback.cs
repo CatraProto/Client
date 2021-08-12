@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class KeyboardButtonCallback : CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonBase
+	public partial class KeyboardButtonCallback : KeyboardButtonBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -55,7 +52,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			RequiresPassword = FlagsHelper.IsFlagSet(Flags, 0);
 			Text = reader.Read<string>();
 			Data = reader.Read<byte[]>();
+		}
 
+		public override string ToString()
+		{
+			return "keyboardButtonCallback";
 		}
 	}
 }

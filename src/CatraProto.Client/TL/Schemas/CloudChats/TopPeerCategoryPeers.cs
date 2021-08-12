@@ -1,14 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class TopPeerCategoryPeers : CatraProto.Client.TL.Schemas.CloudChats.TopPeerCategoryPeersBase
+	public partial class TopPeerCategoryPeers : TopPeerCategoryPeersBase
 	{
 
 
@@ -17,13 +14,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("category")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.TopPeerCategoryBase Category { get; set; }
+		public override TopPeerCategoryBase Category { get; set; }
 
 [JsonPropertyName("count")]
 		public override int Count { get; set; }
 
 [JsonPropertyName("peers")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.TopPeerBase> Peers { get; set; }
+		public override IList<TopPeerBase> Peers { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -42,10 +39,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Category = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.TopPeerCategoryBase>();
+			Category = reader.Read<TopPeerCategoryBase>();
 			Count = reader.Read<int>();
-			Peers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.TopPeerBase>();
+			Peers = reader.ReadVector<TopPeerBase>();
+		}
 
+		public override string ToString()
+		{
+			return "topPeerCategoryPeers";
 		}
 	}
 }

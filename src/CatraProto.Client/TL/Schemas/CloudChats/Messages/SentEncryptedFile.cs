@@ -15,7 +15,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("date")]
 		public override int Date { get; set; }
 
-[JsonPropertyName("file")] public EncryptedFileBase File { get; set; }
+		[JsonPropertyName("file")] public EncryptedFileBase File { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -35,7 +35,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		{
 			Date = reader.Read<int>();
 			File = reader.Read<EncryptedFileBase>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.sentEncryptedFile";
 		}
 	}
 }

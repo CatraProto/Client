@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 
@@ -24,7 +23,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Channels.AdminLogResultsBase);
+		Type IMethod.Type { get; init; } = typeof(AdminLogResultsBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -33,16 +32,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 		public int Flags { get; set; }
 
 [JsonPropertyName("channel")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase Channel { get; set; }
+		public InputChannelBase Channel { get; set; }
 
 [JsonPropertyName("q")]
 		public string Q { get; set; }
 
 [JsonPropertyName("events_filter")]
-		public CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventsFilterBase EventsFilter { get; set; }
+		public ChannelAdminLogEventsFilterBase EventsFilter { get; set; }
 
 [JsonPropertyName("admins")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase> Admins { get; set; }
+		public IList<InputUserBase> Admins { get; set; }
 
 [JsonPropertyName("max_id")]
 		public long MaxId { get; set; }
@@ -87,22 +86,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 		public void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			Channel = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
+			Channel = reader.Read<InputChannelBase>();
 			Q = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				EventsFilter = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventsFilterBase>();
+				EventsFilter = reader.Read<ChannelAdminLogEventsFilterBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Admins = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
+				Admins = reader.ReadVector<InputUserBase>();
 			}
 
 			MaxId = reader.Read<long>();
 			MinId = reader.Read<long>();
 			Limit = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "channels.getAdminLog";
 		}
 	}
 }

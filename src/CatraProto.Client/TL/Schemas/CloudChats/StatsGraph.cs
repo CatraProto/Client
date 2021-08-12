@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class StatsGraph : CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase
+	public partial class StatsGraph : StatsGraphBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -24,7 +21,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Flags { get; set; }
 
 [JsonPropertyName("json")]
-		public CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase Json { get; set; }
+		public DataJSONBase Json { get; set; }
 
 [JsonPropertyName("zoom_token")]
 		public string ZoomToken { get; set; }
@@ -53,13 +50,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			Json = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
+			Json = reader.Read<DataJSONBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				ZoomToken = reader.Read<string>();
 			}
+		}
 
-
+		public override string ToString()
+		{
+			return "statsGraph";
 		}
 	}
 }

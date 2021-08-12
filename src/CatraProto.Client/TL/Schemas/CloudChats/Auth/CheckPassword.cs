@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 
@@ -19,13 +17,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase);
+		Type IMethod.Type { get; init; } = typeof(AuthorizationBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
 [JsonPropertyName("password")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputCheckPasswordSRPBase Password { get; set; }
+		public InputCheckPasswordSRPBase Password { get; set; }
 
 
 		public void UpdateFlags() 
@@ -42,8 +40,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 
 		public void Deserialize(Reader reader)
 		{
-			Password = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputCheckPasswordSRPBase>();
+			Password = reader.Read<InputCheckPasswordSRPBase>();
+		}
 
+		public override string ToString()
+		{
+			return "auth.checkPassword";
 		}
 	}
 }

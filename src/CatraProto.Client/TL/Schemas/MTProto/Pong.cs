@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class Pong : CatraProto.Client.TL.Schemas.MTProto.PongBase
+	public partial class Pong : PongBase
 	{
 
 
@@ -40,7 +36,11 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 		{
 			MsgId = reader.Read<long>();
 			PingId = reader.Read<long>();
+		}
 
+		public override string ToString()
+		{
+			return "pong";
 		}
 	}
 }

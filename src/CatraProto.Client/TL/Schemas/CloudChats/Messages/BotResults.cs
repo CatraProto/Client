@@ -32,14 +32,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("next_offset")]
 		public override string NextOffset { get; set; }
 
-[JsonPropertyName("switch_pm")] public override InlineBotSwitchPMBase SwitchPm { get; set; }
+		[JsonPropertyName("switch_pm")] public override InlineBotSwitchPMBase SwitchPm { get; set; }
 
-[JsonPropertyName("results")] public override IList<BotInlineResultBase> Results { get; set; }
+		[JsonPropertyName("results")] public override IList<BotInlineResultBase> Results { get; set; }
 
 [JsonPropertyName("cache_time")]
 		public override int CacheTime { get; set; }
 
-[JsonPropertyName("users")] public override IList<UserBase> Users { get; set; }
+		[JsonPropertyName("users")] public override IList<UserBase> Users { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -90,7 +90,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Results = reader.ReadVector<BotInlineResultBase>();
 			CacheTime = reader.Read<int>();
 			Users = reader.ReadVector<UserBase>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.botResults";
 		}
 	}
 }

@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputWebFileGeoPointLocation : CatraProto.Client.TL.Schemas.CloudChats.InputWebFileLocationBase
+	public partial class InputWebFileGeoPointLocation : InputWebFileLocationBase
 	{
 
 
@@ -17,7 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("geo_point")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase GeoPoint { get; set; }
+		public InputGeoPointBase GeoPoint { get; set; }
 
 [JsonPropertyName("access_hash")]
 		public override long AccessHash { get; set; }
@@ -54,13 +50,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			GeoPoint = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase>();
+			GeoPoint = reader.Read<InputGeoPointBase>();
 			AccessHash = reader.Read<long>();
 			W = reader.Read<int>();
 			H = reader.Read<int>();
 			Zoom = reader.Read<int>();
 			Scale = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "inputWebFileGeoPointLocation";
 		}
 	}
 }

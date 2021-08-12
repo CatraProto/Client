@@ -23,7 +23,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("messages")] public override IList<MessageBase> Messages { get; set; }
+		[JsonPropertyName("messages")] public override IList<MessageBase> Messages { get; set; }
 
 [JsonPropertyName("max_id")]
 		public override int? MaxId { get; set; }
@@ -34,9 +34,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("read_outbox_max_id")]
 		public override int? ReadOutboxMaxId { get; set; }
 
-[JsonPropertyName("chats")] public override IList<ChatBase> Chats { get; set; }
+		[JsonPropertyName("chats")] public override IList<ChatBase> Chats { get; set; }
 
-[JsonPropertyName("users")] public override IList<UserBase> Users { get; set; }
+		[JsonPropertyName("users")] public override IList<UserBase> Users { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -94,7 +94,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 			Chats = reader.ReadVector<ChatBase>();
 			Users = reader.ReadVector<UserBase>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.discussionMessage";
 		}
 	}
 }

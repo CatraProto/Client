@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PageBlockPhoto : CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase
+	public partial class PageBlockPhoto : PageBlockBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -28,7 +25,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public long PhotoId { get; set; }
 
 [JsonPropertyName("caption")]
-		public CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase Caption { get; set; }
+		public PageCaptionBase Caption { get; set; }
 
 [JsonPropertyName("url")]
 		public string Url { get; set; }
@@ -68,7 +65,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Flags = reader.Read<int>();
 			PhotoId = reader.Read<long>();
-			Caption = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase>();
+			Caption = reader.Read<PageCaptionBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				Url = reader.Read<string>();
@@ -78,8 +75,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			{
 				WebpageId = reader.Read<long>();
 			}
+		}
 
-
+		public override string ToString()
+		{
+			return "pageBlockPhoto";
 		}
 	}
 }

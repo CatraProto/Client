@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateDialogFilter : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
+	public partial class UpdateDialogFilter : UpdateBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -27,7 +24,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Id { get; set; }
 
 [JsonPropertyName("filter")]
-		public CatraProto.Client.TL.Schemas.CloudChats.DialogFilterBase Filter { get; set; }
+		public DialogFilterBase Filter { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -56,10 +53,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Id = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Filter = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DialogFilterBase>();
+				Filter = reader.Read<DialogFilterBase>();
 			}
+		}
 
-
+		public override string ToString()
+		{
+			return "updateDialogFilter";
 		}
 	}
 }

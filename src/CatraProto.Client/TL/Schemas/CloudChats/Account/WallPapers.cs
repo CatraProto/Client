@@ -1,14 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class WallPapers : CatraProto.Client.TL.Schemas.CloudChats.Account.WallPapersBase
+	public partial class WallPapers : WallPapersBase
 	{
 
 
@@ -20,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		public int Hash { get; set; }
 
 [JsonPropertyName("wallpapers")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase> Wallpapers { get; set; }
+		public IList<WallPaperBase> Wallpapers { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -39,8 +36,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		public override void Deserialize(Reader reader)
 		{
 			Hash = reader.Read<int>();
-			Wallpapers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase>();
+			Wallpapers = reader.ReadVector<WallPaperBase>();
+		}
 
+		public override string ToString()
+		{
+			return "account.wallPapers";
 		}
 	}
 }

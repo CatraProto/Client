@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class AutoDownloadSettings : CatraProto.Client.TL.Schemas.CloudChats.Account.AutoDownloadSettingsBase
+	public partial class AutoDownloadSettings : AutoDownloadSettingsBase
 	{
 
 
@@ -17,13 +13,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("low")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase Low { get; set; }
+		public override CloudChats.AutoDownloadSettingsBase Low { get; set; }
 
 [JsonPropertyName("medium")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase Medium { get; set; }
+		public override CloudChats.AutoDownloadSettingsBase Medium { get; set; }
 
 [JsonPropertyName("high")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase High { get; set; }
+		public override CloudChats.AutoDownloadSettingsBase High { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -42,10 +38,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 		public override void Deserialize(Reader reader)
 		{
-			Low = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase>();
-			Medium = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase>();
-			High = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase>();
+			Low = reader.Read<CloudChats.AutoDownloadSettingsBase>();
+			Medium = reader.Read<CloudChats.AutoDownloadSettingsBase>();
+			High = reader.Read<CloudChats.AutoDownloadSettingsBase>();
+		}
 
+		public override string ToString()
+		{
+			return "account.autoDownloadSettings";
 		}
 	}
 }

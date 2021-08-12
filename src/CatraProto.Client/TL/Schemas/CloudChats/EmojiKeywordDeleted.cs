@@ -1,14 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class EmojiKeywordDeleted : CatraProto.Client.TL.Schemas.CloudChats.EmojiKeywordBase
+	public partial class EmojiKeywordDeleted : EmojiKeywordBase
 	{
 
 
@@ -40,7 +37,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Keyword = reader.Read<string>();
 			Emoticons = reader.ReadVector<string>();
+		}
 
+		public override string ToString()
+		{
+			return "emojiKeywordDeleted";
 		}
 	}
 }

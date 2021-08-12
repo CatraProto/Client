@@ -2,13 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class DraftMessage : CatraProto.Client.TL.Schemas.CloudChats.DraftMessageBase
+	public partial class DraftMessage : DraftMessageBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -36,7 +34,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public string Message { get; set; }
 
 [JsonPropertyName("entities")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
+		public IList<MessageEntityBase> Entities { get; set; }
 
 [JsonPropertyName("date")]
 		public override int? Date { get; set; }
@@ -87,15 +85,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Message = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
+				Entities = reader.ReadVector<MessageEntityBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				Date = reader.Read<int>();
 			}
+		}
 
-
+		public override string ToString()
+		{
+			return "draftMessage";
 		}
 	}
 }

@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 
@@ -19,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Account.AuthorizationFormBase);
+		Type IMethod.Type { get; init; } = typeof(AuthorizationFormBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -53,7 +51,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 			BotId = reader.Read<int>();
 			Scope = reader.Read<string>();
 			PublicKey = reader.Read<string>();
+		}
 
+		public override string ToString()
+		{
+			return "account.getAuthorizationForm";
 		}
 	}
 }

@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PhoneConnection : CatraProto.Client.TL.Schemas.CloudChats.PhoneConnectionBase
+	public partial class PhoneConnection : PhoneConnectionBase
 	{
 
 
@@ -55,7 +51,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Ipv6 = reader.Read<string>();
 			Port = reader.Read<int>();
 			PeerTag = reader.Read<byte[]>();
+		}
 
+		public override string ToString()
+		{
+			return "phoneConnection";
 		}
 	}
 }

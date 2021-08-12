@@ -15,13 +15,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => -162681021; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(EncryptedChatBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(EncryptedChatBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("user_id")] public InputUserBase UserId { get; set; }
+		[JsonPropertyName("user_id")] public InputUserBase UserId { get; set; }
 
 [JsonPropertyName("random_id")]
 		public int RandomId { get; set; }
@@ -49,7 +49,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			UserId = reader.Read<InputUserBase>();
 			RandomId = reader.Read<int>();
 			GA = reader.Read<byte[]>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.requestEncryption";
 		}
 	}
 }

@@ -1,14 +1,11 @@
-using System;
-using System.Collections.Generic;
+using System.Numerics;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class PQInnerDataTemp : CatraProto.Client.TL.Schemas.MTProto.PQInnerDataBase
+	public partial class PQInnerDataTemp : PQInnerDataBase
 	{
 
 
@@ -26,13 +23,13 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 		public override byte[] Q { get; set; }
 
 [JsonPropertyName("nonce")]
-		public override System.Numerics.BigInteger Nonce { get; set; }
+		public override BigInteger Nonce { get; set; }
 
 [JsonPropertyName("server_nonce")]
-		public override System.Numerics.BigInteger ServerNonce { get; set; }
+		public override BigInteger ServerNonce { get; set; }
 
 [JsonPropertyName("new_nonce")]
-		public override System.Numerics.BigInteger NewNonce { get; set; }
+		public override BigInteger NewNonce { get; set; }
 
 [JsonPropertyName("expires_in")]
 		public int ExpiresIn { get; set; }
@@ -61,11 +58,15 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 			Pq = reader.Read<byte[]>();
 			P = reader.Read<byte[]>();
 			Q = reader.Read<byte[]>();
-			Nonce = reader.Read<System.Numerics.BigInteger>(128);
-			ServerNonce = reader.Read<System.Numerics.BigInteger>(128);
-			NewNonce = reader.Read<System.Numerics.BigInteger>(256);
+			Nonce = reader.Read<BigInteger>(128);
+			ServerNonce = reader.Read<BigInteger>(128);
+			NewNonce = reader.Read<BigInteger>(256);
 			ExpiresIn = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "p_q_inner_data_temp";
 		}
 	}
 }

@@ -16,18 +16,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => -1115507112; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
+		[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
 
 [JsonPropertyName("id")]
 		public IList<int> Id { get; set; }
 
-[JsonPropertyName("reason")] public ReportReasonBase Reason { get; set; }
+		[JsonPropertyName("reason")] public ReportReasonBase Reason { get; set; }
 
 
 		public void UpdateFlags() 
@@ -49,7 +49,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Peer = reader.Read<InputPeerBase>();
 			Id = reader.ReadVector<int>();
 			Reason = reader.Read<ReportReasonBase>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.report";
 		}
 	}
 }

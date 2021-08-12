@@ -23,7 +23,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("inexact")]
 		public override bool Inexact { get; set; }
 
-[JsonPropertyName("filter")] public override MessagesFilterBase Filter { get; set; }
+		[JsonPropertyName("filter")] public override MessagesFilterBase Filter { get; set; }
 
 [JsonPropertyName("count")]
 		public override int Count { get; set; }
@@ -51,7 +51,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Inexact = FlagsHelper.IsFlagSet(Flags, 1);
 			Filter = reader.Read<MessagesFilterBase>();
 			Count = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.searchCounter";
 		}
 	}
 }

@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class TopPeer : CatraProto.Client.TL.Schemas.CloudChats.TopPeerBase
+	public partial class TopPeer : TopPeerBase
 	{
 
 
@@ -17,7 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("peer")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
+		public override PeerBase Peer { get; set; }
 
 [JsonPropertyName("rating")]
 		public override double Rating { get; set; }
@@ -38,9 +34,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+			Peer = reader.Read<PeerBase>();
 			Rating = reader.Read<double>();
+		}
 
+		public override string ToString()
+		{
+			return "topPeer";
 		}
 	}
 }

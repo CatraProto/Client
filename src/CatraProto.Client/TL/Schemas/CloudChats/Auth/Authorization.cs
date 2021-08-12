@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
-	public partial class Authorization : CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase
+	public partial class Authorization : AuthorizationBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -27,7 +24,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 		public int? TmpSessions { get; set; }
 
 [JsonPropertyName("user")]
-		public CatraProto.Client.TL.Schemas.CloudChats.UserBase User { get; set; }
+		public UserBase User { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -58,8 +55,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 				TmpSessions = reader.Read<int>();
 			}
 
-			User = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+			User = reader.Read<UserBase>();
+		}
 
+		public override string ToString()
+		{
+			return "auth.authorization";
 		}
 	}
 }

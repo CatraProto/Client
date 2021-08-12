@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputEncryptedFileUploaded : CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedFileBase
+	public partial class InputEncryptedFileUploaded : InputEncryptedFileBase
 	{
 
 
@@ -50,7 +46,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Parts = reader.Read<int>();
 			Md5Checksum = reader.Read<string>();
 			KeyFingerprint = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "inputEncryptedFileUploaded";
 		}
 	}
 }

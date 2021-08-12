@@ -24,7 +24,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 [JsonPropertyName("has_saved_credentials")]
 		public override bool HasSavedCredentials { get; set; }
 
-[JsonPropertyName("SavedInfo_")] public override PaymentRequestedInfoBase SavedInfo_ { get; set; }
+		[JsonPropertyName("SavedInfo_")] public override PaymentRequestedInfoBase SavedInfo_ { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -55,8 +55,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 			{
 				SavedInfo_ = reader.Read<PaymentRequestedInfoBase>();
 			}
+		}
 
-
+		public override string ToString()
+		{
+			return "payments.savedInfo";
 		}
 	}
 }

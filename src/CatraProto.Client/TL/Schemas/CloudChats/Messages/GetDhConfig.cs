@@ -15,8 +15,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => 651135312; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(DhConfigBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(DhConfigBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -45,7 +45,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		{
 			Version = reader.Read<int>();
 			RandomLength = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.getDhConfig";
 		}
 	}
 }

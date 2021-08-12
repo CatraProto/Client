@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class RpcError : CatraProto.Client.TL.Schemas.MTProto.RpcErrorBase
+	public partial class RpcError : RpcErrorBase
 	{
 
 
@@ -40,7 +36,11 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 		{
 			ErrorCode = reader.Read<int>();
 			ErrorMessage = reader.Read<string>();
+		}
 
+		public override string ToString()
+		{
+			return "rpc_error";
 		}
 	}
 }

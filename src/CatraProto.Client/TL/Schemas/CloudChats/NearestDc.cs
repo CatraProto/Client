@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class NearestDc : CatraProto.Client.TL.Schemas.CloudChats.NearestDcBase
+	public partial class NearestDc : NearestDcBase
 	{
 
 
@@ -45,7 +41,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Country = reader.Read<string>();
 			ThisDc = reader.Read<int>();
 			NearestDc_ = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "nearestDc";
 		}
 	}
 }

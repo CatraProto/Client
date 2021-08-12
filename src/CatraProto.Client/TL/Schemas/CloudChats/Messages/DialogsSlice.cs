@@ -16,13 +16,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("count")]
 		public int Count { get; set; }
 
-[JsonPropertyName("dialogs")] public IList<DialogBase> Dialogs { get; set; }
+		[JsonPropertyName("dialogs")] public IList<DialogBase> Dialogs { get; set; }
 
-[JsonPropertyName("messages")] public IList<MessageBase> Messages { get; set; }
+		[JsonPropertyName("messages")] public IList<MessageBase> Messages { get; set; }
 
-[JsonPropertyName("chats")] public IList<ChatBase> Chats { get; set; }
+		[JsonPropertyName("chats")] public IList<ChatBase> Chats { get; set; }
 
-[JsonPropertyName("users")] public IList<UserBase> Users { get; set; }
+		[JsonPropertyName("users")] public IList<UserBase> Users { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -48,7 +48,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Messages = reader.ReadVector<MessageBase>();
 			Chats = reader.ReadVector<ChatBase>();
 			Users = reader.ReadVector<UserBase>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.dialogsSlice";
 		}
 	}
 }

@@ -24,9 +24,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("count")]
 		public override int Count { get; set; }
 
-[JsonPropertyName("votes")] public override IList<MessageUserVoteBase> Votes { get; set; }
+		[JsonPropertyName("votes")] public override IList<MessageUserVoteBase> Votes { get; set; }
 
-[JsonPropertyName("users")] public override IList<UserBase> Users { get; set; }
+		[JsonPropertyName("users")] public override IList<UserBase> Users { get; set; }
 
 [JsonPropertyName("next_offset")]
 		public override string NextOffset { get; set; }
@@ -64,8 +64,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			{
 				NextOffset = reader.Read<string>();
 			}
+		}
 
-
+		public override string ToString()
+		{
+			return "messages.votesList";
 		}
 	}
 }

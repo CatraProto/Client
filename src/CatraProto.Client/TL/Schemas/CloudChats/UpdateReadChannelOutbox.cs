@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateReadChannelOutbox : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
+	public partial class UpdateReadChannelOutbox : UpdateBase
 	{
 
 
@@ -40,7 +36,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			ChannelId = reader.Read<int>();
 			MaxId = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "updateReadChannelOutbox";
 		}
 	}
 }

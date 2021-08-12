@@ -1,14 +1,11 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class Message : CatraProto.Client.TL.Schemas.MTProto.MessageBase
+	public partial class Message : MessageBase
 	{
 
 
@@ -50,7 +47,11 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 			Seqno = reader.Read<int>();
 			Bytes = reader.Read<int>();
 			Body = reader.Read<IObject>();
+		}
 
+		public override string ToString()
+		{
+			return "message";
 		}
 	}
 }

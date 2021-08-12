@@ -13,16 +13,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => 863093588; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonPropertyName("dialogs")] public override IList<DialogBase> Dialogs { get; set; }
 
-[JsonPropertyName("messages")] public override IList<MessageBase> Messages { get; set; }
+        [JsonPropertyName("dialogs")] public override IList<DialogBase> Dialogs { get; set; }
 
-[JsonPropertyName("chats")] public override IList<ChatBase> Chats { get; set; }
+        [JsonPropertyName("messages")] public override IList<MessageBase> Messages { get; set; }
 
-[JsonPropertyName("users")] public override IList<UserBase> Users { get; set; }
+        [JsonPropertyName("chats")] public override IList<ChatBase> Chats { get; set; }
 
-[JsonPropertyName("state")] public override StateBase State { get; set; }
+        [JsonPropertyName("users")] public override IList<UserBase> Users { get; set; }
+
+        [JsonPropertyName("state")] public override StateBase State { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -48,7 +48,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Chats = reader.ReadVector<ChatBase>();
 			Users = reader.ReadVector<UserBase>();
 			State = reader.Read<StateBase>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.peerDialogs";
 		}
 	}
 }

@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class SentEmailCode : CatraProto.Client.TL.Schemas.CloudChats.Account.SentEmailCodeBase
+	public partial class SentEmailCode : SentEmailCodeBase
 	{
 
 
@@ -40,7 +36,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		{
 			EmailPattern = reader.Read<string>();
 			Length = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "account.sentEmailCode";
 		}
 	}
 }

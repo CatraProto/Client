@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateBotPrecheckoutQuery : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
+	public partial class UpdateBotPrecheckoutQuery : UpdateBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -34,7 +31,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public byte[] Payload { get; set; }
 
 [JsonPropertyName("info")]
-		public CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase Info { get; set; }
+		public PaymentRequestedInfoBase Info { get; set; }
 
 [JsonPropertyName("shipping_option_id")]
 		public string ShippingOptionId { get; set; }
@@ -84,7 +81,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Payload = reader.Read<byte[]>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Info = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase>();
+				Info = reader.Read<PaymentRequestedInfoBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
@@ -94,7 +91,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			Currency = reader.Read<string>();
 			TotalAmount = reader.Read<long>();
+		}
 
+		public override string ToString()
+		{
+			return "updateBotPrecheckoutQuery";
 		}
 	}
 }

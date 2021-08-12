@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelForbidden : CatraProto.Client.TL.Schemas.CloudChats.ChatBase
+	public partial class ChannelForbidden : ChatBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -80,8 +77,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			{
 				UntilDate = reader.Read<int>();
 			}
+		}
 
-
+		public override string ToString()
+		{
+			return "channelForbidden";
 		}
 	}
 }

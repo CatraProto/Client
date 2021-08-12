@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class BotInlineMessageMediaVenue : CatraProto.Client.TL.Schemas.CloudChats.BotInlineMessageBase
+	public partial class BotInlineMessageMediaVenue : BotInlineMessageBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -24,7 +21,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Flags { get; set; }
 
 [JsonPropertyName("geo")]
-		public CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase Geo { get; set; }
+		public GeoPointBase Geo { get; set; }
 
 [JsonPropertyName("title")]
 		public string Title { get; set; }
@@ -42,7 +39,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public string VenueType { get; set; }
 
 [JsonPropertyName("reply_markup")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase ReplyMarkup { get; set; }
+		public override ReplyMarkupBase ReplyMarkup { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -73,7 +70,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			Geo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase>();
+			Geo = reader.Read<GeoPointBase>();
 			Title = reader.Read<string>();
 			Address = reader.Read<string>();
 			Provider = reader.Read<string>();
@@ -81,10 +78,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			VenueType = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				ReplyMarkup = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase>();
+				ReplyMarkup = reader.Read<ReplyMarkupBase>();
 			}
+		}
 
-
+		public override string ToString()
+		{
+			return "botInlineMessageMediaVenue";
 		}
 	}
 }

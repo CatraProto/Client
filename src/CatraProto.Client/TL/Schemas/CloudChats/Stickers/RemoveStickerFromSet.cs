@@ -15,13 +15,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
         public static int StaticConstructorId { get => -143257775; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(Messages.StickerSetBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(Messages.StickerSetBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("sticker")] public InputDocumentBase Sticker { get; set; }
+		[JsonPropertyName("sticker")] public InputDocumentBase Sticker { get; set; }
 
 
 		public void UpdateFlags() 
@@ -39,7 +39,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 		public void Deserialize(Reader reader)
 		{
 			Sticker = reader.Read<InputDocumentBase>();
+		}
 
+		public override string ToString()
+		{
+			return "stickers.removeStickerFromSet";
 		}
 	}
 }

@@ -20,8 +20,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => 991616823; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -35,7 +35,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("folder_id")]
 		public int FolderId { get; set; }
 
-[JsonPropertyName("order")] public IList<InputDialogPeerBase> Order { get; set; }
+		[JsonPropertyName("order")] public IList<InputDialogPeerBase> Order { get; set; }
 
 
 		public void UpdateFlags() 
@@ -60,7 +60,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Force = FlagsHelper.IsFlagSet(Flags, 0);
 			FolderId = reader.Read<int>();
 			Order = reader.ReadVector<InputDialogPeerBase>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.reorderPinnedDialogs";
 		}
 	}
 }

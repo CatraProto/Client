@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-	public partial class SupportName : CatraProto.Client.TL.Schemas.CloudChats.Help.SupportNameBase
+	public partial class SupportName : SupportNameBase
 	{
 
 
@@ -35,7 +31,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 		public override void Deserialize(Reader reader)
 		{
 			Name = reader.Read<string>();
+		}
 
+		public override string ToString()
+		{
+			return "help.supportName";
 		}
 	}
 }

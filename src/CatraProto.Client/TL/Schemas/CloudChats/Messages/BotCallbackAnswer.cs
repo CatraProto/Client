@@ -89,7 +89,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			}
 
 			CacheTime = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.botCallbackAnswer";
 		}
 	}
 }

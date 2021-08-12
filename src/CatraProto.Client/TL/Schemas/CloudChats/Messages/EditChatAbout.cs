@@ -15,13 +15,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => -554301545; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
+		[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
 
 [JsonPropertyName("about")]
 		public string About { get; set; }
@@ -44,7 +44,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		{
 			Peer = reader.Read<InputPeerBase>();
 			About = reader.Read<string>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.editChatAbout";
 		}
 	}
 }

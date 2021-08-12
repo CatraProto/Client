@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class WebAuthorization : CatraProto.Client.TL.Schemas.CloudChats.WebAuthorizationBase
+	public partial class WebAuthorization : WebAuthorizationBase
 	{
 
 
@@ -75,7 +71,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			DateActive = reader.Read<int>();
 			Ip = reader.Read<string>();
 			Region = reader.Read<string>();
+		}
 
+		public override string ToString()
+		{
+			return "webAuthorization";
 		}
 	}
 }

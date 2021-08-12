@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 
@@ -19,16 +17,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
+		Type IMethod.Type { get; init; } = typeof(bool);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
 [JsonPropertyName("broadcast")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase Broadcast { get; set; }
+		public InputChannelBase Broadcast { get; set; }
 
 [JsonPropertyName("group")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase Group { get; set; }
+		public InputChannelBase Group { get; set; }
 
 
 		public void UpdateFlags() 
@@ -46,9 +44,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 
 		public void Deserialize(Reader reader)
 		{
-			Broadcast = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
-			Group = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
+			Broadcast = reader.Read<InputChannelBase>();
+			Group = reader.Read<InputChannelBase>();
+		}
 
+		public override string ToString()
+		{
+			return "channels.setDiscussionGroup";
 		}
 	}
 }

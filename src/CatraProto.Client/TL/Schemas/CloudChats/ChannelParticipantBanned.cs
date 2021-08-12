@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelParticipantBanned : CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantBase
+	public partial class ChannelParticipantBanned : ChannelParticipantBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -36,7 +33,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Date { get; set; }
 
 [JsonPropertyName("banned_rights")]
-		public CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase BannedRights { get; set; }
+		public ChatBannedRightsBase BannedRights { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -64,8 +61,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			UserId = reader.Read<int>();
 			KickedBy = reader.Read<int>();
 			Date = reader.Read<int>();
-			BannedRights = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase>();
+			BannedRights = reader.Read<ChatBannedRightsBase>();
+		}
 
+		public override string ToString()
+		{
+			return "channelParticipantBanned";
 		}
 	}
 }

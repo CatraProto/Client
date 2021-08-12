@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PeerNotifySettings : CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase
+	public partial class PeerNotifySettings : PeerNotifySettingsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -82,8 +79,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			{
 				Sound = reader.Read<string>();
 			}
+		}
 
-
+		public override string ToString()
+		{
+			return "peerNotifySettings";
 		}
 	}
 }

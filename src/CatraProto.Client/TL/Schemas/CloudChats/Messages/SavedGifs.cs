@@ -16,7 +16,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("hash")]
 		public int Hash { get; set; }
 
-[JsonPropertyName("gifs")] public IList<DocumentBase> Gifs { get; set; }
+		[JsonPropertyName("gifs")] public IList<DocumentBase> Gifs { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -36,7 +36,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		{
 			Hash = reader.Read<int>();
 			Gifs = reader.ReadVector<DocumentBase>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.savedGifs";
 		}
 	}
 }

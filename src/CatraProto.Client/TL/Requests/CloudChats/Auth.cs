@@ -22,7 +22,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 	    public async Task<RpcMessage<SentCodeBase>> SendCodeAsync(string phoneNumber, int apiId, string apiHash, CodeSettingsBase settings, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			var rpcResponse = new RpcMessage<SentCodeBase>();
-			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			messageSendingOptions ??= new MessageSendingOptions(true);
 			var methodBody = new SendCode
 			{
 PhoneNumber = phoneNumber,
@@ -32,14 +32,14 @@ Settings = settings,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
 	    public async Task<RpcMessage<AuthorizationBase>> SignUpAsync(string phoneNumber, string phoneCodeHash, string firstName, string lastName, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			var rpcResponse = new RpcMessage<AuthorizationBase>();
-			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			messageSendingOptions ??= new MessageSendingOptions(true);
 			var methodBody = new SignUp
 			{
 PhoneNumber = phoneNumber,
@@ -49,14 +49,14 @@ LastName = lastName,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
 	    public async Task<RpcMessage<AuthorizationBase>> SignInAsync(string phoneNumber, string phoneCodeHash, string phoneCode, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			var rpcResponse = new RpcMessage<AuthorizationBase>();
-			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			messageSendingOptions ??= new MessageSendingOptions(true);
 			var methodBody = new SignIn
 			{
 PhoneNumber = phoneNumber,
@@ -65,7 +65,7 @@ PhoneCode = phoneCode,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
@@ -73,13 +73,13 @@ return rpcResponse;
 		{
 
 var rpcResponse = new RpcMessage<bool>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new MessageSendingOptions(true);
 var methodBody = new LogOut
 {
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
@@ -87,34 +87,34 @@ return rpcResponse;
 		{
 
 var rpcResponse = new RpcMessage<bool>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new MessageSendingOptions(true);
 var methodBody = new ResetAuthorizations
 {
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
 	    public async Task<RpcMessage<ExportedAuthorizationBase>> ExportAuthorizationAsync(int dcId, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			var rpcResponse = new RpcMessage<ExportedAuthorizationBase>();
-			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			messageSendingOptions ??= new MessageSendingOptions(true);
 			var methodBody = new ExportAuthorization
 			{
 DcId = dcId,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
 	    public async Task<RpcMessage<AuthorizationBase>> ImportAuthorizationAsync(int id, byte[] bytes, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			var rpcResponse = new RpcMessage<AuthorizationBase>();
-			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			messageSendingOptions ??= new MessageSendingOptions(true);
 			var methodBody = new ImportAuthorization
 			{
 Id = id,
@@ -122,7 +122,7 @@ Bytes = bytes,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
@@ -130,7 +130,7 @@ return rpcResponse;
 		{
 
 var rpcResponse = new RpcMessage<bool>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new MessageSendingOptions(true);
 var methodBody = new BindTempAuthKey
 {
 PermAuthKeyId = permAuthKeyId,
@@ -140,14 +140,14 @@ EncryptedMessage = encryptedMessage,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
 	    public async Task<RpcMessage<AuthorizationBase>> ImportBotAuthorizationAsync(int flags, int apiId, string apiHash, string botAuthToken, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			var rpcResponse = new RpcMessage<AuthorizationBase>();
-			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			messageSendingOptions ??= new MessageSendingOptions(true);
 			var methodBody = new ImportBotAuthorization
 			{
 Flags = flags,
@@ -157,55 +157,55 @@ BotAuthToken = botAuthToken,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
 	    public async Task<RpcMessage<AuthorizationBase>> CheckPasswordAsync(InputCheckPasswordSRPBase password, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			var rpcResponse = new RpcMessage<AuthorizationBase>();
-			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			messageSendingOptions ??= new MessageSendingOptions(true);
 			var methodBody = new CheckPassword
 			{
 Password = password,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
 	    public async Task<RpcMessage<PasswordRecoveryBase>> RequestPasswordRecoveryAsync(MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			var rpcResponse = new RpcMessage<PasswordRecoveryBase>();
-			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			messageSendingOptions ??= new MessageSendingOptions(true);
 			var methodBody = new RequestPasswordRecovery
 			{
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
 	    public async Task<RpcMessage<AuthorizationBase>> RecoverPasswordAsync(string code, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			var rpcResponse = new RpcMessage<AuthorizationBase>();
-			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			messageSendingOptions ??= new MessageSendingOptions(true);
 			var methodBody = new RecoverPassword
 			{
 Code = code,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
 	    public async Task<RpcMessage<SentCodeBase>> ResendCodeAsync(string phoneNumber, string phoneCodeHash, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			var rpcResponse = new RpcMessage<SentCodeBase>();
-			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			messageSendingOptions ??= new MessageSendingOptions(true);
 			var methodBody = new ResendCode
 			{
 PhoneNumber = phoneNumber,
@@ -213,7 +213,7 @@ PhoneCodeHash = phoneCodeHash,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
@@ -221,7 +221,7 @@ return rpcResponse;
 		{
 
 var rpcResponse = new RpcMessage<bool>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new MessageSendingOptions(true);
 var methodBody = new CancelCode
 {
 PhoneNumber = phoneNumber,
@@ -229,7 +229,7 @@ PhoneCodeHash = phoneCodeHash,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
@@ -237,21 +237,21 @@ return rpcResponse;
 		{
 
 var rpcResponse = new RpcMessage<bool>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new MessageSendingOptions(true);
 var methodBody = new DropTempAuthKeys
 {
 ExceptAuthKeys = exceptAuthKeys,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
 	    public async Task<RpcMessage<LoginTokenBase>> ExportLoginTokenAsync(int apiId, string apiHash, IList<int> exceptIds, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			var rpcResponse = new RpcMessage<LoginTokenBase>();
-			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			messageSendingOptions ??= new MessageSendingOptions(true);
 			var methodBody = new ExportLoginToken
 			{
 ApiId = apiId,
@@ -260,35 +260,35 @@ ExceptIds = exceptIds,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
 	    public async Task<RpcMessage<LoginTokenBase>> ImportLoginTokenAsync(byte[] token, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			var rpcResponse = new RpcMessage<LoginTokenBase>();
-			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			messageSendingOptions ??= new MessageSendingOptions(true);
 			var methodBody = new ImportLoginToken
 			{
 Token = token,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
 	    public async Task<RpcMessage<Schemas.CloudChats.AuthorizationBase>> AcceptLoginTokenAsync(byte[] token, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 			var rpcResponse = new RpcMessage<Schemas.CloudChats.AuthorizationBase>();
-			messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+			messageSendingOptions ??= new MessageSendingOptions(true);
 			var methodBody = new AcceptLoginToken
 			{
 Token = token,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 

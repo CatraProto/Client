@@ -1,14 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateDeleteMessages : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
+	public partial class UpdateDeleteMessages : UpdateBase
 	{
 
 
@@ -45,7 +42,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Messages = reader.ReadVector<int>();
 			Pts = reader.Read<int>();
 			PtsCount = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "updateDeleteMessages";
 		}
 	}
 }

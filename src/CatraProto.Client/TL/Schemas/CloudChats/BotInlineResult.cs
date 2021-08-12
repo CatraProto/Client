@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class BotInlineResult : CatraProto.Client.TL.Schemas.CloudChats.BotInlineResultBase
+	public partial class BotInlineResult : BotInlineResultBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -43,13 +40,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public string Url { get; set; }
 
 [JsonPropertyName("thumb")]
-		public CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase Thumb { get; set; }
+		public WebDocumentBase Thumb { get; set; }
 
 [JsonPropertyName("content")]
-		public CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase Content { get; set; }
+		public WebDocumentBase Content { get; set; }
 
 [JsonPropertyName("send_message")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.BotInlineMessageBase SendMessage { get; set; }
+		public override BotInlineMessageBase SendMessage { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -120,16 +117,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				Thumb = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase>();
+				Thumb = reader.Read<WebDocumentBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				Content = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase>();
+				Content = reader.Read<WebDocumentBase>();
 			}
 
-			SendMessage = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.BotInlineMessageBase>();
+			SendMessage = reader.Read<BotInlineMessageBase>();
+		}
 
+		public override string ToString()
+		{
+			return "botInlineResult";
 		}
 	}
 }

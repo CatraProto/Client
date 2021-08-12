@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 
@@ -19,16 +17,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
+		Type IMethod.Type { get; init; } = typeof(bool);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
 [JsonPropertyName("peer")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
+		public InputPeerBase Peer { get; set; }
 
 [JsonPropertyName("reason")]
-		public CatraProto.Client.TL.Schemas.CloudChats.ReportReasonBase Reason { get; set; }
+		public ReportReasonBase Reason { get; set; }
 
 
 		public void UpdateFlags() 
@@ -46,9 +44,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 		public void Deserialize(Reader reader)
 		{
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
-			Reason = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ReportReasonBase>();
+			Peer = reader.Read<InputPeerBase>();
+			Reason = reader.Read<ReportReasonBase>();
+		}
 
+		public override string ToString()
+		{
+			return "account.reportPeer";
 		}
 	}
 }

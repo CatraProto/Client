@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageMediaWebPage : CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase
+	public partial class MessageMediaWebPage : MessageMediaBase
 	{
 
 
@@ -17,7 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("webpage")]
-		public CatraProto.Client.TL.Schemas.CloudChats.WebPageBase Webpage { get; set; }
+		public WebPageBase Webpage { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -34,8 +30,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Webpage = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.WebPageBase>();
+			Webpage = reader.Read<WebPageBase>();
+		}
 
+		public override string ToString()
+		{
+			return "messageMediaWebPage";
 		}
 	}
 }

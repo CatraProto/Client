@@ -1,14 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using CatraProto.Client.TL.Schemas.CloudChats.Help;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
-	public partial class AuthorizationSignUpRequired : CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase
+	public partial class AuthorizationSignUpRequired : AuthorizationBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -24,7 +22,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 		public int Flags { get; set; }
 
 [JsonPropertyName("terms_of_service")]
-		public CatraProto.Client.TL.Schemas.CloudChats.Help.TermsOfServiceBase TermsOfService { get; set; }
+		public TermsOfServiceBase TermsOfService { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -51,10 +49,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 			Flags = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				TermsOfService = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.Help.TermsOfServiceBase>();
+				TermsOfService = reader.Read<TermsOfServiceBase>();
 			}
+		}
 
-
+		public override string ToString()
+		{
+			return "auth.authorizationSignUpRequired";
 		}
 	}
 }

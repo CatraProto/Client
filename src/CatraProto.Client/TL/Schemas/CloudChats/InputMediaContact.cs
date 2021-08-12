@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputMediaContact : CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase
+	public partial class InputMediaContact : InputMediaBase
 	{
 
 
@@ -50,7 +46,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			FirstName = reader.Read<string>();
 			LastName = reader.Read<string>();
 			Vcard = reader.Read<string>();
+		}
 
+		public override string ToString()
+		{
+			return "inputMediaContact";
 		}
 	}
 }

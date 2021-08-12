@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
-using CatraProto.TL;
 using System.Text.Json.Serialization;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 
@@ -24,7 +22,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(IObject);
+		Type IMethod.Type { get; init; } = typeof(IObject);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -54,10 +52,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public string LangCode { get; set; }
 
 [JsonPropertyName("proxy")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputClientProxyBase Proxy { get; set; }
+		public InputClientProxyBase Proxy { get; set; }
 
 [JsonPropertyName("params")]
-		public CatraProto.Client.TL.Schemas.CloudChats.JSONValueBase Params { get; set; }
+		public JSONValueBase Params { get; set; }
 
 [JsonPropertyName("query")]
 		public IObject Query { get; set; }
@@ -108,16 +106,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			LangCode = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Proxy = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputClientProxyBase>();
+				Proxy = reader.Read<InputClientProxyBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Params = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.JSONValueBase>();
+				Params = reader.Read<JSONValueBase>();
 			}
 
 			Query = reader.Read<IObject>();
+		}
 
+		public override string ToString()
+		{
+			return "initConnection";
 		}
 	}
 }

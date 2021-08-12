@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateBotInlineSend : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
+	public partial class UpdateBotInlineSend : UpdateBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -31,13 +28,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public string Query { get; set; }
 
 [JsonPropertyName("geo")]
-		public CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase Geo { get; set; }
+		public GeoPointBase Geo { get; set; }
 
 [JsonPropertyName("id")]
 		public string Id { get; set; }
 
 [JsonPropertyName("msg_id")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageIDBase MsgId { get; set; }
+		public InputBotInlineMessageIDBase MsgId { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -75,16 +72,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Query = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Geo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase>();
+				Geo = reader.Read<GeoPointBase>();
 			}
 
 			Id = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				MsgId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageIDBase>();
+				MsgId = reader.Read<InputBotInlineMessageIDBase>();
 			}
+		}
 
-
+		public override string ToString()
+		{
+			return "updateBotInlineSend";
 		}
 	}
 }

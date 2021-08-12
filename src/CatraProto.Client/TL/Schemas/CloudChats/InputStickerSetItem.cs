@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputStickerSetItem : CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetItemBase
+	public partial class InputStickerSetItem : InputStickerSetItemBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -24,13 +21,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Flags { get; set; }
 
 [JsonPropertyName("document")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase Document { get; set; }
+		public override InputDocumentBase Document { get; set; }
 
 [JsonPropertyName("emoji")]
 		public override string Emoji { get; set; }
 
 [JsonPropertyName("mask_coords")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.MaskCoordsBase MaskCoords { get; set; }
+		public override MaskCoordsBase MaskCoords { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -57,14 +54,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			Document = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
+			Document = reader.Read<InputDocumentBase>();
 			Emoji = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				MaskCoords = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MaskCoordsBase>();
+				MaskCoords = reader.Read<MaskCoordsBase>();
 			}
+		}
 
-
+		public override string ToString()
+		{
+			return "inputStickerSetItem";
 		}
 	}
 }

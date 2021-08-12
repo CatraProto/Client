@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
-	public partial class LoginToken : CatraProto.Client.TL.Schemas.CloudChats.Auth.LoginTokenBase
+	public partial class LoginToken : LoginTokenBase
 	{
 
 
@@ -40,7 +36,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 		{
 			Expires = reader.Read<int>();
 			Token = reader.Read<byte[]>();
+		}
 
+		public override string ToString()
+		{
+			return "auth.loginToken";
 		}
 	}
 }

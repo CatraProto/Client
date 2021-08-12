@@ -31,7 +31,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 		public override void Deserialize(Reader reader)
 		{
 			Url = reader.Read<string>();
+		}
 
+		public override string ToString()
+		{
+			return "payments.paymentVerificationNeeded";
 		}
 	}
 }

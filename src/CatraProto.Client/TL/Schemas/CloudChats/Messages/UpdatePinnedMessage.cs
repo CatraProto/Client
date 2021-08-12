@@ -21,8 +21,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => -760547348; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -39,7 +39,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("pm_oneside")]
 		public bool PmOneside { get; set; }
 
-[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
+		[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
 
 [JsonPropertyName("id")]
 		public int Id { get; set; }
@@ -71,7 +71,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			PmOneside = FlagsHelper.IsFlagSet(Flags, 2);
 			Peer = reader.Read<InputPeerBase>();
 			Id = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.updatePinnedMessage";
 		}
 	}
 }

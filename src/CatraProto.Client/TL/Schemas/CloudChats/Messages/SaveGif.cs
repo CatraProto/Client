@@ -15,13 +15,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => 846868683; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("id")] public InputDocumentBase Id { get; set; }
+		[JsonPropertyName("id")] public InputDocumentBase Id { get; set; }
 
 [JsonPropertyName("unsave")]
 		public bool Unsave { get; set; }
@@ -44,7 +44,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		{
 			Id = reader.Read<InputDocumentBase>();
 			Unsave = reader.Read<bool>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.saveGif";
 		}
 	}
 }

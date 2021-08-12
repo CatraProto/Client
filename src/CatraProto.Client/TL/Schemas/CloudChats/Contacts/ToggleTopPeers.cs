@@ -15,8 +15,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
         public static int StaticConstructorId { get => -2062238246; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -40,7 +40,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 		public void Deserialize(Reader reader)
 		{
 			Enabled = reader.Read<bool>();
+		}
 
+		public override string ToString()
+		{
+			return "contacts.toggleTopPeers";
 		}
 	}
 }

@@ -15,15 +15,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => 1369162417; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(MessageMediaBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(MessageMediaBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
+		[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
 
-[JsonPropertyName("media")] public InputMediaBase Media { get; set; }
+		[JsonPropertyName("media")] public InputMediaBase Media { get; set; }
 
 
 		public void UpdateFlags() 
@@ -43,7 +43,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		{
 			Peer = reader.Read<InputPeerBase>();
 			Media = reader.Read<InputMediaBase>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.uploadMedia";
 		}
 	}
 }

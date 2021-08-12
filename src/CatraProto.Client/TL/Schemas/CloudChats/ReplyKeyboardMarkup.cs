@@ -2,13 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ReplyKeyboardMarkup : CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase
+	public partial class ReplyKeyboardMarkup : ReplyMarkupBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -35,7 +33,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public bool Selective { get; set; }
 
 [JsonPropertyName("rows")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonRowBase> Rows { get; set; }
+		public IList<KeyboardButtonRowBase> Rows { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -61,8 +59,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Resize = FlagsHelper.IsFlagSet(Flags, 0);
 			SingleUse = FlagsHelper.IsFlagSet(Flags, 1);
 			Selective = FlagsHelper.IsFlagSet(Flags, 2);
-			Rows = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonRowBase>();
+			Rows = reader.ReadVector<KeyboardButtonRowBase>();
+		}
 
+		public override string ToString()
+		{
+			return "replyKeyboardMarkup";
 		}
 	}
 }

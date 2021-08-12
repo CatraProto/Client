@@ -2,13 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class Config : CatraProto.Client.TL.Schemas.CloudChats.ConfigBase
+	public partial class Config : ConfigBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -72,7 +70,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override int ThisDc { get; set; }
 
 [JsonPropertyName("dc_options")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase> DcOptions { get; set; }
+		public override IList<DcOptionBase> DcOptions { get; set; }
 
 [JsonPropertyName("dc_txt_domain_name")]
 		public override string DcTxtDomainName { get; set; }
@@ -315,7 +313,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Expires = reader.Read<int>();
 			TestMode = reader.Read<bool>();
 			ThisDc = reader.Read<int>();
-			DcOptions = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase>();
+			DcOptions = reader.ReadVector<DcOptionBase>();
 			DcTxtDomainName = reader.Read<string>();
 			ChatSizeMax = reader.Read<int>();
 			MegagroupSizeMax = reader.Read<int>();
@@ -390,8 +388,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			{
 				BaseLangPackVersion = reader.Read<int>();
 			}
+		}
 
-
+		public override string ToString()
+		{
+			return "config";
 		}
 	}
 }

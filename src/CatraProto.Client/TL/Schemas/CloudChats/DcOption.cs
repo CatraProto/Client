@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class DcOption : CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase
+	public partial class DcOption : DcOptionBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -98,8 +95,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			{
 				Secret = reader.Read<byte[]>();
 			}
+		}
 
-
+		public override string ToString()
+		{
+			return "dcOption";
 		}
 	}
 }

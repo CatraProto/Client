@@ -56,7 +56,7 @@ namespace CatraProto.Client.TL.Requests
 		{
 
 var rpcResponse = new RpcMessage<IObject>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new MessageSendingOptions(true);
 var methodBody = new InvokeAfterMsg
 {
 MsgId = msgId,
@@ -64,7 +64,7 @@ Query = query,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
@@ -72,7 +72,7 @@ return rpcResponse;
 		{
 
 var rpcResponse = new RpcMessage<IObject>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new MessageSendingOptions(true);
 var methodBody = new InvokeAfterMsgs
 {
 MsgIds = msgIds,
@@ -80,7 +80,7 @@ Query = query,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
@@ -88,7 +88,7 @@ return rpcResponse;
 		{
 
 var rpcResponse = new RpcMessage<IObject>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new MessageSendingOptions(true);
 var methodBody = new InitConnection
 {
 ApiId = apiId,
@@ -104,7 +104,7 @@ Params = pparams,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
@@ -112,7 +112,7 @@ return rpcResponse;
 		{
 
 var rpcResponse = new RpcMessage<IObject>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new MessageSendingOptions(true);
 var methodBody = new InvokeWithLayer
 {
 Layer = layer,
@@ -120,7 +120,7 @@ Query = query,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
@@ -128,14 +128,14 @@ return rpcResponse;
 		{
 
 var rpcResponse = new RpcMessage<IObject>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new MessageSendingOptions(true);
 var methodBody = new InvokeWithoutUpdates
 {
 Query = query,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
@@ -143,7 +143,7 @@ return rpcResponse;
 		{
 
 var rpcResponse = new RpcMessage<IObject>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new MessageSendingOptions(true);
 var methodBody = new InvokeWithMessagesRange
 {
 Range = range,
@@ -151,7 +151,7 @@ Query = query,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 
@@ -159,7 +159,7 @@ return rpcResponse;
 		{
 
 var rpcResponse = new RpcMessage<IObject>();
-messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new MessageSendingOptions(true);
 var methodBody = new InvokeWithTakeout
 {
 TakeoutId = takeoutId,
@@ -167,7 +167,7 @@ Query = query,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-await taskCompletionSource;
+await taskCompletionSource!;
 return rpcResponse;
 }
 

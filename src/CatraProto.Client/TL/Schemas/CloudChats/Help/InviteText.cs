@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-	public partial class InviteText : CatraProto.Client.TL.Schemas.CloudChats.Help.InviteTextBase
+	public partial class InviteText : InviteTextBase
 	{
 
 
@@ -35,7 +31,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 		public override void Deserialize(Reader reader)
 		{
 			Message = reader.Read<string>();
+		}
 
+		public override string ToString()
+		{
+			return "help.inviteText";
 		}
 	}
 }

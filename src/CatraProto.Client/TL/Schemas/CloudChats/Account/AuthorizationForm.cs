@@ -2,13 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class AuthorizationForm : CatraProto.Client.TL.Schemas.CloudChats.Account.AuthorizationFormBase
+	public partial class AuthorizationForm : AuthorizationFormBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -24,16 +22,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		public int Flags { get; set; }
 
 [JsonPropertyName("required_types")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.SecureRequiredTypeBase> RequiredTypes { get; set; }
+		public override IList<SecureRequiredTypeBase> RequiredTypes { get; set; }
 
 [JsonPropertyName("values")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase> Values { get; set; }
+		public override IList<SecureValueBase> Values { get; set; }
 
 [JsonPropertyName("errors")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase> Errors { get; set; }
+		public override IList<SecureValueErrorBase> Errors { get; set; }
 
 [JsonPropertyName("users")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+		public override IList<UserBase> Users { get; set; }
 
 [JsonPropertyName("privacy_policy_url")]
 		public override string PrivacyPolicyUrl { get; set; }
@@ -65,16 +63,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			RequiredTypes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SecureRequiredTypeBase>();
-			Values = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase>();
-			Errors = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase>();
-			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+			RequiredTypes = reader.ReadVector<SecureRequiredTypeBase>();
+			Values = reader.ReadVector<SecureValueBase>();
+			Errors = reader.ReadVector<SecureValueErrorBase>();
+			Users = reader.ReadVector<UserBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				PrivacyPolicyUrl = reader.Read<string>();
 			}
+		}
 
-
+		public override string ToString()
+		{
+			return "account.authorizationForm";
 		}
 	}
 }

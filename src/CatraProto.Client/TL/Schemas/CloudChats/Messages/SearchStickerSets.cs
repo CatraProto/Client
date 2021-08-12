@@ -19,8 +19,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => -1028140917; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(FoundStickerSetsBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(FoundStickerSetsBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -60,7 +60,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			ExcludeFeatured = FlagsHelper.IsFlagSet(Flags, 0);
 			Q = reader.Read<string>();
 			Hash = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.searchStickerSets";
 		}
 	}
 }

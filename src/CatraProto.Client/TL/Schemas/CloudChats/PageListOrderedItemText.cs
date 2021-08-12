@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PageListOrderedItemText : CatraProto.Client.TL.Schemas.CloudChats.PageListOrderedItemBase
+	public partial class PageListOrderedItemText : PageListOrderedItemBase
 	{
 
 
@@ -20,7 +16,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override string Num { get; set; }
 
 [JsonPropertyName("text")]
-		public CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Text { get; set; }
+		public RichTextBase Text { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -39,8 +35,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Num = reader.Read<string>();
-			Text = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
+			Text = reader.Read<RichTextBase>();
+		}
 
+		public override string ToString()
+		{
+			return "pageListOrderedItemText";
 		}
 	}
 }

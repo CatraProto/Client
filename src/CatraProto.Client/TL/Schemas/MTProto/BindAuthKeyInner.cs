@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class BindAuthKeyInner : CatraProto.Client.TL.Schemas.MTProto.BindAuthKeyInnerBase
+	public partial class BindAuthKeyInner : BindAuthKeyInnerBase
 	{
 
 
@@ -55,7 +51,11 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 			PermAuthKeyId = reader.Read<long>();
 			TempSessionId = reader.Read<long>();
 			ExpiresAt = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "bind_auth_key_inner";
 		}
 	}
 }

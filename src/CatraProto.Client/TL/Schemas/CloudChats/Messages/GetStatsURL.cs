@@ -19,8 +19,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => -2127811866; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(StatsURLBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(StatsURLBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -31,7 +31,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [JsonPropertyName("dark")]
 		public bool Dark { get; set; }
 
-[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
+		[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
 
 [JsonPropertyName("params")]
 		public string Params { get; set; }
@@ -59,7 +59,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Dark = FlagsHelper.IsFlagSet(Flags, 0);
 			Peer = reader.Read<InputPeerBase>();
 			Params = reader.Read<string>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.getStatsURL";
 		}
 	}
 }

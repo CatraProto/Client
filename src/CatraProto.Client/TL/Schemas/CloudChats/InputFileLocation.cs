@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputFileLocation : CatraProto.Client.TL.Schemas.CloudChats.InputFileLocationBase
+	public partial class InputFileLocation : InputFileLocationBase
 	{
 
 
@@ -50,7 +46,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			LocalId = reader.Read<int>();
 			Secret = reader.Read<long>();
 			FileReference = reader.Read<byte[]>();
+		}
 
+		public override string ToString()
+		{
+			return "inputFileLocation";
 		}
 	}
 }

@@ -1,14 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-	public partial class CountriesList : CatraProto.Client.TL.Schemas.CloudChats.Help.CountriesListBase
+	public partial class CountriesList : CountriesListBase
 	{
 
 
@@ -17,7 +14,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("countries")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.Help.CountryBase> Countries { get; set; }
+		public IList<CountryBase> Countries { get; set; }
 
 [JsonPropertyName("hash")]
 		public int Hash { get; set; }
@@ -38,9 +35,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 
 		public override void Deserialize(Reader reader)
 		{
-			Countries = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.Help.CountryBase>();
+			Countries = reader.ReadVector<CountryBase>();
 			Hash = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "help.countriesList";
 		}
 	}
 }

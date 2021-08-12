@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PeerBlocked : CatraProto.Client.TL.Schemas.CloudChats.PeerBlockedBase
+	public partial class PeerBlocked : PeerBlockedBase
 	{
 
 
@@ -17,7 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("peer_id")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.PeerBase PeerId { get; set; }
+		public override PeerBase PeerId { get; set; }
 
 [JsonPropertyName("date")]
 		public override int Date { get; set; }
@@ -38,9 +34,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			PeerId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+			PeerId = reader.Read<PeerBase>();
 			Date = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "peerBlocked";
 		}
 	}
 }

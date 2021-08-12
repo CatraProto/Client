@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateLangPack : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
+	public partial class UpdateLangPack : UpdateBase
 	{
 
 
@@ -17,7 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [JsonPropertyName("difference")]
-		public CatraProto.Client.TL.Schemas.CloudChats.LangPackDifferenceBase Difference { get; set; }
+		public LangPackDifferenceBase Difference { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -34,8 +30,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Difference = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.LangPackDifferenceBase>();
+			Difference = reader.Read<LangPackDifferenceBase>();
+		}
 
+		public override string ToString()
+		{
+			return "updateLangPack";
 		}
 	}
 }

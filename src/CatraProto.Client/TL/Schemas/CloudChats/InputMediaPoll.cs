@@ -2,13 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using CatraProto.TL;
-using CatraProto.TL.Interfaces;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputMediaPoll : CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase
+	public partial class InputMediaPoll : InputMediaBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -26,7 +24,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Flags { get; set; }
 
 [JsonPropertyName("poll")]
-		public CatraProto.Client.TL.Schemas.CloudChats.PollBase Poll { get; set; }
+		public PollBase Poll { get; set; }
 
 [JsonPropertyName("correct_answers")]
 		public IList<byte[]> CorrectAnswers { get; set; }
@@ -35,7 +33,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public string Solution { get; set; }
 
 [JsonPropertyName("solution_entities")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> SolutionEntities { get; set; }
+		public IList<MessageEntityBase> SolutionEntities { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -73,7 +71,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			Poll = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PollBase>();
+			Poll = reader.Read<PollBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				CorrectAnswers = reader.ReadVector<byte[]>();
@@ -86,10 +84,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				SolutionEntities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
+				SolutionEntities = reader.ReadVector<MessageEntityBase>();
 			}
+		}
 
-
+		public override string ToString()
+		{
+			return "inputMediaPoll";
 		}
 	}
 }

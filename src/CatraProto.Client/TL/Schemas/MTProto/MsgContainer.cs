@@ -15,8 +15,8 @@ namespace CatraProto.Client.TL.Schemas.MTProto
         public static int StaticConstructorId { get => 1945237724; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonPropertyName("messages")] public override IList<Message> Messages { get; set; }
+
+        [JsonPropertyName("messages")] public override IList<Message> Messages { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -34,7 +34,11 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 		public override void Deserialize(Reader reader)
 		{
 			Messages = reader.ReadVector(new NakedObjectVectorDeserializer<MsgContainerDeserializer>(), true).Cast<Message>().ToList();
+		}
 
+		public override string ToString()
+		{
+			return "msg_container";
 		}
 	}
 }

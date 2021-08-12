@@ -19,8 +19,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int StaticConstructorId { get => 1475442322; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(ArchivedStickersBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(ArchivedStickersBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
@@ -60,7 +60,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Masks = FlagsHelper.IsFlagSet(Flags, 0);
 			OffsetId = reader.Read<long>();
 			Limit = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.getArchivedStickers";
 		}
 	}
 }

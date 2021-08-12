@@ -46,7 +46,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			P = reader.Read<byte[]>();
 			Version = reader.Read<int>();
 			Random = reader.Read<byte[]>();
+		}
 
+		public override string ToString()
+		{
+			return "messages.dhConfig";
 		}
 	}
 }

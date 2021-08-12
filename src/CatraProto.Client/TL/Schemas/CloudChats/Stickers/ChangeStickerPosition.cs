@@ -15,13 +15,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
         public static int StaticConstructorId { get => -4795190; }
         [JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore] Type IMethod.Type { get; init; } = typeof(Messages.StickerSetBase);
+
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(Messages.StickerSetBase);
 
 [JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("sticker")] public InputDocumentBase Sticker { get; set; }
+		[JsonPropertyName("sticker")] public InputDocumentBase Sticker { get; set; }
 
 [JsonPropertyName("position")]
 		public int Position { get; set; }
@@ -44,7 +44,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 		{
 			Sticker = reader.Read<InputDocumentBase>();
 			Position = reader.Read<int>();
+		}
 
+		public override string ToString()
+		{
+			return "stickers.changeStickerPosition";
 		}
 	}
 }
