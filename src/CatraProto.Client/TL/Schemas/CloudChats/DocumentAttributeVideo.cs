@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class DocumentAttributeVideo : DocumentAttributeBase
+	public partial class DocumentAttributeVideo : CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,25 +17,25 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 250621158; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("round_message")]
+[Newtonsoft.Json.JsonProperty("round_message")]
 		public bool RoundMessage { get; set; }
 
-[JsonPropertyName("supports_streaming")]
+[Newtonsoft.Json.JsonProperty("supports_streaming")]
 		public bool SupportsStreaming { get; set; }
 
-[JsonPropertyName("duration")]
+[Newtonsoft.Json.JsonProperty("duration")]
 		public int Duration { get; set; }
 
-[JsonPropertyName("w")]
+[Newtonsoft.Json.JsonProperty("w")]
 		public int W { get; set; }
 
-[JsonPropertyName("h")]
+[Newtonsoft.Json.JsonProperty("h")]
 		public int H { get; set; }
 
         
@@ -63,11 +65,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Duration = reader.Read<int>();
 			W = reader.Read<int>();
 			H = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "documentAttributeVideo";
+		    return "documentAttributeVideo";
 		}
 	}
 }

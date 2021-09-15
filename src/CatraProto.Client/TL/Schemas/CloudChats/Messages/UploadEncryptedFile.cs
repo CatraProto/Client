@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -11,19 +12,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 	{
 
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => 1347929239; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.EncryptedFileBase);
 
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(EncryptedFileBase);
-
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-		[JsonPropertyName("peer")] public InputEncryptedChatBase Peer { get; set; }
+[Newtonsoft.Json.JsonProperty("peer")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedChatBase Peer { get; set; }
 
-		[JsonPropertyName("file")] public InputEncryptedFileBase File { get; set; }
+[Newtonsoft.Json.JsonProperty("file")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedFileBase File { get; set; }
 
 
 		public void UpdateFlags() 
@@ -41,13 +45,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 		public void Deserialize(Reader reader)
 		{
-			Peer = reader.Read<InputEncryptedChatBase>();
-			File = reader.Read<InputEncryptedFileBase>();
-		}
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedChatBase>();
+			File = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedFileBase>();
 
+		}
+		
 		public override string ToString()
 		{
-			return "messages.uploadEncryptedFile";
+		    return "messages.uploadEncryptedFile";
 		}
 	}
 }

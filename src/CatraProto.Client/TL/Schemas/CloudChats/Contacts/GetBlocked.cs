@@ -1,56 +1,59 @@
 using System;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
-	public partial class GetBlocked : IMethod
-	{
-
+    public partial class GetBlocked : IMethod
+    {
+        [JsonIgnore]
+        public static int StaticConstructorId
+        {
+            get => -176409329;
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => -176409329; }
-        [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(BlockedBase);
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(BlockedBase);
 
-[JsonPropertyName("offset")]
-		public int Offset { get; set; }
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("limit")]
-		public int Limit { get; set; }
+        [JsonProperty("offset")] public int Offset { get; set; }
+
+        [JsonProperty("limit")] public int Limit { get; set; }
+
+        public override string ToString()
+        {
+            return "contacts.getBlocked";
+        }
 
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Offset);
-			writer.Write(Limit);
+            writer.Write(Offset);
+            writer.Write(Limit);
+        }
 
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			Offset = reader.Read<int>();
-			Limit = reader.Read<int>();
-		}
-
-		public override string ToString()
-		{
-			return "contacts.getBlocked";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Offset = reader.Read<int>();
+            Limit = reader.Read<int>();
+        }
+    }
 }

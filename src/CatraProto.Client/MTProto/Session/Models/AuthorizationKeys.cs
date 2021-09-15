@@ -4,7 +4,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.MTProto.Session.Models
 {
-    class AuthorizationKeys : ISessionSerializer
+    class AuthorizationKeys
     {
         private readonly Dictionary<int, AuthKeyData> _authKeys = new Dictionary<int, AuthKeyData>();
         private readonly object _mutex;
@@ -40,7 +40,7 @@ namespace CatraProto.Client.MTProto.Session.Models
             lock (_mutex)
             {
                 var count = reader.Read<int>();
-                for (int i = 0; i < count; i++)
+                for (var i = 0; i < count; i++)
                 {
                     var dc = reader.Read<int>();
                     var key = new AuthKeyData(_mutex);

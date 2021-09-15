@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class KeyboardButtonCallback : KeyboardButtonBase
+	public partial class KeyboardButtonCallback : CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,19 +16,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 901503851; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("requires_password")]
+[Newtonsoft.Json.JsonProperty("requires_password")]
 		public bool RequiresPassword { get; set; }
 
-[JsonPropertyName("text")]
+[Newtonsoft.Json.JsonProperty("text")]
 		public override string Text { get; set; }
 
-[JsonPropertyName("data")]
+[Newtonsoft.Json.JsonProperty("data")]
 		public byte[] Data { get; set; }
 
         
@@ -52,11 +54,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			RequiresPassword = FlagsHelper.IsFlagSet(Flags, 0);
 			Text = reader.Read<string>();
 			Data = reader.Read<byte[]>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "keyboardButtonCallback";
+		    return "keyboardButtonCallback";
 		}
 	}
 }

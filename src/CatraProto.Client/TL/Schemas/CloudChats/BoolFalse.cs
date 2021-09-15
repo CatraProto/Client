@@ -1,6 +1,8 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -10,7 +12,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
         public static int StaticConstructorId { get => -1132882121; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
         
@@ -27,11 +29,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public void Deserialize(Reader reader)
 		{
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "boolFalse";
+		    return "boolFalse";
 		}
 	}
 }

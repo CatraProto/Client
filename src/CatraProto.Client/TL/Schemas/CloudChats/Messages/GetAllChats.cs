@@ -1,51 +1,56 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class GetAllChats : IMethod
-	{
-
+    public partial class GetAllChats : IMethod
+    {
+        [JsonIgnore]
+        public static int StaticConstructorId
+        {
+            get => -341307408;
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => -341307408; }
-        [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
         [JsonIgnore] Type IMethod.Type { get; init; } = typeof(ChatsBase);
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("except_ids")]
-		public IList<int> ExceptIds { get; set; }
+        [JsonProperty("except_ids")] public IList<int> ExceptIds { get; set; }
+
+        public override string ToString()
+        {
+            return "messages.getAllChats";
+        }
 
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(ExceptIds);
+            writer.Write(ExceptIds);
+        }
 
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			ExceptIds = reader.ReadVector<int>();
-		}
-
-		public override string ToString()
-		{
-			return "messages.getAllChats";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            ExceptIds = reader.ReadVector<int>();
+        }
+    }
 }

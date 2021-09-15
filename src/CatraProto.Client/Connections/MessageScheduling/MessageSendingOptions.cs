@@ -17,7 +17,8 @@ namespace CatraProto.Client.Connections.MessageScheduling
             AwaiterType = awaiterType;
         }
 
-        internal MessageSendingOptions(bool isEncrypted, AuthKey? sendWithAuthKey, long? sendWithMessageId = null, AwaiterType awaiterType = AwaiterType.OnResponse) : this(isEncrypted, sendWithMessageId, awaiterType)
+        internal MessageSendingOptions(bool isEncrypted, AuthKey? sendWithAuthKey, long? sendWithMessageId = null,
+            AwaiterType awaiterType = AwaiterType.OnResponse) : this(isEncrypted, sendWithMessageId, awaiterType)
         {
             SendWithAuthKey = sendWithAuthKey;
         }

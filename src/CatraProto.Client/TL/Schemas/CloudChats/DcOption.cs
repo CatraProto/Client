@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class DcOption : DcOptionBase
+	public partial class DcOption : CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -19,37 +21,37 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 414687501; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("ipv6")]
+[Newtonsoft.Json.JsonProperty("ipv6")]
 		public override bool Ipv6 { get; set; }
 
-[JsonPropertyName("media_only")]
+[Newtonsoft.Json.JsonProperty("media_only")]
 		public override bool MediaOnly { get; set; }
 
-[JsonPropertyName("tcpo_only")]
+[Newtonsoft.Json.JsonProperty("tcpo_only")]
 		public override bool TcpoOnly { get; set; }
 
-[JsonPropertyName("cdn")]
+[Newtonsoft.Json.JsonProperty("cdn")]
 		public override bool Cdn { get; set; }
 
-[JsonPropertyName("static")]
+[Newtonsoft.Json.JsonProperty("static")]
 		public override bool Static { get; set; }
 
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public override int Id { get; set; }
 
-[JsonPropertyName("ip_address")]
+[Newtonsoft.Json.JsonProperty("ip_address")]
 		public override string IpAddress { get; set; }
 
-[JsonPropertyName("port")]
+[Newtonsoft.Json.JsonProperty("port")]
 		public override int Port { get; set; }
 
-[JsonPropertyName("secret")]
+[Newtonsoft.Json.JsonProperty("secret")]
 		public override byte[] Secret { get; set; }
 
         
@@ -95,11 +97,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			{
 				Secret = reader.Read<byte[]>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "dcOption";
+		    return "dcOption";
 		}
 	}
 }

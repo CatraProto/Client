@@ -1,24 +1,27 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class SecureData : SecureDataBase
+	public partial class SecureData : CatraProto.Client.TL.Schemas.CloudChats.SecureDataBase
 	{
 
 
         public static int StaticConstructorId { get => -1964327229; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("data")]
+[Newtonsoft.Json.JsonProperty("data")]
 		public override byte[] Data { get; set; }
 
-[JsonPropertyName("data_hash")]
+[Newtonsoft.Json.JsonProperty("data_hash")]
 		public override byte[] DataHash { get; set; }
 
-[JsonPropertyName("secret")]
+[Newtonsoft.Json.JsonProperty("secret")]
 		public override byte[] Secret { get; set; }
 
         
@@ -41,11 +44,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Data = reader.Read<byte[]>();
 			DataHash = reader.Read<byte[]>();
 			Secret = reader.Read<byte[]>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "secureData";
+		    return "secureData";
 		}
 	}
 }

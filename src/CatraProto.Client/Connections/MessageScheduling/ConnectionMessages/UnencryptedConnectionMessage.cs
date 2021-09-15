@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using CatraProto.Client.Connections.MessageScheduling.ConnectionMessages.Interfaces;
-using CatraProto.Client.Extensions;
+using CatraProto.TL;
 
 namespace CatraProto.Client.Connections.MessageScheduling.ConnectionMessages
 {

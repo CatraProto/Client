@@ -1,21 +1,24 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateGeoLiveViewed : UpdateBase
+	public partial class UpdateGeoLiveViewed : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 
 
         public static int StaticConstructorId { get => -2027964103; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("peer")]
-		public PeerBase Peer { get; set; }
+[Newtonsoft.Json.JsonProperty("peer")]
+		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
 
-[JsonPropertyName("msg_id")]
+[Newtonsoft.Json.JsonProperty("msg_id")]
 		public int MsgId { get; set; }
 
         
@@ -34,13 +37,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Peer = reader.Read<PeerBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
 			MsgId = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "updateGeoLiveViewed";
+		    return "updateGeoLiveViewed";
 		}
 	}
 }

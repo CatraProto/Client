@@ -1,21 +1,24 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class RpcError : RpcErrorBase
+	public partial class RpcError : CatraProto.Client.TL.Schemas.MTProto.RpcErrorBase
 	{
 
 
         public static int StaticConstructorId { get => 558156313; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("error_code")]
+[Newtonsoft.Json.JsonProperty("error_code")]
 		public override int ErrorCode { get; set; }
 
-[JsonPropertyName("error_message")]
+[Newtonsoft.Json.JsonProperty("error_message")]
 		public override string ErrorMessage { get; set; }
 
         
@@ -36,11 +39,12 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 		{
 			ErrorCode = reader.Read<int>();
 			ErrorMessage = reader.Read<string>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "rpc_error";
+		    return "rpc_error";
 		}
 	}
 }

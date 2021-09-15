@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -11,24 +12,27 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 	{
 
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => -421563528; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
 
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
-
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-		[JsonPropertyName("bot")] public InputUserBase Bot { get; set; }
+[Newtonsoft.Json.JsonProperty("bot")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase Bot { get; set; }
 
-		[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
+[Newtonsoft.Json.JsonProperty("peer")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
 
-[JsonPropertyName("random_id")]
+[Newtonsoft.Json.JsonProperty("random_id")]
 		public long RandomId { get; set; }
 
-[JsonPropertyName("start_param")]
+[Newtonsoft.Json.JsonProperty("start_param")]
 		public string StartParam { get; set; }
 
 
@@ -49,15 +53,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 		public void Deserialize(Reader reader)
 		{
-			Bot = reader.Read<InputUserBase>();
-			Peer = reader.Read<InputPeerBase>();
+			Bot = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
 			RandomId = reader.Read<long>();
 			StartParam = reader.Read<string>();
-		}
 
+		}
+		
 		public override string ToString()
 		{
-			return "messages.startBot";
+		    return "messages.startBot";
 		}
 	}
 }

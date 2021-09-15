@@ -1,15 +1,13 @@
-using System;
-using System.Text.Json;
-using System.Threading.Tasks;
 using CatraProto.Client.Connections.MessageScheduling.ConnectionMessages;
 using CatraProto.Client.Connections.MessageScheduling.ConnectionMessages.Interfaces;
-using CatraProto.Client.Extensions;
-using CatraProto.Client.MTProto;
 using CatraProto.Client.MTProto.Deserializers;
 using CatraProto.Client.MTProto.Rpc;
+using CatraProto.Client.MTProto.Rpc.RpcErrors.Migrations.Interfaces;
+using CatraProto.Client.MTProto.Session;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.Client.TL.Schemas.CloudChats;
 using CatraProto.Client.TL.Schemas.MTProto;
+using CatraProto.Client.Updates;
 using CatraProto.TL;
 using CatraProto.TL.Exceptions;
 using CatraProto.TL.Interfaces;
@@ -19,26 +17,28 @@ namespace CatraProto.Client.Connections.MessageScheduling
 {
     class MessagesDispatcher
     {
+        public UpdatesHandler? UpdatesHandler { get; set; }
         private readonly MessagesValidator _messagesValidator;
         private readonly MessagesHandler _messagesHandler;
         private readonly RpcDeserializer _rpcDeserializer;
+        private readonly ClientSession _clientSession;
         private readonly MTProtoState _mtProtoState;
         private readonly ILogger _logger;
 
-        public MessagesDispatcher(MessagesHandler messagesHandler, MTProtoState mtProtoState, ILogger logger)
+        public MessagesDispatcher(MessagesHandler messagesHandler, MTProtoState mtProtoState, ClientSession clientSession)
         {
-            _rpcDeserializer = new RpcDeserializer(messagesHandler.MessagesTrackers.MessageCompletionTracker, logger);
-            _messagesValidator = new MessagesValidator(messagesHandler, mtProtoState, logger);
-            _logger = logger.ForContext<MessagesDispatcher>();
+            _rpcDeserializer = new RpcDeserializer(messagesHandler.MessagesTrackers.MessageCompletionTracker, clientSession.Logger);
+            _messagesValidator = new MessagesValidator(messagesHandler, mtProtoState, clientSession.Logger);
+            _logger = clientSession.Logger.ForContext<MessagesDispatcher>();
             _messagesHandler = messagesHandler;
             _mtProtoState = mtProtoState;
+            _clientSession = clientSession;
         }
 
         public void DispatchMessage(IConnectionMessage connectionMessage)
         {
-            var reader = new Reader(MergedProvider.Singleton, connectionMessage.Body.ToMemoryStream());
-            reader.AddCustomObjectDeserializer(typeof(RpcObject), _rpcDeserializer);
-
+            using var reader = new Reader(MergedProvider.Singleton, connectionMessage.Body.ToMemoryStream());
+            reader.SetRpcDeserializer(_rpcDeserializer);
             if (connectionMessage.Body.Length == 4)
             {
                 var error = reader.Read<int>();
@@ -49,7 +49,12 @@ namespace CatraProto.Client.Connections.MessageScheduling
                 };
 
                 _logger.Warning("Received protocol error {Error} from server", error);
-                _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(0, rpcError);
+                if (!_messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(0, rpcError))
+                {
+                    _logger.Information("Server forgot authorization key, regenerating");
+                    _mtProtoState.KeysHandler.TemporaryAuthKey.GetAuthKeyAsync(forceGeneration: true);
+                }
+
                 return;
             }
 
@@ -59,13 +64,6 @@ namespace CatraProto.Client.Connections.MessageScheduling
                 _logger.Information("Handling message of type {T}", deserialized);
                 if (connectionMessage.AuthKeyId != 0)
                 {
-                    if (deserialized is GzipPacked gzipPacked)
-                    {
-                        reader.Dispose();
-                        reader = new Reader(MergedProvider.Singleton, GzipHandler.ReadGzipPacket(gzipPacked.PackedData));
-                        deserialized = reader.Read<IObject>();
-                    }
-
                     if (_messagesValidator.IsMessageValid((EncryptedConnectionMessage)connectionMessage, deserialized))
                     {
                         HandleObject(deserialized, reader, true);
@@ -80,8 +78,6 @@ namespace CatraProto.Client.Connections.MessageScheduling
             {
                 _logger.Error(e, "Failed to deserialize received message");
             }
-
-            reader.Dispose();
         }
 
         private void HandleObject(IObject obj, Reader reader, bool isEncrypted)
@@ -108,28 +104,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
                     case MsgContainer msgContainer:
                         HandleContainer(msgContainer, reader);
                         break;
-                    case UUpdates updates:
-                        var random = new Random();
-                        foreach (var t in updates.Updates)
-                        {
-                            var update = (UpdateNewMessage)t;
-                            var randomInt = random.Next();
-                            _ = _mtProtoState.Api.CloudChatsApi.Messages.SendMessageAsync(new InputPeerUser
-                            {
-                                AccessHash = ((User)updates.Users[0]).AccessHash!.Value,
-                                UserId = updates.Users[0].Id
-                            }, "This is a reply", randomInt, replyToMsgId: update.Message.Id).ContinueWith(x =>
-                            {
-                                if (x.Result.RpcCallFailed)
-                                {
-                                    JsonSerializer.Serialize(x.Result.Error);
-                                }
-                            }, TaskContinuationOptions.OnlyOnRanToCompletion);
-                        }
-
-                        break;
-                    default:
-                        _logger.Warning("Couldn't handle message of type {obj}", obj);
+                    case UpdatesBase updatesBase:
                         break;
                 }
             }
@@ -142,7 +117,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
         private void HandlePing(Ping ping)
         {
             _logger.Information("Replying to ping from server with Id {Id}", ping);
-            _messagesHandler.MessagesQueue.EnqueueMessage(new Pong()
+            _messagesHandler.MessagesQueue.EnqueueMessage(new Pong
             {
                 PingId = ping.PingId
             }, new MessageSendingOptions(true), null, out _, default);
@@ -166,9 +141,27 @@ namespace CatraProto.Client.Connections.MessageScheduling
             _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(futureSalts.ReqMsgId, futureSalts);
         }
 
-        private void HandleRpcResult(RpcObject rpcObject)
+        private async void HandleRpcResult(RpcObject rpcObject)
         {
             _logger.Information("Handling rpc message in response to id {Id}", rpcObject.MessageId);
+            if (rpcObject.Response is RpcError error)
+            {
+                var errorDetected = MTProto.Rpc.Interfaces.RpcError.GetRpcError(error);
+                if (errorDetected is IMigrateError migrateError)
+                {
+                    if (_messagesHandler.MessagesTrackers.MessageCompletionTracker.RemoveCompletion(rpcObject.MessageId, out var item))
+                    {
+                        _logger.Information("Received migrate error, moving request and setting account dc to DC{DcId} ", migrateError.DcId);
+                        var connection = await _clientSession.ConnectionPool.GetConnectionByDcAsync(migrateError.DcId);
+                        _clientSession.ConnectionPool.SetAccountConnection(connection);
+                        item.BindTo(connection.MessagesHandler);
+                        item.SetToSend();
+                        return;
+                        //item.BindTo((await _connectionPool.GetConnectionByDcAsync(migrateError.DcId)).MessagesHandler);
+                    }
+                }
+            }
+
             _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(rpcObject.MessageId, rpcObject.Response);
         }
     }

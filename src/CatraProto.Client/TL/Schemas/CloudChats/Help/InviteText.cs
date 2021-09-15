@@ -1,41 +1,47 @@
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using Newtonsoft.Json;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-	public partial class InviteText : InviteTextBase
-	{
+    public partial class InviteText : InviteTextBase
+    {
+        public static int StaticConstructorId
+        {
+            get => 415997816;
+        }
 
-
-        public static int StaticConstructorId { get => 415997816; }
         [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonPropertyName("message")]
-		public override string Message { get; set; }
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-        
-		public override void UpdateFlags() 
-		{
+        [JsonProperty("message")] public override string Message { get; set; }
 
-		}
 
-		public override void Serialize(Writer writer)
-		{
-		    if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Message);
+        public override void UpdateFlags()
+        {
+        }
 
-		}
+        public override void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public override void Deserialize(Reader reader)
-		{
-			Message = reader.Read<string>();
-		}
+            writer.Write(Message);
+        }
 
-		public override string ToString()
-		{
-			return "help.inviteText";
-		}
-	}
+        public override void Deserialize(Reader reader)
+        {
+            Message = reader.Read<string>();
+        }
+
+        public override string ToString()
+        {
+            return "help.inviteText";
+        }
+    }
 }

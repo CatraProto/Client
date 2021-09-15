@@ -1,46 +1,50 @@
 using System;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
-	public partial class ResetSaved : IMethod
-	{
-
+    public partial class ResetSaved : IMethod
+    {
+        [JsonIgnore]
+        public static int StaticConstructorId
+        {
+            get => -2020263951;
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => -2020263951; }
-        [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(bool);
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
+
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
+
+        public override string ToString()
+        {
+            return "contacts.resetSaved";
+        }
 
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+        }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-
-		}
-
-		public void Deserialize(Reader reader)
-		{
-		}
-
-		public override string ToString()
-		{
-			return "contacts.resetSaved";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+        }
+    }
 }

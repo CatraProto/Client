@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,16 +7,16 @@ namespace CatraProto.Client.TL.Schemas.MTProto
     public abstract class MessageBase : IObject
     {
 
-[JsonPropertyName("msg_id")]
+[Newtonsoft.Json.JsonProperty("msg_id")]
 		public abstract long MsgId { get; set; }
 
-[JsonPropertyName("seqno")]
+[Newtonsoft.Json.JsonProperty("seqno")]
 		public abstract int Seqno { get; set; }
 
-[JsonPropertyName("bytes")]
+[Newtonsoft.Json.JsonProperty("bytes")]
 		public abstract int Bytes { get; set; }
 
-[JsonPropertyName("body")]
+[Newtonsoft.Json.JsonProperty("body")]
 		public abstract IObject Body { get; set; }
 
         public abstract void UpdateFlags();

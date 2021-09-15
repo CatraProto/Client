@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class Theme : ThemeBase
+	public partial class Theme : CatraProto.Client.TL.Schemas.CloudChats.ThemeBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -17,37 +19,37 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 42930452; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("creator")]
+[Newtonsoft.Json.JsonProperty("creator")]
 		public override bool Creator { get; set; }
 
-[JsonPropertyName("default")]
+[Newtonsoft.Json.JsonProperty("default")]
 		public override bool Default { get; set; }
 
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public override long Id { get; set; }
 
-[JsonPropertyName("access_hash")]
+[Newtonsoft.Json.JsonProperty("access_hash")]
 		public override long AccessHash { get; set; }
 
-[JsonPropertyName("slug")]
+[Newtonsoft.Json.JsonProperty("slug")]
 		public override string Slug { get; set; }
 
-[JsonPropertyName("title")]
+[Newtonsoft.Json.JsonProperty("title")]
 		public override string Title { get; set; }
 
-[JsonPropertyName("document")]
-		public override DocumentBase Document { get; set; }
+[Newtonsoft.Json.JsonProperty("document")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.DocumentBase Document { get; set; }
 
-[JsonPropertyName("settings")]
-		public override ThemeSettingsBase Settings { get; set; }
+[Newtonsoft.Json.JsonProperty("settings")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.ThemeSettingsBase Settings { get; set; }
 
-[JsonPropertyName("installs_count")]
+[Newtonsoft.Json.JsonProperty("installs_count")]
 		public override int InstallsCount { get; set; }
 
         
@@ -94,20 +96,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Title = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				Document = reader.Read<DocumentBase>();
+				Document = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				Settings = reader.Read<ThemeSettingsBase>();
+				Settings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ThemeSettingsBase>();
 			}
 
 			InstallsCount = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "theme";
+		    return "theme";
 		}
 	}
 }

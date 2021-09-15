@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class BotInlineMessageText : BotInlineMessageBase
+	public partial class BotInlineMessageText : CatraProto.Client.TL.Schemas.CloudChats.BotInlineMessageBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -17,23 +18,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -1937807902; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("no_webpage")]
+[Newtonsoft.Json.JsonProperty("no_webpage")]
 		public bool NoWebpage { get; set; }
 
-[JsonPropertyName("message")]
+[Newtonsoft.Json.JsonProperty("message")]
 		public string Message { get; set; }
 
-[JsonPropertyName("entities")]
-		public IList<MessageEntityBase> Entities { get; set; }
+[Newtonsoft.Json.JsonProperty("entities")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
 
-[JsonPropertyName("reply_markup")]
-		public override ReplyMarkupBase ReplyMarkup { get; set; }
+[Newtonsoft.Json.JsonProperty("reply_markup")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase ReplyMarkup { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -70,18 +71,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Message = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Entities = reader.ReadVector<MessageEntityBase>();
+				Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				ReplyMarkup = reader.Read<ReplyMarkupBase>();
+				ReplyMarkup = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "botInlineMessageText";
+		    return "botInlineMessageText";
 		}
 	}
 }

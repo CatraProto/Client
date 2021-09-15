@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class Document : DocumentBase
+	public partial class Document : CatraProto.Client.TL.Schemas.CloudChats.DocumentBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,41 +17,41 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 512177195; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public override long Id { get; set; }
 
-[JsonPropertyName("access_hash")]
+[Newtonsoft.Json.JsonProperty("access_hash")]
 		public long AccessHash { get; set; }
 
-[JsonPropertyName("file_reference")]
+[Newtonsoft.Json.JsonProperty("file_reference")]
 		public byte[] FileReference { get; set; }
 
-[JsonPropertyName("date")]
+[Newtonsoft.Json.JsonProperty("date")]
 		public int Date { get; set; }
 
-[JsonPropertyName("mime_type")]
+[Newtonsoft.Json.JsonProperty("mime_type")]
 		public string MimeType { get; set; }
 
-[JsonPropertyName("size")]
+[Newtonsoft.Json.JsonProperty("size")]
 		public int Size { get; set; }
 
-[JsonPropertyName("thumbs")]
-		public IList<PhotoSizeBase> Thumbs { get; set; }
+[Newtonsoft.Json.JsonProperty("thumbs")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase> Thumbs { get; set; }
 
-[JsonPropertyName("video_thumbs")]
-		public IList<VideoSizeBase> VideoThumbs { get; set; }
+[Newtonsoft.Json.JsonProperty("video_thumbs")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.VideoSizeBase> VideoThumbs { get; set; }
 
-[JsonPropertyName("dc_id")]
+[Newtonsoft.Json.JsonProperty("dc_id")]
 		public int DcId { get; set; }
 
-[JsonPropertyName("attributes")]
-		public IList<DocumentAttributeBase> Attributes { get; set; }
+[Newtonsoft.Json.JsonProperty("attributes")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase> Attributes { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -97,21 +98,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Size = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Thumbs = reader.ReadVector<PhotoSizeBase>();
+				Thumbs = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				VideoThumbs = reader.ReadVector<VideoSizeBase>();
+				VideoThumbs = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.VideoSizeBase>();
 			}
 
 			DcId = reader.Read<int>();
-			Attributes = reader.ReadVector<DocumentAttributeBase>();
-		}
+			Attributes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "document";
+		    return "document";
 		}
 	}
 }

@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputPaymentCredentials : InputPaymentCredentialsBase
+	public partial class InputPaymentCredentials : CatraProto.Client.TL.Schemas.CloudChats.InputPaymentCredentialsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,17 +16,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 873977640; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("save")]
+[Newtonsoft.Json.JsonProperty("save")]
 		public bool Save { get; set; }
 
-[JsonPropertyName("data")]
-		public DataJSONBase Data { get; set; }
+[Newtonsoft.Json.JsonProperty("data")]
+		public CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase Data { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -46,12 +48,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Flags = reader.Read<int>();
 			Save = FlagsHelper.IsFlagSet(Flags, 0);
-			Data = reader.Read<DataJSONBase>();
-		}
+			Data = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "inputPaymentCredentials";
+		    return "inputPaymentCredentials";
 		}
 	}
 }

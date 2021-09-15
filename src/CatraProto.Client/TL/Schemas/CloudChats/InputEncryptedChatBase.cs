@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,10 +7,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class InputEncryptedChatBase : IObject
     {
 
-[JsonPropertyName("chat_id")]
+[Newtonsoft.Json.JsonProperty("chat_id")]
 		public abstract int ChatId { get; set; }
 
-[JsonPropertyName("access_hash")]
+[Newtonsoft.Json.JsonProperty("access_hash")]
 		public abstract long AccessHash { get; set; }
 
         public abstract void UpdateFlags();

@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputStickerSetItem : InputStickerSetItemBase
+	public partial class InputStickerSetItem : CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetItemBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,20 +16,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -6249322; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("document")]
-		public override InputDocumentBase Document { get; set; }
+[Newtonsoft.Json.JsonProperty("document")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase Document { get; set; }
 
-[JsonPropertyName("emoji")]
+[Newtonsoft.Json.JsonProperty("emoji")]
 		public override string Emoji { get; set; }
 
-[JsonPropertyName("mask_coords")]
-		public override MaskCoordsBase MaskCoords { get; set; }
+[Newtonsoft.Json.JsonProperty("mask_coords")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.MaskCoordsBase MaskCoords { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -54,17 +56,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			Document = reader.Read<InputDocumentBase>();
+			Document = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
 			Emoji = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				MaskCoords = reader.Read<MaskCoordsBase>();
+				MaskCoords = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MaskCoordsBase>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "inputStickerSetItem";
+		    return "inputStickerSetItem";
 		}
 	}
 }

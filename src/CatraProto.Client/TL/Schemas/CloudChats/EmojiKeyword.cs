@@ -1,22 +1,24 @@
+using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class EmojiKeyword : EmojiKeywordBase
+	public partial class EmojiKeyword : CatraProto.Client.TL.Schemas.CloudChats.EmojiKeywordBase
 	{
 
 
         public static int StaticConstructorId { get => -709641735; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("keyword")]
+[Newtonsoft.Json.JsonProperty("keyword")]
 		public override string Keyword { get; set; }
 
-[JsonPropertyName("emoticons")]
+[Newtonsoft.Json.JsonProperty("emoticons")]
 		public override IList<string> Emoticons { get; set; }
 
         
@@ -37,11 +39,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Keyword = reader.Read<string>();
 			Emoticons = reader.ReadVector<string>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "emojiKeyword";
+		    return "emojiKeyword";
 		}
 	}
 }

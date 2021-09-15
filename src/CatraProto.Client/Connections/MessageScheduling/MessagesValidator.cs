@@ -28,7 +28,8 @@ namespace CatraProto.Client.Connections.MessageScheduling
 
             foreach (var cMessage in container.Messages)
             {
-                var newMessage = new EncryptedConnectionMessage(connectionMessage.AuthKey, cMessage.MsgId, connectionMessage.Salt, connectionMessage.SessionId, cMessage.Seqno, Array.Empty<byte>());
+                var newMessage = new EncryptedConnectionMessage(connectionMessage.AuthKey, cMessage.MsgId, connectionMessage.Salt,
+                    connectionMessage.SessionId, cMessage.Seqno, Array.Empty<byte>());
                 if (!InternalCheckMessageValidity(newMessage, cMessage.Body))
                 {
                     return false;
@@ -48,7 +49,8 @@ namespace CatraProto.Client.Connections.MessageScheduling
             var shouldSeqno = _mtProtoState.SeqnoHandler.ComputeSeqno(deserialized, true);
             if (shouldSeqno != connectionMessage.SeqNo)
             {
-                _logger.Warning("Received seqno {RSeqno} does not equal computed seqno {CSeqno} ({Obj})", connectionMessage.SeqNo, shouldSeqno, deserialized);
+                _logger.Warning("Received seqno {RSeqno} does not equal computed seqno {CSeqno} ({Obj})", connectionMessage.SeqNo, shouldSeqno,
+                    deserialized);
             }
 
             switch (deserialized)
@@ -64,7 +66,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
             var sessionId = _mtProtoState.SessionIdHandler.GetSessionId();
             if (sessionId != connectionMessage.SessionId)
             {
-                _logger.Warning("Local session {LSession} is not equal to the remote session {RSession}", sessionId, connectionMessage.SessionId);
+                _logger.Warning("Local session {LSession} does not equal to the remote session {RSession}", sessionId, connectionMessage.SessionId);
                 return false;
             }
 
@@ -85,7 +87,9 @@ namespace CatraProto.Client.Connections.MessageScheduling
         {
             if (_mtProtoState.SessionIdHandler.GetSessionId() == sessionId)
             {
-                _logger.Warning("Received new session created but the id is the same as the old one, new server salt {Salt}, new SessionId {SessionId}", newSessionCreated.ServerSalt, sessionId);
+                _logger.Warning(
+                    "Received new session created but the id is the same as the old one, new server salt {Salt}, new SessionId {SessionId}",
+                    newSessionCreated.ServerSalt, sessionId);
                 return;
             }
 
@@ -98,6 +102,9 @@ namespace CatraProto.Client.Connections.MessageScheduling
         private void HandleBadServerSalt(BadServerSalt serverSalt)
         {
             _mtProtoState.SaltHandler.SetSalt(serverSalt.NewServerSalt, false);
+            _messagesHandler.MessagesTrackers.MessageCompletionTracker.RemoveCompletion(serverSalt.BadMsgId, out var messageItem);
+            //TODO: Support containers
+            messageItem?.SetToSend();
         }
     }
 }

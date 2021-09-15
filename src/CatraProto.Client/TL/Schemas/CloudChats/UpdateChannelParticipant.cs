@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateChannelParticipant : UpdateBase
+	public partial class UpdateChannelParticipant : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,28 +17,28 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 1708307556; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("channel_id")]
+[Newtonsoft.Json.JsonProperty("channel_id")]
 		public int ChannelId { get; set; }
 
-[JsonPropertyName("date")]
+[Newtonsoft.Json.JsonProperty("date")]
 		public int Date { get; set; }
 
-[JsonPropertyName("user_id")]
+[Newtonsoft.Json.JsonProperty("user_id")]
 		public int UserId { get; set; }
 
-[JsonPropertyName("prev_participant")]
-		public ChannelParticipantBase PrevParticipant { get; set; }
+[Newtonsoft.Json.JsonProperty("prev_participant")]
+		public CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantBase PrevParticipant { get; set; }
 
-[JsonPropertyName("new_participant")]
-		public ChannelParticipantBase NewParticipant { get; set; }
+[Newtonsoft.Json.JsonProperty("new_participant")]
+		public CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantBase NewParticipant { get; set; }
 
-[JsonPropertyName("qts")]
+[Newtonsoft.Json.JsonProperty("qts")]
 		public int Qts { get; set; }
 
         
@@ -77,20 +79,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			UserId = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				PrevParticipant = reader.Read<ChannelParticipantBase>();
+				PrevParticipant = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				NewParticipant = reader.Read<ChannelParticipantBase>();
+				NewParticipant = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantBase>();
 			}
 
 			Qts = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "updateChannelParticipant";
+		    return "updateChannelParticipant";
 		}
 	}
 }

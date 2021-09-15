@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class WebPageNotModified : WebPageBase
+	public partial class WebPageNotModified : CatraProto.Client.TL.Schemas.CloudChats.WebPageBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,13 +16,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 1930545681; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("cached_page_views")]
+[Newtonsoft.Json.JsonProperty("cached_page_views")]
 		public int? CachedPageViews { get; set; }
 
         
@@ -50,11 +52,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			{
 				CachedPageViews = reader.Read<int>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "webPageNotModified";
+		    return "webPageNotModified";
 		}
 	}
 }

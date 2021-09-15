@@ -1,23 +1,28 @@
+using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class StickerSet : StickerSetBase
+	public partial class StickerSet : CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetBase
 	{
 
 
         public static int StaticConstructorId { get => -1240849242; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonProperty("set")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.StickerSetBase Set { get; set; }
 
-        [JsonPropertyName("set")] public override CloudChats.StickerSetBase Set { get; set; }
+[Newtonsoft.Json.JsonProperty("packs")]
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.StickerPackBase> Packs { get; set; }
 
-        [JsonPropertyName("packs")] public override IList<StickerPackBase> Packs { get; set; }
-
-        [JsonPropertyName("documents")] public override IList<DocumentBase> Documents { get; set; }
+[Newtonsoft.Json.JsonProperty("documents")]
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase> Documents { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -36,14 +41,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 		public override void Deserialize(Reader reader)
 		{
-			Set = reader.Read<CloudChats.StickerSetBase>();
-			Packs = reader.ReadVector<StickerPackBase>();
-			Documents = reader.ReadVector<DocumentBase>();
-		}
+			Set = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StickerSetBase>();
+			Packs = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.StickerPackBase>();
+			Documents = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "messages.stickerSet";
+		    return "messages.stickerSet";
 		}
 	}
 }

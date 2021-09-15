@@ -1,15 +1,18 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputGeoPointEmpty : InputGeoPointBase
+	public partial class InputGeoPointEmpty : CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase
 	{
 
 
         public static int StaticConstructorId { get => -457104426; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
         
@@ -26,11 +29,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "inputGeoPointEmpty";
+		    return "inputGeoPointEmpty";
 		}
 	}
 }

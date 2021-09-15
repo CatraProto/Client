@@ -1,62 +1,64 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class UnregisterDevice : IMethod
-	{
-
+    public partial class UnregisterDevice : IMethod
+    {
+        [JsonIgnore]
+        public static int StaticConstructorId
+        {
+            get => 813089983;
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => 813089983; }
-        [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(bool);
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
 
-[JsonPropertyName("token_type")]
-		public int TokenType { get; set; }
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("token")]
-		public string Token { get; set; }
+        [JsonProperty("token_type")] public int TokenType { get; set; }
 
-[JsonPropertyName("other_uids")]
-		public IList<int> OtherUids { get; set; }
+        [JsonProperty("token")] public string Token { get; set; }
+
+        [JsonProperty("other_uids")] public IList<int> OtherUids { get; set; }
+
+        public override string ToString()
+        {
+            return "account.unregisterDevice";
+        }
 
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(TokenType);
-			writer.Write(Token);
-			writer.Write(OtherUids);
+            writer.Write(TokenType);
+            writer.Write(Token);
+            writer.Write(OtherUids);
+        }
 
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			TokenType = reader.Read<int>();
-			Token = reader.Read<string>();
-			OtherUids = reader.ReadVector<int>();
-		}
-
-		public override string ToString()
-		{
-			return "account.unregisterDevice";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            TokenType = reader.Read<int>();
+            Token = reader.Read<string>();
+            OtherUids = reader.ReadVector<int>();
+        }
+    }
 }

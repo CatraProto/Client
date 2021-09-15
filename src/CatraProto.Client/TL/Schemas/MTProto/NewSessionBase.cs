@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,13 +7,13 @@ namespace CatraProto.Client.TL.Schemas.MTProto
     public abstract class NewSessionBase : IObject
     {
 
-[JsonPropertyName("first_msg_id")]
+[Newtonsoft.Json.JsonProperty("first_msg_id")]
 		public abstract long FirstMsgId { get; set; }
 
-[JsonPropertyName("unique_id")]
+[Newtonsoft.Json.JsonProperty("unique_id")]
 		public abstract long UniqueId { get; set; }
 
-[JsonPropertyName("server_salt")]
+[Newtonsoft.Json.JsonProperty("server_salt")]
 		public abstract long ServerSalt { get; set; }
 
         public abstract void UpdateFlags();

@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class AutoDownloadSettings : AutoDownloadSettingsBase
+	public partial class AutoDownloadSettings : CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -17,34 +19,34 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -532532493; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("disabled")]
+[Newtonsoft.Json.JsonProperty("disabled")]
 		public override bool Disabled { get; set; }
 
-[JsonPropertyName("video_preload_large")]
+[Newtonsoft.Json.JsonProperty("video_preload_large")]
 		public override bool VideoPreloadLarge { get; set; }
 
-[JsonPropertyName("audio_preload_next")]
+[Newtonsoft.Json.JsonProperty("audio_preload_next")]
 		public override bool AudioPreloadNext { get; set; }
 
-[JsonPropertyName("phonecalls_less_data")]
+[Newtonsoft.Json.JsonProperty("phonecalls_less_data")]
 		public override bool PhonecallsLessData { get; set; }
 
-[JsonPropertyName("photo_size_max")]
+[Newtonsoft.Json.JsonProperty("photo_size_max")]
 		public override int PhotoSizeMax { get; set; }
 
-[JsonPropertyName("video_size_max")]
+[Newtonsoft.Json.JsonProperty("video_size_max")]
 		public override int VideoSizeMax { get; set; }
 
-[JsonPropertyName("file_size_max")]
+[Newtonsoft.Json.JsonProperty("file_size_max")]
 		public override int FileSizeMax { get; set; }
 
-[JsonPropertyName("video_upload_maxbitrate")]
+[Newtonsoft.Json.JsonProperty("video_upload_maxbitrate")]
 		public override int VideoUploadMaxbitrate { get; set; }
 
         
@@ -80,11 +82,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			VideoSizeMax = reader.Read<int>();
 			FileSizeMax = reader.Read<int>();
 			VideoUploadMaxbitrate = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "autoDownloadSettings";
+		    return "autoDownloadSettings";
 		}
 	}
 }

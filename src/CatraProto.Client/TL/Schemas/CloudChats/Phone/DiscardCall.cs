@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -15,33 +16,33 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 			Video = 1 << 0
 		}
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => -1295269440; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(UpdatesBase);
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("video")]
+[Newtonsoft.Json.JsonProperty("video")]
 		public bool Video { get; set; }
 
-[JsonPropertyName("peer")]
-		public InputPhoneCallBase Peer { get; set; }
+[Newtonsoft.Json.JsonProperty("peer")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPhoneCallBase Peer { get; set; }
 
-[JsonPropertyName("duration")]
+[Newtonsoft.Json.JsonProperty("duration")]
 		public int Duration { get; set; }
 
-[JsonPropertyName("reason")]
-		public PhoneCallDiscardReasonBase Reason { get; set; }
+[Newtonsoft.Json.JsonProperty("reason")]
+		public CatraProto.Client.TL.Schemas.CloudChats.PhoneCallDiscardReasonBase Reason { get; set; }
 
-[JsonPropertyName("connection_id")]
+[Newtonsoft.Json.JsonProperty("connection_id")]
 		public long ConnectionId { get; set; }
 
 
@@ -67,15 +68,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 		{
 			Flags = reader.Read<int>();
 			Video = FlagsHelper.IsFlagSet(Flags, 0);
-			Peer = reader.Read<InputPhoneCallBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPhoneCallBase>();
 			Duration = reader.Read<int>();
-			Reason = reader.Read<PhoneCallDiscardReasonBase>();
+			Reason = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhoneCallDiscardReasonBase>();
 			ConnectionId = reader.Read<long>();
-		}
 
+		}
+		
 		public override string ToString()
 		{
-			return "phone.discardCall";
+		    return "phone.discardCall";
 		}
 	}
 }

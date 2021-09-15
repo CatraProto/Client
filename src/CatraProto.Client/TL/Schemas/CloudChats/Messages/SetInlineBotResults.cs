@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -19,37 +19,40 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			SwitchPm = 1 << 3
 		}
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => -346119674; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(bool);
 
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
-
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("gallery")]
+[Newtonsoft.Json.JsonProperty("gallery")]
 		public bool Gallery { get; set; }
 
-[JsonPropertyName("private")]
+[Newtonsoft.Json.JsonProperty("private")]
 		public bool Private { get; set; }
 
-[JsonPropertyName("query_id")]
+[Newtonsoft.Json.JsonProperty("query_id")]
 		public long QueryId { get; set; }
 
-		[JsonPropertyName("results")] public IList<InputBotInlineResultBase> Results { get; set; }
+[Newtonsoft.Json.JsonProperty("results")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineResultBase> Results { get; set; }
 
-[JsonPropertyName("cache_time")]
+[Newtonsoft.Json.JsonProperty("cache_time")]
 		public int CacheTime { get; set; }
 
-[JsonPropertyName("next_offset")]
+[Newtonsoft.Json.JsonProperty("next_offset")]
 		public string NextOffset { get; set; }
 
-		[JsonPropertyName("switch_pm")] public InlineBotSwitchPMBase SwitchPm { get; set; }
+[Newtonsoft.Json.JsonProperty("switch_pm")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InlineBotSwitchPMBase SwitchPm { get; set; }
 
 
 		public void UpdateFlags() 
@@ -88,7 +91,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Gallery = FlagsHelper.IsFlagSet(Flags, 0);
 			Private = FlagsHelper.IsFlagSet(Flags, 1);
 			QueryId = reader.Read<long>();
-			Results = reader.ReadVector<InputBotInlineResultBase>();
+			Results = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineResultBase>();
 			CacheTime = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
@@ -97,13 +100,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				SwitchPm = reader.Read<InlineBotSwitchPMBase>();
+				SwitchPm = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InlineBotSwitchPMBase>();
 			}
-		}
 
+
+		}
+		
 		public override string ToString()
 		{
-			return "messages.setInlineBotResults";
+		    return "messages.setInlineBotResults";
 		}
 	}
 }

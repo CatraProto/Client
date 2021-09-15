@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 {
-	public partial class ChannelDifferenceTooLong : ChannelDifferenceBase
+	public partial class ChannelDifferenceTooLong : CatraProto.Client.TL.Schemas.CloudChats.Updates.ChannelDifferenceBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,29 +17,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 		}
 
         public static int StaticConstructorId { get => -1531132162; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("final")]
+[Newtonsoft.Json.JsonProperty("final")]
 		public override bool Final { get; set; }
 
-[JsonPropertyName("timeout")]
+[Newtonsoft.Json.JsonProperty("timeout")]
 		public override int? Timeout { get; set; }
 
-[JsonPropertyName("dialog")]
-		public DialogBase Dialog { get; set; }
+[Newtonsoft.Json.JsonProperty("dialog")]
+		public CatraProto.Client.TL.Schemas.CloudChats.DialogBase Dialog { get; set; }
 
-[JsonPropertyName("messages")]
-		public IList<MessageBase> Messages { get; set; }
+[Newtonsoft.Json.JsonProperty("messages")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageBase> Messages { get; set; }
 
-[JsonPropertyName("chats")]
-		public IList<ChatBase> Chats { get; set; }
+[Newtonsoft.Json.JsonProperty("chats")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
 
-[JsonPropertyName("users")]
-		public IList<UserBase> Users { get; set; }
+[Newtonsoft.Json.JsonProperty("users")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -74,15 +75,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 				Timeout = reader.Read<int>();
 			}
 
-			Dialog = reader.Read<DialogBase>();
-			Messages = reader.ReadVector<MessageBase>();
-			Chats = reader.ReadVector<ChatBase>();
-			Users = reader.ReadVector<UserBase>();
-		}
+			Dialog = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DialogBase>();
+			Messages = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageBase>();
+			Chats = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
+			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "updates.channelDifferenceTooLong";
+		    return "updates.channelDifferenceTooLong";
 		}
 	}
 }

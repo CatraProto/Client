@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelForbidden : ChatBase
+	public partial class ChannelForbidden : CatraProto.Client.TL.Schemas.CloudChats.ChatBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,28 +18,28 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 681420594; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("broadcast")]
+[Newtonsoft.Json.JsonProperty("broadcast")]
 		public bool Broadcast { get; set; }
 
-[JsonPropertyName("megagroup")]
+[Newtonsoft.Json.JsonProperty("megagroup")]
 		public bool Megagroup { get; set; }
 
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public override int Id { get; set; }
 
-[JsonPropertyName("access_hash")]
+[Newtonsoft.Json.JsonProperty("access_hash")]
 		public long AccessHash { get; set; }
 
-[JsonPropertyName("title")]
+[Newtonsoft.Json.JsonProperty("title")]
 		public string Title { get; set; }
 
-[JsonPropertyName("until_date")]
+[Newtonsoft.Json.JsonProperty("until_date")]
 		public int? UntilDate { get; set; }
 
         
@@ -77,11 +79,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			{
 				UntilDate = reader.Read<int>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "channelForbidden";
+		    return "channelForbidden";
 		}
 	}
 }

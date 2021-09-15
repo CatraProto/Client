@@ -4,7 +4,7 @@ namespace CatraProto.Client.MTProto.Settings
     {
         public int ApiId { get; }
         public string ApiHash { get; }
-        public string DeviceModel { get; } 
+        public string DeviceModel { get; }
         public string AppVersion { get; }
         public string LangCode { get; }
         public string LangPack { get; }

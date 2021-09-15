@@ -1,61 +1,63 @@
 using System;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class GetTheme : IMethod
-	{
-
+    public partial class GetTheme : IMethod
+    {
+        [JsonIgnore]
+        public static int StaticConstructorId
+        {
+            get => -1919060949;
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => -1919060949; }
-        [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(ThemeBase);
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(ThemeBase);
 
-[JsonPropertyName("format")]
-		public string Format { get; set; }
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("theme")]
-		public InputThemeBase Theme { get; set; }
+        [JsonProperty("format")] public string Format { get; set; }
 
-[JsonPropertyName("document_id")]
-		public long DocumentId { get; set; }
+        [JsonProperty("theme")] public InputThemeBase Theme { get; set; }
+
+        [JsonProperty("document_id")] public long DocumentId { get; set; }
+
+        public override string ToString()
+        {
+            return "account.getTheme";
+        }
 
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Format);
-			writer.Write(Theme);
-			writer.Write(DocumentId);
+            writer.Write(Format);
+            writer.Write(Theme);
+            writer.Write(DocumentId);
+        }
 
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			Format = reader.Read<string>();
-			Theme = reader.Read<InputThemeBase>();
-			DocumentId = reader.Read<long>();
-		}
-
-		public override string ToString()
-		{
-			return "account.getTheme";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Format = reader.Read<string>();
+            Theme = reader.Read<InputThemeBase>();
+            DocumentId = reader.Read<long>();
+        }
+    }
 }

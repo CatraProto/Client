@@ -1,18 +1,15 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
-using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
     public abstract class PasswordSettingsBase : IObject
     {
+        [JsonProperty("email")] public abstract string Email { get; set; }
 
-[JsonPropertyName("email")]
-		public abstract string Email { get; set; }
-
-[JsonPropertyName("secure_settings")]
-		public abstract CatraProto.Client.TL.Schemas.CloudChats.SecureSecretSettingsBase SecureSettings { get; set; }
+        [JsonProperty("secure_settings")] public abstract SecureSecretSettingsBase SecureSettings { get; set; }
 
         public abstract void UpdateFlags();
         public abstract void Deserialize(Reader reader);

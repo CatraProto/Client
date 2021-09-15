@@ -1,27 +1,30 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputPhoneContact : InputContactBase
+	public partial class InputPhoneContact : CatraProto.Client.TL.Schemas.CloudChats.InputContactBase
 	{
 
 
         public static int StaticConstructorId { get => -208488460; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("client_id")]
+[Newtonsoft.Json.JsonProperty("client_id")]
 		public override long ClientId { get; set; }
 
-[JsonPropertyName("phone")]
+[Newtonsoft.Json.JsonProperty("phone")]
 		public override string Phone { get; set; }
 
-[JsonPropertyName("first_name")]
+[Newtonsoft.Json.JsonProperty("first_name")]
 		public override string FirstName { get; set; }
 
-[JsonPropertyName("last_name")]
+[Newtonsoft.Json.JsonProperty("last_name")]
 		public override string LastName { get; set; }
 
         
@@ -46,11 +49,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Phone = reader.Read<string>();
 			FirstName = reader.Read<string>();
 			LastName = reader.Read<string>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "inputPhoneContact";
+		    return "inputPhoneContact";
 		}
 	}
 }

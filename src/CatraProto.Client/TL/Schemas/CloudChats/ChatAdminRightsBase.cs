@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,34 +7,34 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class ChatAdminRightsBase : IObject
     {
 
-[JsonPropertyName("change_info")]
+[Newtonsoft.Json.JsonProperty("change_info")]
 		public abstract bool ChangeInfo { get; set; }
 
-[JsonPropertyName("post_messages")]
+[Newtonsoft.Json.JsonProperty("post_messages")]
 		public abstract bool PostMessages { get; set; }
 
-[JsonPropertyName("edit_messages")]
+[Newtonsoft.Json.JsonProperty("edit_messages")]
 		public abstract bool EditMessages { get; set; }
 
-[JsonPropertyName("delete_messages")]
+[Newtonsoft.Json.JsonProperty("delete_messages")]
 		public abstract bool DeleteMessages { get; set; }
 
-[JsonPropertyName("ban_users")]
+[Newtonsoft.Json.JsonProperty("ban_users")]
 		public abstract bool BanUsers { get; set; }
 
-[JsonPropertyName("invite_users")]
+[Newtonsoft.Json.JsonProperty("invite_users")]
 		public abstract bool InviteUsers { get; set; }
 
-[JsonPropertyName("pin_messages")]
+[Newtonsoft.Json.JsonProperty("pin_messages")]
 		public abstract bool PinMessages { get; set; }
 
-[JsonPropertyName("add_admins")]
+[Newtonsoft.Json.JsonProperty("add_admins")]
 		public abstract bool AddAdmins { get; set; }
 
-[JsonPropertyName("anonymous")]
+[Newtonsoft.Json.JsonProperty("anonymous")]
 		public abstract bool Anonymous { get; set; }
 
-[JsonPropertyName("manage_call")]
+[Newtonsoft.Json.JsonProperty("manage_call")]
 		public abstract bool ManageCall { get; set; }
 
         public abstract void UpdateFlags();

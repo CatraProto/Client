@@ -1,21 +1,24 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class TopPeer : TopPeerBase
+	public partial class TopPeer : CatraProto.Client.TL.Schemas.CloudChats.TopPeerBase
 	{
 
 
         public static int StaticConstructorId { get => -305282981; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("peer")]
-		public override PeerBase Peer { get; set; }
+[Newtonsoft.Json.JsonProperty("peer")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
 
-[JsonPropertyName("rating")]
+[Newtonsoft.Json.JsonProperty("rating")]
 		public override double Rating { get; set; }
 
         
@@ -34,13 +37,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Peer = reader.Read<PeerBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
 			Rating = reader.Read<double>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "topPeer";
+		    return "topPeer";
 		}
 	}
 }

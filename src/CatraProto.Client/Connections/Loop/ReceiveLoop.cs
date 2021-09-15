@@ -3,11 +3,9 @@ using System.IO;
 using System.Threading.Tasks;
 using CatraProto.Client.Async.Loops;
 using CatraProto.Client.Async.Loops.Enums.Generic;
-using CatraProto.Client.Connections.Exceptions;
 using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.Connections.MessageScheduling.ConnectionMessages;
 using CatraProto.Client.Connections.MessageScheduling.ConnectionMessages.Interfaces;
-using CatraProto.Client.Extensions;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.TL;
 using Serilog;
@@ -32,28 +30,41 @@ namespace CatraProto.Client.Connections.Loop
 
         private async Task Loop()
         {
-            _logger.Information("Listening for incoming messages from {Connection}...", _connection.ConnectionInfo);
             while (true)
             {
-                await StateSignaler.WaitStateAsync(default, SignalState.Start);
+                try
+                {
+                    if (StateSignaler.GetCurrentState(true) == SignalState.Stop)
+                    {
+                        _logger.Information("ReceiveLoop for connection {Info} shutdown", _connection.ConnectionInfo);
+                        SetLoopStopped();
+
+                        await StateSignaler.WaitStateAsync(false, default, SignalState.Start);
+                        _logger.Information("Listening for incoming messages on connection {Info}...", _connection.ConnectionInfo);
+                    }
+                }
+                catch (ObjectDisposedException e) when (e.ObjectName == "AsyncStateSignaler")
+                {
+                    break;
+                }
+                catch (Exception e)
+                {
+                    _logger.Error(e, "Exception thrown on SendLoop for {Info}", _connection.ConnectionInfo);
+                }
 
                 var protocol = _connection.Protocol!;
                 var shutdownToken = GetShutdownToken();
                 try
                 {
                     var message = await protocol.Reader!.ReadMessageAsync(shutdownToken);
-                    _connection.Signaler.SetSignal(false);
+                    //_connection.Signaler.SetSignal(false);
                     using var reader = new Reader(MergedProvider.Singleton, message.ToMemoryStream());
 
-                    switch (message.Length)
+                    if (message.Length == 4)
                     {
-                        case 0:
-                            _logger.Error("Received 0 bytes from server");
-                            continue;
-                        case 4:
-                            _messagesDispatcher.DispatchMessage(new UnencryptedConnectionMessage(message));
-                            _connection.Signaler.SetSignal(true);
-                            continue;
+                        _messagesDispatcher.DispatchMessage(new UnencryptedConnectionMessage(message));
+                        _connection.Signaler.SetSignal(true);
+                        continue;
                     }
 
                     var authKeyId = reader.Read<long>();
@@ -82,26 +93,24 @@ namespace CatraProto.Client.Connections.Loop
                 {
                     //Ignored on purpose
                 }
-                catch (ConnectionClosedException)
+                catch (IOException e)
                 {
-                    _ = _connection.ConnectAsync(shutdownToken);
-                    break;
-                }
-                catch (IOException)
-                {
+                    _logger.Error("IOException received. Message: \"{Info}\", reconnecting...", e.Message);
                     _ = _connection.ConnectAsync(shutdownToken);
                     break;
                 }
                 catch (Exception e)
                 {
-                    _logger.Error(e, "Exception thrown on ReadLoop for {Info}", _connection.ConnectionInfo);
+                    _logger.Error(e, "Exception thrown on ReceiveLoop for {Info}", _connection.ConnectionInfo);
                     break;
                 }
-
-                _connection.Signaler.SetSignal(true);
+                finally
+                {
+                    _connection.Signaler.SetSignal(true);
+                }
             }
 
-            _logger.Information("ReadLoop for connection {Info} shutdown", _connection.ConnectionInfo);
+            _logger.Information("Dispose ReceiveLoop for connection {Info}", _connection.ConnectionInfo);
             SetLoopStopped();
         }
     }

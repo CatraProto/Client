@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.MTProto.Rpc.Interfaces;
 using CatraProto.TL.Interfaces;
@@ -7,10 +8,10 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
 {
     class MessageCompletion
     {
+        public CancellationTokenRegistration? CancellationTokenRegistration { get; set; }
         public TaskCompletionSource? TaskCompletionSource { get; }
         public IRpcMessage? RpcMessage { get; }
         public IMethod? Method { get; }
-        private MessagesHandler? _messagesHandler;
 
         public MessageCompletion(TaskCompletionSource? taskCompletionSource, IRpcMessage? rpcMessage, IMethod? method)
         {
@@ -22,16 +23,6 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
             Method = method;
             RpcMessage = rpcMessage;
             TaskCompletionSource = taskCompletionSource;
-        }
-
-        public void SetSent(long messageId)
-        {
-            _messagesHandler?.MessagesTrackers.MessageCompletionTracker.AddCompletion(messageId, this);
-        }
-
-        public void BindTo(MessagesHandler messagesHandler)
-        {
-            _messagesHandler = messagesHandler;
         }
     }
 }

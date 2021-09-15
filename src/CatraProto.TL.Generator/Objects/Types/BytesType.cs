@@ -18,7 +18,7 @@ namespace CatraProto.TL.Generator.Objects.Types
 		{
 			var type = GetTypeName(NamingType.FullNamespace, parameter, true);
 			stringBuilder.AppendLine(
-				$"\n[JsonPropertyName(\"{parameter.NamingInfo.OriginalName}\")]\n{StringTools.TwoTabs}{GetParameterAccessibility(parameter, isAbstract)} {type} {parameter.NamingInfo.PascalCaseName} {{ get; set; }}");
+				$"\n[Newtonsoft.Json.JsonProperty(\"{parameter.NamingInfo.OriginalName}\")]\n{StringTools.TwoTabs}{GetParameterAccessibility(parameter, isAbstract)} {type} {parameter.NamingInfo.PascalCaseName} {{ get; set; }}");
 		}
 
 		public override void WriteSerializer(StringBuilder stringBuilder, Parameter parameter)

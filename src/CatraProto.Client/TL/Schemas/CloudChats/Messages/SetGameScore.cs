@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -16,33 +17,36 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Force = 1 << 1
 		}
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => -1896289088; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
 
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
-
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("edit_message")]
+[Newtonsoft.Json.JsonProperty("edit_message")]
 		public bool EditMessage { get; set; }
 
-[JsonPropertyName("force")]
+[Newtonsoft.Json.JsonProperty("force")]
 		public bool Force { get; set; }
 
-		[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
+[Newtonsoft.Json.JsonProperty("peer")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
 
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public int Id { get; set; }
 
-		[JsonPropertyName("user_id")] public InputUserBase UserId { get; set; }
+[Newtonsoft.Json.JsonProperty("user_id")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase UserId { get; set; }
 
-[JsonPropertyName("score")]
+[Newtonsoft.Json.JsonProperty("score")]
 		public int Score { get; set; }
 
 
@@ -70,15 +74,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Flags = reader.Read<int>();
 			EditMessage = FlagsHelper.IsFlagSet(Flags, 0);
 			Force = FlagsHelper.IsFlagSet(Flags, 1);
-			Peer = reader.Read<InputPeerBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
 			Id = reader.Read<int>();
-			UserId = reader.Read<InputUserBase>();
+			UserId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
 			Score = reader.Read<int>();
-		}
 
+		}
+		
 		public override string ToString()
 		{
-			return "messages.setGameScore";
+		    return "messages.setGameScore";
 		}
 	}
 }

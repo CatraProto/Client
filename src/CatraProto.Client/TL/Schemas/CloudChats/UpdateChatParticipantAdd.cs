@@ -1,30 +1,33 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateChatParticipantAdd : UpdateBase
+	public partial class UpdateChatParticipantAdd : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 
 
         public static int StaticConstructorId { get => -364179876; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("chat_id")]
+[Newtonsoft.Json.JsonProperty("chat_id")]
 		public int ChatId { get; set; }
 
-[JsonPropertyName("user_id")]
+[Newtonsoft.Json.JsonProperty("user_id")]
 		public int UserId { get; set; }
 
-[JsonPropertyName("inviter_id")]
+[Newtonsoft.Json.JsonProperty("inviter_id")]
 		public int InviterId { get; set; }
 
-[JsonPropertyName("date")]
+[Newtonsoft.Json.JsonProperty("date")]
 		public int Date { get; set; }
 
-[JsonPropertyName("version")]
+[Newtonsoft.Json.JsonProperty("version")]
 		public int Version { get; set; }
 
         
@@ -51,11 +54,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			InviterId = reader.Read<int>();
 			Date = reader.Read<int>();
 			Version = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "updateChatParticipantAdd";
+		    return "updateChatParticipantAdd";
 		}
 	}
 }

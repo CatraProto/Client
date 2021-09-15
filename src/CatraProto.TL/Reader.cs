@@ -6,6 +6,7 @@ using CatraProto.TL.Exceptions;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Interfaces.Deserializers;
 using CatraProto.TL.ObjectDeserializers;
+using CatraProto.TL.Options;
 
 namespace CatraProto.TL
 {
@@ -16,7 +17,7 @@ namespace CatraProto.TL
             get => _reader.BaseStream;
         }
 
-        private readonly Dictionary<Type, ICustomObjectDeserializer> _customObjectDeserializers = new Dictionary<Type, ICustomObjectDeserializer>();
+        private ICustomObjectDeserializer? _rpcDeserializer;
         private readonly ObjectProvider _provider;
         private readonly BinaryReader _reader;
 
@@ -26,17 +27,18 @@ namespace CatraProto.TL
             _reader = new BinaryReader(stream, Encoding.UTF8, leaveOpen);
         }
 
-        public void AddCustomObjectDeserializer(Type type, ICustomObjectDeserializer deserializer)
+        public void SetRpcDeserializer(ICustomObjectDeserializer customObjectDeserializer)
         {
-            _customObjectDeserializers.TryAdd(type, deserializer);
+            _rpcDeserializer = customObjectDeserializer;
         }
 
-        public T Read<T>(int? bitSize = null)
+
+        public T Read<T>(int? bitSize = null, DeserializationOptions? deserializationOptions = null)
         {
             return (T)Read(typeof(T), bitSize);
         }
 
-        public object Read(Type type, int? bitSize = null)
+        public object Read(Type type, int? bitSize = null, DeserializationOptions? deserializationOptions = null)
         {
             if (type == typeof(int))
             {
@@ -84,9 +86,17 @@ namespace CatraProto.TL
                     throw new DeserializationException($"The provider couldn't provide an instance for {id}", DeserializationException.DeserializationErrors.ProviderReturnedNull);
                 }
 
-                if (_customObjectDeserializers.TryGetValue(instance.GetType(), out var deserializer))
+                if (id == _provider.GzipPackedId)
                 {
-                    deserializer.DeserializeObject(instance, this);
+                    var gzipInstance = _provider.ResolveConstructorId(id);
+                    gzipInstance!.Deserialize(this);
+                    var gzippedBytes = _provider.GetGzippedBytes(gzipInstance);
+                    instance = GzipHandler.DeserializeGzippedObject(gzippedBytes, _provider);
+                } 
+                else if (_rpcDeserializer != null && id == _provider.RpcResultId)
+                {
+                    _rpcDeserializer.DeserializeObject(instance, this);
+                    return instance;
                 }
                 else
                 {

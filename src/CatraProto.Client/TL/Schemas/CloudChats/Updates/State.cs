@@ -1,30 +1,33 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 {
-	public partial class State : StateBase
+	public partial class State : CatraProto.Client.TL.Schemas.CloudChats.Updates.StateBase
 	{
 
 
         public static int StaticConstructorId { get => -1519637954; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("pts")]
+[Newtonsoft.Json.JsonProperty("pts")]
 		public override int Pts { get; set; }
 
-[JsonPropertyName("qts")]
+[Newtonsoft.Json.JsonProperty("qts")]
 		public override int Qts { get; set; }
 
-[JsonPropertyName("date")]
+[Newtonsoft.Json.JsonProperty("date")]
 		public override int Date { get; set; }
 
-[JsonPropertyName("seq")]
+[Newtonsoft.Json.JsonProperty("seq")]
 		public override int Seq { get; set; }
 
-[JsonPropertyName("unread_count")]
+[Newtonsoft.Json.JsonProperty("unread_count")]
 		public override int UnreadCount { get; set; }
 
         
@@ -51,11 +54,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 			Date = reader.Read<int>();
 			Seq = reader.Read<int>();
 			UnreadCount = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "updates.state";
+		    return "updates.state";
 		}
 	}
 }

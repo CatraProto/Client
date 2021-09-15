@@ -1,22 +1,25 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class RecentMeUrlChatInvite : RecentMeUrlBase
+	public partial class RecentMeUrlChatInvite : CatraProto.Client.TL.Schemas.CloudChats.RecentMeUrlBase
 	{
 
 
         public static int StaticConstructorId { get => -347535331; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("url")]
+[Newtonsoft.Json.JsonProperty("url")]
 		public override string Url { get; set; }
 
-[JsonPropertyName("chat_invite")]
-		public ChatInviteBase ChatInvite { get; set; }
+[Newtonsoft.Json.JsonProperty("chat_invite")]
+		public CatraProto.Client.TL.Schemas.CloudChats.ChatInviteBase ChatInvite { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -35,12 +38,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Url = reader.Read<string>();
-			ChatInvite = reader.Read<ChatInviteBase>();
-		}
+			ChatInvite = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatInviteBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "recentMeUrlChatInvite";
+		    return "recentMeUrlChatInvite";
 		}
 	}
 }

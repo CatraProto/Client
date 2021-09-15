@@ -1,56 +1,59 @@
 using System;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 {
-	public partial class SetStickers : IMethod
-	{
-
+    public partial class SetStickers : IMethod
+    {
+        [JsonIgnore]
+        public static int StaticConstructorId
+        {
+            get => -359881479;
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => -359881479; }
-        [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(bool);
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
 
-[JsonPropertyName("channel")]
-		public InputChannelBase Channel { get; set; }
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("stickerset")]
-		public InputStickerSetBase Stickerset { get; set; }
+        [JsonProperty("channel")] public InputChannelBase Channel { get; set; }
+
+        [JsonProperty("stickerset")] public InputStickerSetBase Stickerset { get; set; }
+
+        public override string ToString()
+        {
+            return "channels.setStickers";
+        }
 
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Channel);
-			writer.Write(Stickerset);
+            writer.Write(Channel);
+            writer.Write(Stickerset);
+        }
 
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			Channel = reader.Read<InputChannelBase>();
-			Stickerset = reader.Read<InputStickerSetBase>();
-		}
-
-		public override string ToString()
-		{
-			return "channels.setStickers";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Channel = reader.Read<InputChannelBase>();
+            Stickerset = reader.Read<InputStickerSetBase>();
+        }
+    }
 }

@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -11,24 +12,24 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 	{
 
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => -1835453025; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(HttpWaitBase);
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.HttpWaitBase);
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("max_delay")]
+[Newtonsoft.Json.JsonProperty("max_delay")]
 		public int MaxDelay { get; set; }
 
-[JsonPropertyName("wait_after")]
+[Newtonsoft.Json.JsonProperty("wait_after")]
 		public int WaitAfter { get; set; }
 
-[JsonPropertyName("max_wait")]
+[Newtonsoft.Json.JsonProperty("max_wait")]
 		public int MaxWait { get; set; }
 
 
@@ -51,11 +52,12 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 			MaxDelay = reader.Read<int>();
 			WaitAfter = reader.Read<int>();
 			MaxWait = reader.Read<int>();
-		}
 
+		}
+		
 		public override string ToString()
 		{
-			return "http_wait";
+		    return "http_wait";
 		}
 	}
 }

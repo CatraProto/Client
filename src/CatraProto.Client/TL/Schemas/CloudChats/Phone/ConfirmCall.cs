@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -11,28 +12,28 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 	{
 
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => 788404002; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(PhoneCallBase);
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Phone.PhoneCallBase);
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("peer")]
-		public InputPhoneCallBase Peer { get; set; }
+[Newtonsoft.Json.JsonProperty("peer")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPhoneCallBase Peer { get; set; }
 
-[JsonPropertyName("g_a")]
+[Newtonsoft.Json.JsonProperty("g_a")]
 		public byte[] GA { get; set; }
 
-[JsonPropertyName("key_fingerprint")]
+[Newtonsoft.Json.JsonProperty("key_fingerprint")]
 		public long KeyFingerprint { get; set; }
 
-[JsonPropertyName("protocol")]
-		public PhoneCallProtocolBase Protocol { get; set; }
+[Newtonsoft.Json.JsonProperty("protocol")]
+		public CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase Protocol { get; set; }
 
 
 		public void UpdateFlags() 
@@ -52,15 +53,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 
 		public void Deserialize(Reader reader)
 		{
-			Peer = reader.Read<InputPhoneCallBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPhoneCallBase>();
 			GA = reader.Read<byte[]>();
 			KeyFingerprint = reader.Read<long>();
-			Protocol = reader.Read<PhoneCallProtocolBase>();
-		}
+			Protocol = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase>();
 
+		}
+		
 		public override string ToString()
 		{
-			return "phone.confirmCall";
+		    return "phone.confirmCall";
 		}
 	}
 }

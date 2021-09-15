@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PaymentRequestedInfo : PaymentRequestedInfoBase
+	public partial class PaymentRequestedInfo : CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -17,23 +19,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -1868808300; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("name")]
+[Newtonsoft.Json.JsonProperty("name")]
 		public override string Name { get; set; }
 
-[JsonPropertyName("phone")]
+[Newtonsoft.Json.JsonProperty("phone")]
 		public override string Phone { get; set; }
 
-[JsonPropertyName("email")]
+[Newtonsoft.Json.JsonProperty("email")]
 		public override string Email { get; set; }
 
-[JsonPropertyName("shipping_address")]
-		public override PostAddressBase ShippingAddress { get; set; }
+[Newtonsoft.Json.JsonProperty("shipping_address")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.PostAddressBase ShippingAddress { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -93,13 +95,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				ShippingAddress = reader.Read<PostAddressBase>();
+				ShippingAddress = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PostAddressBase>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "paymentRequestedInfo";
+		    return "paymentRequestedInfo";
 		}
 	}
 }

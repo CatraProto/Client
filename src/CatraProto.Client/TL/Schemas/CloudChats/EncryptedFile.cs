@@ -1,30 +1,33 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class EncryptedFile : EncryptedFileBase
+	public partial class EncryptedFile : CatraProto.Client.TL.Schemas.CloudChats.EncryptedFileBase
 	{
 
 
         public static int StaticConstructorId { get => 1248893260; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public long Id { get; set; }
 
-[JsonPropertyName("access_hash")]
+[Newtonsoft.Json.JsonProperty("access_hash")]
 		public long AccessHash { get; set; }
 
-[JsonPropertyName("size")]
+[Newtonsoft.Json.JsonProperty("size")]
 		public int Size { get; set; }
 
-[JsonPropertyName("dc_id")]
+[Newtonsoft.Json.JsonProperty("dc_id")]
 		public int DcId { get; set; }
 
-[JsonPropertyName("key_fingerprint")]
+[Newtonsoft.Json.JsonProperty("key_fingerprint")]
 		public int KeyFingerprint { get; set; }
 
         
@@ -51,11 +54,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Size = reader.Read<int>();
 			DcId = reader.Read<int>();
 			KeyFingerprint = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "encryptedFile";
+		    return "encryptedFile";
 		}
 	}
 }

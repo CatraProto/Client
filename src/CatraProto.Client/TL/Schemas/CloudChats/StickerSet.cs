@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class StickerSet : StickerSetBase
+	public partial class StickerSet : CatraProto.Client.TL.Schemas.CloudChats.StickerSetBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -20,49 +22,49 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -290164953; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("archived")]
+[Newtonsoft.Json.JsonProperty("archived")]
 		public override bool Archived { get; set; }
 
-[JsonPropertyName("official")]
+[Newtonsoft.Json.JsonProperty("official")]
 		public override bool Official { get; set; }
 
-[JsonPropertyName("masks")]
+[Newtonsoft.Json.JsonProperty("masks")]
 		public override bool Masks { get; set; }
 
-[JsonPropertyName("animated")]
+[Newtonsoft.Json.JsonProperty("animated")]
 		public override bool Animated { get; set; }
 
-[JsonPropertyName("installed_date")]
+[Newtonsoft.Json.JsonProperty("installed_date")]
 		public override int? InstalledDate { get; set; }
 
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public override long Id { get; set; }
 
-[JsonPropertyName("access_hash")]
+[Newtonsoft.Json.JsonProperty("access_hash")]
 		public override long AccessHash { get; set; }
 
-[JsonPropertyName("title")]
+[Newtonsoft.Json.JsonProperty("title")]
 		public override string Title { get; set; }
 
-[JsonPropertyName("short_name")]
+[Newtonsoft.Json.JsonProperty("short_name")]
 		public override string ShortName { get; set; }
 
-[JsonPropertyName("thumb")]
-		public override PhotoSizeBase Thumb { get; set; }
+[Newtonsoft.Json.JsonProperty("thumb")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase Thumb { get; set; }
 
-[JsonPropertyName("thumb_dc_id")]
+[Newtonsoft.Json.JsonProperty("thumb_dc_id")]
 		public override int? ThumbDcId { get; set; }
 
-[JsonPropertyName("count")]
+[Newtonsoft.Json.JsonProperty("count")]
 		public override int Count { get; set; }
 
-[JsonPropertyName("hash")]
+[Newtonsoft.Json.JsonProperty("hash")]
 		public override int Hash { get; set; }
 
         
@@ -125,7 +127,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ShortName = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				Thumb = reader.Read<PhotoSizeBase>();
+				Thumb = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
@@ -135,11 +137,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			Count = reader.Read<int>();
 			Hash = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "stickerSet";
+		    return "stickerSet";
 		}
 	}
 }

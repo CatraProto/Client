@@ -1,21 +1,24 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageEntityHashtag : MessageEntityBase
+	public partial class MessageEntityHashtag : CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase
 	{
 
 
         public static int StaticConstructorId { get => 1868782349; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("offset")]
+[Newtonsoft.Json.JsonProperty("offset")]
 		public override int Offset { get; set; }
 
-[JsonPropertyName("length")]
+[Newtonsoft.Json.JsonProperty("length")]
 		public override int Length { get; set; }
 
         
@@ -36,11 +39,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Offset = reader.Read<int>();
 			Length = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "messageEntityHashtag";
+		    return "messageEntityHashtag";
 		}
 	}
 }

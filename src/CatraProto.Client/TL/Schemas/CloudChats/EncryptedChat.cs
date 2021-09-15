@@ -1,36 +1,39 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class EncryptedChat : EncryptedChatBase
+	public partial class EncryptedChat : CatraProto.Client.TL.Schemas.CloudChats.EncryptedChatBase
 	{
 
 
         public static int StaticConstructorId { get => -94974410; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public override int Id { get; set; }
 
-[JsonPropertyName("access_hash")]
+[Newtonsoft.Json.JsonProperty("access_hash")]
 		public long AccessHash { get; set; }
 
-[JsonPropertyName("date")]
+[Newtonsoft.Json.JsonProperty("date")]
 		public int Date { get; set; }
 
-[JsonPropertyName("admin_id")]
+[Newtonsoft.Json.JsonProperty("admin_id")]
 		public int AdminId { get; set; }
 
-[JsonPropertyName("participant_id")]
+[Newtonsoft.Json.JsonProperty("participant_id")]
 		public int ParticipantId { get; set; }
 
-[JsonPropertyName("g_a_or_b")]
+[Newtonsoft.Json.JsonProperty("g_a_or_b")]
 		public byte[] GAOrB { get; set; }
 
-[JsonPropertyName("key_fingerprint")]
+[Newtonsoft.Json.JsonProperty("key_fingerprint")]
 		public long KeyFingerprint { get; set; }
 
         
@@ -61,11 +64,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ParticipantId = reader.Read<int>();
 			GAOrB = reader.Read<byte[]>();
 			KeyFingerprint = reader.Read<long>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "encryptedChat";
+		    return "encryptedChat";
 		}
 	}
 }

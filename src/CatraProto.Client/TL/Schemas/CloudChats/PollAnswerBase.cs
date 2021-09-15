@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,10 +7,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class PollAnswerBase : IObject
     {
 
-[JsonPropertyName("text")]
+[Newtonsoft.Json.JsonProperty("text")]
 		public abstract string Text { get; set; }
 
-[JsonPropertyName("option")]
+[Newtonsoft.Json.JsonProperty("option")]
 		public abstract byte[] Option { get; set; }
 
         public abstract void UpdateFlags();

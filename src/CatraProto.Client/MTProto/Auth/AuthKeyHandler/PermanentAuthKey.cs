@@ -31,7 +31,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
         {
             if (_authKey.RawAuthKey is null)
             {
-                await _authKey.ComputeAuthKey(-1, cancellationToken);
+                await _authKey.EnsureComputeAsync(-1, cancellationToken);
                 _authKeyData.SetData(_authKey.RawAuthKey!, _authKey.AuthKeyId!.Value, _authKey.ServerSalt!.Value);
             }
 

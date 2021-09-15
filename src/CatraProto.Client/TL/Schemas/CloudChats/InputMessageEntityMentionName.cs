@@ -1,25 +1,28 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputMessageEntityMentionName : MessageEntityBase
+	public partial class InputMessageEntityMentionName : CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase
 	{
 
 
         public static int StaticConstructorId { get => 546203849; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("offset")]
+[Newtonsoft.Json.JsonProperty("offset")]
 		public override int Offset { get; set; }
 
-[JsonPropertyName("length")]
+[Newtonsoft.Json.JsonProperty("length")]
 		public override int Length { get; set; }
 
-[JsonPropertyName("user_id")]
-		public InputUserBase UserId { get; set; }
+[Newtonsoft.Json.JsonProperty("user_id")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase UserId { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -40,12 +43,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Offset = reader.Read<int>();
 			Length = reader.Read<int>();
-			UserId = reader.Read<InputUserBase>();
-		}
+			UserId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "inputMessageEntityMentionName";
+		    return "inputMessageEntityMentionName";
 		}
 	}
 }

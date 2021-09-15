@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -11,19 +12,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 	{
 
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => 1926525996; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(PhotoBase);
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Photos.PhotoBase);
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("id")]
-		public InputPhotoBase Id { get; set; }
+[Newtonsoft.Json.JsonProperty("id")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPhotoBase Id { get; set; }
 
 
 		public void UpdateFlags() 
@@ -40,12 +41,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 
 		public void Deserialize(Reader reader)
 		{
-			Id = reader.Read<InputPhotoBase>();
-		}
+			Id = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPhotoBase>();
 
+		}
+		
 		public override string ToString()
 		{
-			return "photos.updateProfilePhoto";
+		    return "photos.updateProfilePhoto";
 		}
 	}
 }

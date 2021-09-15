@@ -1,56 +1,59 @@
 using System;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 {
-	public partial class ToggleSignatures : IMethod
-	{
-
+    public partial class ToggleSignatures : IMethod
+    {
+        [JsonIgnore]
+        public static int StaticConstructorId
+        {
+            get => 527021574;
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => 527021574; }
-        [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(UpdatesBase);
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
 
-[JsonPropertyName("channel")]
-		public InputChannelBase Channel { get; set; }
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("enabled")]
-		public bool Enabled { get; set; }
+        [JsonProperty("channel")] public InputChannelBase Channel { get; set; }
+
+        [JsonProperty("enabled")] public bool Enabled { get; set; }
+
+        public override string ToString()
+        {
+            return "channels.toggleSignatures";
+        }
 
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Channel);
-			writer.Write(Enabled);
+            writer.Write(Channel);
+            writer.Write(Enabled);
+        }
 
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			Channel = reader.Read<InputChannelBase>();
-			Enabled = reader.Read<bool>();
-		}
-
-		public override string ToString()
-		{
-			return "channels.toggleSignatures";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Channel = reader.Read<InputChannelBase>();
+            Enabled = reader.Read<bool>();
+        }
+    }
 }

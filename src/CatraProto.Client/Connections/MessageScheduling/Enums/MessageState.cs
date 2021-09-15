@@ -5,6 +5,8 @@ namespace CatraProto.Client.Connections.MessageScheduling.Enums
         NotYetSent,
         MessageSent,
         Acknowledged,
-        Replied
+        Replied,
+        Canceled,
+        Failed
     }
 }

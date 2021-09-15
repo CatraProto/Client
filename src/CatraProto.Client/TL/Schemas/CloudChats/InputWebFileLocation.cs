@@ -1,21 +1,24 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputWebFileLocation : InputWebFileLocationBase
+	public partial class InputWebFileLocation : CatraProto.Client.TL.Schemas.CloudChats.InputWebFileLocationBase
 	{
 
 
         public static int StaticConstructorId { get => -1036396922; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("url")]
+[Newtonsoft.Json.JsonProperty("url")]
 		public string Url { get; set; }
 
-[JsonPropertyName("access_hash")]
+[Newtonsoft.Json.JsonProperty("access_hash")]
 		public override long AccessHash { get; set; }
 
         
@@ -36,11 +39,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Url = reader.Read<string>();
 			AccessHash = reader.Read<long>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "inputWebFileLocation";
+		    return "inputWebFileLocation";
 		}
 	}
 }

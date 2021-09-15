@@ -1,21 +1,24 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class KeyboardButtonUrl : KeyboardButtonBase
+	public partial class KeyboardButtonUrl : CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonBase
 	{
 
 
         public static int StaticConstructorId { get => 629866245; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("text")]
+[Newtonsoft.Json.JsonProperty("text")]
 		public override string Text { get; set; }
 
-[JsonPropertyName("url")]
+[Newtonsoft.Json.JsonProperty("url")]
 		public string Url { get; set; }
 
         
@@ -36,11 +39,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Text = reader.Read<string>();
 			Url = reader.Read<string>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "keyboardButtonUrl";
+		    return "keyboardButtonUrl";
 		}
 	}
 }

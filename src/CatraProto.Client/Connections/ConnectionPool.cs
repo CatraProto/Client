@@ -4,26 +4,22 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using CatraProto.Client.MTProto.Session.Models;
-using CatraProto.Client.MTProto.Settings;
+using CatraProto.Client.MTProto.Session;
 using Serilog;
 
 namespace CatraProto.Client.Connections
 {
-    class ConnectionPool
+    class ConnectionPool : IAsyncDisposable
     {
         private readonly Dictionary<int, Connection> _connections = new Dictionary<int, Connection>();
-        private readonly ClientSettings _clientSettings;
+        private readonly ClientSession _clientSession;
         private readonly object _mutex = new object();
-        private readonly SessionData _sessionData;
         private Connection? _accountConnection;
         private readonly ILogger _logger;
 
-        public ConnectionPool(SessionData sessionData, ClientSettings clientSettings, ILogger logger)
+        public ConnectionPool(ClientSession clientSession, ILogger logger)
         {
-            _sessionData = sessionData;
-            _clientSettings = clientSettings;
-            _clientSettings = clientSettings;
+            _clientSession = clientSession;
             _logger = logger.ForContext<ConnectionPool>();
         }
 
@@ -49,21 +45,29 @@ namespace CatraProto.Client.Connections
                     throw new Exception("Datacenter could not be found");
                 }
 
-                var connectionInfo = new ConnectionInfo(IPAddress.Parse(datacenter.IpAddress), datacenter.Port, dc);
+                var connectionInfo = new ConnectionInfo(ConnectionProtocol.TcpAbridged, IPAddress.Parse(datacenter.IpAddress), datacenter.Port, dc);
                 return await GetConnectionAsync(connectionInfo);
             }
         }
 
         public async ValueTask<Connection> GetConnectionAsync(ConnectionInfo? connectionInfo = null)
         {
-            connectionInfo ??= _clientSettings.ConnectionSettings.DefaultDatacenter;
-            var connection = CreateConnection(connectionInfo, out var justCreated);
-            if (justCreated)
+            Connection connection;
+            bool justCreated;
+            lock (_mutex)
             {
-                connection.MtProtoState.StartLoops();
-                await connection.ConnectAsync();
+                connectionInfo ??= _clientSession.Settings.ConnectionSettings.DefaultDatacenter;
+                connection = CreateConnection(connectionInfo, out justCreated);
+                _accountConnection ??= connection;
             }
 
+            if (!justCreated)
+            {
+                return connection;
+            }
+
+            connection.MtProtoState.StartLoops();
+            await connection.ConnectAsync();
             return connection;
         }
 
@@ -78,7 +82,7 @@ namespace CatraProto.Client.Connections
                 }
                 else
                 {
-                    var newConnection = new Connection(connectionInfo, _clientSettings, ConnectionProtocol.TcpAbridged, _sessionData, _logger);
+                    var newConnection = new Connection(connectionInfo, _clientSession);
                     _connections.TryAdd(connectionInfo.DcId, newConnection);
 
                     justCreated = true;
@@ -107,8 +111,35 @@ namespace CatraProto.Client.Connections
         {
             lock (_mutex)
             {
+                if (_accountConnection != null)
+                {
+                    _accountConnection.ConnectionInfo.Main = false;
+                }
+
+                connection.ConnectionInfo.Main = true;
                 _accountConnection = connection;
             }
+        }
+
+        public async ValueTask DisposeAsync()
+        {
+            ValueTask[] toWait;
+            lock (_mutex)
+            {
+                toWait = new ValueTask[_connections.Count];
+                var i = 0;
+                foreach (var connection in _connections)
+                {
+                    _logger.Information("Disposing connection {Connection}", connection);
+                    toWait[i++] = connection.Value.DisposeAsync();
+                }
+            }
+
+            foreach (var vTask in toWait)
+            {
+                await vTask;
+            }
+            _logger.Information("Connection pool disposed");
         }
     }
 }

@@ -1,29 +1,31 @@
+using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class EmojiKeywordsDifference : EmojiKeywordsDifferenceBase
+	public partial class EmojiKeywordsDifference : CatraProto.Client.TL.Schemas.CloudChats.EmojiKeywordsDifferenceBase
 	{
 
 
         public static int StaticConstructorId { get => 1556570557; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("lang_code")]
+[Newtonsoft.Json.JsonProperty("lang_code")]
 		public override string LangCode { get; set; }
 
-[JsonPropertyName("from_version")]
+[Newtonsoft.Json.JsonProperty("from_version")]
 		public override int FromVersion { get; set; }
 
-[JsonPropertyName("version")]
+[Newtonsoft.Json.JsonProperty("version")]
 		public override int Version { get; set; }
 
-[JsonPropertyName("keywords")]
-		public override IList<EmojiKeywordBase> Keywords { get; set; }
+[Newtonsoft.Json.JsonProperty("keywords")]
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.EmojiKeywordBase> Keywords { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -46,12 +48,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			LangCode = reader.Read<string>();
 			FromVersion = reader.Read<int>();
 			Version = reader.Read<int>();
-			Keywords = reader.ReadVector<EmojiKeywordBase>();
-		}
+			Keywords = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.EmojiKeywordBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "emojiKeywordsDifference";
+		    return "emojiKeywordsDifference";
 		}
 	}
 }

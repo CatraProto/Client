@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class StatsGraph : StatsGraphBase
+	public partial class StatsGraph : CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,16 +16,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -1901828938; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("json")]
-		public DataJSONBase Json { get; set; }
+[Newtonsoft.Json.JsonProperty("json")]
+		public CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase Json { get; set; }
 
-[JsonPropertyName("zoom_token")]
+[Newtonsoft.Json.JsonProperty("zoom_token")]
 		public string ZoomToken { get; set; }
 
         
@@ -50,16 +52,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			Json = reader.Read<DataJSONBase>();
+			Json = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				ZoomToken = reader.Read<string>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "statsGraph";
+		    return "statsGraph";
 		}
 	}
 }

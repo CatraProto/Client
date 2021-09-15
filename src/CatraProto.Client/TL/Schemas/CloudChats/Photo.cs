@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class Photo : PhotoBase
+	public partial class Photo : CatraProto.Client.TL.Schemas.CloudChats.PhotoBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,34 +17,34 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -82216347; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("has_stickers")]
+[Newtonsoft.Json.JsonProperty("has_stickers")]
 		public bool HasStickers { get; set; }
 
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public override long Id { get; set; }
 
-[JsonPropertyName("access_hash")]
+[Newtonsoft.Json.JsonProperty("access_hash")]
 		public long AccessHash { get; set; }
 
-[JsonPropertyName("file_reference")]
+[Newtonsoft.Json.JsonProperty("file_reference")]
 		public byte[] FileReference { get; set; }
 
-[JsonPropertyName("date")]
+[Newtonsoft.Json.JsonProperty("date")]
 		public int Date { get; set; }
 
-[JsonPropertyName("sizes")]
-		public IList<PhotoSizeBase> Sizes { get; set; }
+[Newtonsoft.Json.JsonProperty("sizes")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase> Sizes { get; set; }
 
-[JsonPropertyName("video_sizes")]
-		public IList<VideoSizeBase> VideoSizes { get; set; }
+[Newtonsoft.Json.JsonProperty("video_sizes")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.VideoSizeBase> VideoSizes { get; set; }
 
-[JsonPropertyName("dc_id")]
+[Newtonsoft.Json.JsonProperty("dc_id")]
 		public int DcId { get; set; }
 
         
@@ -81,18 +82,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			AccessHash = reader.Read<long>();
 			FileReference = reader.Read<byte[]>();
 			Date = reader.Read<int>();
-			Sizes = reader.ReadVector<PhotoSizeBase>();
+			Sizes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				VideoSizes = reader.ReadVector<VideoSizeBase>();
+				VideoSizes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.VideoSizeBase>();
 			}
 
 			DcId = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "photo";
+		    return "photo";
 		}
 	}
 }

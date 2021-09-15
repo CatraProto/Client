@@ -1,8 +1,8 @@
 using System;
-using System.Numerics;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -12,33 +12,33 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 	{
 
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => -686627650; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(ServerDHParamsBase);
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.ServerDHParamsBase);
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("nonce")]
-		public BigInteger Nonce { get; set; }
+[Newtonsoft.Json.JsonProperty("nonce")]
+		public System.Numerics.BigInteger Nonce { get; set; }
 
-[JsonPropertyName("server_nonce")]
-		public BigInteger ServerNonce { get; set; }
+[Newtonsoft.Json.JsonProperty("server_nonce")]
+		public System.Numerics.BigInteger ServerNonce { get; set; }
 
-[JsonPropertyName("p")]
+[Newtonsoft.Json.JsonProperty("p")]
 		public byte[] P { get; set; }
 
-[JsonPropertyName("q")]
+[Newtonsoft.Json.JsonProperty("q")]
 		public byte[] Q { get; set; }
 
-[JsonPropertyName("public_key_fingerprint")]
+[Newtonsoft.Json.JsonProperty("public_key_fingerprint")]
 		public long PublicKeyFingerprint { get; set; }
 
-[JsonPropertyName("encrypted_data")]
+[Newtonsoft.Json.JsonProperty("encrypted_data")]
 		public byte[] EncryptedData { get; set; }
 
 
@@ -61,17 +61,18 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
 		public void Deserialize(Reader reader)
 		{
-			Nonce = reader.Read<BigInteger>(128);
-			ServerNonce = reader.Read<BigInteger>(128);
+			Nonce = reader.Read<System.Numerics.BigInteger>(128);
+			ServerNonce = reader.Read<System.Numerics.BigInteger>(128);
 			P = reader.Read<byte[]>();
 			Q = reader.Read<byte[]>();
 			PublicKeyFingerprint = reader.Read<long>();
 			EncryptedData = reader.Read<byte[]>();
-		}
 
+		}
+		
 		public override string ToString()
 		{
-			return "req_DH_params";
+		    return "req_DH_params";
 		}
 	}
 }

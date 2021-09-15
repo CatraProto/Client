@@ -1,21 +1,24 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageUserVoteInputOption : MessageUserVoteBase
+	public partial class MessageUserVoteInputOption : CatraProto.Client.TL.Schemas.CloudChats.MessageUserVoteBase
 	{
 
 
         public static int StaticConstructorId { get => 909603888; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("user_id")]
+[Newtonsoft.Json.JsonProperty("user_id")]
 		public override int UserId { get; set; }
 
-[JsonPropertyName("date")]
+[Newtonsoft.Json.JsonProperty("date")]
 		public override int Date { get; set; }
 
         
@@ -36,11 +39,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			UserId = reader.Read<int>();
 			Date = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "messageUserVoteInputOption";
+		    return "messageUserVoteInputOption";
 		}
 	}
 }

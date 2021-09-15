@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,7 +7,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
     public abstract class SentEncryptedMessageBase : IObject
     {
 
-[JsonPropertyName("date")]
+[Newtonsoft.Json.JsonProperty("date")]
 		public abstract int Date { get; set; }
 
         public abstract void UpdateFlags();

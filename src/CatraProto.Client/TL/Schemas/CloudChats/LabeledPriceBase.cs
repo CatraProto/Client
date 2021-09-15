@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,10 +7,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class LabeledPriceBase : IObject
     {
 
-[JsonPropertyName("label")]
+[Newtonsoft.Json.JsonProperty("label")]
 		public abstract string Label { get; set; }
 
-[JsonPropertyName("amount")]
+[Newtonsoft.Json.JsonProperty("amount")]
 		public abstract long Amount { get; set; }
 
         public abstract void UpdateFlags();

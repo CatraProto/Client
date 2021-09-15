@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -22,46 +22,51 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			ScheduleDate = 1 << 10
 		}
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => 881978281; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
 
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
-
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("silent")]
+[Newtonsoft.Json.JsonProperty("silent")]
 		public bool Silent { get; set; }
 
-[JsonPropertyName("background")]
+[Newtonsoft.Json.JsonProperty("background")]
 		public bool Background { get; set; }
 
-[JsonPropertyName("clear_draft")]
+[Newtonsoft.Json.JsonProperty("clear_draft")]
 		public bool ClearDraft { get; set; }
 
-		[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
+[Newtonsoft.Json.JsonProperty("peer")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
 
-[JsonPropertyName("reply_to_msg_id")]
+[Newtonsoft.Json.JsonProperty("reply_to_msg_id")]
 		public int? ReplyToMsgId { get; set; }
 
-		[JsonPropertyName("media")] public InputMediaBase Media { get; set; }
+[Newtonsoft.Json.JsonProperty("media")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase Media { get; set; }
 
-[JsonPropertyName("message")]
+[Newtonsoft.Json.JsonProperty("message")]
 		public string Message { get; set; }
 
-[JsonPropertyName("random_id")]
+[Newtonsoft.Json.JsonProperty("random_id")]
 		public long RandomId { get; set; }
 
-		[JsonPropertyName("reply_markup")] public ReplyMarkupBase ReplyMarkup { get; set; }
+[Newtonsoft.Json.JsonProperty("reply_markup")]
+		public CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase ReplyMarkup { get; set; }
 
-		[JsonPropertyName("entities")] public IList<MessageEntityBase> Entities { get; set; }
+[Newtonsoft.Json.JsonProperty("entities")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
 
-[JsonPropertyName("schedule_date")]
+[Newtonsoft.Json.JsonProperty("schedule_date")]
 		public int? ScheduleDate { get; set; }
 
 
@@ -115,34 +120,36 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Silent = FlagsHelper.IsFlagSet(Flags, 5);
 			Background = FlagsHelper.IsFlagSet(Flags, 6);
 			ClearDraft = FlagsHelper.IsFlagSet(Flags, 7);
-			Peer = reader.Read<InputPeerBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				ReplyToMsgId = reader.Read<int>();
 			}
 
-			Media = reader.Read<InputMediaBase>();
+			Media = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase>();
 			Message = reader.Read<string>();
 			RandomId = reader.Read<long>();
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				ReplyMarkup = reader.Read<ReplyMarkupBase>();
+				ReplyMarkup = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				Entities = reader.ReadVector<MessageEntityBase>();
+				Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 10))
 			{
 				ScheduleDate = reader.Read<int>();
 			}
-		}
 
+
+		}
+		
 		public override string ToString()
 		{
-			return "messages.sendMedia";
+		    return "messages.sendMedia";
 		}
 	}
 }

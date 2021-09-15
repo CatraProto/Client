@@ -2,7 +2,7 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using CatraProto.Client.Crypto.Aes;
-using CatraProto.Client.Extensions;
+using CatraProto.TL;
 
 namespace CatraProto.Client.Crypto.KeyExchange
 {

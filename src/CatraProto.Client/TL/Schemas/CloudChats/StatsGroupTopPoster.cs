@@ -1,24 +1,27 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class StatsGroupTopPoster : StatsGroupTopPosterBase
+	public partial class StatsGroupTopPoster : CatraProto.Client.TL.Schemas.CloudChats.StatsGroupTopPosterBase
 	{
 
 
         public static int StaticConstructorId { get => 418631927; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("user_id")]
+[Newtonsoft.Json.JsonProperty("user_id")]
 		public override int UserId { get; set; }
 
-[JsonPropertyName("messages")]
+[Newtonsoft.Json.JsonProperty("messages")]
 		public override int Messages { get; set; }
 
-[JsonPropertyName("avg_chars")]
+[Newtonsoft.Json.JsonProperty("avg_chars")]
 		public override int AvgChars { get; set; }
 
         
@@ -41,11 +44,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			UserId = reader.Read<int>();
 			Messages = reader.Read<int>();
 			AvgChars = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "statsGroupTopPoster";
+		    return "statsGroupTopPoster";
 		}
 	}
 }

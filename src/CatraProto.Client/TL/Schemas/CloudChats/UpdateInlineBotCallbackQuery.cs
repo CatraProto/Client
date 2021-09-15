@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateInlineBotCallbackQuery : UpdateBase
+	public partial class UpdateInlineBotCallbackQuery : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,28 +17,28 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -103646630; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("query_id")]
+[Newtonsoft.Json.JsonProperty("query_id")]
 		public long QueryId { get; set; }
 
-[JsonPropertyName("user_id")]
+[Newtonsoft.Json.JsonProperty("user_id")]
 		public int UserId { get; set; }
 
-[JsonPropertyName("msg_id")]
-		public InputBotInlineMessageIDBase MsgId { get; set; }
+[Newtonsoft.Json.JsonProperty("msg_id")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageIDBase MsgId { get; set; }
 
-[JsonPropertyName("chat_instance")]
+[Newtonsoft.Json.JsonProperty("chat_instance")]
 		public long ChatInstance { get; set; }
 
-[JsonPropertyName("data")]
+[Newtonsoft.Json.JsonProperty("data")]
 		public byte[] Data { get; set; }
 
-[JsonPropertyName("game_short_name")]
+[Newtonsoft.Json.JsonProperty("game_short_name")]
 		public string GameShortName { get; set; }
 
         
@@ -74,7 +76,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = reader.Read<int>();
 			QueryId = reader.Read<long>();
 			UserId = reader.Read<int>();
-			MsgId = reader.Read<InputBotInlineMessageIDBase>();
+			MsgId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageIDBase>();
 			ChatInstance = reader.Read<long>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
@@ -85,11 +87,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			{
 				GameShortName = reader.Read<string>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "updateInlineBotCallbackQuery";
+		    return "updateInlineBotCallbackQuery";
 		}
 	}
 }

@@ -1,24 +1,27 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class TextImage : RichTextBase
+	public partial class TextImage : CatraProto.Client.TL.Schemas.CloudChats.RichTextBase
 	{
 
 
         public static int StaticConstructorId { get => 136105807; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("document_id")]
+[Newtonsoft.Json.JsonProperty("document_id")]
 		public long DocumentId { get; set; }
 
-[JsonPropertyName("w")]
+[Newtonsoft.Json.JsonProperty("w")]
 		public int W { get; set; }
 
-[JsonPropertyName("h")]
+[Newtonsoft.Json.JsonProperty("h")]
 		public int H { get; set; }
 
         
@@ -41,11 +44,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			DocumentId = reader.Read<long>();
 			W = reader.Read<int>();
 			H = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "textImage";
+		    return "textImage";
 		}
 	}
 }

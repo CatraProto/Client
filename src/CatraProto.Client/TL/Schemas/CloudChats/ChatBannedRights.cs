@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChatBannedRights : ChatBannedRightsBase
+	public partial class ChatBannedRights : CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -25,49 +27,49 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -1626209256; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("view_messages")]
+[Newtonsoft.Json.JsonProperty("view_messages")]
 		public override bool ViewMessages { get; set; }
 
-[JsonPropertyName("send_messages")]
+[Newtonsoft.Json.JsonProperty("send_messages")]
 		public override bool SendMessages { get; set; }
 
-[JsonPropertyName("send_media")]
+[Newtonsoft.Json.JsonProperty("send_media")]
 		public override bool SendMedia { get; set; }
 
-[JsonPropertyName("send_stickers")]
+[Newtonsoft.Json.JsonProperty("send_stickers")]
 		public override bool SendStickers { get; set; }
 
-[JsonPropertyName("send_gifs")]
+[Newtonsoft.Json.JsonProperty("send_gifs")]
 		public override bool SendGifs { get; set; }
 
-[JsonPropertyName("send_games")]
+[Newtonsoft.Json.JsonProperty("send_games")]
 		public override bool SendGames { get; set; }
 
-[JsonPropertyName("send_inline")]
+[Newtonsoft.Json.JsonProperty("send_inline")]
 		public override bool SendInline { get; set; }
 
-[JsonPropertyName("embed_links")]
+[Newtonsoft.Json.JsonProperty("embed_links")]
 		public override bool EmbedLinks { get; set; }
 
-[JsonPropertyName("send_polls")]
+[Newtonsoft.Json.JsonProperty("send_polls")]
 		public override bool SendPolls { get; set; }
 
-[JsonPropertyName("change_info")]
+[Newtonsoft.Json.JsonProperty("change_info")]
 		public override bool ChangeInfo { get; set; }
 
-[JsonPropertyName("invite_users")]
+[Newtonsoft.Json.JsonProperty("invite_users")]
 		public override bool InviteUsers { get; set; }
 
-[JsonPropertyName("pin_messages")]
+[Newtonsoft.Json.JsonProperty("pin_messages")]
 		public override bool PinMessages { get; set; }
 
-[JsonPropertyName("until_date")]
+[Newtonsoft.Json.JsonProperty("until_date")]
 		public override int UntilDate { get; set; }
 
         
@@ -113,11 +115,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			InviteUsers = FlagsHelper.IsFlagSet(Flags, 15);
 			PinMessages = FlagsHelper.IsFlagSet(Flags, 17);
 			UntilDate = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "chatBannedRights";
+		    return "chatBannedRights";
 		}
 	}
 }

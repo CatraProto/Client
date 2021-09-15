@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -11,18 +12,18 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 	{
 
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => -1188971260; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(FutureSaltsBase);
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.FutureSaltsBase);
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("num")]
+[Newtonsoft.Json.JsonProperty("num")]
 		public int Num { get; set; }
 
 
@@ -41,11 +42,12 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 		public void Deserialize(Reader reader)
 		{
 			Num = reader.Read<int>();
-		}
 
+		}
+		
 		public override string ToString()
 		{
-			return "get_future_salts";
+		    return "get_future_salts";
 		}
 	}
 }

@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -16,29 +17,31 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 			ShippingOptionId = 1 << 1
 		}
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => 730364339; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentResultBase);
 
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(PaymentResultBase);
-
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("msg_id")]
+[Newtonsoft.Json.JsonProperty("msg_id")]
 		public int MsgId { get; set; }
 
-[JsonPropertyName("requested_info_id")]
+[Newtonsoft.Json.JsonProperty("requested_info_id")]
 		public string RequestedInfoId { get; set; }
 
-[JsonPropertyName("shipping_option_id")]
+[Newtonsoft.Json.JsonProperty("shipping_option_id")]
 		public string ShippingOptionId { get; set; }
 
-		[JsonPropertyName("credentials")] public InputPaymentCredentialsBase Credentials { get; set; }
+[Newtonsoft.Json.JsonProperty("credentials")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPaymentCredentialsBase Credentials { get; set; }
 
 
 		public void UpdateFlags() 
@@ -82,12 +85,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 				ShippingOptionId = reader.Read<string>();
 			}
 
-			Credentials = reader.Read<InputPaymentCredentialsBase>();
-		}
+			Credentials = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPaymentCredentialsBase>();
 
+		}
+		
 		public override string ToString()
 		{
-			return "payments.sendPaymentForm";
+		    return "payments.sendPaymentForm";
 		}
 	}
 }

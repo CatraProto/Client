@@ -1,22 +1,25 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdatePeerSettings : UpdateBase
+	public partial class UpdatePeerSettings : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 
 
         public static int StaticConstructorId { get => 1786671974; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("peer")]
-		public PeerBase Peer { get; set; }
+[Newtonsoft.Json.JsonProperty("peer")]
+		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
 
-[JsonPropertyName("settings")]
-		public PeerSettingsBase Settings { get; set; }
+[Newtonsoft.Json.JsonProperty("settings")]
+		public CatraProto.Client.TL.Schemas.CloudChats.PeerSettingsBase Settings { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -34,13 +37,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Peer = reader.Read<PeerBase>();
-			Settings = reader.Read<PeerSettingsBase>();
-		}
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+			Settings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerSettingsBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "updatePeerSettings";
+		    return "updatePeerSettings";
 		}
 	}
 }

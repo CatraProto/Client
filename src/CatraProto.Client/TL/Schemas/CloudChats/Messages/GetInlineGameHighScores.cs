@@ -1,53 +1,59 @@
 using System;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class GetInlineGameHighScores : IMethod
-	{
-
+    public partial class GetInlineGameHighScores : IMethod
+    {
+        [JsonIgnore]
+        public static int StaticConstructorId
+        {
+            get => 258170395;
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => 258170395; }
-        [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
         [JsonIgnore] Type IMethod.Type { get; init; } = typeof(HighScoresBase);
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
 
-		[JsonPropertyName("id")] public InputBotInlineMessageIDBase Id { get; set; }
+        [JsonProperty("id")] public InputBotInlineMessageIDBase Id { get; set; }
 
-		[JsonPropertyName("user_id")] public InputUserBase UserId { get; set; }
+        [JsonProperty("user_id")] public InputUserBase UserId { get; set; }
+
+        public override string ToString()
+        {
+            return "messages.getInlineGameHighScores";
+        }
 
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Id);
-			writer.Write(UserId);
+            writer.Write(Id);
+            writer.Write(UserId);
+        }
 
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			Id = reader.Read<InputBotInlineMessageIDBase>();
-			UserId = reader.Read<InputUserBase>();
-		}
-
-		public override string ToString()
-		{
-			return "messages.getInlineGameHighScores";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Id = reader.Read<InputBotInlineMessageIDBase>();
+            UserId = reader.Read<InputUserBase>();
+        }
+    }
 }

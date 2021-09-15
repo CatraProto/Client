@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -53,15 +54,18 @@ namespace CatraProto.Client.Async.Collections
             }
         }
 
-        public async Task<T> DequeueAsync(CancellationToken token = default)
+        public async ValueTask<T> DequeueAsync(CancellationToken token = default)
         {
             while (true)
             {
-                await _semaphoreSlim.WaitAsync(token);
+                Debug.WriteLine("HIT!");
                 if (TryDequeue(out var item))
                 {
                     return item!;
                 }
+
+                await _semaphoreSlim.WaitAsync(token);
+                Debug.WriteLine("Waiting for dequeue");
             }
         }
 

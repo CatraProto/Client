@@ -1,22 +1,25 @@
+using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 {
-	public partial class BankCardData : BankCardDataBase
+	public partial class BankCardData : CatraProto.Client.TL.Schemas.CloudChats.Payments.BankCardDataBase
 	{
 
 
         public static int StaticConstructorId { get => 1042605427; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("title")]
+[Newtonsoft.Json.JsonProperty("title")]
 		public override string Title { get; set; }
 
-		[JsonPropertyName("open_urls")] public override IList<BankCardOpenUrlBase> OpenUrls { get; set; }
+[Newtonsoft.Json.JsonProperty("open_urls")]
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.BankCardOpenUrlBase> OpenUrls { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -35,12 +38,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 		public override void Deserialize(Reader reader)
 		{
 			Title = reader.Read<string>();
-			OpenUrls = reader.ReadVector<BankCardOpenUrlBase>();
-		}
+			OpenUrls = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.BankCardOpenUrlBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "payments.bankCardData";
+		    return "payments.bankCardData";
 		}
 	}
 }

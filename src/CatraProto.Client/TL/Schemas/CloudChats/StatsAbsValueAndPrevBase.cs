@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,10 +7,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class StatsAbsValueAndPrevBase : IObject
     {
 
-[JsonPropertyName("current")]
+[Newtonsoft.Json.JsonProperty("current")]
 		public abstract double Current { get; set; }
 
-[JsonPropertyName("previous")]
+[Newtonsoft.Json.JsonProperty("previous")]
 		public abstract double Previous { get; set; }
 
         public abstract void UpdateFlags();

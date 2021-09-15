@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateBotInlineSend : UpdateBase
+	public partial class UpdateBotInlineSend : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,26 +17,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 239663460; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("user_id")]
+[Newtonsoft.Json.JsonProperty("user_id")]
 		public int UserId { get; set; }
 
-[JsonPropertyName("query")]
+[Newtonsoft.Json.JsonProperty("query")]
 		public string Query { get; set; }
 
-[JsonPropertyName("geo")]
-		public GeoPointBase Geo { get; set; }
+[Newtonsoft.Json.JsonProperty("geo")]
+		public CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase Geo { get; set; }
 
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public string Id { get; set; }
 
-[JsonPropertyName("msg_id")]
-		public InputBotInlineMessageIDBase MsgId { get; set; }
+[Newtonsoft.Json.JsonProperty("msg_id")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageIDBase MsgId { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -72,19 +74,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Query = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Geo = reader.Read<GeoPointBase>();
+				Geo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase>();
 			}
 
 			Id = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				MsgId = reader.Read<InputBotInlineMessageIDBase>();
+				MsgId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageIDBase>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "updateBotInlineSend";
+		    return "updateBotInlineSend";
 		}
 	}
 }

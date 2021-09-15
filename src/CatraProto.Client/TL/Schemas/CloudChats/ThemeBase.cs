@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,31 +7,31 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class ThemeBase : IObject
     {
 
-[JsonPropertyName("creator")]
+[Newtonsoft.Json.JsonProperty("creator")]
 		public abstract bool Creator { get; set; }
 
-[JsonPropertyName("default")]
+[Newtonsoft.Json.JsonProperty("default")]
 		public abstract bool Default { get; set; }
 
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public abstract long Id { get; set; }
 
-[JsonPropertyName("access_hash")]
+[Newtonsoft.Json.JsonProperty("access_hash")]
 		public abstract long AccessHash { get; set; }
 
-[JsonPropertyName("slug")]
+[Newtonsoft.Json.JsonProperty("slug")]
 		public abstract string Slug { get; set; }
 
-[JsonPropertyName("title")]
+[Newtonsoft.Json.JsonProperty("title")]
 		public abstract string Title { get; set; }
 
-[JsonPropertyName("document")]
+[Newtonsoft.Json.JsonProperty("document")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.DocumentBase Document { get; set; }
 
-[JsonPropertyName("settings")]
+[Newtonsoft.Json.JsonProperty("settings")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.ThemeSettingsBase Settings { get; set; }
 
-[JsonPropertyName("installs_count")]
+[Newtonsoft.Json.JsonProperty("installs_count")]
 		public abstract int InstallsCount { get; set; }
 
         public abstract void UpdateFlags();

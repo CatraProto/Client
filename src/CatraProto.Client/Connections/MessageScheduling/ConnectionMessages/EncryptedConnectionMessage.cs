@@ -3,8 +3,8 @@ using System.Linq;
 using System.Security.Cryptography;
 using CatraProto.Client.Connections.MessageScheduling.ConnectionMessages.Interfaces;
 using CatraProto.Client.Crypto;
-using CatraProto.Client.Extensions;
 using CatraProto.Client.MTProto.Auth.AuthKeyHandler;
+using CatraProto.TL;
 
 namespace CatraProto.Client.Connections.MessageScheduling.ConnectionMessages
 {

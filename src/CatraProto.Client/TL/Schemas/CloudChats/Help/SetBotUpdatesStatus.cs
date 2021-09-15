@@ -1,56 +1,60 @@
 using System;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-	public partial class SetBotUpdatesStatus : IMethod
-	{
-
+    public partial class SetBotUpdatesStatus : IMethod
+    {
+        [JsonIgnore]
+        public static int StaticConstructorId
+        {
+            get => -333262899;
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => -333262899; }
-        [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(bool);
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
 
-[JsonPropertyName("pending_updates_count")]
-		public int PendingUpdatesCount { get; set; }
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("message")]
-		public string Message { get; set; }
+        [JsonProperty("pending_updates_count")]
+        public int PendingUpdatesCount { get; set; }
+
+        [JsonProperty("message")] public string Message { get; set; }
+
+        public override string ToString()
+        {
+            return "help.setBotUpdatesStatus";
+        }
 
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(PendingUpdatesCount);
-			writer.Write(Message);
+            writer.Write(PendingUpdatesCount);
+            writer.Write(Message);
+        }
 
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			PendingUpdatesCount = reader.Read<int>();
-			Message = reader.Read<string>();
-		}
-
-		public override string ToString()
-		{
-			return "help.setBotUpdatesStatus";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            PendingUpdatesCount = reader.Read<int>();
+            Message = reader.Read<string>();
+        }
+    }
 }

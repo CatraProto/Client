@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PageBlockPhoto : PageBlockBase
+	public partial class PageBlockPhoto : CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,22 +17,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 391759200; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("photo_id")]
+[Newtonsoft.Json.JsonProperty("photo_id")]
 		public long PhotoId { get; set; }
 
-[JsonPropertyName("caption")]
-		public PageCaptionBase Caption { get; set; }
+[Newtonsoft.Json.JsonProperty("caption")]
+		public CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase Caption { get; set; }
 
-[JsonPropertyName("url")]
+[Newtonsoft.Json.JsonProperty("url")]
 		public string Url { get; set; }
 
-[JsonPropertyName("webpage_id")]
+[Newtonsoft.Json.JsonProperty("webpage_id")]
 		public long? WebpageId { get; set; }
 
         
@@ -65,7 +67,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Flags = reader.Read<int>();
 			PhotoId = reader.Read<long>();
-			Caption = reader.Read<PageCaptionBase>();
+			Caption = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				Url = reader.Read<string>();
@@ -75,11 +77,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			{
 				WebpageId = reader.Read<long>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "pageBlockPhoto";
+		    return "pageBlockPhoto";
 		}
 	}
 }

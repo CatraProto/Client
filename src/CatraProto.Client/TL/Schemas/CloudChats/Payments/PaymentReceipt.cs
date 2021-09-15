@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 {
-	public partial class PaymentReceipt : PaymentReceiptBase
+	public partial class PaymentReceipt : CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentReceiptBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,37 +17,41 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 		}
 
         public static int StaticConstructorId { get => 1342771681; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("date")]
+[Newtonsoft.Json.JsonProperty("date")]
 		public override int Date { get; set; }
 
-[JsonPropertyName("bot_id")]
+[Newtonsoft.Json.JsonProperty("bot_id")]
 		public override int BotId { get; set; }
 
-		[JsonPropertyName("invoice")] public override InvoiceBase Invoice { get; set; }
+[Newtonsoft.Json.JsonProperty("invoice")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.InvoiceBase Invoice { get; set; }
 
-[JsonPropertyName("provider_id")]
+[Newtonsoft.Json.JsonProperty("provider_id")]
 		public override int ProviderId { get; set; }
 
-		[JsonPropertyName("info")] public override PaymentRequestedInfoBase Info { get; set; }
+[Newtonsoft.Json.JsonProperty("info")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase Info { get; set; }
 
-		[JsonPropertyName("shipping")] public override ShippingOptionBase Shipping { get; set; }
+[Newtonsoft.Json.JsonProperty("shipping")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.ShippingOptionBase Shipping { get; set; }
 
-[JsonPropertyName("currency")]
+[Newtonsoft.Json.JsonProperty("currency")]
 		public override string Currency { get; set; }
 
-[JsonPropertyName("total_amount")]
+[Newtonsoft.Json.JsonProperty("total_amount")]
 		public override long TotalAmount { get; set; }
 
-[JsonPropertyName("credentials_title")]
+[Newtonsoft.Json.JsonProperty("credentials_title")]
 		public override string CredentialsTitle { get; set; }
 
-		[JsonPropertyName("users")] public override IList<UserBase> Users { get; set; }
+[Newtonsoft.Json.JsonProperty("users")]
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -87,27 +92,28 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 			Flags = reader.Read<int>();
 			Date = reader.Read<int>();
 			BotId = reader.Read<int>();
-			Invoice = reader.Read<InvoiceBase>();
+			Invoice = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InvoiceBase>();
 			ProviderId = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Info = reader.Read<PaymentRequestedInfoBase>();
+				Info = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Shipping = reader.Read<ShippingOptionBase>();
+				Shipping = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ShippingOptionBase>();
 			}
 
 			Currency = reader.Read<string>();
 			TotalAmount = reader.Read<long>();
 			CredentialsTitle = reader.Read<string>();
-			Users = reader.ReadVector<UserBase>();
-		}
+			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "payments.paymentReceipt";
+		    return "payments.paymentReceipt";
 		}
 	}
 }

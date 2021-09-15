@@ -38,6 +38,23 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
             _api = api;
         }
 
+        public async Task EnsureComputeAsync(int duration, CancellationToken token = default)
+        {
+            while (true)
+            {
+                var compute = await ComputeAuthKey(duration, token);
+                if (compute is AuthKeySuccess)
+                {
+                    return;
+                }
+                else
+                {
+                    _logger.Warning("AuthKey generation failed due to {Error}, retrying in 2 seconds...", ((AuthKeyFail)compute).Error);
+                    await Task.Delay(TimeSpan.FromSeconds(2), token);
+                }
+            }
+        }
+
         public async Task<AuthKeyResult> ComputeAuthKey(int duration, CancellationToken cancellationToken = default)
         {
             try
@@ -53,8 +70,8 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
                     var serverNonce = reqPq.Response.ServerNonce;
                     var pq = reqPq.Response.Pq;
 
-                    _logger.Information("Received ServerNonce from server with value {SNonce} and Pq with value {Pq}", serverNonce, pq);
-                    _logger.Information("Server RSA Fingerprints: {Fingerprints}", reqPq.Response.ServerPublicKeyFingerprints);
+                    _logger.Verbose("Received ServerNonce from server with value {SNonce} and Pq with value {Pq}", serverNonce, pq);
+                    _logger.Verbose("Server RSA Fingerprints: {Fingerprints}", reqPq.Response.ServerPublicKeyFingerprints);
                     if (!Rsa.FindByFingerprints(reqPq.Response.ServerPublicKeyFingerprints, out var found))
                     {
                         _logger.Error("None of the fingerprints provided were found in the array of RSA keys");
@@ -77,23 +94,23 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
                     var encryptedData = rsaKey.EncryptData(Hashing.ComputeDataHashedFilling(toHash, MergedProvider.Singleton));
                     rsaKey.Dispose();
 
-                    _logger.Information("Sending ReqDHParams request...");
+                    _logger.Verbose("Sending ReqDHParams request...");
                     var reqDh = await _api.MtProtoApi.ReqDHParamsAsync(nonce, serverNonce, p, q, found.Item1, encryptedData, cancellationToken: cancellationToken);
                     if (!reqDh.RpcCallFailed)
                     {
                         if (reqDh.Response is ServerDHParamsOk ok)
                         {
-                            _logger.Information("Server dh params ok, checking nonce and computing aes iv and key...");
+                            _logger.Verbose("Server dh params ok, checking nonce and computing aes iv and key...");
                             KeyExchangeChecks.CheckNonce(nonce, ok.Nonce);
                             var aesKey = KeyExchangeTools.ComputeAesKey(serverNonce, newNonce);
                             var aesIv = KeyExchangeTools.ComputeAesIv(serverNonce, newNonce);
                             using var igeEncryptor = new IgeEncryptor(aesKey, aesIv);
                             var serverDhInnerData = KeyExchangeTools.DecryptMessage(igeEncryptor, ok.EncryptedAnswer, out var sha).ToObject<ServerDHInnerData>(MergedProvider.Singleton);
 
-                            _logger.Information("Message decrypted, checking serverDhInnerData integrity");
+                            _logger.Verbose("Message decrypted, checking serverDhInnerData integrity");
                             KeyExchangeChecks.CheckHashData(sha, serverDhInnerData);
 
-                            _logger.Information("Checking nonce ({SSNonce} == {Nonce}) and serverNonce ({SSSNonce} == {SNonce})", serverDhInnerData.Nonce, nonce, serverDhInnerData.ServerNonce, serverNonce);
+                            _logger.Verbose("Checking nonce ({SSNonce} == {Nonce}) and serverNonce ({SSSNonce} == {SNonce})", serverDhInnerData.Nonce, nonce, serverDhInnerData.ServerNonce, serverNonce);
                             KeyExchangeChecks.CheckNonce(serverDhInnerData.Nonce, nonce);
                             KeyExchangeChecks.CheckNonce(serverDhInnerData.ServerNonce, serverNonce);
 
@@ -111,21 +128,23 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
                             var hashedPadding = Hashing.ComputeDataHashedPadding(clientDhInnerData, MergedProvider.Singleton);
                             var encryptedInnerData = igeEncryptor.Encrypt(hashedPadding);
 
-                            _logger.Information("gbMod computed, sending setClientDHParams...");
+                            _logger.Verbose("gbMod computed, sending setClientDHParams...");
                             var setDhClient = await _api.MtProtoApi.SetClientDHParamsAsync(nonce, serverNonce, encryptedInnerData, cancellationToken: cancellationToken);
                             if (!setDhClient.RpcCallFailed)
                             {
                                 if (setDhClient.Response is DhGenOk dhGenOk)
                                 {
-                                    _logger.Information("Received dhGenOk checking nonce ({SSNonce} == {Nonce}) and serverNonce ({SSSNonce} == {SNonce})", dhGenOk.Nonce, nonce, dhGenOk.ServerNonce, serverNonce);
+                                    _logger.Verbose("Received dhGenOk checking nonce ({SSNonce} == {Nonce}) and serverNonce ({SSSNonce} == {SNonce})", dhGenOk.Nonce, nonce, dhGenOk.ServerNonce, serverNonce);
                                     KeyExchangeChecks.CheckNonce(dhGenOk.Nonce, nonce);
                                     KeyExchangeChecks.CheckNonce(dhGenOk.ServerNonce, serverNonce);
 
-                                    RawAuthKey = CryptoTools.RemoveFirstBytes(BigInteger.ModPow(new BigInteger(zeroByte.Concat(serverDhInnerData.GA).ToArray(), isBigEndian: true), b, dhPrime).ToByteArray(isBigEndian: true));
+                                    var rawKey = CryptoTools.RemoveStartingZeros(BigInteger.ModPow(new BigInteger(zeroByte.Concat(serverDhInnerData.GA).ToArray(), isBigEndian: true), b, dhPrime).ToByteArray(isBigEndian: true));
+                                    Array.Resize(ref rawKey, 256);
+                                    RawAuthKey = rawKey;
                                     AuthKeyId = BitConverter.ToInt64(SHA1.HashData(RawAuthKey).TakeLast(8).ToArray());
                                     ServerSalt = BitConverter.ToInt64(KeyExchangeTools.ComputeServerSalt(serverNonce, newNonce));
 
-                                    _logger.Information("Nonce and serverNonce match, AuthKey successfully generated. AuthKey: {Key} AuthKeyId: {Id} ServerSalt: {Salt}", RawAuthKey, AuthKeyId, ServerSalt);
+                                    _logger.Information("Nonce and serverNonce match, AuthKey successfully generated. AuthKeyId: {Id} ServerSalt: {Salt}", AuthKeyId, ServerSalt);
                                     return new AuthKeySuccess();
                                 }
                                 else
@@ -145,7 +164,6 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
                     }
                     else
                     {
-                        _logger.Error("Received {ErrorCode} as a result of ReqDhParams", reqDh.Error!.ErrorCode);
                         return new AuthKeyFail(Errors.ServerCallFail);
                     }
                 }
@@ -232,6 +250,11 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
             {
                 writer.Write(false);
             }
+        }
+
+        public void UpdateFlags()
+        {
+            throw new NotImplementedException();
         }
     }
 }

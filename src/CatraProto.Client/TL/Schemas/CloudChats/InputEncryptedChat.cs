@@ -1,21 +1,24 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputEncryptedChat : InputEncryptedChatBase
+	public partial class InputEncryptedChat : CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedChatBase
 	{
 
 
         public static int StaticConstructorId { get => -247351839; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("chat_id")]
+[Newtonsoft.Json.JsonProperty("chat_id")]
 		public override int ChatId { get; set; }
 
-[JsonPropertyName("access_hash")]
+[Newtonsoft.Json.JsonProperty("access_hash")]
 		public override long AccessHash { get; set; }
 
         
@@ -36,11 +39,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			ChatId = reader.Read<int>();
 			AccessHash = reader.Read<long>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "inputEncryptedChat";
+		    return "inputEncryptedChat";
 		}
 	}
 }

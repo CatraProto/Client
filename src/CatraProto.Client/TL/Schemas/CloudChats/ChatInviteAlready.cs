@@ -1,19 +1,22 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChatInviteAlready : ChatInviteBase
+	public partial class ChatInviteAlready : CatraProto.Client.TL.Schemas.CloudChats.ChatInviteBase
 	{
 
 
         public static int StaticConstructorId { get => 1516793212; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("chat")]
-		public ChatBase Chat { get; set; }
+[Newtonsoft.Json.JsonProperty("chat")]
+		public CatraProto.Client.TL.Schemas.CloudChats.ChatBase Chat { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -30,12 +33,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Chat = reader.Read<ChatBase>();
-		}
+			Chat = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "chatInviteAlready";
+		    return "chatInviteAlready";
 		}
 	}
 }

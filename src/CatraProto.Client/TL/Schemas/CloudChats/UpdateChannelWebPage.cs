@@ -1,27 +1,30 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateChannelWebPage : UpdateBase
+	public partial class UpdateChannelWebPage : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 
 
         public static int StaticConstructorId { get => 1081547008; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("channel_id")]
+[Newtonsoft.Json.JsonProperty("channel_id")]
 		public int ChannelId { get; set; }
 
-[JsonPropertyName("webpage")]
-		public WebPageBase Webpage { get; set; }
+[Newtonsoft.Json.JsonProperty("webpage")]
+		public CatraProto.Client.TL.Schemas.CloudChats.WebPageBase Webpage { get; set; }
 
-[JsonPropertyName("pts")]
+[Newtonsoft.Json.JsonProperty("pts")]
 		public int Pts { get; set; }
 
-[JsonPropertyName("pts_count")]
+[Newtonsoft.Json.JsonProperty("pts_count")]
 		public int PtsCount { get; set; }
 
         
@@ -43,14 +46,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			ChannelId = reader.Read<int>();
-			Webpage = reader.Read<WebPageBase>();
+			Webpage = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.WebPageBase>();
 			Pts = reader.Read<int>();
 			PtsCount = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "updateChannelWebPage";
+		    return "updateChannelWebPage";
 		}
 	}
 }

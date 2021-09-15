@@ -1,18 +1,15 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
-using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public abstract class AffectedMessagesBase : IObject
     {
+        [JsonProperty("pts")] public abstract int Pts { get; set; }
 
-[JsonPropertyName("pts")]
-		public abstract int Pts { get; set; }
-
-[JsonPropertyName("pts_count")]
-		public abstract int PtsCount { get; set; }
+        [JsonProperty("pts_count")] public abstract int PtsCount { get; set; }
 
         public abstract void UpdateFlags();
         public abstract void Deserialize(Reader reader);

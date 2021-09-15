@@ -1,24 +1,27 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class NewSessionCreated : NewSessionBase
+	public partial class NewSessionCreated : CatraProto.Client.TL.Schemas.MTProto.NewSessionBase
 	{
 
 
         public static int StaticConstructorId { get => -1631450872; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("first_msg_id")]
+[Newtonsoft.Json.JsonProperty("first_msg_id")]
 		public override long FirstMsgId { get; set; }
 
-[JsonPropertyName("unique_id")]
+[Newtonsoft.Json.JsonProperty("unique_id")]
 		public override long UniqueId { get; set; }
 
-[JsonPropertyName("server_salt")]
+[Newtonsoft.Json.JsonProperty("server_salt")]
 		public override long ServerSalt { get; set; }
 
         
@@ -41,11 +44,12 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 			FirstMsgId = reader.Read<long>();
 			UniqueId = reader.Read<long>();
 			ServerSalt = reader.Read<long>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "new_session_created";
+		    return "new_session_created";
 		}
 	}
 }

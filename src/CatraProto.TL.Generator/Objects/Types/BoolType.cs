@@ -43,19 +43,21 @@ namespace CatraProto.TL.Generator.Objects.Types
 			}
 
 			stringBuilder.AppendLine(
-				$"\n[JsonPropertyName(\"{parameter.NamingInfo.OriginalName}\")]\n{StringTools.TwoTabs}{GetParameterAccessibility(parameter, allowOverride)} {type} {parameter.NamingInfo.PascalCaseName} {{ get; set; }}");
+				$"\n[Newtonsoft.Json.JsonProperty(\"{parameter.NamingInfo.OriginalName}\")]\n{StringTools.TwoTabs}{GetParameterAccessibility(parameter, allowOverride)} {type} {parameter.NamingInfo.PascalCaseName} {{ get; set; }}");
 		}
 
 		public override void WriteDeserializer(StringBuilder stringBuilder, Parameter parameter)
 		{
 			if (InitialTypeName == "true")
 			{
-				stringBuilder.AppendLine(
-					$"{StringTools.ThreeTabs}{parameter.NamingInfo.PascalCaseName} = FlagsHelper.IsFlagSet({parameter.Flag.Name}, {parameter.Flag.Bit});");
+				stringBuilder.AppendLine($"{StringTools.ThreeTabs}{parameter.NamingInfo.PascalCaseName} = FlagsHelper.IsFlagSet({parameter.Flag.Name}, {parameter.Flag.Bit});");
 				return;
 			}
+			
 
+			WriteFlagStart(stringBuilder, out var spacing, parameter);
 			stringBuilder.AppendLine($"{StringTools.ThreeTabs}{parameter.NamingInfo.PascalCaseName} = reader.Read<bool>();");
+			WriteFlagEnd(stringBuilder, spacing, parameter);
 		}
 
 		public override void WriteSerializer(StringBuilder stringBuilder, Parameter parameter)

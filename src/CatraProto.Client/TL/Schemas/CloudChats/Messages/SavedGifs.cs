@@ -1,46 +1,52 @@
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using Newtonsoft.Json;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class SavedGifs : SavedGifsBase
-	{
+    public partial class SavedGifs : SavedGifsBase
+    {
+        public static int StaticConstructorId
+        {
+            get => 772213157;
+        }
 
-
-        public static int StaticConstructorId { get => 772213157; }
         [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonPropertyName("hash")]
-		public int Hash { get; set; }
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-		[JsonPropertyName("gifs")] public IList<DocumentBase> Gifs { get; set; }
+        [JsonProperty("hash")] public int Hash { get; set; }
 
-        
-		public override void UpdateFlags() 
-		{
+        [JsonProperty("gifs")] public IList<DocumentBase> Gifs { get; set; }
 
-		}
 
-		public override void Serialize(Writer writer)
-		{
-		    if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Hash);
-			writer.Write(Gifs);
+        public override void UpdateFlags()
+        {
+        }
 
-		}
+        public override void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public override void Deserialize(Reader reader)
-		{
-			Hash = reader.Read<int>();
-			Gifs = reader.ReadVector<DocumentBase>();
-		}
+            writer.Write(Hash);
+            writer.Write(Gifs);
+        }
 
-		public override string ToString()
-		{
-			return "messages.savedGifs";
-		}
-	}
+        public override void Deserialize(Reader reader)
+        {
+            Hash = reader.Read<int>();
+            Gifs = reader.ReadVector<DocumentBase>();
+        }
+
+        public override string ToString()
+        {
+            return "messages.savedGifs";
+        }
+    }
 }

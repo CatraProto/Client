@@ -1,24 +1,27 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class FileHash : FileHashBase
+	public partial class FileHash : CatraProto.Client.TL.Schemas.CloudChats.FileHashBase
 	{
 
 
         public static int StaticConstructorId { get => 1648543603; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("offset")]
+[Newtonsoft.Json.JsonProperty("offset")]
 		public override int Offset { get; set; }
 
-[JsonPropertyName("limit")]
+[Newtonsoft.Json.JsonProperty("limit")]
 		public override int Limit { get; set; }
 
-[JsonPropertyName("hash")]
+[Newtonsoft.Json.JsonProperty("hash")]
 		public override byte[] Hash { get; set; }
 
         
@@ -41,11 +44,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Offset = reader.Read<int>();
 			Limit = reader.Read<int>();
 			Hash = reader.Read<byte[]>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "fileHash";
+		    return "fileHash";
 		}
 	}
 }

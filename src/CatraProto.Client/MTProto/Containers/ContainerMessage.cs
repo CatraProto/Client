@@ -1,7 +1,7 @@
 using System;
-using CatraProto.Client.Connections;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.MTProto.Containers
 {
@@ -14,7 +14,6 @@ namespace CatraProto.Client.MTProto.Containers
 
         public void UpdateFlags()
         {
-
         }
 
         public void Serialize(Writer writer)
@@ -23,7 +22,6 @@ namespace CatraProto.Client.MTProto.Containers
             writer.Write(Seqno);
             writer.Write(Body.Length);
             writer.Stream.Write(Body);
-
         }
 
         public void Deserialize(Reader reader)

@@ -1,27 +1,30 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class EncryptedMessageService : EncryptedMessageBase
+	public partial class EncryptedMessageService : CatraProto.Client.TL.Schemas.CloudChats.EncryptedMessageBase
 	{
 
 
         public static int StaticConstructorId { get => 594758406; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("random_id")]
+[Newtonsoft.Json.JsonProperty("random_id")]
 		public override long RandomId { get; set; }
 
-[JsonPropertyName("chat_id")]
+[Newtonsoft.Json.JsonProperty("chat_id")]
 		public override int ChatId { get; set; }
 
-[JsonPropertyName("date")]
+[Newtonsoft.Json.JsonProperty("date")]
 		public override int Date { get; set; }
 
-[JsonPropertyName("bytes")]
+[Newtonsoft.Json.JsonProperty("bytes")]
 		public override byte[] Bytes { get; set; }
 
         
@@ -46,11 +49,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ChatId = reader.Read<int>();
 			Date = reader.Read<int>();
 			Bytes = reader.Read<byte[]>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "encryptedMessageService";
+		    return "encryptedMessageService";
 		}
 	}
 }

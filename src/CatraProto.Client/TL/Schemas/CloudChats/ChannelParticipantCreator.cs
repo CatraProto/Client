@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelParticipantCreator : ChannelParticipantBase
+	public partial class ChannelParticipantCreator : CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,19 +16,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 1149094475; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("user_id")]
+[Newtonsoft.Json.JsonProperty("user_id")]
 		public override int UserId { get; set; }
 
-[JsonPropertyName("admin_rights")]
-		public ChatAdminRightsBase AdminRights { get; set; }
+[Newtonsoft.Json.JsonProperty("admin_rights")]
+		public CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase AdminRights { get; set; }
 
-[JsonPropertyName("rank")]
+[Newtonsoft.Json.JsonProperty("rank")]
 		public string Rank { get; set; }
 
         
@@ -55,16 +57,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Flags = reader.Read<int>();
 			UserId = reader.Read<int>();
-			AdminRights = reader.Read<ChatAdminRightsBase>();
+			AdminRights = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				Rank = reader.Read<string>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "channelParticipantCreator";
+		    return "channelParticipantCreator";
 		}
 	}
 }

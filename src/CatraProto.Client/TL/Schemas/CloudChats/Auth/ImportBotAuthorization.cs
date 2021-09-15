@@ -1,66 +1,67 @@
 using System;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
-	public partial class ImportBotAuthorization : IMethod
-	{
-
+    public partial class ImportBotAuthorization : IMethod
+    {
+        [JsonIgnore]
+        public static int StaticConstructorId
+        {
+            get => 1738800940;
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => 1738800940; }
-        [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(AuthorizationBase);
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(AuthorizationBase);
 
-[JsonPropertyName("flags")]
-		public int Flags { get; set; }
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("api_id")]
-		public int ApiId { get; set; }
+        [JsonProperty("flags")] public int Flags { get; set; }
 
-[JsonPropertyName("api_hash")]
-		public string ApiHash { get; set; }
+        [JsonProperty("api_id")] public int ApiId { get; set; }
 
-[JsonPropertyName("bot_auth_token")]
-		public string BotAuthToken { get; set; }
+        [JsonProperty("api_hash")] public string ApiHash { get; set; }
+
+        [JsonProperty("bot_auth_token")] public string BotAuthToken { get; set; }
+
+        public override string ToString()
+        {
+            return "auth.importBotAuthorization";
+        }
 
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Flags);
-			writer.Write(ApiId);
-			writer.Write(ApiHash);
-			writer.Write(BotAuthToken);
+            writer.Write(Flags);
+            writer.Write(ApiId);
+            writer.Write(ApiHash);
+            writer.Write(BotAuthToken);
+        }
 
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			Flags = reader.Read<int>();
-			ApiId = reader.Read<int>();
-			ApiHash = reader.Read<string>();
-			BotAuthToken = reader.Read<string>();
-		}
-
-		public override string ToString()
-		{
-			return "auth.importBotAuthorization";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Flags = reader.Read<int>();
+            ApiId = reader.Read<int>();
+            ApiHash = reader.Read<string>();
+            BotAuthToken = reader.Read<string>();
+        }
+    }
 }

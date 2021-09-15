@@ -1,24 +1,27 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class RestrictionReason : RestrictionReasonBase
+	public partial class RestrictionReason : CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase
 	{
 
 
         public static int StaticConstructorId { get => -797791052; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("platform")]
+[Newtonsoft.Json.JsonProperty("platform")]
 		public override string Platform { get; set; }
 
-[JsonPropertyName("reason")]
+[Newtonsoft.Json.JsonProperty("reason")]
 		public override string Reason { get; set; }
 
-[JsonPropertyName("text")]
+[Newtonsoft.Json.JsonProperty("text")]
 		public override string Text { get; set; }
 
         
@@ -41,11 +44,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Platform = reader.Read<string>();
 			Reason = reader.Read<string>();
 			Text = reader.Read<string>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "restrictionReason";
+		    return "restrictionReason";
 		}
 	}
 }

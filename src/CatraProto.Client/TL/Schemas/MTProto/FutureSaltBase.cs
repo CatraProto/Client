@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,13 +7,13 @@ namespace CatraProto.Client.TL.Schemas.MTProto
     public abstract class FutureSaltBase : IObject
     {
 
-[JsonPropertyName("valid_since")]
+[Newtonsoft.Json.JsonProperty("valid_since")]
 		public abstract int ValidSince { get; set; }
 
-[JsonPropertyName("valid_until")]
+[Newtonsoft.Json.JsonProperty("valid_until")]
 		public abstract int ValidUntil { get; set; }
 
-[JsonPropertyName("salt")]
+[Newtonsoft.Json.JsonProperty("salt")]
 		public abstract long Salt { get; set; }
 
         public abstract void UpdateFlags();

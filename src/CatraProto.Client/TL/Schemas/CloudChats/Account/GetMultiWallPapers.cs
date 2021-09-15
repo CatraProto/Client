@@ -1,52 +1,56 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class GetMultiWallPapers : IMethod
-	{
-
+    public partial class GetMultiWallPapers : IMethod
+    {
+        [JsonIgnore]
+        public static int StaticConstructorId
+        {
+            get => 1705865692;
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => 1705865692; }
-        [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(WallPaperBase);
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = true;
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(WallPaperBase);
 
-[JsonPropertyName("wallpapers")]
-		public IList<InputWallPaperBase> Wallpapers { get; set; }
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = true;
+
+        [JsonProperty("wallpapers")] public IList<InputWallPaperBase> Wallpapers { get; set; }
+
+        public override string ToString()
+        {
+            return "account.getMultiWallPapers";
+        }
 
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Wallpapers);
+            writer.Write(Wallpapers);
+        }
 
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			Wallpapers = reader.ReadVector<InputWallPaperBase>();
-		}
-
-		public override string ToString()
-		{
-			return "account.getMultiWallPapers";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Wallpapers = reader.ReadVector<InputWallPaperBase>();
+        }
+    }
 }

@@ -1,27 +1,30 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateUserPhoto : UpdateBase
+	public partial class UpdateUserPhoto : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 
 
         public static int StaticConstructorId { get => -1791935732; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("user_id")]
+[Newtonsoft.Json.JsonProperty("user_id")]
 		public int UserId { get; set; }
 
-[JsonPropertyName("date")]
+[Newtonsoft.Json.JsonProperty("date")]
 		public int Date { get; set; }
 
-[JsonPropertyName("photo")]
-		public UserProfilePhotoBase Photo { get; set; }
+[Newtonsoft.Json.JsonProperty("photo")]
+		public CatraProto.Client.TL.Schemas.CloudChats.UserProfilePhotoBase Photo { get; set; }
 
-[JsonPropertyName("previous")]
+[Newtonsoft.Json.JsonProperty("previous")]
 		public bool Previous { get; set; }
 
         
@@ -44,13 +47,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			UserId = reader.Read<int>();
 			Date = reader.Read<int>();
-			Photo = reader.Read<UserProfilePhotoBase>();
+			Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.UserProfilePhotoBase>();
 			Previous = reader.Read<bool>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "updateUserPhoto";
+		    return "updateUserPhoto";
 		}
 	}
 }

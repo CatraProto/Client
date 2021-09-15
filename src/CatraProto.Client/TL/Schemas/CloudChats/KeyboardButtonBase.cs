@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,7 +7,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class KeyboardButtonBase : IObject
     {
 
-[JsonPropertyName("text")]
+[Newtonsoft.Json.JsonProperty("text")]
 		public abstract string Text { get; set; }
 
         public abstract void UpdateFlags();

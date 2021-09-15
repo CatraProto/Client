@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PhoneCallProtocol : PhoneCallProtocolBase
+	public partial class PhoneCallProtocol : CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,25 +17,25 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -58224696; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("udp_p2p")]
+[Newtonsoft.Json.JsonProperty("udp_p2p")]
 		public override bool UdpP2p { get; set; }
 
-[JsonPropertyName("udp_reflector")]
+[Newtonsoft.Json.JsonProperty("udp_reflector")]
 		public override bool UdpReflector { get; set; }
 
-[JsonPropertyName("min_layer")]
+[Newtonsoft.Json.JsonProperty("min_layer")]
 		public override int MinLayer { get; set; }
 
-[JsonPropertyName("max_layer")]
+[Newtonsoft.Json.JsonProperty("max_layer")]
 		public override int MaxLayer { get; set; }
 
-[JsonPropertyName("library_versions")]
+[Newtonsoft.Json.JsonProperty("library_versions")]
 		public override IList<string> LibraryVersions { get; set; }
 
         
@@ -64,11 +65,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			MinLayer = reader.Read<int>();
 			MaxLayer = reader.Read<int>();
 			LibraryVersions = reader.ReadVector<string>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "phoneCallProtocol";
+		    return "phoneCallProtocol";
 		}
 	}
 }

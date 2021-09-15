@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class WallPaper : WallPaperBase
+	public partial class WallPaper : CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -18,38 +20,38 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -1539849235; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public long Id { get; set; }
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("creator")]
+[Newtonsoft.Json.JsonProperty("creator")]
 		public bool Creator { get; set; }
 
-[JsonPropertyName("default")]
+[Newtonsoft.Json.JsonProperty("default")]
 		public override bool Default { get; set; }
 
-[JsonPropertyName("pattern")]
+[Newtonsoft.Json.JsonProperty("pattern")]
 		public bool Pattern { get; set; }
 
-[JsonPropertyName("dark")]
+[Newtonsoft.Json.JsonProperty("dark")]
 		public override bool Dark { get; set; }
 
-[JsonPropertyName("access_hash")]
+[Newtonsoft.Json.JsonProperty("access_hash")]
 		public long AccessHash { get; set; }
 
-[JsonPropertyName("slug")]
+[Newtonsoft.Json.JsonProperty("slug")]
 		public string Slug { get; set; }
 
-[JsonPropertyName("document")]
-		public DocumentBase Document { get; set; }
+[Newtonsoft.Json.JsonProperty("document")]
+		public CatraProto.Client.TL.Schemas.CloudChats.DocumentBase Document { get; set; }
 
-[JsonPropertyName("settings")]
-		public override WallPaperSettingsBase Settings { get; set; }
+[Newtonsoft.Json.JsonProperty("settings")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase Settings { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -89,16 +91,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Dark = FlagsHelper.IsFlagSet(Flags, 4);
 			AccessHash = reader.Read<long>();
 			Slug = reader.Read<string>();
-			Document = reader.Read<DocumentBase>();
+			Document = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				Settings = reader.Read<WallPaperSettingsBase>();
+				Settings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "wallPaper";
+		    return "wallPaper";
 		}
 	}
 }

@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class BotInlineMessageMediaGeo : BotInlineMessageBase
+	public partial class BotInlineMessageMediaGeo : CatraProto.Client.TL.Schemas.CloudChats.BotInlineMessageBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -17,26 +19,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 85477117; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("geo")]
-		public GeoPointBase Geo { get; set; }
+[Newtonsoft.Json.JsonProperty("geo")]
+		public CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase Geo { get; set; }
 
-[JsonPropertyName("heading")]
+[Newtonsoft.Json.JsonProperty("heading")]
 		public int? Heading { get; set; }
 
-[JsonPropertyName("period")]
+[Newtonsoft.Json.JsonProperty("period")]
 		public int? Period { get; set; }
 
-[JsonPropertyName("proximity_notification_radius")]
+[Newtonsoft.Json.JsonProperty("proximity_notification_radius")]
 		public int? ProximityNotificationRadius { get; set; }
 
-[JsonPropertyName("reply_markup")]
-		public override ReplyMarkupBase ReplyMarkup { get; set; }
+[Newtonsoft.Json.JsonProperty("reply_markup")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase ReplyMarkup { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -80,7 +82,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			Geo = reader.Read<GeoPointBase>();
+			Geo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				Heading = reader.Read<int>();
@@ -98,13 +100,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				ReplyMarkup = reader.Read<ReplyMarkupBase>();
+				ReplyMarkup = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "botInlineMessageMediaGeo";
+		    return "botInlineMessageMediaGeo";
 		}
 	}
 }

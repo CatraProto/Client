@@ -1,18 +1,21 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class SentEncryptedMessage : SentEncryptedMessageBase
+	public partial class SentEncryptedMessage : CatraProto.Client.TL.Schemas.CloudChats.Messages.SentEncryptedMessageBase
 	{
 
 
         public static int StaticConstructorId { get => 1443858741; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("date")]
+[Newtonsoft.Json.JsonProperty("date")]
 		public override int Date { get; set; }
 
         
@@ -31,11 +34,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public override void Deserialize(Reader reader)
 		{
 			Date = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "messages.sentEncryptedMessage";
+		    return "messages.sentEncryptedMessage";
 		}
 	}
 }

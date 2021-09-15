@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputMediaPhoto : InputMediaBase
+	public partial class InputMediaPhoto : CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,16 +16,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -1279654347; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("id")]
-		public InputPhotoBase Id { get; set; }
+[Newtonsoft.Json.JsonProperty("id")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPhotoBase Id { get; set; }
 
-[JsonPropertyName("ttl_seconds")]
+[Newtonsoft.Json.JsonProperty("ttl_seconds")]
 		public int? TtlSeconds { get; set; }
 
         
@@ -50,16 +52,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			Id = reader.Read<InputPhotoBase>();
+			Id = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPhotoBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				TtlSeconds = reader.Read<int>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "inputMediaPhoto";
+		    return "inputMediaPhoto";
 		}
 	}
 }

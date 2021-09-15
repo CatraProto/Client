@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputGeoPoint : InputGeoPointBase
+	public partial class InputGeoPoint : CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,19 +16,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 1210199983; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("lat")]
+[Newtonsoft.Json.JsonProperty("lat")]
 		public double Lat { get; set; }
 
-[JsonPropertyName("long")]
+[Newtonsoft.Json.JsonProperty("long")]
 		public double Long { get; set; }
 
-[JsonPropertyName("accuracy_radius")]
+[Newtonsoft.Json.JsonProperty("accuracy_radius")]
 		public int? AccuracyRadius { get; set; }
 
         
@@ -60,11 +62,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			{
 				AccuracyRadius = reader.Read<int>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "inputGeoPoint";
+		    return "inputGeoPoint";
 		}
 	}
 }

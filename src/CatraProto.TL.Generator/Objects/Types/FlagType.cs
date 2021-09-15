@@ -16,7 +16,7 @@ namespace CatraProto.TL.Generator.Objects.Types
 
 		public override void WriteParameter(StringBuilder stringBuilder, Parameter parameter, string customTypeName = null, bool isAbstract = false)
 		{
-			stringBuilder.AppendLine($"\n[JsonIgnore]\n{StringTools.TwoTabs}{GetParameterAccessibility(parameter, isAbstract)} int {parameter.NamingInfo.PascalCaseName} {{ get; set; }}");
+			stringBuilder.AppendLine($"\n[Newtonsoft.Json.JsonIgnore]\n{StringTools.TwoTabs}{GetParameterAccessibility(parameter, isAbstract)} int {parameter.NamingInfo.PascalCaseName} {{ get; set; }}");
 		}
 
 		public override void WriteDeserializer(StringBuilder stringBuilder, Parameter parameter)

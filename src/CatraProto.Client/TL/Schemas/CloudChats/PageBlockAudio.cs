@@ -1,22 +1,25 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PageBlockAudio : PageBlockBase
+	public partial class PageBlockAudio : CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase
 	{
 
 
         public static int StaticConstructorId { get => -2143067670; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("audio_id")]
+[Newtonsoft.Json.JsonProperty("audio_id")]
 		public long AudioId { get; set; }
 
-[JsonPropertyName("caption")]
-		public PageCaptionBase Caption { get; set; }
+[Newtonsoft.Json.JsonProperty("caption")]
+		public CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase Caption { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -35,12 +38,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			AudioId = reader.Read<long>();
-			Caption = reader.Read<PageCaptionBase>();
-		}
+			Caption = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "pageBlockAudio";
+		    return "pageBlockAudio";
 		}
 	}
 }

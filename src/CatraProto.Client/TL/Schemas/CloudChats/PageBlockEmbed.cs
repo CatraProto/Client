@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PageBlockEmbed : PageBlockBase
+	public partial class PageBlockEmbed : CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -20,35 +22,35 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -1468953147; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("full_width")]
+[Newtonsoft.Json.JsonProperty("full_width")]
 		public bool FullWidth { get; set; }
 
-[JsonPropertyName("allow_scrolling")]
+[Newtonsoft.Json.JsonProperty("allow_scrolling")]
 		public bool AllowScrolling { get; set; }
 
-[JsonPropertyName("url")]
+[Newtonsoft.Json.JsonProperty("url")]
 		public string Url { get; set; }
 
-[JsonPropertyName("html")]
+[Newtonsoft.Json.JsonProperty("html")]
 		public string Html { get; set; }
 
-[JsonPropertyName("poster_photo_id")]
+[Newtonsoft.Json.JsonProperty("poster_photo_id")]
 		public long? PosterPhotoId { get; set; }
 
-[JsonPropertyName("w")]
+[Newtonsoft.Json.JsonProperty("w")]
 		public int? W { get; set; }
 
-[JsonPropertyName("h")]
+[Newtonsoft.Json.JsonProperty("h")]
 		public int? H { get; set; }
 
-[JsonPropertyName("caption")]
-		public PageCaptionBase Caption { get; set; }
+[Newtonsoft.Json.JsonProperty("caption")]
+		public CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase Caption { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -127,12 +129,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 				H = reader.Read<int>();
 			}
 
-			Caption = reader.Read<PageCaptionBase>();
-		}
+			Caption = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "pageBlockEmbed";
+		    return "pageBlockEmbed";
 		}
 	}
 }

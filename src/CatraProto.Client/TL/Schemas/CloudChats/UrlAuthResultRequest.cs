@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UrlAuthResultRequest : UrlAuthResultBase
+	public partial class UrlAuthResultRequest : CatraProto.Client.TL.Schemas.CloudChats.UrlAuthResultBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,19 +16,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -1831650802; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("request_write_access")]
+[Newtonsoft.Json.JsonProperty("request_write_access")]
 		public bool RequestWriteAccess { get; set; }
 
-[JsonPropertyName("bot")]
-		public UserBase Bot { get; set; }
+[Newtonsoft.Json.JsonProperty("bot")]
+		public CatraProto.Client.TL.Schemas.CloudChats.UserBase Bot { get; set; }
 
-[JsonPropertyName("domain")]
+[Newtonsoft.Json.JsonProperty("domain")]
 		public string Domain { get; set; }
 
         
@@ -50,13 +52,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Flags = reader.Read<int>();
 			RequestWriteAccess = FlagsHelper.IsFlagSet(Flags, 0);
-			Bot = reader.Read<UserBase>();
+			Bot = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 			Domain = reader.Read<string>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "urlAuthResultRequest";
+		    return "urlAuthResultRequest";
 		}
 	}
 }

@@ -1,56 +1,59 @@
 using System;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
-	public partial class ImportAuthorization : IMethod
-	{
-
+    public partial class ImportAuthorization : IMethod
+    {
+        [JsonIgnore]
+        public static int StaticConstructorId
+        {
+            get => -470837741;
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => -470837741; }
-        [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(AuthorizationBase);
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(AuthorizationBase);
 
-[JsonPropertyName("id")]
-		public int Id { get; set; }
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("bytes")]
-		public byte[] Bytes { get; set; }
+        [JsonProperty("id")] public int Id { get; set; }
+
+        [JsonProperty("bytes")] public byte[] Bytes { get; set; }
+
+        public override string ToString()
+        {
+            return "auth.importAuthorization";
+        }
 
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Id);
-			writer.Write(Bytes);
+            writer.Write(Id);
+            writer.Write(Bytes);
+        }
 
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			Id = reader.Read<int>();
-			Bytes = reader.Read<byte[]>();
-		}
-
-		public override string ToString()
-		{
-			return "auth.importAuthorization";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Id = reader.Read<int>();
+            Bytes = reader.Read<byte[]>();
+        }
+    }
 }

@@ -1,24 +1,27 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class TextUrl : RichTextBase
+	public partial class TextUrl : CatraProto.Client.TL.Schemas.CloudChats.RichTextBase
 	{
 
 
         public static int StaticConstructorId { get => 1009288385; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("text")]
-		public RichTextBase Text { get; set; }
+[Newtonsoft.Json.JsonProperty("text")]
+		public CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Text { get; set; }
 
-[JsonPropertyName("url")]
+[Newtonsoft.Json.JsonProperty("url")]
 		public string Url { get; set; }
 
-[JsonPropertyName("webpage_id")]
+[Newtonsoft.Json.JsonProperty("webpage_id")]
 		public long WebpageId { get; set; }
 
         
@@ -38,14 +41,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Text = reader.Read<RichTextBase>();
+			Text = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
 			Url = reader.Read<string>();
 			WebpageId = reader.Read<long>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "textUrl";
+		    return "textUrl";
 		}
 	}
 }

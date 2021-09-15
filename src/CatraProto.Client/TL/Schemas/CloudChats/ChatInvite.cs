@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChatInvite : ChatInviteBase
+	public partial class ChatInvite : CatraProto.Client.TL.Schemas.CloudChats.ChatInviteBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -19,35 +20,35 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -540871282; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("channel")]
+[Newtonsoft.Json.JsonProperty("channel")]
 		public bool Channel { get; set; }
 
-[JsonPropertyName("broadcast")]
+[Newtonsoft.Json.JsonProperty("broadcast")]
 		public bool Broadcast { get; set; }
 
-[JsonPropertyName("public")]
+[Newtonsoft.Json.JsonProperty("public")]
 		public bool Public { get; set; }
 
-[JsonPropertyName("megagroup")]
+[Newtonsoft.Json.JsonProperty("megagroup")]
 		public bool Megagroup { get; set; }
 
-[JsonPropertyName("title")]
+[Newtonsoft.Json.JsonProperty("title")]
 		public string Title { get; set; }
 
-[JsonPropertyName("photo")]
-		public PhotoBase Photo { get; set; }
+[Newtonsoft.Json.JsonProperty("photo")]
+		public CatraProto.Client.TL.Schemas.CloudChats.PhotoBase Photo { get; set; }
 
-[JsonPropertyName("participants_count")]
+[Newtonsoft.Json.JsonProperty("participants_count")]
 		public int ParticipantsCount { get; set; }
 
-[JsonPropertyName("participants")]
-		public IList<UserBase> Participants { get; set; }
+[Newtonsoft.Json.JsonProperty("participants")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Participants { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -84,17 +85,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Public = FlagsHelper.IsFlagSet(Flags, 2);
 			Megagroup = FlagsHelper.IsFlagSet(Flags, 3);
 			Title = reader.Read<string>();
-			Photo = reader.Read<PhotoBase>();
+			Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
 			ParticipantsCount = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				Participants = reader.ReadVector<UserBase>();
+				Participants = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "chatInvite";
+		    return "chatInvite";
 		}
 	}
 }

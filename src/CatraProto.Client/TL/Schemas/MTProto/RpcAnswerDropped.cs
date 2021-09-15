@@ -1,24 +1,27 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class RpcAnswerDropped : RpcDropAnswerBase
+	public partial class RpcAnswerDropped : CatraProto.Client.TL.Schemas.MTProto.RpcDropAnswerBase
 	{
 
 
         public static int StaticConstructorId { get => -1539647305; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("msg_id")]
+[Newtonsoft.Json.JsonProperty("msg_id")]
 		public long MsgId { get; set; }
 
-[JsonPropertyName("seq_no")]
+[Newtonsoft.Json.JsonProperty("seq_no")]
 		public int SeqNo { get; set; }
 
-[JsonPropertyName("bytes")]
+[Newtonsoft.Json.JsonProperty("bytes")]
 		public int Bytes { get; set; }
 
         
@@ -41,11 +44,12 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 			MsgId = reader.Read<long>();
 			SeqNo = reader.Read<int>();
 			Bytes = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "rpc_answer_dropped";
+		    return "rpc_answer_dropped";
 		}
 	}
 }

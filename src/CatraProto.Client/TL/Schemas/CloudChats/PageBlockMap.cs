@@ -1,31 +1,34 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PageBlockMap : PageBlockBase
+	public partial class PageBlockMap : CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase
 	{
 
 
         public static int StaticConstructorId { get => -1538310410; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("geo")]
-		public GeoPointBase Geo { get; set; }
+[Newtonsoft.Json.JsonProperty("geo")]
+		public CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase Geo { get; set; }
 
-[JsonPropertyName("zoom")]
+[Newtonsoft.Json.JsonProperty("zoom")]
 		public int Zoom { get; set; }
 
-[JsonPropertyName("w")]
+[Newtonsoft.Json.JsonProperty("w")]
 		public int W { get; set; }
 
-[JsonPropertyName("h")]
+[Newtonsoft.Json.JsonProperty("h")]
 		public int H { get; set; }
 
-[JsonPropertyName("caption")]
-		public PageCaptionBase Caption { get; set; }
+[Newtonsoft.Json.JsonProperty("caption")]
+		public CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase Caption { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -46,16 +49,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Geo = reader.Read<GeoPointBase>();
+			Geo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase>();
 			Zoom = reader.Read<int>();
 			W = reader.Read<int>();
 			H = reader.Read<int>();
-			Caption = reader.Read<PageCaptionBase>();
-		}
+			Caption = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "pageBlockMap";
+		    return "pageBlockMap";
 		}
 	}
 }

@@ -1,61 +1,84 @@
+using System;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections;
 using CatraProto.Client.Flows.LoginFlow;
 using CatraProto.Client.MTProto.Session;
+using CatraProto.Client.MTProto.Settings;
 using CatraProto.Client.TL.Schemas.CloudChats;
+using CatraProto.Client.Updates;
 using Serilog;
+using Serilog.Core;
 
 namespace CatraProto.Client
 {
-    public class TelegramClient
+    public class TelegramClient : IAsyncDisposable
     {
         public Api? Api
         {
-            get => _connectionPool.GetAccountConnection()?.MtProtoState.Api;
+            get => _clientSession.ConnectionPool.GetAccountConnection()?.MtProtoState.Api;
         }
 
-        private readonly ConnectionPool _connectionPool;
         private readonly ClientSession _clientSession;
         private readonly ILogger _logger;
-
-        public TelegramClient(ClientSession clientSession)
+        
+        public TelegramClient(ClientSettings clientSettings, ILogger logger)
         {
-            _clientSession = clientSession;
-            _clientSession.SessionManager.ThrowIfNotRead();
+            _clientSession = new ClientSession(clientSettings, logger);
             _logger = _clientSession.Logger.ForContext<TelegramClient>();
-            _connectionPool = new ConnectionPool(clientSession.SessionManager.SessionData, clientSession.Settings, _logger);
         }
 
-        public async Task<ClientState> StartAsync()
+        public async Task<ClientState> InitClientAsync()
         {
+            await _clientSession.ReadSessionAsync();
             var sessionData = _clientSession.SessionManager.SessionData;
-            var defaultConnection = await _connectionPool.GetConnectionAsync();
+            var defaultConnection = await _clientSession.ConnectionPool.GetConnectionAsync();
 
-            if (!sessionData.Authorization.IsAuthorized(out var dcId, out var userId, out var accessHash))
+            if (!sessionData.Authorization.IsAuthorized(out var dcId, out _, out _))
             {
                 return ClientState.NeedsLogin;
             }
 
             if (defaultConnection.ConnectionInfo.DcId == dcId)
             {
-                _connectionPool.SetAccountConnection(defaultConnection);
+                _clientSession.ConnectionPool.SetAccountConnection(defaultConnection);
                 return ClientState.ReadyToUse;
             }
 
-            var newConnection = await _connectionPool.GetConnectionByDcAsync(dcId!.Value);
-            _connectionPool.SetAccountConnection(newConnection);
-            var rpc = await _connectionPool.GetAccountConnection()!.MtProtoState.Api.CloudChatsApi.Users.GetFullUserAsync(new InputUser
-            {
-                UserId = userId!.Value,
-                AccessHash = 0
-            });
-            
+            var newConnection = await _clientSession.ConnectionPool.GetConnectionByDcAsync(dcId!.Value);
+            _clientSession.ConnectionPool.SetAccountConnection(newConnection);
             return ClientState.ReadyToUse;
         }
 
+        public Task ForceSaveAsync()
+        {
+            return _clientSession.SaveSessionAsync();
+        }
+
+        public ILogger GetLogger<T>()
+        {
+            // ReSharper disable once ContextualLoggerProblem
+            return _logger.ForContext<T>();
+        }
+        
+        public ILogger GetLogger(string contextName)
+        {
+            return _logger.ForContext(Constants.SourceContextPropertyName, contextName);
+        }
+        
+        public async Task Listen()
+        {
+            //var instance = await Updates.UpdatesHandler.CreateInstance(_clientSession.SessionManager.SessionData, _connectionPool, _logger);
+            //_connectionPool.GetAccountConnection()!.MessagesDispatcher.UpdatesHandler = instance;
+        }
+        
         public LoginFlow GetLoginFlow()
         {
-            return new LoginFlow(_connectionPool, _clientSession);
+            return new LoginFlow(_clientSession.ConnectionPool, _clientSession);
+        }
+
+        public async ValueTask DisposeAsync()
+        {
+            await _clientSession.DisposeAsync();
         }
     }
 }

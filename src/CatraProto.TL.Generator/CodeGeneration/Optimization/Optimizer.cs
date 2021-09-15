@@ -34,13 +34,7 @@ namespace CatraProto.TL.Generator.CodeGeneration.Optimization
 			optimizer.FixNamesCollision();
 			return optimizer.Objects;
 		}
-
-		/// <summary>
-		///     Binds each object to one unique type and adds them to the type's "ReferencedObjects" List
-		/// </summary>
-		/// <returns>
-		///     Void. The types are updated inside the class' field instead of being recreated.
-		/// </returns>
+		
 		public void BindObjects()
 		{
 			var newObjectList = new List<Object>(_objects);
@@ -70,12 +64,6 @@ namespace CatraProto.TL.Generator.CodeGeneration.Optimization
 			_areObjectsBind = true;
 		}
 
-		/// <summary>
-		/// </summary>
-		/// <remarks>
-		///     Calling this method will result in calling <see cref="BindObjects" /> if types aren't already bound to their
-		///     objects.
-		/// </remarks>
 		public void BindParameters()
 		{
 			if (!_areObjectsBind)
@@ -115,11 +103,7 @@ namespace CatraProto.TL.Generator.CodeGeneration.Optimization
 
 			_areParametersBind = true;
 		}
-
-		/// <summary>
-		///     Calling this method will result in calling <see cref="BindParameters" /> if types aren't already bound to their
-		///     types.
-		/// </summary>
+		
 		public void FindCommonParameters()
 		{
 			if (!_areParametersBind)
@@ -184,7 +168,8 @@ namespace CatraProto.TL.Generator.CodeGeneration.Optimization
 					x.Namespace.PartialNamespace != null && x.Namespace.PartialNamespace == obj.Namespace.FullNamespace);
 				if (findConflictingNamespace is not null || obj.Namespace.PartialNamespaceArray[^1] == obj.Namespace.Class)
 				{
-					obj.NamingInfo = obj.NamingInfo.PascalCaseName[0] + obj.NamingInfo.PascalCaseName;
+					obj.NamingInfo.PascalCaseName = "Api" + obj.NamingInfo.PascalCaseName;
+					obj.NamingInfo.CamelCaseName = "api" + obj.NamingInfo.PascalCaseName;
 					obj.Namespace.Class = obj.NamingInfo.PascalCaseName;
 				}
 
@@ -192,7 +177,8 @@ namespace CatraProto.TL.Generator.CodeGeneration.Optimization
 				{
 					if (objParameter.NamingInfo.PascalCaseName == obj.NamingInfo.PascalCaseName)
 					{
-						objParameter.NamingInfo = objParameter.NamingInfo.PascalCaseName += "_";
+						objParameter.NamingInfo.PascalCaseName = objParameter.NamingInfo.PascalCaseName += "Field";
+						objParameter.NamingInfo.CamelCaseName = objParameter.NamingInfo.CamelCaseName += "Field";
 					}
 				}
 			}

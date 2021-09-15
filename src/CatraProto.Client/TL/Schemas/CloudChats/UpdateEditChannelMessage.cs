@@ -1,24 +1,27 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateEditChannelMessage : UpdateBase
+	public partial class UpdateEditChannelMessage : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 
 
         public static int StaticConstructorId { get => 457133559; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("message")]
-		public MessageBase Message { get; set; }
+[Newtonsoft.Json.JsonProperty("message")]
+		public CatraProto.Client.TL.Schemas.CloudChats.MessageBase Message { get; set; }
 
-[JsonPropertyName("pts")]
+[Newtonsoft.Json.JsonProperty("pts")]
 		public int Pts { get; set; }
 
-[JsonPropertyName("pts_count")]
+[Newtonsoft.Json.JsonProperty("pts_count")]
 		public int PtsCount { get; set; }
 
         
@@ -38,14 +41,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Message = reader.Read<MessageBase>();
+			Message = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageBase>();
 			Pts = reader.Read<int>();
 			PtsCount = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "updateEditChannelMessage";
+		    return "updateEditChannelMessage";
 		}
 	}
 }

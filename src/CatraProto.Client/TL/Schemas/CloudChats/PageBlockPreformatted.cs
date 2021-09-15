@@ -1,21 +1,24 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PageBlockPreformatted : PageBlockBase
+	public partial class PageBlockPreformatted : CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase
 	{
 
 
         public static int StaticConstructorId { get => -1066346178; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("text")]
-		public RichTextBase Text { get; set; }
+[Newtonsoft.Json.JsonProperty("text")]
+		public CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Text { get; set; }
 
-[JsonPropertyName("language")]
+[Newtonsoft.Json.JsonProperty("language")]
 		public string Language { get; set; }
 
         
@@ -34,13 +37,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Text = reader.Read<RichTextBase>();
+			Text = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
 			Language = reader.Read<string>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "pageBlockPreformatted";
+		    return "pageBlockPreformatted";
 		}
 	}
 }

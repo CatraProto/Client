@@ -1,6 +1,7 @@
 using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+
 #nullable disable
 namespace CatraProto.Client.MTProto.Rpc
 {
@@ -8,6 +9,7 @@ namespace CatraProto.Client.MTProto.Rpc
     {
         public long MessageId { get; set; }
         public object Response { get; set; }
+
         public void Deserialize(Reader reader)
         {
             throw new NotImplementedException();
@@ -15,12 +17,12 @@ namespace CatraProto.Client.MTProto.Rpc
 
         public void Serialize(Writer writer)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void UpdateFlags()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,25 +1,28 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateChatUserTyping : UpdateBase
+	public partial class UpdateChatUserTyping : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 
 
         public static int StaticConstructorId { get => -1704596961; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("chat_id")]
+[Newtonsoft.Json.JsonProperty("chat_id")]
 		public int ChatId { get; set; }
 
-[JsonPropertyName("user_id")]
+[Newtonsoft.Json.JsonProperty("user_id")]
 		public int UserId { get; set; }
 
-[JsonPropertyName("action")]
-		public SendMessageActionBase Action { get; set; }
+[Newtonsoft.Json.JsonProperty("action")]
+		public CatraProto.Client.TL.Schemas.CloudChats.SendMessageActionBase Action { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -40,12 +43,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			ChatId = reader.Read<int>();
 			UserId = reader.Read<int>();
-			Action = reader.Read<SendMessageActionBase>();
-		}
+			Action = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SendMessageActionBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "updateChatUserTyping";
+		    return "updateChatUserTyping";
 		}
 	}
 }

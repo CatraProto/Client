@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,16 +7,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class StatsGroupTopAdminBase : IObject
     {
 
-[JsonPropertyName("user_id")]
+[Newtonsoft.Json.JsonProperty("user_id")]
 		public abstract int UserId { get; set; }
 
-[JsonPropertyName("deleted")]
+[Newtonsoft.Json.JsonProperty("deleted")]
 		public abstract int Deleted { get; set; }
 
-[JsonPropertyName("kicked")]
+[Newtonsoft.Json.JsonProperty("kicked")]
 		public abstract int Kicked { get; set; }
 
-[JsonPropertyName("banned")]
+[Newtonsoft.Json.JsonProperty("banned")]
 		public abstract int Banned { get; set; }
 
         public abstract void UpdateFlags();

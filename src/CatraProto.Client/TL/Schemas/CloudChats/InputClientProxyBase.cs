@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,10 +7,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class InputClientProxyBase : IObject
     {
 
-[JsonPropertyName("address")]
+[Newtonsoft.Json.JsonProperty("address")]
 		public abstract string Address { get; set; }
 
-[JsonPropertyName("port")]
+[Newtonsoft.Json.JsonProperty("port")]
 		public abstract int Port { get; set; }
 
         public abstract void UpdateFlags();

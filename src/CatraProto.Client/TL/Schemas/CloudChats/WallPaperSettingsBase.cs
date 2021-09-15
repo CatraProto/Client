@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,22 +7,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class WallPaperSettingsBase : IObject
     {
 
-[JsonPropertyName("blur")]
+[Newtonsoft.Json.JsonProperty("blur")]
 		public abstract bool Blur { get; set; }
 
-[JsonPropertyName("motion")]
+[Newtonsoft.Json.JsonProperty("motion")]
 		public abstract bool Motion { get; set; }
 
-[JsonPropertyName("background_color")]
+[Newtonsoft.Json.JsonProperty("background_color")]
 		public abstract int? BackgroundColor { get; set; }
 
-[JsonPropertyName("second_background_color")]
+[Newtonsoft.Json.JsonProperty("second_background_color")]
 		public abstract int? SecondBackgroundColor { get; set; }
 
-[JsonPropertyName("intensity")]
+[Newtonsoft.Json.JsonProperty("intensity")]
 		public abstract int? Intensity { get; set; }
 
-[JsonPropertyName("rotation")]
+[Newtonsoft.Json.JsonProperty("rotation")]
 		public abstract int? Rotation { get; set; }
 
         public abstract void UpdateFlags();

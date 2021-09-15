@@ -1,36 +1,39 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class SecureFile : SecureFileBase
+	public partial class SecureFile : CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase
 	{
 
 
         public static int StaticConstructorId { get => -534283678; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public long Id { get; set; }
 
-[JsonPropertyName("access_hash")]
+[Newtonsoft.Json.JsonProperty("access_hash")]
 		public long AccessHash { get; set; }
 
-[JsonPropertyName("size")]
+[Newtonsoft.Json.JsonProperty("size")]
 		public int Size { get; set; }
 
-[JsonPropertyName("dc_id")]
+[Newtonsoft.Json.JsonProperty("dc_id")]
 		public int DcId { get; set; }
 
-[JsonPropertyName("date")]
+[Newtonsoft.Json.JsonProperty("date")]
 		public int Date { get; set; }
 
-[JsonPropertyName("file_hash")]
+[Newtonsoft.Json.JsonProperty("file_hash")]
 		public byte[] FileHash { get; set; }
 
-[JsonPropertyName("secret")]
+[Newtonsoft.Json.JsonProperty("secret")]
 		public byte[] Secret { get; set; }
 
         
@@ -61,11 +64,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Date = reader.Read<int>();
 			FileHash = reader.Read<byte[]>();
 			Secret = reader.Read<byte[]>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "secureFile";
+		    return "secureFile";
 		}
 	}
 }

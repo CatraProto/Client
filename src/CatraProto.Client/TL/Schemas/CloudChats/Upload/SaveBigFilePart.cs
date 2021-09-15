@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -11,27 +12,27 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 	{
 
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => -562337987; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(bool);
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(bool);
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("file_id")]
+[Newtonsoft.Json.JsonProperty("file_id")]
 		public long FileId { get; set; }
 
-[JsonPropertyName("file_part")]
+[Newtonsoft.Json.JsonProperty("file_part")]
 		public int FilePart { get; set; }
 
-[JsonPropertyName("file_total_parts")]
+[Newtonsoft.Json.JsonProperty("file_total_parts")]
 		public int FileTotalParts { get; set; }
 
-[JsonPropertyName("bytes")]
+[Newtonsoft.Json.JsonProperty("bytes")]
 		public byte[] Bytes { get; set; }
 
 
@@ -56,11 +57,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 			FilePart = reader.Read<int>();
 			FileTotalParts = reader.Read<int>();
 			Bytes = reader.Read<byte[]>();
-		}
 
+		}
+		
 		public override string ToString()
 		{
-			return "upload.saveBigFilePart";
+		    return "upload.saveBigFilePart";
 		}
 	}
 }

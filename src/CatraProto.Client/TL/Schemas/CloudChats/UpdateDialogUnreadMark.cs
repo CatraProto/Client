@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateDialogUnreadMark : UpdateBase
+	public partial class UpdateDialogUnreadMark : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,17 +16,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -513517117; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("unread")]
+[Newtonsoft.Json.JsonProperty("unread")]
 		public bool Unread { get; set; }
 
-[JsonPropertyName("peer")]
-		public DialogPeerBase Peer { get; set; }
+[Newtonsoft.Json.JsonProperty("peer")]
+		public CatraProto.Client.TL.Schemas.CloudChats.DialogPeerBase Peer { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -46,12 +48,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Flags = reader.Read<int>();
 			Unread = FlagsHelper.IsFlagSet(Flags, 0);
-			Peer = reader.Read<DialogPeerBase>();
-		}
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DialogPeerBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "updateDialogUnreadMark";
+		    return "updateDialogUnreadMark";
 		}
 	}
 }

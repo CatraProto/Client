@@ -1,8 +1,8 @@
 using System;
-using System.Numerics;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -12,19 +12,19 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 	{
 
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => 1615239032; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(ResPQBase);
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.ResPQBase);
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("nonce")]
-		public BigInteger Nonce { get; set; }
+[Newtonsoft.Json.JsonProperty("nonce")]
+		public System.Numerics.BigInteger Nonce { get; set; }
 
 
 		public void UpdateFlags() 
@@ -41,12 +41,13 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
 		public void Deserialize(Reader reader)
 		{
-			Nonce = reader.Read<BigInteger>(128);
-		}
+			Nonce = reader.Read<System.Numerics.BigInteger>(128);
 
+		}
+		
 		public override string ToString()
 		{
-			return "req_pq";
+		    return "req_pq";
 		}
 	}
 }

@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class WebPageAttributeTheme : WebPageAttributeBase
+	public partial class WebPageAttributeTheme : CatraProto.Client.TL.Schemas.CloudChats.WebPageAttributeBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,17 +17,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 1421174295; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("documents")]
-		public override IList<DocumentBase> Documents { get; set; }
+[Newtonsoft.Json.JsonProperty("documents")]
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase> Documents { get; set; }
 
-[JsonPropertyName("settings")]
-		public override ThemeSettingsBase Settings { get; set; }
+[Newtonsoft.Json.JsonProperty("settings")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.ThemeSettingsBase Settings { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -59,18 +60,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Documents = reader.ReadVector<DocumentBase>();
+				Documents = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Settings = reader.Read<ThemeSettingsBase>();
+				Settings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ThemeSettingsBase>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "webPageAttributeTheme";
+		    return "webPageAttributeTheme";
 		}
 	}
 }

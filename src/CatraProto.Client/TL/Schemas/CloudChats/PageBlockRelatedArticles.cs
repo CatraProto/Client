@@ -1,23 +1,25 @@
+using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PageBlockRelatedArticles : PageBlockBase
+	public partial class PageBlockRelatedArticles : CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase
 	{
 
 
         public static int StaticConstructorId { get => 370236054; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("title")]
-		public RichTextBase Title { get; set; }
+[Newtonsoft.Json.JsonProperty("title")]
+		public CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Title { get; set; }
 
-[JsonPropertyName("articles")]
-		public IList<PageRelatedArticleBase> Articles { get; set; }
+[Newtonsoft.Json.JsonProperty("articles")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.PageRelatedArticleBase> Articles { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -35,13 +37,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Title = reader.Read<RichTextBase>();
-			Articles = reader.ReadVector<PageRelatedArticleBase>();
-		}
+			Title = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
+			Articles = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PageRelatedArticleBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "pageBlockRelatedArticles";
+		    return "pageBlockRelatedArticles";
 		}
 	}
 }

@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelParticipantsMentions : ChannelParticipantsFilterBase
+	public partial class ChannelParticipantsMentions : CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantsFilterBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,16 +17,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -531931925; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("q")]
+[Newtonsoft.Json.JsonProperty("q")]
 		public string Q { get; set; }
 
-[JsonPropertyName("top_msg_id")]
+[Newtonsoft.Json.JsonProperty("top_msg_id")]
 		public int? TopMsgId { get; set; }
 
         
@@ -65,11 +67,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			{
 				TopMsgId = reader.Read<int>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "channelParticipantsMentions";
+		    return "channelParticipantsMentions";
 		}
 	}
 }

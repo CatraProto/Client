@@ -1,12 +1,13 @@
 using System;
 using System.Threading.Tasks;
 using CatraProto.TL;
+using Serilog;
 
 namespace CatraProto.Client.MTProto.Session.Interfaces
 {
-    interface IAsyncSessionSerializer : ISerializer
+    public interface IAsyncSessionSerializer : IDisposable
     {
-        public Task ReadAsync(Reader reader);
-        public Task SaveAsync(Writer writer);
+        public Task<byte[]> ReadAsync(ILogger logger);
+        public Task SaveAsync(byte[] data, ILogger logger);
     }
 }

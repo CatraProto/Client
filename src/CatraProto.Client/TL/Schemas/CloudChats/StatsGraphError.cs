@@ -1,18 +1,21 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class StatsGraphError : StatsGraphBase
+	public partial class StatsGraphError : CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase
 	{
 
 
         public static int StaticConstructorId { get => -1092839390; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("error")]
+[Newtonsoft.Json.JsonProperty("error")]
 		public string Error { get; set; }
 
         
@@ -31,11 +34,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Error = reader.Read<string>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "statsGraphError";
+		    return "statsGraphError";
 		}
 	}
 }

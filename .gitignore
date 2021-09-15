@@ -338,3 +338,6 @@ ASALocalRun/
 
 #InternalTesting
 src/CatraProto.Start/
+
+#visualstudiocode
+.vscode/

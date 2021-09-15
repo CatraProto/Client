@@ -1,8 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
-using CatraProto.Client.TL.Schemas.CloudChats.Messages;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -12,33 +12,33 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 	{
 
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => 1445996571; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(MessagesBase);
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase);
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("channel")]
-		public InputChannelBase Channel { get; set; }
+[Newtonsoft.Json.JsonProperty("channel")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase Channel { get; set; }
 
-[JsonPropertyName("msg_id")]
+[Newtonsoft.Json.JsonProperty("msg_id")]
 		public int MsgId { get; set; }
 
-[JsonPropertyName("offset_rate")]
+[Newtonsoft.Json.JsonProperty("offset_rate")]
 		public int OffsetRate { get; set; }
 
-[JsonPropertyName("offset_peer")]
-		public InputPeerBase OffsetPeer { get; set; }
+[Newtonsoft.Json.JsonProperty("offset_peer")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase OffsetPeer { get; set; }
 
-[JsonPropertyName("offset_id")]
+[Newtonsoft.Json.JsonProperty("offset_id")]
 		public int OffsetId { get; set; }
 
-[JsonPropertyName("limit")]
+[Newtonsoft.Json.JsonProperty("limit")]
 		public int Limit { get; set; }
 
 
@@ -61,17 +61,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 
 		public void Deserialize(Reader reader)
 		{
-			Channel = reader.Read<InputChannelBase>();
+			Channel = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
 			MsgId = reader.Read<int>();
 			OffsetRate = reader.Read<int>();
-			OffsetPeer = reader.Read<InputPeerBase>();
+			OffsetPeer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
 			OffsetId = reader.Read<int>();
 			Limit = reader.Read<int>();
-		}
 
+		}
+		
 		public override string ToString()
 		{
-			return "stats.getMessagePublicForwards";
+		    return "stats.getMessagePublicForwards";
 		}
 	}
 }

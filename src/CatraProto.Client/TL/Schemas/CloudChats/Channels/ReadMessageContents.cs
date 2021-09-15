@@ -1,57 +1,60 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 {
-	public partial class ReadMessageContents : IMethod
-	{
-
+    public partial class ReadMessageContents : IMethod
+    {
+        [JsonIgnore]
+        public static int StaticConstructorId
+        {
+            get => -357180360;
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => -357180360; }
-        [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(bool);
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
 
-[JsonPropertyName("channel")]
-		public InputChannelBase Channel { get; set; }
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("id")]
-		public IList<int> Id { get; set; }
+        [JsonProperty("channel")] public InputChannelBase Channel { get; set; }
+
+        [JsonProperty("id")] public IList<int> Id { get; set; }
+
+        public override string ToString()
+        {
+            return "channels.readMessageContents";
+        }
 
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Channel);
-			writer.Write(Id);
+            writer.Write(Channel);
+            writer.Write(Id);
+        }
 
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			Channel = reader.Read<InputChannelBase>();
-			Id = reader.ReadVector<int>();
-		}
-
-		public override string ToString()
-		{
-			return "channels.readMessageContents";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Channel = reader.Read<InputChannelBase>();
+            Id = reader.ReadVector<int>();
+        }
+    }
 }

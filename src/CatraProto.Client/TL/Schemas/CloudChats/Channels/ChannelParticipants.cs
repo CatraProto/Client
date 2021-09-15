@@ -1,52 +1,56 @@
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using Newtonsoft.Json;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 {
-	public partial class ChannelParticipants : ChannelParticipantsBase
-	{
+    public partial class ChannelParticipants : ChannelParticipantsBase
+    {
+        public static int StaticConstructorId
+        {
+            get => -177282392;
+        }
 
-
-        public static int StaticConstructorId { get => -177282392; }
         [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonPropertyName("count")]
-		public int Count { get; set; }
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonPropertyName("participants")]
-		public IList<CloudChats.ChannelParticipantBase> Participants { get; set; }
+        [JsonProperty("count")] public int Count { get; set; }
 
-[JsonPropertyName("users")]
-		public IList<UserBase> Users { get; set; }
+        [JsonProperty("participants")] public IList<CloudChats.ChannelParticipantBase> Participants { get; set; }
 
-        
-		public override void UpdateFlags() 
-		{
+        [JsonProperty("users")] public IList<UserBase> Users { get; set; }
 
-		}
 
-		public override void Serialize(Writer writer)
-		{
-		    if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Count);
-			writer.Write(Participants);
-			writer.Write(Users);
+        public override void UpdateFlags()
+        {
+        }
 
-		}
+        public override void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public override void Deserialize(Reader reader)
-		{
-			Count = reader.Read<int>();
-			Participants = reader.ReadVector<CloudChats.ChannelParticipantBase>();
-			Users = reader.ReadVector<UserBase>();
-		}
+            writer.Write(Count);
+            writer.Write(Participants);
+            writer.Write(Users);
+        }
 
-		public override string ToString()
-		{
-			return "channels.channelParticipants";
-		}
-	}
+        public override void Deserialize(Reader reader)
+        {
+            Count = reader.Read<int>();
+            Participants = reader.ReadVector<CloudChats.ChannelParticipantBase>();
+            Users = reader.ReadVector<UserBase>();
+        }
+
+        public override string ToString()
+        {
+            return "channels.channelParticipants";
+        }
+    }
 }

@@ -1,18 +1,21 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChatEmpty : ChatBase
+	public partial class ChatEmpty : CatraProto.Client.TL.Schemas.CloudChats.ChatBase
 	{
 
 
         public static int StaticConstructorId { get => -1683826688; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public override int Id { get; set; }
 
         
@@ -31,11 +34,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Id = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "chatEmpty";
+		    return "chatEmpty";
 		}
 	}
 }

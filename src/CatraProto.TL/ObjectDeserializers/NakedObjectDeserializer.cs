@@ -8,7 +8,7 @@ namespace CatraProto.TL.ObjectDeserializers
     {
         public T GetValue(Reader reader)
         {
-             var instance = Activator.CreateInstance<T>();
+            var instance = Activator.CreateInstance<T>();
             instance.Deserialize(reader);
             return instance;
         }

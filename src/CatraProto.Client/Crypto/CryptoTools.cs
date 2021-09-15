@@ -42,9 +42,11 @@ namespace CatraProto.Client.Crypto
             var first = FastFactor((long)pq);
             var second = (long)pq / first;
 
-            var transformedFirst = RemoveFirstBytes(BitConverter.GetBytes(first).Reverse().ToArray());
-            var transformedSecond = RemoveFirstBytes(BitConverter.GetBytes(second).Reverse().ToArray());
-            return first < second ? new Tuple<byte[], byte[]>(transformedFirst, transformedSecond) : new Tuple<byte[], byte[]>(transformedSecond, transformedFirst);
+            var transformedFirst = RemoveStartingZeros(BitConverter.GetBytes(first).Reverse().ToArray());
+            var transformedSecond = RemoveStartingZeros(BitConverter.GetBytes(second).Reverse().ToArray());
+            return first < second
+                ? new Tuple<byte[], byte[]>(transformedFirst, transformedSecond)
+                : new Tuple<byte[], byte[]>(transformedSecond, transformedFirst);
         }
 
         //https://github.com/UnigramDev/Unigram/blob/cd8ddb40bffd427fd9bc3fa6f2b99608e2118124/Unigram/Unigram.Api/Helpers/Utils.cs#L244
@@ -143,10 +145,9 @@ namespace CatraProto.Client.Crypto
             return byteArray;
         }
 
-        public static byte[] RemoveFirstBytes(byte[] array)
+        public static byte[] RemoveStartingZeros(byte[] array)
         {
             var result = new List<byte>(array);
-
             while (result.Count > 0 && result[0] == 0x00)
             {
                 result.RemoveAt(0);

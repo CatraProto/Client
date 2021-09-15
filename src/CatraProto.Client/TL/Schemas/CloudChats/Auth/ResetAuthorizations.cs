@@ -1,46 +1,50 @@
 using System;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
-	public partial class ResetAuthorizations : IMethod
-	{
-
+    public partial class ResetAuthorizations : IMethod
+    {
+        [JsonIgnore]
+        public static int StaticConstructorId
+        {
+            get => -1616179942;
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => -1616179942; }
-        [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(bool);
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
+
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
+
+        public override string ToString()
+        {
+            return "auth.resetAuthorizations";
+        }
 
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
+        }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-
-		}
-
-		public void Deserialize(Reader reader)
-		{
-		}
-
-		public override string ToString()
-		{
-			return "auth.resetAuthorizations";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+        }
+    }
 }

@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageFwdHeader : MessageFwdHeaderBase
+	public partial class MessageFwdHeader : CatraProto.Client.TL.Schemas.CloudChats.MessageFwdHeaderBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -21,37 +23,37 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 1601666510; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("imported")]
+[Newtonsoft.Json.JsonProperty("imported")]
 		public override bool Imported { get; set; }
 
-[JsonPropertyName("from_id")]
-		public override PeerBase FromId { get; set; }
+[Newtonsoft.Json.JsonProperty("from_id")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.PeerBase FromId { get; set; }
 
-[JsonPropertyName("from_name")]
+[Newtonsoft.Json.JsonProperty("from_name")]
 		public override string FromName { get; set; }
 
-[JsonPropertyName("date")]
+[Newtonsoft.Json.JsonProperty("date")]
 		public override int Date { get; set; }
 
-[JsonPropertyName("channel_post")]
+[Newtonsoft.Json.JsonProperty("channel_post")]
 		public override int? ChannelPost { get; set; }
 
-[JsonPropertyName("post_author")]
+[Newtonsoft.Json.JsonProperty("post_author")]
 		public override string PostAuthor { get; set; }
 
-[JsonPropertyName("saved_from_peer")]
-		public override PeerBase SavedFromPeer { get; set; }
+[Newtonsoft.Json.JsonProperty("saved_from_peer")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.PeerBase SavedFromPeer { get; set; }
 
-[JsonPropertyName("saved_from_msg_id")]
+[Newtonsoft.Json.JsonProperty("saved_from_msg_id")]
 		public override int? SavedFromMsgId { get; set; }
 
-[JsonPropertyName("psa_type")]
+[Newtonsoft.Json.JsonProperty("psa_type")]
 		public override string PsaType { get; set; }
 
         
@@ -118,7 +120,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Imported = FlagsHelper.IsFlagSet(Flags, 7);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				FromId = reader.Read<PeerBase>();
+				FromId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
@@ -139,7 +141,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				SavedFromPeer = reader.Read<PeerBase>();
+				SavedFromPeer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
@@ -151,11 +153,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			{
 				PsaType = reader.Read<string>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "messageFwdHeader";
+		    return "messageFwdHeader";
 		}
 	}
 }

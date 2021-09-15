@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -11,19 +12,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Users
 	{
 
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => -902781519; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(UserFullBase);
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UserFullBase);
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("id")]
-		public InputUserBase Id { get; set; }
+[Newtonsoft.Json.JsonProperty("id")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase Id { get; set; }
 
 
 		public void UpdateFlags() 
@@ -40,12 +41,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Users
 
 		public void Deserialize(Reader reader)
 		{
-			Id = reader.Read<InputUserBase>();
-		}
+			Id = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
 
+		}
+		
 		public override string ToString()
 		{
-			return "users.getFullUser";
+		    return "users.getFullUser";
 		}
 	}
 }

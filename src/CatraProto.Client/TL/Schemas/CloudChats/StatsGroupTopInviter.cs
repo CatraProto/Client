@@ -1,21 +1,24 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class StatsGroupTopInviter : StatsGroupTopInviterBase
+	public partial class StatsGroupTopInviter : CatraProto.Client.TL.Schemas.CloudChats.StatsGroupTopInviterBase
 	{
 
 
         public static int StaticConstructorId { get => 831924812; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("user_id")]
+[Newtonsoft.Json.JsonProperty("user_id")]
 		public override int UserId { get; set; }
 
-[JsonPropertyName("invitations")]
+[Newtonsoft.Json.JsonProperty("invitations")]
 		public override int Invitations { get; set; }
 
         
@@ -36,11 +39,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			UserId = reader.Read<int>();
 			Invitations = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "statsGroupTopInviter";
+		    return "statsGroupTopInviter";
 		}
 	}
 }

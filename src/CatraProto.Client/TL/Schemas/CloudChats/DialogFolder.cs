@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class DialogFolder : DialogBase
+	public partial class DialogFolder : CatraProto.Client.TL.Schemas.CloudChats.DialogBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,34 +16,34 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 1908216652; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("pinned")]
+[Newtonsoft.Json.JsonProperty("pinned")]
 		public override bool Pinned { get; set; }
 
-[JsonPropertyName("folder")]
-		public FolderBase Folder { get; set; }
+[Newtonsoft.Json.JsonProperty("folder")]
+		public CatraProto.Client.TL.Schemas.CloudChats.FolderBase Folder { get; set; }
 
-[JsonPropertyName("peer")]
-		public override PeerBase Peer { get; set; }
+[Newtonsoft.Json.JsonProperty("peer")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
 
-[JsonPropertyName("top_message")]
+[Newtonsoft.Json.JsonProperty("top_message")]
 		public override int TopMessage { get; set; }
 
-[JsonPropertyName("unread_muted_peers_count")]
+[Newtonsoft.Json.JsonProperty("unread_muted_peers_count")]
 		public int UnreadMutedPeersCount { get; set; }
 
-[JsonPropertyName("unread_unmuted_peers_count")]
+[Newtonsoft.Json.JsonProperty("unread_unmuted_peers_count")]
 		public int UnreadUnmutedPeersCount { get; set; }
 
-[JsonPropertyName("unread_muted_messages_count")]
+[Newtonsoft.Json.JsonProperty("unread_muted_messages_count")]
 		public int UnreadMutedMessagesCount { get; set; }
 
-[JsonPropertyName("unread_unmuted_messages_count")]
+[Newtonsoft.Json.JsonProperty("unread_unmuted_messages_count")]
 		public int UnreadUnmutedMessagesCount { get; set; }
 
         
@@ -70,18 +72,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Flags = reader.Read<int>();
 			Pinned = FlagsHelper.IsFlagSet(Flags, 2);
-			Folder = reader.Read<FolderBase>();
-			Peer = reader.Read<PeerBase>();
+			Folder = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.FolderBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
 			TopMessage = reader.Read<int>();
 			UnreadMutedPeersCount = reader.Read<int>();
 			UnreadUnmutedPeersCount = reader.Read<int>();
 			UnreadMutedMessagesCount = reader.Read<int>();
 			UnreadUnmutedMessagesCount = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "dialogFolder";
+		    return "dialogFolder";
 		}
 	}
 }

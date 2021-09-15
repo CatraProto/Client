@@ -5,24 +5,14 @@ namespace CatraProto.Client.MTProto.Settings
     public class ClientSettings
     {
         public ConnectionSettings ConnectionSettings { get; }
-        public ApiSettings ApiSettings { get; init; }
-        public string SessionName { get; init; }
-        public string SessionPath { get; init; }
+        public SessionSettings SessionSettings { get; }
+        public ApiSettings ApiSettings { get; }
 
-        public ClientSettings(ApiSettings apiSettings, string? sessionName, ConnectionSettings? connectionSetting = null, string? sessionPath = null)
+        public ClientSettings(SessionSettings sessionSettings, ApiSettings apiSettings, ConnectionSettings? connectionSetting = null)
         {
             ConnectionSettings = connectionSetting ?? new ConnectionSettings();
-            
-            SessionName = sessionName ?? throw new ArgumentNullException(nameof(sessionName));
+            SessionSettings = sessionSettings;
             ApiSettings = apiSettings;
-            if (sessionPath == null)
-            {
-                SessionPath = sessionName + ".catra";
-            }
-            else
-            {
-                SessionPath = sessionPath;
-            }
         }
     }
 }

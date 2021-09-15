@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -16,48 +17,48 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Params = 1 << 1
 		}
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => -1043505495; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(IObject);
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(IObject);
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("api_id")]
+[Newtonsoft.Json.JsonProperty("api_id")]
 		public int ApiId { get; set; }
 
-[JsonPropertyName("device_model")]
+[Newtonsoft.Json.JsonProperty("device_model")]
 		public string DeviceModel { get; set; }
 
-[JsonPropertyName("system_version")]
+[Newtonsoft.Json.JsonProperty("system_version")]
 		public string SystemVersion { get; set; }
 
-[JsonPropertyName("app_version")]
+[Newtonsoft.Json.JsonProperty("app_version")]
 		public string AppVersion { get; set; }
 
-[JsonPropertyName("system_lang_code")]
+[Newtonsoft.Json.JsonProperty("system_lang_code")]
 		public string SystemLangCode { get; set; }
 
-[JsonPropertyName("lang_pack")]
+[Newtonsoft.Json.JsonProperty("lang_pack")]
 		public string LangPack { get; set; }
 
-[JsonPropertyName("lang_code")]
+[Newtonsoft.Json.JsonProperty("lang_code")]
 		public string LangCode { get; set; }
 
-[JsonPropertyName("proxy")]
-		public InputClientProxyBase Proxy { get; set; }
+[Newtonsoft.Json.JsonProperty("proxy")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputClientProxyBase Proxy { get; set; }
 
-[JsonPropertyName("params")]
-		public JSONValueBase Params { get; set; }
+[Newtonsoft.Json.JsonProperty("params")]
+		public CatraProto.Client.TL.Schemas.CloudChats.JSONValueBase Params { get; set; }
 
-[JsonPropertyName("query")]
+[Newtonsoft.Json.JsonProperty("query")]
 		public IObject Query { get; set; }
 
 
@@ -106,20 +107,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			LangCode = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Proxy = reader.Read<InputClientProxyBase>();
+				Proxy = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputClientProxyBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Params = reader.Read<JSONValueBase>();
+				Params = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.JSONValueBase>();
 			}
 
 			Query = reader.Read<IObject>();
-		}
 
+		}
+		
 		public override string ToString()
 		{
-			return "initConnection";
+		    return "initConnection";
 		}
 	}
 }

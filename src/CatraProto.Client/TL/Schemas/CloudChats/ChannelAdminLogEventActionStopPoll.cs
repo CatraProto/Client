@@ -1,19 +1,22 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelAdminLogEventActionStopPoll : ChannelAdminLogEventActionBase
+	public partial class ChannelAdminLogEventActionStopPoll : CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionBase
 	{
 
 
         public static int StaticConstructorId { get => -1895328189; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("message")]
-		public MessageBase Message { get; set; }
+[Newtonsoft.Json.JsonProperty("message")]
+		public CatraProto.Client.TL.Schemas.CloudChats.MessageBase Message { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -30,12 +33,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Message = reader.Read<MessageBase>();
-		}
+			Message = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "channelAdminLogEventActionStopPoll";
+		    return "channelAdminLogEventActionStopPoll";
 		}
 	}
 }

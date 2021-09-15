@@ -1,61 +1,63 @@
 using System;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class GetAuthorizationForm : IMethod
-	{
-
+    public partial class GetAuthorizationForm : IMethod
+    {
+        [JsonIgnore]
+        public static int StaticConstructorId
+        {
+            get => -1200903967;
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => -1200903967; }
-        [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(AuthorizationFormBase);
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(AuthorizationFormBase);
 
-[JsonPropertyName("bot_id")]
-		public int BotId { get; set; }
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("scope")]
-		public string Scope { get; set; }
+        [JsonProperty("bot_id")] public int BotId { get; set; }
 
-[JsonPropertyName("public_key")]
-		public string PublicKey { get; set; }
+        [JsonProperty("scope")] public string Scope { get; set; }
+
+        [JsonProperty("public_key")] public string PublicKey { get; set; }
+
+        public override string ToString()
+        {
+            return "account.getAuthorizationForm";
+        }
 
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(BotId);
-			writer.Write(Scope);
-			writer.Write(PublicKey);
+            writer.Write(BotId);
+            writer.Write(Scope);
+            writer.Write(PublicKey);
+        }
 
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			BotId = reader.Read<int>();
-			Scope = reader.Read<string>();
-			PublicKey = reader.Read<string>();
-		}
-
-		public override string ToString()
-		{
-			return "account.getAuthorizationForm";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            BotId = reader.Read<int>();
+            Scope = reader.Read<string>();
+            PublicKey = reader.Read<string>();
+        }
+    }
 }

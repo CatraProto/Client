@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -11,27 +12,27 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 	{
 
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => -1848823128; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(PhotosBase);
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Photos.PhotosBase);
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("user_id")]
-		public InputUserBase UserId { get; set; }
+[Newtonsoft.Json.JsonProperty("user_id")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase UserId { get; set; }
 
-[JsonPropertyName("offset")]
+[Newtonsoft.Json.JsonProperty("offset")]
 		public int Offset { get; set; }
 
-[JsonPropertyName("max_id")]
+[Newtonsoft.Json.JsonProperty("max_id")]
 		public long MaxId { get; set; }
 
-[JsonPropertyName("limit")]
+[Newtonsoft.Json.JsonProperty("limit")]
 		public int Limit { get; set; }
 
 
@@ -52,15 +53,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 
 		public void Deserialize(Reader reader)
 		{
-			UserId = reader.Read<InputUserBase>();
+			UserId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
 			Offset = reader.Read<int>();
 			MaxId = reader.Read<long>();
 			Limit = reader.Read<int>();
-		}
 
+		}
+		
 		public override string ToString()
 		{
-			return "photos.getUserPhotos";
+		    return "photos.getUserPhotos";
 		}
 	}
 }

@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,31 +7,31 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class PeerSettingsBase : IObject
     {
 
-[JsonPropertyName("report_spam")]
+[Newtonsoft.Json.JsonProperty("report_spam")]
 		public abstract bool ReportSpam { get; set; }
 
-[JsonPropertyName("add_contact")]
+[Newtonsoft.Json.JsonProperty("add_contact")]
 		public abstract bool AddContact { get; set; }
 
-[JsonPropertyName("block_contact")]
+[Newtonsoft.Json.JsonProperty("block_contact")]
 		public abstract bool BlockContact { get; set; }
 
-[JsonPropertyName("share_contact")]
+[Newtonsoft.Json.JsonProperty("share_contact")]
 		public abstract bool ShareContact { get; set; }
 
-[JsonPropertyName("need_contacts_exception")]
+[Newtonsoft.Json.JsonProperty("need_contacts_exception")]
 		public abstract bool NeedContactsException { get; set; }
 
-[JsonPropertyName("report_geo")]
+[Newtonsoft.Json.JsonProperty("report_geo")]
 		public abstract bool ReportGeo { get; set; }
 
-[JsonPropertyName("autoarchived")]
+[Newtonsoft.Json.JsonProperty("autoarchived")]
 		public abstract bool Autoarchived { get; set; }
 
-[JsonPropertyName("invite_members")]
+[Newtonsoft.Json.JsonProperty("invite_members")]
 		public abstract bool InviteMembers { get; set; }
 
-[JsonPropertyName("geo_distance")]
+[Newtonsoft.Json.JsonProperty("geo_distance")]
 		public abstract int? GeoDistance { get; set; }
 
         public abstract void UpdateFlags();

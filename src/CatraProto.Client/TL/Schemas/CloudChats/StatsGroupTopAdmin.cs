@@ -1,27 +1,30 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class StatsGroupTopAdmin : StatsGroupTopAdminBase
+	public partial class StatsGroupTopAdmin : CatraProto.Client.TL.Schemas.CloudChats.StatsGroupTopAdminBase
 	{
 
 
         public static int StaticConstructorId { get => 1611985938; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("user_id")]
+[Newtonsoft.Json.JsonProperty("user_id")]
 		public override int UserId { get; set; }
 
-[JsonPropertyName("deleted")]
+[Newtonsoft.Json.JsonProperty("deleted")]
 		public override int Deleted { get; set; }
 
-[JsonPropertyName("kicked")]
+[Newtonsoft.Json.JsonProperty("kicked")]
 		public override int Kicked { get; set; }
 
-[JsonPropertyName("banned")]
+[Newtonsoft.Json.JsonProperty("banned")]
 		public override int Banned { get; set; }
 
         
@@ -46,11 +49,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Deleted = reader.Read<int>();
 			Kicked = reader.Read<int>();
 			Banned = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "statsGroupTopAdmin";
+		    return "statsGroupTopAdmin";
 		}
 	}
 }

@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class Invoice : InvoiceBase
+	public partial class Invoice : CatraProto.Client.TL.Schemas.CloudChats.InvoiceBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -22,41 +23,41 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -1022713000; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("test")]
+[Newtonsoft.Json.JsonProperty("test")]
 		public override bool Test { get; set; }
 
-[JsonPropertyName("name_requested")]
+[Newtonsoft.Json.JsonProperty("name_requested")]
 		public override bool NameRequested { get; set; }
 
-[JsonPropertyName("phone_requested")]
+[Newtonsoft.Json.JsonProperty("phone_requested")]
 		public override bool PhoneRequested { get; set; }
 
-[JsonPropertyName("email_requested")]
+[Newtonsoft.Json.JsonProperty("email_requested")]
 		public override bool EmailRequested { get; set; }
 
-[JsonPropertyName("shipping_address_requested")]
+[Newtonsoft.Json.JsonProperty("shipping_address_requested")]
 		public override bool ShippingAddressRequested { get; set; }
 
-[JsonPropertyName("flexible")]
+[Newtonsoft.Json.JsonProperty("flexible")]
 		public override bool Flexible { get; set; }
 
-[JsonPropertyName("phone_to_provider")]
+[Newtonsoft.Json.JsonProperty("phone_to_provider")]
 		public override bool PhoneToProvider { get; set; }
 
-[JsonPropertyName("email_to_provider")]
+[Newtonsoft.Json.JsonProperty("email_to_provider")]
 		public override bool EmailToProvider { get; set; }
 
-[JsonPropertyName("currency")]
+[Newtonsoft.Json.JsonProperty("currency")]
 		public override string Currency { get; set; }
 
-[JsonPropertyName("prices")]
-		public override IList<LabeledPriceBase> Prices { get; set; }
+[Newtonsoft.Json.JsonProperty("prices")]
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase> Prices { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -94,12 +95,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			PhoneToProvider = FlagsHelper.IsFlagSet(Flags, 6);
 			EmailToProvider = FlagsHelper.IsFlagSet(Flags, 7);
 			Currency = reader.Read<string>();
-			Prices = reader.ReadVector<LabeledPriceBase>();
-		}
+			Prices = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "invoice";
+		    return "invoice";
 		}
 	}
 }

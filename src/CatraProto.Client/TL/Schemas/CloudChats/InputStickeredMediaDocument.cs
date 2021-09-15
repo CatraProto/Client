@@ -1,19 +1,22 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputStickeredMediaDocument : InputStickeredMediaBase
+	public partial class InputStickeredMediaDocument : CatraProto.Client.TL.Schemas.CloudChats.InputStickeredMediaBase
 	{
 
 
         public static int StaticConstructorId { get => 70813275; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("id")]
-		public InputDocumentBase Id { get; set; }
+[Newtonsoft.Json.JsonProperty("id")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase Id { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -30,12 +33,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Id = reader.Read<InputDocumentBase>();
-		}
+			Id = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "inputStickeredMediaDocument";
+		    return "inputStickeredMediaDocument";
 		}
 	}
 }

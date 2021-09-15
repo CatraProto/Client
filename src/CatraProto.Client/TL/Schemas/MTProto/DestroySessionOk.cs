@@ -1,18 +1,21 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class DestroySessionOk : DestroySessionResBase
+	public partial class DestroySessionOk : CatraProto.Client.TL.Schemas.MTProto.DestroySessionResBase
 	{
 
 
         public static int StaticConstructorId { get => -501201412; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("session_id")]
+[Newtonsoft.Json.JsonProperty("session_id")]
 		public override long SessionId { get; set; }
 
         
@@ -31,11 +34,12 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 		public override void Deserialize(Reader reader)
 		{
 			SessionId = reader.Read<long>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "destroy_session_ok";
+		    return "destroy_session_ok";
 		}
 	}
 }

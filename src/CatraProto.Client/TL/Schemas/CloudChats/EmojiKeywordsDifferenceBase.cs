@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,16 +7,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class EmojiKeywordsDifferenceBase : IObject
     {
 
-[JsonPropertyName("lang_code")]
+[Newtonsoft.Json.JsonProperty("lang_code")]
 		public abstract string LangCode { get; set; }
 
-[JsonPropertyName("from_version")]
+[Newtonsoft.Json.JsonProperty("from_version")]
 		public abstract int FromVersion { get; set; }
 
-[JsonPropertyName("version")]
+[Newtonsoft.Json.JsonProperty("version")]
 		public abstract int Version { get; set; }
 
-[JsonPropertyName("keywords")]
+[Newtonsoft.Json.JsonProperty("keywords")]
 		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.EmojiKeywordBase> Keywords { get; set; }
 
         public abstract void UpdateFlags();

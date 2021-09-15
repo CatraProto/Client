@@ -1,27 +1,30 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class BadServerSalt : BadMsgNotificationBase
+	public partial class BadServerSalt : CatraProto.Client.TL.Schemas.MTProto.BadMsgNotificationBase
 	{
 
 
         public static int StaticConstructorId { get => -307542917; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("bad_msg_id")]
+[Newtonsoft.Json.JsonProperty("bad_msg_id")]
 		public override long BadMsgId { get; set; }
 
-[JsonPropertyName("bad_msg_seqno")]
+[Newtonsoft.Json.JsonProperty("bad_msg_seqno")]
 		public override int BadMsgSeqno { get; set; }
 
-[JsonPropertyName("error_code")]
+[Newtonsoft.Json.JsonProperty("error_code")]
 		public override int ErrorCode { get; set; }
 
-[JsonPropertyName("new_server_salt")]
+[Newtonsoft.Json.JsonProperty("new_server_salt")]
 		public long NewServerSalt { get; set; }
 
         
@@ -46,11 +49,12 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 			BadMsgSeqno = reader.Read<int>();
 			ErrorCode = reader.Read<int>();
 			NewServerSalt = reader.Read<long>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "bad_server_salt";
+		    return "bad_server_salt";
 		}
 	}
 }

@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -11,22 +12,24 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 	{
 
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => -914493408; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
 
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
-
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-		[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
+[Newtonsoft.Json.JsonProperty("peer")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
 
-[JsonPropertyName("reply_to_msg_id")]
+[Newtonsoft.Json.JsonProperty("reply_to_msg_id")]
 		public int ReplyToMsgId { get; set; }
 
-[JsonPropertyName("random_id")]
+[Newtonsoft.Json.JsonProperty("random_id")]
 		public long RandomId { get; set; }
 
 
@@ -46,14 +49,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 		public void Deserialize(Reader reader)
 		{
-			Peer = reader.Read<InputPeerBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
 			ReplyToMsgId = reader.Read<int>();
 			RandomId = reader.Read<long>();
-		}
 
+		}
+		
 		public override string ToString()
 		{
-			return "messages.sendScreenshotNotification";
+		    return "messages.sendScreenshotNotification";
 		}
 	}
 }

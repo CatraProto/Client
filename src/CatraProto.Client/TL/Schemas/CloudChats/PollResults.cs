@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PollResults : PollResultsBase
+	public partial class PollResults : CatraProto.Client.TL.Schemas.CloudChats.PollResultsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -20,29 +21,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -1159937629; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("min")]
+[Newtonsoft.Json.JsonProperty("min")]
 		public override bool Min { get; set; }
 
-[JsonPropertyName("results")]
-		public override IList<PollAnswerVotersBase> Results { get; set; }
+[Newtonsoft.Json.JsonProperty("results")]
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.PollAnswerVotersBase> Results { get; set; }
 
-[JsonPropertyName("total_voters")]
+[Newtonsoft.Json.JsonProperty("total_voters")]
 		public override int? TotalVoters { get; set; }
 
-[JsonPropertyName("recent_voters")]
+[Newtonsoft.Json.JsonProperty("recent_voters")]
 		public override IList<int> RecentVoters { get; set; }
 
-[JsonPropertyName("solution")]
+[Newtonsoft.Json.JsonProperty("solution")]
 		public override string Solution { get; set; }
 
-[JsonPropertyName("solution_entities")]
-		public override IList<MessageEntityBase> SolutionEntities { get; set; }
+[Newtonsoft.Json.JsonProperty("solution_entities")]
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> SolutionEntities { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -95,7 +96,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Min = FlagsHelper.IsFlagSet(Flags, 0);
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Results = reader.ReadVector<PollAnswerVotersBase>();
+				Results = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PollAnswerVotersBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
@@ -115,13 +116,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				SolutionEntities = reader.ReadVector<MessageEntityBase>();
+				SolutionEntities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "pollResults";
+		    return "pollResults";
 		}
 	}
 }

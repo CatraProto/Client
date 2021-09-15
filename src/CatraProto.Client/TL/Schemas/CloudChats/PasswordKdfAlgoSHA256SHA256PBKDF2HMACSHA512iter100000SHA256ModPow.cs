@@ -1,27 +1,30 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PasswordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow : PasswordKdfAlgoBase
+	public partial class PasswordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow : CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase
 	{
 
 
         public static int StaticConstructorId { get => 982592842; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("salt1")]
+[Newtonsoft.Json.JsonProperty("salt1")]
 		public byte[] Salt1 { get; set; }
 
-[JsonPropertyName("salt2")]
+[Newtonsoft.Json.JsonProperty("salt2")]
 		public byte[] Salt2 { get; set; }
 
-[JsonPropertyName("g")]
+[Newtonsoft.Json.JsonProperty("g")]
 		public int G { get; set; }
 
-[JsonPropertyName("p")]
+[Newtonsoft.Json.JsonProperty("p")]
 		public byte[] P { get; set; }
 
         
@@ -46,11 +49,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Salt2 = reader.Read<byte[]>();
 			G = reader.Read<int>();
 			P = reader.Read<byte[]>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow";
+		    return "passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow";
 		}
 	}
 }

@@ -1,33 +1,36 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputPhotoLegacyFileLocation : InputFileLocationBase
+	public partial class InputPhotoLegacyFileLocation : CatraProto.Client.TL.Schemas.CloudChats.InputFileLocationBase
 	{
 
 
         public static int StaticConstructorId { get => -667654413; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public long Id { get; set; }
 
-[JsonPropertyName("access_hash")]
+[Newtonsoft.Json.JsonProperty("access_hash")]
 		public long AccessHash { get; set; }
 
-[JsonPropertyName("file_reference")]
+[Newtonsoft.Json.JsonProperty("file_reference")]
 		public byte[] FileReference { get; set; }
 
-[JsonPropertyName("volume_id")]
+[Newtonsoft.Json.JsonProperty("volume_id")]
 		public long VolumeId { get; set; }
 
-[JsonPropertyName("local_id")]
+[Newtonsoft.Json.JsonProperty("local_id")]
 		public int LocalId { get; set; }
 
-[JsonPropertyName("secret")]
+[Newtonsoft.Json.JsonProperty("secret")]
 		public long Secret { get; set; }
 
         
@@ -56,11 +59,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			VolumeId = reader.Read<long>();
 			LocalId = reader.Read<int>();
 			Secret = reader.Read<long>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "inputPhotoLegacyFileLocation";
+		    return "inputPhotoLegacyFileLocation";
 		}
 	}
 }

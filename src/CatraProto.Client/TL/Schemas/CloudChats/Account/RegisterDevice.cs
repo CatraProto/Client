@@ -1,87 +1,87 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class RegisterDevice : IMethod
-	{
-		[Flags]
-		public enum FlagsEnum 
-		{
-			NoMuted = 1 << 0
-		}
+    public partial class RegisterDevice : IMethod
+    {
+        [Flags]
+        public enum FlagsEnum
+        {
+            NoMuted = 1 << 0
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => 1754754159; }
+        public static int StaticConstructorId
+        {
+            get => 1754754159;
+        }
+
         [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(bool);
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
 
-[JsonIgnore]
-		public int Flags { get; set; }
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("no_muted")]
-		public bool NoMuted { get; set; }
+        [JsonIgnore] public int Flags { get; set; }
 
-[JsonPropertyName("token_type")]
-		public int TokenType { get; set; }
+        [JsonProperty("no_muted")] public bool NoMuted { get; set; }
 
-[JsonPropertyName("token")]
-		public string Token { get; set; }
+        [JsonProperty("token_type")] public int TokenType { get; set; }
 
-[JsonPropertyName("app_sandbox")]
-		public bool AppSandbox { get; set; }
+        [JsonProperty("token")] public string Token { get; set; }
 
-[JsonPropertyName("secret")]
-		public byte[] Secret { get; set; }
+        [JsonProperty("app_sandbox")] public bool AppSandbox { get; set; }
 
-[JsonPropertyName("other_uids")]
-		public IList<int> OtherUids { get; set; }
+        [JsonProperty("secret")] public byte[] Secret { get; set; }
+
+        [JsonProperty("other_uids")] public IList<int> OtherUids { get; set; }
+
+        public override string ToString()
+        {
+            return "account.registerDevice";
+        }
 
 
-		public void UpdateFlags() 
-		{
-			Flags = NoMuted ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
+        public void UpdateFlags()
+        {
+            Flags = NoMuted ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(TokenType);
-			writer.Write(Token);
-			writer.Write(AppSandbox);
-			writer.Write(Secret);
-			writer.Write(OtherUids);
+            UpdateFlags();
+            writer.Write(Flags);
+            writer.Write(TokenType);
+            writer.Write(Token);
+            writer.Write(AppSandbox);
+            writer.Write(Secret);
+            writer.Write(OtherUids);
+        }
 
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			Flags = reader.Read<int>();
-			NoMuted = FlagsHelper.IsFlagSet(Flags, 0);
-			TokenType = reader.Read<int>();
-			Token = reader.Read<string>();
-			AppSandbox = reader.Read<bool>();
-			Secret = reader.Read<byte[]>();
-			OtherUids = reader.ReadVector<int>();
-		}
-
-		public override string ToString()
-		{
-			return "account.registerDevice";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Flags = reader.Read<int>();
+            NoMuted = FlagsHelper.IsFlagSet(Flags, 0);
+            TokenType = reader.Read<int>();
+            Token = reader.Read<string>();
+            AppSandbox = reader.Read<bool>();
+            Secret = reader.Read<byte[]>();
+            OtherUids = reader.ReadVector<int>();
+        }
+    }
 }

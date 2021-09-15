@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ReplyKeyboardMarkup : ReplyMarkupBase
+	public partial class ReplyKeyboardMarkup : CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -17,23 +18,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 889353612; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("resize")]
+[Newtonsoft.Json.JsonProperty("resize")]
 		public bool Resize { get; set; }
 
-[JsonPropertyName("single_use")]
+[Newtonsoft.Json.JsonProperty("single_use")]
 		public bool SingleUse { get; set; }
 
-[JsonPropertyName("selective")]
+[Newtonsoft.Json.JsonProperty("selective")]
 		public bool Selective { get; set; }
 
-[JsonPropertyName("rows")]
-		public IList<KeyboardButtonRowBase> Rows { get; set; }
+[Newtonsoft.Json.JsonProperty("rows")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonRowBase> Rows { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -59,12 +60,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Resize = FlagsHelper.IsFlagSet(Flags, 0);
 			SingleUse = FlagsHelper.IsFlagSet(Flags, 1);
 			Selective = FlagsHelper.IsFlagSet(Flags, 2);
-			Rows = reader.ReadVector<KeyboardButtonRowBase>();
-		}
+			Rows = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonRowBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "replyKeyboardMarkup";
+		    return "replyKeyboardMarkup";
 		}
 	}
 }

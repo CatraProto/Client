@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -15,24 +16,24 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 			X = 1 << 0
 		}
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => 1646092192; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(StatsGraphBase);
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase);
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("token")]
+[Newtonsoft.Json.JsonProperty("token")]
 		public string Token { get; set; }
 
-[JsonPropertyName("x")]
+[Newtonsoft.Json.JsonProperty("x")]
 		public long? X { get; set; }
 
 
@@ -64,11 +65,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 			{
 				X = reader.Read<long>();
 			}
-		}
 
+
+		}
+		
 		public override string ToString()
 		{
-			return "stats.loadAsyncGraph";
+		    return "stats.loadAsyncGraph";
 		}
 	}
 }

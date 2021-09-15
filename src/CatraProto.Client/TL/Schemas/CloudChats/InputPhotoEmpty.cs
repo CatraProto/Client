@@ -1,15 +1,18 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputPhotoEmpty : InputPhotoBase
+	public partial class InputPhotoEmpty : CatraProto.Client.TL.Schemas.CloudChats.InputPhotoBase
 	{
 
 
         public static int StaticConstructorId { get => 483901197; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
         
@@ -26,11 +29,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "inputPhotoEmpty";
+		    return "inputPhotoEmpty";
 		}
 	}
 }

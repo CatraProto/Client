@@ -1,56 +1,59 @@
 using System;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class GetTmpPassword : IMethod
-	{
-
+    public partial class GetTmpPassword : IMethod
+    {
+        [JsonIgnore]
+        public static int StaticConstructorId
+        {
+            get => 1151208273;
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => 1151208273; }
-        [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(TmpPasswordBase);
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(TmpPasswordBase);
 
-[JsonPropertyName("password")]
-		public InputCheckPasswordSRPBase Password { get; set; }
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("period")]
-		public int Period { get; set; }
+        [JsonProperty("password")] public InputCheckPasswordSRPBase Password { get; set; }
+
+        [JsonProperty("period")] public int Period { get; set; }
+
+        public override string ToString()
+        {
+            return "account.getTmpPassword";
+        }
 
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Password);
-			writer.Write(Period);
+            writer.Write(Password);
+            writer.Write(Period);
+        }
 
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			Password = reader.Read<InputCheckPasswordSRPBase>();
-			Period = reader.Read<int>();
-		}
-
-		public override string ToString()
-		{
-			return "account.getTmpPassword";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Password = reader.Read<InputCheckPasswordSRPBase>();
+            Period = reader.Read<int>();
+        }
+    }
 }

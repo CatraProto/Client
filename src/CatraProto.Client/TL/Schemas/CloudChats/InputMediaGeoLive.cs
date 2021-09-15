@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputMediaGeoLive : InputMediaBase
+	public partial class InputMediaGeoLive : CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -17,25 +19,25 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -1759532989; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("stopped")]
+[Newtonsoft.Json.JsonProperty("stopped")]
 		public bool Stopped { get; set; }
 
-[JsonPropertyName("geo_point")]
-		public InputGeoPointBase GeoPoint { get; set; }
+[Newtonsoft.Json.JsonProperty("geo_point")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase GeoPoint { get; set; }
 
-[JsonPropertyName("heading")]
+[Newtonsoft.Json.JsonProperty("heading")]
 		public int? Heading { get; set; }
 
-[JsonPropertyName("period")]
+[Newtonsoft.Json.JsonProperty("period")]
 		public int? Period { get; set; }
 
-[JsonPropertyName("proximity_notification_radius")]
+[Newtonsoft.Json.JsonProperty("proximity_notification_radius")]
 		public int? ProximityNotificationRadius { get; set; }
 
         
@@ -76,7 +78,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Flags = reader.Read<int>();
 			Stopped = FlagsHelper.IsFlagSet(Flags, 0);
-			GeoPoint = reader.Read<InputGeoPointBase>();
+			GeoPoint = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
 				Heading = reader.Read<int>();
@@ -91,11 +93,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			{
 				ProximityNotificationRadius = reader.Read<int>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "inputMediaGeoLive";
+		    return "inputMediaGeoLive";
 		}
 	}
 }

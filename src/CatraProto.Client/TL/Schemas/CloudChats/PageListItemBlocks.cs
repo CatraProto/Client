@@ -1,20 +1,22 @@
+using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PageListItemBlocks : PageListItemBase
+	public partial class PageListItemBlocks : CatraProto.Client.TL.Schemas.CloudChats.PageListItemBase
 	{
 
 
         public static int StaticConstructorId { get => 635466748; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("blocks")]
-		public IList<PageBlockBase> Blocks { get; set; }
+[Newtonsoft.Json.JsonProperty("blocks")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase> Blocks { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -31,12 +33,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Blocks = reader.ReadVector<PageBlockBase>();
-		}
+			Blocks = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "pageListItemBlocks";
+		    return "pageListItemBlocks";
 		}
 	}
 }

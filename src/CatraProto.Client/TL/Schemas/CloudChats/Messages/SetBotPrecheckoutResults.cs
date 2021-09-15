@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -16,26 +17,27 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Error = 1 << 0
 		}
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => 163765653; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(bool);
 
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
-
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("success")]
+[Newtonsoft.Json.JsonProperty("success")]
 		public bool Success { get; set; }
 
-[JsonPropertyName("query_id")]
+[Newtonsoft.Json.JsonProperty("query_id")]
 		public long QueryId { get; set; }
 
-[JsonPropertyName("error")]
+[Newtonsoft.Json.JsonProperty("error")]
 		public string Error { get; set; }
 
 
@@ -69,11 +71,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			{
 				Error = reader.Read<string>();
 			}
-		}
 
+
+		}
+		
 		public override string ToString()
 		{
-			return "messages.setBotPrecheckoutResults";
+		    return "messages.setBotPrecheckoutResults";
 		}
 	}
 }

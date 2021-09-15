@@ -1,32 +1,34 @@
+using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 {
-	public partial class FileCdnRedirect : FileBase
+	public partial class FileCdnRedirect : CatraProto.Client.TL.Schemas.CloudChats.Upload.FileBase
 	{
 
 
         public static int StaticConstructorId { get => -242427324; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("dc_id")]
+[Newtonsoft.Json.JsonProperty("dc_id")]
 		public int DcId { get; set; }
 
-[JsonPropertyName("file_token")]
+[Newtonsoft.Json.JsonProperty("file_token")]
 		public byte[] FileToken { get; set; }
 
-[JsonPropertyName("encryption_key")]
+[Newtonsoft.Json.JsonProperty("encryption_key")]
 		public byte[] EncryptionKey { get; set; }
 
-[JsonPropertyName("encryption_iv")]
+[Newtonsoft.Json.JsonProperty("encryption_iv")]
 		public byte[] EncryptionIv { get; set; }
 
-[JsonPropertyName("file_hashes")]
-		public IList<FileHashBase> FileHashes { get; set; }
+[Newtonsoft.Json.JsonProperty("file_hashes")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase> FileHashes { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -51,12 +53,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 			FileToken = reader.Read<byte[]>();
 			EncryptionKey = reader.Read<byte[]>();
 			EncryptionIv = reader.Read<byte[]>();
-			FileHashes = reader.ReadVector<FileHashBase>();
-		}
+			FileHashes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "upload.fileCdnRedirect";
+		    return "upload.fileCdnRedirect";
 		}
 	}
 }

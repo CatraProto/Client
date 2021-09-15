@@ -1,25 +1,27 @@
+using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateMessagePollVote : UpdateBase
+	public partial class UpdateMessagePollVote : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 
 
         public static int StaticConstructorId { get => 1123585836; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("poll_id")]
+[Newtonsoft.Json.JsonProperty("poll_id")]
 		public long PollId { get; set; }
 
-[JsonPropertyName("user_id")]
+[Newtonsoft.Json.JsonProperty("user_id")]
 		public int UserId { get; set; }
 
-[JsonPropertyName("options")]
+[Newtonsoft.Json.JsonProperty("options")]
 		public IList<byte[]> Options { get; set; }
 
         
@@ -42,11 +44,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			PollId = reader.Read<long>();
 			UserId = reader.Read<int>();
 			Options = reader.ReadVector<byte[]>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "updateMessagePollVote";
+		    return "updateMessagePollVote";
 		}
 	}
 }

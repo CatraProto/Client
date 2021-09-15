@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using CatraProto.Client.Connections;
 using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.Crypto;
-using CatraProto.Client.MTProto.Settings;
+using CatraProto.Client.MTProto.Session;
 using CatraProto.Client.TL.Schemas.CloudChats;
 using CatraProto.Client.TL.Schemas.CloudChats.Help;
 using CatraProto.Client.TL.Schemas.MTProto;
@@ -17,7 +17,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
         public delegate void AuthKeyChanged(AuthKey authKey, bool bindCompleted);
 
         private readonly PermanentAuthKey _permanentAuthKey;
-        private readonly ClientSettings _clientSettings;
+        private readonly ClientSession _clientSession;
         private readonly object _mutex = new object();
         private readonly MTProtoState _mtProtoState;
         private Task<AuthKey>? _generationTask;
@@ -28,14 +28,14 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
         private int _expiresAt;
         public event AuthKeyChanged? OnAuthKeyChanged;
 
-        public TemporaryAuthKey(MTProtoState mtProtoState, PermanentAuthKey permanentAuthKey, Api api, ClientSettings clientSettings, int duration, ILogger logger)
+        public TemporaryAuthKey(MTProtoState mtProtoState, PermanentAuthKey permanentAuthKey, Api api, ClientSession clientSession, int duration)
         {
-            _logger = logger.ForContext<TemporaryAuthKey>();
-            _mtProtoState = mtProtoState;
+            _logger = clientSession.Logger.ForContext<TemporaryAuthKey>();
             _permanentAuthKey = permanentAuthKey;
+            _clientSession = clientSession;
+            _mtProtoState = mtProtoState;
             _duration = duration;
             _api = api;
-            _clientSettings = clientSettings;
         }
 
         public Task<AuthKey> GetAuthKeyAsync(bool forceGeneration = false, bool onlyCached = false, bool forceReturn = false, CancellationToken token = default)
@@ -74,7 +74,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
             var permAuthKey = await _permanentAuthKey.GetAuthKeyAsync(token);
 
             _tempAuthKey = new AuthKey(_api, _logger);
-            await _tempAuthKey.ComputeAuthKey(_duration, token);
+            await _tempAuthKey.EnsureComputeAsync(_duration, token);
 
             _expiresAt = (int)(DateTimeOffset.Now.ToUnixTimeSeconds() + _duration);
 
@@ -104,11 +104,10 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
                 _logger.Information("TempAuthKey successfully ({TempId}) bound until {Time} to permanent key {PermKey}", _tempAuthKey.AuthKeyId, _expiresAt, permAuthKey.AuthKeyId);
             }
 
-
             _logger.Information("Writing client information");
             OnAuthKeyChanged?.Invoke(_tempAuthKey, true);
 
-            var apiSettings = _clientSettings.ApiSettings;
+            var apiSettings = _clientSession.Settings.ApiSettings;
             var response = await _mtProtoState.Api.CloudChatsApi.InvokeWithLayerAsync(121, new InitConnection
             {
                 ApiId = apiSettings.ApiId,

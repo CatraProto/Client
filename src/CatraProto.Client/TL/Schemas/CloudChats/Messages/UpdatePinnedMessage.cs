@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -17,31 +18,33 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			PmOneside = 1 << 2
 		}
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => -760547348; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
 
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
-
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("silent")]
+[Newtonsoft.Json.JsonProperty("silent")]
 		public bool Silent { get; set; }
 
-[JsonPropertyName("unpin")]
+[Newtonsoft.Json.JsonProperty("unpin")]
 		public bool Unpin { get; set; }
 
-[JsonPropertyName("pm_oneside")]
+[Newtonsoft.Json.JsonProperty("pm_oneside")]
 		public bool PmOneside { get; set; }
 
-		[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
+[Newtonsoft.Json.JsonProperty("peer")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
 
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public int Id { get; set; }
 
 
@@ -69,13 +72,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Silent = FlagsHelper.IsFlagSet(Flags, 0);
 			Unpin = FlagsHelper.IsFlagSet(Flags, 1);
 			PmOneside = FlagsHelper.IsFlagSet(Flags, 2);
-			Peer = reader.Read<InputPeerBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
 			Id = reader.Read<int>();
-		}
 
+		}
+		
 		public override string ToString()
 		{
-			return "messages.updatePinnedMessage";
+		    return "messages.updatePinnedMessage";
 		}
 	}
 }

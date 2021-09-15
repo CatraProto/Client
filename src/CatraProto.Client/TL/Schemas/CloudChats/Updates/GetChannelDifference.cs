@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -15,33 +16,33 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 			Force = 1 << 0
 		}
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => 51854712; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(ChannelDifferenceBase);
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Updates.ChannelDifferenceBase);
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("force")]
+[Newtonsoft.Json.JsonProperty("force")]
 		public bool Force { get; set; }
 
-[JsonPropertyName("channel")]
-		public InputChannelBase Channel { get; set; }
+[Newtonsoft.Json.JsonProperty("channel")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase Channel { get; set; }
 
-[JsonPropertyName("filter")]
-		public ChannelMessagesFilterBase Filter { get; set; }
+[Newtonsoft.Json.JsonProperty("filter")]
+		public CatraProto.Client.TL.Schemas.CloudChats.ChannelMessagesFilterBase Filter { get; set; }
 
-[JsonPropertyName("pts")]
+[Newtonsoft.Json.JsonProperty("pts")]
 		public int Pts { get; set; }
 
-[JsonPropertyName("limit")]
+[Newtonsoft.Json.JsonProperty("limit")]
 		public int Limit { get; set; }
 
 
@@ -67,15 +68,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 		{
 			Flags = reader.Read<int>();
 			Force = FlagsHelper.IsFlagSet(Flags, 0);
-			Channel = reader.Read<InputChannelBase>();
-			Filter = reader.Read<ChannelMessagesFilterBase>();
+			Channel = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
+			Filter = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChannelMessagesFilterBase>();
 			Pts = reader.Read<int>();
 			Limit = reader.Read<int>();
-		}
 
+		}
+		
 		public override string ToString()
 		{
-			return "updates.getChannelDifference";
+		    return "updates.getChannelDifference";
 		}
 	}
 }

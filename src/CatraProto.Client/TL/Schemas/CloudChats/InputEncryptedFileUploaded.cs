@@ -1,27 +1,30 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputEncryptedFileUploaded : InputEncryptedFileBase
+	public partial class InputEncryptedFileUploaded : CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedFileBase
 	{
 
 
         public static int StaticConstructorId { get => 1690108678; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public long Id { get; set; }
 
-[JsonPropertyName("parts")]
+[Newtonsoft.Json.JsonProperty("parts")]
 		public int Parts { get; set; }
 
-[JsonPropertyName("md5_checksum")]
+[Newtonsoft.Json.JsonProperty("md5_checksum")]
 		public string Md5Checksum { get; set; }
 
-[JsonPropertyName("key_fingerprint")]
+[Newtonsoft.Json.JsonProperty("key_fingerprint")]
 		public int KeyFingerprint { get; set; }
 
         
@@ -46,11 +49,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Parts = reader.Read<int>();
 			Md5Checksum = reader.Read<string>();
 			KeyFingerprint = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "inputEncryptedFileUploaded";
+		    return "inputEncryptedFileUploaded";
 		}
 	}
 }

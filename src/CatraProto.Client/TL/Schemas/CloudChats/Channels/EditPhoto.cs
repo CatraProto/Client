@@ -1,56 +1,59 @@
 using System;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 {
-	public partial class EditPhoto : IMethod
-	{
-
+    public partial class EditPhoto : IMethod
+    {
+        [JsonIgnore]
+        public static int StaticConstructorId
+        {
+            get => -248621111;
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => -248621111; }
-        [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(UpdatesBase);
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
 
-[JsonPropertyName("channel")]
-		public InputChannelBase Channel { get; set; }
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("photo")]
-		public InputChatPhotoBase Photo { get; set; }
+        [JsonProperty("channel")] public InputChannelBase Channel { get; set; }
+
+        [JsonProperty("photo")] public InputChatPhotoBase Photo { get; set; }
+
+        public override string ToString()
+        {
+            return "channels.editPhoto";
+        }
 
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Channel);
-			writer.Write(Photo);
+            writer.Write(Channel);
+            writer.Write(Photo);
+        }
 
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			Channel = reader.Read<InputChannelBase>();
-			Photo = reader.Read<InputChatPhotoBase>();
-		}
-
-		public override string ToString()
-		{
-			return "channels.editPhoto";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Channel = reader.Read<InputChannelBase>();
+            Photo = reader.Read<InputChatPhotoBase>();
+        }
+    }
 }

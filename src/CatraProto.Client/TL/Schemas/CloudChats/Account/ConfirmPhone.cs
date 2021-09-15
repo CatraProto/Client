@@ -1,56 +1,59 @@
 using System;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class ConfirmPhone : IMethod
-	{
-
+    public partial class ConfirmPhone : IMethod
+    {
+        [JsonIgnore]
+        public static int StaticConstructorId
+        {
+            get => 1596029123;
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => 1596029123; }
-        [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(bool);
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
 
-[JsonPropertyName("phone_code_hash")]
-		public string PhoneCodeHash { get; set; }
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("phone_code")]
-		public string PhoneCode { get; set; }
+        [JsonProperty("phone_code_hash")] public string PhoneCodeHash { get; set; }
+
+        [JsonProperty("phone_code")] public string PhoneCode { get; set; }
+
+        public override string ToString()
+        {
+            return "account.confirmPhone";
+        }
 
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(PhoneCodeHash);
-			writer.Write(PhoneCode);
+            writer.Write(PhoneCodeHash);
+            writer.Write(PhoneCode);
+        }
 
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			PhoneCodeHash = reader.Read<string>();
-			PhoneCode = reader.Read<string>();
-		}
-
-		public override string ToString()
-		{
-			return "account.confirmPhone";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            PhoneCodeHash = reader.Read<string>();
+            PhoneCode = reader.Read<string>();
+        }
+    }
 }

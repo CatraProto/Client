@@ -1,22 +1,25 @@
+using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class Stickers : StickersBase
+	public partial class Stickers : CatraProto.Client.TL.Schemas.CloudChats.Messages.StickersBase
 	{
 
 
         public static int StaticConstructorId { get => -463889475; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("hash")]
+[Newtonsoft.Json.JsonProperty("hash")]
 		public int Hash { get; set; }
 
-		[JsonPropertyName("Stickers_")] public IList<DocumentBase> Stickers_ { get; set; }
+[Newtonsoft.Json.JsonProperty("stickers")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase> StickersField { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -28,19 +31,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		{
 		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(Hash);
-			writer.Write(Stickers_);
+			writer.Write(StickersField);
 
 		}
 
 		public override void Deserialize(Reader reader)
 		{
 			Hash = reader.Read<int>();
-			Stickers_ = reader.ReadVector<DocumentBase>();
-		}
+			StickersField = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "messages.stickers";
+		    return "messages.stickers";
 		}
 	}
 }

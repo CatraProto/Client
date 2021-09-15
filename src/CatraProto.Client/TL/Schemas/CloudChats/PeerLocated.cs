@@ -1,24 +1,27 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PeerLocated : PeerLocatedBase
+	public partial class PeerLocated : CatraProto.Client.TL.Schemas.CloudChats.PeerLocatedBase
 	{
 
 
         public static int StaticConstructorId { get => -901375139; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("peer")]
-		public PeerBase Peer { get; set; }
+[Newtonsoft.Json.JsonProperty("peer")]
+		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
 
-[JsonPropertyName("expires")]
+[Newtonsoft.Json.JsonProperty("expires")]
 		public override int Expires { get; set; }
 
-[JsonPropertyName("distance")]
+[Newtonsoft.Json.JsonProperty("distance")]
 		public int Distance { get; set; }
 
         
@@ -38,14 +41,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Peer = reader.Read<PeerBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
 			Expires = reader.Read<int>();
 			Distance = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "peerLocated";
+		    return "peerLocated";
 		}
 	}
 }

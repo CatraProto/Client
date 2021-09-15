@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class DocumentAttributeAudio : DocumentAttributeBase
+	public partial class DocumentAttributeAudio : CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -17,25 +19,25 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -1739392570; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("voice")]
+[Newtonsoft.Json.JsonProperty("voice")]
 		public bool Voice { get; set; }
 
-[JsonPropertyName("duration")]
+[Newtonsoft.Json.JsonProperty("duration")]
 		public int Duration { get; set; }
 
-[JsonPropertyName("title")]
+[Newtonsoft.Json.JsonProperty("title")]
 		public string Title { get; set; }
 
-[JsonPropertyName("performer")]
+[Newtonsoft.Json.JsonProperty("performer")]
 		public string Performer { get; set; }
 
-[JsonPropertyName("waveform")]
+[Newtonsoft.Json.JsonProperty("waveform")]
 		public byte[] Waveform { get; set; }
 
         
@@ -91,11 +93,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			{
 				Waveform = reader.Read<byte[]>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "documentAttributeAudio";
+		    return "documentAttributeAudio";
 		}
 	}
 }

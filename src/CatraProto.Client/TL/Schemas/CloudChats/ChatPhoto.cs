@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChatPhoto : ChatPhotoBase
+	public partial class ChatPhoto : CatraProto.Client.TL.Schemas.CloudChats.ChatPhotoBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,22 +16,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -770990276; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("has_video")]
+[Newtonsoft.Json.JsonProperty("has_video")]
 		public bool HasVideo { get; set; }
 
-[JsonPropertyName("photo_small")]
-		public FileLocationBase PhotoSmall { get; set; }
+[Newtonsoft.Json.JsonProperty("photo_small")]
+		public CatraProto.Client.TL.Schemas.CloudChats.FileLocationBase PhotoSmall { get; set; }
 
-[JsonPropertyName("photo_big")]
-		public FileLocationBase PhotoBig { get; set; }
+[Newtonsoft.Json.JsonProperty("photo_big")]
+		public CatraProto.Client.TL.Schemas.CloudChats.FileLocationBase PhotoBig { get; set; }
 
-[JsonPropertyName("dc_id")]
+[Newtonsoft.Json.JsonProperty("dc_id")]
 		public int DcId { get; set; }
 
         
@@ -54,14 +56,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Flags = reader.Read<int>();
 			HasVideo = FlagsHelper.IsFlagSet(Flags, 0);
-			PhotoSmall = reader.Read<FileLocationBase>();
-			PhotoBig = reader.Read<FileLocationBase>();
+			PhotoSmall = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.FileLocationBase>();
+			PhotoBig = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.FileLocationBase>();
 			DcId = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "chatPhoto";
+		    return "chatPhoto";
 		}
 	}
 }

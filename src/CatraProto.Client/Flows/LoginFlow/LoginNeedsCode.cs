@@ -39,8 +39,9 @@ namespace CatraProto.Client.Flows.LoginFlow
             switch (query.Response!)
             {
                 case Authorization authorization:
-                    _sessionData.Authorization.SetAuthorized(true, _connection.ConnectionInfo.DcId, authorization.User.Id, ((User)authorization.User).AccessHash!.Value);
-                    return new LoginSuccessful();
+                    _sessionData.Authorization.SetAuthorized(true, _connection.ConnectionInfo.DcId, authorization.User.Id,
+                        ((User)authorization.User).AccessHash!.Value);
+                    return new LoginSuccessful((User)authorization.User);
                 case AuthorizationSignUpRequired signUpRequired:
                     return new LoginNeedsSignup(_connection, _sentCode, _phoneNumber, signUpRequired.TermsOfService, _sessionData);
                 default:

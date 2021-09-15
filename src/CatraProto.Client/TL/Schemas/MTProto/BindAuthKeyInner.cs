@@ -1,30 +1,33 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class BindAuthKeyInner : BindAuthKeyInnerBase
+	public partial class BindAuthKeyInner : CatraProto.Client.TL.Schemas.MTProto.BindAuthKeyInnerBase
 	{
 
 
         public static int StaticConstructorId { get => 1973679973; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("nonce")]
+[Newtonsoft.Json.JsonProperty("nonce")]
 		public override long Nonce { get; set; }
 
-[JsonPropertyName("temp_auth_key_id")]
+[Newtonsoft.Json.JsonProperty("temp_auth_key_id")]
 		public override long TempAuthKeyId { get; set; }
 
-[JsonPropertyName("perm_auth_key_id")]
+[Newtonsoft.Json.JsonProperty("perm_auth_key_id")]
 		public override long PermAuthKeyId { get; set; }
 
-[JsonPropertyName("temp_session_id")]
+[Newtonsoft.Json.JsonProperty("temp_session_id")]
 		public override long TempSessionId { get; set; }
 
-[JsonPropertyName("expires_at")]
+[Newtonsoft.Json.JsonProperty("expires_at")]
 		public override int ExpiresAt { get; set; }
 
         
@@ -51,11 +54,12 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 			PermAuthKeyId = reader.Read<long>();
 			TempSessionId = reader.Read<long>();
 			ExpiresAt = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "bind_auth_key_inner";
+		    return "bind_auth_key_inner";
 		}
 	}
 }

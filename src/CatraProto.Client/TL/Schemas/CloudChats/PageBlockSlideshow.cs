@@ -1,23 +1,25 @@
+using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PageBlockSlideshow : PageBlockBase
+	public partial class PageBlockSlideshow : CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase
 	{
 
 
         public static int StaticConstructorId { get => 52401552; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("items")]
-		public IList<PageBlockBase> Items { get; set; }
+[Newtonsoft.Json.JsonProperty("items")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase> Items { get; set; }
 
-[JsonPropertyName("caption")]
-		public PageCaptionBase Caption { get; set; }
+[Newtonsoft.Json.JsonProperty("caption")]
+		public CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase Caption { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -35,13 +37,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Items = reader.ReadVector<PageBlockBase>();
-			Caption = reader.Read<PageCaptionBase>();
-		}
+			Items = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase>();
+			Caption = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "pageBlockSlideshow";
+		    return "pageBlockSlideshow";
 		}
 	}
 }

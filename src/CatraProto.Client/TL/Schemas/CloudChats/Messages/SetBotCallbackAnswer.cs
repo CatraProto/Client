@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -17,32 +18,33 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Url = 1 << 2
 		}
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => -712043766; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(bool);
 
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
-
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("alert")]
+[Newtonsoft.Json.JsonProperty("alert")]
 		public bool Alert { get; set; }
 
-[JsonPropertyName("query_id")]
+[Newtonsoft.Json.JsonProperty("query_id")]
 		public long QueryId { get; set; }
 
-[JsonPropertyName("message")]
+[Newtonsoft.Json.JsonProperty("message")]
 		public string Message { get; set; }
 
-[JsonPropertyName("url")]
+[Newtonsoft.Json.JsonProperty("url")]
 		public string Url { get; set; }
 
-[JsonPropertyName("cache_time")]
+[Newtonsoft.Json.JsonProperty("cache_time")]
 		public int CacheTime { get; set; }
 
 
@@ -90,11 +92,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			}
 
 			CacheTime = reader.Read<int>();
-		}
 
+		}
+		
 		public override string ToString()
 		{
-			return "messages.setBotCallbackAnswer";
+		    return "messages.setBotCallbackAnswer";
 		}
 	}
 }

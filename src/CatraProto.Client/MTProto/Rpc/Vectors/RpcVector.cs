@@ -5,7 +5,7 @@ namespace CatraProto.Client.MTProto.Rpc.Vectors
 {
     public class RpcVector<T> : List<T>, IRpcVector
     {
-        public void Cast(IList<object> list)
+        public void Cast(IEnumerable<object> list)
         {
             foreach (T o in list)
             {

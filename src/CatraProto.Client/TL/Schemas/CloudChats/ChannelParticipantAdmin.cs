@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelParticipantAdmin : ChannelParticipantBase
+	public partial class ChannelParticipantAdmin : CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -17,34 +19,34 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -859915345; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("can_edit")]
+[Newtonsoft.Json.JsonProperty("can_edit")]
 		public bool CanEdit { get; set; }
 
-[JsonPropertyName("self")]
+[Newtonsoft.Json.JsonProperty("self")]
 		public bool Self { get; set; }
 
-[JsonPropertyName("user_id")]
+[Newtonsoft.Json.JsonProperty("user_id")]
 		public override int UserId { get; set; }
 
-[JsonPropertyName("inviter_id")]
+[Newtonsoft.Json.JsonProperty("inviter_id")]
 		public int? InviterId { get; set; }
 
-[JsonPropertyName("promoted_by")]
+[Newtonsoft.Json.JsonProperty("promoted_by")]
 		public int PromotedBy { get; set; }
 
-[JsonPropertyName("date")]
+[Newtonsoft.Json.JsonProperty("date")]
 		public int Date { get; set; }
 
-[JsonPropertyName("admin_rights")]
-		public ChatAdminRightsBase AdminRights { get; set; }
+[Newtonsoft.Json.JsonProperty("admin_rights")]
+		public CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase AdminRights { get; set; }
 
-[JsonPropertyName("rank")]
+[Newtonsoft.Json.JsonProperty("rank")]
 		public string Rank { get; set; }
 
         
@@ -92,16 +94,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			PromotedBy = reader.Read<int>();
 			Date = reader.Read<int>();
-			AdminRights = reader.Read<ChatAdminRightsBase>();
+			AdminRights = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
 				Rank = reader.Read<string>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "channelParticipantAdmin";
+		    return "channelParticipantAdmin";
 		}
 	}
 }

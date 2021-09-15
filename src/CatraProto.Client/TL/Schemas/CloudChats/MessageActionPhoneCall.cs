@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageActionPhoneCall : MessageActionBase
+	public partial class MessageActionPhoneCall : CatraProto.Client.TL.Schemas.CloudChats.MessageActionBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,22 +18,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -2132731265; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("video")]
+[Newtonsoft.Json.JsonProperty("video")]
 		public bool Video { get; set; }
 
-[JsonPropertyName("call_id")]
+[Newtonsoft.Json.JsonProperty("call_id")]
 		public long CallId { get; set; }
 
-[JsonPropertyName("reason")]
-		public PhoneCallDiscardReasonBase Reason { get; set; }
+[Newtonsoft.Json.JsonProperty("reason")]
+		public CatraProto.Client.TL.Schemas.CloudChats.PhoneCallDiscardReasonBase Reason { get; set; }
 
-[JsonPropertyName("duration")]
+[Newtonsoft.Json.JsonProperty("duration")]
 		public int? Duration { get; set; }
 
         
@@ -69,18 +71,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			CallId = reader.Read<long>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Reason = reader.Read<PhoneCallDiscardReasonBase>();
+				Reason = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhoneCallDiscardReasonBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
 				Duration = reader.Read<int>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "messageActionPhoneCall";
+		    return "messageActionPhoneCall";
 		}
 	}
 }

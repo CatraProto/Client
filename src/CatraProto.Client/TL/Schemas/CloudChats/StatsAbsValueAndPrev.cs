@@ -1,21 +1,24 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class StatsAbsValueAndPrev : StatsAbsValueAndPrevBase
+	public partial class StatsAbsValueAndPrev : CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase
 	{
 
 
         public static int StaticConstructorId { get => -884757282; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("current")]
+[Newtonsoft.Json.JsonProperty("current")]
 		public override double Current { get; set; }
 
-[JsonPropertyName("previous")]
+[Newtonsoft.Json.JsonProperty("previous")]
 		public override double Previous { get; set; }
 
         
@@ -36,11 +39,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Current = reader.Read<double>();
 			Previous = reader.Read<double>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "statsAbsValueAndPrev";
+		    return "statsAbsValueAndPrev";
 		}
 	}
 }

@@ -1,21 +1,24 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class LabeledPrice : LabeledPriceBase
+	public partial class LabeledPrice : CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase
 	{
 
 
         public static int StaticConstructorId { get => -886477832; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("label")]
+[Newtonsoft.Json.JsonProperty("label")]
 		public override string Label { get; set; }
 
-[JsonPropertyName("amount")]
+[Newtonsoft.Json.JsonProperty("amount")]
 		public override long Amount { get; set; }
 
         
@@ -36,11 +39,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Label = reader.Read<string>();
 			Amount = reader.Read<long>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "labeledPrice";
+		    return "labeledPrice";
 		}
 	}
 }

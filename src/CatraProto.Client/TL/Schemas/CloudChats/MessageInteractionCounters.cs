@@ -1,24 +1,27 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageInteractionCounters : MessageInteractionCountersBase
+	public partial class MessageInteractionCounters : CatraProto.Client.TL.Schemas.CloudChats.MessageInteractionCountersBase
 	{
 
 
         public static int StaticConstructorId { get => -1387279939; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("msg_id")]
+[Newtonsoft.Json.JsonProperty("msg_id")]
 		public override int MsgId { get; set; }
 
-[JsonPropertyName("views")]
+[Newtonsoft.Json.JsonProperty("views")]
 		public override int Views { get; set; }
 
-[JsonPropertyName("forwards")]
+[Newtonsoft.Json.JsonProperty("forwards")]
 		public override int Forwards { get; set; }
 
         
@@ -41,11 +44,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			MsgId = reader.Read<int>();
 			Views = reader.Read<int>();
 			Forwards = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "messageInteractionCounters";
+		    return "messageInteractionCounters";
 		}
 	}
 }

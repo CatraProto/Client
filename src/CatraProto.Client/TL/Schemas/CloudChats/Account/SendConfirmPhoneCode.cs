@@ -1,57 +1,60 @@
 using System;
-using System.Text.Json.Serialization;
 using CatraProto.Client.TL.Schemas.CloudChats.Auth;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class SendConfirmPhoneCode : IMethod
-	{
-
+    public partial class SendConfirmPhoneCode : IMethod
+    {
+        [JsonIgnore]
+        public static int StaticConstructorId
+        {
+            get => 457157256;
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => 457157256; }
-        [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(SentCodeBase);
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(SentCodeBase);
 
-[JsonPropertyName("hash")]
-		public string Hash { get; set; }
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("settings")]
-		public CodeSettingsBase Settings { get; set; }
+        [JsonProperty("hash")] public string Hash { get; set; }
+
+        [JsonProperty("settings")] public CodeSettingsBase Settings { get; set; }
+
+        public override string ToString()
+        {
+            return "account.sendConfirmPhoneCode";
+        }
 
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Hash);
-			writer.Write(Settings);
+            writer.Write(Hash);
+            writer.Write(Settings);
+        }
 
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			Hash = reader.Read<string>();
-			Settings = reader.Read<CodeSettingsBase>();
-		}
-
-		public override string ToString()
-		{
-			return "account.sendConfirmPhoneCode";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Hash = reader.Read<string>();
+            Settings = reader.Read<CodeSettingsBase>();
+        }
+    }
 }

@@ -1,28 +1,31 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputAppEvent : InputAppEventBase
+	public partial class InputAppEvent : CatraProto.Client.TL.Schemas.CloudChats.InputAppEventBase
 	{
 
 
         public static int StaticConstructorId { get => 488313413; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("time")]
+[Newtonsoft.Json.JsonProperty("time")]
 		public override double Time { get; set; }
 
-[JsonPropertyName("type")]
+[Newtonsoft.Json.JsonProperty("type")]
 		public override string Type { get; set; }
 
-[JsonPropertyName("peer")]
+[Newtonsoft.Json.JsonProperty("peer")]
 		public override long Peer { get; set; }
 
-[JsonPropertyName("data")]
-		public override JSONValueBase Data { get; set; }
+[Newtonsoft.Json.JsonProperty("data")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.JSONValueBase Data { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -45,12 +48,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Time = reader.Read<double>();
 			Type = reader.Read<string>();
 			Peer = reader.Read<long>();
-			Data = reader.Read<JSONValueBase>();
-		}
+			Data = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.JSONValueBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "inputAppEvent";
+		    return "inputAppEvent";
 		}
 	}
 }

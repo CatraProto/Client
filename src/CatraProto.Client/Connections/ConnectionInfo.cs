@@ -5,13 +5,15 @@ namespace CatraProto.Client.Connections
 {
     public class ConnectionInfo
     {
-        public IPAddress IpAddress { get; init; }
-        public int Port { get; init; }
-        public int DcId { get; init; }
-        public bool Main { get; init; }
+        public ConnectionProtocol ConnectionProtocol { get; }
+        public IPAddress IpAddress { get; }
+        public int Port { get; }
+        public int DcId { get; }
+        public bool Main { get; set; }
 
-        public ConnectionInfo(IPAddress ipAddress, int port, int dcId)
+        public ConnectionInfo(ConnectionProtocol connectionProtocol, IPAddress ipAddress, int port, int dcId)
         {
+            ConnectionProtocol = connectionProtocol;
             IpAddress = ipAddress ?? throw new ArgumentNullException(nameof(ipAddress));
             Port = port;
             DcId = dcId;

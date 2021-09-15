@@ -1,28 +1,30 @@
-using System.Numerics;
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class ClientDHInnerData : ClientDHInnerDataBase
+	public partial class ClientDHInnerData : CatraProto.Client.TL.Schemas.MTProto.ClientDHInnerDataBase
 	{
 
 
         public static int StaticConstructorId { get => 1715713620; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("nonce")]
-		public override BigInteger Nonce { get; set; }
+[Newtonsoft.Json.JsonProperty("nonce")]
+		public override System.Numerics.BigInteger Nonce { get; set; }
 
-[JsonPropertyName("server_nonce")]
-		public override BigInteger ServerNonce { get; set; }
+[Newtonsoft.Json.JsonProperty("server_nonce")]
+		public override System.Numerics.BigInteger ServerNonce { get; set; }
 
-[JsonPropertyName("retry_id")]
+[Newtonsoft.Json.JsonProperty("retry_id")]
 		public override long RetryId { get; set; }
 
-[JsonPropertyName("g_b")]
+[Newtonsoft.Json.JsonProperty("g_b")]
 		public override byte[] GB { get; set; }
 
         
@@ -43,15 +45,16 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
 		public override void Deserialize(Reader reader)
 		{
-			Nonce = reader.Read<BigInteger>(128);
-			ServerNonce = reader.Read<BigInteger>(128);
+			Nonce = reader.Read<System.Numerics.BigInteger>(128);
+			ServerNonce = reader.Read<System.Numerics.BigInteger>(128);
 			RetryId = reader.Read<long>();
 			GB = reader.Read<byte[]>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "client_DH_inner_data";
+		    return "client_DH_inner_data";
 		}
 	}
 }

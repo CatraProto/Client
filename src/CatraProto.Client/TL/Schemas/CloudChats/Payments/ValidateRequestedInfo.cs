@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -15,26 +16,28 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 			Save = 1 << 0
 		}
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => 1997180532; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Payments.ValidatedRequestedInfoBase);
 
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(ValidatedRequestedInfoBase);
-
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("save")]
+[Newtonsoft.Json.JsonProperty("save")]
 		public bool Save { get; set; }
 
-[JsonPropertyName("msg_id")]
+[Newtonsoft.Json.JsonProperty("msg_id")]
 		public int MsgId { get; set; }
 
-		[JsonPropertyName("info")] public PaymentRequestedInfoBase Info { get; set; }
+[Newtonsoft.Json.JsonProperty("info")]
+		public CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase Info { get; set; }
 
 
 		public void UpdateFlags() 
@@ -58,12 +61,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 			Flags = reader.Read<int>();
 			Save = FlagsHelper.IsFlagSet(Flags, 0);
 			MsgId = reader.Read<int>();
-			Info = reader.Read<PaymentRequestedInfoBase>();
-		}
+			Info = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase>();
 
+		}
+		
 		public override string ToString()
 		{
-			return "payments.validateRequestedInfo";
+		    return "payments.validateRequestedInfo";
 		}
 	}
 }

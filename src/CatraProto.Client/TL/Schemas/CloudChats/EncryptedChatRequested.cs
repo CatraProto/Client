@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class EncryptedChatRequested : EncryptedChatBase
+	public partial class EncryptedChatRequested : CatraProto.Client.TL.Schemas.CloudChats.EncryptedChatBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,31 +16,31 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 1651608194; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("folder_id")]
+[Newtonsoft.Json.JsonProperty("folder_id")]
 		public int? FolderId { get; set; }
 
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public override int Id { get; set; }
 
-[JsonPropertyName("access_hash")]
+[Newtonsoft.Json.JsonProperty("access_hash")]
 		public long AccessHash { get; set; }
 
-[JsonPropertyName("date")]
+[Newtonsoft.Json.JsonProperty("date")]
 		public int Date { get; set; }
 
-[JsonPropertyName("admin_id")]
+[Newtonsoft.Json.JsonProperty("admin_id")]
 		public int AdminId { get; set; }
 
-[JsonPropertyName("participant_id")]
+[Newtonsoft.Json.JsonProperty("participant_id")]
 		public int ParticipantId { get; set; }
 
-[JsonPropertyName("g_a")]
+[Newtonsoft.Json.JsonProperty("g_a")]
 		public byte[] GA { get; set; }
 
         
@@ -81,11 +83,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			AdminId = reader.Read<int>();
 			ParticipantId = reader.Read<int>();
 			GA = reader.Read<byte[]>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "encryptedChatRequested";
+		    return "encryptedChatRequested";
 		}
 	}
 }

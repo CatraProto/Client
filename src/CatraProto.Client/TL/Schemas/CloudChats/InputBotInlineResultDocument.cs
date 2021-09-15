@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputBotInlineResultDocument : InputBotInlineResultBase
+	public partial class InputBotInlineResultDocument : CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineResultBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,29 +17,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -459324; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public override string Id { get; set; }
 
-[JsonPropertyName("type")]
+[Newtonsoft.Json.JsonProperty("type")]
 		public string Type { get; set; }
 
-[JsonPropertyName("title")]
+[Newtonsoft.Json.JsonProperty("title")]
 		public string Title { get; set; }
 
-[JsonPropertyName("description")]
+[Newtonsoft.Json.JsonProperty("description")]
 		public string Description { get; set; }
 
-[JsonPropertyName("document")]
-		public InputDocumentBase Document { get; set; }
+[Newtonsoft.Json.JsonProperty("document")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase Document { get; set; }
 
-[JsonPropertyName("send_message")]
-		public override InputBotInlineMessageBase SendMessage { get; set; }
+[Newtonsoft.Json.JsonProperty("send_message")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageBase SendMessage { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -84,13 +86,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 				Description = reader.Read<string>();
 			}
 
-			Document = reader.Read<InputDocumentBase>();
-			SendMessage = reader.Read<InputBotInlineMessageBase>();
-		}
+			Document = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
+			SendMessage = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "inputBotInlineResultDocument";
+		    return "inputBotInlineResultDocument";
 		}
 	}
 }

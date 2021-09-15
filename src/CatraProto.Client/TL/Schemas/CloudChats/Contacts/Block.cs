@@ -1,49 +1,55 @@
 using System;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
-	public partial class Block : IMethod
-	{
-
+    public partial class Block : IMethod
+    {
+        [JsonIgnore]
+        public static int StaticConstructorId
+        {
+            get => 1758204945;
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => 1758204945; }
-        [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
         [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
 
-		[JsonPropertyName("id")] public InputPeerBase Id { get; set; }
+        [JsonProperty("id")] public InputPeerBase Id { get; set; }
+
+        public override string ToString()
+        {
+            return "contacts.block";
+        }
 
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Id);
+            writer.Write(Id);
+        }
 
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			Id = reader.Read<InputPeerBase>();
-		}
-
-		public override string ToString()
-		{
-			return "contacts.block";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Id = reader.Read<InputPeerBase>();
+        }
+    }
 }

@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,7 +7,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class EmojiLanguageBase : IObject
     {
 
-[JsonPropertyName("lang_code")]
+[Newtonsoft.Json.JsonProperty("lang_code")]
 		public abstract string LangCode { get; set; }
 
         public abstract void UpdateFlags();

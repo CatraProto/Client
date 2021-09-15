@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputPeerNotifySettings : InputPeerNotifySettingsBase
+	public partial class InputPeerNotifySettings : CatraProto.Client.TL.Schemas.CloudChats.InputPeerNotifySettingsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -17,22 +19,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -1673717362; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("show_previews")]
+[Newtonsoft.Json.JsonProperty("show_previews")]
 		public override bool? ShowPreviews { get; set; }
 
-[JsonPropertyName("silent")]
+[Newtonsoft.Json.JsonProperty("silent")]
 		public override bool? Silent { get; set; }
 
-[JsonPropertyName("mute_until")]
+[Newtonsoft.Json.JsonProperty("mute_until")]
 		public override int? MuteUntil { get; set; }
 
-[JsonPropertyName("sound")]
+[Newtonsoft.Json.JsonProperty("sound")]
 		public override string Sound { get; set; }
 
         
@@ -68,8 +70,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
+			if(FlagsHelper.IsFlagSet(Flags, 0))
+			{
 			ShowPreviews = reader.Read<bool>();
+			}
+
+			if(FlagsHelper.IsFlagSet(Flags, 1))
+			{
 			Silent = reader.Read<bool>();
+			}
+
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
 				MuteUntil = reader.Read<int>();
@@ -79,11 +89,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			{
 				Sound = reader.Read<string>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "inputPeerNotifySettings";
+		    return "inputPeerNotifySettings";
 		}
 	}
 }

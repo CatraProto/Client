@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,7 +7,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class StickerSetCoveredBase : IObject
     {
 
-[JsonPropertyName("set")]
+[Newtonsoft.Json.JsonProperty("set")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.StickerSetBase Set { get; set; }
 
         public abstract void UpdateFlags();

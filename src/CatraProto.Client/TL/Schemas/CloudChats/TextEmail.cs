@@ -1,21 +1,24 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class TextEmail : RichTextBase
+	public partial class TextEmail : CatraProto.Client.TL.Schemas.CloudChats.RichTextBase
 	{
 
 
         public static int StaticConstructorId { get => -564523562; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("text")]
-		public RichTextBase Text { get; set; }
+[Newtonsoft.Json.JsonProperty("text")]
+		public CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Text { get; set; }
 
-[JsonPropertyName("email")]
+[Newtonsoft.Json.JsonProperty("email")]
 		public string Email { get; set; }
 
         
@@ -34,13 +37,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Text = reader.Read<RichTextBase>();
+			Text = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
 			Email = reader.Read<string>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "textEmail";
+		    return "textEmail";
 		}
 	}
 }

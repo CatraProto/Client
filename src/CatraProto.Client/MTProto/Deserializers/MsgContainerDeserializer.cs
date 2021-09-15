@@ -1,12 +1,10 @@
+using System;
 using System.IO;
-using CatraProto.Client.Connections;
-using CatraProto.Client.MTProto.Session;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL;
 using CatraProto.TL.Exceptions;
 using CatraProto.TL.Interfaces;
-using CatraProto.TL.Interfaces.Deserializers;
-using Serilog;
+
 #nullable disable
 namespace CatraProto.Client.MTProto.Deserializers
 {
@@ -26,12 +24,9 @@ namespace CatraProto.Client.MTProto.Deserializers
             try
             {
                 Body = reader.Read<IObject>();
-                if (Body is GzipPacked packed)
-                {
-                    Body = GzipHandler.DeserializeGzip(packed.PackedData);
-                }
             }
-            catch (DeserializationException exception) when (exception.ErrorCode == DeserializationException.DeserializationErrors.ProviderReturnedNull)
+            catch (DeserializationException exception) when (exception.ErrorCode ==
+                                                             DeserializationException.DeserializationErrors.ProviderReturnedNull)
             {
                 var stream = reader.Stream;
                 stream.Seek(currentPosition + Bytes, SeekOrigin.Begin);
@@ -40,7 +35,7 @@ namespace CatraProto.Client.MTProto.Deserializers
 
         public override void Serialize(Writer writer)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override void UpdateFlags()

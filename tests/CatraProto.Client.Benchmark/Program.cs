@@ -8,7 +8,7 @@ namespace CatraProto.Client.Benchmark
 	{
 		static void Main(string[] args)
 		{
-			BenchmarkRunner.Run<IgeEncryptorTest>();
+			BenchmarkRunner.Run<Memory>();
 		}
 	}
 }

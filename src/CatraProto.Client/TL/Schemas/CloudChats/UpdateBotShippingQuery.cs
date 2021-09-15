@@ -1,28 +1,31 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateBotShippingQuery : UpdateBase
+	public partial class UpdateBotShippingQuery : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 
 
         public static int StaticConstructorId { get => -523384512; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("query_id")]
+[Newtonsoft.Json.JsonProperty("query_id")]
 		public long QueryId { get; set; }
 
-[JsonPropertyName("user_id")]
+[Newtonsoft.Json.JsonProperty("user_id")]
 		public int UserId { get; set; }
 
-[JsonPropertyName("payload")]
+[Newtonsoft.Json.JsonProperty("payload")]
 		public byte[] Payload { get; set; }
 
-[JsonPropertyName("shipping_address")]
-		public PostAddressBase ShippingAddress { get; set; }
+[Newtonsoft.Json.JsonProperty("shipping_address")]
+		public CatraProto.Client.TL.Schemas.CloudChats.PostAddressBase ShippingAddress { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -45,12 +48,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			QueryId = reader.Read<long>();
 			UserId = reader.Read<int>();
 			Payload = reader.Read<byte[]>();
-			ShippingAddress = reader.Read<PostAddressBase>();
-		}
+			ShippingAddress = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PostAddressBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "updateBotShippingQuery";
+		    return "updateBotShippingQuery";
 		}
 	}
 }

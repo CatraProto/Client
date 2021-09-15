@@ -1,50 +1,55 @@
 using System;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
-	public partial class ToggleTopPeers : IMethod
-	{
-
+    public partial class ToggleTopPeers : IMethod
+    {
+        [JsonIgnore]
+        public static int StaticConstructorId
+        {
+            get => -2062238246;
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => -2062238246; }
-        [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
         [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("enabled")]
-		public bool Enabled { get; set; }
+        [JsonProperty("enabled")] public bool Enabled { get; set; }
+
+        public override string ToString()
+        {
+            return "contacts.toggleTopPeers";
+        }
 
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Enabled);
+            writer.Write(Enabled);
+        }
 
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			Enabled = reader.Read<bool>();
-		}
-
-		public override string ToString()
-		{
-			return "contacts.toggleTopPeers";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Enabled = reader.Read<bool>();
+        }
+    }
 }

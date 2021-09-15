@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,49 +7,49 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class UserFullBase : IObject
     {
 
-[JsonPropertyName("blocked")]
+[Newtonsoft.Json.JsonProperty("blocked")]
 		public abstract bool Blocked { get; set; }
 
-[JsonPropertyName("phone_calls_available")]
+[Newtonsoft.Json.JsonProperty("phone_calls_available")]
 		public abstract bool PhoneCallsAvailable { get; set; }
 
-[JsonPropertyName("phone_calls_private")]
+[Newtonsoft.Json.JsonProperty("phone_calls_private")]
 		public abstract bool PhoneCallsPrivate { get; set; }
 
-[JsonPropertyName("can_pin_message")]
+[Newtonsoft.Json.JsonProperty("can_pin_message")]
 		public abstract bool CanPinMessage { get; set; }
 
-[JsonPropertyName("has_scheduled")]
+[Newtonsoft.Json.JsonProperty("has_scheduled")]
 		public abstract bool HasScheduled { get; set; }
 
-[JsonPropertyName("video_calls_available")]
+[Newtonsoft.Json.JsonProperty("video_calls_available")]
 		public abstract bool VideoCallsAvailable { get; set; }
 
-[JsonPropertyName("user")]
+[Newtonsoft.Json.JsonProperty("user")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.UserBase User { get; set; }
 
-[JsonPropertyName("about")]
+[Newtonsoft.Json.JsonProperty("about")]
 		public abstract string About { get; set; }
 
-[JsonPropertyName("settings")]
+[Newtonsoft.Json.JsonProperty("settings")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.PeerSettingsBase Settings { get; set; }
 
-[JsonPropertyName("profile_photo")]
+[Newtonsoft.Json.JsonProperty("profile_photo")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.PhotoBase ProfilePhoto { get; set; }
 
-[JsonPropertyName("notify_settings")]
+[Newtonsoft.Json.JsonProperty("notify_settings")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase NotifySettings { get; set; }
 
-[JsonPropertyName("bot_info")]
+[Newtonsoft.Json.JsonProperty("bot_info")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase BotInfo { get; set; }
 
-[JsonPropertyName("pinned_msg_id")]
+[Newtonsoft.Json.JsonProperty("pinned_msg_id")]
 		public abstract int? PinnedMsgId { get; set; }
 
-[JsonPropertyName("common_chats_count")]
+[Newtonsoft.Json.JsonProperty("common_chats_count")]
 		public abstract int CommonChatsCount { get; set; }
 
-[JsonPropertyName("folder_id")]
+[Newtonsoft.Json.JsonProperty("folder_id")]
 		public abstract int? FolderId { get; set; }
 
         public abstract void UpdateFlags();

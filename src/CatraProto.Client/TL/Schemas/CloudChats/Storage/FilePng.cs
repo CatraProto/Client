@@ -1,15 +1,18 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Storage
 {
-	public partial class FilePng : FileTypeBase
+	public partial class FilePng : CatraProto.Client.TL.Schemas.CloudChats.Storage.FileTypeBase
 	{
 
 
         public static int StaticConstructorId { get => 172975040; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
         
@@ -26,11 +29,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Storage
 
 		public override void Deserialize(Reader reader)
 		{
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "storage.filePng";
+		    return "storage.filePng";
 		}
 	}
 }

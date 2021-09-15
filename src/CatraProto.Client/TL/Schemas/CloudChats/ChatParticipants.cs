@@ -1,25 +1,27 @@
+using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChatParticipants : ChatParticipantsBase
+	public partial class ChatParticipants : CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantsBase
 	{
 
 
         public static int StaticConstructorId { get => 1061556205; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("chat_id")]
+[Newtonsoft.Json.JsonProperty("chat_id")]
 		public override int ChatId { get; set; }
 
-[JsonPropertyName("participants")]
-		public IList<ChatParticipantBase> Participants { get; set; }
+[Newtonsoft.Json.JsonProperty("participants")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantBase> Participants { get; set; }
 
-[JsonPropertyName("version")]
+[Newtonsoft.Json.JsonProperty("version")]
 		public int Version { get; set; }
 
         
@@ -40,13 +42,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			ChatId = reader.Read<int>();
-			Participants = reader.ReadVector<ChatParticipantBase>();
+			Participants = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantBase>();
 			Version = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "chatParticipants";
+		    return "chatParticipants";
 		}
 	}
 }

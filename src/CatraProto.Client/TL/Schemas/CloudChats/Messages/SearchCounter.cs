@@ -1,61 +1,67 @@
 using System;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using Newtonsoft.Json;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class SearchCounter : SearchCounterBase
-	{
-		[Flags]
-		public enum FlagsEnum 
-		{
-			Inexact = 1 << 1
-		}
+    public partial class SearchCounter : SearchCounterBase
+    {
+        [Flags]
+        public enum FlagsEnum
+        {
+            Inexact = 1 << 1
+        }
 
-        public static int StaticConstructorId { get => -398136321; }
+        public static int StaticConstructorId
+        {
+            get => -398136321;
+        }
+
         [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore]
-		public int Flags { get; set; }
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonPropertyName("inexact")]
-		public override bool Inexact { get; set; }
+        [JsonIgnore] public int Flags { get; set; }
 
-		[JsonPropertyName("filter")] public override MessagesFilterBase Filter { get; set; }
+        [JsonProperty("inexact")] public override bool Inexact { get; set; }
 
-[JsonPropertyName("count")]
-		public override int Count { get; set; }
+        [JsonProperty("filter")] public override MessagesFilterBase Filter { get; set; }
 
-        
-		public override void UpdateFlags() 
-		{
-			Flags = Inexact ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
+        [JsonProperty("count")] public override int Count { get; set; }
 
-		}
 
-		public override void Serialize(Writer writer)
-		{
-		    if(ConstructorId != 0) writer.Write(ConstructorId);
-			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Filter);
-			writer.Write(Count);
+        public override void UpdateFlags()
+        {
+            Flags = Inexact ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
+        }
 
-		}
+        public override void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public override void Deserialize(Reader reader)
-		{
-			Flags = reader.Read<int>();
-			Inexact = FlagsHelper.IsFlagSet(Flags, 1);
-			Filter = reader.Read<MessagesFilterBase>();
-			Count = reader.Read<int>();
-		}
+            UpdateFlags();
+            writer.Write(Flags);
+            writer.Write(Filter);
+            writer.Write(Count);
+        }
 
-		public override string ToString()
-		{
-			return "messages.searchCounter";
-		}
-	}
+        public override void Deserialize(Reader reader)
+        {
+            Flags = reader.Read<int>();
+            Inexact = FlagsHelper.IsFlagSet(Flags, 1);
+            Filter = reader.Read<MessagesFilterBase>();
+            Count = reader.Read<int>();
+        }
+
+        public override string ToString()
+        {
+            return "messages.searchCounter";
+        }
+    }
 }

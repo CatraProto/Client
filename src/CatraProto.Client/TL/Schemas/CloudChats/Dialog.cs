@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class Dialog : DialogBase
+	public partial class Dialog : CatraProto.Client.TL.Schemas.CloudChats.DialogBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -18,46 +20,46 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 739712882; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("pinned")]
+[Newtonsoft.Json.JsonProperty("pinned")]
 		public override bool Pinned { get; set; }
 
-[JsonPropertyName("unread_mark")]
+[Newtonsoft.Json.JsonProperty("unread_mark")]
 		public bool UnreadMark { get; set; }
 
-[JsonPropertyName("peer")]
-		public override PeerBase Peer { get; set; }
+[Newtonsoft.Json.JsonProperty("peer")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
 
-[JsonPropertyName("top_message")]
+[Newtonsoft.Json.JsonProperty("top_message")]
 		public override int TopMessage { get; set; }
 
-[JsonPropertyName("read_inbox_max_id")]
+[Newtonsoft.Json.JsonProperty("read_inbox_max_id")]
 		public int ReadInboxMaxId { get; set; }
 
-[JsonPropertyName("read_outbox_max_id")]
+[Newtonsoft.Json.JsonProperty("read_outbox_max_id")]
 		public int ReadOutboxMaxId { get; set; }
 
-[JsonPropertyName("unread_count")]
+[Newtonsoft.Json.JsonProperty("unread_count")]
 		public int UnreadCount { get; set; }
 
-[JsonPropertyName("unread_mentions_count")]
+[Newtonsoft.Json.JsonProperty("unread_mentions_count")]
 		public int UnreadMentionsCount { get; set; }
 
-[JsonPropertyName("notify_settings")]
-		public PeerNotifySettingsBase NotifySettings { get; set; }
+[Newtonsoft.Json.JsonProperty("notify_settings")]
+		public CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase NotifySettings { get; set; }
 
-[JsonPropertyName("pts")]
+[Newtonsoft.Json.JsonProperty("pts")]
 		public int? Pts { get; set; }
 
-[JsonPropertyName("draft")]
-		public DraftMessageBase Draft { get; set; }
+[Newtonsoft.Json.JsonProperty("draft")]
+		public CatraProto.Client.TL.Schemas.CloudChats.DraftMessageBase Draft { get; set; }
 
-[JsonPropertyName("folder_id")]
+[Newtonsoft.Json.JsonProperty("folder_id")]
 		public int? FolderId { get; set; }
 
         
@@ -106,13 +108,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = reader.Read<int>();
 			Pinned = FlagsHelper.IsFlagSet(Flags, 2);
 			UnreadMark = FlagsHelper.IsFlagSet(Flags, 3);
-			Peer = reader.Read<PeerBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
 			TopMessage = reader.Read<int>();
 			ReadInboxMaxId = reader.Read<int>();
 			ReadOutboxMaxId = reader.Read<int>();
 			UnreadCount = reader.Read<int>();
 			UnreadMentionsCount = reader.Read<int>();
-			NotifySettings = reader.Read<PeerNotifySettingsBase>();
+			NotifySettings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				Pts = reader.Read<int>();
@@ -120,18 +122,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Draft = reader.Read<DraftMessageBase>();
+				Draft = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DraftMessageBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
 				FolderId = reader.Read<int>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "dialog";
+		    return "dialog";
 		}
 	}
 }

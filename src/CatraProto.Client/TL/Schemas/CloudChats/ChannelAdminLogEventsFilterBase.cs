@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,52 +7,52 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class ChannelAdminLogEventsFilterBase : IObject
     {
 
-[JsonPropertyName("join")]
+[Newtonsoft.Json.JsonProperty("join")]
 		public abstract bool Join { get; set; }
 
-[JsonPropertyName("leave")]
+[Newtonsoft.Json.JsonProperty("leave")]
 		public abstract bool Leave { get; set; }
 
-[JsonPropertyName("invite")]
+[Newtonsoft.Json.JsonProperty("invite")]
 		public abstract bool Invite { get; set; }
 
-[JsonPropertyName("ban")]
+[Newtonsoft.Json.JsonProperty("ban")]
 		public abstract bool Ban { get; set; }
 
-[JsonPropertyName("unban")]
+[Newtonsoft.Json.JsonProperty("unban")]
 		public abstract bool Unban { get; set; }
 
-[JsonPropertyName("kick")]
+[Newtonsoft.Json.JsonProperty("kick")]
 		public abstract bool Kick { get; set; }
 
-[JsonPropertyName("unkick")]
+[Newtonsoft.Json.JsonProperty("unkick")]
 		public abstract bool Unkick { get; set; }
 
-[JsonPropertyName("promote")]
+[Newtonsoft.Json.JsonProperty("promote")]
 		public abstract bool Promote { get; set; }
 
-[JsonPropertyName("demote")]
+[Newtonsoft.Json.JsonProperty("demote")]
 		public abstract bool Demote { get; set; }
 
-[JsonPropertyName("info")]
+[Newtonsoft.Json.JsonProperty("info")]
 		public abstract bool Info { get; set; }
 
-[JsonPropertyName("settings")]
+[Newtonsoft.Json.JsonProperty("settings")]
 		public abstract bool Settings { get; set; }
 
-[JsonPropertyName("pinned")]
+[Newtonsoft.Json.JsonProperty("pinned")]
 		public abstract bool Pinned { get; set; }
 
-[JsonPropertyName("edit")]
+[Newtonsoft.Json.JsonProperty("edit")]
 		public abstract bool Edit { get; set; }
 
-[JsonPropertyName("delete")]
+[Newtonsoft.Json.JsonProperty("delete")]
 		public abstract bool Delete { get; set; }
 
-[JsonPropertyName("group_call")]
+[Newtonsoft.Json.JsonProperty("group_call")]
 		public abstract bool GroupCall { get; set; }
 
-[JsonPropertyName("invites")]
+[Newtonsoft.Json.JsonProperty("invites")]
 		public abstract bool Invites { get; set; }
 
         public abstract void UpdateFlags();

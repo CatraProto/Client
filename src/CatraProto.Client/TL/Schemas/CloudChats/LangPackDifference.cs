@@ -1,29 +1,31 @@
+using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class LangPackDifference : LangPackDifferenceBase
+	public partial class LangPackDifference : CatraProto.Client.TL.Schemas.CloudChats.LangPackDifferenceBase
 	{
 
 
         public static int StaticConstructorId { get => -209337866; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("lang_code")]
+[Newtonsoft.Json.JsonProperty("lang_code")]
 		public override string LangCode { get; set; }
 
-[JsonPropertyName("from_version")]
+[Newtonsoft.Json.JsonProperty("from_version")]
 		public override int FromVersion { get; set; }
 
-[JsonPropertyName("version")]
+[Newtonsoft.Json.JsonProperty("version")]
 		public override int Version { get; set; }
 
-[JsonPropertyName("strings")]
-		public override IList<LangPackStringBase> Strings { get; set; }
+[Newtonsoft.Json.JsonProperty("strings")]
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.LangPackStringBase> Strings { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -46,12 +48,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			LangCode = reader.Read<string>();
 			FromVersion = reader.Read<int>();
 			Version = reader.Read<int>();
-			Strings = reader.ReadVector<LangPackStringBase>();
-		}
+			Strings = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.LangPackStringBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "langPackDifference";
+		    return "langPackDifference";
 		}
 	}
 }

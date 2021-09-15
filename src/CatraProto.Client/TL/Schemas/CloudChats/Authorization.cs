@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class Authorization : AuthorizationBase
+	public partial class Authorization : CatraProto.Client.TL.Schemas.CloudChats.AuthorizationBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,55 +18,55 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -1392388579; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("current")]
+[Newtonsoft.Json.JsonProperty("current")]
 		public override bool Current { get; set; }
 
-[JsonPropertyName("official_app")]
+[Newtonsoft.Json.JsonProperty("official_app")]
 		public override bool OfficialApp { get; set; }
 
-[JsonPropertyName("password_pending")]
+[Newtonsoft.Json.JsonProperty("password_pending")]
 		public override bool PasswordPending { get; set; }
 
-[JsonPropertyName("hash")]
+[Newtonsoft.Json.JsonProperty("hash")]
 		public override long Hash { get; set; }
 
-[JsonPropertyName("device_model")]
+[Newtonsoft.Json.JsonProperty("device_model")]
 		public override string DeviceModel { get; set; }
 
-[JsonPropertyName("platform")]
+[Newtonsoft.Json.JsonProperty("platform")]
 		public override string Platform { get; set; }
 
-[JsonPropertyName("system_version")]
+[Newtonsoft.Json.JsonProperty("system_version")]
 		public override string SystemVersion { get; set; }
 
-[JsonPropertyName("api_id")]
+[Newtonsoft.Json.JsonProperty("api_id")]
 		public override int ApiId { get; set; }
 
-[JsonPropertyName("app_name")]
+[Newtonsoft.Json.JsonProperty("app_name")]
 		public override string AppName { get; set; }
 
-[JsonPropertyName("app_version")]
+[Newtonsoft.Json.JsonProperty("app_version")]
 		public override string AppVersion { get; set; }
 
-[JsonPropertyName("date_created")]
+[Newtonsoft.Json.JsonProperty("date_created")]
 		public override int DateCreated { get; set; }
 
-[JsonPropertyName("date_active")]
+[Newtonsoft.Json.JsonProperty("date_active")]
 		public override int DateActive { get; set; }
 
-[JsonPropertyName("ip")]
+[Newtonsoft.Json.JsonProperty("ip")]
 		public override string Ip { get; set; }
 
-[JsonPropertyName("country")]
+[Newtonsoft.Json.JsonProperty("country")]
 		public override string Country { get; set; }
 
-[JsonPropertyName("region")]
+[Newtonsoft.Json.JsonProperty("region")]
 		public override string Region { get; set; }
 
         
@@ -114,11 +116,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Ip = reader.Read<string>();
 			Country = reader.Read<string>();
 			Region = reader.Read<string>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "authorization";
+		    return "authorization";
 		}
 	}
 }

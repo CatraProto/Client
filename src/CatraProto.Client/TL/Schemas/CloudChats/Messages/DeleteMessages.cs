@@ -1,66 +1,71 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class DeleteMessages : IMethod
-	{
-		[Flags]
-		public enum FlagsEnum 
-		{
-			Revoke = 1 << 0
-		}
+    public partial class DeleteMessages : IMethod
+    {
+        [Flags]
+        public enum FlagsEnum
+        {
+            Revoke = 1 << 0
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => -443640366; }
+        public static int StaticConstructorId
+        {
+            get => -443640366;
+        }
+
         [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
         [JsonIgnore] Type IMethod.Type { get; init; } = typeof(AffectedMessagesBase);
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
 
-[JsonIgnore]
-		public int Flags { get; set; }
+        [JsonIgnore] public int Flags { get; set; }
 
-[JsonPropertyName("revoke")]
-		public bool Revoke { get; set; }
+        [JsonProperty("revoke")] public bool Revoke { get; set; }
 
-[JsonPropertyName("id")]
-		public IList<int> Id { get; set; }
+        [JsonProperty("id")] public IList<int> Id { get; set; }
+
+        public override string ToString()
+        {
+            return "messages.deleteMessages";
+        }
 
 
-		public void UpdateFlags() 
-		{
-			Flags = Revoke ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
+        public void UpdateFlags()
+        {
+            Flags = Revoke ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Id);
+            UpdateFlags();
+            writer.Write(Flags);
+            writer.Write(Id);
+        }
 
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			Flags = reader.Read<int>();
-			Revoke = FlagsHelper.IsFlagSet(Flags, 0);
-			Id = reader.ReadVector<int>();
-		}
-
-		public override string ToString()
-		{
-			return "messages.deleteMessages";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Flags = reader.Read<int>();
+            Revoke = FlagsHelper.IsFlagSet(Flags, 0);
+            Id = reader.ReadVector<int>();
+        }
+    }
 }

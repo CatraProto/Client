@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -15,23 +16,25 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Filter = 1 << 0
 		}
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => 450142282; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(bool);
 
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
-
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public int Id { get; set; }
 
-		[JsonPropertyName("filter")] public DialogFilterBase Filter { get; set; }
+[Newtonsoft.Json.JsonProperty("filter")]
+		public CatraProto.Client.TL.Schemas.CloudChats.DialogFilterBase Filter { get; set; }
 
 
 		public void UpdateFlags() 
@@ -60,13 +63,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Id = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Filter = reader.Read<DialogFilterBase>();
+				Filter = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DialogFilterBase>();
 			}
-		}
 
+
+		}
+		
 		public override string ToString()
 		{
-			return "messages.updateDialogFilter";
+		    return "messages.updateDialogFilter";
 		}
 	}
 }

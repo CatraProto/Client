@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class SecureRequiredType : SecureRequiredTypeBase
+	public partial class SecureRequiredType : CatraProto.Client.TL.Schemas.CloudChats.SecureRequiredTypeBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,23 +18,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -2103600678; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("native_names")]
+[Newtonsoft.Json.JsonProperty("native_names")]
 		public bool NativeNames { get; set; }
 
-[JsonPropertyName("selfie_required")]
+[Newtonsoft.Json.JsonProperty("selfie_required")]
 		public bool SelfieRequired { get; set; }
 
-[JsonPropertyName("translation_required")]
+[Newtonsoft.Json.JsonProperty("translation_required")]
 		public bool TranslationRequired { get; set; }
 
-[JsonPropertyName("type")]
-		public SecureValueTypeBase Type { get; set; }
+[Newtonsoft.Json.JsonProperty("type")]
+		public CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase Type { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -58,12 +60,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			NativeNames = FlagsHelper.IsFlagSet(Flags, 0);
 			SelfieRequired = FlagsHelper.IsFlagSet(Flags, 1);
 			TranslationRequired = FlagsHelper.IsFlagSet(Flags, 2);
-			Type = reader.Read<SecureValueTypeBase>();
-		}
+			Type = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "secureRequiredType";
+		    return "secureRequiredType";
 		}
 	}
 }

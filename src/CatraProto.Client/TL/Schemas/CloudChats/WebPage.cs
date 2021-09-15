@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class WebPage : WebPageBase
+	public partial class WebPage : CatraProto.Client.TL.Schemas.CloudChats.WebPageBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -28,65 +29,65 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -392411726; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public long Id { get; set; }
 
-[JsonPropertyName("url")]
+[Newtonsoft.Json.JsonProperty("url")]
 		public string Url { get; set; }
 
-[JsonPropertyName("display_url")]
+[Newtonsoft.Json.JsonProperty("display_url")]
 		public string DisplayUrl { get; set; }
 
-[JsonPropertyName("hash")]
+[Newtonsoft.Json.JsonProperty("hash")]
 		public int Hash { get; set; }
 
-[JsonPropertyName("type")]
+[Newtonsoft.Json.JsonProperty("type")]
 		public string Type { get; set; }
 
-[JsonPropertyName("site_name")]
+[Newtonsoft.Json.JsonProperty("site_name")]
 		public string SiteName { get; set; }
 
-[JsonPropertyName("title")]
+[Newtonsoft.Json.JsonProperty("title")]
 		public string Title { get; set; }
 
-[JsonPropertyName("description")]
+[Newtonsoft.Json.JsonProperty("description")]
 		public string Description { get; set; }
 
-[JsonPropertyName("photo")]
-		public PhotoBase Photo { get; set; }
+[Newtonsoft.Json.JsonProperty("photo")]
+		public CatraProto.Client.TL.Schemas.CloudChats.PhotoBase Photo { get; set; }
 
-[JsonPropertyName("embed_url")]
+[Newtonsoft.Json.JsonProperty("embed_url")]
 		public string EmbedUrl { get; set; }
 
-[JsonPropertyName("embed_type")]
+[Newtonsoft.Json.JsonProperty("embed_type")]
 		public string EmbedType { get; set; }
 
-[JsonPropertyName("embed_width")]
+[Newtonsoft.Json.JsonProperty("embed_width")]
 		public int? EmbedWidth { get; set; }
 
-[JsonPropertyName("embed_height")]
+[Newtonsoft.Json.JsonProperty("embed_height")]
 		public int? EmbedHeight { get; set; }
 
-[JsonPropertyName("duration")]
+[Newtonsoft.Json.JsonProperty("duration")]
 		public int? Duration { get; set; }
 
-[JsonPropertyName("author")]
+[Newtonsoft.Json.JsonProperty("author")]
 		public string Author { get; set; }
 
-[JsonPropertyName("document")]
-		public DocumentBase Document { get; set; }
+[Newtonsoft.Json.JsonProperty("document")]
+		public CatraProto.Client.TL.Schemas.CloudChats.DocumentBase Document { get; set; }
 
-[JsonPropertyName("cached_page")]
-		public PageBase CachedPage { get; set; }
+[Newtonsoft.Json.JsonProperty("cached_page")]
+		public CatraProto.Client.TL.Schemas.CloudChats.PageBase CachedPage { get; set; }
 
-[JsonPropertyName("attributes")]
-		public IList<WebPageAttributeBase> Attributes { get; set; }
+[Newtonsoft.Json.JsonProperty("attributes")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.WebPageAttributeBase> Attributes { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -219,7 +220,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				Photo = reader.Read<PhotoBase>();
+				Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
@@ -254,23 +255,25 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 9))
 			{
-				Document = reader.Read<DocumentBase>();
+				Document = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 10))
 			{
-				CachedPage = reader.Read<PageBase>();
+				CachedPage = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PageBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 12))
 			{
-				Attributes = reader.ReadVector<WebPageAttributeBase>();
+				Attributes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.WebPageAttributeBase>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "webPage";
+		    return "webPage";
 		}
 	}
 }

@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -11,17 +12,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 	{
 
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => -265962357; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedHistoryBase);
 
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(AffectedHistoryBase);
-
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-		[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
+[Newtonsoft.Json.JsonProperty("peer")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
 
 
 		public void UpdateFlags() 
@@ -38,12 +41,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 		public void Deserialize(Reader reader)
 		{
-			Peer = reader.Read<InputPeerBase>();
-		}
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
 
+		}
+		
 		public override string ToString()
 		{
-			return "messages.unpinAllMessages";
+		    return "messages.unpinAllMessages";
 		}
 	}
 }

@@ -72,7 +72,7 @@ namespace CatraProto.TL.Generator.Objects.Types.Interfaces
         {
             var typeName = GetTypeName(NamingType.FullNamespace, parameter,true);
             typeName = parameter.HasFlag && TypeInfo.IsBare && !parameter.VectorInfo.IsVector ? typeName + "?" : typeName;
-            stringBuilder.AppendLine($"\n[JsonPropertyName(\"{parameter.NamingInfo.OriginalName}\")]\n{StringTools.TwoTabs}{GetParameterAccessibility(parameter, isAbstract)} {typeName} {parameter.NamingInfo.PascalCaseName} {{ get; set; }}");
+            stringBuilder.AppendLine($"\n[Newtonsoft.Json.JsonProperty(\"{parameter.NamingInfo.OriginalName}\")]\n{StringTools.TwoTabs}{GetParameterAccessibility(parameter, isAbstract)} {typeName} {parameter.NamingInfo.PascalCaseName} {{ get; set; }}");
         }
 
         public virtual void WriteMethodParameter(StringBuilder stringBuilder, Parameter parameter, bool nullableContext = false)

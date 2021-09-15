@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,16 +7,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class InputAppEventBase : IObject
     {
 
-[JsonPropertyName("time")]
+[Newtonsoft.Json.JsonProperty("time")]
 		public abstract double Time { get; set; }
 
-[JsonPropertyName("type")]
+[Newtonsoft.Json.JsonProperty("type")]
 		public abstract string Type { get; set; }
 
-[JsonPropertyName("peer")]
+[Newtonsoft.Json.JsonProperty("peer")]
 		public abstract long Peer { get; set; }
 
-[JsonPropertyName("data")]
+[Newtonsoft.Json.JsonProperty("data")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.JSONValueBase Data { get; set; }
 
         public abstract void UpdateFlags();

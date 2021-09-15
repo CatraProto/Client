@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -11,17 +12,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 	{
 
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => -143257775; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetBase);
 
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(Messages.StickerSetBase);
-
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-		[JsonPropertyName("sticker")] public InputDocumentBase Sticker { get; set; }
+[Newtonsoft.Json.JsonProperty("sticker")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase Sticker { get; set; }
 
 
 		public void UpdateFlags() 
@@ -38,12 +41,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 
 		public void Deserialize(Reader reader)
 		{
-			Sticker = reader.Read<InputDocumentBase>();
-		}
+			Sticker = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
 
+		}
+		
 		public override string ToString()
 		{
-			return "stickers.removeStickerFromSet";
+		    return "stickers.removeStickerFromSet";
 		}
 	}
 }

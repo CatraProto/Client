@@ -1,20 +1,22 @@
+using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ReplyInlineMarkup : ReplyMarkupBase
+	public partial class ReplyInlineMarkup : CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase
 	{
 
 
         public static int StaticConstructorId { get => 1218642516; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("rows")]
-		public IList<KeyboardButtonRowBase> Rows { get; set; }
+[Newtonsoft.Json.JsonProperty("rows")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonRowBase> Rows { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -31,12 +33,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Rows = reader.ReadVector<KeyboardButtonRowBase>();
-		}
+			Rows = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonRowBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "replyInlineMarkup";
+		    return "replyInlineMarkup";
 		}
 	}
 }

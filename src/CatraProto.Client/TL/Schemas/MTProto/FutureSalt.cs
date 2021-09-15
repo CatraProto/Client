@@ -1,24 +1,27 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class FutureSalt : FutureSaltBase
+	public partial class FutureSalt : CatraProto.Client.TL.Schemas.MTProto.FutureSaltBase
 	{
 
 
         public static int StaticConstructorId { get => 155834844; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("valid_since")]
+[Newtonsoft.Json.JsonProperty("valid_since")]
 		public override int ValidSince { get; set; }
 
-[JsonPropertyName("valid_until")]
+[Newtonsoft.Json.JsonProperty("valid_until")]
 		public override int ValidUntil { get; set; }
 
-[JsonPropertyName("salt")]
+[Newtonsoft.Json.JsonProperty("salt")]
 		public override long Salt { get; set; }
 
         
@@ -41,11 +44,12 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 			ValidSince = reader.Read<int>();
 			ValidUntil = reader.Read<int>();
 			Salt = reader.Read<long>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "future_salt";
+		    return "future_salt";
 		}
 	}
 }

@@ -36,5 +36,10 @@ namespace CatraProto.TL
 			using var reader = new Reader(objectProvider, stream, true);
 			return reader.ReadVector<T>();
 		}
+		
+		public static MemoryStream ToMemoryStream(this byte[] data)
+		{
+			return new MemoryStream(data);
+		}
 	}
 }

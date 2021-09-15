@@ -1,18 +1,21 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelAdminLogEventActionToggleInvites : ChannelAdminLogEventActionBase
+	public partial class ChannelAdminLogEventActionToggleInvites : CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionBase
 	{
 
 
         public static int StaticConstructorId { get => 460916654; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("new_value")]
+[Newtonsoft.Json.JsonProperty("new_value")]
 		public bool NewValue { get; set; }
 
         
@@ -31,11 +34,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			NewValue = reader.Read<bool>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "channelAdminLogEventActionToggleInvites";
+		    return "channelAdminLogEventActionToggleInvites";
 		}
 	}
 }

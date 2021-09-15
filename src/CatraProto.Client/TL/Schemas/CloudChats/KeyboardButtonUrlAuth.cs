@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class KeyboardButtonUrlAuth : KeyboardButtonBase
+	public partial class KeyboardButtonUrlAuth : CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,22 +16,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 280464681; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("text")]
+[Newtonsoft.Json.JsonProperty("text")]
 		public override string Text { get; set; }
 
-[JsonPropertyName("fwd_text")]
+[Newtonsoft.Json.JsonProperty("fwd_text")]
 		public string FwdText { get; set; }
 
-[JsonPropertyName("url")]
+[Newtonsoft.Json.JsonProperty("url")]
 		public string Url { get; set; }
 
-[JsonPropertyName("button_id")]
+[Newtonsoft.Json.JsonProperty("button_id")]
 		public int ButtonId { get; set; }
 
         
@@ -66,11 +68,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			Url = reader.Read<string>();
 			ButtonId = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "keyboardButtonUrlAuth";
+		    return "keyboardButtonUrlAuth";
 		}
 	}
 }

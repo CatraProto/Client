@@ -1,18 +1,22 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 {
-	public partial class PaymentResult : PaymentResultBase
+	public partial class PaymentResult : CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentResultBase
 	{
 
 
         public static int StaticConstructorId { get => 1314881805; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-
-        [JsonPropertyName("updates")] public UpdatesBase Updates { get; set; }
+        
+[Newtonsoft.Json.JsonProperty("updates")]
+		public CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase Updates { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -29,12 +33,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 
 		public override void Deserialize(Reader reader)
 		{
-			Updates = reader.Read<UpdatesBase>();
-		}
+			Updates = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "payments.paymentResult";
+		    return "payments.paymentResult";
 		}
 	}
 }

@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -11,19 +12,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 	{
 
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => 2031374829; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(bool);
 
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
-
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-		[JsonPropertyName("peer")] public InputEncryptedChatBase Peer { get; set; }
+[Newtonsoft.Json.JsonProperty("peer")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedChatBase Peer { get; set; }
 
-[JsonPropertyName("typing")]
+[Newtonsoft.Json.JsonProperty("typing")]
 		public bool Typing { get; set; }
 
 
@@ -42,13 +45,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 		public void Deserialize(Reader reader)
 		{
-			Peer = reader.Read<InputEncryptedChatBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedChatBase>();
 			Typing = reader.Read<bool>();
-		}
 
+		}
+		
 		public override string ToString()
 		{
-			return "messages.setEncryptedTyping";
+		    return "messages.setEncryptedTyping";
 		}
 	}
 }

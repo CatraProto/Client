@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PollAnswerVoters : PollAnswerVotersBase
+	public partial class PollAnswerVoters : CatraProto.Client.TL.Schemas.CloudChats.PollAnswerVotersBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,22 +17,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 997055186; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("chosen")]
+[Newtonsoft.Json.JsonProperty("chosen")]
 		public override bool Chosen { get; set; }
 
-[JsonPropertyName("correct")]
+[Newtonsoft.Json.JsonProperty("correct")]
 		public override bool Correct { get; set; }
 
-[JsonPropertyName("option")]
+[Newtonsoft.Json.JsonProperty("option")]
 		public override byte[] Option { get; set; }
 
-[JsonPropertyName("voters")]
+[Newtonsoft.Json.JsonProperty("voters")]
 		public override int Voters { get; set; }
 
         
@@ -58,11 +60,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Correct = FlagsHelper.IsFlagSet(Flags, 1);
 			Option = reader.Read<byte[]>();
 			Voters = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "pollAnswerVoters";
+		    return "pollAnswerVoters";
 		}
 	}
 }

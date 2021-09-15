@@ -1,55 +1,60 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class DeleteScheduledMessages : IMethod
-	{
-
+    public partial class DeleteScheduledMessages : IMethod
+    {
+        [JsonIgnore]
+        public static int StaticConstructorId
+        {
+            get => 1504586518;
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => 1504586518; }
-        [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
         [JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
 
-		[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
+        [JsonProperty("peer")] public InputPeerBase Peer { get; set; }
 
-[JsonPropertyName("id")]
-		public IList<int> Id { get; set; }
+        [JsonProperty("id")] public IList<int> Id { get; set; }
+
+        public override string ToString()
+        {
+            return "messages.deleteScheduledMessages";
+        }
 
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Peer);
-			writer.Write(Id);
+            writer.Write(Peer);
+            writer.Write(Id);
+        }
 
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			Peer = reader.Read<InputPeerBase>();
-			Id = reader.ReadVector<int>();
-		}
-
-		public override string ToString()
-		{
-			return "messages.deleteScheduledMessages";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Peer = reader.Read<InputPeerBase>();
+            Id = reader.ReadVector<int>();
+        }
+    }
 }

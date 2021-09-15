@@ -1,51 +1,55 @@
 using System;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
-	public partial class CheckPassword : IMethod
-	{
-
+    public partial class CheckPassword : IMethod
+    {
+        [JsonIgnore]
+        public static int StaticConstructorId
+        {
+            get => -779399914;
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => -779399914; }
-        [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(AuthorizationBase);
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(AuthorizationBase);
 
-[JsonPropertyName("password")]
-		public InputCheckPasswordSRPBase Password { get; set; }
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
+
+        [JsonProperty("password")] public InputCheckPasswordSRPBase Password { get; set; }
+
+        public override string ToString()
+        {
+            return "auth.checkPassword";
+        }
 
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Password);
+            writer.Write(Password);
+        }
 
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			Password = reader.Read<InputCheckPasswordSRPBase>();
-		}
-
-		public override string ToString()
-		{
-			return "auth.checkPassword";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Password = reader.Read<InputCheckPasswordSRPBase>();
+        }
+    }
 }

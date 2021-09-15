@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,13 +7,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class InputStickerSetItemBase : IObject
     {
 
-[JsonPropertyName("document")]
+[Newtonsoft.Json.JsonProperty("document")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase Document { get; set; }
 
-[JsonPropertyName("emoji")]
+[Newtonsoft.Json.JsonProperty("emoji")]
 		public abstract string Emoji { get; set; }
 
-[JsonPropertyName("mask_coords")]
+[Newtonsoft.Json.JsonProperty("mask_coords")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.MaskCoordsBase MaskCoords { get; set; }
 
         public abstract void UpdateFlags();

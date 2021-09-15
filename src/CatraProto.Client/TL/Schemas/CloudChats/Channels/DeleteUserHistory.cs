@@ -1,57 +1,60 @@
 using System;
-using System.Text.Json.Serialization;
 using CatraProto.Client.TL.Schemas.CloudChats.Messages;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 {
-	public partial class DeleteUserHistory : IMethod
-	{
-
+    public partial class DeleteUserHistory : IMethod
+    {
+        [JsonIgnore]
+        public static int StaticConstructorId
+        {
+            get => -787622117;
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => -787622117; }
-        [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(AffectedHistoryBase);
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(AffectedHistoryBase);
 
-[JsonPropertyName("channel")]
-		public InputChannelBase Channel { get; set; }
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("user_id")]
-		public InputUserBase UserId { get; set; }
+        [JsonProperty("channel")] public InputChannelBase Channel { get; set; }
+
+        [JsonProperty("user_id")] public InputUserBase UserId { get; set; }
+
+        public override string ToString()
+        {
+            return "channels.deleteUserHistory";
+        }
 
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Channel);
-			writer.Write(UserId);
+            writer.Write(Channel);
+            writer.Write(UserId);
+        }
 
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			Channel = reader.Read<InputChannelBase>();
-			UserId = reader.Read<InputUserBase>();
-		}
-
-		public override string ToString()
-		{
-			return "channels.deleteUserHistory";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Channel = reader.Read<InputChannelBase>();
+            UserId = reader.Read<InputUserBase>();
+        }
+    }
 }

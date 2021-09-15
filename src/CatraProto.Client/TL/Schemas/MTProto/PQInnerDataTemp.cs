@@ -1,37 +1,39 @@
-using System.Numerics;
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class PQInnerDataTemp : PQInnerDataBase
+	public partial class PQInnerDataTemp : CatraProto.Client.TL.Schemas.MTProto.PQInnerDataBase
 	{
 
 
         public static int StaticConstructorId { get => 1013613780; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("pq")]
+[Newtonsoft.Json.JsonProperty("pq")]
 		public override byte[] Pq { get; set; }
 
-[JsonPropertyName("p")]
+[Newtonsoft.Json.JsonProperty("p")]
 		public override byte[] P { get; set; }
 
-[JsonPropertyName("q")]
+[Newtonsoft.Json.JsonProperty("q")]
 		public override byte[] Q { get; set; }
 
-[JsonPropertyName("nonce")]
-		public override BigInteger Nonce { get; set; }
+[Newtonsoft.Json.JsonProperty("nonce")]
+		public override System.Numerics.BigInteger Nonce { get; set; }
 
-[JsonPropertyName("server_nonce")]
-		public override BigInteger ServerNonce { get; set; }
+[Newtonsoft.Json.JsonProperty("server_nonce")]
+		public override System.Numerics.BigInteger ServerNonce { get; set; }
 
-[JsonPropertyName("new_nonce")]
-		public override BigInteger NewNonce { get; set; }
+[Newtonsoft.Json.JsonProperty("new_nonce")]
+		public override System.Numerics.BigInteger NewNonce { get; set; }
 
-[JsonPropertyName("expires_in")]
+[Newtonsoft.Json.JsonProperty("expires_in")]
 		public int ExpiresIn { get; set; }
 
         
@@ -58,15 +60,16 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 			Pq = reader.Read<byte[]>();
 			P = reader.Read<byte[]>();
 			Q = reader.Read<byte[]>();
-			Nonce = reader.Read<BigInteger>(128);
-			ServerNonce = reader.Read<BigInteger>(128);
-			NewNonce = reader.Read<BigInteger>(256);
+			Nonce = reader.Read<System.Numerics.BigInteger>(128);
+			ServerNonce = reader.Read<System.Numerics.BigInteger>(128);
+			NewNonce = reader.Read<System.Numerics.BigInteger>(256);
 			ExpiresIn = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "p_q_inner_data_temp";
+		    return "p_q_inner_data_temp";
 		}
 	}
 }

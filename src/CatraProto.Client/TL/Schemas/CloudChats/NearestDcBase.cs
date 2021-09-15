@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,14 +7,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class NearestDcBase : IObject
     {
 
-[JsonPropertyName("country")]
+[Newtonsoft.Json.JsonProperty("country")]
 		public abstract string Country { get; set; }
 
-[JsonPropertyName("this_dc")]
+[Newtonsoft.Json.JsonProperty("this_dc")]
 		public abstract int ThisDc { get; set; }
 
-[JsonPropertyName("NearestDc_")]
-		public abstract int NearestDc_ { get; set; }
+[Newtonsoft.Json.JsonProperty("nearest_dc")]
+		public abstract int NearestDcField { get; set; }
 
         public abstract void UpdateFlags();
         public abstract void Deserialize(Reader reader);

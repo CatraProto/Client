@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Async.Collections;
@@ -27,6 +29,11 @@ namespace CatraProto.Client.Async.Signalers
                 ThrowIfDisposed();
                 _cancellationToken = cancellationToken;
             }
+        }
+
+        public bool TryGetLastReadState(out T? state)
+        {
+            return _asyncQueue.TryGetLastElement(out state);
         }
 
         public T GetCurrentState(bool setAsRead)
@@ -70,19 +77,28 @@ namespace CatraProto.Client.Async.Signalers
             }
         }
 
-        public async Task<T> WaitStateAsync(CancellationToken token = default, params T[] targetStates)
+        public async ValueTask<T> WaitStateAsync(bool alwaysWait, CancellationToken token = default, params T[] targetStates)
         {
+            if (!alwaysWait)
+            {
+                var currentState = GetCurrentState(true);
+                if (IsStateInArray(targetStates, currentState, out var foundState))
+                {
+                    return foundState!;
+                }
+            }
+
             while (true)
             {
                 var currentState = await WaitAsync(token);
-                if (IsStateInArray(targetStates, currentState, out T? foundState))
+                if (IsStateInArray(targetStates, currentState, out var foundState))
                 {
                     return foundState!;
                 }
             }
         }
 
-        private bool IsStateInArray(T[] states, T targetState, out T? foundState)
+        private bool IsStateInArray(T[] states, T targetState, [MaybeNullWhen(false)] out T foundState)
         {
             for (var index = 0; index < states.Length; index++)
             {
@@ -129,7 +145,7 @@ namespace CatraProto.Client.Async.Signalers
 
         public async Task<T> WaitAsync(CancellationToken token = default)
         {
-            Task<T> task;
+            ValueTask<T> task;
             lock (_mutex)
             {
                 task = _asyncQueue.DequeueAsync(token);

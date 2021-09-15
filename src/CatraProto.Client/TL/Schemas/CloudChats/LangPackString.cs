@@ -1,21 +1,24 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class LangPackString : LangPackStringBase
+	public partial class LangPackString : CatraProto.Client.TL.Schemas.CloudChats.LangPackStringBase
 	{
 
 
         public static int StaticConstructorId { get => -892239370; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("key")]
+[Newtonsoft.Json.JsonProperty("key")]
 		public override string Key { get; set; }
 
-[JsonPropertyName("value")]
+[Newtonsoft.Json.JsonProperty("value")]
 		public string Value { get; set; }
 
         
@@ -36,11 +39,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Key = reader.Read<string>();
 			Value = reader.Read<string>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "langPackString";
+		    return "langPackString";
 		}
 	}
 }

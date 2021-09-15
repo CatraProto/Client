@@ -1,56 +1,59 @@
 using System;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class GetThemes : IMethod
-	{
-
+    public partial class GetThemes : IMethod
+    {
+        [JsonIgnore]
+        public static int StaticConstructorId
+        {
+            get => 676939512;
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => 676939512; }
-        [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(ThemesBase);
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(ThemesBase);
 
-[JsonPropertyName("format")]
-		public string Format { get; set; }
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("hash")]
-		public int Hash { get; set; }
+        [JsonProperty("format")] public string Format { get; set; }
+
+        [JsonProperty("hash")] public int Hash { get; set; }
+
+        public override string ToString()
+        {
+            return "account.getThemes";
+        }
 
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Format);
-			writer.Write(Hash);
+            writer.Write(Format);
+            writer.Write(Hash);
+        }
 
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			Format = reader.Read<string>();
-			Hash = reader.Read<int>();
-		}
-
-		public override string ToString()
-		{
-			return "account.getThemes";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Format = reader.Read<string>();
+            Hash = reader.Read<int>();
+        }
+    }
 }

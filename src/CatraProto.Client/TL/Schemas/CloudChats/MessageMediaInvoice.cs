@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageMediaInvoice : MessageMediaBase
+	public partial class MessageMediaInvoice : CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -17,37 +19,37 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -2074799289; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("shipping_address_requested")]
+[Newtonsoft.Json.JsonProperty("shipping_address_requested")]
 		public bool ShippingAddressRequested { get; set; }
 
-[JsonPropertyName("test")]
+[Newtonsoft.Json.JsonProperty("test")]
 		public bool Test { get; set; }
 
-[JsonPropertyName("title")]
+[Newtonsoft.Json.JsonProperty("title")]
 		public string Title { get; set; }
 
-[JsonPropertyName("description")]
+[Newtonsoft.Json.JsonProperty("description")]
 		public string Description { get; set; }
 
-[JsonPropertyName("photo")]
-		public WebDocumentBase Photo { get; set; }
+[Newtonsoft.Json.JsonProperty("photo")]
+		public CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase Photo { get; set; }
 
-[JsonPropertyName("receipt_msg_id")]
+[Newtonsoft.Json.JsonProperty("receipt_msg_id")]
 		public int? ReceiptMsgId { get; set; }
 
-[JsonPropertyName("currency")]
+[Newtonsoft.Json.JsonProperty("currency")]
 		public string Currency { get; set; }
 
-[JsonPropertyName("total_amount")]
+[Newtonsoft.Json.JsonProperty("total_amount")]
 		public long TotalAmount { get; set; }
 
-[JsonPropertyName("start_param")]
+[Newtonsoft.Json.JsonProperty("start_param")]
 		public string StartParam { get; set; }
 
         
@@ -92,7 +94,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Description = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Photo = reader.Read<WebDocumentBase>();
+				Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
@@ -103,11 +105,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Currency = reader.Read<string>();
 			TotalAmount = reader.Read<long>();
 			StartParam = reader.Read<string>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "messageMediaInvoice";
+		    return "messageMediaInvoice";
 		}
 	}
 }

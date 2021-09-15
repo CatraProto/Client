@@ -30,11 +30,12 @@ namespace CatraProto.Client.MTProto.Auth
             {
                 ContentRelatedSent = newCount;
             }
-            
+
             var computeSeqno = currentCount * 2 + add;
-            
+
             var side = computeServer ? "server" : "client";
-            _logger.Verbose("Computed {Side} seqno for object {Obj}, new value is {NSeqno}, old contentRelated {CRelated}", side, obj, computeSeqno, currentCount);
+            _logger.Verbose("Computed {Side} seqno for object {Obj}, new value is {NSeqno}, old contentRelated {CRelated}", side, obj, computeSeqno,
+                currentCount);
             return computeSeqno;
         }
     }

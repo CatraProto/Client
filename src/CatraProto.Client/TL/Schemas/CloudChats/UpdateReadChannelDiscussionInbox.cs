@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateReadChannelDiscussionInbox : UpdateBase
+	public partial class UpdateReadChannelDiscussionInbox : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,25 +17,25 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 482860628; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("channel_id")]
+[Newtonsoft.Json.JsonProperty("channel_id")]
 		public int ChannelId { get; set; }
 
-[JsonPropertyName("top_msg_id")]
+[Newtonsoft.Json.JsonProperty("top_msg_id")]
 		public int TopMsgId { get; set; }
 
-[JsonPropertyName("read_max_id")]
+[Newtonsoft.Json.JsonProperty("read_max_id")]
 		public int ReadMaxId { get; set; }
 
-[JsonPropertyName("broadcast_id")]
+[Newtonsoft.Json.JsonProperty("broadcast_id")]
 		public int? BroadcastId { get; set; }
 
-[JsonPropertyName("broadcast_post")]
+[Newtonsoft.Json.JsonProperty("broadcast_post")]
 		public int? BroadcastPost { get; set; }
 
         
@@ -80,11 +82,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			{
 				BroadcastPost = reader.Read<int>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "updateReadChannelDiscussionInbox";
+		    return "updateReadChannelDiscussionInbox";
 		}
 	}
 }

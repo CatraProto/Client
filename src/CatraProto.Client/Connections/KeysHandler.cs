@@ -1,6 +1,5 @@
 using CatraProto.Client.MTProto.Auth.AuthKeyHandler;
-using CatraProto.Client.MTProto.Settings;
-using Serilog;
+using CatraProto.Client.MTProto.Session;
 
 namespace CatraProto.Client.Connections
 {
@@ -9,10 +8,10 @@ namespace CatraProto.Client.Connections
         public TemporaryAuthKey TemporaryAuthKey { get; }
         public PermanentAuthKey PermanentAuthKey { get; }
 
-        public KeysHandler(MTProtoState state, Api api, ClientSettings clientSettings, ILogger logger)
+        public KeysHandler(MTProtoState state, Api api, ClientSession clientSession)
         {
-            PermanentAuthKey = new PermanentAuthKey(state.ConnectionInfo, state.SessionData, api, logger);
-            TemporaryAuthKey = new TemporaryAuthKey(state, PermanentAuthKey, api, clientSettings, 1000, logger);
+            PermanentAuthKey = new PermanentAuthKey(state.ConnectionInfo, clientSession.SessionManager.SessionData, api, clientSession.Logger);
+            TemporaryAuthKey = new TemporaryAuthKey(state, PermanentAuthKey, api, clientSession, 1000);
         }
     }
 }

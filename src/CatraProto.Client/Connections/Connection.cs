@@ -7,8 +7,7 @@ using CatraProto.Client.Connections.Loop;
 using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.Connections.Protocols.Interfaces;
 using CatraProto.Client.Connections.Protocols.TcpAbridged;
-using CatraProto.Client.MTProto.Session.Models;
-using CatraProto.Client.MTProto.Settings;
+using CatraProto.Client.MTProto.Session;
 using Serilog;
 
 namespace CatraProto.Client.Connections
@@ -29,15 +28,15 @@ namespace CatraProto.Client.Connections
         private PingLoop? _pingLoop;
         private readonly ILogger _logger;
 
-        public Connection(ConnectionInfo connectionInfo, ClientSettings clientSettings, ConnectionProtocol protocolType, SessionData sessionData, ILogger logger)
+        public Connection(ConnectionInfo connectionInfo, ClientSession clientSession)
         {
-            _logger = logger.ForContext<Connection>();
+            _logger = clientSession.Logger.ForContext<Connection>();
             ConnectionInfo = connectionInfo;
-            MessagesHandler = new MessagesHandler(logger);
-            MtProtoState = new MTProtoState(connectionInfo, new Api(MessagesHandler.MessagesQueue), clientSettings, sessionData, logger);
-            MessagesDispatcher = new MessagesDispatcher(MessagesHandler, MtProtoState, logger);
+            MessagesHandler = new MessagesHandler(clientSession.Logger);
+            MtProtoState = new MTProtoState(connectionInfo, new Api(MessagesHandler.MessagesQueue), clientSession);
+            MessagesDispatcher = new MessagesDispatcher(MessagesHandler, MtProtoState, clientSession);
             _singleCallAsync = new SingleCallAsync<CancellationToken>(InternalConnectAsync);
-            _protocolType = protocolType;
+            _protocolType = connectionInfo.ConnectionProtocol;
         }
 
         public Task ConnectAsync(CancellationToken token = default)
@@ -74,7 +73,7 @@ namespace CatraProto.Client.Connections
             if (_pingLoop != null)
             {
                 _pingLoop.Stop();
-                await _pingLoop.GetShutdownTask();
+                //await _pingLoop.GetShutdownTask();
             }
 
             if (Protocol != null)
@@ -106,7 +105,7 @@ namespace CatraProto.Client.Connections
         {
             _writeLoop ??= new SendLoop(this, _logger);
             _readLoop ??= new ReceiveLoop(this, _logger);
-            _pingLoop ??= new PingLoop(MtProtoState.Api, _logger);
+            _pingLoop ??= new PingLoop(this, _logger);
 
             _pingLoop.Start();
             _writeLoop.Start();
@@ -115,6 +114,10 @@ namespace CatraProto.Client.Connections
 
         public async ValueTask DisposeAsync()
         {
+            var task = MessagesHandler.MessagesTrackers.MessagesAckTracker.GetShutdownTask();
+            MessagesHandler.MessagesTrackers.MessagesAckTracker.Stop();
+            await task;
+            
             if (_writeLoop != null)
             {
                 _writeLoop.Stop();
@@ -130,7 +133,7 @@ namespace CatraProto.Client.Connections
             if (_pingLoop != null)
             {
                 _pingLoop.Stop();
-                await _pingLoop.GetShutdownTask();
+                //await _pingLoop.GetShutdownTask();
             }
 
             Signaler.Dispose();

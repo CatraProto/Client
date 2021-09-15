@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,13 +7,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class FileHashBase : IObject
     {
 
-[JsonPropertyName("offset")]
+[Newtonsoft.Json.JsonProperty("offset")]
 		public abstract int Offset { get; set; }
 
-[JsonPropertyName("limit")]
+[Newtonsoft.Json.JsonProperty("limit")]
 		public abstract int Limit { get; set; }
 
-[JsonPropertyName("hash")]
+[Newtonsoft.Json.JsonProperty("hash")]
 		public abstract byte[] Hash { get; set; }
 
         public abstract void UpdateFlags();

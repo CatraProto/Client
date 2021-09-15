@@ -1,19 +1,21 @@
+using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PrivacyValueAllowChatParticipants : PrivacyRuleBase
+	public partial class PrivacyValueAllowChatParticipants : CatraProto.Client.TL.Schemas.CloudChats.PrivacyRuleBase
 	{
 
 
         public static int StaticConstructorId { get => 415136107; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("chats")]
+[Newtonsoft.Json.JsonProperty("chats")]
 		public IList<int> Chats { get; set; }
 
         
@@ -32,11 +34,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Chats = reader.ReadVector<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "privacyValueAllowChatParticipants";
+		    return "privacyValueAllowChatParticipants";
 		}
 	}
 }

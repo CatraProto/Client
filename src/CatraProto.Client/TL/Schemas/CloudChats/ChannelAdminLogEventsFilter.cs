@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelAdminLogEventsFilter : ChannelAdminLogEventsFilterBase
+	public partial class ChannelAdminLogEventsFilter : CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventsFilterBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -29,58 +31,58 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -368018716; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("join")]
+[Newtonsoft.Json.JsonProperty("join")]
 		public override bool Join { get; set; }
 
-[JsonPropertyName("leave")]
+[Newtonsoft.Json.JsonProperty("leave")]
 		public override bool Leave { get; set; }
 
-[JsonPropertyName("invite")]
+[Newtonsoft.Json.JsonProperty("invite")]
 		public override bool Invite { get; set; }
 
-[JsonPropertyName("ban")]
+[Newtonsoft.Json.JsonProperty("ban")]
 		public override bool Ban { get; set; }
 
-[JsonPropertyName("unban")]
+[Newtonsoft.Json.JsonProperty("unban")]
 		public override bool Unban { get; set; }
 
-[JsonPropertyName("kick")]
+[Newtonsoft.Json.JsonProperty("kick")]
 		public override bool Kick { get; set; }
 
-[JsonPropertyName("unkick")]
+[Newtonsoft.Json.JsonProperty("unkick")]
 		public override bool Unkick { get; set; }
 
-[JsonPropertyName("promote")]
+[Newtonsoft.Json.JsonProperty("promote")]
 		public override bool Promote { get; set; }
 
-[JsonPropertyName("demote")]
+[Newtonsoft.Json.JsonProperty("demote")]
 		public override bool Demote { get; set; }
 
-[JsonPropertyName("info")]
+[Newtonsoft.Json.JsonProperty("info")]
 		public override bool Info { get; set; }
 
-[JsonPropertyName("settings")]
+[Newtonsoft.Json.JsonProperty("settings")]
 		public override bool Settings { get; set; }
 
-[JsonPropertyName("pinned")]
+[Newtonsoft.Json.JsonProperty("pinned")]
 		public override bool Pinned { get; set; }
 
-[JsonPropertyName("edit")]
+[Newtonsoft.Json.JsonProperty("edit")]
 		public override bool Edit { get; set; }
 
-[JsonPropertyName("delete")]
+[Newtonsoft.Json.JsonProperty("delete")]
 		public override bool Delete { get; set; }
 
-[JsonPropertyName("group_call")]
+[Newtonsoft.Json.JsonProperty("group_call")]
 		public override bool GroupCall { get; set; }
 
-[JsonPropertyName("invites")]
+[Newtonsoft.Json.JsonProperty("invites")]
 		public override bool Invites { get; set; }
 
         
@@ -132,11 +134,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Delete = FlagsHelper.IsFlagSet(Flags, 13);
 			GroupCall = FlagsHelper.IsFlagSet(Flags, 14);
 			Invites = FlagsHelper.IsFlagSet(Flags, 15);
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "channelAdminLogEventsFilter";
+		    return "channelAdminLogEventsFilter";
 		}
 	}
 }

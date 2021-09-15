@@ -1,21 +1,24 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputPaymentCredentialsSaved : InputPaymentCredentialsBase
+	public partial class InputPaymentCredentialsSaved : CatraProto.Client.TL.Schemas.CloudChats.InputPaymentCredentialsBase
 	{
 
 
         public static int StaticConstructorId { get => -1056001329; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public string Id { get; set; }
 
-[JsonPropertyName("tmp_password")]
+[Newtonsoft.Json.JsonProperty("tmp_password")]
 		public byte[] TmpPassword { get; set; }
 
         
@@ -36,11 +39,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Id = reader.Read<string>();
 			TmpPassword = reader.Read<byte[]>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "inputPaymentCredentialsSaved";
+		    return "inputPaymentCredentialsSaved";
 		}
 	}
 }

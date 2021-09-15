@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class Chat : ChatBase
+	public partial class Chat : CatraProto.Client.TL.Schemas.CloudChats.ChatBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -22,56 +24,56 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 1004149726; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("creator")]
+[Newtonsoft.Json.JsonProperty("creator")]
 		public bool Creator { get; set; }
 
-[JsonPropertyName("kicked")]
+[Newtonsoft.Json.JsonProperty("kicked")]
 		public bool Kicked { get; set; }
 
-[JsonPropertyName("left")]
+[Newtonsoft.Json.JsonProperty("left")]
 		public bool Left { get; set; }
 
-[JsonPropertyName("deactivated")]
+[Newtonsoft.Json.JsonProperty("deactivated")]
 		public bool Deactivated { get; set; }
 
-[JsonPropertyName("call_active")]
+[Newtonsoft.Json.JsonProperty("call_active")]
 		public bool CallActive { get; set; }
 
-[JsonPropertyName("call_not_empty")]
+[Newtonsoft.Json.JsonProperty("call_not_empty")]
 		public bool CallNotEmpty { get; set; }
 
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public override int Id { get; set; }
 
-[JsonPropertyName("title")]
+[Newtonsoft.Json.JsonProperty("title")]
 		public string Title { get; set; }
 
-[JsonPropertyName("photo")]
-		public ChatPhotoBase Photo { get; set; }
+[Newtonsoft.Json.JsonProperty("photo")]
+		public CatraProto.Client.TL.Schemas.CloudChats.ChatPhotoBase Photo { get; set; }
 
-[JsonPropertyName("participants_count")]
+[Newtonsoft.Json.JsonProperty("participants_count")]
 		public int ParticipantsCount { get; set; }
 
-[JsonPropertyName("date")]
+[Newtonsoft.Json.JsonProperty("date")]
 		public int Date { get; set; }
 
-[JsonPropertyName("version")]
+[Newtonsoft.Json.JsonProperty("version")]
 		public int Version { get; set; }
 
-[JsonPropertyName("migrated_to")]
-		public InputChannelBase MigratedTo { get; set; }
+[Newtonsoft.Json.JsonProperty("migrated_to")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase MigratedTo { get; set; }
 
-[JsonPropertyName("admin_rights")]
-		public ChatAdminRightsBase AdminRights { get; set; }
+[Newtonsoft.Json.JsonProperty("admin_rights")]
+		public CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase AdminRights { get; set; }
 
-[JsonPropertyName("default_banned_rights")]
-		public ChatBannedRightsBase DefaultBannedRights { get; set; }
+[Newtonsoft.Json.JsonProperty("default_banned_rights")]
+		public CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase DefaultBannedRights { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -128,29 +130,31 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			CallNotEmpty = FlagsHelper.IsFlagSet(Flags, 24);
 			Id = reader.Read<int>();
 			Title = reader.Read<string>();
-			Photo = reader.Read<ChatPhotoBase>();
+			Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatPhotoBase>();
 			ParticipantsCount = reader.Read<int>();
 			Date = reader.Read<int>();
 			Version = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
-				MigratedTo = reader.Read<InputChannelBase>();
+				MigratedTo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 14))
 			{
-				AdminRights = reader.Read<ChatAdminRightsBase>();
+				AdminRights = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 18))
 			{
-				DefaultBannedRights = reader.Read<ChatBannedRightsBase>();
+				DefaultBannedRights = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "chat";
+		    return "chat";
 		}
 	}
 }

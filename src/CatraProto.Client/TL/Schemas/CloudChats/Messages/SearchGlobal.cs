@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -15,42 +16,45 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			FolderId = 1 << 0
 		}
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => 1271290010; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase);
 
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(MessagesBase);
-
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("folder_id")]
+[Newtonsoft.Json.JsonProperty("folder_id")]
 		public int? FolderId { get; set; }
 
-[JsonPropertyName("q")]
+[Newtonsoft.Json.JsonProperty("q")]
 		public string Q { get; set; }
 
-		[JsonPropertyName("filter")] public MessagesFilterBase Filter { get; set; }
+[Newtonsoft.Json.JsonProperty("filter")]
+		public CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase Filter { get; set; }
 
-[JsonPropertyName("min_date")]
+[Newtonsoft.Json.JsonProperty("min_date")]
 		public int MinDate { get; set; }
 
-[JsonPropertyName("max_date")]
+[Newtonsoft.Json.JsonProperty("max_date")]
 		public int MaxDate { get; set; }
 
-[JsonPropertyName("offset_rate")]
+[Newtonsoft.Json.JsonProperty("offset_rate")]
 		public int OffsetRate { get; set; }
 
-		[JsonPropertyName("offset_peer")] public InputPeerBase OffsetPeer { get; set; }
+[Newtonsoft.Json.JsonProperty("offset_peer")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase OffsetPeer { get; set; }
 
-[JsonPropertyName("offset_id")]
+[Newtonsoft.Json.JsonProperty("offset_id")]
 		public int OffsetId { get; set; }
 
-[JsonPropertyName("limit")]
+[Newtonsoft.Json.JsonProperty("limit")]
 		public int Limit { get; set; }
 
 
@@ -90,18 +94,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			}
 
 			Q = reader.Read<string>();
-			Filter = reader.Read<MessagesFilterBase>();
+			Filter = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase>();
 			MinDate = reader.Read<int>();
 			MaxDate = reader.Read<int>();
 			OffsetRate = reader.Read<int>();
-			OffsetPeer = reader.Read<InputPeerBase>();
+			OffsetPeer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
 			OffsetId = reader.Read<int>();
 			Limit = reader.Read<int>();
-		}
 
+		}
+		
 		public override string ToString()
 		{
-			return "messages.searchGlobal";
+		    return "messages.searchGlobal";
 		}
 	}
 }

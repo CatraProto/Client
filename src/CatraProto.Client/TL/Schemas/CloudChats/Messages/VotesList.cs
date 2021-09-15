@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class VotesList : VotesListBase
+	public partial class VotesList : CatraProto.Client.TL.Schemas.CloudChats.Messages.VotesListBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,20 +16,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		}
 
         public static int StaticConstructorId { get => 136574537; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("count")]
+[Newtonsoft.Json.JsonProperty("count")]
 		public override int Count { get; set; }
 
-		[JsonPropertyName("votes")] public override IList<MessageUserVoteBase> Votes { get; set; }
+[Newtonsoft.Json.JsonProperty("votes")]
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.MessageUserVoteBase> Votes { get; set; }
 
-		[JsonPropertyName("users")] public override IList<UserBase> Users { get; set; }
+[Newtonsoft.Json.JsonProperty("users")]
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
-[JsonPropertyName("next_offset")]
+[Newtonsoft.Json.JsonProperty("next_offset")]
 		public override string NextOffset { get; set; }
 
         
@@ -58,17 +61,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		{
 			Flags = reader.Read<int>();
 			Count = reader.Read<int>();
-			Votes = reader.ReadVector<MessageUserVoteBase>();
-			Users = reader.ReadVector<UserBase>();
+			Votes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageUserVoteBase>();
+			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				NextOffset = reader.Read<string>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "messages.votesList";
+		    return "messages.votesList";
 		}
 	}
 }

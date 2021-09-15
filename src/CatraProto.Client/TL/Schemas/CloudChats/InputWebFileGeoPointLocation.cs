@@ -1,33 +1,36 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputWebFileGeoPointLocation : InputWebFileLocationBase
+	public partial class InputWebFileGeoPointLocation : CatraProto.Client.TL.Schemas.CloudChats.InputWebFileLocationBase
 	{
 
 
         public static int StaticConstructorId { get => -1625153079; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("geo_point")]
-		public InputGeoPointBase GeoPoint { get; set; }
+[Newtonsoft.Json.JsonProperty("geo_point")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase GeoPoint { get; set; }
 
-[JsonPropertyName("access_hash")]
+[Newtonsoft.Json.JsonProperty("access_hash")]
 		public override long AccessHash { get; set; }
 
-[JsonPropertyName("w")]
+[Newtonsoft.Json.JsonProperty("w")]
 		public int W { get; set; }
 
-[JsonPropertyName("h")]
+[Newtonsoft.Json.JsonProperty("h")]
 		public int H { get; set; }
 
-[JsonPropertyName("zoom")]
+[Newtonsoft.Json.JsonProperty("zoom")]
 		public int Zoom { get; set; }
 
-[JsonPropertyName("scale")]
+[Newtonsoft.Json.JsonProperty("scale")]
 		public int Scale { get; set; }
 
         
@@ -50,17 +53,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			GeoPoint = reader.Read<InputGeoPointBase>();
+			GeoPoint = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase>();
 			AccessHash = reader.Read<long>();
 			W = reader.Read<int>();
 			H = reader.Read<int>();
 			Zoom = reader.Read<int>();
 			Scale = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "inputWebFileGeoPointLocation";
+		    return "inputWebFileGeoPointLocation";
 		}
 	}
 }

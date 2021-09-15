@@ -1,15 +1,18 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PrivacyKeyChatInvite : PrivacyKeyBase
+	public partial class PrivacyKeyChatInvite : CatraProto.Client.TL.Schemas.CloudChats.PrivacyKeyBase
 	{
 
 
         public static int StaticConstructorId { get => 1343122938; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
         
@@ -26,11 +29,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "privacyKeyChatInvite";
+		    return "privacyKeyChatInvite";
 		}
 	}
 }

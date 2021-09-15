@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,43 +7,43 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class ChatBannedRightsBase : IObject
     {
 
-[JsonPropertyName("view_messages")]
+[Newtonsoft.Json.JsonProperty("view_messages")]
 		public abstract bool ViewMessages { get; set; }
 
-[JsonPropertyName("send_messages")]
+[Newtonsoft.Json.JsonProperty("send_messages")]
 		public abstract bool SendMessages { get; set; }
 
-[JsonPropertyName("send_media")]
+[Newtonsoft.Json.JsonProperty("send_media")]
 		public abstract bool SendMedia { get; set; }
 
-[JsonPropertyName("send_stickers")]
+[Newtonsoft.Json.JsonProperty("send_stickers")]
 		public abstract bool SendStickers { get; set; }
 
-[JsonPropertyName("send_gifs")]
+[Newtonsoft.Json.JsonProperty("send_gifs")]
 		public abstract bool SendGifs { get; set; }
 
-[JsonPropertyName("send_games")]
+[Newtonsoft.Json.JsonProperty("send_games")]
 		public abstract bool SendGames { get; set; }
 
-[JsonPropertyName("send_inline")]
+[Newtonsoft.Json.JsonProperty("send_inline")]
 		public abstract bool SendInline { get; set; }
 
-[JsonPropertyName("embed_links")]
+[Newtonsoft.Json.JsonProperty("embed_links")]
 		public abstract bool EmbedLinks { get; set; }
 
-[JsonPropertyName("send_polls")]
+[Newtonsoft.Json.JsonProperty("send_polls")]
 		public abstract bool SendPolls { get; set; }
 
-[JsonPropertyName("change_info")]
+[Newtonsoft.Json.JsonProperty("change_info")]
 		public abstract bool ChangeInfo { get; set; }
 
-[JsonPropertyName("invite_users")]
+[Newtonsoft.Json.JsonProperty("invite_users")]
 		public abstract bool InviteUsers { get; set; }
 
-[JsonPropertyName("pin_messages")]
+[Newtonsoft.Json.JsonProperty("pin_messages")]
 		public abstract bool PinMessages { get; set; }
 
-[JsonPropertyName("until_date")]
+[Newtonsoft.Json.JsonProperty("until_date")]
 		public abstract int UntilDate { get; set; }
 
         public abstract void UpdateFlags();

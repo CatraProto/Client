@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputMediaInvoice : InputMediaBase
+	public partial class InputMediaInvoice : CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,34 +16,34 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -186607933; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("title")]
+[Newtonsoft.Json.JsonProperty("title")]
 		public string Title { get; set; }
 
-[JsonPropertyName("description")]
+[Newtonsoft.Json.JsonProperty("description")]
 		public string Description { get; set; }
 
-[JsonPropertyName("photo")]
-		public InputWebDocumentBase Photo { get; set; }
+[Newtonsoft.Json.JsonProperty("photo")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputWebDocumentBase Photo { get; set; }
 
-[JsonPropertyName("invoice")]
-		public InvoiceBase Invoice { get; set; }
+[Newtonsoft.Json.JsonProperty("invoice")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InvoiceBase Invoice { get; set; }
 
-[JsonPropertyName("payload")]
+[Newtonsoft.Json.JsonProperty("payload")]
 		public byte[] Payload { get; set; }
 
-[JsonPropertyName("provider")]
+[Newtonsoft.Json.JsonProperty("provider")]
 		public string Provider { get; set; }
 
-[JsonPropertyName("provider_data")]
-		public DataJSONBase ProviderData { get; set; }
+[Newtonsoft.Json.JsonProperty("provider_data")]
+		public CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase ProviderData { get; set; }
 
-[JsonPropertyName("start_param")]
+[Newtonsoft.Json.JsonProperty("start_param")]
 		public string StartParam { get; set; }
 
         
@@ -78,19 +80,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Description = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Photo = reader.Read<InputWebDocumentBase>();
+				Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputWebDocumentBase>();
 			}
 
-			Invoice = reader.Read<InvoiceBase>();
+			Invoice = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InvoiceBase>();
 			Payload = reader.Read<byte[]>();
 			Provider = reader.Read<string>();
-			ProviderData = reader.Read<DataJSONBase>();
+			ProviderData = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
 			StartParam = reader.Read<string>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "inputMediaInvoice";
+		    return "inputMediaInvoice";
 		}
 	}
 }

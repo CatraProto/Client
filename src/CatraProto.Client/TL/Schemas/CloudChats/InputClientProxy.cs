@@ -1,21 +1,24 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputClientProxy : InputClientProxyBase
+	public partial class InputClientProxy : CatraProto.Client.TL.Schemas.CloudChats.InputClientProxyBase
 	{
 
 
         public static int StaticConstructorId { get => 1968737087; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("address")]
+[Newtonsoft.Json.JsonProperty("address")]
 		public override string Address { get; set; }
 
-[JsonPropertyName("port")]
+[Newtonsoft.Json.JsonProperty("port")]
 		public override int Port { get; set; }
 
         
@@ -36,11 +39,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Address = reader.Read<string>();
 			Port = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "inputClientProxy";
+		    return "inputClientProxy";
 		}
 	}
 }

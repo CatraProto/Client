@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -15,28 +16,30 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Silent = 1 << 0
 		}
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => 1157265941; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.SentEncryptedMessageBase);
 
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(SentEncryptedMessageBase);
-
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("silent")]
+[Newtonsoft.Json.JsonProperty("silent")]
 		public bool Silent { get; set; }
 
-		[JsonPropertyName("peer")] public InputEncryptedChatBase Peer { get; set; }
+[Newtonsoft.Json.JsonProperty("peer")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedChatBase Peer { get; set; }
 
-[JsonPropertyName("random_id")]
+[Newtonsoft.Json.JsonProperty("random_id")]
 		public long RandomId { get; set; }
 
-[JsonPropertyName("data")]
+[Newtonsoft.Json.JsonProperty("data")]
 		public byte[] Data { get; set; }
 
 
@@ -61,14 +64,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		{
 			Flags = reader.Read<int>();
 			Silent = FlagsHelper.IsFlagSet(Flags, 0);
-			Peer = reader.Read<InputEncryptedChatBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedChatBase>();
 			RandomId = reader.Read<long>();
 			Data = reader.Read<byte[]>();
-		}
 
+		}
+		
 		public override string ToString()
 		{
-			return "messages.sendEncrypted";
+		    return "messages.sendEncrypted";
 		}
 	}
 }

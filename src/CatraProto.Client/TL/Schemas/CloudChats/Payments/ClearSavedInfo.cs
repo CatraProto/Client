@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -16,23 +17,24 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 			Info = 1 << 1
 		}
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => -667062079; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(bool);
 
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
-
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("credentials")]
+[Newtonsoft.Json.JsonProperty("credentials")]
 		public bool Credentials { get; set; }
 
-[JsonPropertyName("info")]
+[Newtonsoft.Json.JsonProperty("info")]
 		public bool Info { get; set; }
 
 
@@ -56,11 +58,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 			Flags = reader.Read<int>();
 			Credentials = FlagsHelper.IsFlagSet(Flags, 0);
 			Info = FlagsHelper.IsFlagSet(Flags, 1);
-		}
 
+		}
+		
 		public override string ToString()
 		{
-			return "payments.clearSavedInfo";
+		    return "payments.clearSavedInfo";
 		}
 	}
 }

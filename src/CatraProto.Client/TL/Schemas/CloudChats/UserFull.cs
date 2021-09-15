@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UserFull : UserFullBase
+	public partial class UserFull : CatraProto.Client.TL.Schemas.CloudChats.UserFullBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -24,55 +26,55 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -302941166; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("blocked")]
+[Newtonsoft.Json.JsonProperty("blocked")]
 		public override bool Blocked { get; set; }
 
-[JsonPropertyName("phone_calls_available")]
+[Newtonsoft.Json.JsonProperty("phone_calls_available")]
 		public override bool PhoneCallsAvailable { get; set; }
 
-[JsonPropertyName("phone_calls_private")]
+[Newtonsoft.Json.JsonProperty("phone_calls_private")]
 		public override bool PhoneCallsPrivate { get; set; }
 
-[JsonPropertyName("can_pin_message")]
+[Newtonsoft.Json.JsonProperty("can_pin_message")]
 		public override bool CanPinMessage { get; set; }
 
-[JsonPropertyName("has_scheduled")]
+[Newtonsoft.Json.JsonProperty("has_scheduled")]
 		public override bool HasScheduled { get; set; }
 
-[JsonPropertyName("video_calls_available")]
+[Newtonsoft.Json.JsonProperty("video_calls_available")]
 		public override bool VideoCallsAvailable { get; set; }
 
-[JsonPropertyName("user")]
-		public override UserBase User { get; set; }
+[Newtonsoft.Json.JsonProperty("user")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.UserBase User { get; set; }
 
-[JsonPropertyName("about")]
+[Newtonsoft.Json.JsonProperty("about")]
 		public override string About { get; set; }
 
-[JsonPropertyName("settings")]
-		public override PeerSettingsBase Settings { get; set; }
+[Newtonsoft.Json.JsonProperty("settings")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.PeerSettingsBase Settings { get; set; }
 
-[JsonPropertyName("profile_photo")]
-		public override PhotoBase ProfilePhoto { get; set; }
+[Newtonsoft.Json.JsonProperty("profile_photo")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.PhotoBase ProfilePhoto { get; set; }
 
-[JsonPropertyName("notify_settings")]
-		public override PeerNotifySettingsBase NotifySettings { get; set; }
+[Newtonsoft.Json.JsonProperty("notify_settings")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase NotifySettings { get; set; }
 
-[JsonPropertyName("bot_info")]
-		public override BotInfoBase BotInfo { get; set; }
+[Newtonsoft.Json.JsonProperty("bot_info")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase BotInfo { get; set; }
 
-[JsonPropertyName("pinned_msg_id")]
+[Newtonsoft.Json.JsonProperty("pinned_msg_id")]
 		public override int? PinnedMsgId { get; set; }
 
-[JsonPropertyName("common_chats_count")]
+[Newtonsoft.Json.JsonProperty("common_chats_count")]
 		public override int CommonChatsCount { get; set; }
 
-[JsonPropertyName("folder_id")]
+[Newtonsoft.Json.JsonProperty("folder_id")]
 		public override int? FolderId { get; set; }
 
         
@@ -138,22 +140,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			CanPinMessage = FlagsHelper.IsFlagSet(Flags, 7);
 			HasScheduled = FlagsHelper.IsFlagSet(Flags, 12);
 			VideoCallsAvailable = FlagsHelper.IsFlagSet(Flags, 13);
-			User = reader.Read<UserBase>();
+			User = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
 				About = reader.Read<string>();
 			}
 
-			Settings = reader.Read<PeerSettingsBase>();
+			Settings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerSettingsBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				ProfilePhoto = reader.Read<PhotoBase>();
+				ProfilePhoto = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
 			}
 
-			NotifySettings = reader.Read<PeerNotifySettingsBase>();
+			NotifySettings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				BotInfo = reader.Read<BotInfoBase>();
+				BotInfo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 6))
@@ -166,11 +168,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			{
 				FolderId = reader.Read<int>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "userFull";
+		    return "userFull";
 		}
 	}
 }

@@ -12,6 +12,8 @@ namespace CatraProto.Client
         {
             CloudChatsApi = new CloudChatsApi(messagesQueue);
             MtProtoApi = new MTProtoApi(messagesQueue);
+
+
         }
     }
 }

@@ -18,7 +18,8 @@ namespace CatraProto.Client.Flows.LoginFlow
         private readonly string _phoneNumber;
         private readonly SessionData _sessionData;
 
-        internal LoginNeedsSignup(Connection connection, SentCodeBase sentCode, string phoneNumber, TermsOfServiceBase termsOfService, SessionData sessionData)
+        internal LoginNeedsSignup(Connection connection, SentCodeBase sentCode, string phoneNumber, TermsOfServiceBase termsOfService,
+            SessionData sessionData)
         {
             TermsOfService = termsOfService;
             _connection = connection;
@@ -38,8 +39,9 @@ namespace CatraProto.Client.Flows.LoginFlow
             }
 
             var authorization = (Authorization)rpcQuery.Response!;
-            _sessionData.Authorization.SetAuthorized(true, _connection.ConnectionInfo.DcId, authorization.User.Id, ((User)authorization.User).AccessHash!.Value);
-            return new LoginSuccessful();
+            _sessionData.Authorization.SetAuthorized(true, _connection.ConnectionInfo.DcId, authorization.User.Id,
+                ((User)authorization.User).AccessHash!.Value);
+            return new LoginSuccessful((User)authorization.User);
         }
     }
 }

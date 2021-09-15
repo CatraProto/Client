@@ -6,11 +6,11 @@ namespace CatraProto.Client.Crypto.Aes
 {
     class IgeEncryptor : IDisposable
     {
-        private AesManaged _aesManaged;
-        private ICryptoTransform _decryptor;
-        private ICryptoTransform _encryptor;
-        private byte[] _iv1;
-        private byte[] _iv2;
+        private readonly AesManaged _aesManaged;
+        private readonly ICryptoTransform _decryptor;
+        private readonly ICryptoTransform _encryptor;
+        private readonly byte[] _iv1;
+        private readonly byte[] _iv2;
 
         public IgeEncryptor(byte[] key, byte[] iv)
         {

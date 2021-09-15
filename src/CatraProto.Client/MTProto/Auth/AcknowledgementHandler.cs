@@ -3,6 +3,7 @@ using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.Connections.MessageScheduling.Items;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL.Interfaces;
+using Serilog;
 
 namespace CatraProto.Client.MTProto.Auth
 {
@@ -10,6 +11,12 @@ namespace CatraProto.Client.MTProto.Auth
     {
         private readonly List<long> _ackIds = new List<long>();
         private readonly object _mutex = new object();
+        private readonly ILogger _logger;
+
+        public AcknowledgementHandler(ILogger logger)
+        {
+            _logger = logger;
+        }
 
         public MsgsAck? GetAckObject()
         {
@@ -47,7 +54,8 @@ namespace CatraProto.Client.MTProto.Auth
                         return result;
                     }
 
-                    result.Add(new MessageItem(ack, new MessageSendingOptions(true), new MessageStatus(new MessageCompletion(null, null, null)), default));
+                    result.Add(new MessageItem(ack, new MessageSendingOptions(true), new MessageStatus(new MessageCompletion(null, null, null)),
+                        _logger, default));
                 }
             }
         }

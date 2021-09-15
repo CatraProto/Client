@@ -1,22 +1,25 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class RecentMeUrlStickerSet : RecentMeUrlBase
+	public partial class RecentMeUrlStickerSet : CatraProto.Client.TL.Schemas.CloudChats.RecentMeUrlBase
 	{
 
 
         public static int StaticConstructorId { get => -1140172836; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("url")]
+[Newtonsoft.Json.JsonProperty("url")]
 		public override string Url { get; set; }
 
-[JsonPropertyName("set")]
-		public StickerSetCoveredBase Set { get; set; }
+[Newtonsoft.Json.JsonProperty("set")]
+		public CatraProto.Client.TL.Schemas.CloudChats.StickerSetCoveredBase Set { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -35,12 +38,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Url = reader.Read<string>();
-			Set = reader.Read<StickerSetCoveredBase>();
-		}
+			Set = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StickerSetCoveredBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "recentMeUrlStickerSet";
+		    return "recentMeUrlStickerSet";
 		}
 	}
 }

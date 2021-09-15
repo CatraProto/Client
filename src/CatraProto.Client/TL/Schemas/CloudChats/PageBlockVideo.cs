@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PageBlockVideo : PageBlockBase
+	public partial class PageBlockVideo : CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,23 +17,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 2089805750; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("autoplay")]
+[Newtonsoft.Json.JsonProperty("autoplay")]
 		public bool Autoplay { get; set; }
 
-[JsonPropertyName("loop")]
+[Newtonsoft.Json.JsonProperty("loop")]
 		public bool Loop { get; set; }
 
-[JsonPropertyName("video_id")]
+[Newtonsoft.Json.JsonProperty("video_id")]
 		public long VideoId { get; set; }
 
-[JsonPropertyName("caption")]
-		public PageCaptionBase Caption { get; set; }
+[Newtonsoft.Json.JsonProperty("caption")]
+		public CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase Caption { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -57,12 +59,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Autoplay = FlagsHelper.IsFlagSet(Flags, 0);
 			Loop = FlagsHelper.IsFlagSet(Flags, 1);
 			VideoId = reader.Read<long>();
-			Caption = reader.Read<PageCaptionBase>();
-		}
+			Caption = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "pageBlockVideo";
+		    return "pageBlockVideo";
 		}
 	}
 }

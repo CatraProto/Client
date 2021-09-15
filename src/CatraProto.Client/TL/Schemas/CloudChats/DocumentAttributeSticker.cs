@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class DocumentAttributeSticker : DocumentAttributeBase
+	public partial class DocumentAttributeSticker : CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,23 +17,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 1662637586; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("mask")]
+[Newtonsoft.Json.JsonProperty("mask")]
 		public bool Mask { get; set; }
 
-[JsonPropertyName("alt")]
+[Newtonsoft.Json.JsonProperty("alt")]
 		public string Alt { get; set; }
 
-[JsonPropertyName("stickerset")]
-		public InputStickerSetBase Stickerset { get; set; }
+[Newtonsoft.Json.JsonProperty("stickerset")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase Stickerset { get; set; }
 
-[JsonPropertyName("mask_coords")]
-		public MaskCoordsBase MaskCoords { get; set; }
+[Newtonsoft.Json.JsonProperty("mask_coords")]
+		public CatraProto.Client.TL.Schemas.CloudChats.MaskCoordsBase MaskCoords { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -61,16 +63,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = reader.Read<int>();
 			Mask = FlagsHelper.IsFlagSet(Flags, 1);
 			Alt = reader.Read<string>();
-			Stickerset = reader.Read<InputStickerSetBase>();
+			Stickerset = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				MaskCoords = reader.Read<MaskCoordsBase>();
+				MaskCoords = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MaskCoordsBase>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "documentAttributeSticker";
+		    return "documentAttributeSticker";
 		}
 	}
 }

@@ -59,7 +59,7 @@ namespace CatraProto.TL.Generator.Objects.Types
         {
             var type = GetTypeName(NamingType.FullNamespace, parameter, true);
             type = parameter.HasFlag && parameter.VectorInfo.IsVector == false ? type + "?" : type;
-            stringBuilder.Append($"\n[JsonPropertyName(\"{parameter.NamingInfo.OriginalName}\")]\n{StringTools.TwoTabs}{GetParameterAccessibility(parameter, isAbstract)} {type}");
+            stringBuilder.Append($"\n[Newtonsoft.Json.JsonProperty(\"{parameter.NamingInfo.OriginalName}\")]\n{StringTools.TwoTabs}{GetParameterAccessibility(parameter, isAbstract)} {type}");
             stringBuilder.AppendLine($" {parameter.NamingInfo.PascalCaseName} {{ get; set; }}");
         }
 

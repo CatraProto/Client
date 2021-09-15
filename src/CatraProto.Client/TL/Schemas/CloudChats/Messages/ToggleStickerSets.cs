@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -18,29 +18,31 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Unarchive = 1 << 2
 		}
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => -1257951254; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(bool);
 
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
-
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("uninstall")]
+[Newtonsoft.Json.JsonProperty("uninstall")]
 		public bool Uninstall { get; set; }
 
-[JsonPropertyName("archive")]
+[Newtonsoft.Json.JsonProperty("archive")]
 		public bool Archive { get; set; }
 
-[JsonPropertyName("unarchive")]
+[Newtonsoft.Json.JsonProperty("unarchive")]
 		public bool Unarchive { get; set; }
 
-		[JsonPropertyName("stickersets")] public IList<InputStickerSetBase> Stickersets { get; set; }
+[Newtonsoft.Json.JsonProperty("stickersets")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase> Stickersets { get; set; }
 
 
 		public void UpdateFlags() 
@@ -66,12 +68,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Uninstall = FlagsHelper.IsFlagSet(Flags, 0);
 			Archive = FlagsHelper.IsFlagSet(Flags, 1);
 			Unarchive = FlagsHelper.IsFlagSet(Flags, 2);
-			Stickersets = reader.ReadVector<InputStickerSetBase>();
-		}
+			Stickersets = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase>();
 
+		}
+		
 		public override string ToString()
 		{
-			return "messages.toggleStickerSets";
+		    return "messages.toggleStickerSets";
 		}
 	}
 }

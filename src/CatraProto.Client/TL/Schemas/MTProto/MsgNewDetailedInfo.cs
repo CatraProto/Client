@@ -1,24 +1,27 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class MsgNewDetailedInfo : MsgDetailedInfoBase
+	public partial class MsgNewDetailedInfo : CatraProto.Client.TL.Schemas.MTProto.MsgDetailedInfoBase
 	{
 
 
         public static int StaticConstructorId { get => -2137147681; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("answer_msg_id")]
+[Newtonsoft.Json.JsonProperty("answer_msg_id")]
 		public override long AnswerMsgId { get; set; }
 
-[JsonPropertyName("bytes")]
+[Newtonsoft.Json.JsonProperty("bytes")]
 		public override int Bytes { get; set; }
 
-[JsonPropertyName("status")]
+[Newtonsoft.Json.JsonProperty("status")]
 		public override int Status { get; set; }
 
         
@@ -41,11 +44,12 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 			AnswerMsgId = reader.Read<long>();
 			Bytes = reader.Read<int>();
 			Status = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "msg_new_detailed_info";
+		    return "msg_new_detailed_info";
 		}
 	}
 }

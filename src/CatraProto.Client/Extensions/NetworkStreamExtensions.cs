@@ -14,7 +14,7 @@ namespace CatraProto.Client.Extensions
             return stream.WriteAsync(bArray, cancellationToken);
         }
 
-        public static async Task<int> ReadInt32(this NetworkStream stream)
+        public static async Task<int> ReadInt32Async(this NetworkStream stream)
         {
             var bytes = await stream.ReadBytesAsync(4);
             return BitConverter.ToInt32(bytes);
@@ -26,7 +26,7 @@ namespace CatraProto.Client.Extensions
             var readCount = 0;
             while (readCount != buffer.Length)
             {
-                readCount += await stream.ReadAsync(buffer, readCount, count, cancellationToken);
+                readCount += await stream.ReadAsync(buffer, readCount, count - readCount, cancellationToken);
                 if (readCount == 0)
                 {
                     throw new ConnectionClosedException();
@@ -36,7 +36,7 @@ namespace CatraProto.Client.Extensions
             return buffer;
         }
 
-        public static async Task<byte> ReadByte(this NetworkStream stream, CancellationToken cancellationToken = default)
+        public static async Task<byte> ReadByteAsync(this NetworkStream stream, CancellationToken cancellationToken = default)
         {
             return (await stream.ReadBytesAsync(1, cancellationToken))[0];
         }

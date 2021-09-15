@@ -1,19 +1,22 @@
+using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class StickerSetInstallResultArchive : StickerSetInstallResultBase
+	public partial class StickerSetInstallResultArchive : CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetInstallResultBase
 	{
 
 
         public static int StaticConstructorId { get => 904138920; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
-
-        [JsonPropertyName("sets")] public IList<StickerSetCoveredBase> Sets { get; set; }
+        
+[Newtonsoft.Json.JsonProperty("sets")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.StickerSetCoveredBase> Sets { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -30,12 +33,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 		public override void Deserialize(Reader reader)
 		{
-			Sets = reader.ReadVector<StickerSetCoveredBase>();
-		}
+			Sets = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.StickerSetCoveredBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "messages.stickerSetInstallResultArchive";
+		    return "messages.stickerSetInstallResultArchive";
 		}
 	}
 }

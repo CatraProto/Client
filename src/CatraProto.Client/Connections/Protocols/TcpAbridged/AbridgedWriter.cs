@@ -1,10 +1,11 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections.Protocols.Interfaces;
-using CatraProto.Client.Extensions;
+using CatraProto.TL;
 using Serilog;
 
 namespace CatraProto.Client.Connections.Protocols.TcpAbridged
@@ -40,11 +41,26 @@ namespace CatraProto.Client.Connections.Protocols.TcpAbridged
             return (MemoryStream)streamWriter.BaseStream;
         }
 
-        public Task SendAsync(byte[] message, CancellationToken cancellationToken = default)
+        public async Task<bool> SendAsync(byte[] message, CancellationToken cancellationToken = default)
         {
-            using var toStream = message.ToMemoryStream();
-            using var headedMessage = SetProtocolHeaders(toStream);
-            return _stream.WriteAsync(headedMessage.ToArray(), cancellationToken).AsTask();
+            try
+            {
+                // ReSharper disable once UseAwaitUsing
+                using var toStream = message.ToMemoryStream();
+                // ReSharper disable once UseAwaitUsing
+                using var headedMessage = SetProtocolHeaders(toStream);
+                await _stream.WriteAsync(headedMessage.ToArray(), cancellationToken);
+            }
+            catch (IOException)
+            {
+                return false;
+            }
+            catch (ObjectDisposedException e) when (e.ObjectName == "System.Net.Sockets.NetworkStream")
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

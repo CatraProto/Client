@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputBotInlineMessageMediaVenue : InputBotInlineMessageBase
+	public partial class InputBotInlineMessageMediaVenue : CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,32 +16,32 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 1098628881; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("geo_point")]
-		public InputGeoPointBase GeoPoint { get; set; }
+[Newtonsoft.Json.JsonProperty("geo_point")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase GeoPoint { get; set; }
 
-[JsonPropertyName("title")]
+[Newtonsoft.Json.JsonProperty("title")]
 		public string Title { get; set; }
 
-[JsonPropertyName("address")]
+[Newtonsoft.Json.JsonProperty("address")]
 		public string Address { get; set; }
 
-[JsonPropertyName("provider")]
+[Newtonsoft.Json.JsonProperty("provider")]
 		public string Provider { get; set; }
 
-[JsonPropertyName("venue_id")]
+[Newtonsoft.Json.JsonProperty("venue_id")]
 		public string VenueId { get; set; }
 
-[JsonPropertyName("venue_type")]
+[Newtonsoft.Json.JsonProperty("venue_type")]
 		public string VenueType { get; set; }
 
-[JsonPropertyName("reply_markup")]
-		public override ReplyMarkupBase ReplyMarkup { get; set; }
+[Newtonsoft.Json.JsonProperty("reply_markup")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase ReplyMarkup { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -70,7 +72,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			GeoPoint = reader.Read<InputGeoPointBase>();
+			GeoPoint = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase>();
 			Title = reader.Read<string>();
 			Address = reader.Read<string>();
 			Provider = reader.Read<string>();
@@ -78,13 +80,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			VenueType = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				ReplyMarkup = reader.Read<ReplyMarkupBase>();
+				ReplyMarkup = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "inputBotInlineMessageMediaVenue";
+		    return "inputBotInlineMessageMediaVenue";
 		}
 	}
 }

@@ -1,46 +1,51 @@
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using Newtonsoft.Json;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class TmpPassword : TmpPasswordBase
-	{
+    public partial class TmpPassword : TmpPasswordBase
+    {
+        public static int StaticConstructorId
+        {
+            get => -614138572;
+        }
 
-
-        public static int StaticConstructorId { get => -614138572; }
         [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonPropertyName("TmpPassword_")]
-		public override byte[] TmpPassword_ { get; set; }
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonPropertyName("valid_until")]
-		public override int ValidUntil { get; set; }
+        [JsonProperty("tmp_password")] public override byte[] TmpPasswordField { get; set; }
 
-        
-		public override void UpdateFlags() 
-		{
+        [JsonProperty("valid_until")] public override int ValidUntil { get; set; }
 
-		}
 
-		public override void Serialize(Writer writer)
-		{
-		    if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(TmpPassword_);
-			writer.Write(ValidUntil);
+        public override void UpdateFlags()
+        {
+        }
 
-		}
+        public override void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public override void Deserialize(Reader reader)
-		{
-			TmpPassword_ = reader.Read<byte[]>();
-			ValidUntil = reader.Read<int>();
-		}
+            writer.Write(TmpPasswordField);
+            writer.Write(ValidUntil);
+        }
 
-		public override string ToString()
-		{
-			return "account.tmpPassword";
-		}
-	}
+        public override void Deserialize(Reader reader)
+        {
+            TmpPasswordField = reader.Read<byte[]>();
+            ValidUntil = reader.Read<int>();
+        }
+
+        public override string ToString()
+        {
+            return "account.tmpPassword";
+        }
+    }
 }

@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -11,21 +12,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 	{
 
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => 911373810; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(IObject);
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(IObject);
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("range")]
-		public MessageRangeBase Range { get; set; }
+[Newtonsoft.Json.JsonProperty("range")]
+		public CatraProto.Client.TL.Schemas.CloudChats.MessageRangeBase Range { get; set; }
 
-[JsonPropertyName("query")]
+[Newtonsoft.Json.JsonProperty("query")]
 		public IObject Query { get; set; }
 
 
@@ -44,13 +45,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public void Deserialize(Reader reader)
 		{
-			Range = reader.Read<MessageRangeBase>();
+			Range = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageRangeBase>();
 			Query = reader.Read<IObject>();
-		}
 
+		}
+		
 		public override string ToString()
 		{
-			return "invokeWithMessagesRange";
+		    return "invokeWithMessagesRange";
 		}
 	}
 }

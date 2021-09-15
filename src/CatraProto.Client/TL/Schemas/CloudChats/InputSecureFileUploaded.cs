@@ -1,30 +1,33 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputSecureFileUploaded : InputSecureFileBase
+	public partial class InputSecureFileUploaded : CatraProto.Client.TL.Schemas.CloudChats.InputSecureFileBase
 	{
 
 
         public static int StaticConstructorId { get => 859091184; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public override long Id { get; set; }
 
-[JsonPropertyName("parts")]
+[Newtonsoft.Json.JsonProperty("parts")]
 		public int Parts { get; set; }
 
-[JsonPropertyName("md5_checksum")]
+[Newtonsoft.Json.JsonProperty("md5_checksum")]
 		public string Md5Checksum { get; set; }
 
-[JsonPropertyName("file_hash")]
+[Newtonsoft.Json.JsonProperty("file_hash")]
 		public byte[] FileHash { get; set; }
 
-[JsonPropertyName("secret")]
+[Newtonsoft.Json.JsonProperty("secret")]
 		public byte[] Secret { get; set; }
 
         
@@ -51,11 +54,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Md5Checksum = reader.Read<string>();
 			FileHash = reader.Read<byte[]>();
 			Secret = reader.Read<byte[]>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "inputSecureFileUploaded";
+		    return "inputSecureFileUploaded";
 		}
 	}
 }

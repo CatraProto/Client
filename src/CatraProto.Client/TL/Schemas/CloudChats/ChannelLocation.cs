@@ -1,21 +1,24 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelLocation : ChannelLocationBase
+	public partial class ChannelLocation : CatraProto.Client.TL.Schemas.CloudChats.ChannelLocationBase
 	{
 
 
         public static int StaticConstructorId { get => 547062491; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("geo_point")]
-		public GeoPointBase GeoPoint { get; set; }
+[Newtonsoft.Json.JsonProperty("geo_point")]
+		public CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase GeoPoint { get; set; }
 
-[JsonPropertyName("address")]
+[Newtonsoft.Json.JsonProperty("address")]
 		public string Address { get; set; }
 
         
@@ -34,13 +37,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			GeoPoint = reader.Read<GeoPointBase>();
+			GeoPoint = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase>();
 			Address = reader.Read<string>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "channelLocation";
+		    return "channelLocation";
 		}
 	}
 }

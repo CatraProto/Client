@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateBotPrecheckoutQuery : UpdateBase
+	public partial class UpdateBotPrecheckoutQuery : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,31 +17,31 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 1563376297; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("query_id")]
+[Newtonsoft.Json.JsonProperty("query_id")]
 		public long QueryId { get; set; }
 
-[JsonPropertyName("user_id")]
+[Newtonsoft.Json.JsonProperty("user_id")]
 		public int UserId { get; set; }
 
-[JsonPropertyName("payload")]
+[Newtonsoft.Json.JsonProperty("payload")]
 		public byte[] Payload { get; set; }
 
-[JsonPropertyName("info")]
-		public PaymentRequestedInfoBase Info { get; set; }
+[Newtonsoft.Json.JsonProperty("info")]
+		public CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase Info { get; set; }
 
-[JsonPropertyName("shipping_option_id")]
+[Newtonsoft.Json.JsonProperty("shipping_option_id")]
 		public string ShippingOptionId { get; set; }
 
-[JsonPropertyName("currency")]
+[Newtonsoft.Json.JsonProperty("currency")]
 		public string Currency { get; set; }
 
-[JsonPropertyName("total_amount")]
+[Newtonsoft.Json.JsonProperty("total_amount")]
 		public long TotalAmount { get; set; }
 
         
@@ -81,7 +83,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Payload = reader.Read<byte[]>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Info = reader.Read<PaymentRequestedInfoBase>();
+				Info = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
@@ -91,11 +93,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			Currency = reader.Read<string>();
 			TotalAmount = reader.Read<long>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "updateBotPrecheckoutQuery";
+		    return "updateBotPrecheckoutQuery";
 		}
 	}
 }

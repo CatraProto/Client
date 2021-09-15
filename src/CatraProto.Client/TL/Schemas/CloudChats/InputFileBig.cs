@@ -1,24 +1,27 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputFileBig : InputFileBase
+	public partial class InputFileBig : CatraProto.Client.TL.Schemas.CloudChats.InputFileBase
 	{
 
 
         public static int StaticConstructorId { get => -95482955; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public override long Id { get; set; }
 
-[JsonPropertyName("parts")]
+[Newtonsoft.Json.JsonProperty("parts")]
 		public override int Parts { get; set; }
 
-[JsonPropertyName("name")]
+[Newtonsoft.Json.JsonProperty("name")]
 		public override string Name { get; set; }
 
         
@@ -41,11 +44,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Id = reader.Read<long>();
 			Parts = reader.Read<int>();
 			Name = reader.Read<string>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "inputFileBig";
+		    return "inputFileBig";
 		}
 	}
 }

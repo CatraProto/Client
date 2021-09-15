@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,16 +7,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class PhoneConnectionBase : IObject
     {
 
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public abstract long Id { get; set; }
 
-[JsonPropertyName("ip")]
+[Newtonsoft.Json.JsonProperty("ip")]
 		public abstract string Ip { get; set; }
 
-[JsonPropertyName("ipv6")]
+[Newtonsoft.Json.JsonProperty("ipv6")]
 		public abstract string Ipv6 { get; set; }
 
-[JsonPropertyName("port")]
+[Newtonsoft.Json.JsonProperty("port")]
 		public abstract int Port { get; set; }
 
         public abstract void UpdateFlags();

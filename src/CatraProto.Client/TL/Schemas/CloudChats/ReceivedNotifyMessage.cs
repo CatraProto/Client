@@ -1,21 +1,24 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ReceivedNotifyMessage : ReceivedNotifyMessageBase
+	public partial class ReceivedNotifyMessage : CatraProto.Client.TL.Schemas.CloudChats.ReceivedNotifyMessageBase
 	{
 
 
         public static int StaticConstructorId { get => -1551583367; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public override int Id { get; set; }
 
-[JsonPropertyName("flags")]
+[Newtonsoft.Json.JsonProperty("flags")]
 		public override int Flags { get; set; }
 
         
@@ -36,11 +39,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Id = reader.Read<int>();
 			Flags = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "receivedNotifyMessage";
+		    return "receivedNotifyMessage";
 		}
 	}
 }

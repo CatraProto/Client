@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,22 +7,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class VideoSizeBase : IObject
     {
 
-[JsonPropertyName("type")]
+[Newtonsoft.Json.JsonProperty("type")]
 		public abstract string Type { get; set; }
 
-[JsonPropertyName("location")]
+[Newtonsoft.Json.JsonProperty("location")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.FileLocationBase Location { get; set; }
 
-[JsonPropertyName("w")]
+[Newtonsoft.Json.JsonProperty("w")]
 		public abstract int W { get; set; }
 
-[JsonPropertyName("h")]
+[Newtonsoft.Json.JsonProperty("h")]
 		public abstract int H { get; set; }
 
-[JsonPropertyName("size")]
+[Newtonsoft.Json.JsonProperty("size")]
 		public abstract int Size { get; set; }
 
-[JsonPropertyName("video_start_ts")]
+[Newtonsoft.Json.JsonProperty("video_start_ts")]
 		public abstract double? VideoStartTs { get; set; }
 
         public abstract void UpdateFlags();

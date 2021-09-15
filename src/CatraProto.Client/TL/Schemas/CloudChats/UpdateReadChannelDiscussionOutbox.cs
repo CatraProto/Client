@@ -1,24 +1,27 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateReadChannelDiscussionOutbox : UpdateBase
+	public partial class UpdateReadChannelDiscussionOutbox : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 
 
         public static int StaticConstructorId { get => 1178116716; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("channel_id")]
+[Newtonsoft.Json.JsonProperty("channel_id")]
 		public int ChannelId { get; set; }
 
-[JsonPropertyName("top_msg_id")]
+[Newtonsoft.Json.JsonProperty("top_msg_id")]
 		public int TopMsgId { get; set; }
 
-[JsonPropertyName("read_max_id")]
+[Newtonsoft.Json.JsonProperty("read_max_id")]
 		public int ReadMaxId { get; set; }
 
         
@@ -41,11 +44,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ChannelId = reader.Read<int>();
 			TopMsgId = reader.Read<int>();
 			ReadMaxId = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "updateReadChannelDiscussionOutbox";
+		    return "updateReadChannelDiscussionOutbox";
 		}
 	}
 }

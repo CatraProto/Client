@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelParticipantBanned : ChannelParticipantBase
+	public partial class ChannelParticipantBanned : CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,26 +16,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 470789295; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("left")]
+[Newtonsoft.Json.JsonProperty("left")]
 		public bool Left { get; set; }
 
-[JsonPropertyName("user_id")]
+[Newtonsoft.Json.JsonProperty("user_id")]
 		public override int UserId { get; set; }
 
-[JsonPropertyName("kicked_by")]
+[Newtonsoft.Json.JsonProperty("kicked_by")]
 		public int KickedBy { get; set; }
 
-[JsonPropertyName("date")]
+[Newtonsoft.Json.JsonProperty("date")]
 		public int Date { get; set; }
 
-[JsonPropertyName("banned_rights")]
-		public ChatBannedRightsBase BannedRights { get; set; }
+[Newtonsoft.Json.JsonProperty("banned_rights")]
+		public CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase BannedRights { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -61,12 +63,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			UserId = reader.Read<int>();
 			KickedBy = reader.Read<int>();
 			Date = reader.Read<int>();
-			BannedRights = reader.Read<ChatBannedRightsBase>();
-		}
+			BannedRights = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "channelParticipantBanned";
+		    return "channelParticipantBanned";
 		}
 	}
 }

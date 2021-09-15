@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,16 +7,16 @@ namespace CatraProto.Client.TL.Schemas.MTProto
     public abstract class ClientDHInnerDataBase : IObject
     {
 
-[JsonPropertyName("nonce")]
+[Newtonsoft.Json.JsonProperty("nonce")]
 		public abstract System.Numerics.BigInteger Nonce { get; set; }
 
-[JsonPropertyName("server_nonce")]
+[Newtonsoft.Json.JsonProperty("server_nonce")]
 		public abstract System.Numerics.BigInteger ServerNonce { get; set; }
 
-[JsonPropertyName("retry_id")]
+[Newtonsoft.Json.JsonProperty("retry_id")]
 		public abstract long RetryId { get; set; }
 
-[JsonPropertyName("g_b")]
+[Newtonsoft.Json.JsonProperty("g_b")]
 		public abstract byte[] GB { get; set; }
 
         public abstract void UpdateFlags();

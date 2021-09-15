@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PeerSettings : PeerSettingsBase
+	public partial class PeerSettings : CatraProto.Client.TL.Schemas.CloudChats.PeerSettingsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -22,37 +24,37 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 1933519201; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("report_spam")]
+[Newtonsoft.Json.JsonProperty("report_spam")]
 		public override bool ReportSpam { get; set; }
 
-[JsonPropertyName("add_contact")]
+[Newtonsoft.Json.JsonProperty("add_contact")]
 		public override bool AddContact { get; set; }
 
-[JsonPropertyName("block_contact")]
+[Newtonsoft.Json.JsonProperty("block_contact")]
 		public override bool BlockContact { get; set; }
 
-[JsonPropertyName("share_contact")]
+[Newtonsoft.Json.JsonProperty("share_contact")]
 		public override bool ShareContact { get; set; }
 
-[JsonPropertyName("need_contacts_exception")]
+[Newtonsoft.Json.JsonProperty("need_contacts_exception")]
 		public override bool NeedContactsException { get; set; }
 
-[JsonPropertyName("report_geo")]
+[Newtonsoft.Json.JsonProperty("report_geo")]
 		public override bool ReportGeo { get; set; }
 
-[JsonPropertyName("autoarchived")]
+[Newtonsoft.Json.JsonProperty("autoarchived")]
 		public override bool Autoarchived { get; set; }
 
-[JsonPropertyName("invite_members")]
+[Newtonsoft.Json.JsonProperty("invite_members")]
 		public override bool InviteMembers { get; set; }
 
-[JsonPropertyName("geo_distance")]
+[Newtonsoft.Json.JsonProperty("geo_distance")]
 		public override int? GeoDistance { get; set; }
 
         
@@ -98,11 +100,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			{
 				GeoDistance = reader.Read<int>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "peerSettings";
+		    return "peerSettings";
 		}
 	}
 }

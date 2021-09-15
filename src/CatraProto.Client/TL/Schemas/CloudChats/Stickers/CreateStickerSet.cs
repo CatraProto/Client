@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -18,36 +18,40 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 			Thumb = 1 << 2
 		}
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => -251435136; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetBase);
 
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(Messages.StickerSetBase);
-
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("masks")]
+[Newtonsoft.Json.JsonProperty("masks")]
 		public bool Masks { get; set; }
 
-[JsonPropertyName("animated")]
+[Newtonsoft.Json.JsonProperty("animated")]
 		public bool Animated { get; set; }
 
-		[JsonPropertyName("user_id")] public InputUserBase UserId { get; set; }
+[Newtonsoft.Json.JsonProperty("user_id")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase UserId { get; set; }
 
-[JsonPropertyName("title")]
+[Newtonsoft.Json.JsonProperty("title")]
 		public string Title { get; set; }
 
-[JsonPropertyName("short_name")]
+[Newtonsoft.Json.JsonProperty("short_name")]
 		public string ShortName { get; set; }
 
-		[JsonPropertyName("thumb")] public InputDocumentBase Thumb { get; set; }
+[Newtonsoft.Json.JsonProperty("thumb")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase Thumb { get; set; }
 
-		[JsonPropertyName("stickers")] public IList<InputStickerSetItemBase> Stickers { get; set; }
+[Newtonsoft.Json.JsonProperty("stickers")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetItemBase> Stickers { get; set; }
 
 
 		public void UpdateFlags() 
@@ -80,20 +84,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 			Flags = reader.Read<int>();
 			Masks = FlagsHelper.IsFlagSet(Flags, 0);
 			Animated = FlagsHelper.IsFlagSet(Flags, 1);
-			UserId = reader.Read<InputUserBase>();
+			UserId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
 			Title = reader.Read<string>();
 			ShortName = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				Thumb = reader.Read<InputDocumentBase>();
+				Thumb = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
 			}
 
-			Stickers = reader.ReadVector<InputStickerSetItemBase>();
-		}
+			Stickers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetItemBase>();
 
+		}
+		
 		public override string ToString()
 		{
-			return "stickers.createStickerSet";
+		    return "stickers.createStickerSet";
 		}
 	}
 }

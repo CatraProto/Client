@@ -1,30 +1,33 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PhoneConnection : PhoneConnectionBase
+	public partial class PhoneConnection : CatraProto.Client.TL.Schemas.CloudChats.PhoneConnectionBase
 	{
 
 
         public static int StaticConstructorId { get => -1655957568; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public override long Id { get; set; }
 
-[JsonPropertyName("ip")]
+[Newtonsoft.Json.JsonProperty("ip")]
 		public override string Ip { get; set; }
 
-[JsonPropertyName("ipv6")]
+[Newtonsoft.Json.JsonProperty("ipv6")]
 		public override string Ipv6 { get; set; }
 
-[JsonPropertyName("port")]
+[Newtonsoft.Json.JsonProperty("port")]
 		public override int Port { get; set; }
 
-[JsonPropertyName("peer_tag")]
+[Newtonsoft.Json.JsonProperty("peer_tag")]
 		public byte[] PeerTag { get; set; }
 
         
@@ -51,11 +54,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Ipv6 = reader.Read<string>();
 			Port = reader.Read<int>();
 			PeerTag = reader.Read<byte[]>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "phoneConnection";
+		    return "phoneConnection";
 		}
 	}
 }

@@ -1,47 +1,52 @@
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using Newtonsoft.Json;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class Themes : ThemesBase
-	{
+    public partial class Themes : ThemesBase
+    {
+        public static int StaticConstructorId
+        {
+            get => 2137482273;
+        }
 
-
-        public static int StaticConstructorId { get => 2137482273; }
         [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonPropertyName("hash")]
-		public int Hash { get; set; }
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonPropertyName("Themes_")]
-		public IList<ThemeBase> Themes_ { get; set; }
+        [JsonProperty("hash")] public int Hash { get; set; }
 
-        
-		public override void UpdateFlags() 
-		{
+        [JsonProperty("themes")] public IList<ThemeBase> ThemesField { get; set; }
 
-		}
 
-		public override void Serialize(Writer writer)
-		{
-		    if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Hash);
-			writer.Write(Themes_);
+        public override void UpdateFlags()
+        {
+        }
 
-		}
+        public override void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public override void Deserialize(Reader reader)
-		{
-			Hash = reader.Read<int>();
-			Themes_ = reader.ReadVector<ThemeBase>();
-		}
+            writer.Write(Hash);
+            writer.Write(ThemesField);
+        }
 
-		public override string ToString()
-		{
-			return "account.themes";
-		}
-	}
+        public override void Deserialize(Reader reader)
+        {
+            Hash = reader.Read<int>();
+            ThemesField = reader.ReadVector<ThemeBase>();
+        }
+
+        public override string ToString()
+        {
+            return "account.themes";
+        }
+    }
 }

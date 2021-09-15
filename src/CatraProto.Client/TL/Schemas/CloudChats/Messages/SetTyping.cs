@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -15,25 +16,28 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			TopMsgId = 1 << 0
 		}
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => 1486110434; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(bool);
 
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
-
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-		[JsonPropertyName("peer")] public InputPeerBase Peer { get; set; }
+[Newtonsoft.Json.JsonProperty("peer")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
 
-[JsonPropertyName("top_msg_id")]
+[Newtonsoft.Json.JsonProperty("top_msg_id")]
 		public int? TopMsgId { get; set; }
 
-		[JsonPropertyName("action")] public SendMessageActionBase Action { get; set; }
+[Newtonsoft.Json.JsonProperty("action")]
+		public CatraProto.Client.TL.Schemas.CloudChats.SendMessageActionBase Action { get; set; }
 
 
 		public void UpdateFlags() 
@@ -60,18 +64,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			Peer = reader.Read<InputPeerBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				TopMsgId = reader.Read<int>();
 			}
 
-			Action = reader.Read<SendMessageActionBase>();
-		}
+			Action = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SendMessageActionBase>();
 
+		}
+		
 		public override string ToString()
 		{
-			return "messages.setTyping";
+		    return "messages.setTyping";
 		}
 	}
 }

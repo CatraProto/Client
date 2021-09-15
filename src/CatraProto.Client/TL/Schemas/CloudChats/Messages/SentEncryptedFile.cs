@@ -1,21 +1,25 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class SentEncryptedFile : SentEncryptedMessageBase
+	public partial class SentEncryptedFile : CatraProto.Client.TL.Schemas.CloudChats.Messages.SentEncryptedMessageBase
 	{
 
 
         public static int StaticConstructorId { get => -1802240206; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("date")]
+[Newtonsoft.Json.JsonProperty("date")]
 		public override int Date { get; set; }
 
-		[JsonPropertyName("file")] public EncryptedFileBase File { get; set; }
+[Newtonsoft.Json.JsonProperty("file")]
+		public CatraProto.Client.TL.Schemas.CloudChats.EncryptedFileBase File { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -34,12 +38,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public override void Deserialize(Reader reader)
 		{
 			Date = reader.Read<int>();
-			File = reader.Read<EncryptedFileBase>();
-		}
+			File = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.EncryptedFileBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "messages.sentEncryptedFile";
+		    return "messages.sentEncryptedFile";
 		}
 	}
 }

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using CatraProto.Client.Async.Loops;
 using CatraProto.Client.Async.Loops.Enums.Resumable;
-using CatraProto.Client.Connections.MessageScheduling.Enums;
 using CatraProto.Client.Connections.MessageScheduling.Items;
 using CatraProto.Client.MTProto.Auth;
 using CatraProto.Client.TL.Schemas.MTProto;
@@ -16,14 +15,16 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
     class MessagesAckTracker : PeriodicLoop
     {
         private readonly ConcurrentDictionary<long, MessageItem> _messages = new ConcurrentDictionary<long, MessageItem>();
-        private readonly AcknowledgementHandler _serverAcksHandler = new AcknowledgementHandler();
-        private readonly AcknowledgementHandler _clientAcksHandler = new AcknowledgementHandler();
+        private readonly AcknowledgementHandler _serverAcksHandler;
+        private readonly AcknowledgementHandler _clientAcksHandler;
         private readonly MessagesQueue _messagesQueue;
         private readonly ILogger _logger;
 
         public MessagesAckTracker(MessagesQueue messagesQueue, ILogger logger) : base(TimeSpan.FromMinutes(4))
         {
             _logger = logger.ForContext<MessagesAckTracker>();
+            _serverAcksHandler = new AcknowledgementHandler(logger);
+            _clientAcksHandler = new AcknowledgementHandler(logger);
             _messagesQueue = messagesQueue;
             Task.Run(Loop);
         }
@@ -32,7 +33,10 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
         {
             while (true)
             {
-                await StateSignaler.WaitStateAsync(default, ResumableSignalState.Resume, ResumableSignalState.Start);
+                SetLoopStopped();
+                return;
+                await StateSignaler.WaitStateAsync(false, default, ResumableSignalState.Resume, ResumableSignalState.Start);
+                _logger.Information("aaaaa");
             }
         }
 
@@ -47,24 +51,25 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
         public void TrackMessage(MessageItem messageItem)
         {
             var messageBody = messageItem.Body;
+            var messageId = messageItem.GetMessageId();
             if (!messageItem.MessageSendingOptions.IsEncrypted)
             {
-                _logger.Information("Not keeping track of message {Message} because it's unencrypted", messageBody);
+                _logger.Verbose("Not keeping track of message {Message} because it's unencrypted", messageBody);
                 return;
             }
 
             if (!AcknowledgementHandler.IsContentRelated(messageBody))
             {
-                _logger.Information("Not keeping track of message {Message} because it's not content related", messageBody);
+                _logger.Verbose("Not keeping track of message {Message} because it's not content related", messageBody);
                 return;
             }
 
-            if (!messageItem.MessageStatus.MessageId.HasValue)
+            if (!messageId.HasValue)
             {
                 throw new InvalidOperationException("Can't track a message without messageId");
             }
 
-            _clientAcksHandler.SetAsNeedsAck(messageItem.MessageStatus.MessageId.Value);
+            _clientAcksHandler.SetAsNeedsAck(messageId.Value);
         }
 
         public void StopTracking(long messageId)
@@ -79,12 +84,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
                 if (_messages.TryRemove(msgsAckMsgId, out var item))
                 {
                     _logger.Information("Received acknowledgment for message {Id} by the server", msgsAckMsgId);
-                    if (item.MessageSendingOptions.AwaiterType == AwaiterType.OnAcknowledgement)
-                    {
-                        //TODO: Complete
-                    }
-
-                    item.MessageStatus.MessageState = MessageState.Acknowledged;
+                    item.SetAcknowledged();
                 }
             }
         }
@@ -102,7 +102,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
             }
             else
             {
-                _logger.Information("Not acknowledging message [{MId}]({MObj}) because it's not content related", body, messageId);
+                _logger.Verbose("Not acknowledging message [{MId}]({MObj}) because it's not content related", body, messageId);
             }
         }
     }

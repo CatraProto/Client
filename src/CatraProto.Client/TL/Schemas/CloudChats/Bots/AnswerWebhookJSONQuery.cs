@@ -1,56 +1,59 @@
 using System;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Bots
 {
-	public partial class AnswerWebhookJSONQuery : IMethod
-	{
-
+    public partial class AnswerWebhookJSONQuery : IMethod
+    {
+        [JsonIgnore]
+        public static int StaticConstructorId
+        {
+            get => -434028723;
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => -434028723; }
-        [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(bool);
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
 
-[JsonPropertyName("query_id")]
-		public long QueryId { get; set; }
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("data")]
-		public DataJSONBase Data { get; set; }
+        [JsonProperty("query_id")] public long QueryId { get; set; }
+
+        [JsonProperty("data")] public DataJSONBase Data { get; set; }
+
+        public override string ToString()
+        {
+            return "bots.answerWebhookJSONQuery";
+        }
 
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(QueryId);
-			writer.Write(Data);
+            writer.Write(QueryId);
+            writer.Write(Data);
+        }
 
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			QueryId = reader.Read<long>();
-			Data = reader.Read<DataJSONBase>();
-		}
-
-		public override string ToString()
-		{
-			return "bots.answerWebhookJSONQuery";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            QueryId = reader.Read<long>();
+            Data = reader.Read<DataJSONBase>();
+        }
+    }
 }

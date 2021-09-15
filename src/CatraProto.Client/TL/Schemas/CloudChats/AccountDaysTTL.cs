@@ -1,18 +1,21 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class AccountDaysTTL : AccountDaysTTLBase
+	public partial class AccountDaysTTL : CatraProto.Client.TL.Schemas.CloudChats.AccountDaysTTLBase
 	{
 
 
         public static int StaticConstructorId { get => -1194283041; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("days")]
+[Newtonsoft.Json.JsonProperty("days")]
 		public override int Days { get; set; }
 
         
@@ -31,11 +34,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Days = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "accountDaysTTL";
+		    return "accountDaysTTL";
 		}
 	}
 }

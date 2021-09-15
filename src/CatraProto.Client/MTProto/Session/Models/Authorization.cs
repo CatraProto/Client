@@ -6,7 +6,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.MTProto.Session.Models
 {
-    class Authorization : ISessionSerializer, IDisposable
+    class Authorization : IDisposable
     {
         private readonly AsyncSignaler _asyncSignaler = new AsyncSignaler(false);
         private readonly object _mutex;

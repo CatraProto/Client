@@ -1,21 +1,24 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelAdminLogEventActionChangeLinkedChat : ChannelAdminLogEventActionBase
+	public partial class ChannelAdminLogEventActionChangeLinkedChat : CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionBase
 	{
 
 
         public static int StaticConstructorId { get => -1569748965; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("prev_value")]
+[Newtonsoft.Json.JsonProperty("prev_value")]
 		public int PrevValue { get; set; }
 
-[JsonPropertyName("new_value")]
+[Newtonsoft.Json.JsonProperty("new_value")]
 		public int NewValue { get; set; }
 
         
@@ -36,11 +39,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			PrevValue = reader.Read<int>();
 			NewValue = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "channelAdminLogEventActionChangeLinkedChat";
+		    return "channelAdminLogEventActionChangeLinkedChat";
 		}
 	}
 }

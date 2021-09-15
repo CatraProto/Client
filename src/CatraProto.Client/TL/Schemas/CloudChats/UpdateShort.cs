@@ -1,21 +1,24 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateShort : UpdatesBase
+	public partial class UpdateShort : CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase
 	{
 
 
         public static int StaticConstructorId { get => 2027216577; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("update")]
-		public UpdateBase Update { get; set; }
+[Newtonsoft.Json.JsonProperty("update")]
+		public CatraProto.Client.TL.Schemas.CloudChats.UpdateBase Update { get; set; }
 
-[JsonPropertyName("date")]
+[Newtonsoft.Json.JsonProperty("date")]
 		public int Date { get; set; }
 
         
@@ -34,13 +37,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Update = reader.Read<UpdateBase>();
+			Update = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.UpdateBase>();
 			Date = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "updateShort";
+		    return "updateShort";
 		}
 	}
 }

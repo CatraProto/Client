@@ -1,22 +1,25 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PageBlockBlockquote : PageBlockBase
+	public partial class PageBlockBlockquote : CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase
 	{
 
 
         public static int StaticConstructorId { get => 641563686; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("text")]
-		public RichTextBase Text { get; set; }
+[Newtonsoft.Json.JsonProperty("text")]
+		public CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Text { get; set; }
 
-[JsonPropertyName("caption")]
-		public RichTextBase Caption { get; set; }
+[Newtonsoft.Json.JsonProperty("caption")]
+		public CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Caption { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -34,13 +37,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Text = reader.Read<RichTextBase>();
-			Caption = reader.Read<RichTextBase>();
-		}
+			Text = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
+			Caption = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "pageBlockBlockquote";
+		    return "pageBlockBlockquote";
 		}
 	}
 }

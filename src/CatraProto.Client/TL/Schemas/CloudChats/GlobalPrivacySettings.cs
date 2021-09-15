@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class GlobalPrivacySettings : GlobalPrivacySettingsBase
+	public partial class GlobalPrivacySettings : CatraProto.Client.TL.Schemas.CloudChats.GlobalPrivacySettingsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,13 +16,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -1096616924; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("archive_and_mute_new_noncontact_peers")]
+[Newtonsoft.Json.JsonProperty("archive_and_mute_new_noncontact_peers")]
 		public override bool? ArchiveAndMuteNewNoncontactPeers { get; set; }
 
         
@@ -42,12 +44,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
+			if(FlagsHelper.IsFlagSet(Flags, 0))
+			{
 			ArchiveAndMuteNewNoncontactPeers = reader.Read<bool>();
-		}
+			}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "globalPrivacySettings";
+		    return "globalPrivacySettings";
 		}
 	}
 }

@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -15,34 +16,34 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 			Video = 1 << 0
 		}
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => 1124046573; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(PhoneCallBase);
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Phone.PhoneCallBase);
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("video")]
+[Newtonsoft.Json.JsonProperty("video")]
 		public bool Video { get; set; }
 
-[JsonPropertyName("user_id")]
-		public InputUserBase UserId { get; set; }
+[Newtonsoft.Json.JsonProperty("user_id")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase UserId { get; set; }
 
-[JsonPropertyName("random_id")]
+[Newtonsoft.Json.JsonProperty("random_id")]
 		public int RandomId { get; set; }
 
-[JsonPropertyName("g_a_hash")]
+[Newtonsoft.Json.JsonProperty("g_a_hash")]
 		public byte[] GAHash { get; set; }
 
-[JsonPropertyName("protocol")]
-		public PhoneCallProtocolBase Protocol { get; set; }
+[Newtonsoft.Json.JsonProperty("protocol")]
+		public CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase Protocol { get; set; }
 
 
 		public void UpdateFlags() 
@@ -67,15 +68,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 		{
 			Flags = reader.Read<int>();
 			Video = FlagsHelper.IsFlagSet(Flags, 0);
-			UserId = reader.Read<InputUserBase>();
+			UserId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
 			RandomId = reader.Read<int>();
 			GAHash = reader.Read<byte[]>();
-			Protocol = reader.Read<PhoneCallProtocolBase>();
-		}
+			Protocol = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase>();
 
+		}
+		
 		public override string ToString()
 		{
-			return "phone.requestCall";
+		    return "phone.requestCall";
 		}
 	}
 }

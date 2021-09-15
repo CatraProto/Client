@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChatAdminRights : ChatAdminRightsBase
+	public partial class ChatAdminRights : CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -23,40 +25,40 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 1605510357; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("change_info")]
+[Newtonsoft.Json.JsonProperty("change_info")]
 		public override bool ChangeInfo { get; set; }
 
-[JsonPropertyName("post_messages")]
+[Newtonsoft.Json.JsonProperty("post_messages")]
 		public override bool PostMessages { get; set; }
 
-[JsonPropertyName("edit_messages")]
+[Newtonsoft.Json.JsonProperty("edit_messages")]
 		public override bool EditMessages { get; set; }
 
-[JsonPropertyName("delete_messages")]
+[Newtonsoft.Json.JsonProperty("delete_messages")]
 		public override bool DeleteMessages { get; set; }
 
-[JsonPropertyName("ban_users")]
+[Newtonsoft.Json.JsonProperty("ban_users")]
 		public override bool BanUsers { get; set; }
 
-[JsonPropertyName("invite_users")]
+[Newtonsoft.Json.JsonProperty("invite_users")]
 		public override bool InviteUsers { get; set; }
 
-[JsonPropertyName("pin_messages")]
+[Newtonsoft.Json.JsonProperty("pin_messages")]
 		public override bool PinMessages { get; set; }
 
-[JsonPropertyName("add_admins")]
+[Newtonsoft.Json.JsonProperty("add_admins")]
 		public override bool AddAdmins { get; set; }
 
-[JsonPropertyName("anonymous")]
+[Newtonsoft.Json.JsonProperty("anonymous")]
 		public override bool Anonymous { get; set; }
 
-[JsonPropertyName("manage_call")]
+[Newtonsoft.Json.JsonProperty("manage_call")]
 		public override bool ManageCall { get; set; }
 
         
@@ -96,11 +98,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			AddAdmins = FlagsHelper.IsFlagSet(Flags, 9);
 			Anonymous = FlagsHelper.IsFlagSet(Flags, 10);
 			ManageCall = FlagsHelper.IsFlagSet(Flags, 11);
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "chatAdminRights";
+		    return "chatAdminRights";
 		}
 	}
 }

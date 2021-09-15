@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class KeyboardButtonRequestPoll : KeyboardButtonBase
+	public partial class KeyboardButtonRequestPoll : CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,16 +16,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -1144565411; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("quiz")]
+[Newtonsoft.Json.JsonProperty("quiz")]
 		public bool? Quiz { get; set; }
 
-[JsonPropertyName("text")]
+[Newtonsoft.Json.JsonProperty("text")]
 		public override string Text { get; set; }
 
         
@@ -46,13 +48,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
+			if(FlagsHelper.IsFlagSet(Flags, 0))
+			{
 			Quiz = reader.Read<bool>();
-			Text = reader.Read<string>();
-		}
+			}
 
+			Text = reader.Read<string>();
+
+		}
+				
 		public override string ToString()
 		{
-			return "keyboardButtonRequestPoll";
+		    return "keyboardButtonRequestPoll";
 		}
 	}
 }

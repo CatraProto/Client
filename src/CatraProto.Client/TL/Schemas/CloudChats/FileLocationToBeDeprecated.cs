@@ -1,21 +1,24 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class FileLocationToBeDeprecated : FileLocationBase
+	public partial class FileLocationToBeDeprecated : CatraProto.Client.TL.Schemas.CloudChats.FileLocationBase
 	{
 
 
         public static int StaticConstructorId { get => -1132476723; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("volume_id")]
+[Newtonsoft.Json.JsonProperty("volume_id")]
 		public override long VolumeId { get; set; }
 
-[JsonPropertyName("local_id")]
+[Newtonsoft.Json.JsonProperty("local_id")]
 		public override int LocalId { get; set; }
 
         
@@ -36,11 +39,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			VolumeId = reader.Read<long>();
 			LocalId = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "fileLocationToBeDeprecated";
+		    return "fileLocationToBeDeprecated";
 		}
 	}
 }

@@ -1,30 +1,33 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PhotoSize : PhotoSizeBase
+	public partial class PhotoSize : CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase
 	{
 
 
         public static int StaticConstructorId { get => 2009052699; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("type")]
+[Newtonsoft.Json.JsonProperty("type")]
 		public override string Type { get; set; }
 
-[JsonPropertyName("location")]
-		public FileLocationBase Location { get; set; }
+[Newtonsoft.Json.JsonProperty("location")]
+		public CatraProto.Client.TL.Schemas.CloudChats.FileLocationBase Location { get; set; }
 
-[JsonPropertyName("w")]
+[Newtonsoft.Json.JsonProperty("w")]
 		public int W { get; set; }
 
-[JsonPropertyName("h")]
+[Newtonsoft.Json.JsonProperty("h")]
 		public int H { get; set; }
 
-[JsonPropertyName("size")]
+[Newtonsoft.Json.JsonProperty("size")]
 		public int Size { get; set; }
 
         
@@ -47,15 +50,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Type = reader.Read<string>();
-			Location = reader.Read<FileLocationBase>();
+			Location = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.FileLocationBase>();
 			W = reader.Read<int>();
 			H = reader.Read<int>();
 			Size = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "photoSize";
+		    return "photoSize";
 		}
 	}
 }

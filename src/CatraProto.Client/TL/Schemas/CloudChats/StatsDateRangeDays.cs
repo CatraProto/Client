@@ -1,21 +1,24 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class StatsDateRangeDays : StatsDateRangeDaysBase
+	public partial class StatsDateRangeDays : CatraProto.Client.TL.Schemas.CloudChats.StatsDateRangeDaysBase
 	{
 
 
         public static int StaticConstructorId { get => -1237848657; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("min_date")]
+[Newtonsoft.Json.JsonProperty("min_date")]
 		public override int MinDate { get; set; }
 
-[JsonPropertyName("max_date")]
+[Newtonsoft.Json.JsonProperty("max_date")]
 		public override int MaxDate { get; set; }
 
         
@@ -36,11 +39,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			MinDate = reader.Read<int>();
 			MaxDate = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "statsDateRangeDays";
+		    return "statsDateRangeDays";
 		}
 	}
 }

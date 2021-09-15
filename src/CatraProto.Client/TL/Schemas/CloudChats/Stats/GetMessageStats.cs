@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -15,27 +16,27 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 			Dark = 1 << 0
 		}
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => -1226791947; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(MessageStatsBase);
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Stats.MessageStatsBase);
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("dark")]
+[Newtonsoft.Json.JsonProperty("dark")]
 		public bool Dark { get; set; }
 
-[JsonPropertyName("channel")]
-		public InputChannelBase Channel { get; set; }
+[Newtonsoft.Json.JsonProperty("channel")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase Channel { get; set; }
 
-[JsonPropertyName("msg_id")]
+[Newtonsoft.Json.JsonProperty("msg_id")]
 		public int MsgId { get; set; }
 
 
@@ -59,13 +60,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 		{
 			Flags = reader.Read<int>();
 			Dark = FlagsHelper.IsFlagSet(Flags, 0);
-			Channel = reader.Read<InputChannelBase>();
+			Channel = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
 			MsgId = reader.Read<int>();
-		}
 
+		}
+		
 		public override string ToString()
 		{
-			return "stats.getMessageStats";
+		    return "stats.getMessageStats";
 		}
 	}
 }

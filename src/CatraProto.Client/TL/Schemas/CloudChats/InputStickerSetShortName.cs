@@ -1,18 +1,21 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputStickerSetShortName : InputStickerSetBase
+	public partial class InputStickerSetShortName : CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase
 	{
 
 
         public static int StaticConstructorId { get => -2044933984; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("short_name")]
+[Newtonsoft.Json.JsonProperty("short_name")]
 		public string ShortName { get; set; }
 
         
@@ -31,11 +34,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			ShortName = reader.Read<string>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "inputStickerSetShortName";
+		    return "inputStickerSetShortName";
 		}
 	}
 }

@@ -1,6 +1,8 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
@@ -10,10 +12,10 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
 
         public static int StaticConstructorId { get => 812830625; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("packed_data")]
+[Newtonsoft.Json.JsonProperty("packed_data")]
 		public byte[] PackedData { get; set; }
 
         
@@ -32,11 +34,12 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 		public void Deserialize(Reader reader)
 		{
 			PackedData = reader.Read<byte[]>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "gzip_packed";
+		    return "gzip_packed";
 		}
 	}
 }

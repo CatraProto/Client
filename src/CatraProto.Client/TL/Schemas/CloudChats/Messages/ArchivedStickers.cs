@@ -1,46 +1,52 @@
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using Newtonsoft.Json;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class ArchivedStickers : ArchivedStickersBase
-	{
+    public partial class ArchivedStickers : ArchivedStickersBase
+    {
+        public static int StaticConstructorId
+        {
+            get => 1338747336;
+        }
 
-
-        public static int StaticConstructorId { get => 1338747336; }
         [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonPropertyName("count")]
-		public override int Count { get; set; }
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-		[JsonPropertyName("sets")] public override IList<StickerSetCoveredBase> Sets { get; set; }
+        [JsonProperty("count")] public override int Count { get; set; }
 
-        
-		public override void UpdateFlags() 
-		{
+        [JsonProperty("sets")] public override IList<StickerSetCoveredBase> Sets { get; set; }
 
-		}
 
-		public override void Serialize(Writer writer)
-		{
-		    if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Count);
-			writer.Write(Sets);
+        public override void UpdateFlags()
+        {
+        }
 
-		}
+        public override void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public override void Deserialize(Reader reader)
-		{
-			Count = reader.Read<int>();
-			Sets = reader.ReadVector<StickerSetCoveredBase>();
-		}
+            writer.Write(Count);
+            writer.Write(Sets);
+        }
 
-		public override string ToString()
-		{
-			return "messages.archivedStickers";
-		}
-	}
+        public override void Deserialize(Reader reader)
+        {
+            Count = reader.Read<int>();
+            Sets = reader.ReadVector<StickerSetCoveredBase>();
+        }
+
+        public override string ToString()
+        {
+            return "messages.archivedStickers";
+        }
+    }
 }

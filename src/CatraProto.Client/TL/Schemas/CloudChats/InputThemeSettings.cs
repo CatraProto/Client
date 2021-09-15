@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputThemeSettings : InputThemeSettingsBase
+	public partial class InputThemeSettings : CatraProto.Client.TL.Schemas.CloudChats.InputThemeSettingsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -17,29 +19,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -1118798639; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("base_theme")]
-		public override BaseThemeBase BaseTheme { get; set; }
+[Newtonsoft.Json.JsonProperty("base_theme")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.BaseThemeBase BaseTheme { get; set; }
 
-[JsonPropertyName("accent_color")]
+[Newtonsoft.Json.JsonProperty("accent_color")]
 		public override int AccentColor { get; set; }
 
-[JsonPropertyName("message_top_color")]
+[Newtonsoft.Json.JsonProperty("message_top_color")]
 		public override int? MessageTopColor { get; set; }
 
-[JsonPropertyName("message_bottom_color")]
+[Newtonsoft.Json.JsonProperty("message_bottom_color")]
 		public override int? MessageBottomColor { get; set; }
 
-[JsonPropertyName("wallpaper")]
-		public override InputWallPaperBase Wallpaper { get; set; }
+[Newtonsoft.Json.JsonProperty("wallpaper")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase Wallpaper { get; set; }
 
-[JsonPropertyName("wallpaper_settings")]
-		public override WallPaperSettingsBase WallpaperSettings { get; set; }
+[Newtonsoft.Json.JsonProperty("wallpaper_settings")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase WallpaperSettings { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -84,7 +86,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			BaseTheme = reader.Read<BaseThemeBase>();
+			BaseTheme = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.BaseThemeBase>();
 			AccentColor = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
@@ -98,18 +100,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Wallpaper = reader.Read<InputWallPaperBase>();
+				Wallpaper = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				WallpaperSettings = reader.Read<WallPaperSettingsBase>();
+				WallpaperSettings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "inputThemeSettings";
+		    return "inputThemeSettings";
 		}
 	}
 }

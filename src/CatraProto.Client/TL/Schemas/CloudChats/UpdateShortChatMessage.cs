@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateShortChatMessage : UpdatesBase
+	public partial class UpdateShortChatMessage : CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -22,56 +23,56 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 1076714939; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("out")]
+[Newtonsoft.Json.JsonProperty("out")]
 		public bool Out { get; set; }
 
-[JsonPropertyName("mentioned")]
+[Newtonsoft.Json.JsonProperty("mentioned")]
 		public bool Mentioned { get; set; }
 
-[JsonPropertyName("media_unread")]
+[Newtonsoft.Json.JsonProperty("media_unread")]
 		public bool MediaUnread { get; set; }
 
-[JsonPropertyName("silent")]
+[Newtonsoft.Json.JsonProperty("silent")]
 		public bool Silent { get; set; }
 
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public int Id { get; set; }
 
-[JsonPropertyName("from_id")]
+[Newtonsoft.Json.JsonProperty("from_id")]
 		public int FromId { get; set; }
 
-[JsonPropertyName("chat_id")]
+[Newtonsoft.Json.JsonProperty("chat_id")]
 		public int ChatId { get; set; }
 
-[JsonPropertyName("message")]
+[Newtonsoft.Json.JsonProperty("message")]
 		public string Message { get; set; }
 
-[JsonPropertyName("pts")]
+[Newtonsoft.Json.JsonProperty("pts")]
 		public int Pts { get; set; }
 
-[JsonPropertyName("pts_count")]
+[Newtonsoft.Json.JsonProperty("pts_count")]
 		public int PtsCount { get; set; }
 
-[JsonPropertyName("date")]
+[Newtonsoft.Json.JsonProperty("date")]
 		public int Date { get; set; }
 
-[JsonPropertyName("fwd_from")]
-		public MessageFwdHeaderBase FwdFrom { get; set; }
+[Newtonsoft.Json.JsonProperty("fwd_from")]
+		public CatraProto.Client.TL.Schemas.CloudChats.MessageFwdHeaderBase FwdFrom { get; set; }
 
-[JsonPropertyName("via_bot_id")]
+[Newtonsoft.Json.JsonProperty("via_bot_id")]
 		public int? ViaBotId { get; set; }
 
-[JsonPropertyName("reply_to")]
-		public MessageReplyHeaderBase ReplyTo { get; set; }
+[Newtonsoft.Json.JsonProperty("reply_to")]
+		public CatraProto.Client.TL.Schemas.CloudChats.MessageReplyHeaderBase ReplyTo { get; set; }
 
-[JsonPropertyName("entities")]
-		public IList<MessageEntityBase> Entities { get; set; }
+[Newtonsoft.Json.JsonProperty("entities")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -138,7 +139,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Date = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				FwdFrom = reader.Read<MessageFwdHeaderBase>();
+				FwdFrom = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageFwdHeaderBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 11))
@@ -148,18 +149,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				ReplyTo = reader.Read<MessageReplyHeaderBase>();
+				ReplyTo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageReplyHeaderBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 7))
 			{
-				Entities = reader.ReadVector<MessageEntityBase>();
+				Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "updateShortChatMessage";
+		    return "updateShortChatMessage";
 		}
 	}
 }

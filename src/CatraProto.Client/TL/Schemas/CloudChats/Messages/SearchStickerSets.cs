@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -15,26 +16,27 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			ExcludeFeatured = 1 << 0
 		}
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => -1028140917; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.FoundStickerSetsBase);
 
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(FoundStickerSetsBase);
-
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("exclude_featured")]
+[Newtonsoft.Json.JsonProperty("exclude_featured")]
 		public bool ExcludeFeatured { get; set; }
 
-[JsonPropertyName("q")]
+[Newtonsoft.Json.JsonProperty("q")]
 		public string Q { get; set; }
 
-[JsonPropertyName("hash")]
+[Newtonsoft.Json.JsonProperty("hash")]
 		public int Hash { get; set; }
 
 
@@ -60,11 +62,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			ExcludeFeatured = FlagsHelper.IsFlagSet(Flags, 0);
 			Q = reader.Read<string>();
 			Hash = reader.Read<int>();
-		}
 
+		}
+		
 		public override string ToString()
 		{
-			return "messages.searchStickerSets";
+		    return "messages.searchStickerSets";
 		}
 	}
 }

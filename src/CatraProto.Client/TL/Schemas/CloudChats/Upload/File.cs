@@ -1,25 +1,27 @@
-using System.Text.Json.Serialization;
-using CatraProto.Client.TL.Schemas.CloudChats.Storage;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 {
-	public partial class File : FileBase
+	public partial class File : CatraProto.Client.TL.Schemas.CloudChats.Upload.FileBase
 	{
 
 
         public static int StaticConstructorId { get => 157948117; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("type")]
-		public FileTypeBase Type { get; set; }
+[Newtonsoft.Json.JsonProperty("type")]
+		public CatraProto.Client.TL.Schemas.CloudChats.Storage.FileTypeBase Type { get; set; }
 
-[JsonPropertyName("mtime")]
+[Newtonsoft.Json.JsonProperty("mtime")]
 		public int Mtime { get; set; }
 
-[JsonPropertyName("bytes")]
+[Newtonsoft.Json.JsonProperty("bytes")]
 		public byte[] Bytes { get; set; }
 
         
@@ -39,14 +41,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 
 		public override void Deserialize(Reader reader)
 		{
-			Type = reader.Read<FileTypeBase>();
+			Type = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.Storage.FileTypeBase>();
 			Mtime = reader.Read<int>();
 			Bytes = reader.Read<byte[]>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "upload.file";
+		    return "upload.file";
 		}
 	}
 }

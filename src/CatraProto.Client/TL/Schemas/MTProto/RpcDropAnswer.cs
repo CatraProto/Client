@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -11,18 +12,18 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 	{
 
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => 1491380032; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(RpcDropAnswerBase);
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.RpcDropAnswerBase);
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("req_msg_id")]
+[Newtonsoft.Json.JsonProperty("req_msg_id")]
 		public long ReqMsgId { get; set; }
 
 
@@ -41,11 +42,12 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 		public void Deserialize(Reader reader)
 		{
 			ReqMsgId = reader.Read<long>();
-		}
 
+		}
+		
 		public override string ToString()
 		{
-			return "rpc_drop_answer";
+		    return "rpc_drop_answer";
 		}
 	}
 }

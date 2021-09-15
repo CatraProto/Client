@@ -1,21 +1,24 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class CdnPublicKey : CdnPublicKeyBase
+	public partial class CdnPublicKey : CatraProto.Client.TL.Schemas.CloudChats.CdnPublicKeyBase
 	{
 
 
         public static int StaticConstructorId { get => -914167110; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("dc_id")]
+[Newtonsoft.Json.JsonProperty("dc_id")]
 		public override int DcId { get; set; }
 
-[JsonPropertyName("public_key")]
+[Newtonsoft.Json.JsonProperty("public_key")]
 		public override string PublicKey { get; set; }
 
         
@@ -36,11 +39,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			DcId = reader.Read<int>();
 			PublicKey = reader.Read<string>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "cdnPublicKey";
+		    return "cdnPublicKey";
 		}
 	}
 }

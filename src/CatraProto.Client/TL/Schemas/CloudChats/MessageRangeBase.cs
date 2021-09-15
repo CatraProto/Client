@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,10 +7,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class MessageRangeBase : IObject
     {
 
-[JsonPropertyName("min_id")]
+[Newtonsoft.Json.JsonProperty("min_id")]
 		public abstract int MinId { get; set; }
 
-[JsonPropertyName("max_id")]
+[Newtonsoft.Json.JsonProperty("max_id")]
 		public abstract int MaxId { get; set; }
 
         public abstract void UpdateFlags();

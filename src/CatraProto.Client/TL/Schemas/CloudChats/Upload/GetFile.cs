@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -16,33 +17,33 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 			CdnSupported = 1 << 1
 		}
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => -1319462148; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(FileBase);
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Upload.FileBase);
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("precise")]
+[Newtonsoft.Json.JsonProperty("precise")]
 		public bool Precise { get; set; }
 
-[JsonPropertyName("cdn_supported")]
+[Newtonsoft.Json.JsonProperty("cdn_supported")]
 		public bool CdnSupported { get; set; }
 
-[JsonPropertyName("location")]
-		public InputFileLocationBase Location { get; set; }
+[Newtonsoft.Json.JsonProperty("location")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputFileLocationBase Location { get; set; }
 
-[JsonPropertyName("offset")]
+[Newtonsoft.Json.JsonProperty("offset")]
 		public int Offset { get; set; }
 
-[JsonPropertyName("limit")]
+[Newtonsoft.Json.JsonProperty("limit")]
 		public int Limit { get; set; }
 
 
@@ -69,14 +70,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 			Flags = reader.Read<int>();
 			Precise = FlagsHelper.IsFlagSet(Flags, 0);
 			CdnSupported = FlagsHelper.IsFlagSet(Flags, 1);
-			Location = reader.Read<InputFileLocationBase>();
+			Location = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputFileLocationBase>();
 			Offset = reader.Read<int>();
 			Limit = reader.Read<int>();
-		}
 
+		}
+		
 		public override string ToString()
 		{
-			return "upload.getFile";
+		    return "upload.getFile";
 		}
 	}
 }

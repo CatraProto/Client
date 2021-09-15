@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,7 +7,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
     public abstract class MessageCopyBase : IObject
     {
 
-[JsonPropertyName("orig_message")]
+[Newtonsoft.Json.JsonProperty("orig_message")]
 		public abstract CatraProto.Client.TL.Schemas.MTProto.MessageBase OrigMessage { get; set; }
 
         public abstract void UpdateFlags();

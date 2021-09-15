@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,55 +7,55 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
     public abstract class MegagroupStatsBase : IObject
     {
 
-[JsonPropertyName("period")]
+[Newtonsoft.Json.JsonProperty("period")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.StatsDateRangeDaysBase Period { get; set; }
 
-[JsonPropertyName("members")]
+[Newtonsoft.Json.JsonProperty("members")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase Members { get; set; }
 
-[JsonPropertyName("messages")]
+[Newtonsoft.Json.JsonProperty("messages")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase Messages { get; set; }
 
-[JsonPropertyName("viewers")]
+[Newtonsoft.Json.JsonProperty("viewers")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase Viewers { get; set; }
 
-[JsonPropertyName("posters")]
+[Newtonsoft.Json.JsonProperty("posters")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase Posters { get; set; }
 
-[JsonPropertyName("growth_graph")]
+[Newtonsoft.Json.JsonProperty("growth_graph")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase GrowthGraph { get; set; }
 
-[JsonPropertyName("members_graph")]
+[Newtonsoft.Json.JsonProperty("members_graph")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase MembersGraph { get; set; }
 
-[JsonPropertyName("new_members_by_source_graph")]
+[Newtonsoft.Json.JsonProperty("new_members_by_source_graph")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase NewMembersBySourceGraph { get; set; }
 
-[JsonPropertyName("languages_graph")]
+[Newtonsoft.Json.JsonProperty("languages_graph")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase LanguagesGraph { get; set; }
 
-[JsonPropertyName("messages_graph")]
+[Newtonsoft.Json.JsonProperty("messages_graph")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase MessagesGraph { get; set; }
 
-[JsonPropertyName("actions_graph")]
+[Newtonsoft.Json.JsonProperty("actions_graph")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase ActionsGraph { get; set; }
 
-[JsonPropertyName("top_hours_graph")]
+[Newtonsoft.Json.JsonProperty("top_hours_graph")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase TopHoursGraph { get; set; }
 
-[JsonPropertyName("weekdays_graph")]
+[Newtonsoft.Json.JsonProperty("weekdays_graph")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase WeekdaysGraph { get; set; }
 
-[JsonPropertyName("top_posters")]
+[Newtonsoft.Json.JsonProperty("top_posters")]
 		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.StatsGroupTopPosterBase> TopPosters { get; set; }
 
-[JsonPropertyName("top_admins")]
+[Newtonsoft.Json.JsonProperty("top_admins")]
 		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.StatsGroupTopAdminBase> TopAdmins { get; set; }
 
-[JsonPropertyName("top_inviters")]
+[Newtonsoft.Json.JsonProperty("top_inviters")]
 		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.StatsGroupTopInviterBase> TopInviters { get; set; }
 
-[JsonPropertyName("users")]
+[Newtonsoft.Json.JsonProperty("users")]
 		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
         public abstract void UpdateFlags();

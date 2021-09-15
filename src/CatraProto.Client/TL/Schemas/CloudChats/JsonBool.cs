@@ -1,18 +1,21 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class JsonBool : JSONValueBase
+	public partial class JsonBool : CatraProto.Client.TL.Schemas.CloudChats.JSONValueBase
 	{
 
 
         public static int StaticConstructorId { get => -952869270; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("value")]
+[Newtonsoft.Json.JsonProperty("value")]
 		public bool Value { get; set; }
 
         
@@ -31,11 +34,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Value = reader.Read<bool>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "jsonBool";
+		    return "jsonBool";
 		}
 	}
 }

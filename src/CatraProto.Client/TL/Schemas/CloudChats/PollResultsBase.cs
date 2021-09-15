@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,22 +7,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class PollResultsBase : IObject
     {
 
-[JsonPropertyName("min")]
+[Newtonsoft.Json.JsonProperty("min")]
 		public abstract bool Min { get; set; }
 
-[JsonPropertyName("results")]
+[Newtonsoft.Json.JsonProperty("results")]
 		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.PollAnswerVotersBase> Results { get; set; }
 
-[JsonPropertyName("total_voters")]
+[Newtonsoft.Json.JsonProperty("total_voters")]
 		public abstract int? TotalVoters { get; set; }
 
-[JsonPropertyName("recent_voters")]
+[Newtonsoft.Json.JsonProperty("recent_voters")]
 		public abstract IList<int> RecentVoters { get; set; }
 
-[JsonPropertyName("solution")]
+[Newtonsoft.Json.JsonProperty("solution")]
 		public abstract string Solution { get; set; }
 
-[JsonPropertyName("solution_entities")]
+[Newtonsoft.Json.JsonProperty("solution_entities")]
 		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> SolutionEntities { get; set; }
 
         public abstract void UpdateFlags();

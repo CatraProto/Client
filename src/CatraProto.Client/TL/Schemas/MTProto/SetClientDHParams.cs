@@ -1,8 +1,8 @@
 using System;
-using System.Numerics;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -12,24 +12,24 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 	{
 
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => -184262881; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(SetClientDHParamsAnswerBase);
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.SetClientDHParamsAnswerBase);
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("nonce")]
-		public BigInteger Nonce { get; set; }
+[Newtonsoft.Json.JsonProperty("nonce")]
+		public System.Numerics.BigInteger Nonce { get; set; }
 
-[JsonPropertyName("server_nonce")]
-		public BigInteger ServerNonce { get; set; }
+[Newtonsoft.Json.JsonProperty("server_nonce")]
+		public System.Numerics.BigInteger ServerNonce { get; set; }
 
-[JsonPropertyName("encrypted_data")]
+[Newtonsoft.Json.JsonProperty("encrypted_data")]
 		public byte[] EncryptedData { get; set; }
 
 
@@ -49,14 +49,15 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
 		public void Deserialize(Reader reader)
 		{
-			Nonce = reader.Read<BigInteger>(128);
-			ServerNonce = reader.Read<BigInteger>(128);
+			Nonce = reader.Read<System.Numerics.BigInteger>(128);
+			ServerNonce = reader.Read<System.Numerics.BigInteger>(128);
 			EncryptedData = reader.Read<byte[]>();
-		}
 
+		}
+		
 		public override string ToString()
 		{
-			return "set_client_DH_params";
+		    return "set_client_DH_params";
 		}
 	}
 }

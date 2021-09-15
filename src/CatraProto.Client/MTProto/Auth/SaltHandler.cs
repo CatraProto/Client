@@ -32,26 +32,29 @@ namespace CatraProto.Client.MTProto.Auth
         {
             while (true)
             {
-                await StateSignaler.WaitStateAsync(default, ResumableSignalState.Resume, ResumableSignalState.Start);
-                _logger.Information("Cleaning up salts...");
+                await StateSignaler.WaitStateAsync(false, default, ResumableSignalState.Resume, ResumableSignalState.Start);
+                _logger.Information("Cleaning up salts");
                 foreach (var (key, value) in _futureSalts)
                 {
                     var expiredSince = DateTimeOffset.UtcNow.ToUnixTimeSeconds() - value.ValidUntil;
                     if (expiredSince >= 1800)
                     {
-                        _logger.Information("Removed salt {Salt} because it expired {Seconds} seconds ago", key, expiredSince);
+                        _logger.Verbose("Removed salt {Salt} because it expired {Seconds} seconds ago", key, expiredSince);
                         _futureSalts.TryRemove(key, out _);
                     }
                 }
+
+                _logger.Information("Cleanup completed");
 
                 _logger.Information("Requesting 64 future salts");
                 var futureSalts = await _api.MtProtoApi.GetFutureSaltsAsync(64);
                 var receivedSalts = futureSalts.Response!.Salts;
 
-                _logger.Information("Received {Count} salts from server", receivedSalts.Count);
+                _logger.Information("Received {Count} new salts from the server", receivedSalts.Count);
                 foreach (var responseSalt in futureSalts.Response.Salts)
                 {
-                    _logger.Information("Adding new salt {Salt} which is valid since {Since} and expires at {Until}", responseSalt.Salt, responseSalt.ValidSince, responseSalt.ValidUntil);
+                    _logger.Verbose("Adding new salt {Salt} which is valid since {Since} and expires at {Until}", responseSalt.Salt,
+                        responseSalt.ValidSince, responseSalt.ValidUntil);
                     _futureSalts.TryAdd(responseSalt.Salt, responseSalt);
                 }
 

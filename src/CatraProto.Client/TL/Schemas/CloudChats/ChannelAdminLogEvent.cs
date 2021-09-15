@@ -1,28 +1,31 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelAdminLogEvent : ChannelAdminLogEventBase
+	public partial class ChannelAdminLogEvent : CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventBase
 	{
 
 
         public static int StaticConstructorId { get => 995769920; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public override long Id { get; set; }
 
-[JsonPropertyName("date")]
+[Newtonsoft.Json.JsonProperty("date")]
 		public override int Date { get; set; }
 
-[JsonPropertyName("user_id")]
+[Newtonsoft.Json.JsonProperty("user_id")]
 		public override int UserId { get; set; }
 
-[JsonPropertyName("action")]
-		public override ChannelAdminLogEventActionBase Action { get; set; }
+[Newtonsoft.Json.JsonProperty("action")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionBase Action { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -45,12 +48,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Id = reader.Read<long>();
 			Date = reader.Read<int>();
 			UserId = reader.Read<int>();
-			Action = reader.Read<ChannelAdminLogEventActionBase>();
-		}
+			Action = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "channelAdminLogEvent";
+		    return "channelAdminLogEvent";
 		}
 	}
 }

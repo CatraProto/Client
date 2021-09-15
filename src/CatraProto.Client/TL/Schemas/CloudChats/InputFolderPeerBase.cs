@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,10 +7,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class InputFolderPeerBase : IObject
     {
 
-[JsonPropertyName("peer")]
+[Newtonsoft.Json.JsonProperty("peer")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
 
-[JsonPropertyName("folder_id")]
+[Newtonsoft.Json.JsonProperty("folder_id")]
 		public abstract int FolderId { get; set; }
 
         public abstract void UpdateFlags();

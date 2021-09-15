@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,49 +7,49 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class AuthorizationBase : IObject
     {
 
-[JsonPropertyName("current")]
+[Newtonsoft.Json.JsonProperty("current")]
 		public abstract bool Current { get; set; }
 
-[JsonPropertyName("official_app")]
+[Newtonsoft.Json.JsonProperty("official_app")]
 		public abstract bool OfficialApp { get; set; }
 
-[JsonPropertyName("password_pending")]
+[Newtonsoft.Json.JsonProperty("password_pending")]
 		public abstract bool PasswordPending { get; set; }
 
-[JsonPropertyName("hash")]
+[Newtonsoft.Json.JsonProperty("hash")]
 		public abstract long Hash { get; set; }
 
-[JsonPropertyName("device_model")]
+[Newtonsoft.Json.JsonProperty("device_model")]
 		public abstract string DeviceModel { get; set; }
 
-[JsonPropertyName("platform")]
+[Newtonsoft.Json.JsonProperty("platform")]
 		public abstract string Platform { get; set; }
 
-[JsonPropertyName("system_version")]
+[Newtonsoft.Json.JsonProperty("system_version")]
 		public abstract string SystemVersion { get; set; }
 
-[JsonPropertyName("api_id")]
+[Newtonsoft.Json.JsonProperty("api_id")]
 		public abstract int ApiId { get; set; }
 
-[JsonPropertyName("app_name")]
+[Newtonsoft.Json.JsonProperty("app_name")]
 		public abstract string AppName { get; set; }
 
-[JsonPropertyName("app_version")]
+[Newtonsoft.Json.JsonProperty("app_version")]
 		public abstract string AppVersion { get; set; }
 
-[JsonPropertyName("date_created")]
+[Newtonsoft.Json.JsonProperty("date_created")]
 		public abstract int DateCreated { get; set; }
 
-[JsonPropertyName("date_active")]
+[Newtonsoft.Json.JsonProperty("date_active")]
 		public abstract int DateActive { get; set; }
 
-[JsonPropertyName("ip")]
+[Newtonsoft.Json.JsonProperty("ip")]
 		public abstract string Ip { get; set; }
 
-[JsonPropertyName("country")]
+[Newtonsoft.Json.JsonProperty("country")]
 		public abstract string Country { get; set; }
 
-[JsonPropertyName("region")]
+[Newtonsoft.Json.JsonProperty("region")]
 		public abstract string Region { get; set; }
 
         public abstract void UpdateFlags();

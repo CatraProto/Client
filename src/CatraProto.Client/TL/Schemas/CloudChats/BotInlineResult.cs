@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class BotInlineResult : BotInlineResultBase
+	public partial class BotInlineResult : CatraProto.Client.TL.Schemas.CloudChats.BotInlineResultBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -18,35 +20,35 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 295067450; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public override string Id { get; set; }
 
-[JsonPropertyName("type")]
+[Newtonsoft.Json.JsonProperty("type")]
 		public override string Type { get; set; }
 
-[JsonPropertyName("title")]
-		public override string Title { get; set; }
+[Newtonsoft.Json.JsonProperty("title")]
+		public string Title { get; set; }
 
-[JsonPropertyName("description")]
-		public override string Description { get; set; }
+[Newtonsoft.Json.JsonProperty("description")]
+		public string Description { get; set; }
 
-[JsonPropertyName("url")]
+[Newtonsoft.Json.JsonProperty("url")]
 		public string Url { get; set; }
 
-[JsonPropertyName("thumb")]
-		public WebDocumentBase Thumb { get; set; }
+[Newtonsoft.Json.JsonProperty("thumb")]
+		public CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase Thumb { get; set; }
 
-[JsonPropertyName("content")]
-		public WebDocumentBase Content { get; set; }
+[Newtonsoft.Json.JsonProperty("content")]
+		public CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase Content { get; set; }
 
-[JsonPropertyName("send_message")]
-		public override BotInlineMessageBase SendMessage { get; set; }
+[Newtonsoft.Json.JsonProperty("send_message")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.BotInlineMessageBase SendMessage { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -117,20 +119,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				Thumb = reader.Read<WebDocumentBase>();
+				Thumb = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				Content = reader.Read<WebDocumentBase>();
+				Content = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase>();
 			}
 
-			SendMessage = reader.Read<BotInlineMessageBase>();
-		}
+			SendMessage = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.BotInlineMessageBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "botInlineResult";
+		    return "botInlineResult";
 		}
 	}
 }

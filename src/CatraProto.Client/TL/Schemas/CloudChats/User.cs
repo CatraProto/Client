@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class User : UserBase
+	public partial class User : CatraProto.Client.TL.Schemas.CloudChats.UserBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -39,88 +40,88 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -1820043071; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("self")]
+[Newtonsoft.Json.JsonProperty("self")]
 		public bool Self { get; set; }
 
-[JsonPropertyName("contact")]
+[Newtonsoft.Json.JsonProperty("contact")]
 		public bool Contact { get; set; }
 
-[JsonPropertyName("mutual_contact")]
+[Newtonsoft.Json.JsonProperty("mutual_contact")]
 		public bool MutualContact { get; set; }
 
-[JsonPropertyName("deleted")]
+[Newtonsoft.Json.JsonProperty("deleted")]
 		public bool Deleted { get; set; }
 
-[JsonPropertyName("bot")]
+[Newtonsoft.Json.JsonProperty("bot")]
 		public bool Bot { get; set; }
 
-[JsonPropertyName("bot_chat_history")]
+[Newtonsoft.Json.JsonProperty("bot_chat_history")]
 		public bool BotChatHistory { get; set; }
 
-[JsonPropertyName("bot_nochats")]
+[Newtonsoft.Json.JsonProperty("bot_nochats")]
 		public bool BotNochats { get; set; }
 
-[JsonPropertyName("verified")]
+[Newtonsoft.Json.JsonProperty("verified")]
 		public bool Verified { get; set; }
 
-[JsonPropertyName("restricted")]
+[Newtonsoft.Json.JsonProperty("restricted")]
 		public bool Restricted { get; set; }
 
-[JsonPropertyName("min")]
+[Newtonsoft.Json.JsonProperty("min")]
 		public bool Min { get; set; }
 
-[JsonPropertyName("bot_inline_geo")]
+[Newtonsoft.Json.JsonProperty("bot_inline_geo")]
 		public bool BotInlineGeo { get; set; }
 
-[JsonPropertyName("support")]
+[Newtonsoft.Json.JsonProperty("support")]
 		public bool Support { get; set; }
 
-[JsonPropertyName("scam")]
+[Newtonsoft.Json.JsonProperty("scam")]
 		public bool Scam { get; set; }
 
-[JsonPropertyName("apply_min_photo")]
+[Newtonsoft.Json.JsonProperty("apply_min_photo")]
 		public bool ApplyMinPhoto { get; set; }
 
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public override int Id { get; set; }
 
-[JsonPropertyName("access_hash")]
+[Newtonsoft.Json.JsonProperty("access_hash")]
 		public long? AccessHash { get; set; }
 
-[JsonPropertyName("first_name")]
+[Newtonsoft.Json.JsonProperty("first_name")]
 		public string FirstName { get; set; }
 
-[JsonPropertyName("last_name")]
+[Newtonsoft.Json.JsonProperty("last_name")]
 		public string LastName { get; set; }
 
-[JsonPropertyName("username")]
+[Newtonsoft.Json.JsonProperty("username")]
 		public string Username { get; set; }
 
-[JsonPropertyName("phone")]
+[Newtonsoft.Json.JsonProperty("phone")]
 		public string Phone { get; set; }
 
-[JsonPropertyName("photo")]
-		public UserProfilePhotoBase Photo { get; set; }
+[Newtonsoft.Json.JsonProperty("photo")]
+		public CatraProto.Client.TL.Schemas.CloudChats.UserProfilePhotoBase Photo { get; set; }
 
-[JsonPropertyName("status")]
-		public UserStatusBase Status { get; set; }
+[Newtonsoft.Json.JsonProperty("status")]
+		public CatraProto.Client.TL.Schemas.CloudChats.UserStatusBase Status { get; set; }
 
-[JsonPropertyName("bot_info_version")]
+[Newtonsoft.Json.JsonProperty("bot_info_version")]
 		public int? BotInfoVersion { get; set; }
 
-[JsonPropertyName("restriction_reason")]
-		public IList<RestrictionReasonBase> RestrictionReason { get; set; }
+[Newtonsoft.Json.JsonProperty("restriction_reason")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase> RestrictionReason { get; set; }
 
-[JsonPropertyName("bot_inline_placeholder")]
+[Newtonsoft.Json.JsonProperty("bot_inline_placeholder")]
 		public string BotInlinePlaceholder { get; set; }
 
-[JsonPropertyName("lang_code")]
+[Newtonsoft.Json.JsonProperty("lang_code")]
 		public string LangCode { get; set; }
 
         
@@ -263,12 +264,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				Photo = reader.Read<UserProfilePhotoBase>();
+				Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.UserProfilePhotoBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
-				Status = reader.Read<UserStatusBase>();
+				Status = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.UserStatusBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 14))
@@ -278,7 +279,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 18))
 			{
-				RestrictionReason = reader.ReadVector<RestrictionReasonBase>();
+				RestrictionReason = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 19))
@@ -290,11 +291,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			{
 				LangCode = reader.Read<string>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "user";
+		    return "user";
 		}
 	}
 }

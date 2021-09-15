@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class Folder : FolderBase
+	public partial class Folder : CatraProto.Client.TL.Schemas.CloudChats.FolderBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -17,29 +19,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -11252123; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("autofill_new_broadcasts")]
+[Newtonsoft.Json.JsonProperty("autofill_new_broadcasts")]
 		public override bool AutofillNewBroadcasts { get; set; }
 
-[JsonPropertyName("autofill_public_groups")]
+[Newtonsoft.Json.JsonProperty("autofill_public_groups")]
 		public override bool AutofillPublicGroups { get; set; }
 
-[JsonPropertyName("autofill_new_correspondents")]
+[Newtonsoft.Json.JsonProperty("autofill_new_correspondents")]
 		public override bool AutofillNewCorrespondents { get; set; }
 
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public override int Id { get; set; }
 
-[JsonPropertyName("title")]
+[Newtonsoft.Json.JsonProperty("title")]
 		public override string Title { get; set; }
 
-[JsonPropertyName("photo")]
-		public override ChatPhotoBase Photo { get; set; }
+[Newtonsoft.Json.JsonProperty("photo")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.ChatPhotoBase Photo { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -76,13 +78,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Title = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				Photo = reader.Read<ChatPhotoBase>();
+				Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatPhotoBase>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "folder";
+		    return "folder";
 		}
 	}
 }

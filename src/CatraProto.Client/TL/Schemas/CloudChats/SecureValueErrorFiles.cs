@@ -1,25 +1,27 @@
+using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class SecureValueErrorFiles : SecureValueErrorBase
+	public partial class SecureValueErrorFiles : CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase
 	{
 
 
         public static int StaticConstructorId { get => 1717706985; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("type")]
-		public override SecureValueTypeBase Type { get; set; }
+[Newtonsoft.Json.JsonProperty("type")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase Type { get; set; }
 
-[JsonPropertyName("file_hash")]
+[Newtonsoft.Json.JsonProperty("file_hash")]
 		public IList<byte[]> FileHash { get; set; }
 
-[JsonPropertyName("text")]
+[Newtonsoft.Json.JsonProperty("text")]
 		public override string Text { get; set; }
 
         
@@ -39,14 +41,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Type = reader.Read<SecureValueTypeBase>();
+			Type = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase>();
 			FileHash = reader.ReadVector<byte[]>();
 			Text = reader.Read<string>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "secureValueErrorFiles";
+		    return "secureValueErrorFiles";
 		}
 	}
 }

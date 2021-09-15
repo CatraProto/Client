@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -17,27 +18,27 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 			VideoStartTs = 1 << 2
 		}
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => -1980559511; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(PhotoBase);
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Photos.PhotoBase);
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("file")]
-		public InputFileBase File { get; set; }
+[Newtonsoft.Json.JsonProperty("file")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase File { get; set; }
 
-[JsonPropertyName("video")]
-		public InputFileBase Video { get; set; }
+[Newtonsoft.Json.JsonProperty("video")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase Video { get; set; }
 
-[JsonPropertyName("video_start_ts")]
+[Newtonsoft.Json.JsonProperty("video_start_ts")]
 		public double? VideoStartTs { get; set; }
 
 
@@ -77,23 +78,25 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 			Flags = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				File = reader.Read<InputFileBase>();
+				File = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Video = reader.Read<InputFileBase>();
+				Video = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
 				VideoStartTs = reader.Read<double>();
 			}
-		}
 
+
+		}
+		
 		public override string ToString()
 		{
-			return "photos.uploadProfilePhoto";
+		    return "photos.uploadProfilePhoto";
 		}
 	}
 }

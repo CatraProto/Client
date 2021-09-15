@@ -1,27 +1,30 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MaskCoords : MaskCoordsBase
+	public partial class MaskCoords : CatraProto.Client.TL.Schemas.CloudChats.MaskCoordsBase
 	{
 
 
         public static int StaticConstructorId { get => -1361650766; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("n")]
+[Newtonsoft.Json.JsonProperty("n")]
 		public override int N { get; set; }
 
-[JsonPropertyName("x")]
+[Newtonsoft.Json.JsonProperty("x")]
 		public override double X { get; set; }
 
-[JsonPropertyName("y")]
+[Newtonsoft.Json.JsonProperty("y")]
 		public override double Y { get; set; }
 
-[JsonPropertyName("zoom")]
+[Newtonsoft.Json.JsonProperty("zoom")]
 		public override double Zoom { get; set; }
 
         
@@ -46,11 +49,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			X = reader.Read<double>();
 			Y = reader.Read<double>();
 			Zoom = reader.Read<double>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "maskCoords";
+		    return "maskCoords";
 		}
 	}
 }

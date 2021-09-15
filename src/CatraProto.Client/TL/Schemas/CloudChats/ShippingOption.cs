@@ -1,26 +1,28 @@
+using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ShippingOption : ShippingOptionBase
+	public partial class ShippingOption : CatraProto.Client.TL.Schemas.CloudChats.ShippingOptionBase
 	{
 
 
         public static int StaticConstructorId { get => -1239335713; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public override string Id { get; set; }
 
-[JsonPropertyName("title")]
+[Newtonsoft.Json.JsonProperty("title")]
 		public override string Title { get; set; }
 
-[JsonPropertyName("prices")]
-		public override IList<LabeledPriceBase> Prices { get; set; }
+[Newtonsoft.Json.JsonProperty("prices")]
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase> Prices { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -41,12 +43,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Id = reader.Read<string>();
 			Title = reader.Read<string>();
-			Prices = reader.ReadVector<LabeledPriceBase>();
-		}
+			Prices = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "shippingOption";
+		    return "shippingOption";
 		}
 	}
 }

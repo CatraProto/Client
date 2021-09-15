@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class WallPaperSettings : WallPaperSettingsBase
+	public partial class WallPaperSettings : CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -19,28 +21,28 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 84438264; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("blur")]
+[Newtonsoft.Json.JsonProperty("blur")]
 		public override bool Blur { get; set; }
 
-[JsonPropertyName("motion")]
+[Newtonsoft.Json.JsonProperty("motion")]
 		public override bool Motion { get; set; }
 
-[JsonPropertyName("background_color")]
+[Newtonsoft.Json.JsonProperty("background_color")]
 		public override int? BackgroundColor { get; set; }
 
-[JsonPropertyName("second_background_color")]
+[Newtonsoft.Json.JsonProperty("second_background_color")]
 		public override int? SecondBackgroundColor { get; set; }
 
-[JsonPropertyName("intensity")]
+[Newtonsoft.Json.JsonProperty("intensity")]
 		public override int? Intensity { get; set; }
 
-[JsonPropertyName("rotation")]
+[Newtonsoft.Json.JsonProperty("rotation")]
 		public override int? Rotation { get; set; }
 
         
@@ -107,11 +109,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			{
 				Rotation = reader.Read<int>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "wallPaperSettings";
+		    return "wallPaperSettings";
 		}
 	}
 }

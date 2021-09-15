@@ -1,8 +1,5 @@
-using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
-using System.Text;
 
 namespace CatraProto.Client.Crypto
 {

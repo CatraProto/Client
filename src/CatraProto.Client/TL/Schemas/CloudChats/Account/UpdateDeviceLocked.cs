@@ -1,51 +1,55 @@
 using System;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class UpdateDeviceLocked : IMethod
-	{
-
+    public partial class UpdateDeviceLocked : IMethod
+    {
+        [JsonIgnore]
+        public static int StaticConstructorId
+        {
+            get => 954152242;
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => 954152242; }
-        [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(bool);
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
 
-[JsonPropertyName("period")]
-		public int Period { get; set; }
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
+
+        [JsonProperty("period")] public int Period { get; set; }
+
+        public override string ToString()
+        {
+            return "account.updateDeviceLocked";
+        }
 
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Period);
+            writer.Write(Period);
+        }
 
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			Period = reader.Read<int>();
-		}
-
-		public override string ToString()
-		{
-			return "account.updateDeviceLocked";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Period = reader.Read<int>();
+        }
+    }
 }

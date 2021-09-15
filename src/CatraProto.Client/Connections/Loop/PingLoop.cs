@@ -9,12 +9,12 @@ namespace CatraProto.Client.Connections.Loop
     class PingLoop : PeriodicLoop
     {
         private readonly Random _random = new Random();
-        private readonly Api _api;
+        private readonly Connection _connection;
         private readonly ILogger _logger;
 
-        public PingLoop(Api api, ILogger logger) : base(TimeSpan.FromMinutes(2))
+        public PingLoop(Connection connection, ILogger logger) : base(TimeSpan.FromSeconds(5))
         {
-            _api = api;
+            _connection = connection;
             _logger = logger;
             Task.Run(Loop);
         }
@@ -25,15 +25,14 @@ namespace CatraProto.Client.Connections.Loop
             {
                 try
                 {
-                    await StateSignaler.WaitStateAsync(default, ResumableSignalState.Resume, ResumableSignalState.Start);
+                    await StateSignaler.WaitStateAsync(false, default, ResumableSignalState.Resume, ResumableSignalState.Start);
                     _logger.Information("Sending ping to server");
-                    await _api.MtProtoApi.PingAsync(_random.Next());
+                    await _connection.MtProtoState.Api.MtProtoApi.PingDelayDisconnectAsync(_random.Next(), 5);
                     _logger.Information("Received pong from server");
                 }
                 catch (OperationCanceledException e) when (e.CancellationToken == GetShutdownToken())
                 {
                     _logger.Information("Ping loop shutdown");
-                    SetLoopStopped();
                     break;
                 }
             }

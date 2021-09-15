@@ -1,23 +1,25 @@
+using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdatePrivacy : UpdateBase
+	public partial class UpdatePrivacy : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 
 
         public static int StaticConstructorId { get => -298113238; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("key")]
-		public PrivacyKeyBase Key { get; set; }
+[Newtonsoft.Json.JsonProperty("key")]
+		public CatraProto.Client.TL.Schemas.CloudChats.PrivacyKeyBase Key { get; set; }
 
-[JsonPropertyName("rules")]
-		public IList<PrivacyRuleBase> Rules { get; set; }
+[Newtonsoft.Json.JsonProperty("rules")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.PrivacyRuleBase> Rules { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -35,13 +37,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Key = reader.Read<PrivacyKeyBase>();
-			Rules = reader.ReadVector<PrivacyRuleBase>();
-		}
+			Key = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PrivacyKeyBase>();
+			Rules = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PrivacyRuleBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "updatePrivacy";
+		    return "updatePrivacy";
 		}
 	}
 }

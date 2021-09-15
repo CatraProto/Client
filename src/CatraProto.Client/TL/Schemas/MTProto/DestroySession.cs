@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -11,18 +12,18 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 	{
 
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => -414113498; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(DestroySessionResBase);
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.DestroySessionResBase);
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("session_id")]
+[Newtonsoft.Json.JsonProperty("session_id")]
 		public long SessionId { get; set; }
 
 
@@ -41,11 +42,12 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 		public void Deserialize(Reader reader)
 		{
 			SessionId = reader.Read<long>();
-		}
 
+		}
+		
 		public override string ToString()
 		{
-			return "destroy_session";
+		    return "destroy_session";
 		}
 	}
 }

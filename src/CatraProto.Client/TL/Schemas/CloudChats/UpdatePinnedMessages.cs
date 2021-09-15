@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdatePinnedMessages : UpdateBase
+	public partial class UpdatePinnedMessages : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,25 +16,25 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -309990731; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("pinned")]
+[Newtonsoft.Json.JsonProperty("pinned")]
 		public bool Pinned { get; set; }
 
-[JsonPropertyName("peer")]
-		public PeerBase Peer { get; set; }
+[Newtonsoft.Json.JsonProperty("peer")]
+		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
 
-[JsonPropertyName("messages")]
+[Newtonsoft.Json.JsonProperty("messages")]
 		public IList<int> Messages { get; set; }
 
-[JsonPropertyName("pts")]
+[Newtonsoft.Json.JsonProperty("pts")]
 		public int Pts { get; set; }
 
-[JsonPropertyName("pts_count")]
+[Newtonsoft.Json.JsonProperty("pts_count")]
 		public int PtsCount { get; set; }
 
         
@@ -59,15 +60,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Flags = reader.Read<int>();
 			Pinned = FlagsHelper.IsFlagSet(Flags, 0);
-			Peer = reader.Read<PeerBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
 			Messages = reader.ReadVector<int>();
 			Pts = reader.Read<int>();
 			PtsCount = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "updatePinnedMessages";
+		    return "updatePinnedMessages";
 		}
 	}
 }

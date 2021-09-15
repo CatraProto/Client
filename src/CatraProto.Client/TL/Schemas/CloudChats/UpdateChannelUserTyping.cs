@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateChannelUserTyping : UpdateBase
+	public partial class UpdateChannelUserTyping : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,23 +16,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -13975905; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("channel_id")]
+[Newtonsoft.Json.JsonProperty("channel_id")]
 		public int ChannelId { get; set; }
 
-[JsonPropertyName("top_msg_id")]
+[Newtonsoft.Json.JsonProperty("top_msg_id")]
 		public int? TopMsgId { get; set; }
 
-[JsonPropertyName("user_id")]
+[Newtonsoft.Json.JsonProperty("user_id")]
 		public int UserId { get; set; }
 
-[JsonPropertyName("action")]
-		public SendMessageActionBase Action { get; set; }
+[Newtonsoft.Json.JsonProperty("action")]
+		public CatraProto.Client.TL.Schemas.CloudChats.SendMessageActionBase Action { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -65,12 +67,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			}
 
 			UserId = reader.Read<int>();
-			Action = reader.Read<SendMessageActionBase>();
-		}
+			Action = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SendMessageActionBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "updateChannelUserTyping";
+		    return "updateChannelUserTyping";
 		}
 	}
 }

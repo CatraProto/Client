@@ -1,29 +1,31 @@
+using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class WebDocumentNoProxy : WebDocumentBase
+	public partial class WebDocumentNoProxy : CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase
 	{
 
 
         public static int StaticConstructorId { get => -104284986; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("url")]
+[Newtonsoft.Json.JsonProperty("url")]
 		public override string Url { get; set; }
 
-[JsonPropertyName("size")]
+[Newtonsoft.Json.JsonProperty("size")]
 		public override int Size { get; set; }
 
-[JsonPropertyName("mime_type")]
+[Newtonsoft.Json.JsonProperty("mime_type")]
 		public override string MimeType { get; set; }
 
-[JsonPropertyName("attributes")]
-		public override IList<DocumentAttributeBase> Attributes { get; set; }
+[Newtonsoft.Json.JsonProperty("attributes")]
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase> Attributes { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -46,12 +48,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Url = reader.Read<string>();
 			Size = reader.Read<int>();
 			MimeType = reader.Read<string>();
-			Attributes = reader.ReadVector<DocumentAttributeBase>();
-		}
+			Attributes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "webDocumentNoProxy";
+		    return "webDocumentNoProxy";
 		}
 	}
 }

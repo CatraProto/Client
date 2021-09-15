@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,28 +7,28 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class InputSecureValueBase : IObject
     {
 
-[JsonPropertyName("type")]
+[Newtonsoft.Json.JsonProperty("type")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase Type { get; set; }
 
-[JsonPropertyName("data")]
+[Newtonsoft.Json.JsonProperty("data")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.SecureDataBase Data { get; set; }
 
-[JsonPropertyName("front_side")]
+[Newtonsoft.Json.JsonProperty("front_side")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.InputSecureFileBase FrontSide { get; set; }
 
-[JsonPropertyName("reverse_side")]
+[Newtonsoft.Json.JsonProperty("reverse_side")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.InputSecureFileBase ReverseSide { get; set; }
 
-[JsonPropertyName("selfie")]
+[Newtonsoft.Json.JsonProperty("selfie")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.InputSecureFileBase Selfie { get; set; }
 
-[JsonPropertyName("translation")]
+[Newtonsoft.Json.JsonProperty("translation")]
 		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.InputSecureFileBase> Translation { get; set; }
 
-[JsonPropertyName("files")]
+[Newtonsoft.Json.JsonProperty("files")]
 		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.InputSecureFileBase> Files { get; set; }
 
-[JsonPropertyName("plain_data")]
+[Newtonsoft.Json.JsonProperty("plain_data")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.SecurePlainDataBase PlainData { get; set; }
 
         public abstract void UpdateFlags();

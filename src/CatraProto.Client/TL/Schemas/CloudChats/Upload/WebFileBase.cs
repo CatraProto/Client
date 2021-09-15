@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,19 +7,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
     public abstract class WebFileBase : IObject
     {
 
-[JsonPropertyName("size")]
+[Newtonsoft.Json.JsonProperty("size")]
 		public abstract int Size { get; set; }
 
-[JsonPropertyName("mime_type")]
+[Newtonsoft.Json.JsonProperty("mime_type")]
 		public abstract string MimeType { get; set; }
 
-[JsonPropertyName("file_type")]
+[Newtonsoft.Json.JsonProperty("file_type")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.Storage.FileTypeBase FileType { get; set; }
 
-[JsonPropertyName("mtime")]
+[Newtonsoft.Json.JsonProperty("mtime")]
 		public abstract int Mtime { get; set; }
 
-[JsonPropertyName("bytes")]
+[Newtonsoft.Json.JsonProperty("bytes")]
 		public abstract byte[] Bytes { get; set; }
 
         public abstract void UpdateFlags();

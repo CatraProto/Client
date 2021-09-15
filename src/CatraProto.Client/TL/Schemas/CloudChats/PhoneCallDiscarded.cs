@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PhoneCallDiscarded : PhoneCallBase
+	public partial class PhoneCallDiscarded : CatraProto.Client.TL.Schemas.CloudChats.PhoneCallBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -18,28 +20,28 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 1355435489; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("need_rating")]
+[Newtonsoft.Json.JsonProperty("need_rating")]
 		public bool NeedRating { get; set; }
 
-[JsonPropertyName("need_debug")]
+[Newtonsoft.Json.JsonProperty("need_debug")]
 		public bool NeedDebug { get; set; }
 
-[JsonPropertyName("video")]
+[Newtonsoft.Json.JsonProperty("video")]
 		public bool Video { get; set; }
 
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public override long Id { get; set; }
 
-[JsonPropertyName("reason")]
-		public PhoneCallDiscardReasonBase Reason { get; set; }
+[Newtonsoft.Json.JsonProperty("reason")]
+		public CatraProto.Client.TL.Schemas.CloudChats.PhoneCallDiscardReasonBase Reason { get; set; }
 
-[JsonPropertyName("duration")]
+[Newtonsoft.Json.JsonProperty("duration")]
 		public int? Duration { get; set; }
 
         
@@ -81,18 +83,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Id = reader.Read<long>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Reason = reader.Read<PhoneCallDiscardReasonBase>();
+				Reason = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhoneCallDiscardReasonBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
 				Duration = reader.Read<int>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "phoneCallDiscarded";
+		    return "phoneCallDiscarded";
 		}
 	}
 }

@@ -1,42 +1,45 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class WebAuthorization : WebAuthorizationBase
+	public partial class WebAuthorization : CatraProto.Client.TL.Schemas.CloudChats.WebAuthorizationBase
 	{
 
 
         public static int StaticConstructorId { get => -892779534; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("hash")]
+[Newtonsoft.Json.JsonProperty("hash")]
 		public override long Hash { get; set; }
 
-[JsonPropertyName("bot_id")]
+[Newtonsoft.Json.JsonProperty("bot_id")]
 		public override int BotId { get; set; }
 
-[JsonPropertyName("domain")]
+[Newtonsoft.Json.JsonProperty("domain")]
 		public override string Domain { get; set; }
 
-[JsonPropertyName("browser")]
+[Newtonsoft.Json.JsonProperty("browser")]
 		public override string Browser { get; set; }
 
-[JsonPropertyName("platform")]
+[Newtonsoft.Json.JsonProperty("platform")]
 		public override string Platform { get; set; }
 
-[JsonPropertyName("date_created")]
+[Newtonsoft.Json.JsonProperty("date_created")]
 		public override int DateCreated { get; set; }
 
-[JsonPropertyName("date_active")]
+[Newtonsoft.Json.JsonProperty("date_active")]
 		public override int DateActive { get; set; }
 
-[JsonPropertyName("ip")]
+[Newtonsoft.Json.JsonProperty("ip")]
 		public override string Ip { get; set; }
 
-[JsonPropertyName("region")]
+[Newtonsoft.Json.JsonProperty("region")]
 		public override string Region { get; set; }
 
         
@@ -71,11 +74,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			DateActive = reader.Read<int>();
 			Ip = reader.Read<string>();
 			Region = reader.Read<string>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "webAuthorization";
+		    return "webAuthorization";
 		}
 	}
 }

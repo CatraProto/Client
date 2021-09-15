@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -11,19 +12,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 	{
 
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => -2041315650; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetBase);
 
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(Messages.StickerSetBase);
-
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-		[JsonPropertyName("stickerset")] public InputStickerSetBase Stickerset { get; set; }
+[Newtonsoft.Json.JsonProperty("stickerset")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase Stickerset { get; set; }
 
-		[JsonPropertyName("sticker")] public InputStickerSetItemBase Sticker { get; set; }
+[Newtonsoft.Json.JsonProperty("sticker")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetItemBase Sticker { get; set; }
 
 
 		public void UpdateFlags() 
@@ -41,13 +45,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 
 		public void Deserialize(Reader reader)
 		{
-			Stickerset = reader.Read<InputStickerSetBase>();
-			Sticker = reader.Read<InputStickerSetItemBase>();
-		}
+			Stickerset = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase>();
+			Sticker = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetItemBase>();
 
+		}
+		
 		public override string ToString()
 		{
-			return "stickers.addStickerToSet";
+		    return "stickers.addStickerToSet";
 		}
 	}
 }

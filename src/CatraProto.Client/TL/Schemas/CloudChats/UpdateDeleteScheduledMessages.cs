@@ -1,22 +1,24 @@
+using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateDeleteScheduledMessages : UpdateBase
+	public partial class UpdateDeleteScheduledMessages : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 
 
         public static int StaticConstructorId { get => -1870238482; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("peer")]
-		public PeerBase Peer { get; set; }
+[Newtonsoft.Json.JsonProperty("peer")]
+		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
 
-[JsonPropertyName("messages")]
+[Newtonsoft.Json.JsonProperty("messages")]
 		public IList<int> Messages { get; set; }
 
         
@@ -35,13 +37,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Peer = reader.Read<PeerBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
 			Messages = reader.ReadVector<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "updateDeleteScheduledMessages";
+		    return "updateDeleteScheduledMessages";
 		}
 	}
 }

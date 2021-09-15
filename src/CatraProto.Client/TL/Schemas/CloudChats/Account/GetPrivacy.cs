@@ -1,51 +1,55 @@
 using System;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class GetPrivacy : IMethod
-	{
-
+    public partial class GetPrivacy : IMethod
+    {
+        [JsonIgnore]
+        public static int StaticConstructorId
+        {
+            get => -623130288;
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => -623130288; }
-        [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(PrivacyRulesBase);
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(PrivacyRulesBase);
 
-[JsonPropertyName("key")]
-		public InputPrivacyKeyBase Key { get; set; }
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
+
+        [JsonProperty("key")] public InputPrivacyKeyBase Key { get; set; }
+
+        public override string ToString()
+        {
+            return "account.getPrivacy";
+        }
 
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Key);
+            writer.Write(Key);
+        }
 
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			Key = reader.Read<InputPrivacyKeyBase>();
-		}
-
-		public override string ToString()
-		{
-			return "account.getPrivacy";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Key = reader.Read<InputPrivacyKeyBase>();
+        }
+    }
 }

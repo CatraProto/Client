@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 {
-	public partial class ChannelDifferenceEmpty : ChannelDifferenceBase
+	public partial class ChannelDifferenceEmpty : CatraProto.Client.TL.Schemas.CloudChats.Updates.ChannelDifferenceBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,19 +17,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 		}
 
         public static int StaticConstructorId { get => 1041346555; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("final")]
+[Newtonsoft.Json.JsonProperty("final")]
 		public override bool Final { get; set; }
 
-[JsonPropertyName("pts")]
+[Newtonsoft.Json.JsonProperty("pts")]
 		public int Pts { get; set; }
 
-[JsonPropertyName("timeout")]
+[Newtonsoft.Json.JsonProperty("timeout")]
 		public override int? Timeout { get; set; }
 
         
@@ -61,11 +63,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 			{
 				Timeout = reader.Read<int>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "updates.channelDifferenceEmpty";
+		    return "updates.channelDifferenceEmpty";
 		}
 	}
 }

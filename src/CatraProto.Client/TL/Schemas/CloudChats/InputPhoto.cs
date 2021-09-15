@@ -1,24 +1,27 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputPhoto : InputPhotoBase
+	public partial class InputPhoto : CatraProto.Client.TL.Schemas.CloudChats.InputPhotoBase
 	{
 
 
         public static int StaticConstructorId { get => 1001634122; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public long Id { get; set; }
 
-[JsonPropertyName("access_hash")]
+[Newtonsoft.Json.JsonProperty("access_hash")]
 		public long AccessHash { get; set; }
 
-[JsonPropertyName("file_reference")]
+[Newtonsoft.Json.JsonProperty("file_reference")]
 		public byte[] FileReference { get; set; }
 
         
@@ -41,11 +44,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Id = reader.Read<long>();
 			AccessHash = reader.Read<long>();
 			FileReference = reader.Read<byte[]>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "inputPhoto";
+		    return "inputPhoto";
 		}
 	}
 }

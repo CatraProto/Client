@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -11,21 +12,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 	{
 
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => -878758099; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(IObject);
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(IObject);
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("msg_id")]
+[Newtonsoft.Json.JsonProperty("msg_id")]
 		public long MsgId { get; set; }
 
-[JsonPropertyName("query")]
+[Newtonsoft.Json.JsonProperty("query")]
 		public IObject Query { get; set; }
 
 
@@ -46,11 +47,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			MsgId = reader.Read<long>();
 			Query = reader.Read<IObject>();
-		}
 
+		}
+		
 		public override string ToString()
 		{
-			return "invokeAfterMsg";
+		    return "invokeAfterMsg";
 		}
 	}
 }

@@ -1,19 +1,22 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PageBlockChannel : PageBlockBase
+	public partial class PageBlockChannel : CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase
 	{
 
 
         public static int StaticConstructorId { get => -283684427; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("channel")]
-		public ChatBase Channel { get; set; }
+[Newtonsoft.Json.JsonProperty("channel")]
+		public CatraProto.Client.TL.Schemas.CloudChats.ChatBase Channel { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -30,12 +33,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Channel = reader.Read<ChatBase>();
-		}
+			Channel = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "pageBlockChannel";
+		    return "pageBlockChannel";
 		}
 	}
 }

@@ -15,9 +15,12 @@ namespace CatraProto.Client.Async.Loops
         {
             lock (SharedLock)
             {
-                if (_loopState != ResumableLoopState.Running)
+                if (StateSignaler.TryGetLastReadState(out var state))
                 {
-                    return false;
+                    if (state is ResumableSignalState.Stop or ResumableSignalState.Suspend)
+                    {
+                        return false;
+                    }
                 }
 
                 StateSignaler.Signal(ResumableSignalState.Suspend);
@@ -30,9 +33,12 @@ namespace CatraProto.Client.Async.Loops
         {
             lock (SharedLock)
             {
-                if (_loopState != ResumableLoopState.Suspended)
+                if (StateSignaler.TryGetLastReadState(out var state))
                 {
-                    return false;
+                    if (state is ResumableSignalState.Resume or ResumableSignalState.Start)
+                    {
+                        return false;
+                    }
                 }
 
                 StateSignaler.Signal(ResumableSignalState.Resume);

@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PhoneCallAccepted : PhoneCallBase
+	public partial class PhoneCallAccepted : CatraProto.Client.TL.Schemas.CloudChats.PhoneCallBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,35 +16,35 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -1719909046; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("video")]
+[Newtonsoft.Json.JsonProperty("video")]
 		public bool Video { get; set; }
 
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public override long Id { get; set; }
 
-[JsonPropertyName("access_hash")]
+[Newtonsoft.Json.JsonProperty("access_hash")]
 		public long AccessHash { get; set; }
 
-[JsonPropertyName("date")]
+[Newtonsoft.Json.JsonProperty("date")]
 		public int Date { get; set; }
 
-[JsonPropertyName("admin_id")]
+[Newtonsoft.Json.JsonProperty("admin_id")]
 		public int AdminId { get; set; }
 
-[JsonPropertyName("participant_id")]
+[Newtonsoft.Json.JsonProperty("participant_id")]
 		public int ParticipantId { get; set; }
 
-[JsonPropertyName("g_b")]
+[Newtonsoft.Json.JsonProperty("g_b")]
 		public byte[] GB { get; set; }
 
-[JsonPropertyName("protocol")]
-		public PhoneCallProtocolBase Protocol { get; set; }
+[Newtonsoft.Json.JsonProperty("protocol")]
+		public CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase Protocol { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -76,12 +78,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			AdminId = reader.Read<int>();
 			ParticipantId = reader.Read<int>();
 			GB = reader.Read<byte[]>();
-			Protocol = reader.Read<PhoneCallProtocolBase>();
-		}
+			Protocol = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "phoneCallAccepted";
+		    return "phoneCallAccepted";
 		}
 	}
 }

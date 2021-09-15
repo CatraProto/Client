@@ -1,53 +1,57 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.Client.TL.Schemas.CloudChats.Messages;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 {
-	public partial class GetChannels : IMethod
-	{
-
+    public partial class GetChannels : IMethod
+    {
+        [JsonIgnore]
+        public static int StaticConstructorId
+        {
+            get => 176122811;
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => 176122811; }
-        [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(ChatsBase);
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(ChatsBase);
 
-[JsonPropertyName("id")]
-		public IList<InputChannelBase> Id { get; set; }
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
+
+        [JsonProperty("id")] public IList<InputChannelBase> Id { get; set; }
+
+        public override string ToString()
+        {
+            return "channels.getChannels";
+        }
 
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Id);
+            writer.Write(Id);
+        }
 
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			Id = reader.ReadVector<InputChannelBase>();
-		}
-
-		public override string ToString()
-		{
-			return "channels.getChannels";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Id = reader.ReadVector<InputChannelBase>();
+        }
+    }
 }

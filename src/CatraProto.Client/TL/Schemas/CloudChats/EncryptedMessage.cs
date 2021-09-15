@@ -1,31 +1,34 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class EncryptedMessage : EncryptedMessageBase
+	public partial class EncryptedMessage : CatraProto.Client.TL.Schemas.CloudChats.EncryptedMessageBase
 	{
 
 
         public static int StaticConstructorId { get => -317144808; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("random_id")]
+[Newtonsoft.Json.JsonProperty("random_id")]
 		public override long RandomId { get; set; }
 
-[JsonPropertyName("chat_id")]
+[Newtonsoft.Json.JsonProperty("chat_id")]
 		public override int ChatId { get; set; }
 
-[JsonPropertyName("date")]
+[Newtonsoft.Json.JsonProperty("date")]
 		public override int Date { get; set; }
 
-[JsonPropertyName("bytes")]
+[Newtonsoft.Json.JsonProperty("bytes")]
 		public override byte[] Bytes { get; set; }
 
-[JsonPropertyName("file")]
-		public EncryptedFileBase File { get; set; }
+[Newtonsoft.Json.JsonProperty("file")]
+		public CatraProto.Client.TL.Schemas.CloudChats.EncryptedFileBase File { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -50,12 +53,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ChatId = reader.Read<int>();
 			Date = reader.Read<int>();
 			Bytes = reader.Read<byte[]>();
-			File = reader.Read<EncryptedFileBase>();
-		}
+			File = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.EncryptedFileBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "encryptedMessage";
+		    return "encryptedMessage";
 		}
 	}
 }

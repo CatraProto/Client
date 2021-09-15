@@ -1,51 +1,55 @@
 using System;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class SetContactSignUpNotification : IMethod
-	{
-
+    public partial class SetContactSignUpNotification : IMethod
+    {
+        [JsonIgnore]
+        public static int StaticConstructorId
+        {
+            get => -806076575;
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => -806076575; }
-        [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(bool);
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
 
-[JsonPropertyName("silent")]
-		public bool Silent { get; set; }
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
+
+        [JsonProperty("silent")] public bool Silent { get; set; }
+
+        public override string ToString()
+        {
+            return "account.setContactSignUpNotification";
+        }
 
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Silent);
+            writer.Write(Silent);
+        }
 
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			Silent = reader.Read<bool>();
-		}
-
-		public override string ToString()
-		{
-			return "account.setContactSignUpNotification";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Silent = reader.Read<bool>();
+        }
+    }
 }

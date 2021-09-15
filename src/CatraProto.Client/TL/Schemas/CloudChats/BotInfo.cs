@@ -1,26 +1,28 @@
+using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class BotInfo : BotInfoBase
+	public partial class BotInfo : CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase
 	{
 
 
         public static int StaticConstructorId { get => -1729618630; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("user_id")]
+[Newtonsoft.Json.JsonProperty("user_id")]
 		public override int UserId { get; set; }
 
-[JsonPropertyName("description")]
+[Newtonsoft.Json.JsonProperty("description")]
 		public override string Description { get; set; }
 
-[JsonPropertyName("commands")]
-		public override IList<BotCommandBase> Commands { get; set; }
+[Newtonsoft.Json.JsonProperty("commands")]
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.BotCommandBase> Commands { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -41,12 +43,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			UserId = reader.Read<int>();
 			Description = reader.Read<string>();
-			Commands = reader.ReadVector<BotCommandBase>();
-		}
+			Commands = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.BotCommandBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "botInfo";
+		    return "botInfo";
 		}
 	}
 }

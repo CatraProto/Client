@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -17,26 +17,28 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			ShippingOptions = 1 << 1
 		}
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => -436833542; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(bool);
 
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
-
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("query_id")]
+[Newtonsoft.Json.JsonProperty("query_id")]
 		public long QueryId { get; set; }
 
-[JsonPropertyName("error")]
+[Newtonsoft.Json.JsonProperty("error")]
 		public string Error { get; set; }
 
-		[JsonPropertyName("shipping_options")] public IList<ShippingOptionBase> ShippingOptions { get; set; }
+[Newtonsoft.Json.JsonProperty("shipping_options")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.ShippingOptionBase> ShippingOptions { get; set; }
 
 
 		public void UpdateFlags() 
@@ -76,13 +78,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				ShippingOptions = reader.ReadVector<ShippingOptionBase>();
+				ShippingOptions = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ShippingOptionBase>();
 			}
-		}
 
+
+		}
+		
 		public override string ToString()
 		{
-			return "messages.setBotShippingResults";
+		    return "messages.setBotShippingResults";
 		}
 	}
 }

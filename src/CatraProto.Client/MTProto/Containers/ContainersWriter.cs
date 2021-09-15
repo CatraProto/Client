@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Channels;
 using CatraProto.Client.Connections;
 using CatraProto.Client.Connections.Loop;
 using CatraProto.Client.Connections.MessageScheduling;
@@ -21,7 +20,7 @@ namespace CatraProto.Client.MTProto.Containers
         public const int ContainerBytesLimit = 2 << 15;
         public byte[]? SerializedContainer { get; set; }
         public List<Tuple<ContainerMessage, MessageItem>> MessageItems { get; set; } = new List<Tuple<ContainerMessage, MessageItem>>();
-        
+
         private readonly Writer _currentWriter;
         private int _currentMessagesCount;
         private int _currentBytes;
@@ -38,6 +37,7 @@ namespace CatraProto.Client.MTProto.Containers
         {
             _currentWriter.WriteNakedVector(MessageItems.Select(x => x.Item1).ToList());
             SerializedContainer = ((MemoryStream)_currentWriter.Stream).ToArray();
+            var ser = SerializedContainer.ToObject<MsgContainer>(MergedProvider.Singleton);
             _currentWriter.Dispose();
         }
 
@@ -48,14 +48,11 @@ namespace CatraProto.Client.MTProto.Containers
 
         public void CreateContainer(List<MessageItem> messages, MessagesHandler messagesHandler, MTProtoState mtProtoState)
         {
-            _logger.Information("Creating a container of {Count} messages", messages.Count);
-            
-            for (var i = 0; i < messages.Count; i++)
+            _logger.Verbose("Generating a container of {Count} messages", messages.Count);
+            foreach (var messageItem in messages)
             {
-                var messageItem = messages[i];
                 if (SocketTools.TrySerialize(messageItem, _logger, out var serialized))
                 {
-                    //serialized = messageContainer.OutgoingMessage.Body is IMethod ? GzipHandler.FromBytes(serialized) : serialized;
                     if (_currentBytes + (serialized!.Length + 8 + 4 + 4) > ContainerBytesLimit || _currentMessagesCount > ContainerMessagesLimit)
                     {
                         messagesHandler.MessagesQueue.EnqueueMessage(messageItem);
@@ -75,9 +72,9 @@ namespace CatraProto.Client.MTProto.Containers
                     _currentMessagesCount++;
                 }
             }
-            
+
             SaveContainer();
-            _logger.Information("Created a container of {Count} messages and size {Size}bytes", MessageItems.Count, SerializedContainer!.Length);
+            _logger.Information("Generating a container of {Count} messages and size {Size}bytes", MessageItems.Count, SerializedContainer!.Length);
         }
     }
 }

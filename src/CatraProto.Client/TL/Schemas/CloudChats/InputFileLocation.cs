@@ -1,27 +1,30 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputFileLocation : InputFileLocationBase
+	public partial class InputFileLocation : CatraProto.Client.TL.Schemas.CloudChats.InputFileLocationBase
 	{
 
 
         public static int StaticConstructorId { get => -539317279; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("volume_id")]
+[Newtonsoft.Json.JsonProperty("volume_id")]
 		public long VolumeId { get; set; }
 
-[JsonPropertyName("local_id")]
+[Newtonsoft.Json.JsonProperty("local_id")]
 		public int LocalId { get; set; }
 
-[JsonPropertyName("secret")]
+[Newtonsoft.Json.JsonProperty("secret")]
 		public long Secret { get; set; }
 
-[JsonPropertyName("file_reference")]
+[Newtonsoft.Json.JsonProperty("file_reference")]
 		public byte[] FileReference { get; set; }
 
         
@@ -46,11 +49,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			LocalId = reader.Read<int>();
 			Secret = reader.Read<long>();
 			FileReference = reader.Read<byte[]>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "inputFileLocation";
+		    return "inputFileLocation";
 		}
 	}
 }

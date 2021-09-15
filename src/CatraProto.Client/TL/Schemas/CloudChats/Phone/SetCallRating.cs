@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -15,30 +16,30 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 			UserInitiative = 1 << 0
 		}
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => 1508562471; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(UpdatesBase);
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("user_initiative")]
+[Newtonsoft.Json.JsonProperty("user_initiative")]
 		public bool UserInitiative { get; set; }
 
-[JsonPropertyName("peer")]
-		public InputPhoneCallBase Peer { get; set; }
+[Newtonsoft.Json.JsonProperty("peer")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPhoneCallBase Peer { get; set; }
 
-[JsonPropertyName("rating")]
+[Newtonsoft.Json.JsonProperty("rating")]
 		public int Rating { get; set; }
 
-[JsonPropertyName("comment")]
+[Newtonsoft.Json.JsonProperty("comment")]
 		public string Comment { get; set; }
 
 
@@ -63,14 +64,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 		{
 			Flags = reader.Read<int>();
 			UserInitiative = FlagsHelper.IsFlagSet(Flags, 0);
-			Peer = reader.Read<InputPhoneCallBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPhoneCallBase>();
 			Rating = reader.Read<int>();
 			Comment = reader.Read<string>();
-		}
 
+		}
+		
 		public override string ToString()
 		{
-			return "phone.setCallRating";
+		    return "phone.setCallRating";
 		}
 	}
 }

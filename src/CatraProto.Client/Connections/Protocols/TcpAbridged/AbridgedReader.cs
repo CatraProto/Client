@@ -1,6 +1,8 @@
-﻿using System.Net.Sockets;
+﻿using System;
+using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
+using CatraProto.Client.Connections.Exceptions;
 using CatraProto.Client.Connections.Protocols.Interfaces;
 using CatraProto.Client.Extensions;
 using Serilog;
@@ -9,8 +11,8 @@ namespace CatraProto.Client.Connections.Protocols.TcpAbridged
 {
     class AbridgedReader : IProtocolReader
     {
-        private ILogger _logger;
-        private NetworkStream _networkStream;
+        private readonly NetworkStream _networkStream;
+        private readonly ILogger _logger;
 
         public AbridgedReader(NetworkStream stream, ILogger logger)
         {
@@ -23,19 +25,27 @@ namespace CatraProto.Client.Connections.Protocols.TcpAbridged
             var length = firstByte;
             if (length >= 0x7f)
             {
-                length = await _networkStream.ReadByte(token) | await _networkStream.ReadByte(token) << 8 | await _networkStream.ReadByte(token) << 16;
+                length = await _networkStream.ReadByteAsync(token) | await _networkStream.ReadByteAsync(token) << 8 |
+                         await _networkStream.ReadByteAsync(token) << 16;
             }
-
+            
             length *= 4;
-            _logger.Information("Transport received a message of {Length} ({Byte})", length, firstByte);
+            _logger.Verbose("Transport received a message of {Length} ({Byte})", length, firstByte);
             return length;
         }
 
         public async Task<byte[]> ReadMessageAsync(CancellationToken token = default)
         {
-            var firstByte = await _networkStream.ReadByte(token);
-            var length = await GetMessageLength(firstByte, token);
-            return await _networkStream.ReadBytesAsync(length, cancellationToken: token);
+            try
+            {
+                var firstByte = await _networkStream.ReadByteAsync(token);
+                var length = await GetMessageLength(firstByte, token);
+                return await _networkStream.ReadBytesAsync(length, cancellationToken: token);
+            }
+            catch (ObjectDisposedException e) when (e.ObjectName == "System.Net.Sockets.NetworkStream")
+            {
+                throw new ConnectionClosedException();
+            }
         }
     }
 }

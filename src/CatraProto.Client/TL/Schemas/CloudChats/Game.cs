@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class Game : GameBase
+	public partial class Game : CatraProto.Client.TL.Schemas.CloudChats.GameBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,32 +16,32 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -1107729093; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public override long Id { get; set; }
 
-[JsonPropertyName("access_hash")]
+[Newtonsoft.Json.JsonProperty("access_hash")]
 		public override long AccessHash { get; set; }
 
-[JsonPropertyName("short_name")]
+[Newtonsoft.Json.JsonProperty("short_name")]
 		public override string ShortName { get; set; }
 
-[JsonPropertyName("title")]
+[Newtonsoft.Json.JsonProperty("title")]
 		public override string Title { get; set; }
 
-[JsonPropertyName("description")]
+[Newtonsoft.Json.JsonProperty("description")]
 		public override string Description { get; set; }
 
-[JsonPropertyName("photo")]
-		public override PhotoBase Photo { get; set; }
+[Newtonsoft.Json.JsonProperty("photo")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.PhotoBase Photo { get; set; }
 
-[JsonPropertyName("document")]
-		public override DocumentBase Document { get; set; }
+[Newtonsoft.Json.JsonProperty("document")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.DocumentBase Document { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -75,16 +77,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ShortName = reader.Read<string>();
 			Title = reader.Read<string>();
 			Description = reader.Read<string>();
-			Photo = reader.Read<PhotoBase>();
+			Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Document = reader.Read<DocumentBase>();
+				Document = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "game";
+		    return "game";
 		}
 	}
 }

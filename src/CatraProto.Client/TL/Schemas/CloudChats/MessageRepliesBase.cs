@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,25 +7,25 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class MessageRepliesBase : IObject
     {
 
-[JsonPropertyName("comments")]
+[Newtonsoft.Json.JsonProperty("comments")]
 		public abstract bool Comments { get; set; }
 
-[JsonPropertyName("replies")]
+[Newtonsoft.Json.JsonProperty("replies")]
 		public abstract int Replies { get; set; }
 
-[JsonPropertyName("replies_pts")]
+[Newtonsoft.Json.JsonProperty("replies_pts")]
 		public abstract int RepliesPts { get; set; }
 
-[JsonPropertyName("recent_repliers")]
+[Newtonsoft.Json.JsonProperty("recent_repliers")]
 		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.PeerBase> RecentRepliers { get; set; }
 
-[JsonPropertyName("channel_id")]
+[Newtonsoft.Json.JsonProperty("channel_id")]
 		public abstract int? ChannelId { get; set; }
 
-[JsonPropertyName("max_id")]
+[Newtonsoft.Json.JsonProperty("max_id")]
 		public abstract int? MaxId { get; set; }
 
-[JsonPropertyName("read_max_id")]
+[Newtonsoft.Json.JsonProperty("read_max_id")]
 		public abstract int? ReadMaxId { get; set; }
 
         public abstract void UpdateFlags();

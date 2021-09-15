@@ -1,18 +1,21 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputStickerSetDice : InputStickerSetBase
+	public partial class InputStickerSetDice : CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase
 	{
 
 
         public static int StaticConstructorId { get => -427863538; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("emoticon")]
+[Newtonsoft.Json.JsonProperty("emoticon")]
 		public string Emoticon { get; set; }
 
         
@@ -31,11 +34,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Emoticon = reader.Read<string>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "inputStickerSetDice";
+		    return "inputStickerSetDice";
 		}
 	}
 }

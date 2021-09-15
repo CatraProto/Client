@@ -105,12 +105,32 @@ namespace CatraProto.TL.Generator.Objects
         
         public static bool operator ==(Parameter p1, Parameter p2)
         {
-            return p2 is not null && p1 is not null && p1.NamingInfo.PascalCaseName == p2.NamingInfo.PascalCaseName && p1.Type == p2.Type;
+            if (p2 is not null && p1 is not null && p1.NamingInfo.PascalCaseName == p2.NamingInfo.PascalCaseName && p1.Type == p2.Type)
+            {
+                if (p1.HasFlag)
+                {
+                    if (!p2.HasFlag)
+                    {
+                        return false;
+                    }
+
+                    return p2.Flag.Bit == p1.Flag.Bit;
+                }
+                else
+                {
+                    if (!p2.HasFlag)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         public static bool operator !=(Parameter p1, Parameter p2)
         {
-            return p2 is not null && p1 is not null && (p1.NamingInfo.PascalCaseName != p2.NamingInfo.PascalCaseName || p1.Type != p2.Type);
+            return !(p1 == p2);
         }
 
         protected bool Equals(Parameter other)

@@ -81,11 +81,11 @@ namespace CatraProto.TL
 
         private void WriteBytes(byte[] bytes)
         {
-            var arrayLenght = bytes.Length;
-            var totalLenght = arrayLenght;
-            if (arrayLenght <= 253)
+            var arrayLength = bytes.Length;
+            var totalLenght = arrayLength;
+            if (arrayLength <= 253)
             {
-                _writer.Write((byte)arrayLenght);
+                _writer.Write((byte)arrayLength);
                 totalLenght++;
 
                 _writer.Write(bytes);
@@ -93,9 +93,9 @@ namespace CatraProto.TL
             else
             {
                 _writer.Write((byte)254);
-                _writer.Write((byte)arrayLenght);
-                _writer.Write((byte)(arrayLenght >> 8));
-                _writer.Write((byte)(arrayLenght >> 16));
+                _writer.Write((byte)arrayLength);
+                _writer.Write((byte)(arrayLength >> 8));
+                _writer.Write((byte)(arrayLength >> 16));
                 totalLenght += 4;
 
                 _writer.Write(bytes);

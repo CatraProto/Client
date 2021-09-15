@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class LangPackLanguage : LangPackLanguageBase
+	public partial class LangPackLanguage : CatraProto.Client.TL.Schemas.CloudChats.LangPackLanguageBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -17,43 +19,43 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -288727837; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("official")]
+[Newtonsoft.Json.JsonProperty("official")]
 		public override bool Official { get; set; }
 
-[JsonPropertyName("rtl")]
+[Newtonsoft.Json.JsonProperty("rtl")]
 		public override bool Rtl { get; set; }
 
-[JsonPropertyName("beta")]
+[Newtonsoft.Json.JsonProperty("beta")]
 		public override bool Beta { get; set; }
 
-[JsonPropertyName("name")]
+[Newtonsoft.Json.JsonProperty("name")]
 		public override string Name { get; set; }
 
-[JsonPropertyName("native_name")]
+[Newtonsoft.Json.JsonProperty("native_name")]
 		public override string NativeName { get; set; }
 
-[JsonPropertyName("lang_code")]
+[Newtonsoft.Json.JsonProperty("lang_code")]
 		public override string LangCode { get; set; }
 
-[JsonPropertyName("base_lang_code")]
+[Newtonsoft.Json.JsonProperty("base_lang_code")]
 		public override string BaseLangCode { get; set; }
 
-[JsonPropertyName("plural_code")]
+[Newtonsoft.Json.JsonProperty("plural_code")]
 		public override string PluralCode { get; set; }
 
-[JsonPropertyName("strings_count")]
+[Newtonsoft.Json.JsonProperty("strings_count")]
 		public override int StringsCount { get; set; }
 
-[JsonPropertyName("translated_count")]
+[Newtonsoft.Json.JsonProperty("translated_count")]
 		public override int TranslatedCount { get; set; }
 
-[JsonPropertyName("translations_url")]
+[Newtonsoft.Json.JsonProperty("translations_url")]
 		public override string TranslationsUrl { get; set; }
 
         
@@ -104,11 +106,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			StringsCount = reader.Read<int>();
 			TranslatedCount = reader.Read<int>();
 			TranslationsUrl = reader.Read<string>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "langPackLanguage";
+		    return "langPackLanguage";
 		}
 	}
 }

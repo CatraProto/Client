@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputKeyboardButtonUrlAuth : KeyboardButtonBase
+	public partial class InputKeyboardButtonUrlAuth : CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,26 +17,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -802258988; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("request_write_access")]
+[Newtonsoft.Json.JsonProperty("request_write_access")]
 		public bool RequestWriteAccess { get; set; }
 
-[JsonPropertyName("text")]
+[Newtonsoft.Json.JsonProperty("text")]
 		public override string Text { get; set; }
 
-[JsonPropertyName("fwd_text")]
+[Newtonsoft.Json.JsonProperty("fwd_text")]
 		public string FwdText { get; set; }
 
-[JsonPropertyName("url")]
+[Newtonsoft.Json.JsonProperty("url")]
 		public string Url { get; set; }
 
-[JsonPropertyName("bot")]
-		public InputUserBase Bot { get; set; }
+[Newtonsoft.Json.JsonProperty("bot")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase Bot { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -71,12 +73,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			}
 
 			Url = reader.Read<string>();
-			Bot = reader.Read<InputUserBase>();
-		}
+			Bot = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "inputKeyboardButtonUrlAuth";
+		    return "inputKeyboardButtonUrlAuth";
 		}
 	}
 }

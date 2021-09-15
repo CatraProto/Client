@@ -1,15 +1,13 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
-using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
+
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
     public abstract class InviteTextBase : IObject
     {
-
-[JsonPropertyName("message")]
-		public abstract string Message { get; set; }
+        [JsonProperty("message")] public abstract string Message { get; set; }
 
         public abstract void UpdateFlags();
         public abstract void Deserialize(Reader reader);

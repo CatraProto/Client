@@ -1,21 +1,24 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class BankCardOpenUrl : BankCardOpenUrlBase
+	public partial class BankCardOpenUrl : CatraProto.Client.TL.Schemas.CloudChats.BankCardOpenUrlBase
 	{
 
 
         public static int StaticConstructorId { get => -177732982; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("url")]
+[Newtonsoft.Json.JsonProperty("url")]
 		public override string Url { get; set; }
 
-[JsonPropertyName("name")]
+[Newtonsoft.Json.JsonProperty("name")]
 		public override string Name { get; set; }
 
         
@@ -36,11 +39,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Url = reader.Read<string>();
 			Name = reader.Read<string>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "bankCardOpenUrl";
+		    return "bankCardOpenUrl";
 		}
 	}
 }

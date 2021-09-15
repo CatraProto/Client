@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageReplies : MessageRepliesBase
+	public partial class MessageReplies : CatraProto.Client.TL.Schemas.CloudChats.MessageRepliesBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -19,31 +20,31 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 1093204652; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("comments")]
+[Newtonsoft.Json.JsonProperty("comments")]
 		public override bool Comments { get; set; }
 
-[JsonPropertyName("replies")]
+[Newtonsoft.Json.JsonProperty("replies")]
 		public override int Replies { get; set; }
 
-[JsonPropertyName("replies_pts")]
+[Newtonsoft.Json.JsonProperty("replies_pts")]
 		public override int RepliesPts { get; set; }
 
-[JsonPropertyName("recent_repliers")]
-		public override IList<PeerBase> RecentRepliers { get; set; }
+[Newtonsoft.Json.JsonProperty("recent_repliers")]
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.PeerBase> RecentRepliers { get; set; }
 
-[JsonPropertyName("channel_id")]
+[Newtonsoft.Json.JsonProperty("channel_id")]
 		public override int? ChannelId { get; set; }
 
-[JsonPropertyName("max_id")]
+[Newtonsoft.Json.JsonProperty("max_id")]
 		public override int? MaxId { get; set; }
 
-[JsonPropertyName("read_max_id")]
+[Newtonsoft.Json.JsonProperty("read_max_id")]
 		public override int? ReadMaxId { get; set; }
 
         
@@ -95,7 +96,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			RepliesPts = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				RecentRepliers = reader.ReadVector<PeerBase>();
+				RecentRepliers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 0))
@@ -112,11 +113,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			{
 				ReadMaxId = reader.Read<int>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "messageReplies";
+		    return "messageReplies";
 		}
 	}
 }

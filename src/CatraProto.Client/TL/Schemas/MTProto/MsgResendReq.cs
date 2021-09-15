@@ -1,19 +1,21 @@
+using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class MsgResendReq : MsgResendReqBase
+	public partial class MsgResendReq : CatraProto.Client.TL.Schemas.MTProto.MsgResendReqBase
 	{
 
 
         public static int StaticConstructorId { get => 2105940488; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("msg_ids")]
+[Newtonsoft.Json.JsonProperty("msg_ids")]
 		public override IList<long> MsgIds { get; set; }
 
         
@@ -32,11 +34,12 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 		public override void Deserialize(Reader reader)
 		{
 			MsgIds = reader.ReadVector<long>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "msg_resend_req";
+		    return "msg_resend_req";
 		}
 	}
 }

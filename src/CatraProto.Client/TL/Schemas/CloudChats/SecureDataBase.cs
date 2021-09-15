@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,13 +7,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class SecureDataBase : IObject
     {
 
-[JsonPropertyName("data")]
+[Newtonsoft.Json.JsonProperty("data")]
 		public abstract byte[] Data { get; set; }
 
-[JsonPropertyName("data_hash")]
+[Newtonsoft.Json.JsonProperty("data_hash")]
 		public abstract byte[] DataHash { get; set; }
 
-[JsonPropertyName("secret")]
+[Newtonsoft.Json.JsonProperty("secret")]
 		public abstract byte[] Secret { get; set; }
 
         public abstract void UpdateFlags();

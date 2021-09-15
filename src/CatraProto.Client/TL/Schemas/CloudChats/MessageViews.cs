@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageViews : MessageViewsBase
+	public partial class MessageViews : CatraProto.Client.TL.Schemas.CloudChats.MessageViewsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,20 +18,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 1163625789; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("views")]
+[Newtonsoft.Json.JsonProperty("views")]
 		public override int? Views { get; set; }
 
-[JsonPropertyName("forwards")]
+[Newtonsoft.Json.JsonProperty("forwards")]
 		public override int? Forwards { get; set; }
 
-[JsonPropertyName("replies")]
-		public override MessageRepliesBase Replies { get; set; }
+[Newtonsoft.Json.JsonProperty("replies")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.MessageRepliesBase Replies { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -78,13 +80,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				Replies = reader.Read<MessageRepliesBase>();
+				Replies = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageRepliesBase>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "messageViews";
+		    return "messageViews";
 		}
 	}
 }

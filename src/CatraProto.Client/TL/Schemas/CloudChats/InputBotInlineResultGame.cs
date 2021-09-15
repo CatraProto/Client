@@ -1,25 +1,28 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputBotInlineResultGame : InputBotInlineResultBase
+	public partial class InputBotInlineResultGame : CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineResultBase
 	{
 
 
         public static int StaticConstructorId { get => 1336154098; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public override string Id { get; set; }
 
-[JsonPropertyName("short_name")]
+[Newtonsoft.Json.JsonProperty("short_name")]
 		public string ShortName { get; set; }
 
-[JsonPropertyName("send_message")]
-		public override InputBotInlineMessageBase SendMessage { get; set; }
+[Newtonsoft.Json.JsonProperty("send_message")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageBase SendMessage { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -40,12 +43,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Id = reader.Read<string>();
 			ShortName = reader.Read<string>();
-			SendMessage = reader.Read<InputBotInlineMessageBase>();
-		}
+			SendMessage = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "inputBotInlineResultGame";
+		    return "inputBotInlineResultGame";
 		}
 	}
 }

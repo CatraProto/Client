@@ -1,15 +1,18 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputStickerSetAnimatedEmoji : InputStickerSetBase
+	public partial class InputStickerSetAnimatedEmoji : CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase
 	{
 
 
         public static int StaticConstructorId { get => 42402760; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
         
@@ -26,11 +29,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "inputStickerSetAnimatedEmoji";
+		    return "inputStickerSetAnimatedEmoji";
 		}
 	}
 }

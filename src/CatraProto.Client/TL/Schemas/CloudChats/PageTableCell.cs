@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PageTableCell : PageTableCellBase
+	public partial class PageTableCell : CatraProto.Client.TL.Schemas.CloudChats.PageTableCellBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -21,34 +23,34 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => 878078826; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("header")]
+[Newtonsoft.Json.JsonProperty("header")]
 		public override bool Header { get; set; }
 
-[JsonPropertyName("align_center")]
+[Newtonsoft.Json.JsonProperty("align_center")]
 		public override bool AlignCenter { get; set; }
 
-[JsonPropertyName("align_right")]
+[Newtonsoft.Json.JsonProperty("align_right")]
 		public override bool AlignRight { get; set; }
 
-[JsonPropertyName("valign_middle")]
+[Newtonsoft.Json.JsonProperty("valign_middle")]
 		public override bool ValignMiddle { get; set; }
 
-[JsonPropertyName("valign_bottom")]
+[Newtonsoft.Json.JsonProperty("valign_bottom")]
 		public override bool ValignBottom { get; set; }
 
-[JsonPropertyName("text")]
-		public override RichTextBase Text { get; set; }
+[Newtonsoft.Json.JsonProperty("text")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Text { get; set; }
 
-[JsonPropertyName("colspan")]
+[Newtonsoft.Json.JsonProperty("colspan")]
 		public override int? Colspan { get; set; }
 
-[JsonPropertyName("rowspan")]
+[Newtonsoft.Json.JsonProperty("rowspan")]
 		public override int? Rowspan { get; set; }
 
         
@@ -98,7 +100,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ValignBottom = FlagsHelper.IsFlagSet(Flags, 6);
 			if(FlagsHelper.IsFlagSet(Flags, 7))
 			{
-				Text = reader.Read<RichTextBase>();
+				Text = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
@@ -110,11 +112,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			{
 				Rowspan = reader.Read<int>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "pageTableCell";
+		    return "pageTableCell";
 		}
 	}
 }

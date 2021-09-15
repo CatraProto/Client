@@ -10,7 +10,7 @@ namespace CatraProto.Client.Connections.Loop
     {
         public static bool TrySerialize(MessageItem item, ILogger logger, out byte[]? serialized)
         {
-            logger.Information("Serializing message of type {Type}", item.Body);
+            logger.Verbose("Serializing message of type {Type}", item.Body);
             try
             {
                 serialized = item.Body.ToArray(MergedProvider.Singleton);
@@ -19,7 +19,7 @@ namespace CatraProto.Client.Connections.Loop
             catch (SerializationException e)
             {
                 logger.Error("Serialization of message of type {Type} failed, throwing exception on caller", item.Body);
-                item.MessageStatus.MessageCompletion.TaskCompletionSource?.TrySetException(e);
+                item.SetCanceled();
             }
 
             serialized = null;

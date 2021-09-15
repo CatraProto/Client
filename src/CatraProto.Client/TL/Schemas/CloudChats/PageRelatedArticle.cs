@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PageRelatedArticle : PageRelatedArticleBase
+	public partial class PageRelatedArticle : CatraProto.Client.TL.Schemas.CloudChats.PageRelatedArticleBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -18,31 +20,31 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -1282352120; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("url")]
+[Newtonsoft.Json.JsonProperty("url")]
 		public override string Url { get; set; }
 
-[JsonPropertyName("webpage_id")]
+[Newtonsoft.Json.JsonProperty("webpage_id")]
 		public override long WebpageId { get; set; }
 
-[JsonPropertyName("title")]
+[Newtonsoft.Json.JsonProperty("title")]
 		public override string Title { get; set; }
 
-[JsonPropertyName("description")]
+[Newtonsoft.Json.JsonProperty("description")]
 		public override string Description { get; set; }
 
-[JsonPropertyName("photo_id")]
+[Newtonsoft.Json.JsonProperty("photo_id")]
 		public override long? PhotoId { get; set; }
 
-[JsonPropertyName("author")]
+[Newtonsoft.Json.JsonProperty("author")]
 		public override string Author { get; set; }
 
-[JsonPropertyName("published_date")]
+[Newtonsoft.Json.JsonProperty("published_date")]
 		public override int? PublishedDate { get; set; }
 
         
@@ -120,11 +122,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			{
 				PublishedDate = reader.Read<int>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "pageRelatedArticle";
+		    return "pageRelatedArticle";
 		}
 	}
 }

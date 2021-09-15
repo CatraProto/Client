@@ -1,15 +1,18 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class DocumentAttributeAnimated : DocumentAttributeBase
+	public partial class DocumentAttributeAnimated : CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase
 	{
 
 
         public static int StaticConstructorId { get => 297109817; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
         
@@ -26,11 +29,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "documentAttributeAnimated";
+		    return "documentAttributeAnimated";
 		}
 	}
 }

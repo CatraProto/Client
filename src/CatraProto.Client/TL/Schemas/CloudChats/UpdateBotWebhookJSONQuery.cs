@@ -1,24 +1,27 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateBotWebhookJSONQuery : UpdateBase
+	public partial class UpdateBotWebhookJSONQuery : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 
 
         public static int StaticConstructorId { get => -1684914010; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("query_id")]
+[Newtonsoft.Json.JsonProperty("query_id")]
 		public long QueryId { get; set; }
 
-[JsonPropertyName("data")]
-		public DataJSONBase Data { get; set; }
+[Newtonsoft.Json.JsonProperty("data")]
+		public CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase Data { get; set; }
 
-[JsonPropertyName("timeout")]
+[Newtonsoft.Json.JsonProperty("timeout")]
 		public int Timeout { get; set; }
 
         
@@ -39,13 +42,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			QueryId = reader.Read<long>();
-			Data = reader.Read<DataJSONBase>();
+			Data = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
 			Timeout = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "updateBotWebhookJSONQuery";
+		    return "updateBotWebhookJSONQuery";
 		}
 	}
 }

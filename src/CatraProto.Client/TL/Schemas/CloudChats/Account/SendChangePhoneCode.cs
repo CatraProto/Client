@@ -1,57 +1,60 @@
 using System;
-using System.Text.Json.Serialization;
 using CatraProto.Client.TL.Schemas.CloudChats.Auth;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class SendChangePhoneCode : IMethod
-	{
-
+    public partial class SendChangePhoneCode : IMethod
+    {
+        [JsonIgnore]
+        public static int StaticConstructorId
+        {
+            get => -2108208411;
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => -2108208411; }
-        [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(SentCodeBase);
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(SentCodeBase);
 
-[JsonPropertyName("phone_number")]
-		public string PhoneNumber { get; set; }
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("settings")]
-		public CodeSettingsBase Settings { get; set; }
+        [JsonProperty("phone_number")] public string PhoneNumber { get; set; }
+
+        [JsonProperty("settings")] public CodeSettingsBase Settings { get; set; }
+
+        public override string ToString()
+        {
+            return "account.sendChangePhoneCode";
+        }
 
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(PhoneNumber);
-			writer.Write(Settings);
+            writer.Write(PhoneNumber);
+            writer.Write(Settings);
+        }
 
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			PhoneNumber = reader.Read<string>();
-			Settings = reader.Read<CodeSettingsBase>();
-		}
-
-		public override string ToString()
-		{
-			return "account.sendChangePhoneCode";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            PhoneNumber = reader.Read<string>();
+            Settings = reader.Read<CodeSettingsBase>();
+        }
+    }
 }

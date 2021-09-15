@@ -1,52 +1,56 @@
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using Newtonsoft.Json;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
-	public partial class ResolvedPeer : ResolvedPeerBase
-	{
+    public partial class ResolvedPeer : ResolvedPeerBase
+    {
+        public static int StaticConstructorId
+        {
+            get => 2131196633;
+        }
 
-
-        public static int StaticConstructorId { get => 2131196633; }
         [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonPropertyName("peer")]
-		public override PeerBase Peer { get; set; }
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonPropertyName("chats")]
-		public override IList<ChatBase> Chats { get; set; }
+        [JsonProperty("peer")] public override PeerBase Peer { get; set; }
 
-[JsonPropertyName("users")]
-		public override IList<UserBase> Users { get; set; }
+        [JsonProperty("chats")] public override IList<ChatBase> Chats { get; set; }
 
-        
-		public override void UpdateFlags() 
-		{
+        [JsonProperty("users")] public override IList<UserBase> Users { get; set; }
 
-		}
 
-		public override void Serialize(Writer writer)
-		{
-		    if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Peer);
-			writer.Write(Chats);
-			writer.Write(Users);
+        public override void UpdateFlags()
+        {
+        }
 
-		}
+        public override void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public override void Deserialize(Reader reader)
-		{
-			Peer = reader.Read<PeerBase>();
-			Chats = reader.ReadVector<ChatBase>();
-			Users = reader.ReadVector<UserBase>();
-		}
+            writer.Write(Peer);
+            writer.Write(Chats);
+            writer.Write(Users);
+        }
 
-		public override string ToString()
-		{
-			return "contacts.resolvedPeer";
-		}
-	}
+        public override void Deserialize(Reader reader)
+        {
+            Peer = reader.Read<PeerBase>();
+            Chats = reader.ReadVector<ChatBase>();
+            Users = reader.ReadVector<UserBase>();
+        }
+
+        public override string ToString()
+        {
+            return "contacts.resolvedPeer";
+        }
+    }
 }

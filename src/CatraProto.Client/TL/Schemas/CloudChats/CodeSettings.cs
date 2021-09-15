@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class CodeSettings : CodeSettingsBase
+	public partial class CodeSettings : CatraProto.Client.TL.Schemas.CloudChats.CodeSettingsBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,19 +18,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -557924733; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("allow_flashcall")]
+[Newtonsoft.Json.JsonProperty("allow_flashcall")]
 		public override bool AllowFlashcall { get; set; }
 
-[JsonPropertyName("current_number")]
+[Newtonsoft.Json.JsonProperty("current_number")]
 		public override bool CurrentNumber { get; set; }
 
-[JsonPropertyName("allow_app_hash")]
+[Newtonsoft.Json.JsonProperty("allow_app_hash")]
 		public override bool AllowAppHash { get; set; }
 
         
@@ -54,11 +56,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			AllowFlashcall = FlagsHelper.IsFlagSet(Flags, 0);
 			CurrentNumber = FlagsHelper.IsFlagSet(Flags, 1);
 			AllowAppHash = FlagsHelper.IsFlagSet(Flags, 4);
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "codeSettings";
+		    return "codeSettings";
 		}
 	}
 }

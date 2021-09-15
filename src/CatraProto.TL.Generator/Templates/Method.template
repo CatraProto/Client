@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using CatraProto.TL.Interfaces;
 using System.Linq;
 
@@ -13,9 +12,9 @@ namespace ^Namespace^
 	{
 ^FlagsEnums^
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => ^ConstructorId^; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         ^Properties^
 

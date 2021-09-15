@@ -20,8 +20,8 @@ namespace CatraProto.TL.Generator.Objects
         public override void WriteParameters(StringBuilder builder)
         {
             var type = Type.GetTypeName(NamingType.FullNamespace, null, false, NameContext.TypeExtends);
-            builder.AppendLine($"\n[JsonIgnore]\n{StringTools.TwoTabs}System.Type IMethod.Type {{ get; init; }} = typeof({type});");
-            builder.AppendLine($"\n[JsonIgnore]\n{StringTools.TwoTabs}bool IMethod.IsVector {{ get; init; }} = {ReturnsVector.ToString().ToLower()};");
+            builder.AppendLine($"\n[Newtonsoft.Json.JsonIgnore]\n{StringTools.TwoTabs}System.Type IMethod.Type {{ get; init; }} = typeof({type});");
+            builder.AppendLine($"\n[Newtonsoft.Json.JsonIgnore]\n{StringTools.TwoTabs}bool IMethod.IsVector {{ get; init; }} = {ReturnsVector.ToString().ToLower()};");
             base.WriteParameters(builder);
         }
 
@@ -50,11 +50,13 @@ namespace CatraProto.TL.Generator.Objects
             var comma = args.Length == 0 ? "" : ",";
             builder.AppendLine($"public async Task<RpcMessage<{returnType}>> {NamingInfo.PascalCaseName}Async({args}{comma} CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)\n{StringTools.TwoTabs}{{");
             builder.AppendLine(nullPolicies.ToString());
-            builder.AppendLine($"var rpcResponse = new RpcMessage<{returnType}>();");
+            builder.AppendLine($"var rpcResponse = new RpcMessage<{returnType}>(");
             if (ReturnsVector)
             {
-                builder.AppendLine($"rpcResponse.Response = new {returnType}();");
+                builder.AppendLine($"new {returnType}()");
             }
+
+            builder.AppendLine(");");
 
             builder.AppendLine($"messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: {(MethodCompletionType == MethodCompletionType.ReturnsUnencrypted ? "false" : "true")});");
             builder.AppendLine($"var methodBody = new {Namespace.FullNamespace}(){{");

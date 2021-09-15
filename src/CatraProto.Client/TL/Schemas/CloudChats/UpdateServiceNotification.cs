@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateServiceNotification : UpdateBase
+	public partial class UpdateServiceNotification : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,29 +17,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -337352679; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("popup")]
+[Newtonsoft.Json.JsonProperty("popup")]
 		public bool Popup { get; set; }
 
-[JsonPropertyName("inbox_date")]
+[Newtonsoft.Json.JsonProperty("inbox_date")]
 		public int? InboxDate { get; set; }
 
-[JsonPropertyName("type")]
+[Newtonsoft.Json.JsonProperty("type")]
 		public string Type { get; set; }
 
-[JsonPropertyName("message")]
+[Newtonsoft.Json.JsonProperty("message")]
 		public string Message { get; set; }
 
-[JsonPropertyName("media")]
-		public MessageMediaBase Media { get; set; }
+[Newtonsoft.Json.JsonProperty("media")]
+		public CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase Media { get; set; }
 
-[JsonPropertyName("entities")]
-		public IList<MessageEntityBase> Entities { get; set; }
+[Newtonsoft.Json.JsonProperty("entities")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -76,13 +77,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			Type = reader.Read<string>();
 			Message = reader.Read<string>();
-			Media = reader.Read<MessageMediaBase>();
-			Entities = reader.ReadVector<MessageEntityBase>();
-		}
+			Media = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase>();
+			Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "updateServiceNotification";
+		    return "updateServiceNotification";
 		}
 	}
 }

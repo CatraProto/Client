@@ -1,7 +1,8 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Threading;
+using System.Diagnostics.CodeAnalysis;
 using CatraProto.Client.Connections.MessageScheduling.Items;
+using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL.Interfaces;
 using Serilog;
 
@@ -9,8 +10,8 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
 {
     class MessageCompletionTracker
     {
-        private readonly ConcurrentDictionary<long, MessageCompletion> _messageCompletions = new ConcurrentDictionary<long, MessageCompletion>();
-        private readonly List<MessageCompletion> _unencryptedCompletions = new List<MessageCompletion>();
+        private readonly ConcurrentDictionary<long, MessageItem> _messageCompletions = new ConcurrentDictionary<long, MessageItem>();
+        private readonly List<MessageItem> _unencryptedCompletions = new List<MessageItem>();
         private readonly object _mutex = new object();
         private readonly ILogger _logger;
 
@@ -19,7 +20,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
             _logger = logger.ForContext<MessageCompletionTracker>();
         }
 
-        public void AddCompletion(long messageId, MessageCompletion messageCompletion)
+        public void AddCompletion(long messageId, MessageItem messageCompletion)
         {
             if (messageId == 0)
             {
@@ -34,17 +35,9 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
             _messageCompletions.TryAdd(messageId, messageCompletion);
         }
 
-        public bool RemoveCompletion(long messageId, out MessageCompletion? messageCompletion)
+        public bool RemoveCompletion(long messageId, [MaybeNullWhen(false)] out MessageItem messageItem)
         {
-            return _messageCompletions.TryRemove(messageId, out messageCompletion);
-        }
-
-        public void CancelCompletion(long messageId, CancellationToken cancellationToken = default)
-        {
-            if (GetMessageCompletion(messageId, out var messageCompletion))
-            {
-                messageCompletion!.TaskCompletionSource?.TrySetCanceled(cancellationToken);
-            }
+            return _messageCompletions.TryRemove(messageId, out messageItem);
         }
 
         public bool SetCompletion(long messageId, object response)
@@ -56,9 +49,15 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
                     var responseType = response.GetType();
                     var completionIndex = _unencryptedCompletions.FindIndex(x =>
                     {
-                        if (x.Method is not null)
+                        var method = x.GetMessageMethod();
+                        if (method is not null)
                         {
-                            if (responseType.IsSubclassOf(x.Method.Type) || responseType == x.Method.Type)
+                            if (response is RpcError)
+                            {
+                                return true;
+                            }
+
+                            if (responseType.IsSubclassOf(method.Type) || responseType == method.Type)
                             {
                                 return true;
                             }
@@ -73,23 +72,15 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
                     }
 
                     var completion = _unencryptedCompletions[completionIndex];
-                    completion.RpcMessage!.SetResponse(response);
-                    completion.TaskCompletionSource?.TrySetResult();
-
                     _unencryptedCompletions.RemoveAt(completionIndex);
+                    completion.SetReplied(response);
                     return true;
                 }
             }
 
             if (GetMessageCompletion(messageId, out var messageCompletion))
             {
-                if (messageCompletion!.TaskCompletionSource is null)
-                {
-                    return false;
-                }
-
-                messageCompletion.RpcMessage!.SetResponse(response);
-                messageCompletion.TaskCompletionSource.TrySetResult();
+                messageCompletion.SetReplied(response);
             }
 
             return true;
@@ -99,7 +90,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
         {
             if (GetMessageCompletion(messageId, out var encryptedMessageCompletion, false))
             {
-                method = encryptedMessageCompletion!.Method;
+                method = encryptedMessageCompletion.GetMessageMethod();
                 return true;
             }
 
@@ -107,9 +98,9 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
             return false;
         }
 
-        private bool GetMessageCompletion(long messageId, out MessageCompletion? messageCompletion, bool remove = true)
+        private bool GetMessageCompletion(long messageId, [MaybeNullWhen(false)] out MessageItem messageItem, bool remove = true)
         {
-            if (_messageCompletions.TryGetValue(messageId, out messageCompletion))
+            if (_messageCompletions.TryGetValue(messageId, out messageItem))
             {
                 if (remove)
                 {

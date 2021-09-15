@@ -1,28 +1,30 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class Message : MessageBase
+	public partial class Message : CatraProto.Client.TL.Schemas.MTProto.MessageBase
 	{
 
 
         public static int StaticConstructorId { get => 0; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("msg_id")]
+[Newtonsoft.Json.JsonProperty("msg_id")]
 		public override long MsgId { get; set; }
 
-[JsonPropertyName("seqno")]
+[Newtonsoft.Json.JsonProperty("seqno")]
 		public override int Seqno { get; set; }
 
-[JsonPropertyName("bytes")]
+[Newtonsoft.Json.JsonProperty("bytes")]
 		public override int Bytes { get; set; }
 
-[JsonPropertyName("body")]
+[Newtonsoft.Json.JsonProperty("body")]
 		public override IObject Body { get; set; }
 
         
@@ -47,11 +49,12 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 			Seqno = reader.Read<int>();
 			Bytes = reader.Read<int>();
 			Body = reader.Read<IObject>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "message";
+		    return "message";
 		}
 	}
 }

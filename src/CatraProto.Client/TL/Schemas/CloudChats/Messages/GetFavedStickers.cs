@@ -1,50 +1,55 @@
 using System;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class GetFavedStickers : IMethod
-	{
-
+    public partial class GetFavedStickers : IMethod
+    {
+        [JsonIgnore]
+        public static int StaticConstructorId
+        {
+            get => 567151374;
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => 567151374; }
-        [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
         [JsonIgnore] Type IMethod.Type { get; init; } = typeof(FavedStickersBase);
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
 
-[JsonPropertyName("hash")]
-		public int Hash { get; set; }
+        [JsonProperty("hash")] public int Hash { get; set; }
+
+        public override string ToString()
+        {
+            return "messages.getFavedStickers";
+        }
 
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Hash);
+            writer.Write(Hash);
+        }
 
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			Hash = reader.Read<int>();
-		}
-
-		public override string ToString()
-		{
-			return "messages.getFavedStickers";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Hash = reader.Read<int>();
+        }
+    }
 }

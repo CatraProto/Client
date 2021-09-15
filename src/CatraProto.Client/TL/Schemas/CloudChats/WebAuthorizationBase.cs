@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,31 +7,31 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class WebAuthorizationBase : IObject
     {
 
-[JsonPropertyName("hash")]
+[Newtonsoft.Json.JsonProperty("hash")]
 		public abstract long Hash { get; set; }
 
-[JsonPropertyName("bot_id")]
+[Newtonsoft.Json.JsonProperty("bot_id")]
 		public abstract int BotId { get; set; }
 
-[JsonPropertyName("domain")]
+[Newtonsoft.Json.JsonProperty("domain")]
 		public abstract string Domain { get; set; }
 
-[JsonPropertyName("browser")]
+[Newtonsoft.Json.JsonProperty("browser")]
 		public abstract string Browser { get; set; }
 
-[JsonPropertyName("platform")]
+[Newtonsoft.Json.JsonProperty("platform")]
 		public abstract string Platform { get; set; }
 
-[JsonPropertyName("date_created")]
+[Newtonsoft.Json.JsonProperty("date_created")]
 		public abstract int DateCreated { get; set; }
 
-[JsonPropertyName("date_active")]
+[Newtonsoft.Json.JsonProperty("date_active")]
 		public abstract int DateActive { get; set; }
 
-[JsonPropertyName("ip")]
+[Newtonsoft.Json.JsonProperty("ip")]
 		public abstract string Ip { get; set; }
 
-[JsonPropertyName("region")]
+[Newtonsoft.Json.JsonProperty("region")]
 		public abstract string Region { get; set; }
 
         public abstract void UpdateFlags();

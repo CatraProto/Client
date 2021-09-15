@@ -1,51 +1,55 @@
 using System;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
-	public partial class GetContactIDs : IMethod
-	{
-
+    public partial class GetContactIDs : IMethod
+    {
+        [JsonIgnore]
+        public static int StaticConstructorId
+        {
+            get => 749357634;
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => 749357634; }
-        [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(int);
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = true;
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(int);
 
-[JsonPropertyName("hash")]
-		public int Hash { get; set; }
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = true;
+
+        [JsonProperty("hash")] public int Hash { get; set; }
+
+        public override string ToString()
+        {
+            return "contacts.getContactIDs";
+        }
 
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Hash);
+            writer.Write(Hash);
+        }
 
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			Hash = reader.Read<int>();
-		}
-
-		public override string ToString()
-		{
-			return "contacts.getContactIDs";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Hash = reader.Read<int>();
+        }
+    }
 }

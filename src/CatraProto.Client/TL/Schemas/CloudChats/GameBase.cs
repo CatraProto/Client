@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,25 +7,25 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class GameBase : IObject
     {
 
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public abstract long Id { get; set; }
 
-[JsonPropertyName("access_hash")]
+[Newtonsoft.Json.JsonProperty("access_hash")]
 		public abstract long AccessHash { get; set; }
 
-[JsonPropertyName("short_name")]
+[Newtonsoft.Json.JsonProperty("short_name")]
 		public abstract string ShortName { get; set; }
 
-[JsonPropertyName("title")]
+[Newtonsoft.Json.JsonProperty("title")]
 		public abstract string Title { get; set; }
 
-[JsonPropertyName("description")]
+[Newtonsoft.Json.JsonProperty("description")]
 		public abstract string Description { get; set; }
 
-[JsonPropertyName("photo")]
+[Newtonsoft.Json.JsonProperty("photo")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.PhotoBase Photo { get; set; }
 
-[JsonPropertyName("document")]
+[Newtonsoft.Json.JsonProperty("document")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.DocumentBase Document { get; set; }
 
         public abstract void UpdateFlags();

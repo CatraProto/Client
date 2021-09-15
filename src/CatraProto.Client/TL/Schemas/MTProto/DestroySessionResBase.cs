@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,7 +7,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
     public abstract class DestroySessionResBase : IObject
     {
 
-[JsonPropertyName("session_id")]
+[Newtonsoft.Json.JsonProperty("session_id")]
 		public abstract long SessionId { get; set; }
 
         public abstract void UpdateFlags();

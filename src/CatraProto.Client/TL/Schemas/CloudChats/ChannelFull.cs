@@ -1,22 +1,23 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelFull : ChatFullBase
+	public partial class ChannelFull : CatraProto.Client.TL.Schemas.CloudChats.ChatFullBase
 	{
 		[Flags]
 		public enum FlagsEnum 
 		{
 			CanViewParticipants = 1 << 3,
-			CanSetUsername = 1 << 7,
+			CanSetUsername = 1 << 6,
 			CanSetStickers = 1 << 7,
 			HiddenPrehistory = 1 << 10,
 			CanSetLocation = 1 << 16,
-			HasScheduled = 1 << 8,
+			HasScheduled = 1 << 19,
 			CanViewStats = 1 << 20,
 			Blocked = 1 << 22,
 			ParticipantsCount = 1 << 0,
@@ -24,11 +25,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			KickedCount = 1 << 2,
 			BannedCount = 1 << 2,
 			OnlineCount = 1 << 13,
-			ChatPhoto = 1 << 2,
-			BotInfo = 1 << 3,
 			MigratedFromChatId = 1 << 4,
 			MigratedFromMaxId = 1 << 4,
-			PinnedMsgId = 1 << 6,
+			PinnedMsgId = 1 << 5,
 			Stickerset = 1 << 8,
 			AvailableMinId = 1 << 9,
 			FolderId = 1 << 11,
@@ -40,123 +39,123 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -253335766; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("can_view_participants")]
+[Newtonsoft.Json.JsonProperty("can_view_participants")]
 		public bool CanViewParticipants { get; set; }
 
-[JsonPropertyName("can_set_username")]
-		public override bool CanSetUsername { get; set; }
+[Newtonsoft.Json.JsonProperty("can_set_username")]
+		public bool CanSetUsername { get; set; }
 
-[JsonPropertyName("can_set_stickers")]
+[Newtonsoft.Json.JsonProperty("can_set_stickers")]
 		public bool CanSetStickers { get; set; }
 
-[JsonPropertyName("hidden_prehistory")]
+[Newtonsoft.Json.JsonProperty("hidden_prehistory")]
 		public bool HiddenPrehistory { get; set; }
 
-[JsonPropertyName("can_set_location")]
+[Newtonsoft.Json.JsonProperty("can_set_location")]
 		public bool CanSetLocation { get; set; }
 
-[JsonPropertyName("has_scheduled")]
-		public override bool HasScheduled { get; set; }
+[Newtonsoft.Json.JsonProperty("has_scheduled")]
+		public bool HasScheduled { get; set; }
 
-[JsonPropertyName("can_view_stats")]
+[Newtonsoft.Json.JsonProperty("can_view_stats")]
 		public bool CanViewStats { get; set; }
 
-[JsonPropertyName("blocked")]
+[Newtonsoft.Json.JsonProperty("blocked")]
 		public bool Blocked { get; set; }
 
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public override int Id { get; set; }
 
-[JsonPropertyName("about")]
+[Newtonsoft.Json.JsonProperty("about")]
 		public override string About { get; set; }
 
-[JsonPropertyName("participants_count")]
+[Newtonsoft.Json.JsonProperty("participants_count")]
 		public int? ParticipantsCount { get; set; }
 
-[JsonPropertyName("admins_count")]
+[Newtonsoft.Json.JsonProperty("admins_count")]
 		public int? AdminsCount { get; set; }
 
-[JsonPropertyName("kicked_count")]
+[Newtonsoft.Json.JsonProperty("kicked_count")]
 		public int? KickedCount { get; set; }
 
-[JsonPropertyName("banned_count")]
+[Newtonsoft.Json.JsonProperty("banned_count")]
 		public int? BannedCount { get; set; }
 
-[JsonPropertyName("online_count")]
+[Newtonsoft.Json.JsonProperty("online_count")]
 		public int? OnlineCount { get; set; }
 
-[JsonPropertyName("read_inbox_max_id")]
+[Newtonsoft.Json.JsonProperty("read_inbox_max_id")]
 		public int ReadInboxMaxId { get; set; }
 
-[JsonPropertyName("read_outbox_max_id")]
+[Newtonsoft.Json.JsonProperty("read_outbox_max_id")]
 		public int ReadOutboxMaxId { get; set; }
 
-[JsonPropertyName("unread_count")]
+[Newtonsoft.Json.JsonProperty("unread_count")]
 		public int UnreadCount { get; set; }
 
-[JsonPropertyName("chat_photo")]
-		public override PhotoBase ChatPhoto { get; set; }
+[Newtonsoft.Json.JsonProperty("chat_photo")]
+		public CatraProto.Client.TL.Schemas.CloudChats.PhotoBase ChatPhoto { get; set; }
 
-[JsonPropertyName("notify_settings")]
-		public override PeerNotifySettingsBase NotifySettings { get; set; }
+[Newtonsoft.Json.JsonProperty("notify_settings")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase NotifySettings { get; set; }
 
-[JsonPropertyName("exported_invite")]
-		public override ExportedChatInviteBase ExportedInvite { get; set; }
+[Newtonsoft.Json.JsonProperty("exported_invite")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.ExportedChatInviteBase ExportedInvite { get; set; }
 
-[JsonPropertyName("bot_info")]
-		public override IList<BotInfoBase> BotInfo { get; set; }
+[Newtonsoft.Json.JsonProperty("bot_info")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase> BotInfo { get; set; }
 
-[JsonPropertyName("migrated_from_chat_id")]
+[Newtonsoft.Json.JsonProperty("migrated_from_chat_id")]
 		public int? MigratedFromChatId { get; set; }
 
-[JsonPropertyName("migrated_from_max_id")]
+[Newtonsoft.Json.JsonProperty("migrated_from_max_id")]
 		public int? MigratedFromMaxId { get; set; }
 
-[JsonPropertyName("pinned_msg_id")]
-		public override int? PinnedMsgId { get; set; }
+[Newtonsoft.Json.JsonProperty("pinned_msg_id")]
+		public int? PinnedMsgId { get; set; }
 
-[JsonPropertyName("stickerset")]
-		public StickerSetBase Stickerset { get; set; }
+[Newtonsoft.Json.JsonProperty("stickerset")]
+		public CatraProto.Client.TL.Schemas.CloudChats.StickerSetBase Stickerset { get; set; }
 
-[JsonPropertyName("available_min_id")]
+[Newtonsoft.Json.JsonProperty("available_min_id")]
 		public int? AvailableMinId { get; set; }
 
-[JsonPropertyName("folder_id")]
+[Newtonsoft.Json.JsonProperty("folder_id")]
 		public override int? FolderId { get; set; }
 
-[JsonPropertyName("linked_chat_id")]
+[Newtonsoft.Json.JsonProperty("linked_chat_id")]
 		public int? LinkedChatId { get; set; }
 
-[JsonPropertyName("location")]
-		public ChannelLocationBase Location { get; set; }
+[Newtonsoft.Json.JsonProperty("location")]
+		public CatraProto.Client.TL.Schemas.CloudChats.ChannelLocationBase Location { get; set; }
 
-[JsonPropertyName("slowmode_seconds")]
+[Newtonsoft.Json.JsonProperty("slowmode_seconds")]
 		public int? SlowmodeSeconds { get; set; }
 
-[JsonPropertyName("slowmode_next_send_date")]
+[Newtonsoft.Json.JsonProperty("slowmode_next_send_date")]
 		public int? SlowmodeNextSendDate { get; set; }
 
-[JsonPropertyName("stats_dc")]
+[Newtonsoft.Json.JsonProperty("stats_dc")]
 		public int? StatsDc { get; set; }
 
-[JsonPropertyName("pts")]
+[Newtonsoft.Json.JsonProperty("pts")]
 		public int Pts { get; set; }
 
         
 		public override void UpdateFlags() 
 		{
 			Flags = CanViewParticipants ? FlagsHelper.SetFlag(Flags, 3) : FlagsHelper.UnsetFlag(Flags, 3);
-			Flags = CanSetUsername ? FlagsHelper.SetFlag(Flags, 7) : FlagsHelper.UnsetFlag(Flags, 7);
+			Flags = CanSetUsername ? FlagsHelper.SetFlag(Flags, 6) : FlagsHelper.UnsetFlag(Flags, 6);
 			Flags = CanSetStickers ? FlagsHelper.SetFlag(Flags, 7) : FlagsHelper.UnsetFlag(Flags, 7);
 			Flags = HiddenPrehistory ? FlagsHelper.SetFlag(Flags, 10) : FlagsHelper.UnsetFlag(Flags, 10);
 			Flags = CanSetLocation ? FlagsHelper.SetFlag(Flags, 16) : FlagsHelper.UnsetFlag(Flags, 16);
-			Flags = HasScheduled ? FlagsHelper.SetFlag(Flags, 8) : FlagsHelper.UnsetFlag(Flags, 8);
+			Flags = HasScheduled ? FlagsHelper.SetFlag(Flags, 19) : FlagsHelper.UnsetFlag(Flags, 19);
 			Flags = CanViewStats ? FlagsHelper.SetFlag(Flags, 20) : FlagsHelper.UnsetFlag(Flags, 20);
 			Flags = Blocked ? FlagsHelper.SetFlag(Flags, 22) : FlagsHelper.UnsetFlag(Flags, 22);
 			Flags = ParticipantsCount == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
@@ -164,11 +163,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = KickedCount == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
 			Flags = BannedCount == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
 			Flags = OnlineCount == null ? FlagsHelper.UnsetFlag(Flags, 13) : FlagsHelper.SetFlag(Flags, 13);
-			Flags = ChatPhoto == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
-			Flags = BotInfo == null ? FlagsHelper.UnsetFlag(Flags, 3) : FlagsHelper.SetFlag(Flags, 3);
 			Flags = MigratedFromChatId == null ? FlagsHelper.UnsetFlag(Flags, 4) : FlagsHelper.SetFlag(Flags, 4);
 			Flags = MigratedFromMaxId == null ? FlagsHelper.UnsetFlag(Flags, 4) : FlagsHelper.SetFlag(Flags, 4);
-			Flags = PinnedMsgId == null ? FlagsHelper.UnsetFlag(Flags, 6) : FlagsHelper.SetFlag(Flags, 6);
+			Flags = PinnedMsgId == null ? FlagsHelper.UnsetFlag(Flags, 5) : FlagsHelper.SetFlag(Flags, 5);
 			Flags = Stickerset == null ? FlagsHelper.UnsetFlag(Flags, 8) : FlagsHelper.SetFlag(Flags, 8);
 			Flags = AvailableMinId == null ? FlagsHelper.UnsetFlag(Flags, 9) : FlagsHelper.SetFlag(Flags, 9);
 			Flags = FolderId == null ? FlagsHelper.UnsetFlag(Flags, 11) : FlagsHelper.SetFlag(Flags, 11);
@@ -215,18 +212,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			writer.Write(ReadInboxMaxId);
 			writer.Write(ReadOutboxMaxId);
 			writer.Write(UnreadCount);
-			if(FlagsHelper.IsFlagSet(Flags, 2))
-			{
-				writer.Write(ChatPhoto);
-			}
-
+			writer.Write(ChatPhoto);
 			writer.Write(NotifySettings);
 			writer.Write(ExportedInvite);
-			if(FlagsHelper.IsFlagSet(Flags, 3))
-			{
-				writer.Write(BotInfo);
-			}
-
+			writer.Write(BotInfo);
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
 				writer.Write(MigratedFromChatId.Value);
@@ -237,7 +226,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 				writer.Write(MigratedFromMaxId.Value);
 			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 6))
+			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
 				writer.Write(PinnedMsgId.Value);
 			}
@@ -290,11 +279,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Flags = reader.Read<int>();
 			CanViewParticipants = FlagsHelper.IsFlagSet(Flags, 3);
-			CanSetUsername = FlagsHelper.IsFlagSet(Flags, 7);
+			CanSetUsername = FlagsHelper.IsFlagSet(Flags, 6);
 			CanSetStickers = FlagsHelper.IsFlagSet(Flags, 7);
 			HiddenPrehistory = FlagsHelper.IsFlagSet(Flags, 10);
 			CanSetLocation = FlagsHelper.IsFlagSet(Flags, 16);
-			HasScheduled = FlagsHelper.IsFlagSet(Flags, 8);
+			HasScheduled = FlagsHelper.IsFlagSet(Flags, 19);
 			CanViewStats = FlagsHelper.IsFlagSet(Flags, 20);
 			Blocked = FlagsHelper.IsFlagSet(Flags, 22);
 			Id = reader.Read<int>();
@@ -327,18 +316,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ReadInboxMaxId = reader.Read<int>();
 			ReadOutboxMaxId = reader.Read<int>();
 			UnreadCount = reader.Read<int>();
-			if(FlagsHelper.IsFlagSet(Flags, 2))
-			{
-				ChatPhoto = reader.Read<PhotoBase>();
-			}
-
-			NotifySettings = reader.Read<PeerNotifySettingsBase>();
-			ExportedInvite = reader.Read<ExportedChatInviteBase>();
-			if(FlagsHelper.IsFlagSet(Flags, 3))
-			{
-				BotInfo = reader.ReadVector<BotInfoBase>();
-			}
-
+			ChatPhoto = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
+			NotifySettings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase>();
+			ExportedInvite = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ExportedChatInviteBase>();
+			BotInfo = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
 				MigratedFromChatId = reader.Read<int>();
@@ -349,14 +330,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 				MigratedFromMaxId = reader.Read<int>();
 			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 6))
+			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
 				PinnedMsgId = reader.Read<int>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 8))
 			{
-				Stickerset = reader.Read<StickerSetBase>();
+				Stickerset = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StickerSetBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 9))
@@ -376,7 +357,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 15))
 			{
-				Location = reader.Read<ChannelLocationBase>();
+				Location = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChannelLocationBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 17))
@@ -395,11 +376,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			}
 
 			Pts = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "channelFull";
+		    return "channelFull";
 		}
 	}
 }

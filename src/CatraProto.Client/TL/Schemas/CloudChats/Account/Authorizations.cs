@@ -1,42 +1,48 @@
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using Newtonsoft.Json;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class Authorizations : AuthorizationsBase
-	{
+    public partial class Authorizations : AuthorizationsBase
+    {
+        public static int StaticConstructorId
+        {
+            get => 307276766;
+        }
 
-
-        public static int StaticConstructorId { get => 307276766; }
         [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonPropertyName("Authorizations_")]
-		public override IList<AuthorizationBase> Authorizations_ { get; set; }
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-        
-		public override void UpdateFlags() 
-		{
+        [JsonProperty("authorizations")] public override IList<AuthorizationBase> AuthorizationsField { get; set; }
 
-		}
 
-		public override void Serialize(Writer writer)
-		{
-		    if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Authorizations_);
+        public override void UpdateFlags()
+        {
+        }
 
-		}
+        public override void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public override void Deserialize(Reader reader)
-		{
-			Authorizations_ = reader.ReadVector<AuthorizationBase>();
-		}
+            writer.Write(AuthorizationsField);
+        }
 
-		public override string ToString()
-		{
-			return "account.authorizations";
-		}
-	}
+        public override void Deserialize(Reader reader)
+        {
+            AuthorizationsField = reader.ReadVector<AuthorizationBase>();
+        }
+
+        public override string ToString()
+        {
+            return "account.authorizations";
+        }
+    }
 }

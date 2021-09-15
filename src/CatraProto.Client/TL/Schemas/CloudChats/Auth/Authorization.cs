@@ -1,66 +1,72 @@
 using System;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using Newtonsoft.Json;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
-	public partial class Authorization : AuthorizationBase
-	{
-		[Flags]
-		public enum FlagsEnum 
-		{
-			TmpSessions = 1 << 0
-		}
+    public partial class Authorization : AuthorizationBase
+    {
+        [Flags]
+        public enum FlagsEnum
+        {
+            TmpSessions = 1 << 0
+        }
 
-        public static int StaticConstructorId { get => -855308010; }
+        public static int StaticConstructorId
+        {
+            get => -855308010;
+        }
+
         [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore]
-		public int Flags { get; set; }
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonPropertyName("tmp_sessions")]
-		public int? TmpSessions { get; set; }
+        [JsonIgnore] public int Flags { get; set; }
 
-[JsonPropertyName("user")]
-		public UserBase User { get; set; }
+        [JsonProperty("tmp_sessions")] public int? TmpSessions { get; set; }
 
-        
-		public override void UpdateFlags() 
-		{
-			Flags = TmpSessions == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
+        [JsonProperty("user")] public UserBase User { get; set; }
 
-		}
 
-		public override void Serialize(Writer writer)
-		{
-		    if(ConstructorId != 0) writer.Write(ConstructorId);
-			UpdateFlags();
-			writer.Write(Flags);
-			if(FlagsHelper.IsFlagSet(Flags, 0))
-			{
-				writer.Write(TmpSessions.Value);
-			}
+        public override void UpdateFlags()
+        {
+            Flags = TmpSessions == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
+        }
 
-			writer.Write(User);
+        public override void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		}
+            UpdateFlags();
+            writer.Write(Flags);
+            if (FlagsHelper.IsFlagSet(Flags, 0))
+            {
+                writer.Write(TmpSessions.Value);
+            }
 
-		public override void Deserialize(Reader reader)
-		{
-			Flags = reader.Read<int>();
-			if(FlagsHelper.IsFlagSet(Flags, 0))
-			{
-				TmpSessions = reader.Read<int>();
-			}
+            writer.Write(User);
+        }
 
-			User = reader.Read<UserBase>();
-		}
+        public override void Deserialize(Reader reader)
+        {
+            Flags = reader.Read<int>();
+            if (FlagsHelper.IsFlagSet(Flags, 0))
+            {
+                TmpSessions = reader.Read<int>();
+            }
 
-		public override string ToString()
-		{
-			return "auth.authorization";
-		}
-	}
+            User = reader.Read<UserBase>();
+        }
+
+        public override string ToString()
+        {
+            return "auth.authorization";
+        }
+    }
 }

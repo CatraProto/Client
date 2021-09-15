@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class Poll : PollBase
+	public partial class Poll : CatraProto.Client.TL.Schemas.CloudChats.PollBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -20,37 +21,37 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -2032041631; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public override long Id { get; set; }
 
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("closed")]
+[Newtonsoft.Json.JsonProperty("closed")]
 		public override bool Closed { get; set; }
 
-[JsonPropertyName("public_voters")]
+[Newtonsoft.Json.JsonProperty("public_voters")]
 		public override bool PublicVoters { get; set; }
 
-[JsonPropertyName("multiple_choice")]
+[Newtonsoft.Json.JsonProperty("multiple_choice")]
 		public override bool MultipleChoice { get; set; }
 
-[JsonPropertyName("quiz")]
+[Newtonsoft.Json.JsonProperty("quiz")]
 		public override bool Quiz { get; set; }
 
-[JsonPropertyName("question")]
+[Newtonsoft.Json.JsonProperty("question")]
 		public override string Question { get; set; }
 
-[JsonPropertyName("answers")]
-		public override IList<PollAnswerBase> Answers { get; set; }
+[Newtonsoft.Json.JsonProperty("answers")]
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.PollAnswerBase> Answers { get; set; }
 
-[JsonPropertyName("close_period")]
+[Newtonsoft.Json.JsonProperty("close_period")]
 		public override int? ClosePeriod { get; set; }
 
-[JsonPropertyName("close_date")]
+[Newtonsoft.Json.JsonProperty("close_date")]
 		public override int? CloseDate { get; set; }
 
         
@@ -95,7 +96,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			MultipleChoice = FlagsHelper.IsFlagSet(Flags, 2);
 			Quiz = FlagsHelper.IsFlagSet(Flags, 3);
 			Question = reader.Read<string>();
-			Answers = reader.ReadVector<PollAnswerBase>();
+			Answers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PollAnswerBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
 				ClosePeriod = reader.Read<int>();
@@ -105,11 +106,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			{
 				CloseDate = reader.Read<int>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "poll";
+		    return "poll";
 		}
 	}
 }

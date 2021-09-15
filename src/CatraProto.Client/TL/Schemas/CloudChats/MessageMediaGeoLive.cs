@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageMediaGeoLive : MessageMediaBase
+	public partial class MessageMediaGeoLive : CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -15,22 +17,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -1186937242; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("geo")]
-		public GeoPointBase Geo { get; set; }
+[Newtonsoft.Json.JsonProperty("geo")]
+		public CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase Geo { get; set; }
 
-[JsonPropertyName("heading")]
+[Newtonsoft.Json.JsonProperty("heading")]
 		public int? Heading { get; set; }
 
-[JsonPropertyName("period")]
+[Newtonsoft.Json.JsonProperty("period")]
 		public int Period { get; set; }
 
-[JsonPropertyName("proximity_notification_radius")]
+[Newtonsoft.Json.JsonProperty("proximity_notification_radius")]
 		public int? ProximityNotificationRadius { get; set; }
 
         
@@ -64,7 +66,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			Geo = reader.Read<GeoPointBase>();
+			Geo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				Heading = reader.Read<int>();
@@ -75,11 +77,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			{
 				ProximityNotificationRadius = reader.Read<int>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "messageMediaGeoLive";
+		    return "messageMediaGeoLive";
 		}
 	}
 }

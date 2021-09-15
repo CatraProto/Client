@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdatePinnedDialogs : UpdateBase
+	public partial class UpdatePinnedDialogs : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,17 +17,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -99664734; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("folder_id")]
+[Newtonsoft.Json.JsonProperty("folder_id")]
 		public int? FolderId { get; set; }
 
-[JsonPropertyName("order")]
-		public IList<DialogPeerBase> Order { get; set; }
+[Newtonsoft.Json.JsonProperty("order")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.DialogPeerBase> Order { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -64,13 +65,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Order = reader.ReadVector<DialogPeerBase>();
+				Order = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DialogPeerBase>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "updatePinnedDialogs";
+		    return "updatePinnedDialogs";
 		}
 	}
 }

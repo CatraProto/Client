@@ -1,51 +1,55 @@
 using System;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using Newtonsoft.Json;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class SetAccountTTL : IMethod
-	{
-
+    public partial class SetAccountTTL : IMethod
+    {
+        [JsonIgnore]
+        public static int StaticConstructorId
+        {
+            get => 608323678;
+        }
 
         [JsonIgnore]
-        public static int StaticConstructorId { get => 608323678; }
-        [JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
-        
-[JsonIgnore]
-		Type IMethod.Type { get; init; } = typeof(bool);
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
 
-[JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
 
-[JsonPropertyName("ttl")]
-		public AccountDaysTTLBase Ttl { get; set; }
+        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
+
+        [JsonProperty("ttl")] public AccountDaysTTLBase Ttl { get; set; }
+
+        public override string ToString()
+        {
+            return "account.setAccountTTL";
+        }
 
 
-		public void UpdateFlags() 
-		{
+        public void UpdateFlags()
+        {
+        }
 
-		}
+        public void Serialize(Writer writer)
+        {
+            if (ConstructorId != 0)
+            {
+                writer.Write(ConstructorId);
+            }
 
-		public void Serialize(Writer writer)
-		{
-            if(ConstructorId != 0) writer.Write(ConstructorId);
-			writer.Write(Ttl);
+            writer.Write(Ttl);
+        }
 
-		}
-
-		public void Deserialize(Reader reader)
-		{
-			Ttl = reader.Read<AccountDaysTTLBase>();
-		}
-
-		public override string ToString()
-		{
-			return "account.setAccountTTL";
-		}
-	}
+        public void Deserialize(Reader reader)
+        {
+            Ttl = reader.Read<AccountDaysTTLBase>();
+        }
+    }
 }

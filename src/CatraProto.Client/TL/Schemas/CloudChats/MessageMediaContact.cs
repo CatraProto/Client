@@ -1,30 +1,33 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageMediaContact : MessageMediaBase
+	public partial class MessageMediaContact : CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase
 	{
 
 
         public static int StaticConstructorId { get => -873313984; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("phone_number")]
+[Newtonsoft.Json.JsonProperty("phone_number")]
 		public string PhoneNumber { get; set; }
 
-[JsonPropertyName("first_name")]
+[Newtonsoft.Json.JsonProperty("first_name")]
 		public string FirstName { get; set; }
 
-[JsonPropertyName("last_name")]
+[Newtonsoft.Json.JsonProperty("last_name")]
 		public string LastName { get; set; }
 
-[JsonPropertyName("vcard")]
+[Newtonsoft.Json.JsonProperty("vcard")]
 		public string Vcard { get; set; }
 
-[JsonPropertyName("user_id")]
+[Newtonsoft.Json.JsonProperty("user_id")]
 		public int UserId { get; set; }
 
         
@@ -51,11 +54,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			LastName = reader.Read<string>();
 			Vcard = reader.Read<string>();
 			UserId = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "messageMediaContact";
+		    return "messageMediaContact";
 		}
 	}
 }

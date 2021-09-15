@@ -1,24 +1,27 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class MessageEntityPre : MessageEntityBase
+	public partial class MessageEntityPre : CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase
 	{
 
 
         public static int StaticConstructorId { get => 1938967520; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("offset")]
+[Newtonsoft.Json.JsonProperty("offset")]
 		public override int Offset { get; set; }
 
-[JsonPropertyName("length")]
+[Newtonsoft.Json.JsonProperty("length")]
 		public override int Length { get; set; }
 
-[JsonPropertyName("language")]
+[Newtonsoft.Json.JsonProperty("language")]
 		public string Language { get; set; }
 
         
@@ -41,11 +44,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Offset = reader.Read<int>();
 			Length = reader.Read<int>();
 			Language = reader.Read<string>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "messageEntityPre";
+		    return "messageEntityPre";
 		}
 	}
 }

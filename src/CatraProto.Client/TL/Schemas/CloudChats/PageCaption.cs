@@ -1,22 +1,25 @@
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PageCaption : PageCaptionBase
+	public partial class PageCaption : CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase
 	{
 
 
         public static int StaticConstructorId { get => 1869903447; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("text")]
-		public override RichTextBase Text { get; set; }
+[Newtonsoft.Json.JsonProperty("text")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Text { get; set; }
 
-[JsonPropertyName("credit")]
-		public override RichTextBase Credit { get; set; }
+[Newtonsoft.Json.JsonProperty("credit")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Credit { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -34,13 +37,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			Text = reader.Read<RichTextBase>();
-			Credit = reader.Read<RichTextBase>();
-		}
+			Text = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
+			Credit = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
 
+		}
+				
 		public override string ToString()
 		{
-			return "pageCaption";
+		    return "pageCaption";
 		}
 	}
 }

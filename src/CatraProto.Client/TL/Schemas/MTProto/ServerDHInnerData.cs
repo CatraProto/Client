@@ -1,34 +1,36 @@
-using System.Numerics;
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class ServerDHInnerData : ServerDHInnerDataBase
+	public partial class ServerDHInnerData : CatraProto.Client.TL.Schemas.MTProto.ServerDHInnerDataBase
 	{
 
 
         public static int StaticConstructorId { get => -1249309254; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("nonce")]
-		public override BigInteger Nonce { get; set; }
+[Newtonsoft.Json.JsonProperty("nonce")]
+		public override System.Numerics.BigInteger Nonce { get; set; }
 
-[JsonPropertyName("server_nonce")]
-		public override BigInteger ServerNonce { get; set; }
+[Newtonsoft.Json.JsonProperty("server_nonce")]
+		public override System.Numerics.BigInteger ServerNonce { get; set; }
 
-[JsonPropertyName("g")]
+[Newtonsoft.Json.JsonProperty("g")]
 		public override int G { get; set; }
 
-[JsonPropertyName("dh_prime")]
+[Newtonsoft.Json.JsonProperty("dh_prime")]
 		public override byte[] DhPrime { get; set; }
 
-[JsonPropertyName("g_a")]
+[Newtonsoft.Json.JsonProperty("g_a")]
 		public override byte[] GA { get; set; }
 
-[JsonPropertyName("server_time")]
+[Newtonsoft.Json.JsonProperty("server_time")]
 		public override int ServerTime { get; set; }
 
         
@@ -51,17 +53,18 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
 		public override void Deserialize(Reader reader)
 		{
-			Nonce = reader.Read<BigInteger>(128);
-			ServerNonce = reader.Read<BigInteger>(128);
+			Nonce = reader.Read<System.Numerics.BigInteger>(128);
+			ServerNonce = reader.Read<System.Numerics.BigInteger>(128);
 			G = reader.Read<int>();
 			DhPrime = reader.Read<byte[]>();
 			GA = reader.Read<byte[]>();
 			ServerTime = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "server_DH_inner_data";
+		    return "server_DH_inner_data";
 		}
 	}
 }

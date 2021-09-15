@@ -1,7 +1,8 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
@@ -11,14 +12,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 	{
 
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => 578650699; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Payments.SavedInfoBase);
 
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(SavedInfoBase);
-
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;
 
 
@@ -35,11 +37,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 
 		public void Deserialize(Reader reader)
 		{
-		}
 
+		}
+		
 		public override string ToString()
 		{
-			return "payments.getSavedInfo";
+		    return "payments.getSavedInfo";
 		}
 	}
 }

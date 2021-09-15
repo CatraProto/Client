@@ -1,11 +1,13 @@
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputBotInlineMessageMediaContact : InputBotInlineMessageBase
+	public partial class InputBotInlineMessageMediaContact : CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -14,26 +16,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -1494368259; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("phone_number")]
+[Newtonsoft.Json.JsonProperty("phone_number")]
 		public string PhoneNumber { get; set; }
 
-[JsonPropertyName("first_name")]
+[Newtonsoft.Json.JsonProperty("first_name")]
 		public string FirstName { get; set; }
 
-[JsonPropertyName("last_name")]
+[Newtonsoft.Json.JsonProperty("last_name")]
 		public string LastName { get; set; }
 
-[JsonPropertyName("vcard")]
+[Newtonsoft.Json.JsonProperty("vcard")]
 		public string Vcard { get; set; }
 
-[JsonPropertyName("reply_markup")]
-		public override ReplyMarkupBase ReplyMarkup { get; set; }
+[Newtonsoft.Json.JsonProperty("reply_markup")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase ReplyMarkup { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -68,13 +70,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Vcard = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				ReplyMarkup = reader.Read<ReplyMarkupBase>();
+				ReplyMarkup = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase>();
 			}
-		}
 
+
+		}
+				
 		public override string ToString()
 		{
-			return "inputBotInlineMessageMediaContact";
+		    return "inputBotInlineMessageMediaContact";
 		}
 	}
 }

@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PhoneCall : PhoneCallBase
+	public partial class PhoneCall : CatraProto.Client.TL.Schemas.CloudChats.PhoneCallBase
 	{
 		[Flags]
 		public enum FlagsEnum 
@@ -16,46 +17,46 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         public static int StaticConstructorId { get => -2025673089; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonIgnore]
+[Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
-[JsonPropertyName("p2p_allowed")]
+[Newtonsoft.Json.JsonProperty("p2p_allowed")]
 		public bool P2pAllowed { get; set; }
 
-[JsonPropertyName("video")]
+[Newtonsoft.Json.JsonProperty("video")]
 		public bool Video { get; set; }
 
-[JsonPropertyName("id")]
+[Newtonsoft.Json.JsonProperty("id")]
 		public override long Id { get; set; }
 
-[JsonPropertyName("access_hash")]
+[Newtonsoft.Json.JsonProperty("access_hash")]
 		public long AccessHash { get; set; }
 
-[JsonPropertyName("date")]
+[Newtonsoft.Json.JsonProperty("date")]
 		public int Date { get; set; }
 
-[JsonPropertyName("admin_id")]
+[Newtonsoft.Json.JsonProperty("admin_id")]
 		public int AdminId { get; set; }
 
-[JsonPropertyName("participant_id")]
+[Newtonsoft.Json.JsonProperty("participant_id")]
 		public int ParticipantId { get; set; }
 
-[JsonPropertyName("g_a_or_b")]
+[Newtonsoft.Json.JsonProperty("g_a_or_b")]
 		public byte[] GAOrB { get; set; }
 
-[JsonPropertyName("key_fingerprint")]
+[Newtonsoft.Json.JsonProperty("key_fingerprint")]
 		public long KeyFingerprint { get; set; }
 
-[JsonPropertyName("protocol")]
-		public PhoneCallProtocolBase Protocol { get; set; }
+[Newtonsoft.Json.JsonProperty("protocol")]
+		public CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase Protocol { get; set; }
 
-[JsonPropertyName("connections")]
-		public IList<PhoneConnectionBase> Connections { get; set; }
+[Newtonsoft.Json.JsonProperty("connections")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.PhoneConnectionBase> Connections { get; set; }
 
-[JsonPropertyName("start_date")]
+[Newtonsoft.Json.JsonProperty("start_date")]
 		public int StartDate { get; set; }
 
         
@@ -96,14 +97,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ParticipantId = reader.Read<int>();
 			GAOrB = reader.Read<byte[]>();
 			KeyFingerprint = reader.Read<long>();
-			Protocol = reader.Read<PhoneCallProtocolBase>();
-			Connections = reader.ReadVector<PhoneConnectionBase>();
+			Protocol = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase>();
+			Connections = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PhoneConnectionBase>();
 			StartDate = reader.Read<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "phoneCall";
+		    return "phoneCall";
 		}
 	}
 }

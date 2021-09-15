@@ -1,19 +1,21 @@
+using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateDialogFilterOrder : UpdateBase
+	public partial class UpdateDialogFilterOrder : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
 	{
 
 
         public static int StaticConstructorId { get => -1512627963; }
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[JsonPropertyName("order")]
+[Newtonsoft.Json.JsonProperty("order")]
 		public IList<int> Order { get; set; }
 
         
@@ -32,11 +34,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Order = reader.ReadVector<int>();
-		}
 
+		}
+				
 		public override string ToString()
 		{
-			return "updateDialogFilterOrder";
+		    return "updateDialogFilterOrder";
 		}
 	}
 }

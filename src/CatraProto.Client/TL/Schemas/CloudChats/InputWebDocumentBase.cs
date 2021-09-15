@@ -1,5 +1,4 @@
 using CatraProto.TL;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
 #nullable disable
@@ -8,16 +7,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class InputWebDocumentBase : IObject
     {
 
-[JsonPropertyName("url")]
+[Newtonsoft.Json.JsonProperty("url")]
 		public abstract string Url { get; set; }
 
-[JsonPropertyName("size")]
+[Newtonsoft.Json.JsonProperty("size")]
 		public abstract int Size { get; set; }
 
-[JsonPropertyName("mime_type")]
+[Newtonsoft.Json.JsonProperty("mime_type")]
 		public abstract string MimeType { get; set; }
 
-[JsonPropertyName("attributes")]
+[Newtonsoft.Json.JsonProperty("attributes")]
 		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase> Attributes { get; set; }
 
         public abstract void UpdateFlags();
