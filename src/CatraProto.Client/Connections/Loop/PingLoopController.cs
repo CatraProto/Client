@@ -6,13 +6,14 @@ using Serilog;
 
 namespace CatraProto.Client.Connections.Loop
 {
-    class PingLoop : PeriodicLoop
+    //TODO Loop implementation
+    class PingLoopController : PeriodicLoopController
     {
         private readonly Random _random = new Random();
         private readonly Connection _connection;
         private readonly ILogger _logger;
 
-        public PingLoop(Connection connection, ILogger logger) : base(TimeSpan.FromSeconds(5))
+        public PingLoopController(Connection connection, ILogger logger) : base(TimeSpan.FromSeconds(5), logger)
         {
             _connection = connection;
             _logger = logger;
@@ -25,17 +26,23 @@ namespace CatraProto.Client.Connections.Loop
             {
                 try
                 {
-                    await StateSignaler.WaitStateAsync(false, default, ResumableSignalState.Resume, ResumableSignalState.Start);
+                    //TODO: Fix
+                    //await StateSignaler.WaitStateAsync(false, default, ResumableSignalState.Resume, ResumableSignalState.Start);
                     _logger.Information("Sending ping to server");
                     await _connection.MtProtoState.Api.MtProtoApi.PingDelayDisconnectAsync(_random.Next(), 5);
                     _logger.Information("Received pong from server");
                 }
-                catch (OperationCanceledException e) when (e.CancellationToken == GetShutdownToken())
+                catch (OperationCanceledException e)
                 {
                     _logger.Information("Ping loop shutdown");
                     break;
                 }
             }
+        }
+
+        protected override void LoopFaulted(Exception e)
+        {
+            throw new NotImplementedException();
         }
     }
 }

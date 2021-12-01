@@ -17,7 +17,8 @@ using Serilog;
 
 namespace CatraProto.Client.Connections.Loop
 {
-    class SendLoop : GenericLoop
+    //TODO: Impl
+    class SendLoopController : GenericLoopController
     {
         private readonly Task<(int Loop, SendResult Result)>?[] _encryptedTasks = new Task<(int Loop, SendResult Result)>[3];
         private List<MessageItem> _pendingMessages = new List<MessageItem>();
@@ -28,18 +29,18 @@ namespace CatraProto.Client.Connections.Loop
         private readonly ILogger _logger;
         private int _startTime;
 
-        public SendLoop(Connection connection, ILogger logger)
+        public SendLoopController(Connection connection, ILogger logger) : base(logger)
         {
             _connection = connection;
             _messagesHandler = _connection.MessagesHandler;
             _mtProtoState = _connection.MtProtoState;
-            _logger = logger.ForContext<SendLoop>();
+            _logger = logger.ForContext<SendLoopController>();
             Task.Run(Loop);
         }
 
         private async Task Loop()
         {
-            await StateSignaler.WaitStateAsync(false, default, SignalState.Start);
+            /*await StateSignaler.WaitStateAsync(false, default, SignalState.Start);
             _logger.Information("Listening for outgoing messages on connection {Info}...", _connection.ConnectionInfo);
             while (true)
             {
@@ -83,7 +84,7 @@ namespace CatraProto.Client.Connections.Loop
                 {
                     _logger.Error(e, "Exception thrown on SendLoop for {Info}", _connection.ConnectionInfo);
                 }
-            }
+            }*/
         }
 
         private async Task LoopTickAsync(CancellationToken shutdownToken)

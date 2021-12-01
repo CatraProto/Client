@@ -12,7 +12,8 @@ using Serilog;
 
 namespace CatraProto.Client.Connections.MessageScheduling.Trackers
 {
-    class MessagesAckTracker : PeriodicLoop
+    //TODO: Impl
+    class MessagesAckTracker : PeriodicLoopController
     {
         private readonly ConcurrentDictionary<long, MessageItem> _messages = new ConcurrentDictionary<long, MessageItem>();
         private readonly AcknowledgementHandler _serverAcksHandler;
@@ -20,7 +21,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
         private readonly MessagesQueue _messagesQueue;
         private readonly ILogger _logger;
 
-        public MessagesAckTracker(MessagesQueue messagesQueue, ILogger logger) : base(TimeSpan.FromMinutes(4))
+        public MessagesAckTracker(MessagesQueue messagesQueue, ILogger logger) : base(TimeSpan.FromMinutes(4), logger)
         {
             _logger = logger.ForContext<MessagesAckTracker>();
             _serverAcksHandler = new AcknowledgementHandler(logger);
@@ -33,9 +34,8 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
         {
             while (true)
             {
-                SetLoopStopped();
                 return;
-                await StateSignaler.WaitStateAsync(false, default, ResumableSignalState.Resume, ResumableSignalState.Start);
+                //await StateSignaler.WaitStateAsync(false, default, ResumableSignalState.Resume, ResumableSignalState.Start);
                 _logger.Information("aaaaa");
             }
         }
@@ -104,6 +104,11 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
             {
                 _logger.Verbose("Not acknowledging message [{MId}]({MObj}) because it's not content related", body, messageId);
             }
+        }
+
+        protected override void LoopFaulted(Exception e)
+        {
+            throw new NotImplementedException();
         }
     }
 }

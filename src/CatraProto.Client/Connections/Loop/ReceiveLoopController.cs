@@ -12,16 +12,17 @@ using Serilog;
 
 namespace CatraProto.Client.Connections.Loop
 {
-    class ReceiveLoop : GenericLoop
+    //TODO Loop implementation
+    class ReceiveLoopController : GenericLoopController
     {
         private readonly MessagesDispatcher _messagesDispatcher;
         private readonly MTProtoState _mtProtoState;
         private readonly Connection _connection;
         private readonly ILogger _logger;
 
-        public ReceiveLoop(Connection connection, ILogger logger)
+        public ReceiveLoopController(Connection connection, ILogger logger) : base(logger)
         {
-            _logger = logger.ForContext<ReceiveLoop>();
+            _logger = logger.ForContext<ReceiveLoopController>();
             _connection = connection;
             _messagesDispatcher = connection.MessagesDispatcher;
             _mtProtoState = connection.MtProtoState;
@@ -30,16 +31,16 @@ namespace CatraProto.Client.Connections.Loop
 
         private async Task Loop()
         {
-            while (true)
+            /*while (true)
             {
                 try
                 {
-                    if (StateSignaler.GetCurrentState(true) == SignalState.Stop)
+                    //if (StateSignaler.GetCurrentState(true) == SignalState.Stop)
                     {
                         _logger.Information("ReceiveLoop for connection {Info} shutdown", _connection.ConnectionInfo);
-                        SetLoopStopped();
+                        SetLoopState(LoopState.Stopped);
 
-                        await StateSignaler.WaitStateAsync(false, default, SignalState.Start);
+                        //await StateSignaler.WaitStateAsync(false, default, SignalState.Start);
                         _logger.Information("Listening for incoming messages on connection {Info}...", _connection.ConnectionInfo);
                     }
                 }
@@ -53,7 +54,7 @@ namespace CatraProto.Client.Connections.Loop
                 }
 
                 var protocol = _connection.Protocol!;
-                var shutdownToken = GetShutdownToken();
+                //var shutdownToken = GetShutdownToken();
                 try
                 {
                     var message = await protocol.Reader!.ReadMessageAsync(shutdownToken);
@@ -111,7 +112,7 @@ namespace CatraProto.Client.Connections.Loop
             }
 
             _logger.Information("Dispose ReceiveLoop for connection {Info}", _connection.ConnectionInfo);
-            SetLoopStopped();
+            SetLoopStopped();*/
         }
     }
 }

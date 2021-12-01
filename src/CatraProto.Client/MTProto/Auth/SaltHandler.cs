@@ -10,13 +10,14 @@ using Serilog;
 
 namespace CatraProto.Client.MTProto.Auth
 {
-    class SaltHandler : PeriodicLoop
+    //TODO: Impl
+    class SaltHandler : PeriodicLoopController
     {
         private readonly ConcurrentDictionary<long, FutureSalt> _futureSalts = new ConcurrentDictionary<long, FutureSalt>();
         private readonly ILogger _logger;
         private readonly Api _api;
 
-        public SaltHandler(Api api, TemporaryAuthKey? temporaryAuthKey, ILogger logger) : base(TimeSpan.FromMinutes(1))
+        public SaltHandler(Api api, TemporaryAuthKey? temporaryAuthKey, ILogger logger) : base(TimeSpan.FromMinutes(1), logger)
         {
             _logger = logger.ForContext<SaltHandler>();
             _api = api;
@@ -32,7 +33,7 @@ namespace CatraProto.Client.MTProto.Auth
         {
             while (true)
             {
-                await StateSignaler.WaitStateAsync(false, default, ResumableSignalState.Resume, ResumableSignalState.Start);
+                //await StateSignaler.WaitStateAsync(false, default, ResumableSignalState.Resume, ResumableSignalState.Start);
                 _logger.Information("Cleaning up salts");
                 foreach (var (key, value) in _futureSalts)
                 {
@@ -125,7 +126,8 @@ namespace CatraProto.Client.MTProto.Auth
             if (clear)
             {
                 //Since we cleared the salts, we must wakeup the loop and fetch some again
-                Resume();
+                //Todo: fix
+                //Resume();
             }
         }
 
@@ -138,6 +140,11 @@ namespace CatraProto.Client.MTProto.Auth
             }
 
             SetSalt(authKey.ServerSalt!.Value, false);
+        }
+
+        protected override void LoopFaulted(Exception e)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -24,7 +24,7 @@ namespace CatraProto.TL.Generator.UnitTests.OptimizerTests
 			var optimizer = new Optimizer(parser);
 
 			optimizer.FixNamesCollision();
-			Assert.Equal("Peer_", optimizer.Objects[2].Parameters[0].NamingInfo.PascalCaseName);
+			Assert.Equal("PeerField", optimizer.Objects[2].Parameters[0].NamingInfo.PascalCaseName);
 		}
 
 		[Fact]
@@ -40,8 +40,8 @@ namespace CatraProto.TL.Generator.UnitTests.OptimizerTests
 			var optimizer = new Optimizer(parser);
 
 			optimizer.FixNamesCollision();
-			Assert.Equal("UUpdates", optimizer.Objects[0].NamingInfo.PascalCaseName);
-			Assert.Equal("UUpdates", optimizer.Objects[1].NamingInfo.PascalCaseName);
+			Assert.Equal("ApiUpdates", optimizer.Objects[0].NamingInfo.PascalCaseName);
+			Assert.Equal("ApiUpdates", optimizer.Objects[1].NamingInfo.PascalCaseName);
 		}
 	}
 }

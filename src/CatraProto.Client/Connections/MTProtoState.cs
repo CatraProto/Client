@@ -30,7 +30,8 @@ namespace CatraProto.Client.Connections
 
         public void StartLoops()
         {
-            SaltHandler.Start();
+            //TODO: fix
+            //SaltHandler.Start();
         }
     }
 }

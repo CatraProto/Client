@@ -23,9 +23,9 @@ namespace CatraProto.Client.Connections
 
         private readonly SingleCallAsync<CancellationToken> _singleCallAsync;
         private readonly ConnectionProtocol _protocolType;
-        private SendLoop? _writeLoop;
-        private ReceiveLoop? _readLoop;
-        private PingLoop? _pingLoop;
+        private SendLoopController? _writeLoop;
+        private ReceiveLoopController? _readLoop;
+        private PingLoopController? _pingLoop;
         private readonly ILogger _logger;
 
         public Connection(ConnectionInfo connectionInfo, ClientSession clientSession)
@@ -60,19 +60,22 @@ namespace CatraProto.Client.Connections
             _logger.Information("Stopping loops and creating protocol");
             if (_writeLoop != null)
             {
-                _writeLoop.Stop();
+                //TODO: FIX
+                //_writeLoop.Stop();
                 await _writeLoop.GetShutdownTask();
             }
 
             if (_readLoop != null)
             {
-                _readLoop.Stop();
+                //TODO: FIX
+                //_readLoop.Stop();
                 await _readLoop.GetShutdownTask();
             }
 
             if (_pingLoop != null)
             {
-                _pingLoop.Stop();
+                //TODO: FIX
+                //_pingLoop.Stop();
                 //await _pingLoop.GetShutdownTask();
             }
 
@@ -103,36 +106,38 @@ namespace CatraProto.Client.Connections
 
         private void StartLoops()
         {
-            _writeLoop ??= new SendLoop(this, _logger);
-            _readLoop ??= new ReceiveLoop(this, _logger);
-            _pingLoop ??= new PingLoop(this, _logger);
+            _writeLoop ??= new SendLoopController(this, _logger);
+            _readLoop ??= new ReceiveLoopController(this, _logger);
+            _pingLoop ??= new PingLoopController(this, _logger);
 
-            _pingLoop.Start();
-            _writeLoop.Start();
-            _readLoop.Start();
+            //TODO: FIX
+            //_pingLoop.Start();
+            //_writeLoop.Start();
+            //_readLoop.Start();
         }
 
         public async ValueTask DisposeAsync()
         {
             var task = MessagesHandler.MessagesTrackers.MessagesAckTracker.GetShutdownTask();
-            MessagesHandler.MessagesTrackers.MessagesAckTracker.Stop();
+            //TODO: FIX
+            //MessagesHandler.MessagesTrackers.MessagesAckTracker.Stop();
             await task;
             
             if (_writeLoop != null)
             {
-                _writeLoop.Stop();
+                //_writeLoop.Stop();
                 await _writeLoop.GetShutdownTask();
             }
 
             if (_readLoop != null)
             {
-                _readLoop.Stop();
+                //_readLoop.Stop();
                 await _readLoop.GetShutdownTask();
             }
 
             if (_pingLoop != null)
             {
-                _pingLoop.Stop();
+                //_pingLoop.Stop();
                 //await _pingLoop.GetShutdownTask();
             }
 

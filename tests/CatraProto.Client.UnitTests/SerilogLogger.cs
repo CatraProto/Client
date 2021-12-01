@@ -6,13 +6,13 @@ namespace CatraProto.Client.UnitTests
 {
 	public class SerilogLogger
 	{
-		public static ILogger CreateLogger(ITestOutputHelper helper)
+		public static ILogger CreateLogger<T>(ITestOutputHelper helper)
 		{
 			return new LoggerConfiguration()
 				.WriteTo.TestOutput(helper, LogEventLevel.Debug,
-					"[{Timestamp:HH:mm:ss} {Level:u3}][{Session}][{SourceContext}] {Message:lj}{NewLine}{Exception}")
+					"[{Timestamp:HH:mm:ss} {Level:u3}][{SourceContext}] {Message:lj}{NewLine}{Exception}")
 				.MinimumLevel.Debug()
-				.CreateLogger();
+				.CreateLogger().ForContext<T>();
 		}
 	}
 }

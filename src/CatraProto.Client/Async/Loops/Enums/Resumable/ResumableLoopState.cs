@@ -2,8 +2,10 @@ namespace CatraProto.Client.Async.Loops.Enums.Resumable
 {
     public enum ResumableLoopState
     {
-        Stopped,
+        NotYetStarted,
+        Running,
         Suspended,
-        Running
+        Stopped,
+        Faulted
     }
 }

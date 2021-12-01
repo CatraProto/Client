@@ -5,11 +5,12 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Async.Collections;
+using CatraProto.Client.Async.Signalers.Exceptions;
 using CatraProto.Client.Async.Signalers.Interfaces;
 
 namespace CatraProto.Client.Async.Signalers
 {
-    public class AsyncStateSignaler<T> : IStateSignaler<T>, IDisposable where T : Enum
+    public class AsyncStateSignaler<T> : IStateSignaler<T>, IDisposable
     {
         private readonly EqualityComparer<T> _equalityComparer = EqualityComparer<T>.Default;
         private readonly AsyncQueue<T> _asyncQueue = new AsyncQueue<T>();
@@ -17,46 +18,11 @@ namespace CatraProto.Client.Async.Signalers
         private CancellationToken? _cancellationToken;
         private bool _isObjectDisposed;
 
-        public AsyncStateSignaler(T initialState)
+        public AsyncStateSignaler(T? initialState)
         {
-            _asyncQueue.Enqueue(initialState);
-        }
-
-        public void SetCancellationToken(CancellationToken cancellationToken)
-        {
-            lock (_mutex)
+            if (initialState is not null)
             {
-                ThrowIfDisposed();
-                _cancellationToken = cancellationToken;
-            }
-        }
-
-        public bool TryGetLastReadState(out T? state)
-        {
-            return _asyncQueue.TryGetLastElement(out state);
-        }
-
-        public T GetCurrentState(bool setAsRead)
-        {
-            lock (_mutex)
-            {
-                ThrowIfDisposed();
-
-                T toReturn;
-                if (_asyncQueue.TryGetFirstElement(out var item))
-                {
-                    toReturn = item!;
-                    if (setAsRead)
-                    {
-                        _asyncQueue.Dequeue();
-                    }
-                }
-                else
-                {
-                    toReturn = _asyncQueue.GetLastReadElement()!;
-                }
-
-                return toReturn;
+                _asyncQueue.Enqueue(initialState);
             }
         }
 
@@ -65,7 +31,7 @@ namespace CatraProto.Client.Async.Signalers
             lock (_mutex)
             {
                 ThrowIfDisposed();
-                if (_asyncQueue.TryGetLastElement(out var lastState))
+                if (_asyncQueue.TryGetLastEnqueued(out var lastState))
                 {
                     if (_equalityComparer.Equals(state, lastState) && !force)
                     {
@@ -77,12 +43,67 @@ namespace CatraProto.Client.Async.Signalers
             }
         }
 
+        public void Signal(T state)
+        {
+            lock (_mutex)
+            {
+                Signal(state, false);
+            }
+        }
+
+        public T? GetLastSignaled()
+        {
+            lock (_mutex)
+            {
+                _asyncQueue.TryGetLastEnqueued(out var item);
+                return item;   
+            }
+        }
+        
+        public T? GetCurrentState(bool setAsRead)
+        {
+            lock (_mutex)
+            {
+                ThrowIfDisposed();
+                T? toReturn;
+                if (_asyncQueue.TryPeek(out var item))
+                {
+                    toReturn = item!;
+                    if (setAsRead)
+                    {
+                        _asyncQueue.Dequeue();
+                    }
+                }
+                else
+                {
+                    _asyncQueue.TryGetLastDequeued(out var last);
+                    return last;
+                }
+
+                return toReturn;
+            }
+        }
+
+        public Task<T> WaitAsync(CancellationToken token = default)
+        {
+            ValueTask<T> task;
+            lock (_mutex)
+            {
+                ThrowIfDisposed();
+                task = _asyncQueue.DequeueAsync(token);
+            }
+
+
+            return task.AsTask();
+        }
+
         public async ValueTask<T> WaitStateAsync(bool alwaysWait, CancellationToken token = default, params T[] targetStates)
         {
-            if (!alwaysWait)
+            //No need to lock here, the signaler is designed to have only one reader at a time
+            if (!alwaysWait && GetCurrentState(false) is not null)
             {
                 var currentState = GetCurrentState(true);
-                if (IsStateInArray(targetStates, currentState, out var foundState))
+                if (IsStateInArray(targetStates, currentState!, out var foundState))
                 {
                     return foundState!;
                 }
@@ -90,6 +111,7 @@ namespace CatraProto.Client.Async.Signalers
 
             while (true)
             {
+                //this actually will set it as read no matter what, but it does not matter
                 var currentState = await WaitAsync(token);
                 if (IsStateInArray(targetStates, currentState, out var foundState))
                 {
@@ -100,14 +122,15 @@ namespace CatraProto.Client.Async.Signalers
 
         private bool IsStateInArray(T[] states, T targetState, [MaybeNullWhen(false)] out T foundState)
         {
-            for (var index = 0; index < states.Length; index++)
+            foreach (var state in states)
             {
-                var state = states[index];
-                if (_equalityComparer.Equals(state, targetState))
+                if (!_equalityComparer.Equals(state, targetState))
                 {
-                    foundState = state;
-                    return true;
+                    continue;
                 }
+
+                foundState = state;
+                return true;
             }
 
             foundState = default;
@@ -134,41 +157,21 @@ namespace CatraProto.Client.Async.Signalers
             }
         }
 
+        public void SetCancellationToken(CancellationToken cancellationToken)
+        {
+            lock (_mutex)
+            {
+                ThrowIfDisposed();
+                _cancellationToken = cancellationToken;
+            }
+        }
+
         public void Dispose()
         {
             lock (_mutex)
             {
                 _isObjectDisposed = true;
                 _asyncQueue.Dispose();
-            }
-        }
-
-        public async Task<T> WaitAsync(CancellationToken token = default)
-        {
-            ValueTask<T> task;
-            lock (_mutex)
-            {
-                task = _asyncQueue.DequeueAsync(token);
-            }
-
-            try
-            {
-                return await task;
-            }
-            catch (ObjectDisposedException)
-            {
-                ThrowIfDisposed();
-
-                //unreachable
-                return default!;
-            }
-        }
-
-        public void Signal(T state)
-        {
-            lock (_mutex)
-            {
-                Signal(state, false);
             }
         }
     }

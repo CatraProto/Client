@@ -1,8 +1,8 @@
 namespace CatraProto.Client.Async.Loops.Enums.Generic
 {
-    public enum LoopState
+    public enum GenericSignalState
     {
-        Stopped,
-        Running
+        Stop,
+        Start
     }
 }

@@ -1,22 +1,23 @@
 using System;
-using System.Threading;
+using System.Timers;
+
 
 namespace CatraProto.Client.Async.Signalers
 {
     public class AsyncAutoSignaler : IDisposable
     {
         public delegate void SignalEvent();
-
         private readonly AsyncSignaler _signaler = new AsyncSignaler(false);
         private readonly object _mutex = new object();
         private readonly Timer _timer;
-        private int _interval;
         public event SignalEvent? OnSignal;
 
         public AsyncAutoSignaler(TimeSpan timeSpan)
         {
-            _timer = new Timer(_ => Signal(), this, (int)timeSpan.TotalMilliseconds, (int)timeSpan.TotalMilliseconds);
-            _interval = (int)timeSpan.TotalMilliseconds;
+            _timer = new Timer();
+            _timer.Interval = timeSpan.TotalMilliseconds;
+            _timer.AutoReset = true;
+            _timer.Elapsed += (_, _) => Signal();
         }
 
         public void Signal()
@@ -25,7 +26,6 @@ namespace CatraProto.Client.Async.Signalers
             {
                 OnSignal?.Invoke();
                 _signaler.SignalOnce();
-                _timer.Change(_interval, _interval);
             }
         }
 
@@ -33,19 +33,18 @@ namespace CatraProto.Client.Async.Signalers
         {
             lock (_mutex)
             {
-                _interval = (int)timeSpan.TotalMilliseconds;
-                ResetTimer();
+                _timer.Interval = timeSpan.TotalMilliseconds;
             }
         }
 
-        public void ResetTimer()
+        public void Start()
         {
             lock (_mutex)
             {
-                _timer.Change(_interval, _interval);
+                _timer.Start();
             }
         }
-
+        
         public void Dispose()
         {
             lock (_mutex)
