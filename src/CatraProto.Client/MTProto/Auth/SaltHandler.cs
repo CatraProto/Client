@@ -62,7 +62,7 @@ namespace CatraProto.Client.MTProto.Auth
                 var oldestSalt = receivedSalts.Aggregate((first, second) => first.ValidSince > second.ValidSince ? first : second);
                 var unixTimeSeconds = oldestSalt.ValidSince - DateTimeOffset.UtcNow.ToUnixTimeSeconds();
                 _logger.Information("Requesting new salts in {UnixTimeSeconds} seconds", unixTimeSeconds);
-                ChangeInterval(TimeSpan.FromSeconds(unixTimeSeconds));
+                await Task.Delay(TimeSpan.FromSeconds(unixTimeSeconds));
             }
         }
 
@@ -131,7 +131,7 @@ namespace CatraProto.Client.MTProto.Auth
             }
         }
 
-        private void OnAuthKeyChanged(AuthKey authKey, bool bindCompleted)
+        private void OnAuthKeyChanged(AuthKeyObject authKeyGen, bool bindCompleted)
         {
             //We have already received the AuthKey because the update is sent both on the generation and the binding of the key 
             if (bindCompleted)
@@ -139,7 +139,7 @@ namespace CatraProto.Client.MTProto.Auth
                 return;
             }
 
-            SetSalt(authKey.ServerSalt!.Value, false);
+            SetSalt(authKeyGen.ServerSalt, false);
         }
 
         protected override void LoopFaulted(Exception e)

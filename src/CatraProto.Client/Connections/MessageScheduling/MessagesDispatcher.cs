@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using CatraProto.Client.Connections.MessageScheduling.ConnectionMessages;
 using CatraProto.Client.Connections.MessageScheduling.ConnectionMessages.Interfaces;
 using CatraProto.Client.MTProto.Deserializers;
@@ -6,6 +7,7 @@ using CatraProto.Client.MTProto.Rpc.RpcErrors.Migrations.Interfaces;
 using CatraProto.Client.MTProto.Session;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.Client.TL.Schemas.CloudChats;
+using CatraProto.Client.TL.Schemas.CloudChats.Help;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.Client.Updates;
 using CatraProto.TL;
@@ -19,17 +21,19 @@ namespace CatraProto.Client.Connections.MessageScheduling
     {
         public UpdatesHandler? UpdatesHandler { get; set; }
         private readonly MessagesValidator _messagesValidator;
+        private readonly Connection _connection;
         private readonly MessagesHandler _messagesHandler;
         private readonly RpcDeserializer _rpcDeserializer;
         private readonly ClientSession _clientSession;
         private readonly MTProtoState _mtProtoState;
         private readonly ILogger _logger;
 
-        public MessagesDispatcher(MessagesHandler messagesHandler, MTProtoState mtProtoState, ClientSession clientSession)
+        public MessagesDispatcher(Connection connection, MessagesHandler messagesHandler, MTProtoState mtProtoState, ClientSession clientSession)
         {
             _rpcDeserializer = new RpcDeserializer(messagesHandler.MessagesTrackers.MessageCompletionTracker, clientSession.Logger);
             _messagesValidator = new MessagesValidator(messagesHandler, mtProtoState, clientSession.Logger);
             _logger = clientSession.Logger.ForContext<MessagesDispatcher>();
+            _connection = connection;
             _messagesHandler = messagesHandler;
             _mtProtoState = mtProtoState;
             _clientSession = clientSession;
@@ -48,12 +52,14 @@ namespace CatraProto.Client.Connections.MessageScheduling
                     ErrorMessage = "Protocol error"
                 };
 
+                //It could also be an error during the key exchange, but if everything is implemented correctly it should never happen
                 _logger.Warning("Received protocol error {Error} from server", error);
-                if (!_messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(0, rpcError))
+                Task.Run(async () =>
                 {
-                    _logger.Information("Server forgot authorization key, regenerating");
-                    _mtProtoState.KeysHandler.TemporaryAuthKey.GetAuthKeyAsync(forceGeneration: true);
-                }
+                    _logger.Information("Server forgot authorization key, regenerating and rescheduling messages");
+                    _mtProtoState.KeysHandler.TemporaryAuthKey.SetExpired();
+                    await _connection.RegenKey();
+                });
 
                 return;
             }
@@ -93,7 +99,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
                         HandlePong(pong);
                         break;
                     case MsgsAck msgsAck:
-                        _messagesHandler.MessagesTrackers.MessagesAckTracker.ServerSentAcks(msgsAck);
+                        _messagesHandler.MessagesTrackers.MessagesAckTracker.ServerSentAcks(msgsAck, GetExecInfo());
                         break;
                     case FutureSalts futureSalts:
                         HandleFutureSalts(futureSalts);
@@ -110,7 +116,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
             }
             else
             {
-                _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(0, obj);
+                _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(0, obj, GetExecInfo());
             }
         }
 
@@ -125,7 +131,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
 
         private void HandlePong(Pong pong)
         {
-            _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(pong.MsgId, pong);
+            _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(pong.MsgId, pong, GetExecInfo());
         }
 
         private void HandleContainer(MsgContainer container, Reader reader)
@@ -138,7 +144,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
 
         private void HandleFutureSalts(FutureSalts futureSalts)
         {
-            _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(futureSalts.ReqMsgId, futureSalts);
+            _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(futureSalts.ReqMsgId, futureSalts, GetExecInfo());
         }
 
         private async void HandleRpcResult(RpcObject rpcObject)
@@ -162,7 +168,12 @@ namespace CatraProto.Client.Connections.MessageScheduling
                 }
             }
 
-            _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(rpcObject.MessageId, rpcObject.Response);
+            _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(rpcObject.MessageId, rpcObject.Response, GetExecInfo());
+        }
+
+        private ExecutionInfo GetExecInfo()
+        {
+            return new ExecutionInfo(_mtProtoState.Connection.ConnectionInfo);
         }
     }
 }

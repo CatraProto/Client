@@ -6,10 +6,11 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
     {
         public MessageCompletion MessageCompletion { get; }
         public MessageState MessageState { get; set; }
-        public long? MessageId { get; set; }
+        public MessageProtocolInfo MessageProtocolInfo { get; set; }
 
         public MessageStatus(MessageCompletion messageCompletion)
         {
+            MessageProtocolInfo = new MessageProtocolInfo();
             MessageCompletion = messageCompletion;
         }
     }

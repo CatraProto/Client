@@ -17,7 +17,7 @@ namespace CatraProto.Client.Updates
         private UpdatesHandler(SessionData sessionData, Api api, ILogger logger)
         {
             _commonState = sessionData.UpdatesStates.GetState();
-            _logger = logger;
+            _logger = logger.ForContext<UpdatesHandler>();
             _api = api;
         }
 

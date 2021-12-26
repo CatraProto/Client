@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using Microsoft.VisualBasic;
 
 namespace CatraProto.Client.Crypto
 {
@@ -29,6 +30,7 @@ namespace CatraProto.Client.Crypto
             }
 
             var output = new byte[first.Length];
+
             for (var i = 0; i < first.Length; i++)
             {
                 output[i] = (byte)(first[i] ^ second[i]);
@@ -36,6 +38,7 @@ namespace CatraProto.Client.Crypto
 
             return output;
         }
+        
 
         public static Tuple<byte[], byte[]> GetFastPq(ulong pq)
         {

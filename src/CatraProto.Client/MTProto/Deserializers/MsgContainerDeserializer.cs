@@ -25,8 +25,7 @@ namespace CatraProto.Client.MTProto.Deserializers
             {
                 Body = reader.Read<IObject>();
             }
-            catch (DeserializationException exception) when (exception.ErrorCode ==
-                                                             DeserializationException.DeserializationErrors.ProviderReturnedNull)
+            catch (DeserializationException exception) when (exception.ErrorCode == DeserializationException.DeserializationErrors.ProviderReturnedNull)
             {
                 var stream = reader.Stream;
                 stream.Seek(currentPosition + Bytes, SeekOrigin.Begin);

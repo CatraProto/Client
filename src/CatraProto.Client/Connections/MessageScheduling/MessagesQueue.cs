@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Async.Collections;
@@ -11,53 +14,46 @@ using Serilog;
 
 namespace CatraProto.Client.Connections.MessageScheduling
 {
-    class MessagesQueue : IDisposable
+    class MessagesQueue
     {
         public int OutgoingCount
         {
-            get => _asyncQueue.GetCount();
+            get => _concurrentQueue.Count;
         }
 
-        private readonly AsyncQueue<MessageItem> _asyncQueue = new AsyncQueue<MessageItem>();
+        private readonly ConcurrentQueue<MessageItem> _concurrentQueue = new ConcurrentQueue<MessageItem>();
         private readonly MessagesHandler _messagesHandler;
         private readonly ILogger _logger;
 
         public MessagesQueue(MessagesHandler messagesHandler, ILogger logger)
         {
             _messagesHandler = messagesHandler;
-            _logger = logger;
+            _logger = logger.ForContext<MessagesQueue>();
         }
 
-        public void EnqueueMessage(IObject body, MessageSendingOptions messageSendingOptions, IRpcMessage? rpcMessage, out Task? completionTask, CancellationToken requestCancellationToken)
+        public void EnqueueMessage(IObject body, MessageSendingOptions messageSendingOptions, IRpcMessage? rpcMessage, out Task completionTask, CancellationToken requestCancellationToken)
         {
             var taskCompletionSource = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
-            
             completionTask = taskCompletionSource.Task;
             var messageCompletion = new MessageCompletion(taskCompletionSource, rpcMessage, body is IMethod method ? method : null);
             var messageStatusTracker = new MessageStatus(messageCompletion);
             var messageItem = new MessageItem(body, messageSendingOptions, messageStatusTracker, _logger, requestCancellationToken);
-            EnqueueMessage(messageItem);
+            messageItem.BindTo(_messagesHandler);
+            messageItem.SetToSend();
         }
 
-        public void EnqueueMessage(MessageItem item)
+        public void PutInQueue(MessageItem item, bool wakeUpLoop)
         {
-            item.BindTo(_messagesHandler);
-            item.SetToSend();
-        }
-
-        public void PutInQueue(MessageItem item)
-        {
-            _asyncQueue.Enqueue(item);
+            _concurrentQueue.Enqueue(item);
+            if (wakeUpLoop)
+            {
+                _messagesHandler.Connection.WakeUpLoop();
+            }
         }
         
-        public ValueTask<MessageItem> GetMessageAsync(CancellationToken token = default)
+        public bool TryGetMessage([MaybeNullWhen(false)]out MessageItem messageItem)
         {
-            return _asyncQueue.DequeueAsync(token);
-        }
-
-        public void Dispose()
-        {
-            _asyncQueue.Dispose();
+            return _concurrentQueue.TryDequeue(out messageItem);
         }
     }
 }

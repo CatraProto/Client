@@ -10,7 +10,7 @@ namespace CatraProto.Client.Crypto
 {
     class Pfs
     {
-        public static byte[] Encrypt(AuthKey permAuthKey, BindAuthKeyInner inner, long messageId)
+        public static byte[] Encrypt(AuthKeyObject permAuthKey, BindAuthKeyInner inner, long messageId)
         {
             using (var encryptedWriter = new BinaryWriter(new MemoryStream()))
             {
@@ -28,10 +28,10 @@ namespace CatraProto.Client.Crypto
                     CryptoTools.AddPadding(plainWriter.BaseStream, 16);
                     plainToByte = ((MemoryStream)plainWriter.BaseStream).ToArray();
 
-                    using var encryptor = permAuthKey.CreateEncryptorV1(msgKey, true);
+                    using var encryptor = AesCryptoCreator.CreateEncryptorV1(permAuthKey.KeyArray, msgKey, true);
                     var encryptedData = encryptor.Encrypt(plainToByte);
 
-                    encryptedWriter.Write(permAuthKey.AuthKeyId!.Value);
+                    encryptedWriter.Write(permAuthKey.AuthKeyId);
                     encryptedWriter.Write(msgKey);
                     encryptedWriter.Write(encryptedData);
                 }

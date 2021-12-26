@@ -107,7 +107,6 @@ namespace CatraProto.Client.Async.Collections
                 }
             }
         }
-
         
         public bool TryGetLastEnqueued([MaybeNullWhen(false)] out T item)
         {

@@ -32,7 +32,7 @@ namespace CatraProto.Client.Flows.LoginFlow
             var api = connection.MtProtoState.Api;
             _logger.Information("Sending authorization code to {Number}", phoneNumber);
             var auth = await api.CloudChatsApi.Auth.SendCodeAsync(phoneNumber, _clientSettings.ApiSettings.ApiId, _clientSettings.ApiSettings.ApiHash, codeSettings);
-            if (auth.Error != null)
+            if (auth.RpcCallFailed)
             {
                 _logger.Error("Login failed due to {Error}", auth.Error);
                 return new LoginFailed(auth.Error);
@@ -47,13 +47,13 @@ namespace CatraProto.Client.Flows.LoginFlow
             var connection = await _connectionPool.GetConnectionAsync();
             var api = connection.MtProtoState.Api;
             var auth = await api.CloudChatsApi.Auth.ImportBotAuthorizationAsync(0, _clientSettings.ApiSettings.ApiId, _clientSettings.ApiSettings.ApiHash, token);
-            if (auth.Error != null)
+            if (auth.RpcCallFailed)
             {
                 return new LoginFailed(auth.Error);
             }
 
             var user = (User)((Authorization)auth.Response).User;
-            _sessionData.Authorization.SetAuthorized(true, connection.ConnectionInfo.DcId, user.Id, user.AccessHash!.Value);
+            _sessionData.Authorization.SetAuthorized(true, auth.ExecutionInfo.ExecutedBy.DcId, user.Id, user.AccessHash!.Value);
             _logger.Information("Successfully logged in as @{BotUsername}", user.Username);
             return new LoginSuccessful(user);
         }

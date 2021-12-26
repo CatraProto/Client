@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Async.Collections;
-using CatraProto.Client.Async.Signalers.Exceptions;
 using CatraProto.Client.Async.Signalers.Interfaces;
 
 namespace CatraProto.Client.Async.Signalers

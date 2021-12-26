@@ -1,12 +1,12 @@
-namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler.Results
+namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
 {
-    class AuthKeySuccess : AuthKeyResult
+    public class AuthKeyObject
     {
         public byte[] KeyArray { get; }
         public long AuthKeyId { get; }
         public long ServerSalt { get; }
         public int? ExpiresAt { get; }
-        public AuthKeySuccess(byte[] keyArray, long authKeyId, long serverSalt, int? expiresAt)
+        public AuthKeyObject(byte[] keyArray, long authKeyId, long serverSalt, int? expiresAt)
         {
             KeyArray = keyArray;
             AuthKeyId = authKeyId;

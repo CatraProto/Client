@@ -6,6 +6,7 @@ using CatraProto.Client.Async.Loops;
 using CatraProto.Client.Async.Loops.Enums.Resumable;
 using CatraProto.Client.Connections.MessageScheduling.Items;
 using CatraProto.Client.MTProto.Auth;
+using CatraProto.Client.MTProto.Rpc;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL.Interfaces;
 using Serilog;
@@ -51,7 +52,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
         public void TrackMessage(MessageItem messageItem)
         {
             var messageBody = messageItem.Body;
-            var messageId = messageItem.GetMessageId();
+            var messageId = messageItem.GetProtocolInfo().MessageId;
             if (!messageItem.MessageSendingOptions.IsEncrypted)
             {
                 _logger.Verbose("Not keeping track of message {Message} because it's unencrypted", messageBody);
@@ -77,21 +78,26 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
             _messages.TryRemove(messageId, out _);
         }
 
-        public void ServerSentAcks(MsgsAck msgsAck)
+        public void ServerSentAcks(MsgsAck msgsAck, ExecutionInfo executionInfo)
         {
             foreach (var msgsAckMsgId in msgsAck.MsgIds)
             {
                 if (_messages.TryRemove(msgsAckMsgId, out var item))
                 {
                     _logger.Information("Received acknowledgment for message {Id} by the server", msgsAckMsgId);
-                    item.SetAcknowledged();
+                    item.SetAcknowledged(executionInfo);
                 }
             }
         }
 
-        public IEnumerable<MessageItem> GetAcknowledgements()
+        public List<MessageItem> GetAcknowledgements()
         {
             return _serverAcksHandler.GetAckMessages();
+        }
+
+        public void AcknowledgeNext(long messageId)
+        {
+            _serverAcksHandler.SetAsNeedsAck(messageId);
         }
 
         public void AcknowledgeNext(IObject body, long messageId)

@@ -6,12 +6,17 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.MTProto.Session
 {
-    public class SessionManager
+    public class SessionManager : IDisposable
     {
-        internal SessionData SessionData { get; } = new SessionData();
+        internal SessionData SessionData { get; }
         private readonly object _mutex = new object();
         private bool _hasRead;
 
+        public SessionManager()
+        {
+            SessionData = new SessionData(_mutex);
+        }
+        
         public byte[] Save()
         {
             using (var writer = new Writer(MergedProvider.Singleton, new MemoryStream()))
@@ -53,6 +58,14 @@ namespace CatraProto.Client.MTProto.Session
                 {
                     throw new Exception("Please deserialize the session first");
                 }
+            }
+        }
+
+        public void Dispose()
+        {
+            lock (_mutex)
+            {
+                SessionData.Dispose();
             }
         }
     }

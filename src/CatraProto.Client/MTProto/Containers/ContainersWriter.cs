@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using CatraProto.Client.Connections;
@@ -18,63 +19,56 @@ namespace CatraProto.Client.MTProto.Containers
     {
         public const int ContainerMessagesLimit = 1020;
         public const int ContainerBytesLimit = 2 << 15;
-        public byte[]? SerializedContainer { get; set; }
-        public List<Tuple<ContainerMessage, MessageItem>> MessageItems { get; set; } = new List<Tuple<ContainerMessage, MessageItem>>();
-
-        private readonly Writer _currentWriter;
-        private int _currentMessagesCount;
-        private int _currentBytes;
-        private readonly ILogger _logger;
-
-        public ContainersWriter(ILogger logger)
+        public static bool GetContainer(List<MessageItem> messageItems, MTProtoState mtProtoState, [MaybeNullWhen(false)] out List<MessageItem> containerizedItems, [MaybeNullWhen(false)] out byte[] container, ILogger logger)
         {
-            _logger = logger;
-            _currentWriter = new Writer(MergedProvider.Singleton, new MemoryStream());
-            WriteContainer();
-        }
-
-        private void SaveContainer()
-        {
-            _currentWriter.WriteNakedVector(MessageItems.Select(x => x.Item1).ToList());
-            SerializedContainer = ((MemoryStream)_currentWriter.Stream).ToArray();
-            var ser = SerializedContainer.ToObject<MsgContainer>(MergedProvider.Singleton);
-            _currentWriter.Dispose();
-        }
-
-        private void WriteContainer()
-        {
-            _currentWriter.Write(MsgContainer.StaticConstructorId);
-        }
-
-        public void CreateContainer(List<MessageItem> messages, MessagesHandler messagesHandler, MTProtoState mtProtoState)
-        {
-            _logger.Verbose("Generating a container of {Count} messages", messages.Count);
-            foreach (var messageItem in messages)
+            var currentBytes = 0;
+            var currentMessagesCount = 0;
+            logger = logger.ForContext<ContainersWriter>();
+            var fineList = new List<Tuple<MessageItem, byte[]>>();
+            foreach (var messageItem in messageItems)
             {
-                if (SocketTools.TrySerialize(messageItem, _logger, out var serialized))
+                if (SocketTools.TrySerialize(messageItem, logger, out var serialized))
                 {
-                    if (_currentBytes + (serialized!.Length + 8 + 4 + 4) > ContainerBytesLimit || _currentMessagesCount > ContainerMessagesLimit)
+                    if (currentBytes + (serialized.Length + 8 + 4 + 4) > ContainerBytesLimit || currentMessagesCount > ContainerMessagesLimit)
                     {
-                        messagesHandler.MessagesQueue.EnqueueMessage(messageItem);
+                        logger.Information("Postponing {Message} as container size would be too big", messageItem.Body);
+                        messageItem.SetToSend();
                         continue;
                     }
 
-                    var sendingOptions = messageItem.MessageSendingOptions;
-                    var containerMessage = new ContainerMessage
-                    {
-                        MsgId = sendingOptions.SendWithMessageId ?? mtProtoState.MessageIdsHandler.ComputeMessageId(),
-                        Seqno = mtProtoState.SeqnoHandler.ComputeSeqno(messageItem.Body),
-                        Body = serialized
-                    };
-                    MessageItems.Add(new Tuple<ContainerMessage, MessageItem>(containerMessage, messageItem));
-
-                    _currentBytes += serialized.Length + 8 + 4 + 4;
-                    _currentMessagesCount++;
+                    currentMessagesCount++;
+                    currentBytes = serialized.Length + 8 + 4 + 4;
+                    fineList.Add(Tuple.Create(messageItem, serialized));
                 }
             }
 
-            SaveContainer();
-            _logger.Information("Generating a container of {Count} messages and size {Size}bytes", MessageItems.Count, SerializedContainer!.Length);
+            if (fineList.Count == 0)
+            {
+                logger.Verbose("No message made it into the container");
+                containerizedItems = null;
+                container = null;
+                return false;
+            }
+
+            containerizedItems = fineList.Select(x => x.Item1).ToList();
+
+            using var writer = new Writer(MergedProvider.Singleton, new MemoryStream());
+            writer.Write(MsgContainer.StaticConstructorId);
+            writer.Write(containerizedItems.Count);
+            foreach (var item in fineList)
+            {
+                var messageItem = item.Item1;
+                var messageId = mtProtoState.MessageIdsHandler.ComputeMessageId();
+                var seqno = mtProtoState.SeqnoHandler.ComputeSeqno(messageItem.Body);
+                messageItem.SetProtocolInfo(messageId, seqno);
+                writer.Write(messageId);
+                writer.Write(seqno);
+                writer.Write(item.Item2.Length);
+                writer.Stream.Write(item.Item2);
+            }
+
+            container = ((MemoryStream)writer.Stream).ToArray();
+            return true;
         }
     }
 }

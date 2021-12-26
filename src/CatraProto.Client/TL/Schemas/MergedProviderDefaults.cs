@@ -9,6 +9,7 @@ namespace CatraProto.Client.TL.Schemas
 {
     partial class MergedProvider : ObjectProvider
     {
+        public const int LayerId = 121;
         public static readonly MergedProvider Singleton = new MergedProvider();
         public override int BoolTrueId { get; } = BoolTrue.StaticConstructorId;
         public override int BoolFalseId { get; } = BoolFalse.StaticConstructorId;

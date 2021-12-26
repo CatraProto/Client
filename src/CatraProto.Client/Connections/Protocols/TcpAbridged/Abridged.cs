@@ -8,16 +8,21 @@ using Serilog;
 
 namespace CatraProto.Client.Connections.Protocols.TcpAbridged
 {
-    class Abridged : IProtocol, IDisposable
+    class Abridged : IProtocol
     {
-        public bool IsConnected
+        public IProtocolWriter Writer
         {
-            get => _client.Connected;
+            get => _protocolWriter ?? throw new InvalidOperationException("Can't get protocol writer when stream is not connected");
         }
 
-        public IProtocolWriter? Writer { get; set; }
-        public IProtocolReader? Reader { get; set; }
+        public IProtocolReader Reader
+        {
+            get => _protocolReader ?? throw new InvalidOperationException("Can't get protocol writer when stream is not connected");
+        }
+
         public ConnectionInfo ConnectionInfo { get; init; }
+        private IProtocolWriter? _protocolWriter;
+        private IProtocolReader? _protocolReader;
         private readonly TcpClient _client;
         private readonly ILogger _logger;
 
@@ -28,34 +33,27 @@ namespace CatraProto.Client.Connections.Protocols.TcpAbridged
             _client = new TcpClient { NoDelay = true };
         }
 
-        public void Dispose()
-        {
-            _client.Dispose();
-        }
-
         public async Task ConnectAsync(CancellationToken token = default)
         {
-            if (!IsConnected)
+            if (_protocolWriter != null || _protocolReader != null)
             {
-                _logger.Information("Establishing connection using Tcp Abridged. IpAddress: {Address}", ConnectionInfo);
-
-                await _client.ConnectAsync(ConnectionInfo.IpAddress, ConnectionInfo.Port, token);
-
-                var stream = _client.GetStream();
-                await stream.WriteAsync(0xef, token);
-
-                Writer ??= new AbridgedWriter(stream, _logger);
-                Reader ??= new AbridgedReader(stream, _logger);
+                _logger.Error("Connection to {Connection} already established", ConnectionInfo);
+                throw new InvalidOperationException("Connection already established");
             }
-            else
-            {
-                _logger.Warning("Connect called but we're already connected, request ignored");
-            }
+
+            _logger.Information("Establishing connection using Tcp Abridged. IpAddress: {Address}", ConnectionInfo);
+            await _client.ConnectAsync(ConnectionInfo.IpAddress, ConnectionInfo.Port, token);
+
+            var stream = _client.GetStream();
+            await stream.WriteAsync(0xef, token);
+
+            _protocolWriter = new AbridgedWriter(stream, _logger);
+            _protocolReader = new AbridgedReader(stream, _logger);
         }
 
         public Task CloseAsync()
         {
-            _client.Close();
+            _client.Dispose();
             return Task.CompletedTask;
         }
     }

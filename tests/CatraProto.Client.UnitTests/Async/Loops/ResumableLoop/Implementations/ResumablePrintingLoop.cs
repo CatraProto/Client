@@ -14,7 +14,7 @@ namespace CatraProto.Client.UnitTests.Async.Loops.ResumableLoop.Implementations
 
         public ResumablePrintingLoop(ILogger logger)
         {
-            _logger = logger;
+            _logger = logger.ForContext<ResumablePrintingLoop>();
         }
 
         public override async Task LoopAsync(CancellationToken stoppingToken)

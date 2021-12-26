@@ -1,8 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Async.Loops;
 using CatraProto.Client.Async.Loops.Enums.Generic;
+using CatraProto.Client.Async.Loops.Enums.Resumable;
+using CatraProto.Client.Async.Loops.Interfaces;
 using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.Connections.MessageScheduling.ConnectionMessages;
 using CatraProto.Client.Connections.MessageScheduling.ConnectionMessages.Interfaces;
@@ -13,51 +16,49 @@ using Serilog;
 namespace CatraProto.Client.Connections.Loop
 {
     //TODO Loop implementation
-    class ReceiveLoopController : GenericLoopController
+    class ReceiveLoop : LoopImplementation<GenericLoopState, GenericSignalState>
     {
         private readonly MessagesDispatcher _messagesDispatcher;
         private readonly MTProtoState _mtProtoState;
         private readonly Connection _connection;
         private readonly ILogger _logger;
 
-        public ReceiveLoopController(Connection connection, ILogger logger) : base(logger)
+        public ReceiveLoop(Connection connection, ILogger logger)
         {
-            _logger = logger.ForContext<ReceiveLoopController>();
+            _logger = logger.ForContext<ReceiveLoop>();
             _connection = connection;
             _messagesDispatcher = connection.MessagesDispatcher;
             _mtProtoState = connection.MtProtoState;
-            Task.Run(Loop);
         }
 
-        private async Task Loop()
+        public override async Task LoopAsync(CancellationToken cancellationToken)
         {
-            /*while (true)
+            
+            var currentState = StateSignaler.GetCurrentState(true);
+            while (true)
             {
-                try
+                if (currentState!.AlreadyHandled)
                 {
-                    //if (StateSignaler.GetCurrentState(true) == SignalState.Stop)
-                    {
-                        _logger.Information("ReceiveLoop for connection {Info} shutdown", _connection.ConnectionInfo);
-                        SetLoopState(LoopState.Stopped);
+                    currentState = StateSignaler.GetCurrentState(true);
+                }
 
-                        //await StateSignaler.WaitStateAsync(false, default, SignalState.Start);
-                        _logger.Information("Listening for incoming messages on connection {Info}...", _connection.ConnectionInfo);
+                if (!currentState!.AlreadyHandled)
+                {
+                    switch (currentState.Signal)
+                    {
+                        case GenericSignalState.Start:
+                            SetSignalHandled(GenericLoopState.Running, currentState);
+                            _logger.Information("Send loop started for connection {Connection}", _connection.ConnectionInfo);
+                            break;
+                        case GenericSignalState.Stop:
+                            _logger.Information("Send loop stopped for connection {Connection}", _connection.ConnectionInfo);
+                            SetSignalHandled(GenericLoopState.Stopped, currentState);
+                            return;
                     }
                 }
-                catch (ObjectDisposedException e) when (e.ObjectName == "AsyncStateSignaler")
-                {
-                    break;
-                }
-                catch (Exception e)
-                {
-                    _logger.Error(e, "Exception thrown on SendLoop for {Info}", _connection.ConnectionInfo);
-                }
-
-                var protocol = _connection.Protocol!;
-                //var shutdownToken = GetShutdownToken();
                 try
                 {
-                    var message = await protocol.Reader!.ReadMessageAsync(shutdownToken);
+                    var message = await _connection.Protocol.Reader.ReadMessageAsync(cancellationToken);
                     //_connection.Signaler.SetSignal(false);
                     using var reader = new Reader(MergedProvider.Singleton, message.ToMemoryStream());
 
@@ -76,7 +77,7 @@ namespace CatraProto.Client.Connections.Loop
                     }
                     else
                     {
-                        var getAuthKey = await _mtProtoState.KeysHandler.TemporaryAuthKey.GetAuthKeyAsync(forceReturn: true, token: shutdownToken);
+                        var getAuthKey = _mtProtoState.KeysHandler.TemporaryAuthKey.GetCachedKey();
                         if (authKeyId == getAuthKey.AuthKeyId)
                         {
                             imported = new EncryptedConnectionMessage(getAuthKey, message);
@@ -90,14 +91,14 @@ namespace CatraProto.Client.Connections.Loop
 
                     _messagesDispatcher.DispatchMessage(imported);
                 }
-                catch (OperationCanceledException e) when (e.CancellationToken == shutdownToken)
+                catch (OperationCanceledException e) when (e.CancellationToken == cancellationToken)
                 {
                     //Ignored on purpose
                 }
                 catch (IOException e)
                 {
                     _logger.Error("IOException received. Message: \"{Info}\", reconnecting...", e.Message);
-                    _ = _connection.ConnectAsync(shutdownToken);
+                    _ = _connection.ConnectAsync(cancellationToken);
                     break;
                 }
                 catch (Exception e)
@@ -110,9 +111,8 @@ namespace CatraProto.Client.Connections.Loop
                     _connection.Signaler.SetSignal(true);
                 }
             }
-
-            _logger.Information("Dispose ReceiveLoop for connection {Info}", _connection.ConnectionInfo);
-            SetLoopStopped();*/
         }
+
+        public override string ToString() => $"Read loop for connection {_connection}";
     }
 }

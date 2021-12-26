@@ -4,21 +4,20 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.MTProto.Session.Models
 {
-    class UpdatesStates
+    class UpdatesStates : SessionModel
     {
         private readonly Dictionary<int, UpdatesState> _updatesStates = new Dictionary<int, UpdatesState>();
         private readonly UpdatesState _commonUpdatesState;
-        private readonly object _mutex;
+        
 
-        public UpdatesStates(object mutex)
+        public UpdatesStates(object mutex) : base(mutex)
         {
             _commonUpdatesState = new UpdatesState(mutex);
-            _mutex = mutex;
         }
 
         public UpdatesState GetState(int? channelId = null)
         {
-            lock (_mutex)
+            lock (Mutex)
             {
                 if (channelId == null)
                 {
@@ -31,7 +30,7 @@ namespace CatraProto.Client.MTProto.Session.Models
                         return state;
                     }
 
-                    state = new UpdatesState(_mutex);
+                    state = new UpdatesState(Mutex);
                     _updatesStates.Add(channelId.Value, state);
                     return state;
                 }
@@ -40,14 +39,14 @@ namespace CatraProto.Client.MTProto.Session.Models
 
         public void Read(Reader reader)
         {
-            lock (_mutex)
+            lock (Mutex)
             {
                 _commonUpdatesState.Read(reader);
                 var count = reader.Read<int>();
                 for (var i = 0; i < count; i++)
                 {
                     var channelId = reader.Read<int>();
-                    var updatesState = new UpdatesState(_mutex);
+                    var updatesState = new UpdatesState(Mutex);
                     _updatesStates.Add(channelId, updatesState);
                     updatesState.Read(reader);
                 }
@@ -56,7 +55,7 @@ namespace CatraProto.Client.MTProto.Session.Models
 
         public void Save(Writer writer)
         {
-            lock (_mutex)
+            lock (Mutex)
             {
                 _commonUpdatesState.Save(writer);
                 writer.Write(_updatesStates.Count);

@@ -1,6 +1,8 @@
 using System;
 using System.Threading;
 using CatraProto.Client.Connections.MessageScheduling.Enums;
+using CatraProto.Client.MTProto.Rpc;
+using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL.Interfaces;
 using Serilog;
 
@@ -11,7 +13,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
         public MessageSendingOptions MessageSendingOptions { get; }
         public CancellationToken CancellationToken { get; }
         public IObject Body { get; }
-        
+
         private readonly object _mutex = new object();
         private readonly MessageStatus _messageStatus;
         private MessagesHandler? _messagesHandler;
@@ -24,14 +26,14 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
             CancellationToken = cancellationToken;
             _messageStatus = messageStatus;
             Body = body;
-            
+
             if (cancellationToken.CanBeCanceled)
             {
                 if (cancellationToken.IsCancellationRequested)
                 {
                     SetCanceled(cancellationToken);
                 }
-                
+
                 _messageStatus.MessageCompletion.CancellationTokenRegistration = cancellationToken.Register(() =>
                 {
                     SetCanceled(cancellationToken);
@@ -39,61 +41,77 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
             }
         }
 
-        public long? GetMessageId()
+        public void SetSent(long? upperId = null)
         {
             lock (_mutex)
             {
-                return _messageStatus.MessageId;
-            }
-        }
+                var messageId = GetProtocolInfo().MessageId;
+                if (messageId == null)
+                {
+                    throw new InvalidOperationException("Can't set as sent when message id is null");
+                }
 
-        public IMethod? GetMessageMethod()
-        {
-            lock (_mutex)
-            {
-                return _messageStatus.MessageCompletion.Method;
-            }
-        }
+                if (upperId != null)
+                {
+                    _messageStatus.MessageProtocolInfo.UpperMessageId = upperId;
+                }
 
-        public void SetSent(long messageId)
-        {
-            lock (_mutex)
-            {
                 _messageStatus.MessageState = MessageState.MessageSent;
-                _messageStatus.MessageId = messageId;
-                _messagesHandler?.MessagesTrackers.MessageCompletionTracker.AddCompletion(messageId, this);
+                _messagesHandler?.MessagesTrackers.MessageCompletionTracker.AddCompletion(messageId.Value, this);
                 _messagesHandler?.MessagesTrackers.MessagesAckTracker.TrackMessage(this);
             }
         }
 
-        public void SetToSend()
+        public void SetToSend(bool resetProtocolInfo = true, bool wakeUpLoop = true, bool canDelete = false)
         {
             lock (_mutex)
             {
+                if (_messagesHandler is null)
+                {
+                    throw new InvalidOperationException("MessageHandler is not set");
+                }
+
+                var (messageId, _) = GetProtocolInfo();
+                if (messageId.HasValue)
+                {
+                    _messagesHandler.MessagesTrackers.MessageCompletionTracker.RemoveCompletion(messageId.Value, out _);
+                }
+
                 if (CancellationToken.IsCancellationRequested)
                 {
                     _logger.Verbose("Tried to send a canceled message (this is not an error)");
                     return;
                 }
 
-                if (_messagesHandler is null)
+                if (resetProtocolInfo)
                 {
-                    throw new InvalidOperationException("MessageHandler is not set");
+                    SetProtocolInfo(null, null);
                 }
-                
-                _messageStatus.MessageState = MessageState.NotYetSent;
-                _messagesHandler?.MessagesQueue.PutInQueue(this);
+
+                if (Body is MsgsAck msgsAck && canDelete)
+                {
+                    _logger.Information("MsgsAck got deleted, putting msgs back into acknowledge list");
+                    foreach (var msg in msgsAck.MsgIds)
+                    {
+                        _messagesHandler.MessagesTrackers.MessagesAckTracker.AcknowledgeNext(msg);
+                    }
+                }
+                else
+                {
+                    _messageStatus.MessageState = MessageState.NotYetSent;
+                    _messagesHandler?.MessagesQueue.PutInQueue(this, wakeUpLoop);
+                }
             }
         }
 
-        public void SetReplied(object? response)
+        public void SetReplied(object? response, ExecutionInfo executionInfo)
         {
             lock (_mutex)
             {
                 _messageStatus.MessageState = MessageState.Replied;
                 if (response != null)
                 {
-                    _messageStatus.MessageCompletion.RpcMessage?.SetResponse(response);
+                    _messageStatus.MessageCompletion.RpcMessage?.SetResponse(response, executionInfo);
                 }
 
                 _messageStatus.MessageCompletion.TaskCompletionSource?.TrySetResult();
@@ -109,7 +127,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
                 _messageStatus.MessageCompletion.TaskCompletionSource?.TrySetException(exception);
                 _messageStatus.MessageCompletion.CancellationTokenRegistration?.Unregister();
 
-                var messageId = GetMessageId();
+                var messageId = GetProtocolInfo().MessageId;
                 if (messageId != null)
                 {
                     _messagesHandler?.MessagesTrackers.MessageCompletionTracker.RemoveCompletion(messageId.Value, out _);
@@ -129,7 +147,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
 
                 _messageStatus.MessageCompletion.CancellationTokenRegistration?.Unregister();
 
-                var messageId = GetMessageId();
+                var messageId = GetProtocolInfo().MessageId;
                 if (messageId != null)
                 {
                     _messagesHandler?.MessagesTrackers.MessagesAckTracker.StopTracking(messageId.Value);
@@ -138,14 +156,14 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
             }
         }
 
-        public void SetAcknowledged()
+        public void SetAcknowledged(ExecutionInfo executionInfo)
         {
             lock (_mutex)
             {
                 _messageStatus.MessageState = MessageState.Acknowledged;
                 if (MessageSendingOptions.AwaiterType == AwaiterType.OnAcknowledgement)
                 {
-                    SetReplied(null);
+                    SetReplied(null, executionInfo);
                 }
             }
         }
@@ -162,7 +180,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
                         return;
                     }
 
-                    var messageId = GetMessageId();
+                    var messageId = GetProtocolInfo().MessageId;
                     if (messageId.HasValue)
                     {
                         _messagesHandler.MessagesTrackers.MessageCompletionTracker.RemoveCompletion(messageId.Value, out _);
@@ -171,6 +189,47 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
                 }
 
                 _messagesHandler = messagesHandler;
+            }
+        }
+
+        public (long? MessageId, int? SeqNo) GetProtocolInfo()
+        {
+            lock (_mutex)
+            {
+                return (_messageStatus.MessageProtocolInfo.MessageId, _messageStatus.MessageProtocolInfo.SeqNo);
+            }
+        }
+
+        public void SetProtocolInfo(long? messageId, int? seqNo, bool force = false)
+        {
+            lock (_mutex)
+            {
+                if (MessageSendingOptions.SendWithMessageId.HasValue && !force)
+                {
+                    _messageStatus.MessageProtocolInfo.MessageId = MessageSendingOptions.SendWithMessageId.Value;
+                }
+                else
+                {
+                    _messageStatus.MessageProtocolInfo.MessageId = messageId;
+                }
+
+                _messageStatus.MessageProtocolInfo.SeqNo = seqNo;
+            }
+        }
+
+        public IMethod? GetMessageMethod()
+        {
+            lock (_mutex)
+            {
+                return _messageStatus.MessageCompletion.Method;
+            }
+        }
+
+        public MessageState GetMessageState()
+        {
+            lock (_mutex)
+            {
+                return _messageStatus.MessageState;
             }
         }
     }

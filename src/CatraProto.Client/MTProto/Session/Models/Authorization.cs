@@ -6,22 +6,21 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.MTProto.Session.Models
 {
-    class Authorization : IDisposable
+    class Authorization : SessionModel, IDisposable
     {
         private readonly AsyncSignaler _asyncSignaler = new AsyncSignaler(false);
-        private readonly object _mutex;
+        
         private long _userAccessHash;
         private int _userId;
         private int _dcId;
 
-        public Authorization(object mutex)
+        public Authorization(object mutex) : base(mutex)
         {
-            _mutex = mutex;
         }
 
         public void SetAuthorized(bool authorized, int dcId, int userId, long userAccessHash)
         {
-            lock (_mutex)
+            lock (Mutex)
             {
                 _userAccessHash = userAccessHash;
                 _userId = userId;
@@ -32,7 +31,7 @@ namespace CatraProto.Client.MTProto.Session.Models
 
         public bool IsAuthorized(out int? dcId, out int? userId, out long? userAccessHash)
         {
-            lock (_mutex)
+            lock (Mutex)
             {
                 if (_asyncSignaler.IsReleased())
                 {
@@ -52,7 +51,7 @@ namespace CatraProto.Client.MTProto.Session.Models
         public async Task WaitAuthorizationAsync()
         {
             Task task;
-            lock (_mutex)
+            lock (Mutex)
             {
                 if (_asyncSignaler.IsReleased())
                 {
@@ -65,14 +64,9 @@ namespace CatraProto.Client.MTProto.Session.Models
             await task;
         }
 
-        public void Dispose()
-        {
-            _asyncSignaler.Dispose();
-        }
-
         public void Read(Reader reader)
         {
-            lock (_mutex)
+            lock (Mutex)
             {
                 _asyncSignaler.SetSignal(reader.Read<bool>());
                 if (_asyncSignaler.IsReleased())
@@ -86,7 +80,7 @@ namespace CatraProto.Client.MTProto.Session.Models
 
         public void Save(Writer writer)
         {
-            lock (_mutex)
+            lock (Mutex)
             {
                 var isAuth = IsAuthorized(out var dcId, out var userId, out var userAccessHash);
                 writer.Write(isAuth);
@@ -97,6 +91,11 @@ namespace CatraProto.Client.MTProto.Session.Models
                     writer.Write(userAccessHash!.Value);
                 }
             }
+        }
+        
+        public void Dispose()
+        {
+            _asyncSignaler.Dispose();
         }
     }
 }

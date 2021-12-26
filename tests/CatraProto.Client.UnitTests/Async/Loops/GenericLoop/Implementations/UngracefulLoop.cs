@@ -12,7 +12,7 @@ namespace CatraProto.Client.UnitTests.Async.Loops.GenericLoop.Implementations
 
         public UngracefulLoop(ILogger logger)
         {
-            _logger = logger;
+            _logger = logger.ForContext<UngracefulLoop>();
         }
         
         public override Task LoopAsync(CancellationToken stoppingToken)

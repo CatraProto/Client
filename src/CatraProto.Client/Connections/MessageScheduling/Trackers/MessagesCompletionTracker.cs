@@ -1,7 +1,10 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using CatraProto.Client.Connections.MessageScheduling.Enums;
 using CatraProto.Client.Connections.MessageScheduling.Items;
+using CatraProto.Client.MTProto.Rpc;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL.Interfaces;
 using Serilog;
@@ -40,7 +43,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
             return _messageCompletions.TryRemove(messageId, out messageItem);
         }
 
-        public bool SetCompletion(long messageId, object response)
+        public bool SetCompletion(long messageId, object response, ExecutionInfo executionInfo)
         {
             if (messageId == 0)
             {
@@ -73,14 +76,14 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
 
                     var completion = _unencryptedCompletions[completionIndex];
                     _unencryptedCompletions.RemoveAt(completionIndex);
-                    completion.SetReplied(response);
+                    completion.SetReplied(response, executionInfo);
                     return true;
                 }
             }
 
             if (GetMessageCompletion(messageId, out var messageCompletion))
             {
-                messageCompletion.SetReplied(response);
+                messageCompletion.SetReplied(response, executionInfo);
             }
 
             return true;
@@ -112,6 +115,22 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
 
             _logger.Warning("Couldn't find message id {Id}", messageId);
             return false;
+        }
+
+        public IList<MessageItem> GetUnanswered(bool includeAcknowledged)
+        {
+            return _messageCompletions.Where(x =>
+            {
+                var getStatus = x.Value.GetMessageState();
+                if (getStatus == MessageState.MessageSent || includeAcknowledged && getStatus == MessageState.Acknowledged)
+                {
+                    return true;
+                }
+
+                return false;
+            })
+                .Select(x => x.Value)
+                .ToList();
         }
     }
 }

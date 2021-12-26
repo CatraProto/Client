@@ -1,11 +1,8 @@
 using System;
 using System.Threading.Tasks;
-using CatraProto.Client.Connections;
 using CatraProto.Client.Flows.LoginFlow;
 using CatraProto.Client.MTProto.Session;
 using CatraProto.Client.MTProto.Settings;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using CatraProto.Client.Updates;
 using Serilog;
 using Serilog.Core;
 

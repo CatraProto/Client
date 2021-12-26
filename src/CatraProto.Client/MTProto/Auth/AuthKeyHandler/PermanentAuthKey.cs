@@ -8,34 +8,29 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
 {
     class PermanentAuthKey
     {
-        private readonly AuthKey _authKey;
-        private readonly AuthKeyData _authKeyData;
+        private readonly AuthKeyCache _authKeyCache;
+        private readonly Api _api;
+        private readonly ILogger _logger;
 
-        public PermanentAuthKey(ConnectionInfo connectionInfo, SessionData sessionData, Api api, ILogger logger)
+        public PermanentAuthKey(AuthKeyCache authKeyCache, Api api, ILogger logger)
         {
-            var authKeyData = sessionData.AuthorizationKeys.GetAuthKey(connectionInfo.DcId, out var justCreated);
-            if (!justCreated)
-            {
-                var (key, keyId, salt) = authKeyData.GetData()!.Value;
-                _authKey = new AuthKey(key, keyId, salt, api, logger);
-            }
-            else
-            {
-                _authKey = new AuthKey(api, logger);
-            }
-
-            _authKeyData = authKeyData;
+            _authKeyCache = authKeyCache;
+            _api = api;
+            _logger = logger.ForContext<PermanentAuthKey>();
         }
 
-        public async Task<AuthKey> GetAuthKeyAsync(CancellationToken cancellationToken = default)
+        public async ValueTask<AuthKeyObject> GetAuthKeyAsync(CancellationToken cancellationToken = default)
         {
-            if (_authKey.RawAuthKey is null)
+            var getData = _authKeyCache.GetData();
+            if (getData is null)
             {
-                await _authKey.EnsureComputeAsync(-1, cancellationToken);
-                _authKeyData.SetData(_authKey.RawAuthKey!, _authKey.AuthKeyId!.Value, _authKey.ServerSalt!.Value);
+                var result = await AuthKeyGen.EnsureComputeAsync(-1, _api, _logger, cancellationToken);
+                _authKeyCache.SetData(result.KeyArray, result.AuthKeyId, result.ServerSalt);
+                return new AuthKeyObject(result.KeyArray, result.AuthKeyId, result.ServerSalt, null);
             }
 
-            return _authKey;
+            var (key, keyId, serverSalt, _, _) = getData.Value;
+            return new AuthKeyObject(key, keyId, serverSalt, null);
         }
     }
 }

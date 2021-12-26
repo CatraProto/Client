@@ -15,7 +15,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.ConnectionMessages
             get => Body.Length;
         }
 
-        public AuthKey AuthKey { get; init; }
+        public AuthKeyObject AuthKey { get; init; }
         public long AuthKeyId { get; private set; }
         public long MessageId { get; private set; }
         public byte[] Body { get; private set; }
@@ -24,14 +24,14 @@ namespace CatraProto.Client.Connections.MessageScheduling.ConnectionMessages
         public long SessionId { get; private set; }
         public int SeqNo { get; private set; }
 
-        public EncryptedConnectionMessage(AuthKey authKey, byte[] payload)
+        public EncryptedConnectionMessage(AuthKeyObject authKey, byte[] payload)
         {
             Body = null!;
             AuthKey = authKey;
             Import(payload);
         }
 
-        public EncryptedConnectionMessage(AuthKey authKey, long messageId, long salt, long sessionId, int seqNo, byte[] body)
+        public EncryptedConnectionMessage(AuthKeyObject authKey, long messageId, long salt, long sessionId, int seqNo, byte[] body)
         {
             AuthKey = authKey;
             MessageId = messageId;
@@ -39,7 +39,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.ConnectionMessages
             SessionId = sessionId;
             SeqNo = seqNo;
             Body = body;
-            AuthKeyId = AuthKey.AuthKeyId!.Value;
+            AuthKeyId = AuthKey.AuthKeyId;
         }
 
         public void Import(byte[] message)
@@ -48,7 +48,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.ConnectionMessages
             {
                 AuthKeyId = reader.ReadInt64();
                 MsgKey = reader.ReadBytes(16);
-                using var encryptor = AuthKey.CreateEncryptorV2(MsgKey, false);
+                using var encryptor = AesCryptoCreator.CreateEncryptorV2(AuthKey.KeyArray, MsgKey, false);
                 var encryptedBuffer = reader.ReadBytes((int)(reader.BaseStream.Length - reader.BaseStream.Position));
                 var decryptedText = encryptor.Decrypt(encryptedBuffer);
                 using (var cleanReader = new BinaryReader(decryptedText.ToMemoryStream()))
@@ -79,8 +79,8 @@ namespace CatraProto.Client.Connections.MessageScheduling.ConnectionMessages
                     CryptoTools.AddPadding(plainWriter.BaseStream, 16, 12);
 
                     var toEncryptData = ((MemoryStream)plainWriter.BaseStream).ToArray();
-                    var msgKey = SHA256.HashData(AuthKey.RawAuthKey!.Skip(88).Take(32).Concat(toEncryptData).ToArray()).Skip(8).Take(16).ToArray();
-                    using var encryptor = AuthKey.CreateEncryptorV2(msgKey, true);
+                    var msgKey = SHA256.HashData(AuthKey.KeyArray.Skip(88).Take(32).Concat(toEncryptData).ToArray()).Skip(8).Take(16).ToArray();
+                    using var encryptor = AesCryptoCreator.CreateEncryptorV2(AuthKey.KeyArray, msgKey, true);
 
                     writer.Write(AuthKeyId);
                     writer.Write(msgKey);

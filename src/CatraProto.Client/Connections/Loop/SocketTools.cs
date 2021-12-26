@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using CatraProto.Client.Connections.MessageScheduling.Items;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.TL;
@@ -8,9 +9,9 @@ namespace CatraProto.Client.Connections.Loop
 {
     static class SocketTools
     {
-        public static bool TrySerialize(MessageItem item, ILogger logger, out byte[]? serialized)
+        public static bool TrySerialize(MessageItem item, ILogger logger, [MaybeNullWhen(false)] out byte[] serialized)
         {
-            logger.Verbose("Serializing message of type {Type}", item.Body);
+            logger.Verbose("Trying to serialize {Type}", item.Body);
             try
             {
                 serialized = item.Body.ToArray(MergedProvider.Singleton);
@@ -19,7 +20,7 @@ namespace CatraProto.Client.Connections.Loop
             catch (SerializationException e)
             {
                 logger.Error("Serialization of message of type {Type} failed, throwing exception on caller", item.Body);
-                item.SetCanceled();
+                item.SetFailed(e);
             }
 
             serialized = null;

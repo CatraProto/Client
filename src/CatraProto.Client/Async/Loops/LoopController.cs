@@ -62,7 +62,6 @@ namespace CatraProto.Client.Async.Loops
 
         protected virtual void LaunchLoop()
         {
-            //Avoid scheduling
             if (LoopImplementation is null)
             {
                 return;

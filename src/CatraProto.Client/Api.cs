@@ -7,13 +7,10 @@ namespace CatraProto.Client
     {
         public CloudChatsApi CloudChatsApi { get; }
         public MTProtoApi MtProtoApi { get; }
-
         internal Api(MessagesQueue messagesQueue)
         {
             CloudChatsApi = new CloudChatsApi(messagesQueue);
             MtProtoApi = new MTProtoApi(messagesQueue);
-
-
         }
     }
 }

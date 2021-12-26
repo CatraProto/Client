@@ -54,7 +54,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
 
             if (IsMessageIdTooNew(messageId))
             {
-                _logger.Warning("Given message id {Id} is too young", messageId);
+                _logger.Warning("Given message id {Id} is too new", messageId);
                 return false;
             }
 

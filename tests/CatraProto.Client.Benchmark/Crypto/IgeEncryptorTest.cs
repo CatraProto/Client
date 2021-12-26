@@ -16,8 +16,9 @@ namespace CatraProto.Client.Benchmark.Crypto
 		{
 			var iv = new byte[32];
 			var key = new byte[16];
-			_payload = new byte[1932240];
-
+			_payload = new byte[640];
+			//_payload = new byte[1932240];
+			
 			var random = new Random();
 			random.NextBytes(iv);
 			random.NextBytes(key);
@@ -36,8 +37,6 @@ namespace CatraProto.Client.Benchmark.Crypto
 		{
 			_encryptor.Decrypt(_payload);
 		}
-		
-		
 
 		[GlobalCleanup]
 		public void CleanUp()

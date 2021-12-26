@@ -3,22 +3,21 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.MTProto.Session.Models
 {
-    class UpdatesState
+    class UpdatesState : SessionModel
     {
-        private readonly object _mutex;
+        
         private int _pts = 1;
         private int _qts = -1;
         private int _seq;
         private int _date = 1;
 
-        public UpdatesState(object mutex)
+        public UpdatesState(object mutex) : base(mutex)
         {
-            _mutex = mutex;
         }
 
         public (int pts, int qts, int seq, int date) GetData()
         {
-            lock (_mutex)
+            lock (Mutex)
             {
                 return (_pts, _qts, _seq, _date);
             }
@@ -26,7 +25,7 @@ namespace CatraProto.Client.MTProto.Session.Models
 
         public void SetData(int? pts = null, int? qts = null, int? seq = null, int? date = null)
         {
-            lock (_mutex)
+            lock (Mutex)
             {
                 var (currentPts, currentQts, currentSeq, currentDate) = GetData();
                 _pts = pts ?? currentPts;
@@ -38,7 +37,7 @@ namespace CatraProto.Client.MTProto.Session.Models
 
         public void Read(Reader reader)
         {
-            lock (_mutex)
+            lock (Mutex)
             {
                 _pts = reader.Read<int>();
                 _qts = reader.Read<int>();
@@ -49,7 +48,7 @@ namespace CatraProto.Client.MTProto.Session.Models
 
         public void Save(Writer writer)
         {
-            lock (_mutex)
+            lock (Mutex)
             {
                 writer.Write(_pts);
                 writer.Write(_qts);

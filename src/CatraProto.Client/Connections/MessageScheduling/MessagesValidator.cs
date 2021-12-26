@@ -28,8 +28,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
 
             foreach (var cMessage in container.Messages)
             {
-                var newMessage = new EncryptedConnectionMessage(connectionMessage.AuthKey, cMessage.MsgId, connectionMessage.Salt,
-                    connectionMessage.SessionId, cMessage.Seqno, Array.Empty<byte>());
+                var newMessage = new EncryptedConnectionMessage(connectionMessage.AuthKey, cMessage.MsgId, connectionMessage.Salt, connectionMessage.SessionId, cMessage.Seqno, Array.Empty<byte>());
                 if (!InternalCheckMessageValidity(newMessage, cMessage.Body))
                 {
                     return false;
@@ -87,9 +86,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
         {
             if (_mtProtoState.SessionIdHandler.GetSessionId() == sessionId)
             {
-                _logger.Warning(
-                    "Received new session created but the id is the same as the old one, new server salt {Salt}, new SessionId {SessionId}",
-                    newSessionCreated.ServerSalt, sessionId);
+                _logger.Verbose("Received new session created but the id is the same as the old one, new server salt {Salt}, new SessionId {SessionId}", newSessionCreated.ServerSalt, sessionId);
                 return;
             }
 

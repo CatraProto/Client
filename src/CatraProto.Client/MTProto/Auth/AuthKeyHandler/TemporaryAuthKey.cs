@@ -4,9 +4,8 @@ using System.Threading.Tasks;
 using CatraProto.Client.Connections;
 using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.Crypto;
-using CatraProto.Client.MTProto.Session;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using CatraProto.Client.TL.Schemas.CloudChats.Help;
+using CatraProto.Client.MTProto.Session.Models;
+using CatraProto.Client.MTProto.Settings;
 using CatraProto.Client.TL.Schemas.MTProto;
 using Serilog;
 
@@ -14,122 +13,137 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
 {
     class TemporaryAuthKey
     {
-        public delegate void AuthKeyChanged(AuthKey authKey, bool bindCompleted);
-
-        private readonly PermanentAuthKey _permanentAuthKey;
-        private readonly ClientSession _clientSession;
-        private readonly object _mutex = new object();
-        private readonly MTProtoState _mtProtoState;
-        private Task<AuthKey>? _generationTask;
-        private readonly ILogger _logger;
-        private readonly int _duration;
-        private AuthKey? _tempAuthKey;
-        private readonly Api _api;
-        private int _expiresAt;
+        public delegate void AuthKeyChanged(AuthKeyObject authKey, bool bindCompleted);
         public event AuthKeyChanged? OnAuthKeyChanged;
-
-        public TemporaryAuthKey(MTProtoState mtProtoState, PermanentAuthKey permanentAuthKey, Api api, ClientSession clientSession, int duration)
+        
+        private readonly PermanentAuthKey _permanentAuthKey;
+        private readonly AuthKeyCache _keyCacheCache;
+        private readonly ConnectionSettings _connectionSettings;
+        private readonly MTProtoState _mtProtoState;
+        private readonly object _mutex = new object();
+        private readonly ILogger _logger;
+        
+        public TemporaryAuthKey(AuthKeyCache authKeyCache, ConnectionSettings connectionSettings, PermanentAuthKey permanentAuthKey, MTProtoState mtProtoState, ILogger logger)
         {
-            _logger = clientSession.Logger.ForContext<TemporaryAuthKey>();
+            _keyCacheCache = authKeyCache;
+            _connectionSettings = connectionSettings;
             _permanentAuthKey = permanentAuthKey;
-            _clientSession = clientSession;
             _mtProtoState = mtProtoState;
-            _duration = duration;
-            _api = api;
+            _logger = logger.ForContext<TemporaryAuthKey>();
         }
 
-        public Task<AuthKey> GetAuthKeyAsync(bool forceGeneration = false, bool onlyCached = false, bool forceReturn = false, CancellationToken token = default)
+        public async Task GenerateNewAuthKey(CancellationToken token)
         {
+            var duration = _connectionSettings.PfsKeyDuration;
+            var permanentKey = await _permanentAuthKey.GetAuthKeyAsync(token);
+            var success = await AuthKeyGen.EnsureComputeAsync(duration, _mtProtoState.Api, _logger, token);
+            var expiresAt = (int)DateTimeOffset.Now.Add(TimeSpan.FromSeconds(duration)).ToUnixTimeSeconds();
             lock (_mutex)
             {
-                if (forceReturn)
-                {
-                    return Task.FromResult(_tempAuthKey!);
-                }
-
-                if (onlyCached)
-                {
-                    return _generationTask!;
-                }
-
-                if (_generationTask is null || forceGeneration)
-                {
-                    return _generationTask = InternalGetAuthKeyAsync(token);
-                }
-
-                if (_generationTask.IsCompleted)
-                {
-                    if (DateTimeOffset.Now.ToUnixTimeSeconds() - _expiresAt >= _duration)
-                    {
-                        return _generationTask = InternalGetAuthKeyAsync(token);
-                    }
-                }
-
-                return _generationTask;
+                _keyCacheCache.SetData(success.KeyArray, success.AuthKeyId, success.ServerSalt, expiresAt, false);
             }
-        }
-
-        private async Task<AuthKey> InternalGetAuthKeyAsync(CancellationToken token = default)
-        {
-            var permAuthKey = await _permanentAuthKey.GetAuthKeyAsync(token);
-
-            _tempAuthKey = new AuthKey(_api, _logger);
-            await _tempAuthKey.EnsureComputeAsync(_duration, token);
-
-            _expiresAt = (int)(DateTimeOffset.Now.ToUnixTimeSeconds() + _duration);
-
-            OnAuthKeyChanged?.Invoke(_tempAuthKey, false);
-            _logger.Information("Binding temp auth key with permanent auth key");
+            var keyObject = new AuthKeyObject(success.KeyArray, success.AuthKeyId, success.ServerSalt, expiresAt);
+            _logger.Information("Generated temporary authentication key {AuthId} which expires at {Time}", success.AuthKeyId, expiresAt);
+            OnAuthKeyChanged?.Invoke(keyObject, false);
 
             var innerData = new BindAuthKeyInner
             {
                 Nonce = CryptoTools.CreateRandomLong(),
-                TempAuthKeyId = _tempAuthKey.AuthKeyId!.Value,
-                PermAuthKeyId = permAuthKey.AuthKeyId!.Value,
+                TempAuthKeyId = success.AuthKeyId,
+                PermAuthKeyId = permanentKey.AuthKeyId,
                 TempSessionId = _mtProtoState.SessionIdHandler.GetSessionId(),
-                ExpiresAt = _expiresAt
+                ExpiresAt = expiresAt
             };
-
+            
             var messageId = _mtProtoState.MessageIdsHandler.ComputeMessageId();
-            var encryptedInnerData = Pfs.Encrypt(permAuthKey, innerData, messageId);
-            var messageOptions = new MessageSendingOptions(true, _tempAuthKey, messageId);
-            var bindTempAuthKey = await _mtProtoState.Api.CloudChatsApi.Auth.BindTempAuthKeyAsync(permAuthKey.AuthKeyId.Value, innerData.Nonce, _expiresAt, encryptedInnerData, messageOptions, token);
-
-            if (bindTempAuthKey.RpcCallFailed)
+            var encryptedInnerData = Pfs.Encrypt(permanentKey, innerData, messageId);
+            var messageOptions = new MessageSendingOptions(true, messageId);
+            
+            _mtProtoState.Connection.SetIsInited(false);
+            await _mtProtoState.Api.CloudChatsApi.Auth.BindTempAuthKeyAsync(permanentKey.AuthKeyId, innerData.Nonce, expiresAt, encryptedInnerData, messageOptions, token);
+            
+            lock (_mutex)
             {
-                _logger.Error("PFS KEY BINDING FAILED, server returned {Error}", bindTempAuthKey.Error);
+                _keyCacheCache.SetData(success.KeyArray, success.AuthKeyId, success.ServerSalt, expiresAt, true);
+                OnAuthKeyChanged?.Invoke(keyObject, true);
             }
-            else
+            
+            _logger.Information("Temporary authentication key {AuthId} bound to permanent {PAuthId}", success.AuthKeyId, permanentKey.AuthKeyId);
+            _mtProtoState.Connection.WakeUpLoop();
+        }
+
+        public void SetExpired()
+        {
+            lock (_mutex)
             {
-                _logger.Information("TempAuthKey successfully ({TempId}) bound until {Time} to permanent key {PermKey}", _tempAuthKey.AuthKeyId, _expiresAt, permAuthKey.AuthKeyId);
+                var data = _keyCacheCache.GetData();
+                if (data is null)
+                {
+                    throw new InvalidOperationException("No cached authorization key");
+                }
+                
+                var (authKey, authKeyId, salt, _, isBound) = data.Value;
+                _keyCacheCache.SetData(authKey, authKeyId, salt, -1, isBound);
             }
+        }
 
-            _logger.Information("Writing client information");
-            OnAuthKeyChanged?.Invoke(_tempAuthKey, true);
-
-            var apiSettings = _clientSession.Settings.ApiSettings;
-            var response = await _mtProtoState.Api.CloudChatsApi.InvokeWithLayerAsync(121, new InitConnection
+        public AuthKeyObject GetCachedKey()
+        {
+            lock (_mutex)
             {
-                ApiId = apiSettings.ApiId,
-                AppVersion = apiSettings.AppVersion,
-                DeviceModel = apiSettings.DeviceModel,
-                LangCode = apiSettings.LangCode,
-                LangPack = apiSettings.LangPack,
-                SystemLangCode = apiSettings.SystemLangCode,
-                SystemVersion = apiSettings.SystemVersion,
-                Query = new GetConfig()
-            }, cancellationToken: token, messageSendingOptions: new MessageSendingOptions(true, _tempAuthKey));
+                var data = _keyCacheCache.GetData();
+                if (data is null)
+                {
+                    throw new InvalidOperationException("No cached authorization key");
+                }
 
-            if (response.Error != null)
-            {
-                _logger.Error("Couldn't write client information due to {Error}", bindTempAuthKey.Error);
+                var key = data.Value;
+                return new AuthKeyObject(key.Key, key.KeyId, key.Salt, key.ExpirationDate);
             }
-            else
+        }
+        
+        public bool HasExpired(int toSubtract = 0)
+        {
+            lock (_mutex)
             {
-                _logger.Information("Successfully wrote client information");
+                var data = _keyCacheCache.GetData();
+                if (data is null)
+                {
+                    return false;
+                }
+                
+                return DateTimeOffset.Now.ToUnixTimeSeconds() - (data.Value.ExpirationDate - toSubtract) > 0;
             }
+        }
 
-            return _tempAuthKey;
+        public bool IsBound()
+        {
+            lock (_mutex)
+            {
+                var data = _keyCacheCache.GetData();
+                if (data is null)
+                {
+                    return false;
+                }
+
+                return data.Value.IsBound!.Value;   
+            }
+        }
+
+        public bool CanBeUsed()
+        {
+            lock (_mutex)
+            {
+                return IsBound() && !HasExpired();
+            }
+        }
+
+        public bool Exists()
+        {
+            lock (_mutex)
+            {
+                return _keyCacheCache.GetData().HasValue;
+            }
         }
     }
 }

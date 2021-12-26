@@ -12,7 +12,7 @@ namespace CatraProto.Client.UnitTests.Async.Loops.GenericLoop.Implementations
 
         public PrintingLoop(ILogger logger)
         {
-            _logger = logger;
+            _logger = logger.ForContext<PrintingLoop>();
         }
         
         public override Task LoopAsync(CancellationToken stoppingToken)

@@ -15,7 +15,7 @@ namespace CatraProto.Client.MTProto.Auth
 
         public AcknowledgementHandler(ILogger logger)
         {
-            _logger = logger;
+            _logger = logger.ForContext<AcknowledgementHandler>();
         }
 
         public MsgsAck? GetAckObject()
@@ -41,7 +41,7 @@ namespace CatraProto.Client.MTProto.Auth
             }
         }
 
-        public IEnumerable<MessageItem> GetAckMessages()
+        public List<MessageItem> GetAckMessages()
         {
             lock (_mutex)
             {
@@ -51,11 +51,14 @@ namespace CatraProto.Client.MTProto.Auth
                     var ack = GetAckObject();
                     if (ack == null)
                     {
+                        if (result.Count > 0)
+                        {
+                            _logger.Information("Generated {Count} acknowledgments", result.Count);
+                        }
                         return result;
                     }
-
-                    result.Add(new MessageItem(ack, new MessageSendingOptions(true), new MessageStatus(new MessageCompletion(null, null, null)),
-                        _logger, default));
+                    
+                    result.Add(new MessageItem(ack, new MessageSendingOptions(true), new MessageStatus(new MessageCompletion(null, null, null)), _logger, default));
                 }
             }
         }

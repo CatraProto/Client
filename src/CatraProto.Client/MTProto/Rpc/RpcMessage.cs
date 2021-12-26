@@ -11,7 +11,7 @@ namespace CatraProto.Client.MTProto.Rpc
             get => IsError();
         }
 
-        public RpcError? Error
+        public RpcError Error
         {
             get => GetError();
         }
@@ -21,7 +21,13 @@ namespace CatraProto.Client.MTProto.Rpc
             get => GetResponse();
         }
 
+        public ExecutionInfo ExecutionInfo
+        {
+            get => GetExecutionInformation();
+        }
+        
         private readonly object _mutex = new object();
+        private ExecutionInfo? _executionInfo = null;
         private RpcError? _rpcError = null;
         private bool _isSuccessful;
         private T? _response;
@@ -35,10 +41,11 @@ namespace CatraProto.Client.MTProto.Rpc
             _response = (T)initialVector;
         }
 
-        void IRpcMessage.SetResponse(object o)
+        void IRpcMessage.SetResponse(object o, ExecutionInfo executionInfo)
         {
             lock (_mutex)
             {
+                _executionInfo = executionInfo; 
                 switch (o)
                 {
                     case IList<object> objects:
@@ -68,7 +75,7 @@ namespace CatraProto.Client.MTProto.Rpc
                     return _response!;
                 }
 
-                if (Error == null)
+                if (!IsError())
                 {
                     throw new InvalidOperationException("This rpc message has not yet received a successful response nor an error");
                 }
@@ -83,7 +90,6 @@ namespace CatraProto.Client.MTProto.Rpc
         {
             lock (_mutex)
             {
-                //TODO: Also check whether we've received a response or nothing at all
                 if (!IsError())
                 {
                     throw new InvalidOperationException("Query didn't return an error");
@@ -93,11 +99,24 @@ namespace CatraProto.Client.MTProto.Rpc
             }
         }
         
+        private ExecutionInfo GetExecutionInformation()
+        {
+            lock (_mutex)
+            {
+                if (IsError() || _isSuccessful)
+                {
+                    return _executionInfo!;
+                }
+                
+                throw new InvalidOperationException("Query has not been executed yet");
+            }
+        }
+
         private bool IsError()
         {
             lock (_mutex)
             {
-                return _rpcError == null;
+                return _rpcError != null;
             }
         }
     }

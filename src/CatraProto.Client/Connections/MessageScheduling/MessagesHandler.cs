@@ -6,9 +6,11 @@ namespace CatraProto.Client.Connections.MessageScheduling
     {
         public MessagesTrackers MessagesTrackers { get; }
         public MessagesQueue MessagesQueue { get; }
+        public Connection Connection { get; }
 
-        public MessagesHandler(ILogger logger)
+        public MessagesHandler(Connection connection, ILogger logger)
         {
+            Connection = connection;
             MessagesQueue = new MessagesQueue(this, logger);
             MessagesTrackers = new MessagesTrackers(MessagesQueue, logger);
         }

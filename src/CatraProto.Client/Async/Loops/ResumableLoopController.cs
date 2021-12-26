@@ -50,7 +50,7 @@ namespace CatraProto.Client.Async.Loops
                 StateSignaler.Signal(SignalBody<ResumableSignalState>.FromSignal(signal, out signalHandledTask));
                 if (signal is ResumableSignalState.Start)
                 {
-                    Logger.Information("Received Start signal, starting loop");
+                    Logger.Verbose("Received Start signal, starting loop");
                     LaunchLoop();
                 }
                 
