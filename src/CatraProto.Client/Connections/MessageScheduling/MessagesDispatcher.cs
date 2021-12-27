@@ -71,12 +71,12 @@ namespace CatraProto.Client.Connections.MessageScheduling
                 {
                     if (_messagesValidator.IsMessageValid((EncryptedConnectionMessage)connectionMessage, deserialized))
                     {
-                        HandleObject(deserialized, reader, true);
+                        await HandleObject(deserialized, reader, true);
                     }
                 }
                 else
                 {
-                    HandleObject(deserialized, reader, false);
+                    await HandleObject(deserialized, reader, false);
                 }
             }
             catch (DeserializationException e)
@@ -85,7 +85,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
             }
         }
 
-        private void HandleObject(IObject obj, Reader reader, bool isEncrypted)
+        private async Task HandleObject(IObject obj, Reader reader, bool isEncrypted)
         {
             if (isEncrypted)
             {
@@ -104,7 +104,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
                         HandleFutureSalts(futureSalts);
                         break;
                     case RpcObject rpcResult:
-                        HandleRpcResult(rpcResult);
+                        await HandleRpcResult(rpcResult);
                         break;
                     case MsgContainer msgContainer:
                         HandleContainer(msgContainer, reader);
@@ -146,7 +146,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
             _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(futureSalts.ReqMsgId, futureSalts, GetExecInfo());
         }
 
-        private async void HandleRpcResult(RpcObject rpcObject)
+        private async Task HandleRpcResult(RpcObject rpcObject)
         {
             _logger.Information("Handling rpc message in response to id {Id}", rpcObject.MessageId);
             if (rpcObject.Response is RpcError error)
