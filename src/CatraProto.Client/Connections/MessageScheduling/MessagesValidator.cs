@@ -98,10 +98,18 @@ namespace CatraProto.Client.Connections.MessageScheduling
 
         private void HandleBadServerSalt(BadServerSalt serverSalt)
         {
+            _logger.Information("Some messages were sent using the wrong salt, now using the new one ({Salt}) and resending messages", serverSalt.NewServerSalt);
             _mtProtoState.SaltHandler.SetSalt(serverSalt.NewServerSalt, false);
-            _messagesHandler.MessagesTrackers.MessageCompletionTracker.RemoveCompletion(serverSalt.BadMsgId, out var messageItem);
-            //TODO: Support containers
-            messageItem?.SetToSend();
+            if (_messagesHandler.MessagesTrackers.MessageCompletionTracker.RemoveCompletions(serverSalt.BadMsgId, out var messageItems))
+            {
+                var count = messageItems.Count;
+                for (var i = 0; i < count; i++)
+                {
+                    var item = messageItems[i];
+                    _logger.Information("Resending message {Body} because it was sent using an expired salt", item.Body);
+                    item.SetToSend(true, i == count - 1, true);
+                }
+            }
         }
     }
 }

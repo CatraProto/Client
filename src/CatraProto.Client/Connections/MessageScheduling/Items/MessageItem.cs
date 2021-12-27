@@ -71,7 +71,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
                     throw new InvalidOperationException("MessageHandler is not set");
                 }
 
-                var (messageId, _) = GetProtocolInfo();
+                var (messageId, _, _) = GetProtocolInfo();
                 if (messageId.HasValue)
                 {
                     _messagesHandler.MessagesTrackers.MessageCompletionTracker.RemoveCompletion(messageId.Value, out _);
@@ -192,11 +192,11 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
             }
         }
 
-        public (long? MessageId, int? SeqNo) GetProtocolInfo()
+        public (long? MessageId, int? SeqNo, long? upperMsgId) GetProtocolInfo()
         {
             lock (_mutex)
             {
-                return (_messageStatus.MessageProtocolInfo.MessageId, _messageStatus.MessageProtocolInfo.SeqNo);
+                return (_messageStatus.MessageProtocolInfo.MessageId, _messageStatus.MessageProtocolInfo.SeqNo, _messageStatus.MessageProtocolInfo.UpperMessageId);
             }
         }
 

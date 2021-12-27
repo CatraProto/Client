@@ -42,6 +42,23 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
         {
             return _messageCompletions.TryRemove(messageId, out messageItem);
         }
+        
+        public bool RemoveCompletions(long upperMessageId, [MaybeNullWhen(false)] out List<MessageItem> messageItems)
+        {
+            var query = _messageCompletions
+                .Where(x => x.Value.GetMessageState() is MessageState.MessageSent && x.Value.GetProtocolInfo().upperMsgId == upperMessageId)
+                .Select(x => x.Value)
+                .ToList();
+            
+            if (query.Count == 0)
+            {
+                messageItems = null;
+                return false;
+            }
+
+            messageItems = query;
+            return true;
+        }
 
         public bool SetCompletion(long messageId, object response, ExecutionInfo executionInfo)
         {
