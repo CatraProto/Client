@@ -39,7 +39,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
             _clientSession = clientSession;
         }
 
-        public void DispatchMessage(IConnectionMessage connectionMessage)
+        public async Task DispatchMessage(IConnectionMessage connectionMessage)
         {
             using var reader = new Reader(MergedProvider.Singleton, connectionMessage.Body.ToMemoryStream());
             reader.SetRpcDeserializer(_rpcDeserializer);
@@ -54,13 +54,11 @@ namespace CatraProto.Client.Connections.MessageScheduling
 
                 //It could also be an error during the key exchange, but if everything is implemented correctly it should never happen
                 _logger.Warning("Received protocol error {Error} from server", error);
-                Task.Run(async () =>
-                {
-                    _logger.Information("Server forgot authorization key, regenerating and rescheduling messages");
-                    _mtProtoState.KeysHandler.TemporaryAuthKey.SetExpired();
-                    await _connection.RegenKey();
-                });
 
+
+                _logger.Information("Server forgot authorization key, regenerating and rescheduling messages");
+                _mtProtoState.KeysHandler.TemporaryAuthKey.SetExpired();
+                await _connection.RegenKey();
                 return;
             }
 
