@@ -8,17 +8,10 @@ namespace CatraProto.Client.MTProto.Rpc.RpcErrors.Migrations
         public override string ErrorDescription { get; }
         public int DcId { get; }
 
-        public UserMigrateError(string errorMessage, int errorCode) : base(errorMessage, errorCode)
+        public UserMigrateError(string errorMessage, int errorCode, int dcId) : base(errorMessage, errorCode)
         {
-            if (errorMessage.Length > 13 && int.TryParse(errorMessage[13..], out var dcId))
-            {
-                DcId = dcId;
-                ErrorDescription = $"User's data is located in datacenter {dcId}";
-            }
-            else
-            {
-                ErrorDescription = "User's data is located in another datacenter";
-            }
+            DcId = dcId;
+            ErrorDescription = $"User's data is located in datacenter {dcId}";
         }
     }
 }

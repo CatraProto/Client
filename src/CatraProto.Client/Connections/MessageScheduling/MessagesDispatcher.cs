@@ -3,6 +3,7 @@ using CatraProto.Client.Connections.MessageScheduling.ConnectionMessages;
 using CatraProto.Client.Connections.MessageScheduling.ConnectionMessages.Interfaces;
 using CatraProto.Client.MTProto.Deserializers;
 using CatraProto.Client.MTProto.Rpc;
+using CatraProto.Client.MTProto.Rpc.Parsers;
 using CatraProto.Client.MTProto.Rpc.RpcErrors.Migrations.Interfaces;
 using CatraProto.Client.MTProto.Session;
 using CatraProto.Client.TL.Schemas;
@@ -150,7 +151,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
             _logger.Information("Handling rpc message in response to id {Id}", rpcObject.MessageId);
             if (rpcObject.Response is RpcError error)
             {
-                var errorDetected = MTProto.Rpc.Interfaces.RpcError.GetRpcError(error);
+                var errorDetected = ParsersList.GetError(error);
                 if (errorDetected is IMigrateError migrateError)
                 {
                     if (_messagesHandler.MessagesTrackers.MessageCompletionTracker.RemoveCompletion(rpcObject.MessageId, out var item))

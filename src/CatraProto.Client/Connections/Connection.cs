@@ -19,7 +19,6 @@ namespace CatraProto.Client.Connections
 {
     class Connection : IAsyncDisposable
     {
-        public AsyncSignaler Signaler { get; } = new AsyncSignaler(true);
         public MTProtoState MtProtoState { get; }
         public MessagesHandler MessagesHandler { get; }
         public MessagesDispatcher MessagesDispatcher { get; }
@@ -184,7 +183,6 @@ namespace CatraProto.Client.Connections
             //MessagesHandler.MessagesTrackers.MessagesAckTracker.Stop();
             await task;
             await StopLoops();
-            Signaler.Dispose();
         }
     }
 }

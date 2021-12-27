@@ -15,7 +15,6 @@ using Serilog;
 
 namespace CatraProto.Client.Connections.Loop
 {
-    //TODO Loop implementation
     class ReceiveLoop : LoopImplementation<GenericLoopState, GenericSignalState>
     {
         private readonly MessagesDispatcher _messagesDispatcher;
@@ -33,7 +32,6 @@ namespace CatraProto.Client.Connections.Loop
 
         public override async Task LoopAsync(CancellationToken cancellationToken)
         {
-            
             var currentState = StateSignaler.GetCurrentState(true);
             while (true)
             {
@@ -65,7 +63,6 @@ namespace CatraProto.Client.Connections.Loop
                     if (message.Length == 4)
                     {
                         await _messagesDispatcher.DispatchMessage(new UnencryptedConnectionMessage(message));
-                        _connection.Signaler.SetSignal(true);
                         continue;
                     }
 
@@ -105,10 +102,6 @@ namespace CatraProto.Client.Connections.Loop
                 {
                     _logger.Error(e, "Exception thrown on ReceiveLoop for {Info}", _connection.ConnectionInfo);
                     break;
-                }
-                finally
-                {
-                    _connection.Signaler.SetSignal(true);
                 }
             }
         }

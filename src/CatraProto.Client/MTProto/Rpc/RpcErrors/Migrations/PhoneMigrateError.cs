@@ -8,17 +8,10 @@ namespace CatraProto.Client.MTProto.Rpc.RpcErrors.Migrations
         public override string ErrorDescription { get; }
         public int DcId { get; }
 
-        public PhoneMigrateError(string errorMessage, int errorCode) : base(errorMessage, errorCode)
+        public PhoneMigrateError(string errorMessage, int errorCode, int dcId) : base(errorMessage, errorCode)
         {
-            if (errorMessage.Length > 14 && int.TryParse(errorMessage[14..], out var dcId))
-            {
-                DcId = dcId;
-                ErrorDescription = $"Based on the phone number, the server chose dc{dcId} to continue authentication";
-            }
-            else
-            {
-                ErrorDescription = "Based on the phone number, the server choose another datacenter to continue authentication";
-            }
+            DcId = dcId;
+            ErrorDescription = $"Based on the phone number, the server chose dc{dcId} to continue authentication";
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using CatraProto.Client.MTProto.Rpc.Interfaces;
+using CatraProto.Client.MTProto.Rpc.Parsers;
 
 namespace CatraProto.Client.MTProto.Rpc
 {
@@ -56,7 +57,7 @@ namespace CatraProto.Client.MTProto.Rpc
                         return;
                     case TL.Schemas.MTProto.RpcError error:
                         _isSuccessful = false;
-                        _rpcError = RpcError.GetRpcError(error);
+                        _rpcError = ParsersList.GetError(error);
                         break;
                     default:
                         _isSuccessful = true;
