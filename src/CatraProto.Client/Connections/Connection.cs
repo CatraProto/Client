@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Async.Locks;
@@ -24,14 +25,14 @@ namespace CatraProto.Client.Connections
         public MessagesDispatcher MessagesDispatcher { get; }
         public ConnectionInfo ConnectionInfo { get; }
         public IProtocol Protocol { get; private set; }
-
+        
         private readonly SingleCallAsync<CancellationToken> _singleCallAsync;
         private readonly ClientSettings _clientSettings;
         private readonly ConnectionProtocol _protocolType;
         private readonly object _mutex = new object();
         private (ReceiveLoop? Loop, GenericLoopController? Controller) _receiveLoop;
         private (SendLoop? Loop, ResumableLoopController? Controller) _writeLoop;
-        private (KeyGenerator? Loop, PeriodicLoopController? Controller) _periodicLoopController;
+        private (KeyGenerator? Loop, PeriodicLoopController? Controller) _periodicLoop;
         private readonly ILogger _logger;
         private bool _isInited;
 
@@ -47,12 +48,7 @@ namespace CatraProto.Client.Connections
             _protocolType = connectionInfo.ConnectionProtocol;
             Protocol = CreateProtocol();
         }
-
-        public Task ConnectAsync(CancellationToken token = default)
-        {
-            return _singleCallAsync.GetCall(token);
-        }
-
+        
         private IProtocol CreateProtocol()
         {
             switch (_protocolType)
@@ -64,11 +60,17 @@ namespace CatraProto.Client.Connections
             }
         }
 
+        public Task ConnectAsync(CancellationToken token = default)
+        {
+            return _singleCallAsync.GetCall(token);
+        }
+        
         private async Task InternalConnectAsync(CancellationToken token)
         {
             _logger.Information("Stopping loops and creating protocol");
+            await StopLoops();
             await Protocol.CloseAsync();
-
+            
             Protocol = CreateProtocol();
             while (true)
             {
@@ -78,7 +80,7 @@ namespace CatraProto.Client.Connections
                     await Protocol.ConnectAsync(token);
                     break;
                 }
-                catch (Exception e)
+                catch (IOException e)
                 {
                     _logger.Error("Couldn't connect due to {Message}, trying again in 3 seconds", e.Message);
                     await Task.Delay(3000, token);
@@ -92,12 +94,14 @@ namespace CatraProto.Client.Connections
         private async Task StartLoops()
         {
             _logger.Information("Starting loops for {Connection}", ConnectionInfo);
-            Task wStart;
-            Task wSus;
-            Task rStart;
-            Task pStart;
+            Task wStart, wSus, rStart, pStart;
             lock (_mutex)
             {
+                _periodicLoop.Loop ??= new KeyGenerator(MtProtoState.KeysHandler.TemporaryAuthKey, this, _logger);
+                _periodicLoop.Controller = new PeriodicLoopController(TimeSpan.FromSeconds(_clientSettings.ConnectionSettings.PfsKeyDuration), _logger);
+                _periodicLoop.Controller.BindTo(_periodicLoop.Loop);
+                pStart = _periodicLoop.Controller.SignalAsync(ResumableSignalState.Start);
+                
                 _receiveLoop.Loop ??= new ReceiveLoop(this, _logger);
                 _receiveLoop.Controller = new GenericLoopController(_logger);
                 _receiveLoop.Controller.BindTo(_receiveLoop.Loop);
@@ -108,12 +112,6 @@ namespace CatraProto.Client.Connections
                 _writeLoop.Controller.BindTo(_writeLoop.Loop);
                 wStart = _writeLoop.Controller.SignalAsync(ResumableSignalState.Start);   
                 wSus = _writeLoop.Controller.SignalAsync(ResumableSignalState.Suspend);
-
-
-                _periodicLoopController.Loop ??= new KeyGenerator(MtProtoState.KeysHandler.TemporaryAuthKey, this, _logger);
-                _periodicLoopController.Controller = new PeriodicLoopController(TimeSpan.FromSeconds(_clientSettings.ConnectionSettings.PfsKeyDuration), _logger);
-                _periodicLoopController.Controller.BindTo(_periodicLoopController.Loop);
-                pStart = _periodicLoopController.Controller.SignalAsync(ResumableSignalState.Start);
             }
             
             await Task.WhenAll(wStart, wSus, rStart, pStart);
@@ -122,9 +120,26 @@ namespace CatraProto.Client.Connections
 
         private async Task StopLoops()
         {
-            var t1 = _writeLoop.Controller?.SignalAsync(ResumableSignalState.Stop);
-            var t2 = _receiveLoop.Controller?.SignalAsync(GenericSignalState.Stop);
-            await Task.WhenAll(t1, t2);
+            _logger.Information("Stopping loops for {Connection}", ConnectionInfo);
+            Task wStop, rStop, pStop;
+            lock (_mutex)
+            {
+                wStop = _writeLoop.Controller is null ? Task.CompletedTask : _writeLoop.Controller.SignalAsync(ResumableSignalState.Stop);
+                rStop = _receiveLoop.Controller is null ? Task.CompletedTask : _receiveLoop.Controller.SignalAsync(GenericSignalState.Stop);
+                pStop = _periodicLoop.Controller is null ? Task.CompletedTask : _periodicLoop.Controller.SignalAsync(ResumableSignalState.Stop);
+
+                _writeLoop.Loop = null;
+                _writeLoop.Controller = null;
+                
+                _receiveLoop.Loop = null;
+                _receiveLoop.Controller = null;
+                
+                _periodicLoop.Loop = null;
+                _periodicLoop.Controller = null;
+            }
+            
+            await Task.WhenAll(wStop, rStop, pStop);
+            _logger.Information("All loops for {Connection} stopped", ConnectionInfo);
         }
         
         public void WakeUpLoop()
@@ -144,11 +159,19 @@ namespace CatraProto.Client.Connections
             Task task;
             lock (_mutex)
             {
-                if (_periodicLoopController.Controller is not null)
+                if (_periodicLoop.Controller is not null)
                 {
-                    _logger.Information("Waking up loop to regen key and resetting timer");
-                    task = _periodicLoopController.Controller.SignalAsync(ResumableSignalState.Resume);
-                    _periodicLoopController.Controller.ChangeInterval(TimeSpan.FromSeconds(_clientSettings.ConnectionSettings.PfsKeyDuration));
+                    if (!MtProtoState.KeysHandler.TemporaryAuthKey.HasExpired())
+                    {
+                        _logger.Information("Waking up loop to regen key and resetting timer");
+                        MtProtoState.KeysHandler.TemporaryAuthKey.SetExpired();
+                        task = _periodicLoop.Controller.TrySignalAsync(ResumableSignalState.Resume);
+                        _periodicLoop.Controller.ChangeInterval(TimeSpan.FromSeconds(_clientSettings.ConnectionSettings.PfsKeyDuration));   
+                    }
+                    else
+                    {
+                        task = Task.CompletedTask;
+                    }
                 }
                 else
                 {

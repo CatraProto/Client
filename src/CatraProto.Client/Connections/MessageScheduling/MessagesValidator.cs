@@ -1,4 +1,6 @@
 using System;
+using System.Diagnostics;
+using System.Linq;
 using CatraProto.Client.Connections.MessageScheduling.ConnectionMessages;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL.Interfaces;
@@ -21,6 +23,15 @@ namespace CatraProto.Client.Connections.MessageScheduling
 
         public bool IsMessageValid(EncryptedConnectionMessage connectionMessage, IObject deserialization)
         {
+            using var stream = connectionMessage.GetPlainTextStream(connectionMessage.Padding);
+            var msgComputed = connectionMessage.ComputeMsgKey(stream.ToArray(), false);
+            
+            if (!msgComputed.SequenceEqual(connectionMessage.MsgKey!))
+            {
+                _logger.Warning("DISCARDING MESSAGE DUE TO MSG_KEY MISMATCH {ComputeKey} != {ReceivedKey}", msgComputed, connectionMessage.MsgKey);
+                return false;
+            }
+            
             if (deserialization is not MsgContainer container)
             {
                 return InternalCheckMessageValidity(connectionMessage, deserialization);
@@ -48,20 +59,9 @@ namespace CatraProto.Client.Connections.MessageScheduling
             var shouldSeqno = _mtProtoState.SeqnoHandler.ComputeSeqno(deserialized, true);
             if (shouldSeqno != connectionMessage.SeqNo)
             {
-                _logger.Warning("Received seqno {RSeqno} does not equal computed seqno {CSeqno} ({Obj})", connectionMessage.SeqNo, shouldSeqno,
-                    deserialized);
+                _logger.Warning("Received seqno {RSeqno} does not equal computed seqno {CSeqno} ({Obj})", connectionMessage.SeqNo, shouldSeqno, deserialized);
             }
-
-            switch (deserialized)
-            {
-                case NewSessionCreated newSessionCreated:
-                    HandleNewSessionCreation(newSessionCreated, connectionMessage.SessionId);
-                    break;
-                case BadServerSalt badServerSalt:
-                    HandleBadServerSalt(badServerSalt);
-                    break;
-            }
-
+            
             var sessionId = _mtProtoState.SessionIdHandler.GetSessionId();
             if (sessionId != connectionMessage.SessionId)
             {
@@ -69,7 +69,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
                 return false;
             }
 
-            if (!_mtProtoState.SaltHandler.IsSaltValid(connectionMessage.Salt))
+            if (!_mtProtoState.SaltHandler.IsSaltValid(connectionMessage.Salt) && deserialized is not BadServerSalt)
             {
                 return false;
             }
@@ -81,35 +81,6 @@ namespace CatraProto.Client.Connections.MessageScheduling
 
             return true;
         }
-
-        private void HandleNewSessionCreation(NewSessionCreated newSessionCreated, long sessionId)
-        {
-            if (_mtProtoState.SessionIdHandler.GetSessionId() == sessionId)
-            {
-                _logger.Verbose("Received new session created but the id is the same as the old one, new server salt {Salt}, new SessionId {SessionId}", newSessionCreated.ServerSalt, sessionId);
-                return;
-            }
-
-            _mtProtoState.SessionIdHandler.SetSessionId(sessionId);
-            _mtProtoState.SaltHandler.SetSalt(newSessionCreated.ServerSalt, true);
-            _mtProtoState.SeqnoHandler.ContentRelatedReceived = 0;
-            _logger.Information("New session created, new server salt {Salt}, new SessionId {SessionId}", newSessionCreated.ServerSalt, sessionId);
-        }
-
-        private void HandleBadServerSalt(BadServerSalt serverSalt)
-        {
-            _logger.Information("Some messages were sent using the wrong salt, now using the new one ({Salt}) and resending messages", serverSalt.NewServerSalt);
-            _mtProtoState.SaltHandler.SetSalt(serverSalt.NewServerSalt, false);
-            if (_messagesHandler.MessagesTrackers.MessageCompletionTracker.RemoveCompletions(serverSalt.BadMsgId, out var messageItems))
-            {
-                var count = messageItems.Count;
-                for (var i = 0; i < count; i++)
-                {
-                    var item = messageItems[i];
-                    _logger.Information("Resending message {Body} because it was sent using an expired salt", item.Body);
-                    item.SetToSend(true, i == count - 1, true);
-                }
-            }
-        }
+        
     }
 }
