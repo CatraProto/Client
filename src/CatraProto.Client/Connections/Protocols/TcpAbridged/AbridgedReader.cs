@@ -25,8 +25,7 @@ namespace CatraProto.Client.Connections.Protocols.TcpAbridged
             var length = firstByte;
             if (length >= 0x7f)
             {
-                length = await _networkStream.ReadByteAsync(token) | await _networkStream.ReadByteAsync(token) << 8 |
-                         await _networkStream.ReadByteAsync(token) << 16;
+                length = await _networkStream.ReadByteAsync(token) | await _networkStream.ReadByteAsync(token) << 8 | await _networkStream.ReadByteAsync(token) << 16;
             }
             
             length *= 4;

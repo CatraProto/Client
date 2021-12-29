@@ -23,18 +23,18 @@ namespace CatraProto.Client.Connections.Protocols.TcpAbridged
 
         private MemoryStream SetProtocolHeaders(MemoryStream stream)
         {
-            var streamLenght = stream.Length / 4;
-            using var streamWriter = new BinaryWriter(new MemoryStream(), Encoding.Default, true);
-            if (streamLenght >= 127)
+            var streamLength = stream.Length / 4;
+            using var streamWriter = new BinaryWriter(new MemoryStream(), Encoding.UTF8, true);
+            if (streamLength >= 127)
             {
                 streamWriter.Write((byte)127);
-                streamWriter.Write((byte)streamLenght);
-                streamWriter.Write((byte)streamLenght >> 8);
-                streamWriter.Write((byte)streamLenght >> 16);
+                streamWriter.Write((byte)streamLength);
+                streamWriter.Write((byte)(streamLength >> 8));
+                streamWriter.Write((byte)(streamLength >> 16));
             }
             else
             {
-                streamWriter.Write((byte)streamLenght);
+                streamWriter.Write((byte)streamLength);
             }
 
             streamWriter.Write(stream.ToArray());
