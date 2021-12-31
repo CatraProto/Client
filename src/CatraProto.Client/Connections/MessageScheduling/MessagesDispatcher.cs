@@ -47,19 +47,13 @@ namespace CatraProto.Client.Connections.MessageScheduling
             if (connectionMessage.Body.Length == 4)
             {
                 var error = reader.Read<int>();
-                var rpcError = new RpcError
-                {
-                    ErrorCode = error,
-                    ErrorMessage = "Protocol error"
-                };
-
                 //It could also be an error during the key exchange, but if everything is implemented correctly it should never happen
                 _logger.Warning("Received protocol error {Error} from server", error);
-
-
-                _logger.Information("Server forgot authorization key, regenerating and rescheduling messages");
-                _mtProtoState.KeysHandler.TemporaryAuthKey.SetExpired();
-                await _connection.RegenKey();
+                if (error == -404)
+                {
+                    _logger.Information("Server forgot authorization key, regenerating and rescheduling messages");
+                    await _connection.RegenKey();   
+                }
                 return;
             }
 
@@ -71,12 +65,12 @@ namespace CatraProto.Client.Connections.MessageScheduling
                 {
                     if (_messagesValidator.IsMessageValid((EncryptedConnectionMessage)connectionMessage, deserialized))
                     {
-                        await HandleObject(deserialized, reader, true);
+                        HandleObject(connectionMessage, deserialized, reader);
                     }
                 }
                 else
                 {
-                    await HandleObject(deserialized, reader, false);
+                    HandleObject(connectionMessage, deserialized, reader);
                 }
             }
             catch (DeserializationException e)
@@ -85,9 +79,9 @@ namespace CatraProto.Client.Connections.MessageScheduling
             }
         }
 
-        private async Task HandleObject(IObject obj, Reader reader, bool isEncrypted)
+        private void HandleObject(IConnectionMessage connectionMessage, IObject obj, Reader reader)
         {
-            if (isEncrypted)
+            if (connectionMessage is EncryptedConnectionMessage encryptedConnectionMessage)
             {
                 switch (obj)
                 {
@@ -104,10 +98,10 @@ namespace CatraProto.Client.Connections.MessageScheduling
                         HandleFutureSalts(futureSalts);
                         break;
                     case RpcObject rpcResult:
-                        await HandleRpcResult(rpcResult);
+                        HandleRpcResult(rpcResult);
                         break;
                     case MsgContainer msgContainer:
-                        HandleContainer(msgContainer, reader);
+                        HandleContainer(connectionMessage, msgContainer, reader);
                         break;
                     case UpdatesBase updatesBase:
                         break;
@@ -133,11 +127,11 @@ namespace CatraProto.Client.Connections.MessageScheduling
             _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(pong.MsgId, pong, GetExecInfo());
         }
 
-        private void HandleContainer(MsgContainer container, Reader reader)
+        private void HandleContainer(IConnectionMessage connectionMessage, MsgContainer container, Reader reader)
         {
             foreach (var message in container.Messages)
             {
-                HandleObject(message.Body, reader, true);
+                HandleObject(connectionMessage, message.Body, reader);
             }
         }
 
@@ -146,7 +140,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
             _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(futureSalts.ReqMsgId, futureSalts, GetExecInfo());
         }
 
-        private async Task HandleRpcResult(RpcObject rpcObject)
+        private void HandleRpcResult(RpcObject rpcObject)
         {
             _logger.Information("Handling rpc message in response to id {Id}", rpcObject.MessageId);
             if (rpcObject.Response is RpcError error)
@@ -154,16 +148,18 @@ namespace CatraProto.Client.Connections.MessageScheduling
                 var errorDetected = ParsersList.GetError(error);
                 if (errorDetected is IMigrateError migrateError)
                 {
-                    if (_messagesHandler.MessagesTrackers.MessageCompletionTracker.RemoveCompletion(rpcObject.MessageId, out var item))
+                    Task.Run(async () =>
                     {
-                        _logger.Information("Received migrate error, moving request and setting account dc to DC{DcId} ", migrateError.DcId);
-                        var connection = await _clientSession.ConnectionPool.GetConnectionByDcAsync(migrateError.DcId);
-                        _clientSession.ConnectionPool.SetAccountConnection(connection);
-                        item.BindTo(connection.MessagesHandler);
-                        item.SetToSend();
-                        return;
-                        //item.BindTo((await _connectionPool.GetConnectionByDcAsync(migrateError.DcId)).MessagesHandler);
-                    }
+                        if (_messagesHandler.MessagesTrackers.MessageCompletionTracker.RemoveCompletion(rpcObject.MessageId, out var item))
+                        {
+                            _logger.Information("Received migrate error, moving request and setting account dc to DC{DcId} ", migrateError.DcId);
+                            var connection = await _clientSession.ConnectionPool.GetConnectionByDcAsync(migrateError.DcId);
+                            _clientSession.ConnectionPool.SetAccountConnection(connection);
+                            item.BindTo(connection.MessagesHandler);
+                            item.SetToSend();
+                        }
+                    });
+                    return;
                 }
             }
 
