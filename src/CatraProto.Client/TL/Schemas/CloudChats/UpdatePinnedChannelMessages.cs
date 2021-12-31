@@ -15,7 +15,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Pinned = 1 << 0
 		}
 
-        public static int StaticConstructorId { get => -2054649973; }
+        public static int StaticConstructorId { get => 1538885128; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -26,7 +26,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public bool Pinned { get; set; }
 
 [Newtonsoft.Json.JsonProperty("channel_id")]
-		public int ChannelId { get; set; }
+		public long ChannelId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("messages")]
 		public IList<int> Messages { get; set; }
@@ -60,7 +60,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Flags = reader.Read<int>();
 			Pinned = FlagsHelper.IsFlagSet(Flags, 0);
-			ChannelId = reader.Read<int>();
+			ChannelId = reader.Read<long>();
 			Messages = reader.ReadVector<int>();
 			Pts = reader.Read<int>();
 			PtsCount = reader.Read<int>();

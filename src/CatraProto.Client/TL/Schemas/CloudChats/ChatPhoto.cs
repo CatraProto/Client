@@ -12,10 +12,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		[Flags]
 		public enum FlagsEnum 
 		{
-			HasVideo = 1 << 0
+			HasVideo = 1 << 0,
+			StrippedThumb = 1 << 1
 		}
 
-        public static int StaticConstructorId { get => -770990276; }
+        public static int StaticConstructorId { get => 476978193; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -25,11 +26,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("has_video")]
 		public bool HasVideo { get; set; }
 
-[Newtonsoft.Json.JsonProperty("photo_small")]
-		public CatraProto.Client.TL.Schemas.CloudChats.FileLocationBase PhotoSmall { get; set; }
+[Newtonsoft.Json.JsonProperty("photo_id")]
+		public long PhotoId { get; set; }
 
-[Newtonsoft.Json.JsonProperty("photo_big")]
-		public CatraProto.Client.TL.Schemas.CloudChats.FileLocationBase PhotoBig { get; set; }
+[Newtonsoft.Json.JsonProperty("stripped_thumb")]
+		public byte[] StrippedThumb { get; set; }
 
 [Newtonsoft.Json.JsonProperty("dc_id")]
 		public int DcId { get; set; }
@@ -38,6 +39,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void UpdateFlags() 
 		{
 			Flags = HasVideo ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
+			Flags = StrippedThumb == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
 
 		}
 
@@ -46,8 +48,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
-			writer.Write(PhotoSmall);
-			writer.Write(PhotoBig);
+			writer.Write(PhotoId);
+			if(FlagsHelper.IsFlagSet(Flags, 1))
+			{
+				writer.Write(StrippedThumb);
+			}
+
 			writer.Write(DcId);
 
 		}
@@ -56,8 +62,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Flags = reader.Read<int>();
 			HasVideo = FlagsHelper.IsFlagSet(Flags, 0);
-			PhotoSmall = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.FileLocationBase>();
-			PhotoBig = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.FileLocationBase>();
+			PhotoId = reader.Read<long>();
+			if(FlagsHelper.IsFlagSet(Flags, 1))
+			{
+				StrippedThumb = reader.Read<byte[]>();
+			}
+
 			DcId = reader.Read<int>();
 
 		}

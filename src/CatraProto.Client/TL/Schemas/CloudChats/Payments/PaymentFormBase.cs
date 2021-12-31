@@ -13,14 +13,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 [Newtonsoft.Json.JsonProperty("password_missing")]
 		public abstract bool PasswordMissing { get; set; }
 
+[Newtonsoft.Json.JsonProperty("form_id")]
+		public abstract long FormId { get; set; }
+
 [Newtonsoft.Json.JsonProperty("bot_id")]
-		public abstract int BotId { get; set; }
+		public abstract long BotId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("invoice")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.InvoiceBase Invoice { get; set; }
 
 [Newtonsoft.Json.JsonProperty("provider_id")]
-		public abstract int ProviderId { get; set; }
+		public abstract long ProviderId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("url")]
 		public abstract string Url { get; set; }

@@ -1,55 +1,53 @@
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-    public partial class GetAppChangelog : IMethod
-    {
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => -1877938321;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
-
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
-
-        [JsonProperty("prev_app_version")] public string PrevAppVersion { get; set; }
-
-        public override string ToString()
-        {
-            return "help.getAppChangelog";
-        }
+	public partial class GetAppChangelog : IMethod
+	{
 
 
-        public void UpdateFlags()
-        {
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => -1877938321; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-            writer.Write(PrevAppVersion);
-        }
+[Newtonsoft.Json.JsonProperty("prev_app_version")]
+		public string PrevAppVersion { get; set; }
 
-        public void Deserialize(Reader reader)
-        {
-            PrevAppVersion = reader.Read<string>();
-        }
-    }
+
+		public void UpdateFlags() 
+		{
+
+		}
+
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(PrevAppVersion);
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			PrevAppVersion = reader.Read<string>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "help.getAppChangelog";
+		}
+	}
 }

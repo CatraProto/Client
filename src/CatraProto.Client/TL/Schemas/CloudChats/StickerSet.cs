@@ -17,11 +17,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Masks = 1 << 3,
 			Animated = 1 << 5,
 			InstalledDate = 1 << 0,
-			Thumb = 1 << 4,
-			ThumbDcId = 1 << 4
+			Thumbs = 1 << 4,
+			ThumbDcId = 1 << 4,
+			ThumbVersion = 1 << 4
 		}
 
-        public static int StaticConstructorId { get => -290164953; }
+        public static int StaticConstructorId { get => -673242758; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -55,11 +56,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("short_name")]
 		public override string ShortName { get; set; }
 
-[Newtonsoft.Json.JsonProperty("thumb")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase Thumb { get; set; }
+[Newtonsoft.Json.JsonProperty("thumbs")]
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase> Thumbs { get; set; }
 
 [Newtonsoft.Json.JsonProperty("thumb_dc_id")]
 		public override int? ThumbDcId { get; set; }
+
+[Newtonsoft.Json.JsonProperty("thumb_version")]
+		public override int? ThumbVersion { get; set; }
 
 [Newtonsoft.Json.JsonProperty("count")]
 		public override int Count { get; set; }
@@ -75,8 +79,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = Masks ? FlagsHelper.SetFlag(Flags, 3) : FlagsHelper.UnsetFlag(Flags, 3);
 			Flags = Animated ? FlagsHelper.SetFlag(Flags, 5) : FlagsHelper.UnsetFlag(Flags, 5);
 			Flags = InstalledDate == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
-			Flags = Thumb == null ? FlagsHelper.UnsetFlag(Flags, 4) : FlagsHelper.SetFlag(Flags, 4);
+			Flags = Thumbs == null ? FlagsHelper.UnsetFlag(Flags, 4) : FlagsHelper.SetFlag(Flags, 4);
 			Flags = ThumbDcId == null ? FlagsHelper.UnsetFlag(Flags, 4) : FlagsHelper.SetFlag(Flags, 4);
+			Flags = ThumbVersion == null ? FlagsHelper.UnsetFlag(Flags, 4) : FlagsHelper.SetFlag(Flags, 4);
 
 		}
 
@@ -96,12 +101,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			writer.Write(ShortName);
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				writer.Write(Thumb);
+				writer.Write(Thumbs);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
 				writer.Write(ThumbDcId.Value);
+			}
+
+			if(FlagsHelper.IsFlagSet(Flags, 4))
+			{
+				writer.Write(ThumbVersion.Value);
 			}
 
 			writer.Write(Count);
@@ -127,12 +137,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ShortName = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				Thumb = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase>();
+				Thumbs = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
 				ThumbDcId = reader.Read<int>();
+			}
+
+			if(FlagsHelper.IsFlagSet(Flags, 4))
+			{
+				ThumbVersion = reader.Read<int>();
 			}
 
 			Count = reader.Read<int>();

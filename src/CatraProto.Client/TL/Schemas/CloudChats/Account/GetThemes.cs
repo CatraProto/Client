@@ -1,59 +1,58 @@
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public partial class GetThemes : IMethod
-    {
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => 676939512;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(ThemesBase);
-
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
-
-        [JsonProperty("format")] public string Format { get; set; }
-
-        [JsonProperty("hash")] public int Hash { get; set; }
-
-        public override string ToString()
-        {
-            return "account.getThemes";
-        }
+	public partial class GetThemes : IMethod
+	{
 
 
-        public void UpdateFlags()
-        {
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => 1913054296; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Account.ThemesBase);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-            writer.Write(Format);
-            writer.Write(Hash);
-        }
+[Newtonsoft.Json.JsonProperty("format")]
+		public string Format { get; set; }
 
-        public void Deserialize(Reader reader)
-        {
-            Format = reader.Read<string>();
-            Hash = reader.Read<int>();
-        }
-    }
+[Newtonsoft.Json.JsonProperty("hash")]
+		public long Hash { get; set; }
+
+
+		public void UpdateFlags() 
+		{
+
+		}
+
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(Format);
+			writer.Write(Hash);
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			Format = reader.Read<string>();
+			Hash = reader.Read<long>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "account.getThemes";
+		}
+	}
 }

@@ -1,55 +1,53 @@
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 {
-    public partial class LeaveChannel : IMethod
-    {
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => -130635115;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
-
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
-
-        [JsonProperty("channel")] public InputChannelBase Channel { get; set; }
-
-        public override string ToString()
-        {
-            return "channels.leaveChannel";
-        }
+	public partial class LeaveChannel : IMethod
+	{
 
 
-        public void UpdateFlags()
-        {
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => -130635115; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-            writer.Write(Channel);
-        }
+[Newtonsoft.Json.JsonProperty("channel")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase Channel { get; set; }
 
-        public void Deserialize(Reader reader)
-        {
-            Channel = reader.Read<InputChannelBase>();
-        }
-    }
+
+		public void UpdateFlags() 
+		{
+
+		}
+
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(Channel);
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			Channel = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "channels.leaveChannel";
+		}
+	}
 }

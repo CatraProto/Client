@@ -24,7 +24,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int ConstructorId { get => StaticConstructorId; }
         
 [Newtonsoft.Json.JsonProperty("id")]
-		public long Id { get; set; }
+		public override long Id { get; set; }
 
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }

@@ -14,7 +14,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public abstract int Date { get; set; }
 
 [Newtonsoft.Json.JsonProperty("user_id")]
-		public abstract int UserId { get; set; }
+		public abstract long UserId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("action")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionBase Action { get; set; }

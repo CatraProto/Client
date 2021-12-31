@@ -1,55 +1,53 @@
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class GetSavedGifs : IMethod
-    {
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => -2084618926;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(SavedGifsBase);
-
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
-
-        [JsonProperty("hash")] public int Hash { get; set; }
-
-        public override string ToString()
-        {
-            return "messages.getSavedGifs";
-        }
+	public partial class GetSavedGifs : IMethod
+	{
 
 
-        public void UpdateFlags()
-        {
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => 1559270965; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.SavedGifsBase);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-            writer.Write(Hash);
-        }
+[Newtonsoft.Json.JsonProperty("hash")]
+		public long Hash { get; set; }
 
-        public void Deserialize(Reader reader)
-        {
-            Hash = reader.Read<int>();
-        }
-    }
+
+		public void UpdateFlags() 
+		{
+
+		}
+
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(Hash);
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			Hash = reader.Read<long>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "messages.getSavedGifs";
+		}
+	}
 }

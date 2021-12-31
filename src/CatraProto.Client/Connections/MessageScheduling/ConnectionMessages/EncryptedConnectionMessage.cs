@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -26,11 +27,11 @@ namespace CatraProto.Client.Connections.MessageScheduling.ConnectionMessages
         public int SeqNo { get; private set; }
         public byte[]? Padding { get; private set; } = null;
 
-        public EncryptedConnectionMessage(AuthKeyObject authKey, byte[] payload)
+        public EncryptedConnectionMessage(AuthKeyObject authKey, byte[] payload, bool fromClient = false)
         {
             Body = null!;
             AuthKey = authKey;
-            Import(payload);
+            Import(payload, fromClient);
         }
 
         public EncryptedConnectionMessage(AuthKeyObject authKey, long messageId, long salt, long sessionId, int seqNo, byte[] body)
@@ -46,11 +47,16 @@ namespace CatraProto.Client.Connections.MessageScheduling.ConnectionMessages
 
         public void Import(byte[] message)
         {
+            Import(message, false);
+        }
+        
+        public void Import(byte[] message, bool fromClient)
+        {
             using (var reader = new BinaryReader(message.ToMemoryStream()))
             {
                 AuthKeyId = reader.ReadInt64();
                 MsgKey = reader.ReadBytes(16);
-                using var encryptor = AesCryptoCreator.CreateEncryptorV2(AuthKey.KeyArray, MsgKey, false);
+                using var encryptor = AesCryptoCreator.CreateEncryptorV2(AuthKey.KeyArray, MsgKey, fromClient);
                 var encryptedBuffer = reader.ReadBytes((int)(reader.BaseStream.Length - reader.BaseStream.Position));
                 var decryptedText = encryptor.Decrypt(encryptedBuffer);
                 using (var cleanReader = new BinaryReader(decryptedText.ToMemoryStream()))
@@ -109,7 +115,8 @@ namespace CatraProto.Client.Connections.MessageScheduling.ConnectionMessages
                 writer.Write(msgKey);
                 writer.Write(encryptor.Encrypt(toEncryptData));
                 
-                return ((MemoryStream)writer.BaseStream).ToArray();
+                var array = ((MemoryStream)writer.BaseStream).ToArray();
+                return array;
             }
         }
     }

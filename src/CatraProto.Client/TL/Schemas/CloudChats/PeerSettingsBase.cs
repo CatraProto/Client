@@ -31,8 +31,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("invite_members")]
 		public abstract bool InviteMembers { get; set; }
 
+[Newtonsoft.Json.JsonProperty("request_chat_broadcast")]
+		public abstract bool RequestChatBroadcast { get; set; }
+
 [Newtonsoft.Json.JsonProperty("geo_distance")]
 		public abstract int? GeoDistance { get; set; }
+
+[Newtonsoft.Json.JsonProperty("request_chat_title")]
+		public abstract string RequestChatTitle { get; set; }
+
+[Newtonsoft.Json.JsonProperty("request_chat_date")]
+		public abstract int? RequestChatDate { get; set; }
 
         public abstract void UpdateFlags();
         public abstract void Deserialize(Reader reader);

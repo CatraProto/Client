@@ -1,63 +1,63 @@
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class AddChatUser : IMethod
-    {
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => -106911223;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
-
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
-
-        [JsonProperty("chat_id")] public int ChatId { get; set; }
-
-        [JsonProperty("user_id")] public InputUserBase UserId { get; set; }
-
-        [JsonProperty("fwd_limit")] public int FwdLimit { get; set; }
-
-        public override string ToString()
-        {
-            return "messages.addChatUser";
-        }
+	public partial class AddChatUser : IMethod
+	{
 
 
-        public void UpdateFlags()
-        {
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => -230206493; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-            writer.Write(ChatId);
-            writer.Write(UserId);
-            writer.Write(FwdLimit);
-        }
+[Newtonsoft.Json.JsonProperty("chat_id")]
+		public long ChatId { get; set; }
 
-        public void Deserialize(Reader reader)
-        {
-            ChatId = reader.Read<int>();
-            UserId = reader.Read<InputUserBase>();
-            FwdLimit = reader.Read<int>();
-        }
-    }
+[Newtonsoft.Json.JsonProperty("user_id")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase UserId { get; set; }
+
+[Newtonsoft.Json.JsonProperty("fwd_limit")]
+		public int FwdLimit { get; set; }
+
+
+		public void UpdateFlags() 
+		{
+
+		}
+
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(ChatId);
+			writer.Write(UserId);
+			writer.Write(FwdLimit);
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			ChatId = reader.Read<long>();
+			UserId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
+			FwdLimit = reader.Read<int>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "messages.addChatUser";
+		}
+	}
 }

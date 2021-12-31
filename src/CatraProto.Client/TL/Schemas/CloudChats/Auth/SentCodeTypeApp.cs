@@ -1,47 +1,45 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
-using Newtonsoft.Json;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
-    public partial class SentCodeTypeApp : SentCodeTypeBase
-    {
-        public static int StaticConstructorId
-        {
-            get => 1035688326;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonProperty("length")] public int Length { get; set; }
+	public partial class SentCodeTypeApp : CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeTypeBase
+	{
 
 
-        public override void UpdateFlags()
-        {
-        }
+        public static int StaticConstructorId { get => 1035688326; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonProperty("length")]
+		public int Length { get; set; }
 
-        public override void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+        
+		public override void UpdateFlags() 
+		{
 
-            writer.Write(Length);
-        }
+		}
 
-        public override void Deserialize(Reader reader)
-        {
-            Length = reader.Read<int>();
-        }
+		public override void Serialize(Writer writer)
+		{
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(Length);
 
-        public override string ToString()
-        {
-            return "auth.sentCodeTypeApp";
-        }
-    }
+		}
+
+		public override void Deserialize(Reader reader)
+		{
+			Length = reader.Read<int>();
+
+		}
+				
+		public override string ToString()
+		{
+		    return "auth.sentCodeTypeApp";
+		}
+	}
 }

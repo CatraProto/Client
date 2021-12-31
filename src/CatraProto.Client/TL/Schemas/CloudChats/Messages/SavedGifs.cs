@@ -1,52 +1,50 @@
+using System;
 using System.Collections.Generic;
 using CatraProto.TL;
-using Newtonsoft.Json;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class SavedGifs : SavedGifsBase
-    {
-        public static int StaticConstructorId
-        {
-            get => 772213157;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonProperty("hash")] public int Hash { get; set; }
-
-        [JsonProperty("gifs")] public IList<DocumentBase> Gifs { get; set; }
+	public partial class SavedGifs : CatraProto.Client.TL.Schemas.CloudChats.Messages.SavedGifsBase
+	{
 
 
-        public override void UpdateFlags()
-        {
-        }
+        public static int StaticConstructorId { get => -2069878259; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonProperty("hash")]
+		public long Hash { get; set; }
 
-        public override void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonProperty("gifs")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase> Gifs { get; set; }
 
-            writer.Write(Hash);
-            writer.Write(Gifs);
-        }
+        
+		public override void UpdateFlags() 
+		{
 
-        public override void Deserialize(Reader reader)
-        {
-            Hash = reader.Read<int>();
-            Gifs = reader.ReadVector<DocumentBase>();
-        }
+		}
 
-        public override string ToString()
-        {
-            return "messages.savedGifs";
-        }
-    }
+		public override void Serialize(Writer writer)
+		{
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(Hash);
+			writer.Write(Gifs);
+
+		}
+
+		public override void Deserialize(Reader reader)
+		{
+			Hash = reader.Read<long>();
+			Gifs = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
+
+		}
+				
+		public override string ToString()
+		{
+		    return "messages.savedGifs";
+		}
+	}
 }

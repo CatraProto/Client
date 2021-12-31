@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using System.Linq;
-using System.Text.Json.Serialization;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto

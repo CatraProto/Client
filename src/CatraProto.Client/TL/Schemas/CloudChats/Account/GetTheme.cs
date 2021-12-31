@@ -1,63 +1,63 @@
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public partial class GetTheme : IMethod
-    {
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => -1919060949;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(ThemeBase);
-
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
-
-        [JsonProperty("format")] public string Format { get; set; }
-
-        [JsonProperty("theme")] public InputThemeBase Theme { get; set; }
-
-        [JsonProperty("document_id")] public long DocumentId { get; set; }
-
-        public override string ToString()
-        {
-            return "account.getTheme";
-        }
+	public partial class GetTheme : IMethod
+	{
 
 
-        public void UpdateFlags()
-        {
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => -1919060949; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.ThemeBase);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-            writer.Write(Format);
-            writer.Write(Theme);
-            writer.Write(DocumentId);
-        }
+[Newtonsoft.Json.JsonProperty("format")]
+		public string Format { get; set; }
 
-        public void Deserialize(Reader reader)
-        {
-            Format = reader.Read<string>();
-            Theme = reader.Read<InputThemeBase>();
-            DocumentId = reader.Read<long>();
-        }
-    }
+[Newtonsoft.Json.JsonProperty("theme")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputThemeBase Theme { get; set; }
+
+[Newtonsoft.Json.JsonProperty("document_id")]
+		public long DocumentId { get; set; }
+
+
+		public void UpdateFlags() 
+		{
+
+		}
+
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(Format);
+			writer.Write(Theme);
+			writer.Write(DocumentId);
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			Format = reader.Read<string>();
+			Theme = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputThemeBase>();
+			DocumentId = reader.Read<long>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "account.getTheme";
+		}
+	}
 }

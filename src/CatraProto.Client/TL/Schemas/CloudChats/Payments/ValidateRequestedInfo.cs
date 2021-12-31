@@ -17,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 		}
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => 1997180532; }
+        public static int StaticConstructorId { get => -619695760; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -32,6 +32,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 
 [Newtonsoft.Json.JsonProperty("save")]
 		public bool Save { get; set; }
+
+[Newtonsoft.Json.JsonProperty("peer")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
 
 [Newtonsoft.Json.JsonProperty("msg_id")]
 		public int MsgId { get; set; }
@@ -51,6 +54,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
             if(ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
+			writer.Write(Peer);
 			writer.Write(MsgId);
 			writer.Write(Info);
 
@@ -60,6 +64,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 		{
 			Flags = reader.Read<int>();
 			Save = FlagsHelper.IsFlagSet(Flags, 0);
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
 			MsgId = reader.Read<int>();
 			Info = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase>();
 

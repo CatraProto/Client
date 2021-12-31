@@ -9,31 +9,55 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class MessageEmpty : CatraProto.Client.TL.Schemas.CloudChats.MessageBase
 	{
+		[Flags]
+		public enum FlagsEnum 
+		{
+			PeerId = 1 << 0
+		}
 
-
-        public static int StaticConstructorId { get => -2082087340; }
+        public static int StaticConstructorId { get => -1868117372; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
+[Newtonsoft.Json.JsonIgnore]
+		public int Flags { get; set; }
+
 [Newtonsoft.Json.JsonProperty("id")]
 		public override int Id { get; set; }
+
+[Newtonsoft.Json.JsonProperty("peer_id")]
+		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase PeerId { get; set; }
 
         
 		public override void UpdateFlags() 
 		{
+			Flags = PeerId == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
 
 		}
 
 		public override void Serialize(Writer writer)
 		{
 		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			UpdateFlags();
+			writer.Write(Flags);
 			writer.Write(Id);
+			if(FlagsHelper.IsFlagSet(Flags, 0))
+			{
+				writer.Write(PeerId);
+			}
+
 
 		}
 
 		public override void Deserialize(Reader reader)
 		{
+			Flags = reader.Read<int>();
 			Id = reader.Read<int>();
+			if(FlagsHelper.IsFlagSet(Flags, 0))
+			{
+				PeerId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+			}
+
 
 		}
 				

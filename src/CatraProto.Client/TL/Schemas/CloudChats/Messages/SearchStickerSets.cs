@@ -17,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		}
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => -1028140917; }
+        public static int StaticConstructorId { get => 896555914; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -37,7 +37,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public string Q { get; set; }
 
 [Newtonsoft.Json.JsonProperty("hash")]
-		public int Hash { get; set; }
+		public long Hash { get; set; }
 
 
 		public void UpdateFlags() 
@@ -61,7 +61,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Flags = reader.Read<int>();
 			ExcludeFeatured = FlagsHelper.IsFlagSet(Flags, 0);
 			Q = reader.Read<string>();
-			Hash = reader.Read<int>();
+			Hash = reader.Read<long>();
 
 		}
 		

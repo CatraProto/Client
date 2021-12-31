@@ -1,47 +1,45 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
-using Newtonsoft.Json;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class MessagesNotModified : MessagesBase
-    {
-        public static int StaticConstructorId
-        {
-            get => 1951620897;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonProperty("count")] public int Count { get; set; }
+	public partial class MessagesNotModified : CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase
+	{
 
 
-        public override void UpdateFlags()
-        {
-        }
+        public static int StaticConstructorId { get => 1951620897; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonProperty("count")]
+		public int Count { get; set; }
 
-        public override void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+        
+		public override void UpdateFlags() 
+		{
 
-            writer.Write(Count);
-        }
+		}
 
-        public override void Deserialize(Reader reader)
-        {
-            Count = reader.Read<int>();
-        }
+		public override void Serialize(Writer writer)
+		{
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(Count);
 
-        public override string ToString()
-        {
-            return "messages.messagesNotModified";
-        }
-    }
+		}
+
+		public override void Deserialize(Reader reader)
+		{
+			Count = reader.Read<int>();
+
+		}
+				
+		public override string ToString()
+		{
+		    return "messages.messagesNotModified";
+		}
+	}
 }

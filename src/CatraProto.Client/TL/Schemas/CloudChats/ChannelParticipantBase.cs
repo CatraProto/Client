@@ -7,9 +7,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class ChannelParticipantBase : IObject
     {
 
-[Newtonsoft.Json.JsonProperty("user_id")]
-		public abstract int UserId { get; set; }
-
         public abstract void UpdateFlags();
         public abstract void Deserialize(Reader reader);
         public abstract void Serialize(Writer writer);

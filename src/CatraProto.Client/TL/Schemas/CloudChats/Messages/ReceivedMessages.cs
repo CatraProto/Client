@@ -1,55 +1,53 @@
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class ReceivedMessages : IMethod
-    {
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => 94983360;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(ReceivedNotifyMessageBase);
-
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = true;
-
-        [JsonProperty("max_id")] public int MaxId { get; set; }
-
-        public override string ToString()
-        {
-            return "messages.receivedMessages";
-        }
+	public partial class ReceivedMessages : IMethod
+	{
 
 
-        public void UpdateFlags()
-        {
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => 94983360; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.ReceivedNotifyMessageBase);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = true;
 
-            writer.Write(MaxId);
-        }
+[Newtonsoft.Json.JsonProperty("max_id")]
+		public int MaxId { get; set; }
 
-        public void Deserialize(Reader reader)
-        {
-            MaxId = reader.Read<int>();
-        }
-    }
+
+		public void UpdateFlags() 
+		{
+
+		}
+
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(MaxId);
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			MaxId = reader.Read<int>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "messages.receivedMessages";
+		}
+	}
 }

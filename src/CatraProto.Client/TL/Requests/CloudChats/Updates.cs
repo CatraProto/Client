@@ -1,65 +1,74 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
+using CatraProto.Client.Connections;
 using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.MTProto.Rpc;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using CatraProto.Client.TL.Schemas.CloudChats.Updates;
+using CatraProto.TL.Interfaces;
+using System.Collections.Generic;
+using System.Numerics;
+
 
 namespace CatraProto.Client.TL.Requests.CloudChats
 {
-    public partial class Updates
-    {
-        private readonly MessagesQueue _messagesQueue;
+	public partial class Updates
+	{
+		
+	    private readonly MessagesQueue _messagesQueue;
+	    internal Updates(MessagesQueue messagesQueue)
+	    {
+	        _messagesQueue = messagesQueue;
+	        
+	    }
+	    
+	    public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Updates.StateBase>> GetStateAsync( CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+		{
 
-        internal Updates(MessagesQueue messagesQueue)
-        {
-            _messagesQueue = messagesQueue;
-        }
+var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Updates.StateBase>(
+);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Updates.GetState(){
+};
 
-        public async Task<RpcMessage<StateBase>> GetStateAsync(MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
-        {
-            var rpcResponse = new RpcMessage<StateBase>();
-            messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-            var methodBody = new GetState();
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource!;
+return rpcResponse;
+}
+public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Updates.DifferenceBase>> GetDifferenceAsync(int pts, int date, int qts, int? ptsTotalLimit = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+		{
 
-            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-            await taskCompletionSource!;
-            return rpcResponse;
-        }
+var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Updates.DifferenceBase>(
+);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Updates.GetDifference(){
+Pts = pts,
+Date = date,
+Qts = qts,
+PtsTotalLimit = ptsTotalLimit,
+};
 
-        public async Task<RpcMessage<DifferenceBase>> GetDifferenceAsync(int pts, int date, int qts, int? ptsTotalLimit = null, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
-        {
-            var rpcResponse = new RpcMessage<DifferenceBase>();
-            messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-            var methodBody = new GetDifference
-            {
-                Pts = pts,
-                Date = date,
-                Qts = qts,
-                PtsTotalLimit = ptsTotalLimit
-            };
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource!;
+return rpcResponse;
+}
+public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Updates.ChannelDifferenceBase>> GetChannelDifferenceAsync(CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase channel, CatraProto.Client.TL.Schemas.CloudChats.ChannelMessagesFilterBase filter, int pts, int limit, bool force = true, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+		{
 
-            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-            await taskCompletionSource!;
-            return rpcResponse;
-        }
+var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Updates.ChannelDifferenceBase>(
+);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Updates.GetChannelDifference(){
+Channel = channel,
+Filter = filter,
+Pts = pts,
+Limit = limit,
+Force = force,
+};
 
-        public async Task<RpcMessage<ChannelDifferenceBase>> GetChannelDifferenceAsync(InputChannelBase channel, ChannelMessagesFilterBase filter, int pts, int limit, bool force = true, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
-        {
-            var rpcResponse = new RpcMessage<ChannelDifferenceBase>();
-            messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-            var methodBody = new GetChannelDifference
-            {
-                Channel = channel,
-                Filter = filter,
-                Pts = pts,
-                Limit = limit,
-                Force = force
-            };
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource!;
+return rpcResponse;
+}
 
-            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-            await taskCompletionSource!;
-            return rpcResponse;
-        }
-    }
+	}
 }

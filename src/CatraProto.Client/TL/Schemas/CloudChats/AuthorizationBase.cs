@@ -16,6 +16,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("password_pending")]
 		public abstract bool PasswordPending { get; set; }
 
+[Newtonsoft.Json.JsonProperty("encrypted_requests_disabled")]
+		public abstract bool EncryptedRequestsDisabled { get; set; }
+
+[Newtonsoft.Json.JsonProperty("call_requests_disabled")]
+		public abstract bool CallRequestsDisabled { get; set; }
+
 [Newtonsoft.Json.JsonProperty("hash")]
 		public abstract long Hash { get; set; }
 

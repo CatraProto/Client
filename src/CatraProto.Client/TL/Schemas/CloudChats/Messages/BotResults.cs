@@ -1,104 +1,105 @@
 using System;
 using System.Collections.Generic;
 using CatraProto.TL;
-using Newtonsoft.Json;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class BotResults : BotResultsBase
-    {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Gallery = 1 << 0,
-            NextOffset = 1 << 1,
-            SwitchPm = 1 << 2
-        }
+	public partial class BotResults : CatraProto.Client.TL.Schemas.CloudChats.Messages.BotResultsBase
+	{
+		[Flags]
+		public enum FlagsEnum 
+		{
+			Gallery = 1 << 0,
+			NextOffset = 1 << 1,
+			SwitchPm = 1 << 2
+		}
 
-        public static int StaticConstructorId
-        {
-            get => -1803769784;
-        }
+        public static int StaticConstructorId { get => -1803769784; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		public int Flags { get; set; }
 
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
+[Newtonsoft.Json.JsonProperty("gallery")]
+		public override bool Gallery { get; set; }
 
-        [JsonIgnore] public int Flags { get; set; }
+[Newtonsoft.Json.JsonProperty("query_id")]
+		public override long QueryId { get; set; }
 
-        [JsonProperty("gallery")] public override bool Gallery { get; set; }
+[Newtonsoft.Json.JsonProperty("next_offset")]
+		public override string NextOffset { get; set; }
 
-        [JsonProperty("query_id")] public override long QueryId { get; set; }
+[Newtonsoft.Json.JsonProperty("switch_pm")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.InlineBotSwitchPMBase SwitchPm { get; set; }
 
-        [JsonProperty("next_offset")] public override string NextOffset { get; set; }
+[Newtonsoft.Json.JsonProperty("results")]
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.BotInlineResultBase> Results { get; set; }
 
-        [JsonProperty("switch_pm")] public override InlineBotSwitchPMBase SwitchPm { get; set; }
+[Newtonsoft.Json.JsonProperty("cache_time")]
+		public override int CacheTime { get; set; }
 
-        [JsonProperty("results")] public override IList<BotInlineResultBase> Results { get; set; }
+[Newtonsoft.Json.JsonProperty("users")]
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
-        [JsonProperty("cache_time")] public override int CacheTime { get; set; }
+        
+		public override void UpdateFlags() 
+		{
+			Flags = Gallery ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
+			Flags = NextOffset == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
+			Flags = SwitchPm == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
 
-        [JsonProperty("users")] public override IList<UserBase> Users { get; set; }
+		}
 
+		public override void Serialize(Writer writer)
+		{
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			UpdateFlags();
+			writer.Write(Flags);
+			writer.Write(QueryId);
+			if(FlagsHelper.IsFlagSet(Flags, 1))
+			{
+				writer.Write(NextOffset);
+			}
 
-        public override void UpdateFlags()
-        {
-            Flags = Gallery ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
-            Flags = NextOffset == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
-            Flags = SwitchPm == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
-        }
+			if(FlagsHelper.IsFlagSet(Flags, 2))
+			{
+				writer.Write(SwitchPm);
+			}
 
-        public override void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+			writer.Write(Results);
+			writer.Write(CacheTime);
+			writer.Write(Users);
 
-            UpdateFlags();
-            writer.Write(Flags);
-            writer.Write(QueryId);
-            if (FlagsHelper.IsFlagSet(Flags, 1))
-            {
-                writer.Write(NextOffset);
-            }
+		}
 
-            if (FlagsHelper.IsFlagSet(Flags, 2))
-            {
-                writer.Write(SwitchPm);
-            }
+		public override void Deserialize(Reader reader)
+		{
+			Flags = reader.Read<int>();
+			Gallery = FlagsHelper.IsFlagSet(Flags, 0);
+			QueryId = reader.Read<long>();
+			if(FlagsHelper.IsFlagSet(Flags, 1))
+			{
+				NextOffset = reader.Read<string>();
+			}
 
-            writer.Write(Results);
-            writer.Write(CacheTime);
-            writer.Write(Users);
-        }
+			if(FlagsHelper.IsFlagSet(Flags, 2))
+			{
+				SwitchPm = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InlineBotSwitchPMBase>();
+			}
 
-        public override void Deserialize(Reader reader)
-        {
-            Flags = reader.Read<int>();
-            Gallery = FlagsHelper.IsFlagSet(Flags, 0);
-            QueryId = reader.Read<long>();
-            if (FlagsHelper.IsFlagSet(Flags, 1))
-            {
-                NextOffset = reader.Read<string>();
-            }
+			Results = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.BotInlineResultBase>();
+			CacheTime = reader.Read<int>();
+			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 
-            if (FlagsHelper.IsFlagSet(Flags, 2))
-            {
-                SwitchPm = reader.Read<InlineBotSwitchPMBase>();
-            }
-
-            Results = reader.ReadVector<BotInlineResultBase>();
-            CacheTime = reader.Read<int>();
-            Users = reader.ReadVector<UserBase>();
-        }
-
-        public override string ToString()
-        {
-            return "messages.botResults";
-        }
-    }
+		}
+				
+		public override string ToString()
+		{
+		    return "messages.botResults";
+		}
+	}
 }

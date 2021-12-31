@@ -2,59 +2,57 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class CreateChat : IMethod
-    {
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => 164303470;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
-
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
-
-        [JsonProperty("users")] public IList<InputUserBase> Users { get; set; }
-
-        [JsonProperty("title")] public string Title { get; set; }
-
-        public override string ToString()
-        {
-            return "messages.createChat";
-        }
+	public partial class CreateChat : IMethod
+	{
 
 
-        public void UpdateFlags()
-        {
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => 164303470; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-            writer.Write(Users);
-            writer.Write(Title);
-        }
+[Newtonsoft.Json.JsonProperty("users")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase> Users { get; set; }
 
-        public void Deserialize(Reader reader)
-        {
-            Users = reader.ReadVector<InputUserBase>();
-            Title = reader.Read<string>();
-        }
-    }
+[Newtonsoft.Json.JsonProperty("title")]
+		public string Title { get; set; }
+
+
+		public void UpdateFlags() 
+		{
+
+		}
+
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(Users);
+			writer.Write(Title);
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
+			Title = reader.Read<string>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "messages.createChat";
+		}
+	}
 }

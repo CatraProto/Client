@@ -8,7 +8,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     {
 
 [Newtonsoft.Json.JsonProperty("id")]
-		public abstract int Id { get; set; }
+		public abstract long Id { get; set; }
 
         public abstract void UpdateFlags();
         public abstract void Deserialize(Reader reader);

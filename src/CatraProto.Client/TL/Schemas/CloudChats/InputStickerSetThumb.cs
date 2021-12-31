@@ -11,18 +11,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 	{
 
 
-        public static int StaticConstructorId { get => 230353641; }
+        public static int StaticConstructorId { get => -1652231205; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
 [Newtonsoft.Json.JsonProperty("stickerset")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase Stickerset { get; set; }
 
-[Newtonsoft.Json.JsonProperty("volume_id")]
-		public long VolumeId { get; set; }
-
-[Newtonsoft.Json.JsonProperty("local_id")]
-		public int LocalId { get; set; }
+[Newtonsoft.Json.JsonProperty("thumb_version")]
+		public int ThumbVersion { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -34,16 +31,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(Stickerset);
-			writer.Write(VolumeId);
-			writer.Write(LocalId);
+			writer.Write(ThumbVersion);
 
 		}
 
 		public override void Deserialize(Reader reader)
 		{
 			Stickerset = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase>();
-			VolumeId = reader.Read<long>();
-			LocalId = reader.Read<int>();
+			ThumbVersion = reader.Read<int>();
 
 		}
 				

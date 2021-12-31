@@ -2,55 +2,52 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class ReadMessageContents : IMethod
-    {
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => 916930423;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(AffectedMessagesBase);
-
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
-
-        [JsonProperty("id")] public IList<int> Id { get; set; }
-
-        public override string ToString()
-        {
-            return "messages.readMessageContents";
-        }
+	public partial class ReadMessageContents : IMethod
+	{
 
 
-        public void UpdateFlags()
-        {
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => 916930423; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedMessagesBase);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-            writer.Write(Id);
-        }
+[Newtonsoft.Json.JsonProperty("id")]
+		public IList<int> Id { get; set; }
 
-        public void Deserialize(Reader reader)
-        {
-            Id = reader.ReadVector<int>();
-        }
-    }
+
+		public void UpdateFlags() 
+		{
+
+		}
+
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(Id);
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			Id = reader.ReadVector<int>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "messages.readMessageContents";
+		}
+	}
 }

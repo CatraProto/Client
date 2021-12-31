@@ -1,55 +1,55 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
-using Newtonsoft.Json;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public partial class AutoDownloadSettings : AutoDownloadSettingsBase
-    {
-        public static int StaticConstructorId
-        {
-            get => 1674235686;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonProperty("low")] public override CloudChats.AutoDownloadSettingsBase Low { get; set; }
-
-        [JsonProperty("medium")] public override CloudChats.AutoDownloadSettingsBase Medium { get; set; }
-
-        [JsonProperty("high")] public override CloudChats.AutoDownloadSettingsBase High { get; set; }
+	public partial class AutoDownloadSettings : CatraProto.Client.TL.Schemas.CloudChats.Account.AutoDownloadSettingsBase
+	{
 
 
-        public override void UpdateFlags()
-        {
-        }
+        public static int StaticConstructorId { get => 1674235686; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonProperty("low")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase Low { get; set; }
 
-        public override void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonProperty("medium")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase Medium { get; set; }
 
-            writer.Write(Low);
-            writer.Write(Medium);
-            writer.Write(High);
-        }
+[Newtonsoft.Json.JsonProperty("high")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase High { get; set; }
 
-        public override void Deserialize(Reader reader)
-        {
-            Low = reader.Read<CloudChats.AutoDownloadSettingsBase>();
-            Medium = reader.Read<CloudChats.AutoDownloadSettingsBase>();
-            High = reader.Read<CloudChats.AutoDownloadSettingsBase>();
-        }
+        
+		public override void UpdateFlags() 
+		{
 
-        public override string ToString()
-        {
-            return "account.autoDownloadSettings";
-        }
-    }
+		}
+
+		public override void Serialize(Writer writer)
+		{
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(Low);
+			writer.Write(Medium);
+			writer.Write(High);
+
+		}
+
+		public override void Deserialize(Reader reader)
+		{
+			Low = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase>();
+			Medium = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase>();
+			High = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase>();
+
+		}
+				
+		public override string ToString()
+		{
+		    return "account.autoDownloadSettings";
+		}
+	}
 }

@@ -1,79 +1,109 @@
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class DeleteHistory : IMethod
-    {
-        [Flags]
-        public enum FlagsEnum
-        {
-            JustClear = 1 << 0,
-            Revoke = 1 << 1
-        }
+	public partial class DeleteHistory : IMethod
+	{
+		[Flags]
+		public enum FlagsEnum 
+		{
+			JustClear = 1 << 0,
+			Revoke = 1 << 1,
+			MinDate = 1 << 2,
+			MaxDate = 1 << 3
+		}
 
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => 469850889;
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => -1332768214; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedHistoryBase);
 
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(AffectedHistoryBase);
+[Newtonsoft.Json.JsonIgnore]
+		public int Flags { get; set; }
 
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
+[Newtonsoft.Json.JsonProperty("just_clear")]
+		public bool JustClear { get; set; }
 
-        [JsonIgnore] public int Flags { get; set; }
+[Newtonsoft.Json.JsonProperty("revoke")]
+		public bool Revoke { get; set; }
 
-        [JsonProperty("just_clear")] public bool JustClear { get; set; }
+[Newtonsoft.Json.JsonProperty("peer")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
 
-        [JsonProperty("revoke")] public bool Revoke { get; set; }
+[Newtonsoft.Json.JsonProperty("max_id")]
+		public int MaxId { get; set; }
 
-        [JsonProperty("peer")] public InputPeerBase Peer { get; set; }
+[Newtonsoft.Json.JsonProperty("min_date")]
+		public int? MinDate { get; set; }
 
-        [JsonProperty("max_id")] public int MaxId { get; set; }
-
-        public override string ToString()
-        {
-            return "messages.deleteHistory";
-        }
+[Newtonsoft.Json.JsonProperty("max_date")]
+		public int? MaxDate { get; set; }
 
 
-        public void UpdateFlags()
-        {
-            Flags = JustClear ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
-            Flags = Revoke ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
-        }
+		public void UpdateFlags() 
+		{
+			Flags = JustClear ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
+			Flags = Revoke ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
+			Flags = MinDate == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
+			Flags = MaxDate == null ? FlagsHelper.UnsetFlag(Flags, 3) : FlagsHelper.SetFlag(Flags, 3);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+		}
 
-            UpdateFlags();
-            writer.Write(Flags);
-            writer.Write(Peer);
-            writer.Write(MaxId);
-        }
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			UpdateFlags();
+			writer.Write(Flags);
+			writer.Write(Peer);
+			writer.Write(MaxId);
+			if(FlagsHelper.IsFlagSet(Flags, 2))
+			{
+				writer.Write(MinDate.Value);
+			}
 
-        public void Deserialize(Reader reader)
-        {
-            Flags = reader.Read<int>();
-            JustClear = FlagsHelper.IsFlagSet(Flags, 0);
-            Revoke = FlagsHelper.IsFlagSet(Flags, 1);
-            Peer = reader.Read<InputPeerBase>();
-            MaxId = reader.Read<int>();
-        }
-    }
+			if(FlagsHelper.IsFlagSet(Flags, 3))
+			{
+				writer.Write(MaxDate.Value);
+			}
+
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			Flags = reader.Read<int>();
+			JustClear = FlagsHelper.IsFlagSet(Flags, 0);
+			Revoke = FlagsHelper.IsFlagSet(Flags, 1);
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+			MaxId = reader.Read<int>();
+			if(FlagsHelper.IsFlagSet(Flags, 2))
+			{
+				MinDate = reader.Read<int>();
+			}
+
+			if(FlagsHelper.IsFlagSet(Flags, 3))
+			{
+				MaxDate = reader.Read<int>();
+			}
+
+
+		}
+		
+		public override string ToString()
+		{
+		    return "messages.deleteHistory";
+		}
+	}
 }

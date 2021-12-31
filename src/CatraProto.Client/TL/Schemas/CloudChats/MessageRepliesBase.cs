@@ -20,7 +20,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.PeerBase> RecentRepliers { get; set; }
 
 [Newtonsoft.Json.JsonProperty("channel_id")]
-		public abstract int? ChannelId { get; set; }
+		public abstract long? ChannelId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("max_id")]
 		public abstract int? MaxId { get; set; }

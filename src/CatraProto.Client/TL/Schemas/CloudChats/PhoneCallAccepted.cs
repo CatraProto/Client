@@ -15,7 +15,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Video = 1 << 6
 		}
 
-        public static int StaticConstructorId { get => -1719909046; }
+        public static int StaticConstructorId { get => 912311057; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -35,10 +35,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Date { get; set; }
 
 [Newtonsoft.Json.JsonProperty("admin_id")]
-		public int AdminId { get; set; }
+		public long AdminId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("participant_id")]
-		public int ParticipantId { get; set; }
+		public long ParticipantId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("g_b")]
 		public byte[] GB { get; set; }
@@ -75,8 +75,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Id = reader.Read<long>();
 			AccessHash = reader.Read<long>();
 			Date = reader.Read<int>();
-			AdminId = reader.Read<int>();
-			ParticipantId = reader.Read<int>();
+			AdminId = reader.Read<long>();
+			ParticipantId = reader.Read<long>();
 			GB = reader.Read<byte[]>();
 			Protocol = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase>();
 

@@ -26,6 +26,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Support = 1 << 23,
 			Scam = 1 << 24,
 			ApplyMinPhoto = 1 << 25,
+			Fake = 1 << 26,
 			AccessHash = 1 << 0,
 			FirstName = 1 << 1,
 			LastName = 1 << 2,
@@ -39,7 +40,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			LangCode = 1 << 22
 		}
 
-        public static int StaticConstructorId { get => -1820043071; }
+        public static int StaticConstructorId { get => 1073147056; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -88,8 +89,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("apply_min_photo")]
 		public bool ApplyMinPhoto { get; set; }
 
+[Newtonsoft.Json.JsonProperty("fake")]
+		public bool Fake { get; set; }
+
 [Newtonsoft.Json.JsonProperty("id")]
-		public override int Id { get; set; }
+		public override long Id { get; set; }
 
 [Newtonsoft.Json.JsonProperty("access_hash")]
 		public long? AccessHash { get; set; }
@@ -141,6 +145,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = Support ? FlagsHelper.SetFlag(Flags, 23) : FlagsHelper.UnsetFlag(Flags, 23);
 			Flags = Scam ? FlagsHelper.SetFlag(Flags, 24) : FlagsHelper.UnsetFlag(Flags, 24);
 			Flags = ApplyMinPhoto ? FlagsHelper.SetFlag(Flags, 25) : FlagsHelper.UnsetFlag(Flags, 25);
+			Flags = Fake ? FlagsHelper.SetFlag(Flags, 26) : FlagsHelper.UnsetFlag(Flags, 26);
 			Flags = AccessHash == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
 			Flags = FirstName == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
 			Flags = LastName == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
@@ -236,7 +241,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Support = FlagsHelper.IsFlagSet(Flags, 23);
 			Scam = FlagsHelper.IsFlagSet(Flags, 24);
 			ApplyMinPhoto = FlagsHelper.IsFlagSet(Flags, 25);
-			Id = reader.Read<int>();
+			Fake = FlagsHelper.IsFlagSet(Flags, 26);
+			Id = reader.Read<long>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				AccessHash = reader.Read<long>();

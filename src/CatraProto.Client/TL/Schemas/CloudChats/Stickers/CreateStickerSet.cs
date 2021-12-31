@@ -15,11 +15,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 		{
 			Masks = 1 << 0,
 			Animated = 1 << 1,
-			Thumb = 1 << 2
+			Thumb = 1 << 2,
+			Software = 1 << 3
 		}
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => -251435136; }
+        public static int StaticConstructorId { get => -1876841625; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -53,12 +54,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 [Newtonsoft.Json.JsonProperty("stickers")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetItemBase> Stickers { get; set; }
 
+[Newtonsoft.Json.JsonProperty("software")]
+		public string Software { get; set; }
+
 
 		public void UpdateFlags() 
 		{
 			Flags = Masks ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
 			Flags = Animated ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
 			Flags = Thumb == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
+			Flags = Software == null ? FlagsHelper.UnsetFlag(Flags, 3) : FlagsHelper.SetFlag(Flags, 3);
 
 		}
 
@@ -76,6 +81,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 			}
 
 			writer.Write(Stickers);
+			if(FlagsHelper.IsFlagSet(Flags, 3))
+			{
+				writer.Write(Software);
+			}
+
 
 		}
 
@@ -93,6 +103,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 			}
 
 			Stickers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetItemBase>();
+			if(FlagsHelper.IsFlagSet(Flags, 3))
+			{
+				Software = reader.Read<string>();
+			}
+
 
 		}
 		

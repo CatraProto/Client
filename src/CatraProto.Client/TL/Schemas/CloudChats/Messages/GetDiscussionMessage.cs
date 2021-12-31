@@ -1,59 +1,58 @@
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class GetDiscussionMessage : IMethod
-    {
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => 1147761405;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(DiscussionMessageBase);
-
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
-
-        [JsonProperty("peer")] public InputPeerBase Peer { get; set; }
-
-        [JsonProperty("msg_id")] public int MsgId { get; set; }
-
-        public override string ToString()
-        {
-            return "messages.getDiscussionMessage";
-        }
+	public partial class GetDiscussionMessage : IMethod
+	{
 
 
-        public void UpdateFlags()
-        {
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => 1147761405; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.DiscussionMessageBase);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-            writer.Write(Peer);
-            writer.Write(MsgId);
-        }
+[Newtonsoft.Json.JsonProperty("peer")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
 
-        public void Deserialize(Reader reader)
-        {
-            Peer = reader.Read<InputPeerBase>();
-            MsgId = reader.Read<int>();
-        }
-    }
+[Newtonsoft.Json.JsonProperty("msg_id")]
+		public int MsgId { get; set; }
+
+
+		public void UpdateFlags() 
+		{
+
+		}
+
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(Peer);
+			writer.Write(MsgId);
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+			MsgId = reader.Read<int>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "messages.getDiscussionMessage";
+		}
+	}
 }

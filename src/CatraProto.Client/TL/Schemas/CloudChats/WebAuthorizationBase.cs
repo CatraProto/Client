@@ -11,7 +11,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public abstract long Hash { get; set; }
 
 [Newtonsoft.Json.JsonProperty("bot_id")]
-		public abstract int BotId { get; set; }
+		public abstract long BotId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("domain")]
 		public abstract string Domain { get; set; }

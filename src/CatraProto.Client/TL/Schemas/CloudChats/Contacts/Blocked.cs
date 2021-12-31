@@ -1,56 +1,55 @@
+using System;
 using System.Collections.Generic;
 using CatraProto.TL;
-using Newtonsoft.Json;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
-    public partial class Blocked : BlockedBase
-    {
-        public static int StaticConstructorId
-        {
-            get => 182326673;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonProperty("blocked")] public override IList<PeerBlockedBase> BlockedField { get; set; }
-
-        [JsonProperty("chats")] public override IList<ChatBase> Chats { get; set; }
-
-        [JsonProperty("users")] public override IList<UserBase> Users { get; set; }
+	public partial class Blocked : CatraProto.Client.TL.Schemas.CloudChats.Contacts.BlockedBase
+	{
 
 
-        public override void UpdateFlags()
-        {
-        }
+        public static int StaticConstructorId { get => 182326673; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonProperty("blocked")]
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.PeerBlockedBase> BlockedField { get; set; }
 
-        public override void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonProperty("chats")]
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
 
-            writer.Write(BlockedField);
-            writer.Write(Chats);
-            writer.Write(Users);
-        }
+[Newtonsoft.Json.JsonProperty("users")]
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
-        public override void Deserialize(Reader reader)
-        {
-            BlockedField = reader.ReadVector<PeerBlockedBase>();
-            Chats = reader.ReadVector<ChatBase>();
-            Users = reader.ReadVector<UserBase>();
-        }
+        
+		public override void UpdateFlags() 
+		{
 
-        public override string ToString()
-        {
-            return "contacts.blocked";
-        }
-    }
+		}
+
+		public override void Serialize(Writer writer)
+		{
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(BlockedField);
+			writer.Write(Chats);
+			writer.Write(Users);
+
+		}
+
+		public override void Deserialize(Reader reader)
+		{
+			BlockedField = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PeerBlockedBase>();
+			Chats = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
+			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+
+		}
+				
+		public override string ToString()
+		{
+		    return "contacts.blocked";
+		}
+	}
 }

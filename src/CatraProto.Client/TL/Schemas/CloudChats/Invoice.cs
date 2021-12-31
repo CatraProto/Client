@@ -19,10 +19,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ShippingAddressRequested = 1 << 4,
 			Flexible = 1 << 5,
 			PhoneToProvider = 1 << 6,
-			EmailToProvider = 1 << 7
+			EmailToProvider = 1 << 7,
+			MaxTipAmount = 1 << 8,
+			SuggestedTipAmounts = 1 << 8
 		}
 
-        public static int StaticConstructorId { get => -1022713000; }
+        public static int StaticConstructorId { get => 215516896; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -59,6 +61,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("prices")]
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase> Prices { get; set; }
 
+[Newtonsoft.Json.JsonProperty("max_tip_amount")]
+		public override long? MaxTipAmount { get; set; }
+
+[Newtonsoft.Json.JsonProperty("suggested_tip_amounts")]
+		public override IList<long> SuggestedTipAmounts { get; set; }
+
         
 		public override void UpdateFlags() 
 		{
@@ -70,6 +78,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = Flexible ? FlagsHelper.SetFlag(Flags, 5) : FlagsHelper.UnsetFlag(Flags, 5);
 			Flags = PhoneToProvider ? FlagsHelper.SetFlag(Flags, 6) : FlagsHelper.UnsetFlag(Flags, 6);
 			Flags = EmailToProvider ? FlagsHelper.SetFlag(Flags, 7) : FlagsHelper.UnsetFlag(Flags, 7);
+			Flags = MaxTipAmount == null ? FlagsHelper.UnsetFlag(Flags, 8) : FlagsHelper.SetFlag(Flags, 8);
+			Flags = SuggestedTipAmounts == null ? FlagsHelper.UnsetFlag(Flags, 8) : FlagsHelper.SetFlag(Flags, 8);
 
 		}
 
@@ -80,6 +90,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			writer.Write(Flags);
 			writer.Write(Currency);
 			writer.Write(Prices);
+			if(FlagsHelper.IsFlagSet(Flags, 8))
+			{
+				writer.Write(MaxTipAmount.Value);
+			}
+
+			if(FlagsHelper.IsFlagSet(Flags, 8))
+			{
+				writer.Write(SuggestedTipAmounts);
+			}
+
 
 		}
 
@@ -96,6 +116,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			EmailToProvider = FlagsHelper.IsFlagSet(Flags, 7);
 			Currency = reader.Read<string>();
 			Prices = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase>();
+			if(FlagsHelper.IsFlagSet(Flags, 8))
+			{
+				MaxTipAmount = reader.Read<long>();
+			}
+
+			if(FlagsHelper.IsFlagSet(Flags, 8))
+			{
+				SuggestedTipAmounts = reader.ReadVector<long>();
+			}
+
 
 		}
 				

@@ -1,167 +1,157 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
+using CatraProto.Client.Connections;
 using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.MTProto.Rpc;
-using CatraProto.Client.MTProto.Rpc.Vectors;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using CatraProto.Client.TL.Schemas.CloudChats.Upload;
+using CatraProto.TL.Interfaces;
+using System.Collections.Generic;
+using System.Numerics;
+
 
 namespace CatraProto.Client.TL.Requests.CloudChats
 {
-    public partial class Upload
-    {
-        private readonly MessagesQueue _messagesQueue;
+	public partial class Upload
+	{
+		
+	    private readonly MessagesQueue _messagesQueue;
+	    internal Upload(MessagesQueue messagesQueue)
+	    {
+	        _messagesQueue = messagesQueue;
+	        
+	    }
+	    
+	    public async Task<RpcMessage<bool>> SaveFilePartAsync(long fileId, int filePart, byte[] bytes, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+		{
 
-        internal Upload(MessagesQueue messagesQueue)
-        {
-            _messagesQueue = messagesQueue;
-        }
+var rpcResponse = new RpcMessage<bool>(
+);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Upload.SaveFilePart(){
+FileId = fileId,
+FilePart = filePart,
+Bytes = bytes,
+};
 
-        public async Task<RpcMessage<bool>> SaveFilePartAsync(long fileId, int filePart, byte[] bytes,
-            MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
-        {
-            var rpcResponse = new RpcMessage<bool>(
-            );
-            messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-            var methodBody = new SaveFilePart
-            {
-                FileId = fileId,
-                FilePart = filePart,
-                Bytes = bytes
-            };
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource!;
+return rpcResponse;
+}
+public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Upload.FileBase>> GetFileAsync(CatraProto.Client.TL.Schemas.CloudChats.InputFileLocationBase location, int offset, int limit, bool precise = true, bool cdnSupported = true, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+		{
 
-            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-            await taskCompletionSource!;
-            return rpcResponse;
-        }
+var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Upload.FileBase>(
+);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Upload.GetFile(){
+Location = location,
+Offset = offset,
+Limit = limit,
+Precise = precise,
+CdnSupported = cdnSupported,
+};
 
-        public async Task<RpcMessage<FileBase>> GetFileAsync(InputFileLocationBase location, int offset, int limit, bool precise = true,
-            bool cdnSupported = true, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
-        {
-            var rpcResponse = new RpcMessage<FileBase>(
-            );
-            messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-            var methodBody = new GetFile
-            {
-                Location = location,
-                Offset = offset,
-                Limit = limit,
-                Precise = precise,
-                CdnSupported = cdnSupported
-            };
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource!;
+return rpcResponse;
+}
+public async Task<RpcMessage<bool>> SaveBigFilePartAsync(long fileId, int filePart, int fileTotalParts, byte[] bytes, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+		{
 
-            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-            await taskCompletionSource!;
-            return rpcResponse;
-        }
+var rpcResponse = new RpcMessage<bool>(
+);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Upload.SaveBigFilePart(){
+FileId = fileId,
+FilePart = filePart,
+FileTotalParts = fileTotalParts,
+Bytes = bytes,
+};
 
-        public async Task<RpcMessage<bool>> SaveBigFilePartAsync(long fileId, int filePart, int fileTotalParts, byte[] bytes,
-            MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
-        {
-            var rpcResponse = new RpcMessage<bool>(
-            );
-            messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-            var methodBody = new SaveBigFilePart
-            {
-                FileId = fileId,
-                FilePart = filePart,
-                FileTotalParts = fileTotalParts,
-                Bytes = bytes
-            };
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource!;
+return rpcResponse;
+}
+public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Upload.WebFileBase>> GetWebFileAsync(CatraProto.Client.TL.Schemas.CloudChats.InputWebFileLocationBase location, int offset, int limit, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+		{
 
-            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-            await taskCompletionSource!;
-            return rpcResponse;
-        }
+var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Upload.WebFileBase>(
+);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Upload.GetWebFile(){
+Location = location,
+Offset = offset,
+Limit = limit,
+};
 
-        public async Task<RpcMessage<WebFileBase>> GetWebFileAsync(InputWebFileLocationBase location, int offset, int limit,
-            MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
-        {
-            var rpcResponse = new RpcMessage<WebFileBase>(
-            );
-            messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-            var methodBody = new GetWebFile
-            {
-                Location = location,
-                Offset = offset,
-                Limit = limit
-            };
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource!;
+return rpcResponse;
+}
+public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Upload.CdnFileBase>> GetCdnFileAsync(byte[] fileToken, int offset, int limit, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+		{
 
-            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-            await taskCompletionSource!;
-            return rpcResponse;
-        }
+var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.Upload.CdnFileBase>(
+);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Upload.GetCdnFile(){
+FileToken = fileToken,
+Offset = offset,
+Limit = limit,
+};
 
-        public async Task<RpcMessage<CdnFileBase>> GetCdnFileAsync(byte[] fileToken, int offset, int limit,
-            MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
-        {
-            var rpcResponse = new RpcMessage<CdnFileBase>(
-            );
-            messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-            var methodBody = new GetCdnFile
-            {
-                FileToken = fileToken,
-                Offset = offset,
-                Limit = limit
-            };
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource!;
+return rpcResponse;
+}
+public async Task<RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>>> ReuploadCdnFileAsync(byte[] fileToken, byte[] requestToken, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+		{
 
-            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-            await taskCompletionSource!;
-            return rpcResponse;
-        }
+var rpcResponse = new RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>>(
+new CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>()
+);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Upload.ReuploadCdnFile(){
+FileToken = fileToken,
+RequestToken = requestToken,
+};
 
-        public async Task<RpcMessage<RpcVector<FileHashBase>>> ReuploadCdnFileAsync(byte[] fileToken, byte[] requestToken,
-            MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
-        {
-            var rpcResponse = new RpcMessage<RpcVector<FileHashBase>>(
-                new RpcVector<FileHashBase>()
-            );
-            messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-            var methodBody = new ReuploadCdnFile
-            {
-                FileToken = fileToken,
-                RequestToken = requestToken
-            };
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource!;
+return rpcResponse;
+}
+public async Task<RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>>> GetCdnFileHashesAsync(byte[] fileToken, int offset, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+		{
 
-            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-            await taskCompletionSource!;
-            return rpcResponse;
-        }
+var rpcResponse = new RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>>(
+new CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>()
+);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Upload.GetCdnFileHashes(){
+FileToken = fileToken,
+Offset = offset,
+};
 
-        public async Task<RpcMessage<RpcVector<FileHashBase>>> GetCdnFileHashesAsync(byte[] fileToken, int offset,
-            MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
-        {
-            var rpcResponse = new RpcMessage<RpcVector<FileHashBase>>(
-                new RpcVector<FileHashBase>()
-            );
-            messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-            var methodBody = new GetCdnFileHashes
-            {
-                FileToken = fileToken,
-                Offset = offset
-            };
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource!;
+return rpcResponse;
+}
+public async Task<RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>>> GetFileHashesAsync(CatraProto.Client.TL.Schemas.CloudChats.InputFileLocationBase location, int offset, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+		{
 
-            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-            await taskCompletionSource!;
-            return rpcResponse;
-        }
+var rpcResponse = new RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>>(
+new CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>()
+);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Upload.GetFileHashes(){
+Location = location,
+Offset = offset,
+};
 
-        public async Task<RpcMessage<RpcVector<FileHashBase>>> GetFileHashesAsync(InputFileLocationBase location, int offset,
-            MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
-        {
-            var rpcResponse = new RpcMessage<RpcVector<FileHashBase>>(
-                new RpcVector<FileHashBase>()
-            );
-            messageSendingOptions ??= new MessageSendingOptions(isEncrypted: true);
-            var methodBody = new GetFileHashes
-            {
-                Location = location,
-                Offset = offset
-            };
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource!;
+return rpcResponse;
+}
 
-            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-            await taskCompletionSource!;
-            return rpcResponse;
-        }
-    }
+	}
 }

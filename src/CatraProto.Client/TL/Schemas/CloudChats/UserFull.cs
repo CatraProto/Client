@@ -22,10 +22,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ProfilePhoto = 1 << 2,
 			BotInfo = 1 << 3,
 			PinnedMsgId = 1 << 6,
-			FolderId = 1 << 11
+			FolderId = 1 << 11,
+			TtlPeriod = 1 << 14,
+			ThemeEmoticon = 1 << 15,
+			PrivateForwardName = 1 << 16
 		}
 
-        public static int StaticConstructorId { get => -302941166; }
+        public static int StaticConstructorId { get => -818518751; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -50,8 +53,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("video_calls_available")]
 		public override bool VideoCallsAvailable { get; set; }
 
-[Newtonsoft.Json.JsonProperty("user")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.UserBase User { get; set; }
+[Newtonsoft.Json.JsonProperty("id")]
+		public override long Id { get; set; }
 
 [Newtonsoft.Json.JsonProperty("about")]
 		public override string About { get; set; }
@@ -77,6 +80,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("folder_id")]
 		public override int? FolderId { get; set; }
 
+[Newtonsoft.Json.JsonProperty("ttl_period")]
+		public override int? TtlPeriod { get; set; }
+
+[Newtonsoft.Json.JsonProperty("theme_emoticon")]
+		public override string ThemeEmoticon { get; set; }
+
+[Newtonsoft.Json.JsonProperty("private_forward_name")]
+		public override string PrivateForwardName { get; set; }
+
         
 		public override void UpdateFlags() 
 		{
@@ -91,6 +103,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = BotInfo == null ? FlagsHelper.UnsetFlag(Flags, 3) : FlagsHelper.SetFlag(Flags, 3);
 			Flags = PinnedMsgId == null ? FlagsHelper.UnsetFlag(Flags, 6) : FlagsHelper.SetFlag(Flags, 6);
 			Flags = FolderId == null ? FlagsHelper.UnsetFlag(Flags, 11) : FlagsHelper.SetFlag(Flags, 11);
+			Flags = TtlPeriod == null ? FlagsHelper.UnsetFlag(Flags, 14) : FlagsHelper.SetFlag(Flags, 14);
+			Flags = ThemeEmoticon == null ? FlagsHelper.UnsetFlag(Flags, 15) : FlagsHelper.SetFlag(Flags, 15);
+			Flags = PrivateForwardName == null ? FlagsHelper.UnsetFlag(Flags, 16) : FlagsHelper.SetFlag(Flags, 16);
 
 		}
 
@@ -99,7 +114,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
-			writer.Write(User);
+			writer.Write(Id);
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
 				writer.Write(About);
@@ -128,6 +143,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 				writer.Write(FolderId.Value);
 			}
 
+			if(FlagsHelper.IsFlagSet(Flags, 14))
+			{
+				writer.Write(TtlPeriod.Value);
+			}
+
+			if(FlagsHelper.IsFlagSet(Flags, 15))
+			{
+				writer.Write(ThemeEmoticon);
+			}
+
+			if(FlagsHelper.IsFlagSet(Flags, 16))
+			{
+				writer.Write(PrivateForwardName);
+			}
+
 
 		}
 
@@ -140,7 +170,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			CanPinMessage = FlagsHelper.IsFlagSet(Flags, 7);
 			HasScheduled = FlagsHelper.IsFlagSet(Flags, 12);
 			VideoCallsAvailable = FlagsHelper.IsFlagSet(Flags, 13);
-			User = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+			Id = reader.Read<long>();
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
 				About = reader.Read<string>();
@@ -167,6 +197,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			if(FlagsHelper.IsFlagSet(Flags, 11))
 			{
 				FolderId = reader.Read<int>();
+			}
+
+			if(FlagsHelper.IsFlagSet(Flags, 14))
+			{
+				TtlPeriod = reader.Read<int>();
+			}
+
+			if(FlagsHelper.IsFlagSet(Flags, 15))
+			{
+				ThemeEmoticon = reader.Read<string>();
+			}
+
+			if(FlagsHelper.IsFlagSet(Flags, 16))
+			{
+				PrivateForwardName = reader.Read<string>();
 			}
 
 

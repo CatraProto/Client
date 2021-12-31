@@ -19,6 +19,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("second_background_color")]
 		public abstract int? SecondBackgroundColor { get; set; }
 
+[Newtonsoft.Json.JsonProperty("third_background_color")]
+		public abstract int? ThirdBackgroundColor { get; set; }
+
+[Newtonsoft.Json.JsonProperty("fourth_background_color")]
+		public abstract int? FourthBackgroundColor { get; set; }
+
 [Newtonsoft.Json.JsonProperty("intensity")]
 		public abstract int? Intensity { get; set; }
 

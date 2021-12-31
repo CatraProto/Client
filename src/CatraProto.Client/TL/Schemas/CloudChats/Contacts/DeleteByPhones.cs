@@ -2,55 +2,52 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
-    public partial class DeleteByPhones : IMethod
-    {
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => 269745566;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
-
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
-
-        [JsonProperty("phones")] public IList<string> Phones { get; set; }
-
-        public override string ToString()
-        {
-            return "contacts.deleteByPhones";
-        }
+	public partial class DeleteByPhones : IMethod
+	{
 
 
-        public void UpdateFlags()
-        {
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => 269745566; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(bool);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-            writer.Write(Phones);
-        }
+[Newtonsoft.Json.JsonProperty("phones")]
+		public IList<string> Phones { get; set; }
 
-        public void Deserialize(Reader reader)
-        {
-            Phones = reader.ReadVector<string>();
-        }
-    }
+
+		public void UpdateFlags() 
+		{
+
+		}
+
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(Phones);
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			Phones = reader.ReadVector<string>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "contacts.deleteByPhones";
+		}
+	}
 }

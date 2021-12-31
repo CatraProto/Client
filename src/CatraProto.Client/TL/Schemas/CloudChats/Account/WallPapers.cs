@@ -1,52 +1,50 @@
+using System;
 using System.Collections.Generic;
 using CatraProto.TL;
-using Newtonsoft.Json;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public partial class WallPapers : WallPapersBase
-    {
-        public static int StaticConstructorId
-        {
-            get => 1881892265;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonProperty("hash")] public int Hash { get; set; }
-
-        [JsonProperty("wallpapers")] public IList<WallPaperBase> Wallpapers { get; set; }
+	public partial class WallPapers : CatraProto.Client.TL.Schemas.CloudChats.Account.WallPapersBase
+	{
 
 
-        public override void UpdateFlags()
-        {
-        }
+        public static int StaticConstructorId { get => -842824308; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonProperty("hash")]
+		public long Hash { get; set; }
 
-        public override void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonProperty("wallpapers")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase> Wallpapers { get; set; }
 
-            writer.Write(Hash);
-            writer.Write(Wallpapers);
-        }
+        
+		public override void UpdateFlags() 
+		{
 
-        public override void Deserialize(Reader reader)
-        {
-            Hash = reader.Read<int>();
-            Wallpapers = reader.ReadVector<WallPaperBase>();
-        }
+		}
 
-        public override string ToString()
-        {
-            return "account.wallPapers";
-        }
-    }
+		public override void Serialize(Writer writer)
+		{
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(Hash);
+			writer.Write(Wallpapers);
+
+		}
+
+		public override void Deserialize(Reader reader)
+		{
+			Hash = reader.Read<long>();
+			Wallpapers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase>();
+
+		}
+				
+		public override string ToString()
+		{
+		    return "account.wallPapers";
+		}
+	}
 }

@@ -15,7 +15,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			VideoStartTs = 1 << 0
 		}
 
-        public static int StaticConstructorId { get => -399391402; }
+        public static int StaticConstructorId { get => -567037804; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -24,9 +24,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 [Newtonsoft.Json.JsonProperty("type")]
 		public override string Type { get; set; }
-
-[Newtonsoft.Json.JsonProperty("location")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.FileLocationBase Location { get; set; }
 
 [Newtonsoft.Json.JsonProperty("w")]
 		public override int W { get; set; }
@@ -53,7 +50,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			UpdateFlags();
 			writer.Write(Flags);
 			writer.Write(Type);
-			writer.Write(Location);
 			writer.Write(W);
 			writer.Write(H);
 			writer.Write(Size);
@@ -69,7 +65,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Flags = reader.Read<int>();
 			Type = reader.Read<string>();
-			Location = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.FileLocationBase>();
 			W = reader.Read<int>();
 			H = reader.Read<int>();
 			Size = reader.Read<int>();

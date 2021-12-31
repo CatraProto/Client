@@ -1,63 +1,63 @@
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class GetDocumentByHash : IMethod
-    {
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => 864953444;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(DocumentBase);
-
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
-
-        [JsonProperty("sha256")] public byte[] Sha256 { get; set; }
-
-        [JsonProperty("size")] public int Size { get; set; }
-
-        [JsonProperty("mime_type")] public string MimeType { get; set; }
-
-        public override string ToString()
-        {
-            return "messages.getDocumentByHash";
-        }
+	public partial class GetDocumentByHash : IMethod
+	{
 
 
-        public void UpdateFlags()
-        {
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => 864953444; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.DocumentBase);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-            writer.Write(Sha256);
-            writer.Write(Size);
-            writer.Write(MimeType);
-        }
+[Newtonsoft.Json.JsonProperty("sha256")]
+		public byte[] Sha256 { get; set; }
 
-        public void Deserialize(Reader reader)
-        {
-            Sha256 = reader.Read<byte[]>();
-            Size = reader.Read<int>();
-            MimeType = reader.Read<string>();
-        }
-    }
+[Newtonsoft.Json.JsonProperty("size")]
+		public int Size { get; set; }
+
+[Newtonsoft.Json.JsonProperty("mime_type")]
+		public string MimeType { get; set; }
+
+
+		public void UpdateFlags() 
+		{
+
+		}
+
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(Sha256);
+			writer.Write(Size);
+			writer.Write(MimeType);
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			Sha256 = reader.Read<byte[]>();
+			Size = reader.Read<int>();
+			MimeType = reader.Read<string>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "messages.getDocumentByHash";
+		}
+	}
 }

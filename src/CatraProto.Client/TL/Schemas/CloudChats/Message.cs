@@ -21,6 +21,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Legacy = 1 << 19,
 			EditHide = 1 << 21,
 			Pinned = 1 << 24,
+			Noforwards = 1 << 26,
 			FromId = 1 << 8,
 			FwdFrom = 1 << 2,
 			ViaBotId = 1 << 11,
@@ -34,10 +35,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			EditDate = 1 << 15,
 			PostAuthor = 1 << 16,
 			GroupedId = 1 << 17,
-			RestrictionReason = 1 << 22
+			RestrictionReason = 1 << 22,
+			TtlPeriod = 1 << 25
 		}
 
-        public static int StaticConstructorId { get => 1487813065; }
+        public static int StaticConstructorId { get => -2049520670; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -71,6 +73,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("pinned")]
 		public bool Pinned { get; set; }
 
+[Newtonsoft.Json.JsonProperty("noforwards")]
+		public bool Noforwards { get; set; }
+
 [Newtonsoft.Json.JsonProperty("id")]
 		public override int Id { get; set; }
 
@@ -84,7 +89,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public CatraProto.Client.TL.Schemas.CloudChats.MessageFwdHeaderBase FwdFrom { get; set; }
 
 [Newtonsoft.Json.JsonProperty("via_bot_id")]
-		public int? ViaBotId { get; set; }
+		public long? ViaBotId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("reply_to")]
 		public CatraProto.Client.TL.Schemas.CloudChats.MessageReplyHeaderBase ReplyTo { get; set; }
@@ -125,6 +130,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("restriction_reason")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase> RestrictionReason { get; set; }
 
+[Newtonsoft.Json.JsonProperty("ttl_period")]
+		public int? TtlPeriod { get; set; }
+
         
 		public override void UpdateFlags() 
 		{
@@ -137,6 +145,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = Legacy ? FlagsHelper.SetFlag(Flags, 19) : FlagsHelper.UnsetFlag(Flags, 19);
 			Flags = EditHide ? FlagsHelper.SetFlag(Flags, 21) : FlagsHelper.UnsetFlag(Flags, 21);
 			Flags = Pinned ? FlagsHelper.SetFlag(Flags, 24) : FlagsHelper.UnsetFlag(Flags, 24);
+			Flags = Noforwards ? FlagsHelper.SetFlag(Flags, 26) : FlagsHelper.UnsetFlag(Flags, 26);
 			Flags = FromId == null ? FlagsHelper.UnsetFlag(Flags, 8) : FlagsHelper.SetFlag(Flags, 8);
 			Flags = FwdFrom == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
 			Flags = ViaBotId == null ? FlagsHelper.UnsetFlag(Flags, 11) : FlagsHelper.SetFlag(Flags, 11);
@@ -151,6 +160,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = PostAuthor == null ? FlagsHelper.UnsetFlag(Flags, 16) : FlagsHelper.SetFlag(Flags, 16);
 			Flags = GroupedId == null ? FlagsHelper.UnsetFlag(Flags, 17) : FlagsHelper.SetFlag(Flags, 17);
 			Flags = RestrictionReason == null ? FlagsHelper.UnsetFlag(Flags, 22) : FlagsHelper.SetFlag(Flags, 22);
+			Flags = TtlPeriod == null ? FlagsHelper.UnsetFlag(Flags, 25) : FlagsHelper.SetFlag(Flags, 25);
 
 		}
 
@@ -233,6 +243,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 				writer.Write(RestrictionReason);
 			}
 
+			if(FlagsHelper.IsFlagSet(Flags, 25))
+			{
+				writer.Write(TtlPeriod.Value);
+			}
+
 
 		}
 
@@ -248,6 +263,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Legacy = FlagsHelper.IsFlagSet(Flags, 19);
 			EditHide = FlagsHelper.IsFlagSet(Flags, 21);
 			Pinned = FlagsHelper.IsFlagSet(Flags, 24);
+			Noforwards = FlagsHelper.IsFlagSet(Flags, 26);
 			Id = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 8))
 			{
@@ -262,7 +278,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 11))
 			{
-				ViaBotId = reader.Read<int>();
+				ViaBotId = reader.Read<long>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
@@ -320,6 +336,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			if(FlagsHelper.IsFlagSet(Flags, 22))
 			{
 				RestrictionReason = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase>();
+			}
+
+			if(FlagsHelper.IsFlagSet(Flags, 25))
+			{
+				TtlPeriod = reader.Read<int>();
 			}
 
 

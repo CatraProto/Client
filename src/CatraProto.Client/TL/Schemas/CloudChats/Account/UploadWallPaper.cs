@@ -1,63 +1,63 @@
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public partial class UploadWallPaper : IMethod
-    {
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => -578472351;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(WallPaperBase);
-
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
-
-        [JsonProperty("file")] public InputFileBase File { get; set; }
-
-        [JsonProperty("mime_type")] public string MimeType { get; set; }
-
-        [JsonProperty("settings")] public WallPaperSettingsBase Settings { get; set; }
-
-        public override string ToString()
-        {
-            return "account.uploadWallPaper";
-        }
+	public partial class UploadWallPaper : IMethod
+	{
 
 
-        public void UpdateFlags()
-        {
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => -578472351; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-            writer.Write(File);
-            writer.Write(MimeType);
-            writer.Write(Settings);
-        }
+[Newtonsoft.Json.JsonProperty("file")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase File { get; set; }
 
-        public void Deserialize(Reader reader)
-        {
-            File = reader.Read<InputFileBase>();
-            MimeType = reader.Read<string>();
-            Settings = reader.Read<WallPaperSettingsBase>();
-        }
-    }
+[Newtonsoft.Json.JsonProperty("mime_type")]
+		public string MimeType { get; set; }
+
+[Newtonsoft.Json.JsonProperty("settings")]
+		public CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase Settings { get; set; }
+
+
+		public void UpdateFlags() 
+		{
+
+		}
+
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(File);
+			writer.Write(MimeType);
+			writer.Write(Settings);
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			File = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
+			MimeType = reader.Read<string>();
+			Settings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "account.uploadWallPaper";
+		}
+	}
 }

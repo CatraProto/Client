@@ -1,59 +1,58 @@
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class ReadEncryptedHistory : IMethod
-    {
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => 2135648522;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
-
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
-
-        [JsonProperty("peer")] public InputEncryptedChatBase Peer { get; set; }
-
-        [JsonProperty("max_date")] public int MaxDate { get; set; }
-
-        public override string ToString()
-        {
-            return "messages.readEncryptedHistory";
-        }
+	public partial class ReadEncryptedHistory : IMethod
+	{
 
 
-        public void UpdateFlags()
-        {
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => 2135648522; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(bool);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-            writer.Write(Peer);
-            writer.Write(MaxDate);
-        }
+[Newtonsoft.Json.JsonProperty("peer")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedChatBase Peer { get; set; }
 
-        public void Deserialize(Reader reader)
-        {
-            Peer = reader.Read<InputEncryptedChatBase>();
-            MaxDate = reader.Read<int>();
-        }
-    }
+[Newtonsoft.Json.JsonProperty("max_date")]
+		public int MaxDate { get; set; }
+
+
+		public void UpdateFlags() 
+		{
+
+		}
+
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(Peer);
+			writer.Write(MaxDate);
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedChatBase>();
+			MaxDate = reader.Read<int>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "messages.readEncryptedHistory";
+		}
+	}
 }

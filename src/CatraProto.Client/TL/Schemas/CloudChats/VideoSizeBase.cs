@@ -10,9 +10,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("type")]
 		public abstract string Type { get; set; }
 
-[Newtonsoft.Json.JsonProperty("location")]
-		public abstract CatraProto.Client.TL.Schemas.CloudChats.FileLocationBase Location { get; set; }
-
 [Newtonsoft.Json.JsonProperty("w")]
 		public abstract int W { get; set; }
 

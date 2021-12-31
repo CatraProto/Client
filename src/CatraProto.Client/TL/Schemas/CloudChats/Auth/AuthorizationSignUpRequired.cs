@@ -1,67 +1,64 @@
 using System;
-using CatraProto.Client.TL.Schemas.CloudChats.Help;
+using System.Collections.Generic;
 using CatraProto.TL;
-using Newtonsoft.Json;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
-    public partial class AuthorizationSignUpRequired : AuthorizationBase
-    {
-        [Flags]
-        public enum FlagsEnum
-        {
-            TermsOfService = 1 << 0
-        }
+	public partial class AuthorizationSignUpRequired : CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase
+	{
+		[Flags]
+		public enum FlagsEnum 
+		{
+			TermsOfService = 1 << 0
+		}
 
-        public static int StaticConstructorId
-        {
-            get => 1148485274;
-        }
+        public static int StaticConstructorId { get => 1148485274; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		public int Flags { get; set; }
 
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
+[Newtonsoft.Json.JsonProperty("terms_of_service")]
+		public CatraProto.Client.TL.Schemas.CloudChats.Help.TermsOfServiceBase TermsOfService { get; set; }
 
-        [JsonIgnore] public int Flags { get; set; }
+        
+		public override void UpdateFlags() 
+		{
+			Flags = TermsOfService == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
 
-        [JsonProperty("terms_of_service")] public TermsOfServiceBase TermsOfService { get; set; }
+		}
+
+		public override void Serialize(Writer writer)
+		{
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			UpdateFlags();
+			writer.Write(Flags);
+			if(FlagsHelper.IsFlagSet(Flags, 0))
+			{
+				writer.Write(TermsOfService);
+			}
 
 
-        public override void UpdateFlags()
-        {
-            Flags = TermsOfService == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
-        }
+		}
 
-        public override void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+		public override void Deserialize(Reader reader)
+		{
+			Flags = reader.Read<int>();
+			if(FlagsHelper.IsFlagSet(Flags, 0))
+			{
+				TermsOfService = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.Help.TermsOfServiceBase>();
+			}
 
-            UpdateFlags();
-            writer.Write(Flags);
-            if (FlagsHelper.IsFlagSet(Flags, 0))
-            {
-                writer.Write(TermsOfService);
-            }
-        }
 
-        public override void Deserialize(Reader reader)
-        {
-            Flags = reader.Read<int>();
-            if (FlagsHelper.IsFlagSet(Flags, 0))
-            {
-                TermsOfService = reader.Read<TermsOfServiceBase>();
-            }
-        }
-
-        public override string ToString()
-        {
-            return "auth.authorizationSignUpRequired";
-        }
-    }
+		}
+				
+		public override string ToString()
+		{
+		    return "auth.authorizationSignUpRequired";
+		}
+	}
 }

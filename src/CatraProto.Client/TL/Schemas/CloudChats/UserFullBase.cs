@@ -25,8 +25,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("video_calls_available")]
 		public abstract bool VideoCallsAvailable { get; set; }
 
-[Newtonsoft.Json.JsonProperty("user")]
-		public abstract CatraProto.Client.TL.Schemas.CloudChats.UserBase User { get; set; }
+[Newtonsoft.Json.JsonProperty("id")]
+		public abstract long Id { get; set; }
 
 [Newtonsoft.Json.JsonProperty("about")]
 		public abstract string About { get; set; }
@@ -51,6 +51,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 [Newtonsoft.Json.JsonProperty("folder_id")]
 		public abstract int? FolderId { get; set; }
+
+[Newtonsoft.Json.JsonProperty("ttl_period")]
+		public abstract int? TtlPeriod { get; set; }
+
+[Newtonsoft.Json.JsonProperty("theme_emoticon")]
+		public abstract string ThemeEmoticon { get; set; }
+
+[Newtonsoft.Json.JsonProperty("private_forward_name")]
+		public abstract string PrivateForwardName { get; set; }
 
         public abstract void UpdateFlags();
         public abstract void Deserialize(Reader reader);

@@ -8,16 +8,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     {
 
 [Newtonsoft.Json.JsonProperty("id")]
-		public abstract int Id { get; set; }
+		public abstract long Id { get; set; }
 
 [Newtonsoft.Json.JsonProperty("about")]
 		public abstract string About { get; set; }
 
 [Newtonsoft.Json.JsonProperty("notify_settings")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase NotifySettings { get; set; }
-
-[Newtonsoft.Json.JsonProperty("exported_invite")]
-		public abstract CatraProto.Client.TL.Schemas.CloudChats.ExportedChatInviteBase ExportedInvite { get; set; }
 
 [Newtonsoft.Json.JsonProperty("folder_id")]
 		public abstract int? FolderId { get; set; }

@@ -11,7 +11,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public abstract int Pos { get; set; }
 
 [Newtonsoft.Json.JsonProperty("user_id")]
-		public abstract int UserId { get; set; }
+		public abstract long UserId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("score")]
 		public abstract int Score { get; set; }

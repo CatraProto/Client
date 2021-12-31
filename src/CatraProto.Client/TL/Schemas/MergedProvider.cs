@@ -20,29 +20,31 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.BoolFalse();
 				case -1720552011:
 					return new CatraProto.Client.TL.Schemas.CloudChats.BoolTrue();
+				case -994444869:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Error();
 				case 1450380236:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Null();
 				case 2134579434:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputPeerEmpty();
 				case 2107670217:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputPeerSelf();
-				case 396093539:
+				case 900291769:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputPeerChat();
-				case 2072935910:
+				case -571955892:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputPeerUser();
-				case 548253432:
+				case 666680316:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputPeerChannel();
-				case 398123750:
+				case -1468331492:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputPeerUserFromMessage();
-				case -1667893317:
+				case -1121318848:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputPeerChannelFromMessage();
 				case -1182234929:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputUserEmpty();
 				case -138301121:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputUserSelf();
-				case -668391402:
+				case -233744186:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputUser();
-				case 756118935:
+				case 497305826:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputUserFromMessage();
 				case -208488460:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputPhoneContact();
@@ -62,7 +64,7 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputMediaContact();
 				case 1530447553:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputMediaUploadedDocument();
-				case 598418386:
+				case 860303448:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputMediaDocument();
 				case -1052959727:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputMediaVenue();
@@ -72,7 +74,7 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputMediaDocumentExternal();
 				case -750828557:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputMediaGame();
-				case -186607933:
+				case -646342540:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputMediaInvoice();
 				case -1759532989:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputMediaGeoLive();
@@ -108,15 +110,17 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputPhotoFileLocation();
 				case -667654413:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputPhotoLegacyFileLocation();
-				case 668375447:
+				case 925204121:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputPeerPhotoFileLocation();
-				case 230353641:
+				case -1652231205:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetThumb();
-				case -1649296275:
+				case 93890858:
+					return new CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallStream();
+				case 1498486562:
 					return new CatraProto.Client.TL.Schemas.CloudChats.PeerUser();
-				case -1160714821:
+				case 918946202:
 					return new CatraProto.Client.TL.Schemas.CloudChats.PeerChat();
-				case -1109531342:
+				case -1566230754:
 					return new CatraProto.Client.TL.Schemas.CloudChats.PeerChannel();
 				case -1432995067:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Storage.FileUnknown();
@@ -138,13 +142,13 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Storage.FileMp4();
 				case 276907596:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Storage.FileWebp();
-				case 537022650:
+				case -742634630:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UserEmpty();
-				case -1820043071:
+				case 1073147056:
 					return new CatraProto.Client.TL.Schemas.CloudChats.User();
 				case 1326562017:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UserProfilePhotoEmpty();
-				case 1775479590:
+				case -2100168954:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UserProfilePhoto();
 				case 164646985:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UserStatusEmpty();
@@ -158,39 +162,39 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.UserStatusLastWeek();
 				case 2011940674:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UserStatusLastMonth();
-				case -1683826688:
+				case 693512293:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChatEmpty();
-				case 1004149726:
+				case 1103884886:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Chat();
-				case 120753115:
+				case 1704108455:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChatForbidden();
-				case -753232354:
+				case -2107528095:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Channel();
-				case 681420594:
+				case 399807445:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelForbidden();
-				case 461151667:
+				case 1185349556:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChatFull();
-				case -253335766:
+				case 1449537070:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelFull();
-				case -925415106:
+				case -1070776313:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChatParticipant();
-				case -636267638:
+				case -462696732:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantCreator();
-				case -489233354:
+				case -1600962725:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantAdmin();
-				case -57668565:
+				case -2023500831:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantsForbidden();
-				case 1061556205:
+				case 1018991608:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChatParticipants();
 				case 935395612:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChatPhotoEmpty();
-				case -770990276:
+				case 476978193:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChatPhoto();
-				case -2082087340:
+				case -1868117372:
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessageEmpty();
-				case 1487813065:
+				case -2049520670:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Message();
-				case 678405636:
+				case 721967202:
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessageService();
 				case 1038967584:
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessageMediaEmpty();
@@ -198,7 +202,7 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessageMediaPhoto();
 				case 1457575028:
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessageMediaGeo();
-				case -873313984:
+				case 1882335561:
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessageMediaContact();
 				case -1618676578:
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessageMediaUnsupported();
@@ -220,7 +224,7 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessageMediaDice();
 				case -1230047312:
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessageActionEmpty();
-				case -1503425638:
+				case -1119368275:
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessageActionChatCreate();
 				case -1247687078:
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessageActionChatEditTitle();
@@ -228,17 +232,17 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessageActionChatEditPhoto();
 				case -1780220945:
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessageActionChatDeletePhoto();
-				case 1217033015:
+				case 365886720:
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessageActionChatAddUser();
-				case -1297179892:
+				case -1539362612:
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessageActionChatDeleteUser();
-				case -123931160:
+				case 51520707:
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessageActionChatJoinedByLink();
 				case -1781355374:
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessageActionChannelCreate();
-				case 1371385889:
+				case -519864430:
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessageActionChatMigrateTo();
-				case -1336546578:
+				case -365344535:
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessageActionChannelMigrateFrom();
 				case -1799538451:
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessageActionPinMessage();
@@ -266,6 +270,18 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessageActionContactSignUp();
 				case -1730095465:
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessageActionGeoProximityReached();
+				case 2047704898:
+					return new CatraProto.Client.TL.Schemas.CloudChats.MessageActionGroupCall();
+				case 1345295095:
+					return new CatraProto.Client.TL.Schemas.CloudChats.MessageActionInviteToGroupCall();
+				case -1441072131:
+					return new CatraProto.Client.TL.Schemas.CloudChats.MessageActionSetMessagesTTL();
+				case -1281329567:
+					return new CatraProto.Client.TL.Schemas.CloudChats.MessageActionGroupCallScheduled();
+				case -1434950843:
+					return new CatraProto.Client.TL.Schemas.CloudChats.MessageActionSetChatTheme();
+				case -339958837:
+					return new CatraProto.Client.TL.Schemas.CloudChats.MessageActionChatJoinedByRequest();
 				case 739712882:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Dialog();
 				case 1908216652:
@@ -276,13 +292,13 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Photo();
 				case 236446268:
 					return new CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeEmpty();
-				case 2009052699:
+				case 1976012384:
 					return new CatraProto.Client.TL.Schemas.CloudChats.PhotoSize();
-				case -374917894:
+				case 35527382:
 					return new CatraProto.Client.TL.Schemas.CloudChats.PhotoCachedSize();
 				case -525288402:
 					return new CatraProto.Client.TL.Schemas.CloudChats.PhotoStrippedSize();
-				case 1520986705:
+				case -96535659:
 					return new CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeProgressive();
 				case -668906175:
 					return new CatraProto.Client.TL.Schemas.CloudChats.PhotoPathSize();
@@ -292,11 +308,11 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.GeoPoint();
 				case 1577067778:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCode();
-				case -855308010:
+				case 872119224:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Auth.Authorization();
 				case 1148485274:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationSignUpRequired();
-				case -543777747:
+				case -1271602504:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Auth.ExportedAuthorization();
 				case -1195615476:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputNotifyPeer();
@@ -310,11 +326,11 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputPeerNotifySettings();
 				case -1353671392:
 					return new CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettings();
-				case 1933519201:
+				case -1525149427:
 					return new CatraProto.Client.TL.Schemas.CloudChats.PeerSettings();
 				case -1539849235:
 					return new CatraProto.Client.TL.Schemas.CloudChats.WallPaper();
-				case -1963717851:
+				case -528465642:
 					return new CatraProto.Client.TL.Schemas.CloudChats.WallPaperNoFile();
 				case 1490799288:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputReportReasonSpam();
@@ -324,19 +340,21 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputReportReasonPornography();
 				case -1376497949:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputReportReasonChildAbuse();
-				case -512463606:
+				case -1041980751:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputReportReasonOther();
 				case -1685456582:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputReportReasonCopyright();
 				case -606798099:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputReportReasonGeoIrrelevant();
-				case -302941166:
+				case -170010905:
+					return new CatraProto.Client.TL.Schemas.CloudChats.InputReportReasonFake();
+				case -818518751:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UserFull();
-				case -116274796:
+				case 341499403:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Contact();
-				case -805141448:
+				case -1052885936:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ImportedContact();
-				case -748155807:
+				case 383348795:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ContactStatus();
 				case -1219778094:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Contacts.ContactsNotModified();
@@ -410,17 +428,17 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateMessageID();
 				case -1576161051:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateDeleteMessages();
-				case 1548249383:
+				case -1071741569:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateUserTyping();
-				case -1704596961:
+				case -2092401936:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateChatUserTyping();
 				case 125178264:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateChatParticipants();
-				case 469489699:
+				case -440534818:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateUserStatus();
-				case -1489818765:
+				case -1007549728:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateUserName();
-				case -1791935732:
+				case -232290676:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateUserPhoto();
 				case 314359194:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateNewEncryptedMessage();
@@ -430,9 +448,9 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateEncryption();
 				case 956179895:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateEncryptedMessagesRead();
-				case -364179876:
+				case 1037718609:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateChatParticipantAdd();
-				case 1851755554:
+				case -483443337:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateChatParticipantDelete();
 				case -1906403213:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateDcOptions();
@@ -442,7 +460,7 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateServiceNotification();
 				case -298113238:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdatePrivacy();
-				case 314130811:
+				case 88680979:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateUserPhone();
 				case -1667805217:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateReadHistoryInbox();
@@ -452,19 +470,19 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateWebPage();
 				case 1757493555:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateReadMessagesContents();
-				case -352032773:
+				case 277713951:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateChannelTooLong();
-				case -1227598250:
+				case 1666927625:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateChannel();
 				case 1656358105:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateNewChannelMessage();
-				case 856380452:
+				case -1842450928:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateReadChannelInbox();
-				case -1015733815:
+				case -1020437742:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateDeleteChannelMessages();
-				case -1734268085:
+				case -232346616:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateChannelMessageViews();
-				case -1232070311:
+				case -674602590:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateChatParticipantAdmin();
 				case 1753886890:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateNewStickerSet();
@@ -474,19 +492,19 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateStickerSets();
 				case -1821035490:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateSavedGifs();
-				case 1417832080:
+				case 1232025500:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateBotInlineQuery();
-				case 239663460:
+				case 317794823:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateBotInlineSend();
 				case 457133559:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateEditChannelMessage();
-				case -415938591:
+				case -1177566067:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateBotCallbackQuery();
 				case -469536605:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateEditMessage();
-				case -103646630:
+				case 1763610706:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateInlineBotCallbackQuery();
-				case 634833351:
+				case -1218471511:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateReadChannelOutbox();
 				case -299124375:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateDraftMessage();
@@ -498,7 +516,7 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateConfig();
 				case 861169551:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdatePtsChanged();
-				case 1081547008:
+				case 791390623:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateChannelWebPage();
 				case 1852826908:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateDialogPinned();
@@ -508,9 +526,9 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateBotWebhookJSON();
 				case -1684914010:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateBotWebhookJSONQuery();
-				case -523384512:
+				case -1246823043:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateBotShippingQuery();
-				case 1563376297:
+				case -1934976362:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateBotPrecheckoutQuery();
 				case -1425052898:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdatePhoneCall();
@@ -520,11 +538,11 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateLangPack();
 				case -451831443:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateFavedStickers();
-				case -1987495099:
+				case 1153291573:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateChannelReadMessagesContents();
 				case 1887741886:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateContactsReset();
-				case 1893427255:
+				case -1304443240:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateChannelAvailableMessages();
 				case -513517117:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateDialogUnreadMark();
@@ -548,7 +566,7 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateGeoLiveViewed();
 				case 1448076945:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateLoginToken();
-				case 1123585836:
+				case 274961865:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateMessagePollVote();
 				case 654302845:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateDialogFilter();
@@ -558,22 +576,42 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateDialogFilters();
 				case 643940105:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdatePhoneCallSignalingData();
-				case 1708307556:
-					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateChannelParticipant();
-				case 1854571743:
+				case -761649164:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateChannelMessageForwards();
-				case 482860628:
+				case -693004986:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateReadChannelDiscussionInbox();
-				case 1178116716:
+				case 1767677564:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateReadChannelDiscussionOutbox();
 				case 610945826:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdatePeerBlocked();
-				case -13975905:
+				case -1937192669:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateChannelUserTyping();
 				case -309990731:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdatePinnedMessages();
-				case -2054649973:
+				case 1538885128:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdatePinnedChannelMessages();
+				case -124097970:
+					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateChat();
+				case -219423922:
+					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateGroupCallParticipants();
+				case 347227392:
+					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateGroupCall();
+				case -1147422299:
+					return new CatraProto.Client.TL.Schemas.CloudChats.UpdatePeerHistoryTTL();
+				case -796432838:
+					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateChatParticipant();
+				case -1738720581:
+					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateChannelParticipant();
+				case -997782967:
+					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateBotStopped();
+				case 192428418:
+					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateGroupCallConnection();
+				case 1299263278:
+					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateBotCommands();
+				case 1885586395:
+					return new CatraProto.Client.TL.Schemas.CloudChats.UpdatePendingJoinRequests();
+				case 299870598:
+					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateBotChatInviteRequester();
 				case -1519637954:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Updates.State();
 				case 1567990072:
@@ -586,9 +624,9 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Updates.DifferenceTooLong();
 				case -484987010:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdatesTooLong();
-				case 580309704:
+				case 826001400:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateShortMessage();
-				case 1076714939:
+				case 1299050149:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateShortChatMessage();
 				case 2027216577:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateShort();
@@ -596,7 +634,7 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdatesCombined();
 				case 1957577280:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ApiUpdates();
-				case 301019932:
+				case -1877614335:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateShortSentMessage();
 				case -1916114267:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Photos.ApiPhotos();
@@ -614,7 +652,7 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Config();
 				case -1910892683:
 					return new CatraProto.Client.TL.Schemas.CloudChats.NearestDc();
-				case 497489295:
+				case -860107216:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Help.AppUpdate();
 				case -1000708810:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Help.NoAppUpdate();
@@ -622,13 +660,13 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Help.InviteText();
 				case -1417756512:
 					return new CatraProto.Client.TL.Schemas.CloudChats.EncryptedChatEmpty();
-				case 1006044124:
+				case 1722964307:
 					return new CatraProto.Client.TL.Schemas.CloudChats.EncryptedChatWaiting();
-				case 1651608194:
+				case 1223809356:
 					return new CatraProto.Client.TL.Schemas.CloudChats.EncryptedChatRequested();
-				case -94974410:
+				case 1643173063:
 					return new CatraProto.Client.TL.Schemas.CloudChats.EncryptedChat();
-				case 332848423:
+				case 505183301:
 					return new CatraProto.Client.TL.Schemas.CloudChats.EncryptedChatDiscarded();
 				case -247351839:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedChat();
@@ -700,6 +738,16 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.SendMessageRecordRoundAction();
 				case 608050278:
 					return new CatraProto.Client.TL.Schemas.CloudChats.SendMessageUploadRoundAction();
+				case -651419003:
+					return new CatraProto.Client.TL.Schemas.CloudChats.SpeakingInGroupCallAction();
+				case -606432698:
+					return new CatraProto.Client.TL.Schemas.CloudChats.SendMessageHistoryImportAction();
+				case -1336228175:
+					return new CatraProto.Client.TL.Schemas.CloudChats.SendMessageChooseStickerAction();
+				case 630664139:
+					return new CatraProto.Client.TL.Schemas.CloudChats.SendMessageEmojiInteraction();
+				case -1234857938:
+					return new CatraProto.Client.TL.Schemas.CloudChats.SendMessageEmojiInteractionSeen();
 				case -1290580579:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Contacts.Found();
 				case 1335282456:
@@ -746,25 +794,25 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputPrivacyValueDisallowAll();
 				case -1877932953:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputPrivacyValueDisallowUsers();
-				case 1283572154:
+				case -2079962673:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputPrivacyValueAllowChatParticipants();
-				case -668769361:
+				case -380694650:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputPrivacyValueDisallowChatParticipants();
 				case -123988:
 					return new CatraProto.Client.TL.Schemas.CloudChats.PrivacyValueAllowContacts();
 				case 1698855810:
 					return new CatraProto.Client.TL.Schemas.CloudChats.PrivacyValueAllowAll();
-				case 1297858060:
+				case -1198497870:
 					return new CatraProto.Client.TL.Schemas.CloudChats.PrivacyValueAllowUsers();
 				case -125240806:
 					return new CatraProto.Client.TL.Schemas.CloudChats.PrivacyValueDisallowContacts();
 				case -1955338397:
 					return new CatraProto.Client.TL.Schemas.CloudChats.PrivacyValueDisallowAll();
-				case 209668535:
+				case -463335103:
 					return new CatraProto.Client.TL.Schemas.CloudChats.PrivacyValueDisallowUsers();
-				case 415136107:
+				case 1796427406:
 					return new CatraProto.Client.TL.Schemas.CloudChats.PrivacyValueAllowChatParticipants();
-				case -1397881200:
+				case 1103656293:
 					return new CatraProto.Client.TL.Schemas.CloudChats.PrivacyValueDisallowChatParticipants();
 				case 1352683077:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.PrivacyRules();
@@ -786,13 +834,13 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeHasStickers();
 				case -244016606:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.StickersNotModified();
-				case -463889475:
+				case 816245886:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.Stickers();
 				case 313694676:
 					return new CatraProto.Client.TL.Schemas.CloudChats.StickerPack();
 				case -395967805:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.AllStickersNotModified();
-				case -302170017:
+				case -843329861:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.AllStickers();
 				case -2066640507:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedMessages();
@@ -806,9 +854,9 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.WebPageNotModified();
 				case -1392388579:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Authorization();
-				case 307276766:
+				case 1275039392:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.Authorizations();
-				case -1390001672:
+				case 408623183:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.Password();
 				case -1705233435:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.PasswordSettings();
@@ -818,13 +866,11 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Auth.PasswordRecovery();
 				case -1551583367:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ReceivedNotifyMessage();
-				case 1776236393:
-					return new CatraProto.Client.TL.Schemas.CloudChats.ChatInviteEmpty();
-				case -64092740:
+				case 179611673:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChatInviteExported();
 				case 1516793212:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChatInviteAlready();
-				case -540871282:
+				case 806110401:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChatInvite();
 				case 1634294960:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChatInvitePeek();
@@ -838,13 +884,17 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetAnimatedEmoji();
 				case -427863538:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetDice();
-				case -290164953:
+				case 215889721:
+					return new CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetAnimatedEmojiAnimations();
+				case -673242758:
 					return new CatraProto.Client.TL.Schemas.CloudChats.StickerSet();
 				case -1240849242:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSet();
+				case -738646805:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetNotModified();
 				case -1032140601:
 					return new CatraProto.Client.TL.Schemas.CloudChats.BotCommand();
-				case -1729618630:
+				case 460632885:
 					return new CatraProto.Client.TL.Schemas.CloudChats.BotInfo();
 				case -1560655744:
 					return new CatraProto.Client.TL.Schemas.CloudChats.KeyboardButton();
@@ -868,13 +918,17 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputKeyboardButtonUrlAuth();
 				case -1144565411:
 					return new CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonRequestPoll();
+				case -376962181:
+					return new CatraProto.Client.TL.Schemas.CloudChats.InputKeyboardButtonUserProfile();
+				case 814112961:
+					return new CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonUserProfile();
 				case 2002815875:
 					return new CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonRow();
 				case -1606526075:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ReplyKeyboardHide();
-				case -200242528:
+				case -2035021048:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ReplyKeyboardForceReply();
-				case 889353612:
+				case -2049074735:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ReplyKeyboardMarkup();
 				case 1218642516:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ReplyInlineMarkup();
@@ -900,7 +954,7 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessageEntityPre();
 				case 1990644519:
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessageEntityTextUrl();
-				case 892193368:
+				case -595914432:
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessageEntityMentionName();
 				case 546203849:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputMessageEntityMentionName();
@@ -918,9 +972,9 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBankCard();
 				case -292807034:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputChannelEmpty();
-				case -1343524562:
+				case -212145112:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputChannel();
-				case 707290417:
+				case 1536380829:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputChannelFromMessage();
 				case 2131196633:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Contacts.ResolvedPeer();
@@ -936,17 +990,17 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelMessagesFilterEmpty();
 				case -847783593:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelMessagesFilter();
-				case 367766557:
+				case -1072953408:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipant();
-				case -1557620115:
+				case 900251559:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantSelf();
-				case 1149094475:
+				case 803602899:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantCreator();
-				case -859915345:
+				case 885242707:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantAdmin();
-				case 470789295:
+				case 1844969806:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantBanned();
-				case -1010402965:
+				case 453242886:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantLeft();
 				case -566281095:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantsRecent();
@@ -964,17 +1018,17 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantsContacts();
 				case -531931925:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantsMentions();
-				case -177282392:
+				case -1699676497:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Channels.ChannelParticipants();
 				case -266911767:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Channels.ChannelParticipantsNotModified();
-				case -791039645:
+				case -541588713:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Channels.ChannelParticipant();
 				case 2013922064:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Help.TermsOfService();
 				case -402498398:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.SavedGifsNotModified();
-				case 772213157:
+				case -2069878259:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.SavedGifs();
 				case 864077702:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageMediaAuto();
@@ -988,6 +1042,8 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageMediaContact();
 				case 1262639204:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageGame();
+				case -672693723:
+					return new CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageMediaInvoice();
 				case -2000710887:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineResult();
 				case -1462213465:
@@ -1006,6 +1062,8 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.BotInlineMessageMediaVenue();
 				case 416402882:
 					return new CatraProto.Client.TL.Schemas.CloudChats.BotInlineMessageMediaContact();
+				case 894081801:
+					return new CatraProto.Client.TL.Schemas.CloudChats.BotInlineMessageMediaInvoice();
 				case 295067450:
 					return new CatraProto.Client.TL.Schemas.CloudChats.BotInlineResult();
 				case 400266251:
@@ -1022,6 +1080,8 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Auth.CodeTypeCall();
 				case 577556219:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Auth.CodeTypeFlashCall();
+				case -702884114:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Auth.CodeTypeMissedCall();
 				case 1035688326:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeTypeApp();
 				case -1073693790:
@@ -1030,12 +1090,16 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeTypeCall();
 				case -1425815847:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeTypeFlashCall();
+				case -2113903484:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeTypeMissedCall();
 				case 911761060:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.BotCallbackAnswer();
 				case 649453030:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.MessageEditData();
 				case -1995686519:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageID();
+				case -1227287081:
+					return new CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageID64();
 				case 1008755359:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InlineBotSwitchPM();
 				case 863093588:
@@ -1072,11 +1136,11 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.DraftMessage();
 				case -958657434:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.FeaturedStickersNotModified();
-				case -1230257343:
+				case -2067782896:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.FeaturedStickers();
 				case 186120336:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.RecentStickersNotModified();
-				case 586395571:
+				case -1999405994:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.RecentStickers();
 				case 1338747336:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.ArchivedStickers();
@@ -1100,7 +1164,7 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputGameID();
 				case -1020139510:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputGameShortName();
-				case 1493171408:
+				case 1940093419:
 					return new CatraProto.Client.TL.Schemas.CloudChats.HighScore();
 				case -1707344487:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.HighScores();
@@ -1206,7 +1270,7 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.DataJSON();
 				case -886477832:
 					return new CatraProto.Client.TL.Schemas.CloudChats.LabeledPrice();
-				case -1022713000:
+				case 215516896:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Invoice();
 				case -368917890:
 					return new CatraProto.Client.TL.Schemas.CloudChats.PaymentCharge();
@@ -1228,7 +1292,7 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputWebFileGeoPointLocation();
 				case 568808380:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Upload.WebFile();
-				case 1062645411:
+				case 378828315:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentForm();
 				case -784000893:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Payments.ValidatedRequestedInfo();
@@ -1236,7 +1300,7 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentResult();
 				case -666824391:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentVerificationNeeded();
-				case 1342771681:
+				case 1891958275:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentReceipt();
 				case -74456004:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Payments.SavedInfo();
@@ -1246,8 +1310,8 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputPaymentCredentials();
 				case 178373535:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputPaymentCredentialsApplePay();
-				case -905587442:
-					return new CatraProto.Client.TL.Schemas.CloudChats.InputPaymentCredentialsAndroidPay();
+				case -1966921727:
+					return new CatraProto.Client.TL.Schemas.CloudChats.InputPaymentCredentialsGooglePay();
 				case -614138572:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.TmpPassword();
 				case -1239335713:
@@ -1258,13 +1322,13 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputPhoneCall();
 				case 1399245077:
 					return new CatraProto.Client.TL.Schemas.CloudChats.PhoneCallEmpty();
-				case 462375633:
+				case -987599081:
 					return new CatraProto.Client.TL.Schemas.CloudChats.PhoneCallWaiting();
-				case -2014659757:
+				case 347139340:
 					return new CatraProto.Client.TL.Schemas.CloudChats.PhoneCallRequested();
-				case -1719909046:
+				case 912311057:
 					return new CatraProto.Client.TL.Schemas.CloudChats.PhoneCallAccepted();
-				case -2025673089:
+				case -1770029977:
 					return new CatraProto.Client.TL.Schemas.CloudChats.PhoneCall();
 				case 1355435489:
 					return new CatraProto.Client.TL.Schemas.CloudChats.PhoneCallDiscarded();
@@ -1330,13 +1394,41 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionDefaultBannedRights();
 				case -1895328189:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionStopPoll();
-				case -1569748965:
+				case 84703944:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionChangeLinkedChat();
 				case 241923758:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionChangeLocation();
 				case 1401984889:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionToggleSlowMode();
-				case 995769920:
+				case 589338437:
+					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionStartGroupCall();
+				case -610299584:
+					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionDiscardGroupCall();
+				case -115071790:
+					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionParticipantMute();
+				case -431740480:
+					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionParticipantUnmute();
+				case 1456906823:
+					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionToggleGroupCallSetting();
+				case 1557846647:
+					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionParticipantJoinByInvite();
+				case 1515256996:
+					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionExportedInviteDelete();
+				case 1091179342:
+					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionExportedInviteRevoke();
+				case -384910503:
+					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionExportedInviteEdit();
+				case 1048537159:
+					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionParticipantVolume();
+				case 1855199800:
+					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionChangeHistoryTTL();
+				case -1347021750:
+					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionParticipantJoinByRequest();
+				case -886388890:
+					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionToggleNoForwards();
+				case 663693416:
+					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionSendMessage();
+				case 531458253:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEvent();
 				case -309659827:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Channels.AdminLogResults();
@@ -1346,13 +1438,13 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.PopularContact();
 				case -1634752813:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.FavedStickersNotModified();
-				case -209768682:
+				case 750063767:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.FavedStickers();
 				case 1189204285:
 					return new CatraProto.Client.TL.Schemas.CloudChats.RecentMeUrlUnknown();
-				case -1917045962:
+				case -1188296222:
 					return new CatraProto.Client.TL.Schemas.CloudChats.RecentMeUrlUser();
-				case -1608834311:
+				case -1294306862:
 					return new CatraProto.Client.TL.Schemas.CloudChats.RecentMeUrlChat();
 				case -347535331:
 					return new CatraProto.Client.TL.Schemas.CloudChats.RecentMeUrlChatInvite();
@@ -1362,7 +1454,7 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Help.RecentMeUrls();
 				case 482797855:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputSingleMedia();
-				case -892779534:
+				case -1493633966:
 					return new CatraProto.Client.TL.Schemas.CloudChats.WebAuthorization();
 				case -313079300:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.WebAuthorizations();
@@ -1384,7 +1476,7 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.DialogPeerFolder();
 				case 223655517:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.FoundStickerSetsNotModified();
-				case 1359533640:
+				case -1963942446:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.FoundStickerSets();
 				case 1648543603:
 					return new CatraProto.Client.TL.Schemas.CloudChats.FileHash();
@@ -1542,7 +1634,7 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Poll();
 				case 997055186:
 					return new CatraProto.Client.TL.Schemas.CloudChats.PollAnswerVoters();
-				case -1159937629:
+				case -591909213:
 					return new CatraProto.Client.TL.Schemas.CloudChats.PollResults();
 				case -264117680:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChatOnlines();
@@ -1556,15 +1648,15 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputWallPaper();
 				case 1913199744:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperSlug();
-				case -2077770836:
+				case -1770371538:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperNoFile();
 				case 471437699:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.WallPapersNotModified();
-				case 1881892265:
+				case -842824308:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.WallPapers();
-				case -557924733:
+				case -1973130814:
 					return new CatraProto.Client.TL.Schemas.CloudChats.CodeSettings();
-				case 84438264:
+				case 499236004:
 					return new CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettings();
 				case -532532493:
 					return new CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettings();
@@ -1580,8 +1672,6 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.EmojiURL();
 				case -1275374751:
 					return new CatraProto.Client.TL.Schemas.CloudChats.EmojiLanguage();
-				case -1132476723:
-					return new CatraProto.Client.TL.Schemas.CloudChats.FileLocationToBeDeprecated();
 				case -11252123:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Folder();
 				case -70073706:
@@ -1610,11 +1700,11 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputTheme();
 				case -175567375:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputThemeSlug();
-				case 42930452:
+				case -1609668650:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Theme();
 				case -199313886:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.ThemesNotModified();
-				case 2137482273:
+				case -1707242387:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.Themes();
 				case 1654593920:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Auth.LoginToken();
@@ -1636,17 +1726,17 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.BaseThemeTinted();
 				case 1527845466:
 					return new CatraProto.Client.TL.Schemas.CloudChats.BaseThemeArctic();
-				case -1118798639:
+				case -1881255857:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputThemeSettings();
-				case -1676371894:
+				case -94849324:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ThemeSettings();
 				case 1421174295:
 					return new CatraProto.Client.TL.Schemas.CloudChats.WebPageAttributeTheme();
-				case -1567730343:
+				case 886196148:
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessageUserVote();
-				case 909603888:
+				case 1017491692:
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessageUserVoteInputOption();
-				case 244310238:
+				case -1973033641:
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessageUserVoteMultiple();
 				case 136574537:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.VotesList();
@@ -1678,13 +1768,13 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Help.PromoDataEmpty();
 				case -1942390465:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Help.PromoData();
-				case -399391402:
+				case -567037804:
 					return new CatraProto.Client.TL.Schemas.CloudChats.VideoSize();
-				case 418631927:
+				case -1660637285:
 					return new CatraProto.Client.TL.Schemas.CloudChats.StatsGroupTopPoster();
-				case 1611985938:
+				case -682079097:
 					return new CatraProto.Client.TL.Schemas.CloudChats.StatsGroupTopAdmin();
-				case 831924812:
+				case 1398765469:
 					return new CatraProto.Client.TL.Schemas.CloudChats.StatsGroupTopInviter();
 				case -276825834:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Stats.MegagroupStats();
@@ -1702,16 +1792,110 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessageViews();
 				case -1228606141:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.MessageViews();
-				case -170029155:
+				case -1506535550:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.DiscussionMessage();
 				case -1495959709:
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessageReplyHeader();
-				case 1093204652:
+				case -2083123262:
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessageReplies();
 				case -386039788:
 					return new CatraProto.Client.TL.Schemas.CloudChats.PeerBlocked();
 				case -1986399595:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Stats.MessageStats();
+				case 2004925620:
+					return new CatraProto.Client.TL.Schemas.CloudChats.GroupCallDiscarded();
+				case -711498484:
+					return new CatraProto.Client.TL.Schemas.CloudChats.GroupCall();
+				case -659913713:
+					return new CatraProto.Client.TL.Schemas.CloudChats.InputGroupCall();
+				case -341428482:
+					return new CatraProto.Client.TL.Schemas.CloudChats.GroupCallParticipant();
+				case -1636664659:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Phone.GroupCall();
+				case -193506890:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Phone.GroupParticipants();
+				case 813821341:
+					return new CatraProto.Client.TL.Schemas.CloudChats.InlineQueryPeerTypeSameBotPM();
+				case -2093215828:
+					return new CatraProto.Client.TL.Schemas.CloudChats.InlineQueryPeerTypePM();
+				case -681130742:
+					return new CatraProto.Client.TL.Schemas.CloudChats.InlineQueryPeerTypeChat();
+				case 1589952067:
+					return new CatraProto.Client.TL.Schemas.CloudChats.InlineQueryPeerTypeMegagroup();
+				case 1664413338:
+					return new CatraProto.Client.TL.Schemas.CloudChats.InlineQueryPeerTypeBroadcast();
+				case 375566091:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.HistoryImport();
+				case 1578088377:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.HistoryImportParsed();
+				case -275956116:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedFoundMessages();
+				case -1940201511:
+					return new CatraProto.Client.TL.Schemas.CloudChats.ChatInviteImporter();
+				case -1111085620:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.ExportedChatInvites();
+				case 410107472:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.ExportedChatInvite();
+				case 572915951:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.ExportedChatInviteReplaced();
+				case -2118733814:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.ChatInviteImporters();
+				case -219353309:
+					return new CatraProto.Client.TL.Schemas.CloudChats.ChatAdminWithInvites();
+				case -1231326505:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.ChatAdminsWithInvites();
+				case -1571952873:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.CheckedHistoryImportPeer();
+				case -1343921601:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Phone.JoinAsPeers();
+				case 541839704:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Phone.ExportedGroupCallInvite();
+				case -592373577:
+					return new CatraProto.Client.TL.Schemas.CloudChats.GroupCallParticipantVideoSourceGroup();
+				case 1735736008:
+					return new CatraProto.Client.TL.Schemas.CloudChats.GroupCallParticipantVideo();
+				case -2046910401:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Stickers.SuggestedShortName();
+				case 795652779:
+					return new CatraProto.Client.TL.Schemas.CloudChats.BotCommandScopeDefault();
+				case 1011811544:
+					return new CatraProto.Client.TL.Schemas.CloudChats.BotCommandScopeUsers();
+				case 1877059713:
+					return new CatraProto.Client.TL.Schemas.CloudChats.BotCommandScopeChats();
+				case -1180016534:
+					return new CatraProto.Client.TL.Schemas.CloudChats.BotCommandScopeChatAdmins();
+				case -610432643:
+					return new CatraProto.Client.TL.Schemas.CloudChats.BotCommandScopePeer();
+				case 1071145937:
+					return new CatraProto.Client.TL.Schemas.CloudChats.BotCommandScopePeerAdmins();
+				case 169026035:
+					return new CatraProto.Client.TL.Schemas.CloudChats.BotCommandScopePeerUser();
+				case -478701471:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Account.ResetPasswordFailedWait();
+				case -370148227:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Account.ResetPasswordRequestedWait();
+				case -383330754:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Account.ResetPasswordOk();
+				case -783162982:
+					return new CatraProto.Client.TL.Schemas.CloudChats.SponsoredMessage();
+				case 1705297877:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.SponsoredMessages();
+				case -911191137:
+					return new CatraProto.Client.TL.Schemas.CloudChats.SearchResultsCalendarPeriod();
+				case 343859772:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchResultsCalendar();
+				case 2137295719:
+					return new CatraProto.Client.TL.Schemas.CloudChats.SearchResultPosition();
+				case 1404185519:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchResultsPositions();
+				case -2091463255:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Channels.SendAsPeers();
+				case 997004590:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Users.UserFull();
+				case 1753266509:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.PeerSettings();
+				case -1012759713:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Auth.LoggedOut();
 				case -878758099:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InvokeAfterMsg();
 				case 1036301552:
@@ -1732,13 +1916,13 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Auth.SignUp();
 				case -1126886015:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Auth.SignIn();
-				case 1461180992:
+				case 1047706137:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Auth.LogOut();
 				case -1616179942:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Auth.ResetAuthorizations();
 				case -440401971:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Auth.ExportAuthorization();
-				case -470837741:
+				case -1518699091:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Auth.ImportAuthorization();
 				case -841733627:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Auth.BindTempAuthKey();
@@ -1748,7 +1932,7 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Auth.CheckPassword();
 				case -661144474:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Auth.RequestPasswordRecovery();
-				case 1319464594:
+				case 923364464:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Auth.RecoverPassword();
 				case 1056025023:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Auth.ResendCode();
@@ -1756,15 +1940,17 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Auth.CancelCode();
 				case -1907842680:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Auth.DropTempAuthKeys();
-				case -1313598185:
+				case -1210022402:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Auth.ExportLoginToken();
 				case -1783866140:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Auth.ImportLoginToken();
 				case -392909491:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Auth.AcceptLoginToken();
-				case 1754754159:
+				case 221691769:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Auth.CheckRecoveryPassword();
+				case -326762118:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.RegisterDevice();
-				case 813089983:
+				case 1779249670:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.UnregisterDevice();
 				case -2067899501:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.UpdateNotifySettings();
@@ -1776,9 +1962,9 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.UpdateProfile();
 				case 1713919532:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.UpdateStatus();
-				case -1430579357:
+				case 127302966:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.GetWallPapers();
-				case -1374118561:
+				case -977650298:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.ReportPeer();
 				case 655677548:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.CheckUsername();
@@ -1830,9 +2016,9 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.SaveSecureValue();
 				case -1199522741:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.DeleteSecureValue();
-				case -1200903967:
+				case -1456907910:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.GetAuthorizationForm();
-				case -419267436:
+				case -202552205:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.AcceptAuthorization();
 				case -1516022023:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.SendVerifyPhoneCode();
@@ -1874,17 +2060,17 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.SaveAutoDownloadSettings();
 				case 473805619:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.UploadTheme();
-				case -2077048289:
+				case 1697530880:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.CreateTheme();
-				case 1555261397:
+				case 737414348:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.UpdateTheme();
 				case -229175188:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.SaveTheme();
-				case 2061776695:
+				case -953697477:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.InstallTheme();
 				case -1919060949:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.GetTheme();
-				case 676939512:
+				case 1913054296:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.GetThemes();
 				case -1250643605:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.SetContentSettings();
@@ -1896,17 +2082,29 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.GetGlobalPrivacySettings();
 				case 517647042:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.SetGlobalPrivacySettings();
+				case -91437323:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Account.ReportProfilePhoto();
+				case -1828139493:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Account.ResetPassword();
+				case 1284770294:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Account.DeclinePasswordReset();
+				case -700916087:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Account.GetChatThemes();
+				case -1081501024:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Account.SetAuthorizationTTL();
+				case 1089766498:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Account.ChangeAuthorizationSettings();
 				case 227648840:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Users.GetUsers();
-				case -902781519:
+				case -1240508136:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Users.GetFullUser();
 				case -1865902923:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Users.SetSecureValueErrors();
-				case 749357634:
+				case 2061264541:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Contacts.GetContactIDs();
 				case -995929106:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Contacts.GetStatuses();
-				case -1071414113:
+				case 1574346258:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Contacts.GetContacts();
 				case 746589157:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Contacts.ImportContacts();
@@ -1924,7 +2122,7 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Contacts.Search();
 				case -113456221:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Contacts.ResolveUsername();
-				case -728224331:
+				case -1758168906:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Contacts.GetTopPeers();
 				case 451113900:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Contacts.ResetTopPeerRating();
@@ -1944,15 +2142,15 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Contacts.BlockFromReplies();
 				case 1673946374:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetMessages();
-				case -1594999949:
+				case -1594569905:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetDialogs();
-				case -591691168:
+				case 1143203525:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetHistory();
-				case 204812012:
+				case -1593989278:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.Search();
 				case 238054714:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.ReadHistory();
-				case 469850889:
+				case -1332768214:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.DeleteHistory();
 				case -443640366:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.DeleteMessages();
@@ -1960,29 +2158,29 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.ReceivedMessages();
 				case 1486110434:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.SetTyping();
-				case 1376532592:
+				case 228423076:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendMessage();
-				case 881978281:
+				case -497026848:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendMedia();
-				case -637606386:
+				case -869258997:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.ForwardMessages();
 				case -820669733:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.ReportSpam();
-				case 913498268:
+				case -270948702:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetPeerSettings();
-				case -1115507112:
+				case -1991005362:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.Report();
-				case 1013621127:
+				case 1240027791:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetChats();
-				case 998448230:
+				case -1364194508:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetFullChat();
-				case -599447467:
+				case 1937260541:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.EditChatTitle();
-				case -900957736:
+				case 903730804:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.EditChatPhoto();
-				case -106911223:
+				case -230206493:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.AddChatUser();
-				case -530505962:
+				case -1575461717:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.DeleteChatUser();
 				case 164303470:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.CreateChat();
@@ -1992,7 +2190,7 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.RequestEncryption();
 				case 1035731989:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.AcceptEncryption();
-				case -304536635:
+				case -208425312:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.DiscardEncryption();
 				case 2031374829:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.SetEncryptedTyping();
@@ -2010,19 +2208,19 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.ReportEncryptedSpam();
 				case 916930423:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.ReadMessageContents();
-				case 71126828:
+				case -710552671:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetStickers();
-				case 479598769:
+				case -1197432408:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetAllStickers();
 				case -1956073268:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetWebPagePreview();
-				case 234312524:
+				case -1607670315:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.ExportChatInvite();
 				case 1051570619:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.CheckChatInvite();
 				case 1817183516:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.ImportChatInvite();
-				case 639215886:
+				case -928977804:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetStickerSet();
 				case -946871200:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.InstallStickerSet();
@@ -2032,9 +2230,9 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.StartBot();
 				case 1468322785:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetMessagesViews();
-				case -1444503762:
+				case -1470377534:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.EditChatAdmin();
-				case 363051235:
+				case -1568189671:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.MigrateChat();
 				case 1271290010:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchGlobal();
@@ -2042,7 +2240,7 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.ReorderStickerSets();
 				case 864953444:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetDocumentByHash();
-				case -2084618926:
+				case 1559270965:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetSavedGifs();
 				case 846868683:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.SaveGif();
@@ -2050,7 +2248,7 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetInlineBotResults();
 				case -346119674:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.SetInlineBotResults();
-				case 570955184:
+				case 2057376407:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendInlineBotResult();
 				case -39416522:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetMessageEditData();
@@ -2068,11 +2266,11 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.SaveDraft();
 				case 1782549861:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetAllDrafts();
-				case 766298703:
+				case 1685588756:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetFeaturedStickers();
 				case 1527873830:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.ReadFeaturedStickers();
-				case 1587647177:
+				case -1649852357:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetRecentStickers();
 				case 958863608:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.SaveRecentSticker();
@@ -2080,7 +2278,7 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.ClearRecentStickers();
 				case 1475442322:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetArchivedStickers();
-				case 1706608543:
+				case 1678738104:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetMaskStickers();
 				case -866424884:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetAttachedStickers();
@@ -2092,9 +2290,9 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetGameHighScores();
 				case 258170395:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetInlineGameHighScores();
-				case 218777796:
+				case -468934396:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetCommonChats();
-				case -341307408:
+				case -2023787330:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetAllChats();
 				case 852135825:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetWebPage();
@@ -2112,7 +2310,7 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.UploadMedia();
 				case -914493408:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendScreenshotNotification();
-				case 567151374:
+				case 82946729:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetFavedStickers();
 				case -1174420133:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.FaveSticker();
@@ -2120,13 +2318,13 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetUnreadMentions();
 				case 251759059:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.ReadMentions();
-				case -1144759543:
+				case 1881817312:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetRecentLocations();
-				case -872345397:
+				case -134016113:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendMultiMedia();
 				case 1347929239:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.UploadEncryptedFile();
-				case -1028140917:
+				case 896555914:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchStickerSets();
 				case 486505992:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetSplitRanges();
@@ -2144,8 +2342,6 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetPollResults();
 				case 1848369232:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetOnlines();
-				case -2127811866:
-					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetStatsURL();
 				case -554301545:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.EditChatAbout();
 				case -1517917375:
@@ -2160,13 +2356,13 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetEmojiURL();
 				case 1932455680:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetSearchCounters();
-				case -482388461:
+				case 428848198:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.RequestUrlAuth();
-				case -148247912:
+				case -1322487515:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.AcceptUrlAuth();
 				case 1336717624:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.HidePeerSettingsBar();
-				case -490575781:
+				case -183077365:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetScheduledHistory();
 				case -1111817116:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetScheduledMessages();
@@ -2186,9 +2382,9 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.UpdateDialogFilter();
 				case -983318044:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.UpdateDialogFiltersOrder();
-				case 1608974939:
+				case 2127598753:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetOldFeaturedStickers();
-				case 615875002:
+				case 584962828:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetReplies();
 				case 1147761405:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetDiscussionMessage();
@@ -2196,6 +2392,52 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.ReadDiscussion();
 				case -265962357:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.UnpinAllMessages();
+				case 1540419152:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.DeleteChat();
+				case -104078327:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.DeletePhoneCallHistory();
+				case 1140726259:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.CheckHistoryImport();
+				case 873008187:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.InitHistoryImport();
+				case 713433234:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.UploadImportedMedia();
+				case -1271008444:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.StartHistoryImport();
+				case -1565154314:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetExportedChatInvites();
+				case 1937010524:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetExportedChatInvite();
+				case -1110823051:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.EditExportedChatInvite();
+				case 1452833749:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.DeleteRevokedExportedChatInvites();
+				case -731601877:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.DeleteExportedChatInvite();
+				case 958457583:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetAdminsWithInvites();
+				case -553329330:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetChatInviteImporters();
+				case -1207017500:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.SetHistoryTTL();
+				case 1573261059:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.CheckHistoryImportPeer();
+				case -432283329:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.SetChatTheme();
+				case 745510839:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetMessageReadParticipants();
+				case 1240514025:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetSearchResultsCalendar();
+				case 1855292323:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetSearchResultsPositions();
+				case 2145904661:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.HideChatJoinRequest();
+				case -528091926:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.HideAllChatJoinRequests();
+				case -1323389022:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.ToggleNoForwards();
+				case -855777386:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.SaveDefaultSendAs();
 				case -304838614:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Updates.GetState();
 				case 630429265:
@@ -2266,7 +2508,7 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Help.GetPromoData();
 				case 505748629:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Help.HidePromoData();
-				case 125807007:
+				case -183649631:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Help.DismissSuggestion();
 				case 1935116200:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Help.GetCountriesList();
@@ -2274,15 +2516,13 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Channels.ReadHistory();
 				case -2067661490:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Channels.DeleteMessages();
-				case -787622117:
-					return new CatraProto.Client.TL.Schemas.CloudChats.Channels.DeleteUserHistory();
-				case -32999408:
+				case -196443371:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Channels.ReportSpam();
 				case -1383294429:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Channels.GetMessages();
-				case 306054633:
+				case 2010044880:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Channels.GetParticipants();
-				case 1416484774:
+				case -1599378234:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Channels.GetParticipant();
 				case 176122811:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Channels.GetChannels();
@@ -2314,7 +2554,7 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Channels.ToggleSignatures();
 				case -122669393:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Channels.GetAdminedPublicChannels();
-				case 1920559378:
+				case -1763259007:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Channels.EditBanned();
 				case 870184064:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Channels.GetAdminLog();
@@ -2340,19 +2580,33 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Channels.ToggleSlowMode();
 				case 300429806:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Channels.GetInactiveChannels();
+				case 187239529:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Channels.ConvertToGigagroup();
+				case -1095836780:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Channels.ViewSponsoredMessage();
+				case -333377601:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Channels.GetSponsoredMessages();
+				case 231174382:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Channels.GetSendAs();
+				case 913655003:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Channels.DeleteParticipantHistory();
 				case -1440257555:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Bots.SendCustomRequest();
 				case -434028723:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Bots.AnswerWebhookJSONQuery();
-				case -2141370634:
+				case 85399130:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Bots.SetBotCommands();
-				case -1712285883:
+				case 1032708345:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Bots.ResetBotCommands();
+				case -481554986:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Bots.GetBotCommands();
+				case -1976353651:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Payments.GetPaymentForm();
-				case -1601001088:
+				case 611897804:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Payments.GetPaymentReceipt();
-				case 1997180532:
+				case -619695760:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Payments.ValidateRequestedInfo();
-				case 730364339:
+				case 818134173:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Payments.SendPaymentForm();
 				case 578650699:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Payments.GetSavedInfo();
@@ -2360,7 +2614,7 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Payments.ClearSavedInfo();
 				case 779736953:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Payments.GetBankCardData();
-				case -251435136:
+				case -1876841625:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Stickers.CreateStickerSet();
 				case -143257775:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Stickers.RemoveStickerFromSet();
@@ -2370,6 +2624,10 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Stickers.AddStickerToSet();
 				case -1707717072:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Stickers.SetStickerSetThumb();
+				case 676017721:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Stickers.CheckShortName();
+				case 1303364867:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Stickers.SuggestShortName();
 				case 1430593449:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Phone.GetCallConfig();
 				case 1124046573:
@@ -2388,6 +2646,44 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Phone.SaveCallDebug();
 				case -8744061:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Phone.SendSignalingData();
+				case 1221445336:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Phone.CreateGroupCall();
+				case -1322057861:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Phone.JoinGroupCall();
+				case 1342404601:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Phone.LeaveGroupCall();
+				case 2067345760:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Phone.InviteToGroupCall();
+				case 2054648117:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Phone.DiscardGroupCall();
+				case 1958458429:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Phone.ToggleGroupCallSettings();
+				case 68699611:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Phone.GetGroupCall();
+				case -984033109:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Phone.GetGroupParticipants();
+				case -1248003721:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Phone.CheckGroupCall();
+				case -248985848:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Phone.ToggleGroupCallRecord();
+				case -1524155713:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Phone.EditGroupCallParticipant();
+				case 480685066:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Phone.EditGroupCallTitle();
+				case -277077702:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Phone.GetGroupCallJoinAs();
+				case -425040769:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Phone.ExportGroupCallInvite();
+				case 563885286:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Phone.ToggleGroupCallStartSubscription();
+				case 1451287362:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Phone.StartScheduledGroupCall();
+				case 1465786252:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Phone.SaveDefaultGroupCallJoinAs();
+				case -873829436:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Phone.JoinGroupCallPresentation();
+				case 475058500:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Phone.LeaveGroupCallPresentation();
 				case -219008246:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Langpack.GetLangPack();
 				case -269862909:

@@ -11,12 +11,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 	{
 
 
-        public static int StaticConstructorId { get => 1061556205; }
+        public static int StaticConstructorId { get => 1018991608; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
 [Newtonsoft.Json.JsonProperty("chat_id")]
-		public override int ChatId { get; set; }
+		public override long ChatId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("participants")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantBase> Participants { get; set; }
@@ -41,7 +41,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			ChatId = reader.Read<int>();
+			ChatId = reader.Read<long>();
 			Participants = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantBase>();
 			Version = reader.Read<int>();
 

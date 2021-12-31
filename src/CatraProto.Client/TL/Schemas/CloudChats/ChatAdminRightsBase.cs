@@ -37,6 +37,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("manage_call")]
 		public abstract bool ManageCall { get; set; }
 
+[Newtonsoft.Json.JsonProperty("other")]
+		public abstract bool Other { get; set; }
+
         public abstract void UpdateFlags();
         public abstract void Deserialize(Reader reader);
         public abstract void Serialize(Writer writer);

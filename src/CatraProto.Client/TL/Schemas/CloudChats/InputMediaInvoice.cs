@@ -12,10 +12,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		[Flags]
 		public enum FlagsEnum 
 		{
-			Photo = 1 << 0
+			Photo = 1 << 0,
+			StartParam = 1 << 1
 		}
 
-        public static int StaticConstructorId { get => -186607933; }
+        public static int StaticConstructorId { get => -646342540; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -50,6 +51,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void UpdateFlags() 
 		{
 			Flags = Photo == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
+			Flags = StartParam == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
 
 		}
 
@@ -69,7 +71,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			writer.Write(Payload);
 			writer.Write(Provider);
 			writer.Write(ProviderData);
-			writer.Write(StartParam);
+			if(FlagsHelper.IsFlagSet(Flags, 1))
+			{
+				writer.Write(StartParam);
+			}
+
 
 		}
 
@@ -87,7 +93,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Payload = reader.Read<byte[]>();
 			Provider = reader.Read<string>();
 			ProviderData = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
-			StartParam = reader.Read<string>();
+			if(FlagsHelper.IsFlagSet(Flags, 1))
+			{
+				StartParam = reader.Read<string>();
+			}
+
 
 		}
 				

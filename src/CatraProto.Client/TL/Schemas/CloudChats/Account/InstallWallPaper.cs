@@ -1,59 +1,58 @@
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public partial class InstallWallPaper : IMethod
-    {
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => -18000023;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
-
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
-
-        [JsonProperty("wallpaper")] public InputWallPaperBase Wallpaper { get; set; }
-
-        [JsonProperty("settings")] public WallPaperSettingsBase Settings { get; set; }
-
-        public override string ToString()
-        {
-            return "account.installWallPaper";
-        }
+	public partial class InstallWallPaper : IMethod
+	{
 
 
-        public void UpdateFlags()
-        {
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => -18000023; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(bool);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-            writer.Write(Wallpaper);
-            writer.Write(Settings);
-        }
+[Newtonsoft.Json.JsonProperty("wallpaper")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase Wallpaper { get; set; }
 
-        public void Deserialize(Reader reader)
-        {
-            Wallpaper = reader.Read<InputWallPaperBase>();
-            Settings = reader.Read<WallPaperSettingsBase>();
-        }
-    }
+[Newtonsoft.Json.JsonProperty("settings")]
+		public CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase Settings { get; set; }
+
+
+		public void UpdateFlags() 
+		{
+
+		}
+
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(Wallpaper);
+			writer.Write(Settings);
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			Wallpaper = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase>();
+			Settings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "account.installWallPaper";
+		}
+	}
 }

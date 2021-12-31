@@ -2,55 +2,52 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public partial class GetMultiWallPapers : IMethod
-    {
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => 1705865692;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(WallPaperBase);
-
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = true;
-
-        [JsonProperty("wallpapers")] public IList<InputWallPaperBase> Wallpapers { get; set; }
-
-        public override string ToString()
-        {
-            return "account.getMultiWallPapers";
-        }
+	public partial class GetMultiWallPapers : IMethod
+	{
 
 
-        public void UpdateFlags()
-        {
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => 1705865692; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = true;
 
-            writer.Write(Wallpapers);
-        }
+[Newtonsoft.Json.JsonProperty("wallpapers")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase> Wallpapers { get; set; }
 
-        public void Deserialize(Reader reader)
-        {
-            Wallpapers = reader.ReadVector<InputWallPaperBase>();
-        }
-    }
+
+		public void UpdateFlags() 
+		{
+
+		}
+
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(Wallpapers);
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			Wallpapers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "account.getMultiWallPapers";
+		}
+	}
 }

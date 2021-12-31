@@ -1,51 +1,50 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
-using Newtonsoft.Json;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
-    public partial class LoginToken : LoginTokenBase
-    {
-        public static int StaticConstructorId
-        {
-            get => 1654593920;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonProperty("expires")] public int Expires { get; set; }
-
-        [JsonProperty("token")] public byte[] Token { get; set; }
+	public partial class LoginToken : CatraProto.Client.TL.Schemas.CloudChats.Auth.LoginTokenBase
+	{
 
 
-        public override void UpdateFlags()
-        {
-        }
+        public static int StaticConstructorId { get => 1654593920; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonProperty("expires")]
+		public int Expires { get; set; }
 
-        public override void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonProperty("token")]
+		public byte[] Token { get; set; }
 
-            writer.Write(Expires);
-            writer.Write(Token);
-        }
+        
+		public override void UpdateFlags() 
+		{
 
-        public override void Deserialize(Reader reader)
-        {
-            Expires = reader.Read<int>();
-            Token = reader.Read<byte[]>();
-        }
+		}
 
-        public override string ToString()
-        {
-            return "auth.loginToken";
-        }
-    }
+		public override void Serialize(Writer writer)
+		{
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(Expires);
+			writer.Write(Token);
+
+		}
+
+		public override void Deserialize(Reader reader)
+		{
+			Expires = reader.Read<int>();
+			Token = reader.Read<byte[]>();
+
+		}
+				
+		public override string ToString()
+		{
+		    return "auth.loginToken";
+		}
+	}
 }

@@ -34,11 +34,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("short_name")]
 		public abstract string ShortName { get; set; }
 
-[Newtonsoft.Json.JsonProperty("thumb")]
-		public abstract CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase Thumb { get; set; }
+[Newtonsoft.Json.JsonProperty("thumbs")]
+		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase> Thumbs { get; set; }
 
 [Newtonsoft.Json.JsonProperty("thumb_dc_id")]
 		public abstract int? ThumbDcId { get; set; }
+
+[Newtonsoft.Json.JsonProperty("thumb_version")]
+		public abstract int? ThumbVersion { get; set; }
 
 [Newtonsoft.Json.JsonProperty("count")]
 		public abstract int Count { get; set; }

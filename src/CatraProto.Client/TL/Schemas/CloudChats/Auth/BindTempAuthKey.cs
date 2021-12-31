@@ -1,67 +1,68 @@
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
-    public partial class BindTempAuthKey : IMethod
-    {
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => -841733627;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
-
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
-
-        [JsonProperty("perm_auth_key_id")] public long PermAuthKeyId { get; set; }
-
-        [JsonProperty("nonce")] public long Nonce { get; set; }
-
-        [JsonProperty("expires_at")] public int ExpiresAt { get; set; }
-
-        [JsonProperty("encrypted_message")] public byte[] EncryptedMessage { get; set; }
-
-        public override string ToString()
-        {
-            return "auth.bindTempAuthKey";
-        }
+	public partial class BindTempAuthKey : IMethod
+	{
 
 
-        public void UpdateFlags()
-        {
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => -841733627; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(bool);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-            writer.Write(PermAuthKeyId);
-            writer.Write(Nonce);
-            writer.Write(ExpiresAt);
-            writer.Write(EncryptedMessage);
-        }
+[Newtonsoft.Json.JsonProperty("perm_auth_key_id")]
+		public long PermAuthKeyId { get; set; }
 
-        public void Deserialize(Reader reader)
-        {
-            PermAuthKeyId = reader.Read<long>();
-            Nonce = reader.Read<long>();
-            ExpiresAt = reader.Read<int>();
-            EncryptedMessage = reader.Read<byte[]>();
-        }
-    }
+[Newtonsoft.Json.JsonProperty("nonce")]
+		public long Nonce { get; set; }
+
+[Newtonsoft.Json.JsonProperty("expires_at")]
+		public int ExpiresAt { get; set; }
+
+[Newtonsoft.Json.JsonProperty("encrypted_message")]
+		public byte[] EncryptedMessage { get; set; }
+
+
+		public void UpdateFlags() 
+		{
+
+		}
+
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(PermAuthKeyId);
+			writer.Write(Nonce);
+			writer.Write(ExpiresAt);
+			writer.Write(EncryptedMessage);
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			PermAuthKeyId = reader.Read<long>();
+			Nonce = reader.Read<long>();
+			ExpiresAt = reader.Read<int>();
+			EncryptedMessage = reader.Read<byte[]>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "auth.bindTempAuthKey";
+		}
+	}
 }

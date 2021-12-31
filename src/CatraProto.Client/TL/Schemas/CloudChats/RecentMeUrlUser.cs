@@ -11,7 +11,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 	{
 
 
-        public static int StaticConstructorId { get => -1917045962; }
+        public static int StaticConstructorId { get => -1188296222; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -19,7 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override string Url { get; set; }
 
 [Newtonsoft.Json.JsonProperty("user_id")]
-		public int UserId { get; set; }
+		public long UserId { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -38,7 +38,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Url = reader.Read<string>();
-			UserId = reader.Read<int>();
+			UserId = reader.Read<long>();
 
 		}
 				

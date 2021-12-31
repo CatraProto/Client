@@ -19,10 +19,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Post = 1 << 14,
 			Legacy = 1 << 19,
 			FromId = 1 << 8,
-			ReplyTo = 1 << 3
+			ReplyTo = 1 << 3,
+			TtlPeriod = 1 << 25
 		}
 
-        public static int StaticConstructorId { get => 678405636; }
+        public static int StaticConstructorId { get => 721967202; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -65,6 +66,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("action")]
 		public CatraProto.Client.TL.Schemas.CloudChats.MessageActionBase Action { get; set; }
 
+[Newtonsoft.Json.JsonProperty("ttl_period")]
+		public int? TtlPeriod { get; set; }
+
         
 		public override void UpdateFlags() 
 		{
@@ -76,6 +80,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = Legacy ? FlagsHelper.SetFlag(Flags, 19) : FlagsHelper.UnsetFlag(Flags, 19);
 			Flags = FromId == null ? FlagsHelper.UnsetFlag(Flags, 8) : FlagsHelper.SetFlag(Flags, 8);
 			Flags = ReplyTo == null ? FlagsHelper.UnsetFlag(Flags, 3) : FlagsHelper.SetFlag(Flags, 3);
+			Flags = TtlPeriod == null ? FlagsHelper.UnsetFlag(Flags, 25) : FlagsHelper.SetFlag(Flags, 25);
 
 		}
 
@@ -98,6 +103,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			writer.Write(Date);
 			writer.Write(Action);
+			if(FlagsHelper.IsFlagSet(Flags, 25))
+			{
+				writer.Write(TtlPeriod.Value);
+			}
+
 
 		}
 
@@ -124,6 +134,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			Date = reader.Read<int>();
 			Action = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageActionBase>();
+			if(FlagsHelper.IsFlagSet(Flags, 25))
+			{
+				TtlPeriod = reader.Read<int>();
+			}
+
 
 		}
 				

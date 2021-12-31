@@ -1,60 +1,60 @@
+using System;
 using System.Collections.Generic;
 using CatraProto.TL;
-using Newtonsoft.Json;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-    public partial class UserInfo : UserInfoBase
-    {
-        public static int StaticConstructorId
-        {
-            get => 32192344;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonProperty("message")] public string Message { get; set; }
-
-        [JsonProperty("entities")] public IList<MessageEntityBase> Entities { get; set; }
-
-        [JsonProperty("author")] public string Author { get; set; }
-
-        [JsonProperty("date")] public int Date { get; set; }
+	public partial class UserInfo : CatraProto.Client.TL.Schemas.CloudChats.Help.UserInfoBase
+	{
 
 
-        public override void UpdateFlags()
-        {
-        }
+        public static int StaticConstructorId { get => 32192344; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonProperty("message")]
+		public string Message { get; set; }
 
-        public override void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonProperty("entities")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
 
-            writer.Write(Message);
-            writer.Write(Entities);
-            writer.Write(Author);
-            writer.Write(Date);
-        }
+[Newtonsoft.Json.JsonProperty("author")]
+		public string Author { get; set; }
 
-        public override void Deserialize(Reader reader)
-        {
-            Message = reader.Read<string>();
-            Entities = reader.ReadVector<MessageEntityBase>();
-            Author = reader.Read<string>();
-            Date = reader.Read<int>();
-        }
+[Newtonsoft.Json.JsonProperty("date")]
+		public int Date { get; set; }
 
-        public override string ToString()
-        {
-            return "help.userInfo";
-        }
-    }
+        
+		public override void UpdateFlags() 
+		{
+
+		}
+
+		public override void Serialize(Writer writer)
+		{
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(Message);
+			writer.Write(Entities);
+			writer.Write(Author);
+			writer.Write(Date);
+
+		}
+
+		public override void Deserialize(Reader reader)
+		{
+			Message = reader.Read<string>();
+			Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
+			Author = reader.Read<string>();
+			Date = reader.Read<int>();
+
+		}
+				
+		public override string ToString()
+		{
+		    return "help.userInfo";
+		}
+	}
 }

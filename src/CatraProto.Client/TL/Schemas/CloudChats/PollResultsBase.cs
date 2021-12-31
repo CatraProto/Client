@@ -17,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public abstract int? TotalVoters { get; set; }
 
 [Newtonsoft.Json.JsonProperty("recent_voters")]
-		public abstract IList<int> RecentVoters { get; set; }
+		public abstract IList<long> RecentVoters { get; set; }
 
 [Newtonsoft.Json.JsonProperty("solution")]
 		public abstract string Solution { get; set; }

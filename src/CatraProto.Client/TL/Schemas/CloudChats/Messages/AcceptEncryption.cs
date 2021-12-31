@@ -1,63 +1,63 @@
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class AcceptEncryption : IMethod
-    {
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => 1035731989;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(EncryptedChatBase);
-
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
-
-        [JsonProperty("peer")] public InputEncryptedChatBase Peer { get; set; }
-
-        [JsonProperty("g_b")] public byte[] GB { get; set; }
-
-        [JsonProperty("key_fingerprint")] public long KeyFingerprint { get; set; }
-
-        public override string ToString()
-        {
-            return "messages.acceptEncryption";
-        }
+	public partial class AcceptEncryption : IMethod
+	{
 
 
-        public void UpdateFlags()
-        {
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => 1035731989; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.EncryptedChatBase);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-            writer.Write(Peer);
-            writer.Write(GB);
-            writer.Write(KeyFingerprint);
-        }
+[Newtonsoft.Json.JsonProperty("peer")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedChatBase Peer { get; set; }
 
-        public void Deserialize(Reader reader)
-        {
-            Peer = reader.Read<InputEncryptedChatBase>();
-            GB = reader.Read<byte[]>();
-            KeyFingerprint = reader.Read<long>();
-        }
-    }
+[Newtonsoft.Json.JsonProperty("g_b")]
+		public byte[] GB { get; set; }
+
+[Newtonsoft.Json.JsonProperty("key_fingerprint")]
+		public long KeyFingerprint { get; set; }
+
+
+		public void UpdateFlags() 
+		{
+
+		}
+
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(Peer);
+			writer.Write(GB);
+			writer.Write(KeyFingerprint);
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedChatBase>();
+			GB = reader.Read<byte[]>();
+			KeyFingerprint = reader.Read<long>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "messages.acceptEncryption";
+		}
+	}
 }

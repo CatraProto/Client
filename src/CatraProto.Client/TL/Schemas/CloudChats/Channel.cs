@@ -26,6 +26,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			SlowmodeEnabled = 1 << 22,
 			CallActive = 1 << 23,
 			CallNotEmpty = 1 << 24,
+			Fake = 1 << 25,
+			Gigagroup = 1 << 26,
+			Noforwards = 1 << 27,
 			AccessHash = 1 << 13,
 			Username = 1 << 6,
 			RestrictionReason = 1 << 9,
@@ -35,7 +38,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ParticipantsCount = 1 << 17
 		}
 
-        public static int StaticConstructorId { get => -753232354; }
+        public static int StaticConstructorId { get => -2107528095; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -84,8 +87,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("call_not_empty")]
 		public bool CallNotEmpty { get; set; }
 
+[Newtonsoft.Json.JsonProperty("fake")]
+		public bool Fake { get; set; }
+
+[Newtonsoft.Json.JsonProperty("gigagroup")]
+		public bool Gigagroup { get; set; }
+
+[Newtonsoft.Json.JsonProperty("noforwards")]
+		public bool Noforwards { get; set; }
+
 [Newtonsoft.Json.JsonProperty("id")]
-		public override int Id { get; set; }
+		public override long Id { get; set; }
 
 [Newtonsoft.Json.JsonProperty("access_hash")]
 		public long? AccessHash { get; set; }
@@ -101,9 +113,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 [Newtonsoft.Json.JsonProperty("date")]
 		public int Date { get; set; }
-
-[Newtonsoft.Json.JsonProperty("version")]
-		public int Version { get; set; }
 
 [Newtonsoft.Json.JsonProperty("restriction_reason")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase> RestrictionReason { get; set; }
@@ -137,6 +146,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = SlowmodeEnabled ? FlagsHelper.SetFlag(Flags, 22) : FlagsHelper.UnsetFlag(Flags, 22);
 			Flags = CallActive ? FlagsHelper.SetFlag(Flags, 23) : FlagsHelper.UnsetFlag(Flags, 23);
 			Flags = CallNotEmpty ? FlagsHelper.SetFlag(Flags, 24) : FlagsHelper.UnsetFlag(Flags, 24);
+			Flags = Fake ? FlagsHelper.SetFlag(Flags, 25) : FlagsHelper.UnsetFlag(Flags, 25);
+			Flags = Gigagroup ? FlagsHelper.SetFlag(Flags, 26) : FlagsHelper.UnsetFlag(Flags, 26);
+			Flags = Noforwards ? FlagsHelper.SetFlag(Flags, 27) : FlagsHelper.UnsetFlag(Flags, 27);
 			Flags = AccessHash == null ? FlagsHelper.UnsetFlag(Flags, 13) : FlagsHelper.SetFlag(Flags, 13);
 			Flags = Username == null ? FlagsHelper.UnsetFlag(Flags, 6) : FlagsHelper.SetFlag(Flags, 6);
 			Flags = RestrictionReason == null ? FlagsHelper.UnsetFlag(Flags, 9) : FlagsHelper.SetFlag(Flags, 9);
@@ -166,7 +178,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			writer.Write(Photo);
 			writer.Write(Date);
-			writer.Write(Version);
 			if(FlagsHelper.IsFlagSet(Flags, 9))
 			{
 				writer.Write(RestrictionReason);
@@ -212,7 +223,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			SlowmodeEnabled = FlagsHelper.IsFlagSet(Flags, 22);
 			CallActive = FlagsHelper.IsFlagSet(Flags, 23);
 			CallNotEmpty = FlagsHelper.IsFlagSet(Flags, 24);
-			Id = reader.Read<int>();
+			Fake = FlagsHelper.IsFlagSet(Flags, 25);
+			Gigagroup = FlagsHelper.IsFlagSet(Flags, 26);
+			Noforwards = FlagsHelper.IsFlagSet(Flags, 27);
+			Id = reader.Read<long>();
 			if(FlagsHelper.IsFlagSet(Flags, 13))
 			{
 				AccessHash = reader.Read<long>();
@@ -226,7 +240,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatPhotoBase>();
 			Date = reader.Read<int>();
-			Version = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 9))
 			{
 				RestrictionReason = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase>();

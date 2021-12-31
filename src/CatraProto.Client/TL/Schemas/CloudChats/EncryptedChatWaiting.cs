@@ -11,7 +11,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 	{
 
 
-        public static int StaticConstructorId { get => 1006044124; }
+        public static int StaticConstructorId { get => 1722964307; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -25,10 +25,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Date { get; set; }
 
 [Newtonsoft.Json.JsonProperty("admin_id")]
-		public int AdminId { get; set; }
+		public long AdminId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("participant_id")]
-		public int ParticipantId { get; set; }
+		public long ParticipantId { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -52,8 +52,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Id = reader.Read<int>();
 			AccessHash = reader.Read<long>();
 			Date = reader.Read<int>();
-			AdminId = reader.Read<int>();
-			ParticipantId = reader.Read<int>();
+			AdminId = reader.Read<long>();
+			ParticipantId = reader.Read<long>();
 
 		}
 				

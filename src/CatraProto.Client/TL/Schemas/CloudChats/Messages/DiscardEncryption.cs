@@ -1,55 +1,68 @@
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class DiscardEncryption : IMethod
-    {
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => -304536635;
-        }
+	public partial class DiscardEncryption : IMethod
+	{
+		[Flags]
+		public enum FlagsEnum 
+		{
+			DeleteHistory = 1 << 0
+		}
 
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => -208425312; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(bool);
 
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
+[Newtonsoft.Json.JsonIgnore]
+		public int Flags { get; set; }
 
-        [JsonProperty("chat_id")] public int ChatId { get; set; }
+[Newtonsoft.Json.JsonProperty("delete_history")]
+		public bool DeleteHistory { get; set; }
 
-        public override string ToString()
-        {
-            return "messages.discardEncryption";
-        }
+[Newtonsoft.Json.JsonProperty("chat_id")]
+		public int ChatId { get; set; }
 
 
-        public void UpdateFlags()
-        {
-        }
+		public void UpdateFlags() 
+		{
+			Flags = DeleteHistory ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+		}
 
-            writer.Write(ChatId);
-        }
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			UpdateFlags();
+			writer.Write(Flags);
+			writer.Write(ChatId);
 
-        public void Deserialize(Reader reader)
-        {
-            ChatId = reader.Read<int>();
-        }
-    }
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			Flags = reader.Read<int>();
+			DeleteHistory = FlagsHelper.IsFlagSet(Flags, 0);
+			ChatId = reader.Read<int>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "messages.discardEncryption";
+		}
+	}
 }

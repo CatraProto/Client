@@ -20,7 +20,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			SolutionEntities = 1 << 4
 		}
 
-        public static int StaticConstructorId { get => -1159937629; }
+        public static int StaticConstructorId { get => -591909213; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -37,7 +37,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override int? TotalVoters { get; set; }
 
 [Newtonsoft.Json.JsonProperty("recent_voters")]
-		public override IList<int> RecentVoters { get; set; }
+		public override IList<long> RecentVoters { get; set; }
 
 [Newtonsoft.Json.JsonProperty("solution")]
 		public override string Solution { get; set; }
@@ -106,7 +106,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				RecentVoters = reader.ReadVector<int>();
+				RecentVoters = reader.ReadVector<long>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))

@@ -1,42 +1,40 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
-using Newtonsoft.Json;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class FavedStickersNotModified : FavedStickersBase
-    {
-        public static int StaticConstructorId
-        {
-            get => -1634752813;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
+	public partial class FavedStickersNotModified : CatraProto.Client.TL.Schemas.CloudChats.Messages.FavedStickersBase
+	{
 
 
-        public override void UpdateFlags()
-        {
-        }
+        public static int StaticConstructorId { get => -1634752813; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+        
+		public override void UpdateFlags() 
+		{
 
-        public override void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
-        }
+		}
 
-        public override void Deserialize(Reader reader)
-        {
-        }
+		public override void Serialize(Writer writer)
+		{
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 
-        public override string ToString()
-        {
-            return "messages.favedStickersNotModified";
-        }
-    }
+		}
+
+		public override void Deserialize(Reader reader)
+		{
+
+		}
+				
+		public override string ToString()
+		{
+		    return "messages.favedStickersNotModified";
+		}
+	}
 }

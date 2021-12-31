@@ -18,7 +18,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Rank = 1 << 2
 		}
 
-        public static int StaticConstructorId { get => -859915345; }
+        public static int StaticConstructorId { get => 885242707; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -32,13 +32,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public bool Self { get; set; }
 
 [Newtonsoft.Json.JsonProperty("user_id")]
-		public override int UserId { get; set; }
+		public long UserId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("inviter_id")]
-		public int? InviterId { get; set; }
+		public long? InviterId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("promoted_by")]
-		public int PromotedBy { get; set; }
+		public long PromotedBy { get; set; }
 
 [Newtonsoft.Json.JsonProperty("date")]
 		public int Date { get; set; }
@@ -86,13 +86,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = reader.Read<int>();
 			CanEdit = FlagsHelper.IsFlagSet(Flags, 0);
 			Self = FlagsHelper.IsFlagSet(Flags, 1);
-			UserId = reader.Read<int>();
+			UserId = reader.Read<long>();
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				InviterId = reader.Read<int>();
+				InviterId = reader.Read<long>();
 			}
 
-			PromotedBy = reader.Read<int>();
+			PromotedBy = reader.Read<long>();
 			Date = reader.Read<int>();
 			AdminRights = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 2))

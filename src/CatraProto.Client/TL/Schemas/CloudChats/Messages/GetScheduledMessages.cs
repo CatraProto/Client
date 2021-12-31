@@ -2,59 +2,57 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class GetScheduledMessages : IMethod
-    {
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => -1111817116;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(MessagesBase);
-
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
-
-        [JsonProperty("peer")] public InputPeerBase Peer { get; set; }
-
-        [JsonProperty("id")] public IList<int> Id { get; set; }
-
-        public override string ToString()
-        {
-            return "messages.getScheduledMessages";
-        }
+	public partial class GetScheduledMessages : IMethod
+	{
 
 
-        public void UpdateFlags()
-        {
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => -1111817116; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-            writer.Write(Peer);
-            writer.Write(Id);
-        }
+[Newtonsoft.Json.JsonProperty("peer")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
 
-        public void Deserialize(Reader reader)
-        {
-            Peer = reader.Read<InputPeerBase>();
-            Id = reader.ReadVector<int>();
-        }
-    }
+[Newtonsoft.Json.JsonProperty("id")]
+		public IList<int> Id { get; set; }
+
+
+		public void UpdateFlags() 
+		{
+
+		}
+
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(Peer);
+			writer.Write(Id);
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+			Id = reader.ReadVector<int>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "messages.getScheduledMessages";
+		}
+	}
 }

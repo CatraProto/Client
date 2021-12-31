@@ -27,7 +27,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Edit = 1 << 12,
 			Delete = 1 << 13,
 			GroupCall = 1 << 14,
-			Invites = 1 << 15
+			Invites = 1 << 15,
+			Send = 1 << 16
 		}
 
         public static int StaticConstructorId { get => -368018716; }
@@ -85,6 +86,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("invites")]
 		public override bool Invites { get; set; }
 
+[Newtonsoft.Json.JsonProperty("send")]
+		public override bool Send { get; set; }
+
         
 		public override void UpdateFlags() 
 		{
@@ -104,6 +108,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = Delete ? FlagsHelper.SetFlag(Flags, 13) : FlagsHelper.UnsetFlag(Flags, 13);
 			Flags = GroupCall ? FlagsHelper.SetFlag(Flags, 14) : FlagsHelper.UnsetFlag(Flags, 14);
 			Flags = Invites ? FlagsHelper.SetFlag(Flags, 15) : FlagsHelper.UnsetFlag(Flags, 15);
+			Flags = Send ? FlagsHelper.SetFlag(Flags, 16) : FlagsHelper.UnsetFlag(Flags, 16);
 
 		}
 
@@ -134,6 +139,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Delete = FlagsHelper.IsFlagSet(Flags, 13);
 			GroupCall = FlagsHelper.IsFlagSet(Flags, 14);
 			Invites = FlagsHelper.IsFlagSet(Flags, 15);
+			Send = FlagsHelper.IsFlagSet(Flags, 16);
 
 		}
 				

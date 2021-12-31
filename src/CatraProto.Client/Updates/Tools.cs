@@ -96,7 +96,7 @@ namespace CatraProto.Client.Updates
             return false;
         }
 
-        public static bool IsFromChannel(IObject update, out int? channelId)
+        public static bool IsFromChannel(IObject update, out long? channelId)
         {
             switch (update)
             {

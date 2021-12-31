@@ -20,10 +20,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ReportGeo = 1 << 5,
 			Autoarchived = 1 << 7,
 			InviteMembers = 1 << 8,
-			GeoDistance = 1 << 6
+			RequestChatBroadcast = 1 << 10,
+			GeoDistance = 1 << 6,
+			RequestChatTitle = 1 << 9,
+			RequestChatDate = 1 << 9
 		}
 
-        public static int StaticConstructorId { get => 1933519201; }
+        public static int StaticConstructorId { get => -1525149427; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -54,8 +57,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("invite_members")]
 		public override bool InviteMembers { get; set; }
 
+[Newtonsoft.Json.JsonProperty("request_chat_broadcast")]
+		public override bool RequestChatBroadcast { get; set; }
+
 [Newtonsoft.Json.JsonProperty("geo_distance")]
 		public override int? GeoDistance { get; set; }
+
+[Newtonsoft.Json.JsonProperty("request_chat_title")]
+		public override string RequestChatTitle { get; set; }
+
+[Newtonsoft.Json.JsonProperty("request_chat_date")]
+		public override int? RequestChatDate { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -68,7 +80,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = ReportGeo ? FlagsHelper.SetFlag(Flags, 5) : FlagsHelper.UnsetFlag(Flags, 5);
 			Flags = Autoarchived ? FlagsHelper.SetFlag(Flags, 7) : FlagsHelper.UnsetFlag(Flags, 7);
 			Flags = InviteMembers ? FlagsHelper.SetFlag(Flags, 8) : FlagsHelper.UnsetFlag(Flags, 8);
+			Flags = RequestChatBroadcast ? FlagsHelper.SetFlag(Flags, 10) : FlagsHelper.UnsetFlag(Flags, 10);
 			Flags = GeoDistance == null ? FlagsHelper.UnsetFlag(Flags, 6) : FlagsHelper.SetFlag(Flags, 6);
+			Flags = RequestChatTitle == null ? FlagsHelper.UnsetFlag(Flags, 9) : FlagsHelper.SetFlag(Flags, 9);
+			Flags = RequestChatDate == null ? FlagsHelper.UnsetFlag(Flags, 9) : FlagsHelper.SetFlag(Flags, 9);
 
 		}
 
@@ -80,6 +95,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
 				writer.Write(GeoDistance.Value);
+			}
+
+			if(FlagsHelper.IsFlagSet(Flags, 9))
+			{
+				writer.Write(RequestChatTitle);
+			}
+
+			if(FlagsHelper.IsFlagSet(Flags, 9))
+			{
+				writer.Write(RequestChatDate.Value);
 			}
 
 
@@ -96,9 +121,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ReportGeo = FlagsHelper.IsFlagSet(Flags, 5);
 			Autoarchived = FlagsHelper.IsFlagSet(Flags, 7);
 			InviteMembers = FlagsHelper.IsFlagSet(Flags, 8);
+			RequestChatBroadcast = FlagsHelper.IsFlagSet(Flags, 10);
 			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
 				GeoDistance = reader.Read<int>();
+			}
+
+			if(FlagsHelper.IsFlagSet(Flags, 9))
+			{
+				RequestChatTitle = reader.Read<string>();
+			}
+
+			if(FlagsHelper.IsFlagSet(Flags, 9))
+			{
+				RequestChatDate = reader.Read<int>();
 			}
 
 

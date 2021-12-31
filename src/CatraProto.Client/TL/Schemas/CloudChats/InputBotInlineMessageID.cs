@@ -19,7 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override int DcId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("id")]
-		public override long Id { get; set; }
+		public long Id { get; set; }
 
 [Newtonsoft.Json.JsonProperty("access_hash")]
 		public override long AccessHash { get; set; }

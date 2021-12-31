@@ -2,63 +2,62 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
-    public partial class ExportLoginToken : IMethod
-    {
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => -1313598185;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(LoginTokenBase);
-
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
-
-        [JsonProperty("api_id")] public int ApiId { get; set; }
-
-        [JsonProperty("api_hash")] public string ApiHash { get; set; }
-
-        [JsonProperty("except_ids")] public IList<int> ExceptIds { get; set; }
-
-        public override string ToString()
-        {
-            return "auth.exportLoginToken";
-        }
+	public partial class ExportLoginToken : IMethod
+	{
 
 
-        public void UpdateFlags()
-        {
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => -1210022402; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Auth.LoginTokenBase);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-            writer.Write(ApiId);
-            writer.Write(ApiHash);
-            writer.Write(ExceptIds);
-        }
+[Newtonsoft.Json.JsonProperty("api_id")]
+		public int ApiId { get; set; }
 
-        public void Deserialize(Reader reader)
-        {
-            ApiId = reader.Read<int>();
-            ApiHash = reader.Read<string>();
-            ExceptIds = reader.ReadVector<int>();
-        }
-    }
+[Newtonsoft.Json.JsonProperty("api_hash")]
+		public string ApiHash { get; set; }
+
+[Newtonsoft.Json.JsonProperty("except_ids")]
+		public IList<long> ExceptIds { get; set; }
+
+
+		public void UpdateFlags() 
+		{
+
+		}
+
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(ApiId);
+			writer.Write(ApiHash);
+			writer.Write(ExceptIds);
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			ApiId = reader.Read<int>();
+			ApiHash = reader.Read<string>();
+			ExceptIds = reader.ReadVector<long>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "auth.exportLoginToken";
+		}
+	}
 }

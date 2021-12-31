@@ -15,7 +15,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Left = 1 << 0
 		}
 
-        public static int StaticConstructorId { get => 470789295; }
+        public static int StaticConstructorId { get => 1844969806; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -25,11 +25,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("left")]
 		public bool Left { get; set; }
 
-[Newtonsoft.Json.JsonProperty("user_id")]
-		public override int UserId { get; set; }
+[Newtonsoft.Json.JsonProperty("peer")]
+		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
 
 [Newtonsoft.Json.JsonProperty("kicked_by")]
-		public int KickedBy { get; set; }
+		public long KickedBy { get; set; }
 
 [Newtonsoft.Json.JsonProperty("date")]
 		public int Date { get; set; }
@@ -49,7 +49,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
-			writer.Write(UserId);
+			writer.Write(Peer);
 			writer.Write(KickedBy);
 			writer.Write(Date);
 			writer.Write(BannedRights);
@@ -60,8 +60,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Flags = reader.Read<int>();
 			Left = FlagsHelper.IsFlagSet(Flags, 0);
-			UserId = reader.Read<int>();
-			KickedBy = reader.Read<int>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+			KickedBy = reader.Read<long>();
 			Date = reader.Read<int>();
 			BannedRights = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase>();
 

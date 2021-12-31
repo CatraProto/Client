@@ -1,56 +1,55 @@
+using System;
 using System.Collections.Generic;
 using CatraProto.TL;
-using Newtonsoft.Json;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-    public partial class RecentMeUrls : RecentMeUrlsBase
-    {
-        public static int StaticConstructorId
-        {
-            get => 235081943;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonProperty("urls")] public override IList<RecentMeUrlBase> Urls { get; set; }
-
-        [JsonProperty("chats")] public override IList<ChatBase> Chats { get; set; }
-
-        [JsonProperty("users")] public override IList<UserBase> Users { get; set; }
+	public partial class RecentMeUrls : CatraProto.Client.TL.Schemas.CloudChats.Help.RecentMeUrlsBase
+	{
 
 
-        public override void UpdateFlags()
-        {
-        }
+        public static int StaticConstructorId { get => 235081943; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonProperty("urls")]
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.RecentMeUrlBase> Urls { get; set; }
 
-        public override void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonProperty("chats")]
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
 
-            writer.Write(Urls);
-            writer.Write(Chats);
-            writer.Write(Users);
-        }
+[Newtonsoft.Json.JsonProperty("users")]
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
-        public override void Deserialize(Reader reader)
-        {
-            Urls = reader.ReadVector<RecentMeUrlBase>();
-            Chats = reader.ReadVector<ChatBase>();
-            Users = reader.ReadVector<UserBase>();
-        }
+        
+		public override void UpdateFlags() 
+		{
 
-        public override string ToString()
-        {
-            return "help.recentMeUrls";
-        }
-    }
+		}
+
+		public override void Serialize(Writer writer)
+		{
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(Urls);
+			writer.Write(Chats);
+			writer.Write(Users);
+
+		}
+
+		public override void Deserialize(Reader reader)
+		{
+			Urls = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.RecentMeUrlBase>();
+			Chats = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
+			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+
+		}
+				
+		public override string ToString()
+		{
+		    return "help.recentMeUrls";
+		}
+	}
 }

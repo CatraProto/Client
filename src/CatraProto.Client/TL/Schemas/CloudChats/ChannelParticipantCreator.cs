@@ -15,7 +15,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Rank = 1 << 0
 		}
 
-        public static int StaticConstructorId { get => 1149094475; }
+        public static int StaticConstructorId { get => 803602899; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -23,7 +23,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Flags { get; set; }
 
 [Newtonsoft.Json.JsonProperty("user_id")]
-		public override int UserId { get; set; }
+		public long UserId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("admin_rights")]
 		public CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase AdminRights { get; set; }
@@ -56,7 +56,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			UserId = reader.Read<int>();
+			UserId = reader.Read<long>();
 			AdminRights = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{

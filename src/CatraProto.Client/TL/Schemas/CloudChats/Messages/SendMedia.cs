@@ -19,11 +19,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			ReplyToMsgId = 1 << 0,
 			ReplyMarkup = 1 << 2,
 			Entities = 1 << 3,
-			ScheduleDate = 1 << 10
+			ScheduleDate = 1 << 10,
+			SendAs = 1 << 13
 		}
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => 881978281; }
+        public static int StaticConstructorId { get => -497026848; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -69,6 +70,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [Newtonsoft.Json.JsonProperty("schedule_date")]
 		public int? ScheduleDate { get; set; }
 
+[Newtonsoft.Json.JsonProperty("send_as")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase SendAs { get; set; }
+
 
 		public void UpdateFlags() 
 		{
@@ -79,6 +83,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Flags = ReplyMarkup == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
 			Flags = Entities == null ? FlagsHelper.UnsetFlag(Flags, 3) : FlagsHelper.SetFlag(Flags, 3);
 			Flags = ScheduleDate == null ? FlagsHelper.UnsetFlag(Flags, 10) : FlagsHelper.SetFlag(Flags, 10);
+			Flags = SendAs == null ? FlagsHelper.UnsetFlag(Flags, 13) : FlagsHelper.SetFlag(Flags, 13);
 
 		}
 
@@ -109,6 +114,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			if(FlagsHelper.IsFlagSet(Flags, 10))
 			{
 				writer.Write(ScheduleDate.Value);
+			}
+
+			if(FlagsHelper.IsFlagSet(Flags, 13))
+			{
+				writer.Write(SendAs);
 			}
 
 
@@ -142,6 +152,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			if(FlagsHelper.IsFlagSet(Flags, 10))
 			{
 				ScheduleDate = reader.Read<int>();
+			}
+
+			if(FlagsHelper.IsFlagSet(Flags, 13))
+			{
+				SendAs = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
 			}
 
 

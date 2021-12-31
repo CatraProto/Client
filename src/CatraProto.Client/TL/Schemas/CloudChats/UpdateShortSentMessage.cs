@@ -14,10 +14,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Out = 1 << 1,
 			Media = 1 << 9,
-			Entities = 1 << 7
+			Entities = 1 << 7,
+			TtlPeriod = 1 << 25
 		}
 
-        public static int StaticConstructorId { get => 301019932; }
+        public static int StaticConstructorId { get => -1877614335; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -45,12 +46,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("entities")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
 
+[Newtonsoft.Json.JsonProperty("ttl_period")]
+		public int? TtlPeriod { get; set; }
+
         
 		public override void UpdateFlags() 
 		{
 			Flags = Out ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
 			Flags = Media == null ? FlagsHelper.UnsetFlag(Flags, 9) : FlagsHelper.SetFlag(Flags, 9);
 			Flags = Entities == null ? FlagsHelper.UnsetFlag(Flags, 7) : FlagsHelper.SetFlag(Flags, 7);
+			Flags = TtlPeriod == null ? FlagsHelper.UnsetFlag(Flags, 25) : FlagsHelper.SetFlag(Flags, 25);
 
 		}
 
@@ -73,6 +78,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 				writer.Write(Entities);
 			}
 
+			if(FlagsHelper.IsFlagSet(Flags, 25))
+			{
+				writer.Write(TtlPeriod.Value);
+			}
+
 
 		}
 
@@ -92,6 +102,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			if(FlagsHelper.IsFlagSet(Flags, 7))
 			{
 				Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
+			}
+
+			if(FlagsHelper.IsFlagSet(Flags, 25))
+			{
+				TtlPeriod = reader.Read<int>();
 			}
 
 

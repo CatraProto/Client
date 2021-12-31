@@ -12,10 +12,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		[Flags]
 		public enum FlagsEnum 
 		{
-			TtlSeconds = 1 << 0
+			TtlSeconds = 1 << 0,
+			Query = 1 << 1
 		}
 
-        public static int StaticConstructorId { get => 598418386; }
+        public static int StaticConstructorId { get => 860303448; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -28,10 +29,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("ttl_seconds")]
 		public int? TtlSeconds { get; set; }
 
+[Newtonsoft.Json.JsonProperty("query")]
+		public string Query { get; set; }
+
         
 		public override void UpdateFlags() 
 		{
 			Flags = TtlSeconds == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
+			Flags = Query == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
 
 		}
 
@@ -46,6 +51,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 				writer.Write(TtlSeconds.Value);
 			}
 
+			if(FlagsHelper.IsFlagSet(Flags, 1))
+			{
+				writer.Write(Query);
+			}
+
 
 		}
 
@@ -56,6 +66,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				TtlSeconds = reader.Read<int>();
+			}
+
+			if(FlagsHelper.IsFlagSet(Flags, 1))
+			{
+				Query = reader.Read<string>();
 			}
 
 

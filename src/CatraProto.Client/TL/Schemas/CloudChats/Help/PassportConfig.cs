@@ -1,51 +1,50 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
-using Newtonsoft.Json;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-    public partial class PassportConfig : PassportConfigBase
-    {
-        public static int StaticConstructorId
-        {
-            get => -1600596305;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonProperty("hash")] public int Hash { get; set; }
-
-        [JsonProperty("countries_langs")] public DataJSONBase CountriesLangs { get; set; }
+	public partial class PassportConfig : CatraProto.Client.TL.Schemas.CloudChats.Help.PassportConfigBase
+	{
 
 
-        public override void UpdateFlags()
-        {
-        }
+        public static int StaticConstructorId { get => -1600596305; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonProperty("hash")]
+		public int Hash { get; set; }
 
-        public override void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonProperty("countries_langs")]
+		public CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase CountriesLangs { get; set; }
 
-            writer.Write(Hash);
-            writer.Write(CountriesLangs);
-        }
+        
+		public override void UpdateFlags() 
+		{
 
-        public override void Deserialize(Reader reader)
-        {
-            Hash = reader.Read<int>();
-            CountriesLangs = reader.Read<DataJSONBase>();
-        }
+		}
 
-        public override string ToString()
-        {
-            return "help.passportConfig";
-        }
-    }
+		public override void Serialize(Writer writer)
+		{
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(Hash);
+			writer.Write(CountriesLangs);
+
+		}
+
+		public override void Deserialize(Reader reader)
+		{
+			Hash = reader.Read<int>();
+			CountriesLangs = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
+
+		}
+				
+		public override string ToString()
+		{
+		    return "help.passportConfig";
+		}
+	}
 }

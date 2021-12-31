@@ -1,59 +1,58 @@
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
-    public partial class GetBlocked : IMethod
-    {
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => -176409329;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(BlockedBase);
-
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
-
-        [JsonProperty("offset")] public int Offset { get; set; }
-
-        [JsonProperty("limit")] public int Limit { get; set; }
-
-        public override string ToString()
-        {
-            return "contacts.getBlocked";
-        }
+	public partial class GetBlocked : IMethod
+	{
 
 
-        public void UpdateFlags()
-        {
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => -176409329; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Contacts.BlockedBase);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-            writer.Write(Offset);
-            writer.Write(Limit);
-        }
+[Newtonsoft.Json.JsonProperty("offset")]
+		public int Offset { get; set; }
 
-        public void Deserialize(Reader reader)
-        {
-            Offset = reader.Read<int>();
-            Limit = reader.Read<int>();
-        }
-    }
+[Newtonsoft.Json.JsonProperty("limit")]
+		public int Limit { get; set; }
+
+
+		public void UpdateFlags() 
+		{
+
+		}
+
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(Offset);
+			writer.Write(Limit);
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			Offset = reader.Read<int>();
+			Limit = reader.Read<int>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "contacts.getBlocked";
+		}
+	}
 }

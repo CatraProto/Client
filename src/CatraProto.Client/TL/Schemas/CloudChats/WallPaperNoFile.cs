@@ -17,10 +17,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Settings = 1 << 2
 		}
 
-        public static int StaticConstructorId { get => -1963717851; }
+        public static int StaticConstructorId { get => -528465642; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
+[Newtonsoft.Json.JsonProperty("id")]
+		public override long Id { get; set; }
+
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
@@ -45,6 +48,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Serialize(Writer writer)
 		{
 		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(Id);
 			UpdateFlags();
 			writer.Write(Flags);
 			if(FlagsHelper.IsFlagSet(Flags, 2))
@@ -57,6 +61,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
+			Id = reader.Read<long>();
 			Flags = reader.Read<int>();
 			Default = FlagsHelper.IsFlagSet(Flags, 1);
 			Dark = FlagsHelper.IsFlagSet(Flags, 4);

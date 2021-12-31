@@ -1,47 +1,45 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
-using Newtonsoft.Json;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
-    public partial class LoginTokenSuccess : LoginTokenBase
-    {
-        public static int StaticConstructorId
-        {
-            get => 957176926;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonProperty("authorization")] public AuthorizationBase Authorization { get; set; }
+	public partial class LoginTokenSuccess : CatraProto.Client.TL.Schemas.CloudChats.Auth.LoginTokenBase
+	{
 
 
-        public override void UpdateFlags()
-        {
-        }
+        public static int StaticConstructorId { get => 957176926; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonProperty("authorization")]
+		public CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase Authorization { get; set; }
 
-        public override void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+        
+		public override void UpdateFlags() 
+		{
 
-            writer.Write(Authorization);
-        }
+		}
 
-        public override void Deserialize(Reader reader)
-        {
-            Authorization = reader.Read<AuthorizationBase>();
-        }
+		public override void Serialize(Writer writer)
+		{
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(Authorization);
 
-        public override string ToString()
-        {
-            return "auth.loginTokenSuccess";
-        }
-    }
+		}
+
+		public override void Deserialize(Reader reader)
+		{
+			Authorization = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>();
+
+		}
+				
+		public override string ToString()
+		{
+		    return "auth.loginTokenSuccess";
+		}
+	}
 }

@@ -15,7 +15,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Big = 1 << 0
 		}
 
-        public static int StaticConstructorId { get => 668375447; }
+        public static int StaticConstructorId { get => 925204121; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -28,11 +28,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("peer")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
 
-[Newtonsoft.Json.JsonProperty("volume_id")]
-		public long VolumeId { get; set; }
-
-[Newtonsoft.Json.JsonProperty("local_id")]
-		public int LocalId { get; set; }
+[Newtonsoft.Json.JsonProperty("photo_id")]
+		public long PhotoId { get; set; }
 
         
 		public override void UpdateFlags() 
@@ -47,8 +44,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			UpdateFlags();
 			writer.Write(Flags);
 			writer.Write(Peer);
-			writer.Write(VolumeId);
-			writer.Write(LocalId);
+			writer.Write(PhotoId);
 
 		}
 
@@ -57,8 +53,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = reader.Read<int>();
 			Big = FlagsHelper.IsFlagSet(Flags, 0);
 			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
-			VolumeId = reader.Read<long>();
-			LocalId = reader.Read<int>();
+			PhotoId = reader.Read<long>();
 
 		}
 				

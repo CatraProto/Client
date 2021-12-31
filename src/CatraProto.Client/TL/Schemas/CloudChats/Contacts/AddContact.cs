@@ -1,83 +1,83 @@
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
-    public partial class AddContact : IMethod
-    {
-        [Flags]
-        public enum FlagsEnum
-        {
-            AddPhonePrivacyException = 1 << 0
-        }
+	public partial class AddContact : IMethod
+	{
+		[Flags]
+		public enum FlagsEnum 
+		{
+			AddPhonePrivacyException = 1 << 0
+		}
 
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => -386636848;
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => -386636848; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
 
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
+[Newtonsoft.Json.JsonIgnore]
+		public int Flags { get; set; }
 
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
+[Newtonsoft.Json.JsonProperty("add_phone_privacy_exception")]
+		public bool AddPhonePrivacyException { get; set; }
 
-        [JsonIgnore] public int Flags { get; set; }
+[Newtonsoft.Json.JsonProperty("id")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase Id { get; set; }
 
-        [JsonProperty("add_phone_privacy_exception")]
-        public bool AddPhonePrivacyException { get; set; }
+[Newtonsoft.Json.JsonProperty("first_name")]
+		public string FirstName { get; set; }
 
-        [JsonProperty("id")] public InputUserBase Id { get; set; }
+[Newtonsoft.Json.JsonProperty("last_name")]
+		public string LastName { get; set; }
 
-        [JsonProperty("first_name")] public string FirstName { get; set; }
-
-        [JsonProperty("last_name")] public string LastName { get; set; }
-
-        [JsonProperty("phone")] public string Phone { get; set; }
-
-        public override string ToString()
-        {
-            return "contacts.addContact";
-        }
+[Newtonsoft.Json.JsonProperty("phone")]
+		public string Phone { get; set; }
 
 
-        public void UpdateFlags()
-        {
-            Flags = AddPhonePrivacyException ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
-        }
+		public void UpdateFlags() 
+		{
+			Flags = AddPhonePrivacyException ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+		}
 
-            UpdateFlags();
-            writer.Write(Flags);
-            writer.Write(Id);
-            writer.Write(FirstName);
-            writer.Write(LastName);
-            writer.Write(Phone);
-        }
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			UpdateFlags();
+			writer.Write(Flags);
+			writer.Write(Id);
+			writer.Write(FirstName);
+			writer.Write(LastName);
+			writer.Write(Phone);
 
-        public void Deserialize(Reader reader)
-        {
-            Flags = reader.Read<int>();
-            AddPhonePrivacyException = FlagsHelper.IsFlagSet(Flags, 0);
-            Id = reader.Read<InputUserBase>();
-            FirstName = reader.Read<string>();
-            LastName = reader.Read<string>();
-            Phone = reader.Read<string>();
-        }
-    }
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			Flags = reader.Read<int>();
+			AddPhonePrivacyException = FlagsHelper.IsFlagSet(Flags, 0);
+			Id = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
+			FirstName = reader.Read<string>();
+			LastName = reader.Read<string>();
+			Phone = reader.Read<string>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "contacts.addContact";
+		}
+	}
 }

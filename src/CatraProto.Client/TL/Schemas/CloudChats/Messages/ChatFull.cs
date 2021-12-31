@@ -1,56 +1,55 @@
+using System;
 using System.Collections.Generic;
 using CatraProto.TL;
-using Newtonsoft.Json;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class ChatFull : ChatFullBase
-    {
-        public static int StaticConstructorId
-        {
-            get => -438840932;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonProperty("full_chat")] public override CloudChats.ChatFullBase FullChat { get; set; }
-
-        [JsonProperty("chats")] public override IList<ChatBase> Chats { get; set; }
-
-        [JsonProperty("users")] public override IList<UserBase> Users { get; set; }
+	public partial class ChatFull : CatraProto.Client.TL.Schemas.CloudChats.Messages.ChatFullBase
+	{
 
 
-        public override void UpdateFlags()
-        {
-        }
+        public static int StaticConstructorId { get => -438840932; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonProperty("full_chat")]
+		public override CatraProto.Client.TL.Schemas.CloudChats.ChatFullBase FullChat { get; set; }
 
-        public override void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonProperty("chats")]
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
 
-            writer.Write(FullChat);
-            writer.Write(Chats);
-            writer.Write(Users);
-        }
+[Newtonsoft.Json.JsonProperty("users")]
+		public override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
-        public override void Deserialize(Reader reader)
-        {
-            FullChat = reader.Read<CloudChats.ChatFullBase>();
-            Chats = reader.ReadVector<ChatBase>();
-            Users = reader.ReadVector<UserBase>();
-        }
+        
+		public override void UpdateFlags() 
+		{
 
-        public override string ToString()
-        {
-            return "messages.chatFull";
-        }
-    }
+		}
+
+		public override void Serialize(Writer writer)
+		{
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(FullChat);
+			writer.Write(Chats);
+			writer.Write(Users);
+
+		}
+
+		public override void Deserialize(Reader reader)
+		{
+			FullChat = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatFullBase>();
+			Chats = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
+			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+
+		}
+				
+		public override string ToString()
+		{
+		    return "messages.chatFull";
+		}
+	}
 }

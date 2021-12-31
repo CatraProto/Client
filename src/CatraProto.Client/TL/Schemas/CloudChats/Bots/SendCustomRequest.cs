@@ -1,59 +1,58 @@
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Bots
 {
-    public partial class SendCustomRequest : IMethod
-    {
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => -1440257555;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(DataJSONBase);
-
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
-
-        [JsonProperty("custom_method")] public string CustomMethod { get; set; }
-
-        [JsonProperty("params")] public DataJSONBase Params { get; set; }
-
-        public override string ToString()
-        {
-            return "bots.sendCustomRequest";
-        }
+	public partial class SendCustomRequest : IMethod
+	{
 
 
-        public void UpdateFlags()
-        {
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => -1440257555; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-            writer.Write(CustomMethod);
-            writer.Write(Params);
-        }
+[Newtonsoft.Json.JsonProperty("custom_method")]
+		public string CustomMethod { get; set; }
 
-        public void Deserialize(Reader reader)
-        {
-            CustomMethod = reader.Read<string>();
-            Params = reader.Read<DataJSONBase>();
-        }
-    }
+[Newtonsoft.Json.JsonProperty("params")]
+		public CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase Params { get; set; }
+
+
+		public void UpdateFlags() 
+		{
+
+		}
+
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(CustomMethod);
+			writer.Write(Params);
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			CustomMethod = reader.Read<string>();
+			Params = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "bots.sendCustomRequest";
+		}
+	}
 }

@@ -20,7 +20,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 			SavedCredentials = 1 << 1
 		}
 
-        public static int StaticConstructorId { get => 1062645411; }
+        public static int StaticConstructorId { get => 378828315; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -33,14 +33,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 [Newtonsoft.Json.JsonProperty("password_missing")]
 		public override bool PasswordMissing { get; set; }
 
+[Newtonsoft.Json.JsonProperty("form_id")]
+		public override long FormId { get; set; }
+
 [Newtonsoft.Json.JsonProperty("bot_id")]
-		public override int BotId { get; set; }
+		public override long BotId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("invoice")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.InvoiceBase Invoice { get; set; }
 
 [Newtonsoft.Json.JsonProperty("provider_id")]
-		public override int ProviderId { get; set; }
+		public override long ProviderId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("url")]
 		public override string Url { get; set; }
@@ -77,6 +80,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
+			writer.Write(FormId);
 			writer.Write(BotId);
 			writer.Write(Invoice);
 			writer.Write(ProviderId);
@@ -110,9 +114,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 			Flags = reader.Read<int>();
 			CanSaveCredentials = FlagsHelper.IsFlagSet(Flags, 2);
 			PasswordMissing = FlagsHelper.IsFlagSet(Flags, 3);
-			BotId = reader.Read<int>();
+			FormId = reader.Read<long>();
+			BotId = reader.Read<long>();
 			Invoice = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InvoiceBase>();
-			ProviderId = reader.Read<int>();
+			ProviderId = reader.Read<long>();
 			Url = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{

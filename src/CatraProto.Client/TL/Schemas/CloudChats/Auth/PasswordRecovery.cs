@@ -1,47 +1,45 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
-using Newtonsoft.Json;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
-    public partial class PasswordRecovery : PasswordRecoveryBase
-    {
-        public static int StaticConstructorId
-        {
-            get => 326715557;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonProperty("email_pattern")] public override string EmailPattern { get; set; }
+	public partial class PasswordRecovery : CatraProto.Client.TL.Schemas.CloudChats.Auth.PasswordRecoveryBase
+	{
 
 
-        public override void UpdateFlags()
-        {
-        }
+        public static int StaticConstructorId { get => 326715557; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonProperty("email_pattern")]
+		public override string EmailPattern { get; set; }
 
-        public override void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+        
+		public override void UpdateFlags() 
+		{
 
-            writer.Write(EmailPattern);
-        }
+		}
 
-        public override void Deserialize(Reader reader)
-        {
-            EmailPattern = reader.Read<string>();
-        }
+		public override void Serialize(Writer writer)
+		{
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(EmailPattern);
 
-        public override string ToString()
-        {
-            return "auth.passwordRecovery";
-        }
-    }
+		}
+
+		public override void Deserialize(Reader reader)
+		{
+			EmailPattern = reader.Read<string>();
+
+		}
+				
+		public override string ToString()
+		{
+		    return "auth.passwordRecovery";
+		}
+	}
 }

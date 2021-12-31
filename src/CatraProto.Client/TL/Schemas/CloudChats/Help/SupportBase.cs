@@ -1,15 +1,17 @@
 using CatraProto.TL;
+using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
-
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
     public abstract class SupportBase : IObject
     {
-        [JsonProperty("phone_number")] public abstract string PhoneNumber { get; set; }
 
-        [JsonProperty("user")] public abstract UserBase User { get; set; }
+[Newtonsoft.Json.JsonProperty("phone_number")]
+		public abstract string PhoneNumber { get; set; }
+
+[Newtonsoft.Json.JsonProperty("user")]
+		public abstract CatraProto.Client.TL.Schemas.CloudChats.UserBase User { get; set; }
 
         public abstract void UpdateFlags();
         public abstract void Deserialize(Reader reader);

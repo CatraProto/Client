@@ -1,13 +1,14 @@
 using CatraProto.TL;
+using System.Collections.Generic;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
-
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
     public abstract class PasswordRecoveryBase : IObject
     {
-        [JsonProperty("email_pattern")] public abstract string EmailPattern { get; set; }
+
+[Newtonsoft.Json.JsonProperty("email_pattern")]
+		public abstract string EmailPattern { get; set; }
 
         public abstract void UpdateFlags();
         public abstract void Deserialize(Reader reader);

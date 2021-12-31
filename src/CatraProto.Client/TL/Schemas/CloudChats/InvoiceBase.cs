@@ -37,6 +37,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("prices")]
 		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase> Prices { get; set; }
 
+[Newtonsoft.Json.JsonProperty("max_tip_amount")]
+		public abstract long? MaxTipAmount { get; set; }
+
+[Newtonsoft.Json.JsonProperty("suggested_tip_amounts")]
+		public abstract IList<long> SuggestedTipAmounts { get; set; }
+
         public abstract void UpdateFlags();
         public abstract void Deserialize(Reader reader);
         public abstract void Serialize(Writer writer);

@@ -1,55 +1,53 @@
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class ReceivedQueue : IMethod
-    {
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => 1436924774;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(long);
-
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = true;
-
-        [JsonProperty("max_qts")] public int MaxQts { get; set; }
-
-        public override string ToString()
-        {
-            return "messages.receivedQueue";
-        }
+	public partial class ReceivedQueue : IMethod
+	{
 
 
-        public void UpdateFlags()
-        {
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => 1436924774; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(long);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = true;
 
-            writer.Write(MaxQts);
-        }
+[Newtonsoft.Json.JsonProperty("max_qts")]
+		public int MaxQts { get; set; }
 
-        public void Deserialize(Reader reader)
-        {
-            MaxQts = reader.Read<int>();
-        }
-    }
+
+		public void UpdateFlags() 
+		{
+
+		}
+
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(MaxQts);
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			MaxQts = reader.Read<int>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "messages.receivedQueue";
+		}
+	}
 }

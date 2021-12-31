@@ -14,10 +14,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Resize = 1 << 0,
 			SingleUse = 1 << 1,
-			Selective = 1 << 2
+			Selective = 1 << 2,
+			Placeholder = 1 << 3
 		}
 
-        public static int StaticConstructorId { get => 889353612; }
+        public static int StaticConstructorId { get => -2049074735; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -36,12 +37,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("rows")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonRowBase> Rows { get; set; }
 
+[Newtonsoft.Json.JsonProperty("placeholder")]
+		public string Placeholder { get; set; }
+
         
 		public override void UpdateFlags() 
 		{
 			Flags = Resize ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
 			Flags = SingleUse ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
 			Flags = Selective ? FlagsHelper.SetFlag(Flags, 2) : FlagsHelper.UnsetFlag(Flags, 2);
+			Flags = Placeholder == null ? FlagsHelper.UnsetFlag(Flags, 3) : FlagsHelper.SetFlag(Flags, 3);
 
 		}
 
@@ -51,6 +56,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			UpdateFlags();
 			writer.Write(Flags);
 			writer.Write(Rows);
+			if(FlagsHelper.IsFlagSet(Flags, 3))
+			{
+				writer.Write(Placeholder);
+			}
+
 
 		}
 
@@ -61,6 +71,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			SingleUse = FlagsHelper.IsFlagSet(Flags, 1);
 			Selective = FlagsHelper.IsFlagSet(Flags, 2);
 			Rows = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonRowBase>();
+			if(FlagsHelper.IsFlagSet(Flags, 3))
+			{
+				Placeholder = reader.Read<string>();
+			}
+
 
 		}
 				

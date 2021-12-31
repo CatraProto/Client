@@ -14,11 +14,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 		public enum FlagsEnum 
 		{
 			RequestedInfoId = 1 << 0,
-			ShippingOptionId = 1 << 1
+			ShippingOptionId = 1 << 1,
+			TipAmount = 1 << 2
 		}
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => 730364339; }
+        public static int StaticConstructorId { get => 818134173; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -30,6 +31,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
+
+[Newtonsoft.Json.JsonProperty("form_id")]
+		public long FormId { get; set; }
+
+[Newtonsoft.Json.JsonProperty("peer")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
 
 [Newtonsoft.Json.JsonProperty("msg_id")]
 		public int MsgId { get; set; }
@@ -43,11 +50,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 [Newtonsoft.Json.JsonProperty("credentials")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputPaymentCredentialsBase Credentials { get; set; }
 
+[Newtonsoft.Json.JsonProperty("tip_amount")]
+		public long? TipAmount { get; set; }
+
 
 		public void UpdateFlags() 
 		{
 			Flags = RequestedInfoId == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
 			Flags = ShippingOptionId == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
+			Flags = TipAmount == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
 
 		}
 
@@ -56,6 +67,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
             if(ConstructorId != 0) writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
+			writer.Write(FormId);
+			writer.Write(Peer);
 			writer.Write(MsgId);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
@@ -68,12 +81,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 			}
 
 			writer.Write(Credentials);
+			if(FlagsHelper.IsFlagSet(Flags, 2))
+			{
+				writer.Write(TipAmount.Value);
+			}
+
 
 		}
 
 		public void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
+			FormId = reader.Read<long>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
 			MsgId = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
@@ -86,6 +106,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 			}
 
 			Credentials = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPaymentCredentialsBase>();
+			if(FlagsHelper.IsFlagSet(Flags, 2))
+			{
+				TipAmount = reader.Read<long>();
+			}
+
 
 		}
 		

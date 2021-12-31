@@ -21,7 +21,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			PinMessages = 1 << 7,
 			AddAdmins = 1 << 9,
 			Anonymous = 1 << 10,
-			ManageCall = 1 << 11
+			ManageCall = 1 << 11,
+			Other = 1 << 12
 		}
 
         public static int StaticConstructorId { get => 1605510357; }
@@ -61,6 +62,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("manage_call")]
 		public override bool ManageCall { get; set; }
 
+[Newtonsoft.Json.JsonProperty("other")]
+		public override bool Other { get; set; }
+
         
 		public override void UpdateFlags() 
 		{
@@ -74,6 +78,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = AddAdmins ? FlagsHelper.SetFlag(Flags, 9) : FlagsHelper.UnsetFlag(Flags, 9);
 			Flags = Anonymous ? FlagsHelper.SetFlag(Flags, 10) : FlagsHelper.UnsetFlag(Flags, 10);
 			Flags = ManageCall ? FlagsHelper.SetFlag(Flags, 11) : FlagsHelper.UnsetFlag(Flags, 11);
+			Flags = Other ? FlagsHelper.SetFlag(Flags, 12) : FlagsHelper.UnsetFlag(Flags, 12);
 
 		}
 
@@ -98,6 +103,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			AddAdmins = FlagsHelper.IsFlagSet(Flags, 9);
 			Anonymous = FlagsHelper.IsFlagSet(Flags, 10);
 			ManageCall = FlagsHelper.IsFlagSet(Flags, 11);
+			Other = FlagsHelper.IsFlagSet(Flags, 12);
 
 		}
 				

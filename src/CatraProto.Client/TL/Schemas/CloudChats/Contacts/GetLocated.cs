@@ -1,82 +1,83 @@
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
-    public partial class GetLocated : IMethod
-    {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Background = 1 << 1,
-            SelfExpires = 1 << 0
-        }
+	public partial class GetLocated : IMethod
+	{
+		[Flags]
+		public enum FlagsEnum 
+		{
+			Background = 1 << 1,
+			SelfExpires = 1 << 0
+		}
 
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => -750207932;
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => -750207932; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
 
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(UpdatesBase);
+[Newtonsoft.Json.JsonIgnore]
+		public int Flags { get; set; }
 
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
+[Newtonsoft.Json.JsonProperty("background")]
+		public bool Background { get; set; }
 
-        [JsonIgnore] public int Flags { get; set; }
+[Newtonsoft.Json.JsonProperty("geo_point")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase GeoPoint { get; set; }
 
-        [JsonProperty("background")] public bool Background { get; set; }
-
-        [JsonProperty("geo_point")] public InputGeoPointBase GeoPoint { get; set; }
-
-        [JsonProperty("self_expires")] public int? SelfExpires { get; set; }
-
-        public override string ToString()
-        {
-            return "contacts.getLocated";
-        }
+[Newtonsoft.Json.JsonProperty("self_expires")]
+		public int? SelfExpires { get; set; }
 
 
-        public void UpdateFlags()
-        {
-            Flags = Background ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
-            Flags = SelfExpires == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
-        }
+		public void UpdateFlags() 
+		{
+			Flags = Background ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
+			Flags = SelfExpires == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+		}
 
-            UpdateFlags();
-            writer.Write(Flags);
-            writer.Write(GeoPoint);
-            if (FlagsHelper.IsFlagSet(Flags, 0))
-            {
-                writer.Write(SelfExpires.Value);
-            }
-        }
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			UpdateFlags();
+			writer.Write(Flags);
+			writer.Write(GeoPoint);
+			if(FlagsHelper.IsFlagSet(Flags, 0))
+			{
+				writer.Write(SelfExpires.Value);
+			}
 
-        public void Deserialize(Reader reader)
-        {
-            Flags = reader.Read<int>();
-            Background = FlagsHelper.IsFlagSet(Flags, 1);
-            GeoPoint = reader.Read<InputGeoPointBase>();
-            if (FlagsHelper.IsFlagSet(Flags, 0))
-            {
-                SelfExpires = reader.Read<int>();
-            }
-        }
-    }
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			Flags = reader.Read<int>();
+			Background = FlagsHelper.IsFlagSet(Flags, 1);
+			GeoPoint = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase>();
+			if(FlagsHelper.IsFlagSet(Flags, 0))
+			{
+				SelfExpires = reader.Read<int>();
+			}
+
+
+		}
+		
+		public override string ToString()
+		{
+		    return "contacts.getLocated";
+		}
+	}
 }

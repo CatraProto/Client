@@ -1,63 +1,63 @@
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public partial class GetAuthorizationForm : IMethod
-    {
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => -1200903967;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(AuthorizationFormBase);
-
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
-
-        [JsonProperty("bot_id")] public int BotId { get; set; }
-
-        [JsonProperty("scope")] public string Scope { get; set; }
-
-        [JsonProperty("public_key")] public string PublicKey { get; set; }
-
-        public override string ToString()
-        {
-            return "account.getAuthorizationForm";
-        }
+	public partial class GetAuthorizationForm : IMethod
+	{
 
 
-        public void UpdateFlags()
-        {
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => -1456907910; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Account.AuthorizationFormBase);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-            writer.Write(BotId);
-            writer.Write(Scope);
-            writer.Write(PublicKey);
-        }
+[Newtonsoft.Json.JsonProperty("bot_id")]
+		public long BotId { get; set; }
 
-        public void Deserialize(Reader reader)
-        {
-            BotId = reader.Read<int>();
-            Scope = reader.Read<string>();
-            PublicKey = reader.Read<string>();
-        }
-    }
+[Newtonsoft.Json.JsonProperty("scope")]
+		public string Scope { get; set; }
+
+[Newtonsoft.Json.JsonProperty("public_key")]
+		public string PublicKey { get; set; }
+
+
+		public void UpdateFlags() 
+		{
+
+		}
+
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(BotId);
+			writer.Write(Scope);
+			writer.Write(PublicKey);
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			BotId = reader.Read<long>();
+			Scope = reader.Read<string>();
+			PublicKey = reader.Read<string>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "account.getAuthorizationForm";
+		}
+	}
 }

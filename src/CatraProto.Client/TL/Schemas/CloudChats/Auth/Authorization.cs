@@ -1,72 +1,90 @@
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
-using Newtonsoft.Json;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
-    public partial class Authorization : AuthorizationBase
-    {
-        [Flags]
-        public enum FlagsEnum
-        {
-            TmpSessions = 1 << 0
-        }
+	public partial class Authorization : CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase
+	{
+		[Flags]
+		public enum FlagsEnum 
+		{
+			SetupPasswordRequired = 1 << 1,
+			OtherwiseReloginDays = 1 << 1,
+			TmpSessions = 1 << 0
+		}
 
-        public static int StaticConstructorId
-        {
-            get => -855308010;
-        }
+        public static int StaticConstructorId { get => 872119224; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		public int Flags { get; set; }
 
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
+[Newtonsoft.Json.JsonProperty("setup_password_required")]
+		public bool SetupPasswordRequired { get; set; }
 
-        [JsonIgnore] public int Flags { get; set; }
+[Newtonsoft.Json.JsonProperty("otherwise_relogin_days")]
+		public int? OtherwiseReloginDays { get; set; }
 
-        [JsonProperty("tmp_sessions")] public int? TmpSessions { get; set; }
+[Newtonsoft.Json.JsonProperty("tmp_sessions")]
+		public int? TmpSessions { get; set; }
 
-        [JsonProperty("user")] public UserBase User { get; set; }
+[Newtonsoft.Json.JsonProperty("user")]
+		public CatraProto.Client.TL.Schemas.CloudChats.UserBase User { get; set; }
 
+        
+		public override void UpdateFlags() 
+		{
+			Flags = SetupPasswordRequired ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
+			Flags = OtherwiseReloginDays == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
+			Flags = TmpSessions == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
 
-        public override void UpdateFlags()
-        {
-            Flags = TmpSessions == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
-        }
+		}
 
-        public override void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+		public override void Serialize(Writer writer)
+		{
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			UpdateFlags();
+			writer.Write(Flags);
+			if(FlagsHelper.IsFlagSet(Flags, 1))
+			{
+				writer.Write(OtherwiseReloginDays.Value);
+			}
 
-            UpdateFlags();
-            writer.Write(Flags);
-            if (FlagsHelper.IsFlagSet(Flags, 0))
-            {
-                writer.Write(TmpSessions.Value);
-            }
+			if(FlagsHelper.IsFlagSet(Flags, 0))
+			{
+				writer.Write(TmpSessions.Value);
+			}
 
-            writer.Write(User);
-        }
+			writer.Write(User);
 
-        public override void Deserialize(Reader reader)
-        {
-            Flags = reader.Read<int>();
-            if (FlagsHelper.IsFlagSet(Flags, 0))
-            {
-                TmpSessions = reader.Read<int>();
-            }
+		}
 
-            User = reader.Read<UserBase>();
-        }
+		public override void Deserialize(Reader reader)
+		{
+			Flags = reader.Read<int>();
+			SetupPasswordRequired = FlagsHelper.IsFlagSet(Flags, 1);
+			if(FlagsHelper.IsFlagSet(Flags, 1))
+			{
+				OtherwiseReloginDays = reader.Read<int>();
+			}
 
-        public override string ToString()
-        {
-            return "auth.authorization";
-        }
-    }
+			if(FlagsHelper.IsFlagSet(Flags, 0))
+			{
+				TmpSessions = reader.Read<int>();
+			}
+
+			User = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+
+		}
+				
+		public override string ToString()
+		{
+		    return "auth.authorization";
+		}
+	}
 }

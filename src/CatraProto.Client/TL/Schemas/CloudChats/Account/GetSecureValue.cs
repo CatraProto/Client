@@ -2,55 +2,52 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public partial class GetSecureValue : IMethod
-    {
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => 1936088002;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(SecureValueBase);
-
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = true;
-
-        [JsonProperty("types")] public IList<SecureValueTypeBase> Types { get; set; }
-
-        public override string ToString()
-        {
-            return "account.getSecureValue";
-        }
+	public partial class GetSecureValue : IMethod
+	{
 
 
-        public void UpdateFlags()
-        {
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => 1936088002; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = true;
 
-            writer.Write(Types);
-        }
+[Newtonsoft.Json.JsonProperty("types")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase> Types { get; set; }
 
-        public void Deserialize(Reader reader)
-        {
-            Types = reader.ReadVector<SecureValueTypeBase>();
-        }
-    }
+
+		public void UpdateFlags() 
+		{
+
+		}
+
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(Types);
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			Types = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "account.getSecureValue";
+		}
+	}
 }

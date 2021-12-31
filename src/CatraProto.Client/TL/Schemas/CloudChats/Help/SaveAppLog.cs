@@ -2,55 +2,52 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-    public partial class SaveAppLog : IMethod
-    {
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => 1862465352;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
-
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
-
-        [JsonProperty("events")] public IList<InputAppEventBase> Events { get; set; }
-
-        public override string ToString()
-        {
-            return "help.saveAppLog";
-        }
+	public partial class SaveAppLog : IMethod
+	{
 
 
-        public void UpdateFlags()
-        {
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => 1862465352; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(bool);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-            writer.Write(Events);
-        }
+[Newtonsoft.Json.JsonProperty("events")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputAppEventBase> Events { get; set; }
 
-        public void Deserialize(Reader reader)
-        {
-            Events = reader.ReadVector<InputAppEventBase>();
-        }
-    }
+
+		public void UpdateFlags() 
+		{
+
+		}
+
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(Events);
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			Events = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputAppEventBase>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "help.saveAppLog";
+		}
+	}
 }

@@ -1,59 +1,58 @@
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class GetWebPage : IMethod
-    {
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => 852135825;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(WebPageBase);
-
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
-
-        [JsonProperty("url")] public string Url { get; set; }
-
-        [JsonProperty("hash")] public int Hash { get; set; }
-
-        public override string ToString()
-        {
-            return "messages.getWebPage";
-        }
+	public partial class GetWebPage : IMethod
+	{
 
 
-        public void UpdateFlags()
-        {
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => 852135825; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.WebPageBase);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-            writer.Write(Url);
-            writer.Write(Hash);
-        }
+[Newtonsoft.Json.JsonProperty("url")]
+		public string Url { get; set; }
 
-        public void Deserialize(Reader reader)
-        {
-            Url = reader.Read<string>();
-            Hash = reader.Read<int>();
-        }
-    }
+[Newtonsoft.Json.JsonProperty("hash")]
+		public int Hash { get; set; }
+
+
+		public void UpdateFlags() 
+		{
+
+		}
+
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(Url);
+			writer.Write(Hash);
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			Url = reader.Read<string>();
+			Hash = reader.Read<int>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "messages.getWebPage";
+		}
+	}
 }

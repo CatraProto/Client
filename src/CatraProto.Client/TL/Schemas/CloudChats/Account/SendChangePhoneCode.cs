@@ -1,60 +1,58 @@
 using System;
-using CatraProto.Client.TL.Schemas.CloudChats.Auth;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public partial class SendChangePhoneCode : IMethod
-    {
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => -2108208411;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(SentCodeBase);
-
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
-
-        [JsonProperty("phone_number")] public string PhoneNumber { get; set; }
-
-        [JsonProperty("settings")] public CodeSettingsBase Settings { get; set; }
-
-        public override string ToString()
-        {
-            return "account.sendChangePhoneCode";
-        }
+	public partial class SendChangePhoneCode : IMethod
+	{
 
 
-        public void UpdateFlags()
-        {
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => -2108208411; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeBase);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-            writer.Write(PhoneNumber);
-            writer.Write(Settings);
-        }
+[Newtonsoft.Json.JsonProperty("phone_number")]
+		public string PhoneNumber { get; set; }
 
-        public void Deserialize(Reader reader)
-        {
-            PhoneNumber = reader.Read<string>();
-            Settings = reader.Read<CodeSettingsBase>();
-        }
-    }
+[Newtonsoft.Json.JsonProperty("settings")]
+		public CatraProto.Client.TL.Schemas.CloudChats.CodeSettingsBase Settings { get; set; }
+
+
+		public void UpdateFlags() 
+		{
+
+		}
+
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(PhoneNumber);
+			writer.Write(Settings);
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			PhoneNumber = reader.Read<string>();
+			Settings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.CodeSettingsBase>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "account.sendChangePhoneCode";
+		}
+	}
 }

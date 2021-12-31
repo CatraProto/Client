@@ -1,59 +1,58 @@
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public partial class SaveTheme : IMethod
-    {
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => -229175188;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
-
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
-
-        [JsonProperty("theme")] public InputThemeBase Theme { get; set; }
-
-        [JsonProperty("unsave")] public bool Unsave { get; set; }
-
-        public override string ToString()
-        {
-            return "account.saveTheme";
-        }
+	public partial class SaveTheme : IMethod
+	{
 
 
-        public void UpdateFlags()
-        {
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => -229175188; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(bool);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-            writer.Write(Theme);
-            writer.Write(Unsave);
-        }
+[Newtonsoft.Json.JsonProperty("theme")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputThemeBase Theme { get; set; }
 
-        public void Deserialize(Reader reader)
-        {
-            Theme = reader.Read<InputThemeBase>();
-            Unsave = reader.Read<bool>();
-        }
-    }
+[Newtonsoft.Json.JsonProperty("unsave")]
+		public bool Unsave { get; set; }
+
+
+		public void UpdateFlags() 
+		{
+
+		}
+
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(Theme);
+			writer.Write(Unsave);
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			Theme = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputThemeBase>();
+			Unsave = reader.Read<bool>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "account.saveTheme";
+		}
+	}
 }

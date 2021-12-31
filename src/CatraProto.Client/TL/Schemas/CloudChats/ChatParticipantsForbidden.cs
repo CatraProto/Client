@@ -15,7 +15,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			SelfParticipant = 1 << 0
 		}
 
-        public static int StaticConstructorId { get => -57668565; }
+        public static int StaticConstructorId { get => -2023500831; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -23,7 +23,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Flags { get; set; }
 
 [Newtonsoft.Json.JsonProperty("chat_id")]
-		public override int ChatId { get; set; }
+		public override long ChatId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("self_participant")]
 		public CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantBase SelfParticipant { get; set; }
@@ -52,7 +52,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			ChatId = reader.Read<int>();
+			ChatId = reader.Read<long>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
 				SelfParticipant = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantBase>();

@@ -11,7 +11,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 	{
 
 
-        public static int StaticConstructorId { get => 995769920; }
+        public static int StaticConstructorId { get => 531458253; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -22,7 +22,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override int Date { get; set; }
 
 [Newtonsoft.Json.JsonProperty("user_id")]
-		public override int UserId { get; set; }
+		public override long UserId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("action")]
 		public override CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionBase Action { get; set; }
@@ -47,7 +47,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Id = reader.Read<long>();
 			Date = reader.Read<int>();
-			UserId = reader.Read<int>();
+			UserId = reader.Read<long>();
 			Action = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionBase>();
 
 		}

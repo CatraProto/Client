@@ -18,12 +18,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Deactivated = 1 << 5,
 			CallActive = 1 << 23,
 			CallNotEmpty = 1 << 24,
+			Noforwards = 1 << 25,
 			MigratedTo = 1 << 6,
 			AdminRights = 1 << 14,
 			DefaultBannedRights = 1 << 18
 		}
 
-        public static int StaticConstructorId { get => 1004149726; }
+        public static int StaticConstructorId { get => 1103884886; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -48,8 +49,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("call_not_empty")]
 		public bool CallNotEmpty { get; set; }
 
+[Newtonsoft.Json.JsonProperty("noforwards")]
+		public bool Noforwards { get; set; }
+
 [Newtonsoft.Json.JsonProperty("id")]
-		public override int Id { get; set; }
+		public override long Id { get; set; }
 
 [Newtonsoft.Json.JsonProperty("title")]
 		public string Title { get; set; }
@@ -84,6 +88,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = Deactivated ? FlagsHelper.SetFlag(Flags, 5) : FlagsHelper.UnsetFlag(Flags, 5);
 			Flags = CallActive ? FlagsHelper.SetFlag(Flags, 23) : FlagsHelper.UnsetFlag(Flags, 23);
 			Flags = CallNotEmpty ? FlagsHelper.SetFlag(Flags, 24) : FlagsHelper.UnsetFlag(Flags, 24);
+			Flags = Noforwards ? FlagsHelper.SetFlag(Flags, 25) : FlagsHelper.UnsetFlag(Flags, 25);
 			Flags = MigratedTo == null ? FlagsHelper.UnsetFlag(Flags, 6) : FlagsHelper.SetFlag(Flags, 6);
 			Flags = AdminRights == null ? FlagsHelper.UnsetFlag(Flags, 14) : FlagsHelper.SetFlag(Flags, 14);
 			Flags = DefaultBannedRights == null ? FlagsHelper.UnsetFlag(Flags, 18) : FlagsHelper.SetFlag(Flags, 18);
@@ -128,7 +133,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Deactivated = FlagsHelper.IsFlagSet(Flags, 5);
 			CallActive = FlagsHelper.IsFlagSet(Flags, 23);
 			CallNotEmpty = FlagsHelper.IsFlagSet(Flags, 24);
-			Id = reader.Read<int>();
+			Noforwards = FlagsHelper.IsFlagSet(Flags, 25);
+			Id = reader.Read<long>();
 			Title = reader.Read<string>();
 			Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatPhotoBase>();
 			ParticipantsCount = reader.Read<int>();

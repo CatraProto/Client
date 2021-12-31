@@ -7,6 +7,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class WallPaperBase : IObject
     {
 
+[Newtonsoft.Json.JsonProperty("id")]
+		public abstract long Id { get; set; }
+
 [Newtonsoft.Json.JsonProperty("default")]
 		public abstract bool Default { get; set; }
 

@@ -1,70 +1,68 @@
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class GetRecentStickers : IMethod
-    {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Attached = 1 << 0
-        }
+	public partial class GetRecentStickers : IMethod
+	{
+		[Flags]
+		public enum FlagsEnum 
+		{
+			Attached = 1 << 0
+		}
 
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => 1587647177;
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => -1649852357; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.RecentStickersBase);
 
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(RecentStickersBase);
+[Newtonsoft.Json.JsonIgnore]
+		public int Flags { get; set; }
 
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
+[Newtonsoft.Json.JsonProperty("attached")]
+		public bool Attached { get; set; }
 
-        [JsonIgnore] public int Flags { get; set; }
-
-        [JsonProperty("attached")] public bool Attached { get; set; }
-
-        [JsonProperty("hash")] public int Hash { get; set; }
-
-        public override string ToString()
-        {
-            return "messages.getRecentStickers";
-        }
+[Newtonsoft.Json.JsonProperty("hash")]
+		public long Hash { get; set; }
 
 
-        public void UpdateFlags()
-        {
-            Flags = Attached ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
-        }
+		public void UpdateFlags() 
+		{
+			Flags = Attached ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+		}
 
-            UpdateFlags();
-            writer.Write(Flags);
-            writer.Write(Hash);
-        }
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			UpdateFlags();
+			writer.Write(Flags);
+			writer.Write(Hash);
 
-        public void Deserialize(Reader reader)
-        {
-            Flags = reader.Read<int>();
-            Attached = FlagsHelper.IsFlagSet(Flags, 0);
-            Hash = reader.Read<int>();
-        }
-    }
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			Flags = reader.Read<int>();
+			Attached = FlagsHelper.IsFlagSet(Flags, 0);
+			Hash = reader.Read<long>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "messages.getRecentStickers";
+		}
+	}
 }

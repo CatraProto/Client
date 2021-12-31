@@ -16,7 +16,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			BroadcastPost = 1 << 0
 		}
 
-        public static int StaticConstructorId { get => 482860628; }
+        public static int StaticConstructorId { get => -693004986; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -24,7 +24,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Flags { get; set; }
 
 [Newtonsoft.Json.JsonProperty("channel_id")]
-		public int ChannelId { get; set; }
+		public long ChannelId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("top_msg_id")]
 		public int TopMsgId { get; set; }
@@ -33,7 +33,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int ReadMaxId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("broadcast_id")]
-		public int? BroadcastId { get; set; }
+		public long? BroadcastId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("broadcast_post")]
 		public int? BroadcastPost { get; set; }
@@ -70,12 +70,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override void Deserialize(Reader reader)
 		{
 			Flags = reader.Read<int>();
-			ChannelId = reader.Read<int>();
+			ChannelId = reader.Read<long>();
 			TopMsgId = reader.Read<int>();
 			ReadMaxId = reader.Read<int>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				BroadcastId = reader.Read<int>();
+				BroadcastId = reader.Read<long>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 0))

@@ -16,7 +16,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			GameShortName = 1 << 1
 		}
 
-        public static int StaticConstructorId { get => -103646630; }
+        public static int StaticConstructorId { get => 1763610706; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -27,7 +27,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public long QueryId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("user_id")]
-		public int UserId { get; set; }
+		public long UserId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("msg_id")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageIDBase MsgId { get; set; }
@@ -75,7 +75,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Flags = reader.Read<int>();
 			QueryId = reader.Read<long>();
-			UserId = reader.Read<int>();
+			UserId = reader.Read<long>();
 			MsgId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageIDBase>();
 			ChatInstance = reader.Read<long>();
 			if(FlagsHelper.IsFlagSet(Flags, 0))

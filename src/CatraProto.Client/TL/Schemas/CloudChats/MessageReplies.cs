@@ -19,7 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ReadMaxId = 1 << 3
 		}
 
-        public static int StaticConstructorId { get => 1093204652; }
+        public static int StaticConstructorId { get => -2083123262; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -39,7 +39,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public override IList<CatraProto.Client.TL.Schemas.CloudChats.PeerBase> RecentRepliers { get; set; }
 
 [Newtonsoft.Json.JsonProperty("channel_id")]
-		public override int? ChannelId { get; set; }
+		public override long? ChannelId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("max_id")]
 		public override int? MaxId { get; set; }
@@ -101,7 +101,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				ChannelId = reader.Read<int>();
+				ChannelId = reader.Read<long>();
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))

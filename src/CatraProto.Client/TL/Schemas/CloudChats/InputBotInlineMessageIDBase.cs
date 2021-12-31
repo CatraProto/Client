@@ -10,9 +10,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("dc_id")]
 		public abstract int DcId { get; set; }
 
-[Newtonsoft.Json.JsonProperty("id")]
-		public abstract long Id { get; set; }
-
 [Newtonsoft.Json.JsonProperty("access_hash")]
 		public abstract long AccessHash { get; set; }
 

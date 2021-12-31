@@ -1,79 +1,79 @@
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 {
-    public partial class ExportMessageLink : IMethod
-    {
-        [Flags]
-        public enum FlagsEnum
-        {
-            Grouped = 1 << 0,
-            Thread = 1 << 1
-        }
+	public partial class ExportMessageLink : IMethod
+	{
+		[Flags]
+		public enum FlagsEnum 
+		{
+			Grouped = 1 << 0,
+			Thread = 1 << 1
+		}
 
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => -432034325;
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => -432034325; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.ExportedMessageLinkBase);
 
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(ExportedMessageLinkBase);
+[Newtonsoft.Json.JsonIgnore]
+		public int Flags { get; set; }
 
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
+[Newtonsoft.Json.JsonProperty("grouped")]
+		public bool Grouped { get; set; }
 
-        [JsonIgnore] public int Flags { get; set; }
+[Newtonsoft.Json.JsonProperty("thread")]
+		public bool Thread { get; set; }
 
-        [JsonProperty("grouped")] public bool Grouped { get; set; }
+[Newtonsoft.Json.JsonProperty("channel")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase Channel { get; set; }
 
-        [JsonProperty("thread")] public bool Thread { get; set; }
-
-        [JsonProperty("channel")] public InputChannelBase Channel { get; set; }
-
-        [JsonProperty("id")] public int Id { get; set; }
-
-        public override string ToString()
-        {
-            return "channels.exportMessageLink";
-        }
+[Newtonsoft.Json.JsonProperty("id")]
+		public int Id { get; set; }
 
 
-        public void UpdateFlags()
-        {
-            Flags = Grouped ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
-            Flags = Thread ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
-        }
+		public void UpdateFlags() 
+		{
+			Flags = Grouped ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
+			Flags = Thread ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+		}
 
-            UpdateFlags();
-            writer.Write(Flags);
-            writer.Write(Channel);
-            writer.Write(Id);
-        }
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			UpdateFlags();
+			writer.Write(Flags);
+			writer.Write(Channel);
+			writer.Write(Id);
 
-        public void Deserialize(Reader reader)
-        {
-            Flags = reader.Read<int>();
-            Grouped = FlagsHelper.IsFlagSet(Flags, 0);
-            Thread = FlagsHelper.IsFlagSet(Flags, 1);
-            Channel = reader.Read<InputChannelBase>();
-            Id = reader.Read<int>();
-        }
-    }
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			Flags = reader.Read<int>();
+			Grouped = FlagsHelper.IsFlagSet(Flags, 0);
+			Thread = FlagsHelper.IsFlagSet(Flags, 1);
+			Channel = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
+			Id = reader.Read<int>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "channels.exportMessageLink";
+		}
+	}
 }

@@ -13,12 +13,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Users
 
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => -902781519; }
+        public static int StaticConstructorId { get => -1240508136; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UserFullBase);
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Users.UserFullBase);
 
 [Newtonsoft.Json.JsonIgnore]
 		bool IMethod.IsVector { get; init; } = false;

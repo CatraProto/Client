@@ -15,7 +15,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			FolderId = 1 << 0
 		}
 
-        public static int StaticConstructorId { get => 1651608194; }
+        public static int StaticConstructorId { get => 1223809356; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -35,10 +35,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Date { get; set; }
 
 [Newtonsoft.Json.JsonProperty("admin_id")]
-		public int AdminId { get; set; }
+		public long AdminId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("participant_id")]
-		public int ParticipantId { get; set; }
+		public long ParticipantId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("g_a")]
 		public byte[] GA { get; set; }
@@ -80,8 +80,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Id = reader.Read<int>();
 			AccessHash = reader.Read<long>();
 			Date = reader.Read<int>();
-			AdminId = reader.Read<int>();
-			ParticipantId = reader.Read<int>();
+			AdminId = reader.Read<long>();
+			ParticipantId = reader.Read<long>();
 			GA = reader.Read<byte[]>();
 
 		}

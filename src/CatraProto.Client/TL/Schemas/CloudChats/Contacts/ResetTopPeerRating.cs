@@ -1,59 +1,58 @@
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
-    public partial class ResetTopPeerRating : IMethod
-    {
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => 451113900;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
-
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
-
-        [JsonProperty("category")] public TopPeerCategoryBase Category { get; set; }
-
-        [JsonProperty("peer")] public InputPeerBase Peer { get; set; }
-
-        public override string ToString()
-        {
-            return "contacts.resetTopPeerRating";
-        }
+	public partial class ResetTopPeerRating : IMethod
+	{
 
 
-        public void UpdateFlags()
-        {
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => 451113900; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(bool);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-            writer.Write(Category);
-            writer.Write(Peer);
-        }
+[Newtonsoft.Json.JsonProperty("category")]
+		public CatraProto.Client.TL.Schemas.CloudChats.TopPeerCategoryBase Category { get; set; }
 
-        public void Deserialize(Reader reader)
-        {
-            Category = reader.Read<TopPeerCategoryBase>();
-            Peer = reader.Read<InputPeerBase>();
-        }
-    }
+[Newtonsoft.Json.JsonProperty("peer")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
+
+
+		public void UpdateFlags() 
+		{
+
+		}
+
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(Category);
+			writer.Write(Peer);
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			Category = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.TopPeerCategoryBase>();
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "contacts.resetTopPeerRating";
+		}
+	}
 }

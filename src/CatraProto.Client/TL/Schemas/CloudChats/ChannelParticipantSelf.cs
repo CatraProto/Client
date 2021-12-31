@@ -9,17 +9,27 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
 	public partial class ChannelParticipantSelf : CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantBase
 	{
+		[Flags]
+		public enum FlagsEnum 
+		{
+			ViaRequest = 1 << 0
+		}
 
-
-        public static int StaticConstructorId { get => -1557620115; }
+        public static int StaticConstructorId { get => 900251559; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
+[Newtonsoft.Json.JsonIgnore]
+		public int Flags { get; set; }
+
+[Newtonsoft.Json.JsonProperty("via_request")]
+		public bool ViaRequest { get; set; }
+
 [Newtonsoft.Json.JsonProperty("user_id")]
-		public override int UserId { get; set; }
+		public long UserId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("inviter_id")]
-		public int InviterId { get; set; }
+		public long InviterId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("date")]
 		public int Date { get; set; }
@@ -27,12 +37,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         
 		public override void UpdateFlags() 
 		{
+			Flags = ViaRequest ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
 
 		}
 
 		public override void Serialize(Writer writer)
 		{
 		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			UpdateFlags();
+			writer.Write(Flags);
 			writer.Write(UserId);
 			writer.Write(InviterId);
 			writer.Write(Date);
@@ -41,8 +54,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		public override void Deserialize(Reader reader)
 		{
-			UserId = reader.Read<int>();
-			InviterId = reader.Read<int>();
+			Flags = reader.Read<int>();
+			ViaRequest = FlagsHelper.IsFlagSet(Flags, 0);
+			UserId = reader.Read<long>();
+			InviterId = reader.Read<long>();
 			Date = reader.Read<int>();
 
 		}

@@ -1,42 +1,40 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
-using Newtonsoft.Json;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
-    public partial class ContactsNotModified : ContactsBase
-    {
-        public static int StaticConstructorId
-        {
-            get => -1219778094;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
+	public partial class ContactsNotModified : CatraProto.Client.TL.Schemas.CloudChats.Contacts.ContactsBase
+	{
 
 
-        public override void UpdateFlags()
-        {
-        }
+        public static int StaticConstructorId { get => -1219778094; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+        
+		public override void UpdateFlags() 
+		{
 
-        public override void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
-        }
+		}
 
-        public override void Deserialize(Reader reader)
-        {
-        }
+		public override void Serialize(Writer writer)
+		{
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
 
-        public override string ToString()
-        {
-            return "contacts.contactsNotModified";
-        }
-    }
+		}
+
+		public override void Deserialize(Reader reader)
+		{
+
+		}
+				
+		public override string ToString()
+		{
+		    return "contacts.contactsNotModified";
+		}
+	}
 }

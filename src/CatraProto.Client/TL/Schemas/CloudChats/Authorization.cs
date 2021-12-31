@@ -14,7 +14,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 			Current = 1 << 0,
 			OfficialApp = 1 << 1,
-			PasswordPending = 1 << 2
+			PasswordPending = 1 << 2,
+			EncryptedRequestsDisabled = 1 << 3,
+			CallRequestsDisabled = 1 << 4
 		}
 
         public static int StaticConstructorId { get => -1392388579; }
@@ -32,6 +34,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 [Newtonsoft.Json.JsonProperty("password_pending")]
 		public override bool PasswordPending { get; set; }
+
+[Newtonsoft.Json.JsonProperty("encrypted_requests_disabled")]
+		public override bool EncryptedRequestsDisabled { get; set; }
+
+[Newtonsoft.Json.JsonProperty("call_requests_disabled")]
+		public override bool CallRequestsDisabled { get; set; }
 
 [Newtonsoft.Json.JsonProperty("hash")]
 		public override long Hash { get; set; }
@@ -75,6 +83,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = Current ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
 			Flags = OfficialApp ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
 			Flags = PasswordPending ? FlagsHelper.SetFlag(Flags, 2) : FlagsHelper.UnsetFlag(Flags, 2);
+			Flags = EncryptedRequestsDisabled ? FlagsHelper.SetFlag(Flags, 3) : FlagsHelper.UnsetFlag(Flags, 3);
+			Flags = CallRequestsDisabled ? FlagsHelper.SetFlag(Flags, 4) : FlagsHelper.UnsetFlag(Flags, 4);
 
 		}
 
@@ -104,6 +114,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Current = FlagsHelper.IsFlagSet(Flags, 0);
 			OfficialApp = FlagsHelper.IsFlagSet(Flags, 1);
 			PasswordPending = FlagsHelper.IsFlagSet(Flags, 2);
+			EncryptedRequestsDisabled = FlagsHelper.IsFlagSet(Flags, 3);
+			CallRequestsDisabled = FlagsHelper.IsFlagSet(Flags, 4);
 			Hash = reader.Read<long>();
 			DeviceModel = reader.Read<string>();
 			Platform = reader.Read<string>();

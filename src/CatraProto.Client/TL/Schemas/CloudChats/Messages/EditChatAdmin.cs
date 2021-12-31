@@ -1,63 +1,63 @@
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
-using Newtonsoft.Json;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class EditChatAdmin : IMethod
-    {
-        [JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => -1444503762;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonIgnore] Type IMethod.Type { get; init; } = typeof(bool);
-
-        [JsonIgnore] bool IMethod.IsVector { get; init; } = false;
-
-        [JsonProperty("chat_id")] public int ChatId { get; set; }
-
-        [JsonProperty("user_id")] public InputUserBase UserId { get; set; }
-
-        [JsonProperty("is_admin")] public bool IsAdmin { get; set; }
-
-        public override string ToString()
-        {
-            return "messages.editChatAdmin";
-        }
+	public partial class EditChatAdmin : IMethod
+	{
 
 
-        public void UpdateFlags()
-        {
-        }
+        [Newtonsoft.Json.JsonIgnore]
+        public static int StaticConstructorId { get => -1470377534; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(bool);
 
-        public void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-            writer.Write(ChatId);
-            writer.Write(UserId);
-            writer.Write(IsAdmin);
-        }
+[Newtonsoft.Json.JsonProperty("chat_id")]
+		public long ChatId { get; set; }
 
-        public void Deserialize(Reader reader)
-        {
-            ChatId = reader.Read<int>();
-            UserId = reader.Read<InputUserBase>();
-            IsAdmin = reader.Read<bool>();
-        }
-    }
+[Newtonsoft.Json.JsonProperty("user_id")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase UserId { get; set; }
+
+[Newtonsoft.Json.JsonProperty("is_admin")]
+		public bool IsAdmin { get; set; }
+
+
+		public void UpdateFlags() 
+		{
+
+		}
+
+		public void Serialize(Writer writer)
+		{
+            if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(ChatId);
+			writer.Write(UserId);
+			writer.Write(IsAdmin);
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			ChatId = reader.Read<long>();
+			UserId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
+			IsAdmin = reader.Read<bool>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "messages.editChatAdmin";
+		}
+	}
 }

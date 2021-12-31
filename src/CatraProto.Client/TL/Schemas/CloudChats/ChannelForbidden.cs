@@ -17,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			UntilDate = 1 << 16
 		}
 
-        public static int StaticConstructorId { get => 681420594; }
+        public static int StaticConstructorId { get => 399807445; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -31,7 +31,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public bool Megagroup { get; set; }
 
 [Newtonsoft.Json.JsonProperty("id")]
-		public override int Id { get; set; }
+		public override long Id { get; set; }
 
 [Newtonsoft.Json.JsonProperty("access_hash")]
 		public long AccessHash { get; set; }
@@ -72,7 +72,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Flags = reader.Read<int>();
 			Broadcast = FlagsHelper.IsFlagSet(Flags, 5);
 			Megagroup = FlagsHelper.IsFlagSet(Flags, 8);
-			Id = reader.Read<int>();
+			Id = reader.Read<long>();
 			AccessHash = reader.Read<long>();
 			Title = reader.Read<string>();
 			if(FlagsHelper.IsFlagSet(Flags, 16))

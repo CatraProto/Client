@@ -11,15 +11,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 	{
 
 
-        public static int StaticConstructorId { get => -1704596961; }
+        public static int StaticConstructorId { get => -2092401936; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
 [Newtonsoft.Json.JsonProperty("chat_id")]
-		public int ChatId { get; set; }
+		public long ChatId { get; set; }
 
-[Newtonsoft.Json.JsonProperty("user_id")]
-		public int UserId { get; set; }
+[Newtonsoft.Json.JsonProperty("from_id")]
+		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase FromId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("action")]
 		public CatraProto.Client.TL.Schemas.CloudChats.SendMessageActionBase Action { get; set; }
@@ -34,15 +34,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		{
 		    if(ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(ChatId);
-			writer.Write(UserId);
+			writer.Write(FromId);
 			writer.Write(Action);
 
 		}
 
 		public override void Deserialize(Reader reader)
 		{
-			ChatId = reader.Read<int>();
-			UserId = reader.Read<int>();
+			ChatId = reader.Read<long>();
+			FromId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
 			Action = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SendMessageActionBase>();
 
 		}

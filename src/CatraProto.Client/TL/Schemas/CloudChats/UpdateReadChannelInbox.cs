@@ -15,7 +15,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			FolderId = 1 << 0
 		}
 
-        public static int StaticConstructorId { get => 856380452; }
+        public static int StaticConstructorId { get => -1842450928; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -26,7 +26,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int? FolderId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("channel_id")]
-		public int ChannelId { get; set; }
+		public long ChannelId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("max_id")]
 		public int MaxId { get; set; }
@@ -69,7 +69,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 				FolderId = reader.Read<int>();
 			}
 
-			ChannelId = reader.Read<int>();
+			ChannelId = reader.Read<long>();
 			MaxId = reader.Read<int>();
 			StillUnreadCount = reader.Read<int>();
 			Pts = reader.Read<int>();

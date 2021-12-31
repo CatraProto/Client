@@ -1,56 +1,55 @@
+using System;
 using System.Collections.Generic;
 using CatraProto.TL;
-using Newtonsoft.Json;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
-    public partial class TopPeers : TopPeersBase
-    {
-        public static int StaticConstructorId
-        {
-            get => 1891070632;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonProperty("categories")] public IList<TopPeerCategoryPeersBase> Categories { get; set; }
-
-        [JsonProperty("chats")] public IList<ChatBase> Chats { get; set; }
-
-        [JsonProperty("users")] public IList<UserBase> Users { get; set; }
+	public partial class TopPeers : CatraProto.Client.TL.Schemas.CloudChats.Contacts.TopPeersBase
+	{
 
 
-        public override void UpdateFlags()
-        {
-        }
+        public static int StaticConstructorId { get => 1891070632; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonProperty("categories")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.TopPeerCategoryPeersBase> Categories { get; set; }
 
-        public override void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonProperty("chats")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
 
-            writer.Write(Categories);
-            writer.Write(Chats);
-            writer.Write(Users);
-        }
+[Newtonsoft.Json.JsonProperty("users")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
-        public override void Deserialize(Reader reader)
-        {
-            Categories = reader.ReadVector<TopPeerCategoryPeersBase>();
-            Chats = reader.ReadVector<ChatBase>();
-            Users = reader.ReadVector<UserBase>();
-        }
+        
+		public override void UpdateFlags() 
+		{
 
-        public override string ToString()
-        {
-            return "contacts.topPeers";
-        }
-    }
+		}
+
+		public override void Serialize(Writer writer)
+		{
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(Categories);
+			writer.Write(Chats);
+			writer.Write(Users);
+
+		}
+
+		public override void Deserialize(Reader reader)
+		{
+			Categories = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.TopPeerCategoryPeersBase>();
+			Chats = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
+			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+
+		}
+				
+		public override string ToString()
+		{
+		    return "contacts.topPeers";
+		}
+	}
 }

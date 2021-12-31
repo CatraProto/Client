@@ -16,13 +16,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public int ConstructorId { get => StaticConstructorId; }
         
 [Newtonsoft.Json.JsonProperty("set")]
-		public override CatraProto.Client.TL.Schemas.CloudChats.StickerSetBase Set { get; set; }
+		public CatraProto.Client.TL.Schemas.CloudChats.StickerSetBase Set { get; set; }
 
 [Newtonsoft.Json.JsonProperty("packs")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.StickerPackBase> Packs { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.StickerPackBase> Packs { get; set; }
 
 [Newtonsoft.Json.JsonProperty("documents")]
-		public override IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase> Documents { get; set; }
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase> Documents { get; set; }
 
         
 		public override void UpdateFlags() 

@@ -1,52 +1,50 @@
+using System;
 using System.Collections.Generic;
 using CatraProto.TL;
-using Newtonsoft.Json;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class AllStickers : AllStickersBase
-    {
-        public static int StaticConstructorId
-        {
-            get => -302170017;
-        }
-
-        [JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [JsonProperty("hash")] public int Hash { get; set; }
-
-        [JsonProperty("sets")] public IList<CloudChats.StickerSetBase> Sets { get; set; }
+	public partial class AllStickers : CatraProto.Client.TL.Schemas.CloudChats.Messages.AllStickersBase
+	{
 
 
-        public override void UpdateFlags()
-        {
-        }
+        public static int StaticConstructorId { get => -843329861; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonProperty("hash")]
+		public long Hash { get; set; }
 
-        public override void Serialize(Writer writer)
-        {
-            if (ConstructorId != 0)
-            {
-                writer.Write(ConstructorId);
-            }
+[Newtonsoft.Json.JsonProperty("sets")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.StickerSetBase> Sets { get; set; }
 
-            writer.Write(Hash);
-            writer.Write(Sets);
-        }
+        
+		public override void UpdateFlags() 
+		{
 
-        public override void Deserialize(Reader reader)
-        {
-            Hash = reader.Read<int>();
-            Sets = reader.ReadVector<CloudChats.StickerSetBase>();
-        }
+		}
 
-        public override string ToString()
-        {
-            return "messages.allStickers";
-        }
-    }
+		public override void Serialize(Writer writer)
+		{
+		    if(ConstructorId != 0) writer.Write(ConstructorId);
+			writer.Write(Hash);
+			writer.Write(Sets);
+
+		}
+
+		public override void Deserialize(Reader reader)
+		{
+			Hash = reader.Read<long>();
+			Sets = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.StickerSetBase>();
+
+		}
+				
+		public override string ToString()
+		{
+		    return "messages.allStickers";
+		}
+	}
 }
