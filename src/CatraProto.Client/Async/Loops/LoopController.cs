@@ -20,7 +20,7 @@ namespace CatraProto.Client.Async.Loops
         protected TLoopState LoopState { get; set; }
         protected ILogger Logger { get; }
         
-        private readonly TaskCompletionSource _shutdownSource = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        protected readonly TaskCompletionSource ShutdownSource = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         public abstract bool SendSignal(TSignalState signal, [MaybeNullWhen(false)] out Task signalHandledTask);
         protected abstract void LoopFaulted(Exception e);
         protected abstract void SetLoopState(TLoopState state);
@@ -55,8 +55,9 @@ namespace CatraProto.Client.Async.Loops
         {
             lock (SharedLock)
             {
-                _shutdownSource.TrySetResult();
+                ShutdownSource.TrySetResult();
                 StateSignaler.Dispose();
+                CancellationTokenSource.Dispose();
             }
         }
 
@@ -72,7 +73,7 @@ namespace CatraProto.Client.Async.Loops
                 try
                 {
                     await LoopImplementation.LoopAsync(CancellationTokenSource.Token);
-                    if (!_shutdownSource.Task.IsCompleted)
+                    if (!ShutdownSource.Task.IsCompleted)
                     {
                         Logger.Warning("Loop exited without setting itself as stopped, triggering faulted");
                         LoopFaulted(new LoopUngracefullyExited());
@@ -89,7 +90,7 @@ namespace CatraProto.Client.Async.Loops
         {
             lock (SharedLock)
             {
-                return _shutdownSource.Task;
+                return ShutdownSource.Task;
             }
         }
 

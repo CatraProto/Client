@@ -38,15 +38,19 @@ namespace CatraProto.Client.Async.Loops
                     case GenericSignalState.Stop when lastState is null:
                         return false;
                     default:
-                        StateSignaler.Signal(SignalBody<GenericSignalState>.FromSignal(genericSignal, out signalHandledTask));
                         switch (genericSignal)
                         {
                             case GenericSignalState.Start:
+                                StateSignaler.Signal(SignalBody<GenericSignalState>.FromSignal(genericSignal, out signalHandledTask));
                                 LaunchLoop();
                                 break;
                             case GenericSignalState.Stop:
+                                StateSignaler.Signal(SignalBody<GenericSignalState>.FromSignal(genericSignal, ShutdownSource));
+                                signalHandledTask = ShutdownSource.Task;
                                 CancellationTokenSource.Cancel();
                                 break;
+                            default:
+                                throw new InvalidOperationException("Unreachable");
                         }
 
                         return true;

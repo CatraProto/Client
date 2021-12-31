@@ -28,13 +28,13 @@ namespace CatraProto.Client.Async.Loops
                 {
                     return false;
                 }
-                
+
                 var lastSent = StateSignaler.GetLastSignaled();
                 if (lastSent is null && signal is not ResumableSignalState.Start)
                 {
                     return false;
                 }
-                
+
                 switch (signal)
                 {
                     case ResumableSignalState.Start when lastSent is not null:
@@ -46,14 +46,25 @@ namespace CatraProto.Client.Async.Loops
                     case ResumableSignalState.Stop when lastSent?.Signal is ResumableSignalState.Stop:
                         return false;
                 }
-                
-                StateSignaler.Signal(SignalBody<ResumableSignalState>.FromSignal(signal, out signalHandledTask));
+
+                switch (signal)
+                {
+                    case ResumableSignalState.Stop:
+                        StateSignaler.Signal(SignalBody<ResumableSignalState>.FromSignal(signal, ShutdownSource));
+                        signalHandledTask = ShutdownSource.Task;
+                        CancellationTokenSource.Cancel();
+                        break;
+                    default:
+                        StateSignaler.Signal(SignalBody<ResumableSignalState>.FromSignal(signal, out signalHandledTask));
+                        break;
+                }
+
                 if (signal is ResumableSignalState.Start)
                 {
                     Logger.Verbose("Received Start signal, starting loop");
                     LaunchLoop();
                 }
-                
+
                 return true;
             }
         }
@@ -66,7 +77,7 @@ namespace CatraProto.Client.Async.Loops
                 {
                     Logger.Error(e, "Exception thrown while running on loop {Impl}", LoopImplementation!);
                 }
-                
+
                 LoopState = ResumableLoopState.Faulted;
                 OnStopped();
                 ClearSignals();
