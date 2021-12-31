@@ -2,9 +2,7 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using CatraProto.Client.Async.Loops;
 using CatraProto.Client.Async.Loops.Enums.Generic;
-using CatraProto.Client.Async.Loops.Enums.Resumable;
 using CatraProto.Client.Async.Loops.Interfaces;
 using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.Connections.MessageScheduling.ConnectionMessages;
@@ -46,18 +44,18 @@ namespace CatraProto.Client.Connections.Loop
                     {
                         case GenericSignalState.Start:
                             SetSignalHandled(GenericLoopState.Running, currentState);
-                            _logger.Information("Send loop started for connection {Connection}", _connection.ConnectionInfo);
+                            _logger.Information("Receive loop started for connection {Connection}", _connection.ConnectionInfo);
                             break;
                         case GenericSignalState.Stop:
-                            _logger.Information("Send loop stopped for connection {Connection}", _connection.ConnectionInfo);
+                            _logger.Information("Receive loop stopped for connection {Connection}", _connection.ConnectionInfo);
                             SetSignalHandled(GenericLoopState.Stopped, currentState);
                             return;
                     }
                 }
+                
                 try
                 {
                     var message = await _connection.Protocol.Reader.ReadMessageAsync(cancellationToken);
-                    //_connection.Signaler.SetSignal(false);
                     using var reader = new Reader(MergedProvider.Singleton, message.ToMemoryStream());
 
                     if (message.Length == 4)
@@ -95,13 +93,14 @@ namespace CatraProto.Client.Connections.Loop
                 catch (IOException e)
                 {
                     _logger.Error("IOException received. Message: \"{Info}\", reconnecting...", e.Message);
-                    _ = _connection.ConnectAsync(cancellationToken);
-                    break;
+                    // ReSharper disable once MethodSupportsCancellation
+                    _ = _connection.ConnectAsync();
+                    SetLoopState(GenericLoopState.Stopped);
+                    return;
                 }
                 catch (Exception e)
                 {
                     _logger.Error(e, "Exception thrown on ReceiveLoop for {Info}", _connection.ConnectionInfo);
-                    break;
                 }
             }
         }
