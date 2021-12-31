@@ -5,7 +5,7 @@ namespace CatraProto.Client.MTProto
 {
     public static class Extensions
     {
-        public static int ExtractPeerId(this PeerBase peer)
+        public static long ExtractPeerId(this PeerBase peer)
         {
             return peer switch
             {
