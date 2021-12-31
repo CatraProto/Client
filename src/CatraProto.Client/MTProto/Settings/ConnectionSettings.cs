@@ -5,7 +5,7 @@ namespace CatraProto.Client.MTProto.Settings
 {
     public class ConnectionSettings
     {
-        public ConnectionInfo DefaultDatacenter { get; } = new ConnectionInfo(ConnectionProtocol.TcpAbridged, IPAddress.Parse( /*"149.154.167.92"*/"149.154.167.50"), 443, 2);
+        public ConnectionInfo DefaultDatacenter { get; } = new ConnectionInfo(ConnectionProtocol.TcpAbridged, IPAddress.Parse( /*"149.154.167.92"*/"149.154.167.40"), 443, 2);
         public int PfsKeyDuration { get; }
         public bool Ipv6Allowed { get; }
 
