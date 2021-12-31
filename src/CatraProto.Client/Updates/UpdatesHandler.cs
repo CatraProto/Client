@@ -23,10 +23,7 @@ namespace CatraProto.Client.Updates
 
         public static async Task<UpdatesHandler> CreateInstance(SessionData sessionData, ConnectionPool connectionPool, ILogger logger)
         {
-            logger = logger.ForContext<UpdatesHandler>();
-            await sessionData.Authorization.WaitAuthorizationAsync();
-            var api = connectionPool.GetAccountConnection()!.MtProtoState.Api;
-            return new UpdatesHandler(sessionData, api, logger);
+            throw new NotImplementedException();
         }
 
         public void Dispose()
