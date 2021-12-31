@@ -66,10 +66,15 @@ namespace CatraProto.Client.Async.Loops
             {
                 if (base.SendSignal(signal, out signalHandledTask))
                 {
-                    if (signal is ResumableSignalState.Start)
+                    switch (signal)
                     {
-                        base.SendSignal(ResumableSignalState.Suspend, out _);
-                        _asyncAutoSignaler.Start();
+                        case ResumableSignalState.Resume:
+                            base.SendSignal(ResumableSignalState.Suspend, out _);
+                            break;
+                        case ResumableSignalState.Start:
+                            base.SendSignal(ResumableSignalState.Suspend, out _);
+                            _asyncAutoSignaler.Start();
+                            break;
                     }
 
                     return true;
