@@ -2,6 +2,8 @@ using System;
 using System.Threading;
 using CatraProto.Client.Connections.MessageScheduling.Enums;
 using CatraProto.Client.MTProto.Rpc;
+using CatraProto.Client.TL;
+using CatraProto.Client.TL.Schemas.CloudChats;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL.Interfaces;
 using Serilog;
@@ -51,6 +53,15 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
                     throw new InvalidOperationException("Can't set as sent when message id is null");
                 }
 
+                var connInfo = "Unknown connection";
+                if (_messagesHandler is not null)
+                {
+                    connInfo = _messagesHandler.Connection.ConnectionInfo.ToString();
+                }
+                
+                _logger.Information("Message {Body} sent with id {MessageId} to {Connection}", Body, messageId, connInfo);
+
+
                 if (upperId != null)
                 {
                     _messageStatus.MessageProtocolInfo.UpperMessageId = upperId;
@@ -71,11 +82,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
                     throw new InvalidOperationException("MessageHandler is not set");
                 }
 
-                var (messageId, _, _) = GetProtocolInfo();
-                if (messageId.HasValue)
-                {
-                    _messagesHandler.MessagesTrackers.MessageCompletionTracker.RemoveCompletion(messageId.Value, out _);
-                }
+                RemoveSelfFromTrackers();
 
                 if (CancellationToken.IsCancellationRequested)
                 {
@@ -127,11 +134,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
                 _messageStatus.MessageCompletion.TaskCompletionSource?.TrySetException(exception);
                 _messageStatus.MessageCompletion.CancellationTokenRegistration?.Unregister();
 
-                var messageId = GetProtocolInfo().MessageId;
-                if (messageId != null)
-                {
-                    _messagesHandler?.MessagesTrackers.MessageCompletionTracker.RemoveCompletion(messageId.Value, out _);
-                }
+                RemoveSelfFromTrackers();
             }
         }
 
@@ -145,14 +148,8 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
                     _messageStatus.MessageCompletion.TaskCompletionSource?.TrySetCanceled();
                 }
 
+                RemoveSelfFromTrackers();
                 _messageStatus.MessageCompletion.CancellationTokenRegistration?.Unregister();
-
-                var messageId = GetProtocolInfo().MessageId;
-                if (messageId != null)
-                {
-                    _messagesHandler?.MessagesTrackers.MessagesAckTracker.StopTracking(messageId.Value);
-                    _messagesHandler?.MessagesTrackers.MessageCompletionTracker.RemoveCompletion(messageId.Value, out _);
-                }
             }
         }
 
@@ -180,12 +177,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
                         return;
                     }
 
-                    var messageId = GetProtocolInfo().MessageId;
-                    if (messageId.HasValue)
-                    {
-                        _messagesHandler.MessagesTrackers.MessageCompletionTracker.RemoveCompletion(messageId.Value, out _);
-                        _messagesHandler.MessagesTrackers.MessagesAckTracker.StopTracking(messageId.Value);
-                    }
+                    RemoveSelfFromTrackers();
                 }
 
                 _messagesHandler = messagesHandler;
@@ -230,6 +222,28 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
             lock (_mutex)
             {
                 return _messageStatus.MessageState;
+            }
+        }
+
+        private void RemoveSelfFromTrackers()
+        {
+            lock (_mutex)
+            {
+                var messageId = GetProtocolInfo().MessageId;
+                if (!messageId.HasValue)
+                {
+                    return;
+                }
+
+                if (MessageSendingOptions.IsEncrypted)
+                {
+                    _messagesHandler?.MessagesTrackers.MessagesAckTracker.StopTracking(messageId.Value);
+                    _messagesHandler?.MessagesTrackers.MessageCompletionTracker.RemoveCompletion(messageId.Value, out _);
+                }
+                else
+                {
+                    _messagesHandler?.MessagesTrackers.MessageCompletionTracker.RemoveUnencryptedCompletion(this);
+                }
             }
         }
     }

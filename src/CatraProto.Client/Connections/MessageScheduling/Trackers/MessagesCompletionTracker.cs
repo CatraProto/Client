@@ -37,19 +37,24 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
 
             _messageCompletions.TryAdd(messageId, messageCompletion);
         }
+        
+        public bool RemoveUnencryptedCompletion(MessageItem item)
+        {
+            lock (_mutex)
+            {
+                return _unencryptedCompletions.Remove(item);
+            }
+        }
 
         public bool RemoveCompletion(long messageId, [MaybeNullWhen(false)] out MessageItem messageItem)
         {
             return _messageCompletions.TryRemove(messageId, out messageItem);
         }
-        
+
         public bool RemoveCompletions(long upperMessageId, [MaybeNullWhen(false)] out List<MessageItem> messageItems)
         {
-            var query = _messageCompletions
-                .Where(x => x.Value.GetMessageState() is MessageState.MessageSent && x.Value.GetProtocolInfo().upperMsgId == upperMessageId)
-                .Select(x => x.Value)
-                .ToList();
-            
+            var query = _messageCompletions.Where(x => x.Value.GetMessageState() is MessageState.MessageSent && x.Value.GetProtocolInfo().upperMsgId == upperMessageId).Select(x => x.Value).ToList();
+
             if (query.Count == 0)
             {
                 messageItems = null;
@@ -145,9 +150,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
                 }
 
                 return false;
-            })
-                .Select(x => x.Value)
-                .ToList();
+            }).Select(x => x.Value).ToList();
         }
     }
 }
