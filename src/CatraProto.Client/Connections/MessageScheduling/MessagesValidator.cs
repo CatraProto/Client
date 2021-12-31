@@ -56,20 +56,30 @@ namespace CatraProto.Client.Connections.MessageScheduling
                 return false;
             }
 
+            switch (deserialized)
+            {
+                case BadServerSalt badServerSalt:
+                    HandleBadServerSalt(badServerSalt);
+                    break;
+                case NewSessionCreated newSessionCreated:
+                    HandleNewSessionCreation(newSessionCreated, connectionMessage.SessionId);
+                    break;
+            }
+            
             var shouldSeqno = _mtProtoState.SeqnoHandler.ComputeSeqno(deserialized, true);
             if (shouldSeqno != connectionMessage.SeqNo)
             {
                 _logger.Warning("Received seqno {RSeqno} does not equal computed seqno {CSeqno} ({Obj})", connectionMessage.SeqNo, shouldSeqno, deserialized);
             }
-            
+
             var sessionId = _mtProtoState.SessionIdHandler.GetSessionId();
             if (sessionId != connectionMessage.SessionId)
             {
                 _logger.Warning("Local session {LSession} does not equal to the remote session {RSession}", sessionId, connectionMessage.SessionId);
                 return false;
             }
-
-            if (!_mtProtoState.SaltHandler.IsSaltValid(connectionMessage.Salt) && deserialized is not BadServerSalt)
+            
+            if (!_mtProtoState.SaltHandler.IsSaltValid(connectionMessage.Salt))
             {
                 return false;
             }
@@ -80,6 +90,36 @@ namespace CatraProto.Client.Connections.MessageScheduling
             }
 
             return true;
+        }
+        
+        private void HandleNewSessionCreation(NewSessionCreated newSessionCreated, long sessionId)
+        {
+            if (_mtProtoState.SessionIdHandler.GetSessionId() == sessionId)
+            {
+                _logger.Verbose("Received new session created but the id is the same as the old one, new server salt {Salt}, new SessionId {SessionId}", newSessionCreated.ServerSalt, sessionId);
+                return;
+            }
+
+            _mtProtoState.SessionIdHandler.SetSessionId(sessionId);
+            _mtProtoState.SaltHandler.SetSalt(newSessionCreated.ServerSalt, true);
+            _mtProtoState.SeqnoHandler.ContentRelatedReceived = 0;
+            _logger.Information("New session created, new server salt {Salt}, new SessionId {SessionId}", newSessionCreated.ServerSalt, sessionId);
+        }
+
+        private void HandleBadServerSalt(BadServerSalt serverSalt)
+        {
+            _logger.Information("Some messages were sent using the wrong salt, now using the new one ({Salt}) and resending messages", serverSalt.NewServerSalt);
+            _mtProtoState.SaltHandler.SetSalt(serverSalt.NewServerSalt, true);
+            if (_messagesHandler.MessagesTrackers.MessageCompletionTracker.RemoveCompletions(serverSalt.BadMsgId, out var messageItems))
+            {
+                var count = messageItems.Count;
+                for (var i = 0; i < count; i++)
+                {
+                    var item = messageItems[i];
+                    _logger.Information("Resending message {Body} because it was sent using an expired salt", item.Body);
+                    item.SetToSend(true, i == count - 1, true);
+                }
+            }
         }
         
     }
