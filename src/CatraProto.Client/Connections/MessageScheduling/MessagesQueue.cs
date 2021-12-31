@@ -16,12 +16,8 @@ namespace CatraProto.Client.Connections.MessageScheduling
 {
     class MessagesQueue
     {
-        public int OutgoingCount
-        {
-            get => _concurrentQueue.Count;
-        }
-
         private readonly ConcurrentQueue<MessageItem> _concurrentQueue = new ConcurrentQueue<MessageItem>();
+        private readonly ConcurrentQueue<MessageItem> _unencryptedQueue = new ConcurrentQueue<MessageItem>();
         private readonly MessagesHandler _messagesHandler;
         private readonly ILogger _logger;
 
@@ -41,19 +37,41 @@ namespace CatraProto.Client.Connections.MessageScheduling
             messageItem.BindTo(_messagesHandler);
             messageItem.SetToSend();
         }
+        
+        public void SendObject(IObject body, MessageSendingOptions messageSendingOptions, CancellationToken requestCancellationToken)
+        {
+            var messageCompletion = new MessageCompletion(null, null, null);
+            var messageStatusTracker = new MessageStatus(messageCompletion);
+            var messageItem = new MessageItem(body, messageSendingOptions, messageStatusTracker, _logger, requestCancellationToken);
+            messageItem.BindTo(_messagesHandler);
+            messageItem.SetToSend();
+        }
 
         public void PutInQueue(MessageItem item, bool wakeUpLoop)
         {
-            _concurrentQueue.Enqueue(item);
+            if (item.MessageSendingOptions.IsEncrypted)
+            {
+                _concurrentQueue.Enqueue(item);
+            }
+            else
+            {
+                _unencryptedQueue.Enqueue(item);
+            }
+            
             if (wakeUpLoop)
             {
                 _messagesHandler.Connection.WakeUpLoop();
             }
         }
         
-        public bool TryGetMessage([MaybeNullWhen(false)]out MessageItem messageItem)
+        public bool TryGetMessage(bool encrypted, [MaybeNullWhen(false)]out MessageItem messageItem)
         {
-            return _concurrentQueue.TryDequeue(out messageItem);
+            return encrypted ? _concurrentQueue.TryDequeue(out messageItem) : _unencryptedQueue.TryDequeue(out messageItem);
+        }
+        
+        public int GetCount(bool encrypted)
+        {
+            return encrypted ? _concurrentQueue.Count : _unencryptedQueue.Count;
         }
     }
 }
