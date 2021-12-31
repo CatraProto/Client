@@ -13,16 +13,15 @@ namespace CatraProto.Client.Flows.LoginFlow
     public class LoginNeedsSignup : ILoginResult
     {
         public TermsOfServiceBase TermsOfService { get; }
-        private readonly Connection _connection;
+        private readonly TelegramClient _client;
         private readonly SentCodeBase _sentCode;
         private readonly string _phoneNumber;
         private readonly SessionData _sessionData;
 
-        internal LoginNeedsSignup(Connection connection, SentCodeBase sentCode, string phoneNumber, TermsOfServiceBase termsOfService,
-            SessionData sessionData)
+        internal LoginNeedsSignup(TelegramClient client, SentCodeBase sentCode, string phoneNumber, TermsOfServiceBase termsOfService, SessionData sessionData)
         {
             TermsOfService = termsOfService;
-            _connection = connection;
+            _client = client;
             _sentCode = sentCode;
             _phoneNumber = phoneNumber;
             _sessionData = sessionData;
@@ -30,17 +29,15 @@ namespace CatraProto.Client.Flows.LoginFlow
 
         public async Task<ILoginResult> WithProfileData(string firstName, string lastName)
         {
-            var api = _connection.MtProtoState.Api;
-            await api.CloudChatsApi.Help.AcceptTermsOfServiceAsync(TermsOfService.Id);
-            var rpcQuery = await api.CloudChatsApi.Auth.SignUpAsync(_phoneNumber, _sentCode.PhoneCodeHash, firstName, lastName);
-            if (rpcQuery.Error != null)
+            await _client.Api!.CloudChatsApi.Help.AcceptTermsOfServiceAsync(TermsOfService.Id);
+            var rpcQuery = await _client.Api!.CloudChatsApi.Auth.SignUpAsync(_phoneNumber, _sentCode.PhoneCodeHash, firstName, lastName);
+            if (rpcQuery.RpcCallFailed)
             {
                 return new LoginFailed(rpcQuery.Error);
             }
 
             var authorization = (Authorization)rpcQuery.Response!;
-            _sessionData.Authorization.SetAuthorized(true, _connection.ConnectionInfo.DcId, authorization.User.Id,
-                ((User)authorization.User).AccessHash!.Value);
+            _sessionData.Authorization.SetAuthorized(true, rpcQuery.ExecutionInfo.ExecutedBy.DcId, authorization.User.Id, ((User)authorization.User).AccessHash!.Value);
             return new LoginSuccessful((User)authorization.User);
         }
     }
