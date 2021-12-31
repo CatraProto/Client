@@ -10,9 +10,18 @@ namespace CatraProto.Client
 {
     public class TelegramClient : IAsyncDisposable
     {
-        public Api? Api
+        public Api Api
         {
-            get => _clientSession.ConnectionPool.GetAccountConnection()?.MtProtoState.Api;
+            get
+            {
+                var accountConn = _clientSession.ConnectionPool.GetAccountConnection();
+                if (accountConn is not null)
+                {
+                    return accountConn.MtProtoState.Api;
+                }
+
+                throw new InvalidOperationException("Please call InitClientAsync first");
+            }
         }
 
         private readonly ClientSession _clientSession;
@@ -70,7 +79,7 @@ namespace CatraProto.Client
         
         public LoginFlow GetLoginFlow()
         {
-            return new LoginFlow(_clientSession.ConnectionPool, _clientSession);
+            return new LoginFlow(this, _clientSession);
         }
 
         public async ValueTask DisposeAsync()
