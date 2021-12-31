@@ -14,6 +14,9 @@ using CatraProto.Client.Connections.Protocols.Interfaces;
 using CatraProto.Client.Connections.Protocols.TcpAbridged;
 using CatraProto.Client.MTProto.Session;
 using CatraProto.Client.MTProto.Settings;
+using CatraProto.Client.TL.Schemas;
+using CatraProto.Client.TL.Schemas.CloudChats;
+using CatraProto.Client.TL.Schemas.CloudChats.Help;
 using Serilog;
 
 namespace CatraProto.Client.Connections
@@ -67,10 +70,11 @@ namespace CatraProto.Client.Connections
         
         private async Task InternalConnectAsync(CancellationToken token)
         {
-            _logger.Information("Stopping loops and creating protocol");
+            _logger.Information("Stopping loops and creating protocol for {Connection}", ConnectionInfo);
             await StopLoops();
             await Protocol.CloseAsync();
             
+            SetIsInited(false);
             Protocol = CreateProtocol();
             while (true)
             {
@@ -152,6 +156,26 @@ namespace CatraProto.Client.Connections
                     _writeLoop.Controller?.SendSignal(ResumableSignalState.Suspend, out _);   
                 }
             }
+        }
+
+        public async Task InitConnectionAsync(CancellationToken token = default)
+        {
+            _logger.Information("Initializing connection {Connection}", ConnectionInfo);
+            var initConnection = new InitConnection
+            {
+                ApiId = _clientSettings.ApiSettings.ApiId,
+                AppVersion = _clientSettings.ApiSettings.AppVersion,
+                DeviceModel = _clientSettings.ApiSettings.DeviceModel,
+                LangCode = _clientSettings.ApiSettings.LangCode,
+                LangPack = _clientSettings.ApiSettings.LangPack,
+                SystemLangCode = _clientSettings.ApiSettings.SystemLangCode,
+                SystemVersion = _clientSettings.ApiSettings.SystemVersion,
+                Query = new GetConfig()
+            };
+            
+            await MtProtoState.Api.CloudChatsApi.InvokeWithLayerAsync(MergedProvider.LayerId, initConnection, cancellationToken: token);
+            SetIsInited(true);
+            _logger.Information("Connection {Connection} initialized", ConnectionInfo);
         }
         
         public Task RegenKey()

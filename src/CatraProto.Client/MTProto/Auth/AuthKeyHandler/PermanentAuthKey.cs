@@ -1,6 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections;
+using CatraProto.Client.MTProto.Auth.AuthKeyHandler.Results;
 using CatraProto.Client.MTProto.Session.Models;
 using Serilog;
 
@@ -19,18 +20,22 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
             _logger = logger.ForContext<PermanentAuthKey>();
         }
 
-        public async ValueTask<AuthKeyObject> GetAuthKeyAsync(CancellationToken cancellationToken = default)
+        public async ValueTask<AuthKeyResult> GetAuthKeyAsync(CancellationToken cancellationToken = default)
         {
             var getData = _authKeyCache.GetData();
             if (getData is null)
             {
-                var result = await AuthKeyGen.EnsureComputeAsync(-1, _api, _logger, cancellationToken);
-                _authKeyCache.SetData(result.KeyArray, result.AuthKeyId, result.ServerSalt);
-                return new AuthKeyObject(result.KeyArray, result.AuthKeyId, result.ServerSalt, null);
+                var result = await AuthKeyGen.ComputeAuthKey(-1, _api, _logger, cancellationToken);
+                if (result is AuthKeySuccess success)
+                {
+                    _authKeyCache.SetData(success.KeyArray, success.AuthKeyId, success.ServerSalt);
+                }
+
+                return result;
             }
 
             var (key, keyId, serverSalt, _, _) = getData.Value;
-            return new AuthKeyObject(key, keyId, serverSalt, null);
+            return new AuthKeySuccess(key, keyId, serverSalt, null);
         }
     }
 }
