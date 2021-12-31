@@ -1,6 +1,9 @@
+using System.IO;
+using System.Linq;
 using CatraProto.Client.Connections.MessageScheduling.Trackers;
 using CatraProto.Client.MTProto.Rpc;
 using CatraProto.TL;
+using CatraProto.TL.Exceptions;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Interfaces.Deserializers;
 using Serilog;
@@ -18,21 +21,20 @@ namespace CatraProto.Client.MTProto.Deserializers
             _logger = logger.ForContext<RpcDeserializer>();
         }
 
-        public bool DeserializeObject(IObject obj, Reader reader)
+        public void DeserializeObject(IObject obj, Reader reader)
         {
             if (obj is not RpcObject rpcObject)
             {
-                return false;
+                return;
             }
 
             rpcObject.MessageId = reader.Read<long>();
             if (!_messageCompletionTracker.GetRpcMethod(rpcObject.MessageId, out var method))
             {
-                return false;
+                throw new DeserializationException($"Couldn't find RPC message {rpcObject.MessageId}", DeserializationException.DeserializationErrors.ProviderReturnedNull);
             }
-
+            
             rpcObject.Response = method!.IsVector ? reader.ReadVector(method.Type) : reader.Read(method.Type);
-            return true;
         }
     }
 }
