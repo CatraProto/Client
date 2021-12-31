@@ -11,14 +11,14 @@ namespace CatraProto.Client.MTProto.Session.Models
         private readonly AsyncSignaler _asyncSignaler = new AsyncSignaler(false);
         
         private long _userAccessHash;
-        private int _userId;
+        private long _userId;
         private int _dcId;
 
         public Authorization(object mutex) : base(mutex)
         {
         }
 
-        public void SetAuthorized(bool authorized, int dcId, int userId, long userAccessHash)
+        public void SetAuthorized(bool authorized, int dcId, long userId, long userAccessHash)
         {
             lock (Mutex)
             {
@@ -29,7 +29,7 @@ namespace CatraProto.Client.MTProto.Session.Models
             }
         }
 
-        public bool IsAuthorized(out int? dcId, out int? userId, out long? userAccessHash)
+        public bool IsAuthorized(out int? dcId, out long? userId, out long? userAccessHash)
         {
             lock (Mutex)
             {
@@ -72,7 +72,7 @@ namespace CatraProto.Client.MTProto.Session.Models
                 if (_asyncSignaler.IsReleased())
                 {
                     _dcId = reader.Read<int>();
-                    _userId = reader.Read<int>();
+                    _userId = reader.Read<long>();
                     _userAccessHash = reader.Read<long>();
                 }
             }
