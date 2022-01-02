@@ -66,7 +66,6 @@ namespace CatraProto.Client.Connections
                 return connection;
             }
 
-            connection.MtProtoState.StartLoops();
             await connection.ConnectAsync();
             return connection;
         }
@@ -139,6 +138,7 @@ namespace CatraProto.Client.Connections
             {
                 await vTask;
             }
+            
             _logger.Information("Connection pool disposed");
         }
     }

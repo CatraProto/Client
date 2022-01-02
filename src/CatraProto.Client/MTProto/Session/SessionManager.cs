@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using CatraProto.Client.MTProto.Session.Exceptions;
 using CatraProto.Client.MTProto.Session.Models;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.TL;
@@ -16,7 +17,7 @@ namespace CatraProto.Client.MTProto.Session
         {
             SessionData = new SessionData(_mutex);
         }
-        
+
         public byte[] Save()
         {
             using (var writer = new Writer(MergedProvider.Singleton, new MemoryStream()))
@@ -34,7 +35,14 @@ namespace CatraProto.Client.MTProto.Session
                 {
                     using (var reader = new Reader(MergedProvider.Singleton, new MemoryStream(serializedData)))
                     {
-                        SessionData.Read(reader);
+                        try
+                        {
+                            SessionData.Read(reader);
+                        }
+                        catch (IOException)
+                        {
+                            throw new SessionDeserializationException("Session corrupted");
+                        }
                     }
                 }
 

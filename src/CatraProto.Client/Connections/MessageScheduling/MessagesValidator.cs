@@ -25,13 +25,13 @@ namespace CatraProto.Client.Connections.MessageScheduling
         {
             using var stream = connectionMessage.GetPlainTextStream(connectionMessage.Padding);
             var msgComputed = connectionMessage.ComputeMsgKey(stream.ToArray(), false);
-            
+
             if (!msgComputed.SequenceEqual(connectionMessage.MsgKey!))
             {
                 _logger.Warning("DISCARDING MESSAGE DUE TO MSG_KEY MISMATCH {ComputeKey} != {ReceivedKey}", msgComputed, connectionMessage.MsgKey);
                 return false;
             }
-            
+
             if (deserialization is not MsgContainer container)
             {
                 return InternalCheckMessageValidity(connectionMessage, deserialization);
@@ -65,7 +65,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
                     HandleNewSessionCreation(newSessionCreated, connectionMessage.SessionId);
                     break;
             }
-            
+
             var shouldSeqno = _mtProtoState.SeqnoHandler.ComputeSeqno(deserialized, true);
             if (shouldSeqno != connectionMessage.SeqNo)
             {
@@ -78,7 +78,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
                 _logger.Warning("Local session {LSession} does not equal to the remote session {RSession}", sessionId, connectionMessage.SessionId);
                 return false;
             }
-            
+
             if (!_mtProtoState.SaltHandler.IsSaltValid(connectionMessage.Salt))
             {
                 return false;
@@ -91,15 +91,9 @@ namespace CatraProto.Client.Connections.MessageScheduling
 
             return true;
         }
-        
-        private void HandleNewSessionCreation(NewSessionCreated newSessionCreated, long sessionId)
-        {
-            if (_mtProtoState.SessionIdHandler.GetSessionId() == sessionId)
-            {
-                _logger.Verbose("Received new session created but the id is the same as the old one, new server salt {Salt}, new SessionId {SessionId}", newSessionCreated.ServerSalt, sessionId);
-                return;
-            }
 
+        private void HandleNewSessionCreation(NewSessionCreated newSessionCreated, long sessionId)
+        { 
             _mtProtoState.SessionIdHandler.SetSessionId(sessionId);
             _mtProtoState.SaltHandler.SetSalt(newSessionCreated.ServerSalt, true);
             _mtProtoState.SeqnoHandler.ContentRelatedReceived = 0;
@@ -109,9 +103,15 @@ namespace CatraProto.Client.Connections.MessageScheduling
         private void HandleBadServerSalt(BadServerSalt serverSalt)
         {
             _logger.Information("Some messages were sent using the wrong salt, now using the new one ({Salt}) and resending messages", serverSalt.NewServerSalt);
-            _mtProtoState.SaltHandler.SetSalt(serverSalt.NewServerSalt, true);
             if (_messagesHandler.MessagesTrackers.MessageCompletionTracker.RemoveCompletions(serverSalt.BadMsgId, out var messageItems))
             {
+                var seqno = messageItems[0].GetProtocolInfo().upperSeqno!.Value;
+                if (seqno != serverSalt.BadMsgSeqno)
+                {
+                    _logger.Warning("Not applying salt received from BadServerSalt because messageId's ({Id}) seqno is {Actual} not {Received}", serverSalt.BadMsgId, seqno, serverSalt.BadMsgSeqno);
+                }
+
+                _mtProtoState.SaltHandler.SetSalt(serverSalt.NewServerSalt, false);
                 var count = messageItems.Count;
                 for (var i = 0; i < count; i++)
                 {
@@ -120,7 +120,10 @@ namespace CatraProto.Client.Connections.MessageScheduling
                     item.SetToSend(true, i == count - 1, true);
                 }
             }
+            else
+            {
+                _logger.Warning("Not applying salt received from BadServerSalt because messageId {Id} was not found", serverSalt.BadMsgId);
+            }
         }
-        
     }
 }

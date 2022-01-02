@@ -69,15 +69,15 @@ namespace CatraProto.Client.Connections.Loop
                 Task<bool>? task = null;
                 if (!_temporaryAuthKey.Exists())
                 {
-                    _logger.Information("Generating new temporary authorization key because we don't have any");
+                    _logger.Information("Generating new temporary authorization key because we don't have any on {Connection}", _connection.ConnectionInfo);
                     task = _temporaryAuthKey.GenerateNewAuthKey(linked.Token);
                 }
                 else if (!_temporaryAuthKey.CanBeUsed())
                 {
-                    _logger.Information("Generating new temporary authorization key because the old one has expired");
+                    _logger.Information("Generating new temporary authorization key because the old one has expired on {Connection}", _connection.ConnectionInfo);
                     task = _temporaryAuthKey.GenerateNewAuthKey(linked.Token);
                 }
-                
+
                 try
                 {
                     if (task is not null)
@@ -85,7 +85,7 @@ namespace CatraProto.Client.Connections.Loop
                         var result = await task;
                         if (!result)
                         {
-                            _logger.Warning("Failed to generate authorization key, reconnecting...");
+                            _logger.Warning("Failed to generate authorization key, reconnecting to {Connection}...", _connection.ConnectionInfo);
                             _ = _connection.ConnectAsync(CancellationToken.None);
                             continue;
                         }
@@ -94,19 +94,19 @@ namespace CatraProto.Client.Connections.Loop
                     if (!_connection.GetIsInited())
                     {
                         await _connection.InitConnectionAsync(stoppingToken);
-                        _connection.WakeUpLoop();
+                        _connection.SignalNewMessage();
                     }
                 }
                 catch (OperationCanceledException) when (timeout.Token.IsCancellationRequested)
                 {
-                    _logger.Warning("Authorization key was not generated after 1 minute, reconnecting");
+                    _logger.Warning("Authorization key was not generated after 1 minute, reconnecting to on {Connection}", _connection.ConnectionInfo);
                     _ = _connection.ConnectAsync(CancellationToken.None);
                     SetLoopState(ResumableLoopState.Stopped);
                     return;
                 }
                 catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
                 {
-                    _logger.Information("Authorization key was not generated or connection wasn't initialized because loop received stop signal");
+                    _logger.Information("Authorization key was not generated or connection wasn't initialized because loop received stop signal on {Connection}", _connection.ConnectionInfo);
                     SetLoopState(ResumableLoopState.Stopped);
                     return;
                 }

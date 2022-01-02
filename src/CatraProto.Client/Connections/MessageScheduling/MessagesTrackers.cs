@@ -8,9 +8,9 @@ namespace CatraProto.Client.Connections.MessageScheduling
         public MessagesAckTracker MessagesAckTracker { get; }
         public MessageCompletionTracker MessageCompletionTracker { get; }
 
-        public MessagesTrackers(MessagesQueue messagesQueue, ILogger logger)
+        public MessagesTrackers(ILogger logger)
         {
-            MessagesAckTracker = new MessagesAckTracker(messagesQueue, logger);
+            MessagesAckTracker = new MessagesAckTracker(logger);
             MessageCompletionTracker = new MessageCompletionTracker(logger);
         }
     }

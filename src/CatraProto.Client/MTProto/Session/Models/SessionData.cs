@@ -1,6 +1,9 @@
 using System;
+using System.IO;
+using CatraProto.Client.MTProto.Session.Exceptions;
 using CatraProto.Client.MTProto.Session.Interfaces;
 using CatraProto.TL;
+using CatraProto.TL.Exceptions;
 
 namespace CatraProto.Client.MTProto.Session.Models
 {
@@ -23,11 +26,11 @@ namespace CatraProto.Client.MTProto.Session.Models
         {
             if (_sessionVersion > SupportedSessionVersion)
             {
-                throw new Exception($"Deserialization failed: the session has been serialized by a newer version of CatraProto ({_sessionVersion} > {SupportedSessionVersion})");
+                throw new SessionDeserializationException($"Deserialization failed: the session has been serialized by a newer version of CatraProto ({_sessionVersion} > {SupportedSessionVersion})");
             }
             else if (_sessionVersion < SupportedSessionVersion)
             {
-                throw new Exception($"Deserialization failed: the session has been serialized by an older version of CatraProto ({_sessionVersion} < {SupportedSessionVersion})");
+                throw new SessionDeserializationException($"Deserialization failed: the session has been serialized by an older version of CatraProto ({_sessionVersion} < {SupportedSessionVersion})");
             }
         }
 

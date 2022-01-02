@@ -5,18 +5,16 @@ namespace CatraProto.Client.MTProto.Settings
 {
     public class ConnectionSettings
     {
-        public ConnectionInfo DefaultDatacenter { get; } = new ConnectionInfo(ConnectionProtocol.TcpAbridged, IPAddress.Parse( /*"149.154.167.92"*/"149.154.167.40"), 443, 2);
+        public ConnectionInfo DefaultDatacenter { get; }
         public int PfsKeyDuration { get; }
+        public int ConnectionTimeout { get; }
         public bool Ipv6Allowed { get; }
 
-        public ConnectionSettings(int pfsKeyDuration = 1500, bool ipv6Allowed = false, ConnectionInfo? defaultDatacenter = null)
+        public ConnectionSettings(ConnectionInfo defaultDatacenter, int pfsKeyDuration = 1500, int connectionTimeout = 60, bool ipv6Allowed = false)
         {
-            if (defaultDatacenter is not null)
-            {
-                DefaultDatacenter = defaultDatacenter;
-            }
-
+            DefaultDatacenter = defaultDatacenter;
             PfsKeyDuration = pfsKeyDuration;
+            ConnectionTimeout = connectionTimeout;
             Ipv6Allowed = ipv6Allowed;
         }
     }

@@ -43,7 +43,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
             }
         }
 
-        public void SetSent(long? upperId = null)
+        public void SetSent(long? upperId = null, int? upperSeqno = null)
         {
             lock (_mutex)
             {
@@ -58,13 +58,14 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
                 {
                     connInfo = _messagesHandler.Connection.ConnectionInfo.ToString();
                 }
-                
+
                 _logger.Information("Message {Body} sent with id {MessageId} to {Connection}", Body, messageId, connInfo);
 
 
                 if (upperId != null)
                 {
                     _messageStatus.MessageProtocolInfo.UpperMessageId = upperId;
+                    _messageStatus.MessageProtocolInfo.UpperSeqno = upperSeqno;
                 }
 
                 _messageStatus.MessageState = MessageState.MessageSent;
@@ -92,7 +93,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
 
                 if (resetProtocolInfo)
                 {
-                    SetProtocolInfo(null, null);
+                    SetProtocolInfo(null, null, true);
                 }
 
                 if (Body is MsgsAck msgsAck && canDelete)
@@ -153,7 +154,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
             }
         }
 
-        public void SetAcknowledged(ExecutionInfo executionInfo)
+        public bool SetAcknowledged(ExecutionInfo executionInfo)
         {
             lock (_mutex)
             {
@@ -161,7 +162,10 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
                 if (MessageSendingOptions.AwaiterType == AwaiterType.OnAcknowledgement)
                 {
                     SetReplied(null, executionInfo);
+                    return true;
                 }
+
+                return false;
             }
         }
 
@@ -184,11 +188,11 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
             }
         }
 
-        public (long? MessageId, int? SeqNo, long? upperMsgId) GetProtocolInfo()
+        public (long? MessageId, int? SeqNo, long? upperMsgId, long? upperSeqno) GetProtocolInfo()
         {
             lock (_mutex)
             {
-                return (_messageStatus.MessageProtocolInfo.MessageId, _messageStatus.MessageProtocolInfo.SeqNo, _messageStatus.MessageProtocolInfo.UpperMessageId);
+                return (_messageStatus.MessageProtocolInfo.MessageId, _messageStatus.MessageProtocolInfo.SeqNo, _messageStatus.MessageProtocolInfo.UpperMessageId, _messageStatus.MessageProtocolInfo.UpperSeqno);
             }
         }
 
@@ -237,7 +241,6 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
 
                 if (MessageSendingOptions.IsEncrypted)
                 {
-                    _messagesHandler?.MessagesTrackers.MessagesAckTracker.StopTracking(messageId.Value);
                     _messagesHandler?.MessagesTrackers.MessageCompletionTracker.RemoveCompletion(messageId.Value, out _);
                 }
                 else

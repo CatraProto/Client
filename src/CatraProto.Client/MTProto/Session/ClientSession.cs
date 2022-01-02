@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections;
 using CatraProto.Client.MTProto.Settings;

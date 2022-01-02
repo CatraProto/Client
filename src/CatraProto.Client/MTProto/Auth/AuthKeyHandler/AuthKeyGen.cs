@@ -26,7 +26,11 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
                 logger.Information("Generating auth {Type} key", isPermanent ? "permanent" : "temporary");
                 var nonce = BigIntegerTools.GenerateBigInt(128);
                 var reqPq = await api.MtProtoApi.ReqPqMultiAsync(nonce, cancellationToken: cancellationToken);
-
+                if (reqPq.RpcCallFailed)
+                {
+                    return new AuthKeyFail(Errors.ServerCallFail);
+                }
+                
                 KeyExchangeChecks.CheckNonce(nonce, reqPq.Response!.Nonce);
 
                 var serverNonce = reqPq.Response.ServerNonce;
@@ -58,6 +62,11 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
 
                 logger.Verbose("Sending ReqDHParams request...");
                 var reqDh = await api.MtProtoApi.ReqDHParamsAsync(nonce, serverNonce, p, q, found.Item1, encryptedData, cancellationToken: cancellationToken);
+                if (reqDh.RpcCallFailed)
+                {
+                    return new AuthKeyFail(Errors.ServerCallFail);
+                }
+                
                 if (reqDh.Response is ServerDHParamsOk ok)
                 {
                     logger.Verbose("Server dh params ok, checking nonce and computing aes iv and key...");
@@ -90,7 +99,11 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
 
                     logger.Verbose("gbMod computed, sending setClientDHParams...");
                     var setDhClient = await api.MtProtoApi.SetClientDHParamsAsync(nonce, serverNonce, encryptedInnerData, cancellationToken: cancellationToken);
-
+                    if (setDhClient.RpcCallFailed)
+                    {
+                        return new AuthKeyFail(Errors.ServerCallFail);
+                    }
+                    
                     if (setDhClient.Response is DhGenOk dhGenOk)
                     {
                         logger.Verbose("Received dhGenOk checking nonce ({SSNonce} == {Nonce}) and serverNonce ({SSSNonce} == {SNonce})", dhGenOk.Nonce, nonce, dhGenOk.ServerNonce, serverNonce);

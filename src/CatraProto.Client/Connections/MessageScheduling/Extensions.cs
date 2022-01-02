@@ -15,11 +15,11 @@ namespace CatraProto.Client.Connections.MessageScheduling
             }
         }
         
-        public static void SetSent(this IEnumerable<MessageItem> messageItems, long? upperId = null)
+        public static void SetSent(this IEnumerable<MessageItem> messageItems, long? upperId = null, int? upperSeqno = null)
         {
             foreach (var messageItem in messageItems)
             {
-                messageItem.SetSent(upperId);
+                messageItem.SetSent(upperId, upperSeqno);
             }
         }
     }

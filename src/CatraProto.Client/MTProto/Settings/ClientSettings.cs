@@ -8,9 +8,9 @@ namespace CatraProto.Client.MTProto.Settings
         public SessionSettings SessionSettings { get; }
         public ApiSettings ApiSettings { get; }
 
-        public ClientSettings(SessionSettings sessionSettings, ApiSettings apiSettings, ConnectionSettings? connectionSetting = null)
+        public ClientSettings(SessionSettings sessionSettings, ApiSettings apiSettings, ConnectionSettings connectionSetting)
         {
-            ConnectionSettings = connectionSetting ?? new ConnectionSettings();
+            ConnectionSettings = connectionSetting;
             SessionSettings = sessionSettings;
             ApiSettings = apiSettings;
         }

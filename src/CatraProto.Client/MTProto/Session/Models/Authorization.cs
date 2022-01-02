@@ -9,7 +9,6 @@ namespace CatraProto.Client.MTProto.Session.Models
     class Authorization : SessionModel, IDisposable
     {
         private readonly AsyncSignaler _asyncSignaler = new AsyncSignaler(false);
-        
         private long _userAccessHash;
         private long _userId;
         private int _dcId;

@@ -34,33 +34,46 @@ namespace CatraProto.Client.Connections.MessageScheduling
 
         public static bool IsMessageIdTooOld(long messageId)
         {
-            var toSeconds = messageId / 4294967296;
-            return DateTimeOffset.Now.ToUnixTimeSeconds() - toSeconds >= 300;
+            return IsOlderThan(messageId, 300);
         }
 
         public static bool IsMessageIdTooNew(long messageId)
         {
-            var toSeconds = messageId / 4294967296;
-            return DateTimeOffset.Now.ToUnixTimeSeconds() - toSeconds <= -30;
+            return IsNewerThan(messageId, -30);
+        }
+        
+        public static bool IsOlderThan(long messageId, int seconds)
+        {
+            return DateTimeOffset.Now.ToUnixTimeSeconds() - GetSeconds(messageId) >= seconds;
+        }
+        
+        public static bool IsNewerThan(long messageId, int seconds)
+        {
+            return DateTimeOffset.Now.ToUnixTimeSeconds() - GetSeconds(messageId) <= seconds;
+        }
+        
+        public static int GetSeconds(long messageId)
+        {
+            return (int)(messageId / 4294967296);
         }
 
         public bool CheckMessageId(long messageId, bool fromServer = true)
         {
             if (IsMessageIdTooOld(messageId))
             {
-                _logger.Warning("Given message id {Id} is too old", messageId);
+                _logger.Warning("Message id {Id} is too old", messageId);
                 return false;
             }
 
             if (IsMessageIdTooNew(messageId))
             {
-                _logger.Warning("Given message id {Id} is too new", messageId);
+                _logger.Warning("Message id {Id} is too new", messageId);
                 return false;
             }
 
             if (messageId % 4 == 0 && fromServer)
             {
-                _logger.Warning("Given message id {Id} is divisible by 4 but it's been sent from the server", messageId);
+                _logger.Warning("Message id {Id} is divisible by 4 but it's been sent from the server", messageId);
                 return false;
             }
 

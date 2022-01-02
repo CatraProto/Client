@@ -135,10 +135,27 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
                 return true;
             }
 
-            _logger.Warning("Couldn't find message id {Id}", messageId);
+            _logger.Warning("Couldn't find message Id {Id}. Maybe it has already received a response", messageId);
             return false;
         }
 
+        public bool SetAsAcknowledged(long messageId, ExecutionInfo executionInfo)
+        {
+            _logger.Information("Setting message {Id} as acknowledged", messageId);
+            if (GetMessageCompletion(messageId, out var item, false))
+            {
+                if (item.SetAcknowledged(executionInfo))
+                {
+                    RemoveCompletion(messageId, out _);
+                    _logger.Information("Removed message {Id} because it got completed by an acknowledgment", messageId);
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+        
         public IList<MessageItem> GetUnanswered(bool includeAcknowledged)
         {
             return _messageCompletions.Where(x =>

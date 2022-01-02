@@ -41,18 +41,18 @@ namespace CatraProto.Client
 
             if (!sessionData.Authorization.IsAuthorized(out var dcId, out _, out _))
             {
-                return ClientState.NeedsLogin;
+                return ClientState.Unauthenticated;
             }
 
             if (defaultConnection.ConnectionInfo.DcId == dcId)
             {
                 _clientSession.ConnectionPool.SetAccountConnection(defaultConnection);
-                return ClientState.ReadyToUse;
+                return ClientState.Authenticated;
             }
 
             var newConnection = await _clientSession.ConnectionPool.GetConnectionByDcAsync(dcId!.Value);
             _clientSession.ConnectionPool.SetAccountConnection(newConnection);
-            return ClientState.ReadyToUse;
+            return ClientState.Authenticated;
         }
 
         public Task ForceSaveAsync()

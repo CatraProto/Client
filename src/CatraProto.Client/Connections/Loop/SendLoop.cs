@@ -24,13 +24,11 @@ namespace CatraProto.Client.Connections.Loop
     {
         private readonly MessagesHandler _messagesHandler;
         private readonly MTProtoState _mtProtoState;
-        private readonly ApiSettings _apiSettings;
         private readonly Connection _connection;
         private readonly ILogger _logger;
 
-        public SendLoop(ApiSettings apiSettings, Connection connection, ILogger logger)
+        public SendLoop(Connection connection, ILogger logger)
         {
-            _apiSettings = apiSettings;
             _connection = connection;
             _messagesHandler = _connection.MessagesHandler;
             _mtProtoState = _connection.MtProtoState;
@@ -118,23 +116,12 @@ namespace CatraProto.Client.Connections.Loop
 
                     if (_mtProtoState.KeysHandler.TemporaryAuthKey.CanBeUsed())
                     {
-                        if (messageItem.Body is InvokeWithLayer { Layer: MergedProvider.LayerId, Query: InitConnection { Query: GetConfig } })
+                        if (messageItem.Body is InvokeWithLayer { Query: InitConnection })
                         {
-                            //todo: fix seqno thingy
-                            var unanswered = _messagesHandler.MessagesTrackers.MessageCompletionTracker.GetUnanswered(false).Select(x => x.GetProtocolInfo().MessageId!.Value).ToList();
-                            if (unanswered.Count > 0)
-                            {
-                                var stateReq = new MsgsStateReq()
-                                {
-                                    MsgIds = unanswered
-                                };
-                                _messagesHandler.MessagesQueue.SendObject(stateReq, new MessageSendingOptions(true), CancellationToken.None);
-                            }
                             encryptedList.Value.Add(messageItem);
                             break;
                         }
-
-
+                        
                         if (!_connection.GetIsInited())
                         {
                             messageItem.SetToSend(wakeUpLoop: false);
@@ -236,7 +223,12 @@ namespace CatraProto.Client.Connections.Loop
                         _logger.Error("RACE CONDITION");
                         break;
                     }
-
+                    
+                    if (stoppingToken.IsCancellationRequested)
+                    {
+                        return;
+                    }
+                    
                     if (messageItem.CancellationToken.IsCancellationRequested)
                     {
                         continue;
@@ -264,7 +256,7 @@ namespace CatraProto.Client.Connections.Loop
             }
 
             var encryptedMsg = new EncryptedConnectionMessage(authKey, messageId, getSalt, sessionId, seqno, payload);
-            messages.SetSent(encryptedMsg.MessageId);
+            messages.SetSent(encryptedMsg.MessageId, seqno);
             await _connection.Protocol.Writer.SendAsync(encryptedMsg.Export());
         }
 

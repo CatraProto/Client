@@ -40,19 +40,23 @@ namespace CatraProto.Client.Connections.MessageScheduling
             _clientSession = clientSession;
         }
 
-        public async Task DispatchMessage(IConnectionMessage connectionMessage)
+        public void DispatchMessage(IConnectionMessage connectionMessage)
         {
             using var reader = new Reader(MergedProvider.Singleton, connectionMessage.Body.ToMemoryStream());
             reader.SetRpcDeserializer(_rpcDeserializer);
             if (connectionMessage.Body.Length == 4)
             {
                 var error = reader.Read<int>();
-                //It could also be an error during the key exchange, but if everything is implemented correctly it should never happen
                 _logger.Warning("Received protocol error {Error} from server", error);
                 if (error == -404)
                 {
-                    _logger.Information("Server forgot authorization key, regenerating and rescheduling messages");
-                    await _connection.RegenKey();   
+                    if (_messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(0, new RpcError { ErrorCode = -404, ErrorMessage = "Incorrect server call" }, GetExecInfo()))
+                    {
+                        return;
+                    }
+                    
+                    _logger.Information("Server forgot authorization key, regenerating...");
+                    _connection.RegenKey();   
                 }
                 return;
             }
@@ -85,23 +89,32 @@ namespace CatraProto.Client.Connections.MessageScheduling
             {
                 switch (obj)
                 {
+                    case MsgsStateInfo msgsStateInfo:
+                        _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(msgsStateInfo.ReqMsgId, msgsStateInfo, GetExecInfo());
+                        break;
                     case Ping ping:
                         HandlePing(ping);
                         break;
                     case Pong pong:
-                        HandlePong(pong);
+                        _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(pong.MsgId, pong, GetExecInfo());
                         break;
                     case MsgsAck msgsAck:
-                        _messagesHandler.MessagesTrackers.MessagesAckTracker.ServerSentAcks(msgsAck, GetExecInfo());
+                        foreach (var id in msgsAck.MsgIds)
+                        {
+                            _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetAsAcknowledged(id, GetExecInfo());
+                        }
                         break;
                     case FutureSalts futureSalts:
-                        HandleFutureSalts(futureSalts);
+                        _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(futureSalts.ReqMsgId, futureSalts, GetExecInfo());
                         break;
                     case RpcObject rpcResult:
                         HandleRpcResult(rpcResult);
                         break;
                     case MsgContainer msgContainer:
-                        HandleContainer(connectionMessage, msgContainer, reader);
+                        foreach (var message in msgContainer.Messages)
+                        {
+                            HandleObject(connectionMessage, message.Body, reader);
+                        }
                         break;
                     case UpdatesBase updatesBase:
                         break;
@@ -121,25 +134,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
                 PingId = ping.PingId
             }, new MessageSendingOptions(true), null, out _, default);
         }
-
-        private void HandlePong(Pong pong)
-        {
-            _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(pong.MsgId, pong, GetExecInfo());
-        }
-
-        private void HandleContainer(IConnectionMessage connectionMessage, MsgContainer container, Reader reader)
-        {
-            foreach (var message in container.Messages)
-            {
-                HandleObject(connectionMessage, message.Body, reader);
-            }
-        }
-
-        private void HandleFutureSalts(FutureSalts futureSalts)
-        {
-            _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(futureSalts.ReqMsgId, futureSalts, GetExecInfo());
-        }
-
+        
         private void HandleRpcResult(RpcObject rpcObject)
         {
             _logger.Information("Handling rpc message in response to id {Id}", rpcObject.MessageId);

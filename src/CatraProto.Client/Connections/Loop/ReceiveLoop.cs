@@ -60,7 +60,7 @@ namespace CatraProto.Client.Connections.Loop
 
                     if (message.Length == 4)
                     {
-                        await _messagesDispatcher.DispatchMessage(new UnencryptedConnectionMessage(message));
+                        _messagesDispatcher.DispatchMessage(new UnencryptedConnectionMessage(message));
                         continue;
                     }
 
@@ -84,7 +84,7 @@ namespace CatraProto.Client.Connections.Loop
                         }
                     }
 
-                    await _messagesDispatcher.DispatchMessage(imported);
+                    _messagesDispatcher.DispatchMessage(imported);
                 }
                 catch (OperationCanceledException e) when (e.CancellationToken == cancellationToken)
                 {

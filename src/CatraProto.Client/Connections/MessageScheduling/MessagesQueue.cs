@@ -60,7 +60,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
             
             if (wakeUpLoop)
             {
-                _messagesHandler.Connection.WakeUpLoop();
+                _messagesHandler.Connection.SignalNewMessage();
             }
         }
         
