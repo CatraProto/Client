@@ -8,12 +8,12 @@ using System.Linq;
 
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class MsgsStateReq : IMethod
+	public partial class MsgResendAnsReq : IMethod
 	{
 
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => -630588590; }
+        public static int StaticConstructorId { get => -2045723925; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
@@ -47,7 +47,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 		
 		public override string ToString()
 		{
-		    return "msgs_state_req";
+		    return "msg_resend_ans_req";
 		}
 	}
 }

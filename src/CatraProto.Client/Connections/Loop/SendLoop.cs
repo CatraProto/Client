@@ -82,7 +82,7 @@ namespace CatraProto.Client.Connections.Loop
         private async Task EncryptedTickAsync(CancellationToken stoppingToken)
         {
             var encryptedList = new Lazy<List<MessageItem>>(() => new List<MessageItem>(1));
-            var getAcks = _mtProtoState.Connection.MessagesHandler.MessagesTrackers.MessagesAckTracker.GetAcknowledgements();
+            var getAcks = _mtProtoState.Connection.MessagesHandler.MessagesTrackers.AcknowledgementHandler.GetAckMessages();
 
             //Can't use Concat here because Lazy<T> doesn't allow setting the Value property
             foreach (var x in getAcks)
@@ -256,7 +256,7 @@ namespace CatraProto.Client.Connections.Loop
             }
 
             var encryptedMsg = new EncryptedConnectionMessage(authKey, messageId, getSalt, sessionId, seqno, payload);
-            messages.SetSent(encryptedMsg.MessageId, seqno);
+            messages.SetSent(_connection.MessagesDispatcher.GetExecInfo(), encryptedMsg.MessageId, seqno);
             await _connection.Protocol.Writer.SendAsync(encryptedMsg.Export());
         }
 
@@ -267,7 +267,7 @@ namespace CatraProto.Client.Connections.Loop
                 var messageId = _connection.MtProtoState.MessageIdsHandler.ComputeMessageId();
                 var unencryptedMessage = new UnencryptedConnectionMessage(messageId, serializedBody);
                 messageItem.SetProtocolInfo(0, 0);
-                messageItem.SetSent();
+                messageItem.SetSent(_connection.MessagesDispatcher.GetExecInfo());
                 var unencryptedBody = unencryptedMessage.Export();
                 await _connection.Protocol.Writer.SendAsync(unencryptedBody, token);
                 _logger.Verbose("Sent unencrypted message to {Connection}", _connection.ConnectionInfo);

@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using CatraProto.Client.Connections.MessageScheduling;
+using CatraProto.Client.Connections.MessageScheduling.Enums;
 using CatraProto.Client.Connections.MessageScheduling.Items;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL.Interfaces;
@@ -55,10 +57,11 @@ namespace CatraProto.Client.MTProto.Auth
                         {
                             _logger.Information("Generated {Count} acknowledgments", result.Count);
                         }
+
                         return result;
                     }
-                    
-                    result.Add(new MessageItem(ack, new MessageSendingOptions(true), new MessageStatus(new MessageCompletion(null, null, null)), _logger, default));
+
+                    result.Add(new MessageItem(ack, new MessageSendingOptions(true, awaiterType: AwaiterType.OnSent), new MessageStatus(new MessageCompletion(null, null, null)), _logger, default));
                 }
             }
         }
@@ -69,6 +72,17 @@ namespace CatraProto.Client.MTProto.Auth
             {
                 _ackIds.Add(messageId);
             }
+        }
+
+        public void SendAcknowledgment(long messageId, IObject messageBody)
+        {
+            if (!IsContentRelated(messageBody))
+            {
+                _logger.Verbose("Not acknowledging message {Message} because it's not content related", messageBody);
+                return;
+            }
+
+            SetAsNeedsAck(messageId);
         }
 
         public bool SetAsReceived(long messageId)

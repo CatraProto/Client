@@ -86,7 +86,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
 
             if (connectionMessage.AuthKeyId != 0)
             {
-                _messagesHandler.MessagesTrackers.MessagesAckTracker.AcknowledgeNext(deserialized, connectionMessage.MessageId);
+                _messagesHandler.MessagesTrackers.AcknowledgementHandler.SendAcknowledgment(connectionMessage.MessageId, deserialized);
             }
 
             return true;

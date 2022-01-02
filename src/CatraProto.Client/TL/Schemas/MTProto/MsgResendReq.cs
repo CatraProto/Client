@@ -5,38 +5,46 @@ using CatraProto.TL.Interfaces;
 using System.Linq;
 
 #nullable disable
+
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class MsgResendReq : CatraProto.Client.TL.Schemas.MTProto.MsgResendReqBase
+	public partial class MsgResendReq : IMethod
 	{
 
 
+        [Newtonsoft.Json.JsonIgnore]
         public static int StaticConstructorId { get => 2105940488; }
         [Newtonsoft.Json.JsonIgnore]
         public int ConstructorId { get => StaticConstructorId; }
         
-[Newtonsoft.Json.JsonProperty("msg_ids")]
-		public override IList<long> MsgIds { get; set; }
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.MsgsStateInfoBase);
 
-        
-		public override void UpdateFlags() 
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[Newtonsoft.Json.JsonProperty("msg_ids")]
+		public IList<long> MsgIds { get; set; }
+
+
+		public void UpdateFlags() 
 		{
 
 		}
 
-		public override void Serialize(Writer writer)
+		public void Serialize(Writer writer)
 		{
-		    if(ConstructorId != 0) writer.Write(ConstructorId);
+            if(ConstructorId != 0) writer.Write(ConstructorId);
 			writer.Write(MsgIds);
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public void Deserialize(Reader reader)
 		{
 			MsgIds = reader.ReadVector<long>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "msg_resend_req";

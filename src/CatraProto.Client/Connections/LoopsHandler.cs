@@ -16,6 +16,7 @@ namespace CatraProto.Client.Connections
         private (SendLoop? Loop, ResumableLoopController? Controller) _writeLoop;
         private (KeyGenerator? Loop, PeriodicLoopController? Controller) _keyLoop;
         private (PingLoop? Loop, PeriodicLoopController? Controller) _pingLoop;
+        private (AckHandlerLoop? Loop, PeriodicLoopController? Controller) _ackLoop;
         private readonly object _mutex = new object();
         private readonly Connection _connection;
         private readonly ClientSettings _clientSettings;
@@ -31,9 +32,14 @@ namespace CatraProto.Client.Connections
         public async Task StartLoopsAsync()
         {
             _logger.Information("Starting loops for {Connection}", _connection.ConnectionInfo);
-            Task wStart, wSus, rStart, kStart, pStart;
+            Task wStart, wSus, rStart, kStart, pStart, aStart;
             lock (_mutex)
             {
+                _ackLoop.Loop ??= new AckHandlerLoop(_connection, _logger);
+                _ackLoop.Controller = new PeriodicLoopController(TimeSpan.FromSeconds(60), _logger);
+                _ackLoop.Controller.BindTo(_ackLoop.Loop);
+                aStart = _ackLoop.Controller.SignalAsync(ResumableSignalState.Start);
+                
                 _keyLoop.Loop ??= new KeyGenerator(_connection.MtProtoState.KeysHandler.TemporaryAuthKey, _connection, _logger);
                 _keyLoop.Controller = new PeriodicLoopController(TimeSpan.FromSeconds(_clientSettings.ConnectionSettings.PfsKeyDuration), _logger);
                 _keyLoop.Controller.BindTo(_keyLoop.Loop);
@@ -57,21 +63,25 @@ namespace CatraProto.Client.Connections
                 pStart = _pingLoop.Controller.SignalAsync(ResumableSignalState.Start);
             }
             
-            await Task.WhenAll(wStart, wSus, rStart, kStart, pStart);
+            await Task.WhenAll(wStart, wSus, rStart, kStart, pStart, aStart);
             _logger.Information("All loops for {Connection} started", _connection.ConnectionInfo);
         }
         
         public async Task StopLoopsAsync()
         {
             _logger.Information("Stopping loops for {Connection}", _connection.ConnectionInfo);
-            Task wStop, rStop, kStop, pStop;
+            Task wStop, rStop, kStop, pStop, aStop;
             lock (_mutex)
             {
                 wStop = _writeLoop.Controller is null ? Task.CompletedTask : _writeLoop.Controller.SignalAsync(ResumableSignalState.Stop);
                 rStop = _receiveLoop.Controller is null ? Task.CompletedTask : _receiveLoop.Controller.SignalAsync(GenericSignalState.Stop);
                 kStop = _keyLoop.Controller is null ? Task.CompletedTask : _keyLoop.Controller.SignalAsync(ResumableSignalState.Stop);
                 pStop = _pingLoop.Controller is null ? Task.CompletedTask : _pingLoop.Controller.SignalAsync(ResumableSignalState.Stop);
+                aStop = _ackLoop.Controller is null ? Task.CompletedTask : _ackLoop.Controller.SignalAsync(ResumableSignalState.Stop);
 
+                _ackLoop.Controller = null;
+                _ackLoop.Loop = null;
+                
                 _writeLoop.Loop = null;
                 _writeLoop.Controller = null;
                 
@@ -85,7 +95,7 @@ namespace CatraProto.Client.Connections
                 _pingLoop.Controller = null;
             }
             
-            await Task.WhenAll(wStop, rStop, kStop, pStop);
+            await Task.WhenAll(wStop, rStop, kStop, pStop, aStop);
             _logger.Information("All loops for {Connection} stopped", _connection.ConnectionInfo);
         }
         

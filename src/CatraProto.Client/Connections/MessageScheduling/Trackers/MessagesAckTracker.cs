@@ -23,31 +23,6 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
             _toServerAcksHandler = new AcknowledgementHandler(logger);
             _fromClientAcksHandler = new AcknowledgementHandler(logger);
         }
-        
-        public void TrackMessage(MessageItem messageItem)
-        {
-            var messageBody = messageItem.Body;
-            var messageId = messageItem.GetProtocolInfo().MessageId;
-            if (!messageItem.MessageSendingOptions.IsEncrypted)
-            {
-                _logger.Verbose("Not keeping track of message {Message} because it's unencrypted", messageBody);
-                return;
-            }
-
-            if (!AcknowledgementHandler.IsContentRelated(messageBody))
-            {
-                _logger.Verbose("Not keeping track of message {Message} because it's not content related", messageBody);
-                return;
-            }
-
-            if (!messageId.HasValue)
-            {
-                throw new InvalidOperationException("Can't track a message without messageId");
-            }
-
-            _fromClientAcksHandler.SetAsNeedsAck(messageId.Value);
-        }
-
         public List<MessageItem> GetAcknowledgements()
         {
             return _toServerAcksHandler.GetAckMessages();

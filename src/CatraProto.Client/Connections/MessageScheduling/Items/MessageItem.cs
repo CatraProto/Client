@@ -4,6 +4,7 @@ using CatraProto.Client.Connections.MessageScheduling.Enums;
 using CatraProto.Client.MTProto.Rpc;
 using CatraProto.Client.TL;
 using CatraProto.Client.TL.Schemas.CloudChats;
+using CatraProto.Client.TL.Schemas.CloudChats.Messages;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL.Interfaces;
 using Serilog;
@@ -43,7 +44,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
             }
         }
 
-        public void SetSent(long? upperId = null, int? upperSeqno = null)
+        public void SetSent(ExecutionInfo executionInfo, long? upperId = null, int? upperSeqno = null)
         {
             lock (_mutex)
             {
@@ -69,8 +70,14 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
                 }
 
                 _messageStatus.MessageState = MessageState.MessageSent;
-                _messagesHandler?.MessagesTrackers.MessageCompletionTracker.AddCompletion(messageId.Value, this);
-                _messagesHandler?.MessagesTrackers.MessagesAckTracker.TrackMessage(this);
+                if (MessageSendingOptions.AwaiterType == AwaiterType.OnSent)
+                {
+                    SetCompleted(null, executionInfo);
+                }
+                else
+                {
+                    _messagesHandler?.MessagesTrackers.MessageCompletionTracker.AddCompletion(messageId.Value, this);
+                }
             }
         }
 
@@ -101,7 +108,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
                     _logger.Information("MsgsAck got deleted, putting msgs back into acknowledge list");
                     foreach (var msg in msgsAck.MsgIds)
                     {
-                        _messagesHandler.MessagesTrackers.MessagesAckTracker.AcknowledgeNext(msg);
+                        _messagesHandler.MessagesTrackers.AcknowledgementHandler.SetAsNeedsAck(msg);
                     }
                 }
                 else
@@ -112,11 +119,11 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
             }
         }
 
-        public void SetReplied(object? response, ExecutionInfo executionInfo)
+        public void SetCompleted(object? response, ExecutionInfo executionInfo)
         {
             lock (_mutex)
             {
-                _messageStatus.MessageState = MessageState.Replied;
+                _messageStatus.MessageState = MessageState.Completed;
                 if (response != null)
                 {
                     _messageStatus.MessageCompletion.RpcMessage?.SetResponse(response, executionInfo);
@@ -158,11 +165,14 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
         {
             lock (_mutex)
             {
-                _messageStatus.MessageState = MessageState.Acknowledged;
-                if (MessageSendingOptions.AwaiterType == AwaiterType.OnAcknowledgement)
+                if (_messageStatus.MessageState < MessageState.Acknowledged)
                 {
-                    SetReplied(null, executionInfo);
-                    return true;
+                    _messageStatus.MessageState = MessageState.Acknowledged;
+                    if (MessageSendingOptions.AwaiterType == AwaiterType.OnAcknowledgement)
+                    {
+                        SetCompleted(null, executionInfo);
+                        return true;
+                    }
                 }
 
                 return false;

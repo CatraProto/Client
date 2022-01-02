@@ -7,9 +7,6 @@ namespace CatraProto.Client.TL.Schemas.MTProto
     public abstract class MsgsStateReqBase : IObject
     {
 
-[Newtonsoft.Json.JsonProperty("msg_ids")]
-		public abstract IList<long> MsgIds { get; set; }
-
         public abstract void UpdateFlags();
         public abstract void Deserialize(Reader reader);
         public abstract void Serialize(Writer writer);

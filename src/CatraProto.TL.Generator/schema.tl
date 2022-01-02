@@ -1743,8 +1743,9 @@ msgs_ack#62d6b459 msg_ids:Vector<long> = MsgsAck;
 bad_msg_notification#a7eff811 bad_msg_id:long bad_msg_seqno:int error_code:int = BadMsgNotification;
 bad_server_salt#edab447b bad_msg_id:long bad_msg_seqno:int error_code:int new_server_salt:long = BadMsgNotification;
 
-msg_resend_req#7d861a08 msg_ids:Vector<long> = MsgResendReq;
+//msg_resend_req#7d861a08 msg_ids:Vector<long> = MsgResendReq;
 //msgs_state_req#da69fb52 msg_ids:Vector<long> = MsgsStateReq;
+//msg_resend_ans_req#8610baeb msg_ids:Vector<long> = MsgResendReq;
 //moved to functions
 msgs_state_info#04deb57d req_msg_id:long info:bytes = MsgsStateInfo;
 msgs_all_info#8cc0d131 msg_ids:Vector<long> info:bytes = MsgsAllInfo;
@@ -1766,5 +1767,9 @@ get_future_salts#b921bd04 num:int = FutureSalts;
 ping#7abe77ec ping_id:long = Pong;
 ping_delay_disconnect#f3427b8c ping_id:long disconnect_delay:int = Pong;
 destroy_session#e7512126 session_id:long = DestroySessionRes;
-msgs_state_req#da69fb52 msg_ids:Vector<long> = MsgsStateInfo;
 http_wait#9299359f max_delay:int wait_after:int max_wait:int = HttpWait;
+
+
+msgs_state_req#da69fb52 msg_ids:Vector<long> = MsgsStateInfo;
+msg_resend_req#7d861a08 msg_ids:Vector<long> = MsgsStateInfo;
+msg_resend_ans_req#8610baeb msg_ids:Vector<long> = MsgsStateInfo;

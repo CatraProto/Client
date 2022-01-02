@@ -155,6 +155,22 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource!;
 return rpcResponse;
 }
+public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.HttpWaitBase>> HttpWaitAsync(int maxDelay, int waitAfter, int maxWait, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+		{
+
+var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.MTProto.HttpWaitBase>(
+);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.MTProto.HttpWait(){
+MaxDelay = maxDelay,
+WaitAfter = waitAfter,
+MaxWait = maxWait,
+};
+
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource!;
+return rpcResponse;
+}
 public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.MsgsStateInfoBase>> MsgsStateReqAsync(IList<long> msgIds, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
@@ -169,16 +185,28 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource!;
 return rpcResponse;
 }
-public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.HttpWaitBase>> HttpWaitAsync(int maxDelay, int waitAfter, int maxWait, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.MsgsStateInfoBase>> MsgResendReqAsync(IList<long> msgIds, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.MTProto.HttpWaitBase>(
+var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.MTProto.MsgsStateInfoBase>(
 );
 messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
-var methodBody = new CatraProto.Client.TL.Schemas.MTProto.HttpWait(){
-MaxDelay = maxDelay,
-WaitAfter = waitAfter,
-MaxWait = maxWait,
+var methodBody = new CatraProto.Client.TL.Schemas.MTProto.MsgResendReq(){
+MsgIds = msgIds,
+};
+
+_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+await taskCompletionSource!;
+return rpcResponse;
+}
+public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.MsgsStateInfoBase>> MsgResendAnsReqAsync(IList<long> msgIds, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+		{
+
+var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.MTProto.MsgsStateInfoBase>(
+);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+var methodBody = new CatraProto.Client.TL.Schemas.MTProto.MsgResendAnsReq(){
+MsgIds = msgIds,
 };
 
 _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);

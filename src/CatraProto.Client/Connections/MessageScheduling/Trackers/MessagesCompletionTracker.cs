@@ -5,6 +5,7 @@ using System.Linq;
 using CatraProto.Client.Connections.MessageScheduling.Enums;
 using CatraProto.Client.Connections.MessageScheduling.Items;
 using CatraProto.Client.MTProto.Rpc;
+using CatraProto.Client.TL.Schemas.CloudChats.Messages;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL.Interfaces;
 using Serilog;
@@ -98,14 +99,14 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
 
                     var completion = _unencryptedCompletions[completionIndex];
                     _unencryptedCompletions.RemoveAt(completionIndex);
-                    completion.SetReplied(response, executionInfo);
+                    completion.SetCompleted(response, executionInfo);
                     return true;
                 }
             }
 
             if (GetMessageCompletion(messageId, out var messageCompletion))
             {
-                messageCompletion.SetReplied(response, executionInfo);
+                messageCompletion.SetCompleted(response, executionInfo);
             }
 
             return true;

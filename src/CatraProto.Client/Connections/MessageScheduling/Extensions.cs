@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections.MessageScheduling.Items;
+using CatraProto.Client.MTProto.Rpc;
 using Newtonsoft.Json;
 
 namespace CatraProto.Client.Connections.MessageScheduling
@@ -15,11 +16,11 @@ namespace CatraProto.Client.Connections.MessageScheduling
             }
         }
         
-        public static void SetSent(this IEnumerable<MessageItem> messageItems, long? upperId = null, int? upperSeqno = null)
+        public static void SetSent(this IEnumerable<MessageItem> messageItems, ExecutionInfo executionInfo, long? upperId = null, int? upperSeqno = null)
         {
             foreach (var messageItem in messageItems)
             {
-                messageItem.SetSent(upperId, upperSeqno);
+                messageItem.SetSent(executionInfo, upperId, upperSeqno);
             }
         }
     }

@@ -161,7 +161,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
             _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(rpcObject.MessageId, rpcObject.Response, GetExecInfo());
         }
 
-        private ExecutionInfo GetExecInfo()
+        public ExecutionInfo GetExecInfo()
         {
             return new ExecutionInfo(_mtProtoState.Connection.ConnectionInfo);
         }
