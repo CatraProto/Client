@@ -57,7 +57,7 @@ namespace CatraProto.Client
 
             var newConnection = await _clientSession.ConnectionPool.GetConnectionByDcAsync(dcId!.Value);
             _clientSession.ConnectionPool.SetAccountConnection(newConnection);
-            _ = Task.Run(async() => await _updatesHandler.FetchLostUpdatesAsync());
+            Task.Run(() => _updatesHandler.FetchLostUpdatesAsync());
             return ClientState.Authenticated;
         }
 
