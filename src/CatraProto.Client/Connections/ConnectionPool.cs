@@ -23,7 +23,6 @@ namespace CatraProto.Client.Connections
             _logger = logger.ForContext<ConnectionPool>();
         }
 
-
         public async ValueTask<Connection> GetConnectionByDcAsync(int dc)
         {
             if (GetConnection(dc, out var connection))
@@ -112,9 +111,11 @@ namespace CatraProto.Client.Connections
             {
                 if (_accountConnection != null)
                 {
+                    connection.MessagesDispatcher.UpdatesHandler = null;
                     _accountConnection.ConnectionInfo.Main = false;
                 }
 
+                connection.MessagesDispatcher.UpdatesHandler = _clientSession.UpdatesHandler;
                 connection.ConnectionInfo.Main = true;
                 _accountConnection = connection;
             }

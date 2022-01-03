@@ -117,6 +117,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
                         }
                         break;
                     case UpdatesBase updatesBase:
+                        UpdatesHandler?.OnNewUpdates(updatesBase);
                         break;
                 }
             }

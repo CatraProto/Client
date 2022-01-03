@@ -107,7 +107,7 @@ namespace CatraProto.Client.Connections.Loop
 
                             if (FlagsHelper.IsFlagSet(state, 3) || FlagsHelper.IsFlagSet(state, 4))
                             {
-                                _logger.Information("Received state {State} for message {Message}, setting as acknowledged", state, originalMessage.Item1);
+                                _logger.Information("Received state {State} for message {Message}, setting as acknowledged and waiting for message to arrive", state, originalMessage.Item1);
                                 originalMessage.Item2.SetAcknowledged(new ExecutionInfo(_connection.ConnectionInfo));
                             }
 

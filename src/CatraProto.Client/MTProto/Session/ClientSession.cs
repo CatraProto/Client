@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections;
 using CatraProto.Client.MTProto.Settings;
+using CatraProto.Client.Updates;
 using Serilog;
 
 namespace CatraProto.Client.MTProto.Session
@@ -18,7 +19,8 @@ namespace CatraProto.Client.MTProto.Session
         public ClientSettings Settings { get; }
         public SessionManager SessionManager { get; }
         internal ConnectionPool ConnectionPool { get; }
-
+        internal UpdatesHandler? UpdatesHandler { get; set; }
+        
         public ClientSession(ClientSettings settings, ILogger logger)
         {
             Settings = settings;

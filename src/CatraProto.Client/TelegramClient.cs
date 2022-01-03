@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using CatraProto.Client.Flows.LoginFlow;
 using CatraProto.Client.MTProto.Session;
 using CatraProto.Client.MTProto.Settings;
+using CatraProto.Client.Updates;
+using CatraProto.Client.Updates.Interfaces;
 using Serilog;
 using Serilog.Core;
 
@@ -24,12 +26,15 @@ namespace CatraProto.Client
             }
         }
 
+        private readonly UpdatesHandler _updatesHandler;
         private readonly ClientSession _clientSession;
         private readonly ILogger _logger;
         
-        public TelegramClient(ClientSettings clientSettings, ILogger logger)
+        public TelegramClient(IEventHandler eventHandler, ClientSettings clientSettings, ILogger logger)
         {
             _clientSession = new ClientSession(clientSettings, logger);
+            _updatesHandler = new UpdatesHandler(eventHandler, _clientSession, this, logger);
+            _clientSession.UpdatesHandler = _updatesHandler;
             _logger = _clientSession.Logger.ForContext<TelegramClient>();
         }
 
@@ -52,6 +57,7 @@ namespace CatraProto.Client
 
             var newConnection = await _clientSession.ConnectionPool.GetConnectionByDcAsync(dcId!.Value);
             _clientSession.ConnectionPool.SetAccountConnection(newConnection);
+            Task.Run(() => _updatesHandler.FetchLostUpdatesAsync());
             return ClientState.Authenticated;
         }
 
