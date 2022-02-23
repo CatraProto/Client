@@ -1,0 +1,70 @@
+using CatraProto.TL;
+
+#nullable disable
+namespace CatraProto.Client.TL.Schemas.CloudChats
+{
+    public partial class InputPhotoFileLocation : CatraProto.Client.TL.Schemas.CloudChats.InputFileLocationBase
+    {
+        public static int StaticConstructorId
+        {
+            get => 1075322878;
+        }
+
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
+
+        [Newtonsoft.Json.JsonProperty("id")] public long Id { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("access_hash")]
+        public long AccessHash { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("file_reference")]
+        public byte[] FileReference { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("thumb_size")]
+        public string ThumbSize { get; set; }
+
+
+    #nullable enable
+        public InputPhotoFileLocation(long id, long accessHash, byte[] fileReference, string thumbSize)
+        {
+            Id = id;
+            AccessHash = accessHash;
+            FileReference = fileReference;
+            ThumbSize = thumbSize;
+        }
+    #nullable disable
+        internal InputPhotoFileLocation()
+        {
+        }
+
+        public override void UpdateFlags()
+        {
+        }
+
+        public override void Serialize(Writer writer)
+        {
+            writer.Write(ConstructorId);
+            writer.Write(Id);
+            writer.Write(AccessHash);
+            writer.Write(FileReference);
+            writer.Write(ThumbSize);
+        }
+
+        public override void Deserialize(Reader reader)
+        {
+            Id = reader.Read<long>();
+            AccessHash = reader.Read<long>();
+            FileReference = reader.Read<byte[]>();
+            ThumbSize = reader.Read<string>();
+        }
+
+        public override string ToString()
+        {
+            return "inputPhotoFileLocation";
+        }
+    }
+}

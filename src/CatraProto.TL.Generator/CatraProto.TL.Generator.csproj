@@ -1,0 +1,58 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <LangVersion>9</LangVersion>
+        <TargetFramework>net5.0</TargetFramework>
+        <OutputType>Exe</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="CatraProto.TL.Generator.UnitTests" />
+    </ItemGroup>
+  
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <Optimize>false</Optimize>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Remove="Constructor.template" />
+        <None Remove="Dictionary.template" />
+        <None Remove="Method.template" />
+        <None Remove="schema.tl" />
+        <None Remove="Templates\Constructor.template" />
+        <None Remove="TypeTemplate.template" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="Templates\Dictionary.template">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Templates\Method.template">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Templates\Abstract.template">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Templates\Request.template"/>
+        <Content Include="Templates\Request.template">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Templates\UpdatesTools.template"/>
+        <Content Include="Templates\UpdatesTools.template">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="Templates\Constructor.template">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="schema.tl">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+</Project>

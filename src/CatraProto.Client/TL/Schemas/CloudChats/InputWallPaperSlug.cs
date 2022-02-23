@@ -1,0 +1,52 @@
+using CatraProto.TL;
+
+#nullable disable
+namespace CatraProto.Client.TL.Schemas.CloudChats
+{
+    public partial class InputWallPaperSlug : CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase
+    {
+        public static int StaticConstructorId
+        {
+            get => 1913199744;
+        }
+
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
+
+        [Newtonsoft.Json.JsonProperty("slug")] public string Slug { get; set; }
+
+
+    #nullable enable
+        public InputWallPaperSlug(string slug)
+        {
+            Slug = slug;
+        }
+    #nullable disable
+        internal InputWallPaperSlug()
+        {
+        }
+
+        public override void UpdateFlags()
+        {
+        }
+
+        public override void Serialize(Writer writer)
+        {
+            writer.Write(ConstructorId);
+            writer.Write(Slug);
+        }
+
+        public override void Deserialize(Reader reader)
+        {
+            Slug = reader.Read<string>();
+        }
+
+        public override string ToString()
+        {
+            return "inputWallPaperSlug";
+        }
+    }
+}

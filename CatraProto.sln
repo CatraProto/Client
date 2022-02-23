@@ -1,0 +1,86 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30204.135
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatraProto.Client", "src\CatraProto.Client\CatraProto.Client.csproj", "{EBC312CD-67E7-43EC-BC0B-8370A4D5EDE8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatraProto.TL.Generator", "src\CatraProto.TL.Generator\CatraProto.TL.Generator.csproj", "{9BD2C3D0-C848-4E38-8CE3-DFD159F6526B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E7C1D1C4-0B22-44FF-B916-AED5F1E6AB11}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatraProto.TL.Generator.UnitTests", "tests\CatraProto.TL.Generator.UnitTests\CatraProto.TL.Generator.UnitTests.csproj", "{8CA5C597-ABFF-4C09-8B56-3BA35693519C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatraProto.TL", "src\CatraProto.TL\CatraProto.TL.csproj", "{6D86A5A3-E55E-4EFD-856B-C85C3A4F0458}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A9504A16-031C-45B4-9893-5EA88B5B61F5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{32061930-7649-4670-B1EB-AFE850FB8EDD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatraProto.TL.UnitTests", "tests\CatraProto.TL.UnitTests\CatraProto.TL.UnitTests.csproj", "{6C0762E4-7ADB-45C8-9E96-3CE3EC97A588}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatraProto.Client.UnitTests", "tests\CatraProto.Client.UnitTests\CatraProto.Client.UnitTests.csproj", "{4D17C95F-A94E-4760-94F0-E8AF40E844F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatraProto.Client.Benchmark", "tests\CatraProto.Client.Benchmark\CatraProto.Client.Benchmark.csproj", "{28F2F0D8-E2F9-49F0-B0DA-E7C22CFF5A85}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatraProto.Start", "src\CatraProto.Start\CatraProto.Start.csproj", "{9CECB64F-379A-4136-8206-37A73C279CB6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EBC312CD-67E7-43EC-BC0B-8370A4D5EDE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBC312CD-67E7-43EC-BC0B-8370A4D5EDE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBC312CD-67E7-43EC-BC0B-8370A4D5EDE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBC312CD-67E7-43EC-BC0B-8370A4D5EDE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BD2C3D0-C848-4E38-8CE3-DFD159F6526B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BD2C3D0-C848-4E38-8CE3-DFD159F6526B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BD2C3D0-C848-4E38-8CE3-DFD159F6526B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BD2C3D0-C848-4E38-8CE3-DFD159F6526B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CA5C597-ABFF-4C09-8B56-3BA35693519C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CA5C597-ABFF-4C09-8B56-3BA35693519C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CA5C597-ABFF-4C09-8B56-3BA35693519C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CA5C597-ABFF-4C09-8B56-3BA35693519C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D86A5A3-E55E-4EFD-856B-C85C3A4F0458}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D86A5A3-E55E-4EFD-856B-C85C3A4F0458}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D86A5A3-E55E-4EFD-856B-C85C3A4F0458}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D86A5A3-E55E-4EFD-856B-C85C3A4F0458}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C0762E4-7ADB-45C8-9E96-3CE3EC97A588}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C0762E4-7ADB-45C8-9E96-3CE3EC97A588}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C0762E4-7ADB-45C8-9E96-3CE3EC97A588}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C0762E4-7ADB-45C8-9E96-3CE3EC97A588}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D17C95F-A94E-4760-94F0-E8AF40E844F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D17C95F-A94E-4760-94F0-E8AF40E844F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D17C95F-A94E-4760-94F0-E8AF40E844F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D17C95F-A94E-4760-94F0-E8AF40E844F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28F2F0D8-E2F9-49F0-B0DA-E7C22CFF5A85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28F2F0D8-E2F9-49F0-B0DA-E7C22CFF5A85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28F2F0D8-E2F9-49F0-B0DA-E7C22CFF5A85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28F2F0D8-E2F9-49F0-B0DA-E7C22CFF5A85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CECB64F-379A-4136-8206-37A73C279CB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CECB64F-379A-4136-8206-37A73C279CB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CECB64F-379A-4136-8206-37A73C279CB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CECB64F-379A-4136-8206-37A73C279CB6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1380EEF1-3429-4ABE-A568-98F2F82D4421}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9BD2C3D0-C848-4E38-8CE3-DFD159F6526B} = {A9504A16-031C-45B4-9893-5EA88B5B61F5}
+		{6D86A5A3-E55E-4EFD-856B-C85C3A4F0458} = {A9504A16-031C-45B4-9893-5EA88B5B61F5}
+		{EBC312CD-67E7-43EC-BC0B-8370A4D5EDE8} = {A9504A16-031C-45B4-9893-5EA88B5B61F5}
+		{8CA5C597-ABFF-4C09-8B56-3BA35693519C} = {32061930-7649-4670-B1EB-AFE850FB8EDD}
+		{6C0762E4-7ADB-45C8-9E96-3CE3EC97A588} = {32061930-7649-4670-B1EB-AFE850FB8EDD}
+		{4D17C95F-A94E-4760-94F0-E8AF40E844F1} = {32061930-7649-4670-B1EB-AFE850FB8EDD}
+		{28F2F0D8-E2F9-49F0-B0DA-E7C22CFF5A85} = {32061930-7649-4670-B1EB-AFE850FB8EDD}
+		{9CECB64F-379A-4136-8206-37A73C279CB6} = {A9504A16-031C-45B4-9893-5EA88B5B61F5}
+	EndGlobalSection
+EndGlobal

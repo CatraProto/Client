@@ -1,0 +1,40 @@
+//auto-generated
+namespace CatraProto.Client.Updates
+{
+    static partial class UpdatesTools
+    {
+        public static bool TryExtractPeerId(CatraProto.TL.Interfaces.IObject update, out CatraProto.Client.MTProto.PeerId? peerId)
+        {
+            switch(update)
+            {
+                ^PeerConditions^
+            }
+            
+            peerId = null;
+            return false;
+        }        
+        
+        public static bool TryExtractQts(CatraProto.TL.Interfaces.IObject update, out int? qts)
+        {
+            switch(update)
+            {
+                ^QtsConditions^
+            }
+            
+            qts = null;
+            return false;
+        }
+        
+        public static bool TryExtractPts(CatraProto.TL.Interfaces.IObject update, out int? pts, out int? ptsCount)
+        {
+            switch(update)
+            {
+                ^PtsConditions^
+            }
+            
+            pts = null;
+            ptsCount = null;
+            return false;
+        }
+    }
+}

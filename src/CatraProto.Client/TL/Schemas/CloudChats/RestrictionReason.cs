@@ -1,0 +1,64 @@
+using CatraProto.TL;
+
+#nullable disable
+namespace CatraProto.Client.TL.Schemas.CloudChats
+{
+    public partial class RestrictionReason : CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase
+    {
+        public static int StaticConstructorId
+        {
+            get => -797791052;
+        }
+
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
+
+        [Newtonsoft.Json.JsonProperty("platform")]
+        public sealed override string Platform { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("reason")]
+        public sealed override string Reason { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("text")] public sealed override string Text { get; set; }
+
+
+    #nullable enable
+        public RestrictionReason(string platform, string reason, string text)
+        {
+            Platform = platform;
+            Reason = reason;
+            Text = text;
+        }
+    #nullable disable
+        internal RestrictionReason()
+        {
+        }
+
+        public override void UpdateFlags()
+        {
+        }
+
+        public override void Serialize(Writer writer)
+        {
+            writer.Write(ConstructorId);
+            writer.Write(Platform);
+            writer.Write(Reason);
+            writer.Write(Text);
+        }
+
+        public override void Deserialize(Reader reader)
+        {
+            Platform = reader.Read<string>();
+            Reason = reader.Read<string>();
+            Text = reader.Read<string>();
+        }
+
+        public override string ToString()
+        {
+            return "restrictionReason";
+        }
+    }
+}

@@ -1,0 +1,58 @@
+using CatraProto.TL;
+
+#nullable disable
+namespace CatraProto.Client.TL.Schemas.CloudChats
+{
+    public partial class UpdateShort : CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase
+    {
+        public static int StaticConstructorId
+        {
+            get => 2027216577;
+        }
+
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId
+        {
+            get => StaticConstructorId;
+        }
+
+        [Newtonsoft.Json.JsonProperty("update")]
+        public CatraProto.Client.TL.Schemas.CloudChats.UpdateBase Update { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("date")] public int Date { get; set; }
+
+
+    #nullable enable
+        public UpdateShort(CatraProto.Client.TL.Schemas.CloudChats.UpdateBase update, int date)
+        {
+            Update = update;
+            Date = date;
+        }
+    #nullable disable
+        internal UpdateShort()
+        {
+        }
+
+        public override void UpdateFlags()
+        {
+        }
+
+        public override void Serialize(Writer writer)
+        {
+            writer.Write(ConstructorId);
+            writer.Write(Update);
+            writer.Write(Date);
+        }
+
+        public override void Deserialize(Reader reader)
+        {
+            Update = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.UpdateBase>();
+            Date = reader.Read<int>();
+        }
+
+        public override string ToString()
+        {
+            return "updateShort";
+        }
+    }
+}

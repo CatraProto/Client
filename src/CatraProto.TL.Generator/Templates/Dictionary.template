@@ -1,0 +1,33 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+
+namespace ^Namespace^
+{
+    partial class ^ProviderName^ : ObjectProvider
+    {
+        public override IObject? ResolveConstructorId(int constructorId)
+        {
+        	if (InternalResolveConstructorId(constructorId, out var obj))
+            {
+                return obj;
+        	}
+^Switch^
+            return null;
+        }    
+        
+        
+        public override IObject? GetNakedFromType(Type type)
+        {
+            if (InternalGetNakedFromType(type, out var obj))
+            {
+                return obj;        
+            }
+        
+            ^NakedObjectTypes^   
+            return null;
+        }  
+    }
+}

@@ -1,0 +1,44 @@
+using System;
+using System.Collections.Generic;
+using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
+
+#nullable disable
+namespace ^Namespace^
+{
+	public partial class ^Class^ : ^Type^
+	{
+^FlagsEnums^
+
+        public static int StaticConstructorId { get => ^ConstructorId^; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        ^Properties^
+
+        ^PublicConstructor^
+        ^EmptyConstructorAccessibility^ ^Class^() 
+        {
+        }
+		
+		^MethodAccessibility^ void UpdateFlags() 
+		{
+^FlagsUpdate^
+		}
+
+		^MethodAccessibility^ void Serialize(Writer writer)
+		{
+^Serialization^
+		}
+
+		^MethodAccessibility^ void Deserialize(Reader reader)
+		{
+^Deserialization^
+		}
+				
+		public override string ToString()
+		{
+		    return "^ObjectRawName^";
+		}
+	}
+}
