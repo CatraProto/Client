@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections;
 using CatraProto.Client.MTProto.Settings;
@@ -26,17 +27,17 @@ namespace CatraProto.Client.MTProto.Session
             ConnectionPool = new ConnectionPool(client, Logger);
         }
 
-        public async Task ReadSessionAsync()
+        public async Task ReadSessionAsync(CancellationToken token = default)
         {
             var sessionSerializer = Settings.SessionSettings.SessionSerializer;
-            var sessionData = await sessionSerializer.ReadAsync(Logger.ForContext(sessionSerializer.GetType()));
+            var sessionData = await sessionSerializer.ReadAsync(Logger.ForContext(sessionSerializer.GetType()), token);
             SessionManager.Read(sessionData);
         }
 
-        public Task SaveSessionAsync()
+        public Task SaveSessionAsync(CancellationToken token)
         {
             var sessionSerializer = Settings.SessionSettings.SessionSerializer;
-            return sessionSerializer.SaveAsync(SessionManager.Save(), Logger.ForContext(sessionSerializer.GetType()));
+            return sessionSerializer.SaveAsync(SessionManager.Save(), Logger.ForContext(sessionSerializer.GetType()), token);
         }
 
         public async ValueTask DisposeAsync()

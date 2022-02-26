@@ -48,11 +48,13 @@ namespace CatraProto.Client.Updates
 
                     if (!currentState!.AlreadyHandled)
                     {
+                        var skipTick = false;
                         switch (currentState.Signal)
                         {
                             case ResumableSignalState.Start:
                                 SetSignalHandled(ResumableLoopState.Running, currentState);
                                 _logger.Information("{Name} started", ToString());
+                                skipTick = true;
                                 break;
                             case ResumableSignalState.Stop:
                                 _logger.Information("{Name} stopped", ToString());
@@ -67,6 +69,11 @@ namespace CatraProto.Client.Updates
                                 _logger.Verbose("{Name} suspended", ToString());
                                 currentState = await StateSignaler.WaitAsync(stoppingToken);
                                 break;
+                        }
+
+                        if (skipTick)
+                        {
+                            continue;
                         }
                     }
 

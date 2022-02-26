@@ -151,9 +151,10 @@ namespace CatraProto.Client.Connections.MessageScheduling
                         if (_messagesHandler.MessagesTrackers.MessageCompletionTracker.RemoveCompletion(rpcObject.MessageId, out var item))
                         {
                             _logger.Information("Received migrate error, moving request and setting account dc to DC{DcId} ", migrateError.DcId);
-                            var connection = await _clientSession.ConnectionPool.GetConnectionByDcAsync(migrateError.DcId);
-                            _clientSession.ConnectionPool.SetAccountConnection(connection);
-                            item.BindTo(connection.MessagesHandler);
+                            //TODO: Support cancellation
+                            await using var connection = await _clientSession.ConnectionPool.GetConnectionByDcAsync(migrateError.DcId, false, false, System.Threading.CancellationToken.None);
+                            await _clientSession.ConnectionPool.SetAccountConnectionAsync(connection.Connection, true);
+                            item.BindTo(connection.Connection.MessagesHandler);
                             item.SetToSend();
                         }
                     });

@@ -22,8 +22,8 @@ namespace CatraProto.Client.Database
         {
             _client = client;
             _logger = logger.ForContext<DatabaseManager>();
-            Directory.CreateDirectory(client.ClientSession.Settings.DatabaseSettings.Path);
-            _sqliteConnection = new SqliteConnection($"Data Source={client.ClientSession.Settings.DatabaseSettings.Path}{client.ClientSession.Name}.db");
+            Directory.CreateDirectory(client.ClientSession.Settings.SessionSettings.DatabaseSettings.Path);
+            _sqliteConnection = new SqliteConnection($"Data Source={client.ClientSession.Settings.SessionSettings.DatabaseSettings.Path}{client.ClientSession.Name}.db");
             PeerDatabase = new PeerDatabase(_sqliteConnection, _mutex, logger);
             ChatsManager = new ChatsManager();
         }

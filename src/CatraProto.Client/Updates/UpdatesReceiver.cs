@@ -59,7 +59,6 @@ namespace CatraProto.Client.Updates
 
         public void OnNewUpdates(IObject socketObject, IMethod? callingMethod = null)
         {
-
             var channelUpdates = new MultiValueDictionary<long, IObject>();
             var commonUpdates = new List<IObject>();
             var localSeq = _commonSequence.GetData().seq;

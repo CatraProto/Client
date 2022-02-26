@@ -22,6 +22,7 @@ namespace CatraProto.Client.Connections
         public ConnectionInfo ConnectionInfo { get; }
         public IProtocol Protocol { get; private set; }
 
+        private readonly CancellationTokenSource _fullShutdownSource = new CancellationTokenSource();
         private readonly SingleCallAsync<CancellationToken> _singleCallAsync;
         private readonly TelegramClient _client;
         private readonly ClientSettings _clientSettings;
@@ -65,30 +66,52 @@ namespace CatraProto.Client.Connections
 
         private async Task InternalConnectAsync(CancellationToken token)
         {
-            _logger.Information("Stopping loops and creating protocol for {Connection}", ConnectionInfo);
+            if (!token.IsCancellationRequested)
+            {
+                await DisconnectAsync();
+                Protocol = CreateProtocol();
+                token = CancellationTokenSource.CreateLinkedTokenSource(token, _fullShutdownSource.Token).Token;
+                while (true)
+                {
+                    try
+                    {
+                        _logger.Information("Connecting to {Connection}", ConnectionInfo);
+                        await Protocol.ConnectAsync(token);
+
+                        _logger.Information("Successfully connected to {Connection}", ConnectionInfo);
+                        await _loopsHandler.StartLoopsAsync();
+                        break;
+                    }
+                    catch (SocketException e)
+                    {
+                        var seconds = _clientSettings.ConnectionSettings.ConnectionRetry;
+                        _logger.Error("Couldn't connect to {Connection} due to {Message}, trying again in {Seconds} seconds", ConnectionInfo, e.Message, seconds);
+                        try
+                        {
+                            await Task.Delay(TimeSpan.FromSeconds(seconds), token);
+                        }
+                        catch (OperationCanceledException oe) when (oe.CancellationToken == token)
+                        {
+                            _logger.Information("Connection to {Connection} aborted", ConnectionInfo);
+                            return;
+                        }
+                    }
+                    catch (OperationCanceledException e) when (e.CancellationToken == token)
+                    {
+                        _logger.Information("Connection to {Connection} aborted", ConnectionInfo);
+                        return;
+                    }
+                }
+            }
+        }
+
+        private async Task DisconnectAsync()
+        {
+            _logger.Information("Disconnecting from {Connection} and stopping existing loops", ConnectionInfo);
             await _loopsHandler.StopLoopsAsync();
             await Protocol.CloseAsync();
 
             SetIsInited(false);
-            Protocol = CreateProtocol();
-            while (true)
-            {
-                try
-                {
-                    _logger.Information("Connecting to {Connection}", ConnectionInfo);
-                    await Protocol.ConnectAsync(token);
-                    break;
-                }
-                catch (SocketException e)
-                {
-                    var seconds = _clientSettings.ConnectionSettings.ConnectionRetry;
-                    _logger.Error("Couldn't connect to {Connection} due to {Message}, trying again in {Seconds} seconds", ConnectionInfo, e.Message, seconds);
-                    await Task.Delay(TimeSpan.FromSeconds(seconds), token);
-                }
-            }
-
-            _logger.Information("Successfully connected to {Connection}", ConnectionInfo);
-            await _loopsHandler.StartLoopsAsync();
         }
 
         public async Task InitConnectionAsync(CancellationToken token = default)
@@ -148,9 +171,14 @@ namespace CatraProto.Client.Connections
 
         public async ValueTask DisposeAsync()
         {
-            //TODO: FIX
-            //MessagesHandler.MessagesTrackers.MessagesAckTracker.Stop();
-            await _loopsHandler.StopLoopsAsync();
+            _fullShutdownSource.Cancel();
+            //Make sure we are returning only after Task.Delay returned by calling ConnectAsync
+            //This call will wait for the previous one (if exists) to return, this call may have not created a connection yet or it may have already destroyed the previous one 
+            await ConnectAsync();
+            //Since we can't be sure, we call DisconnectAsync manually.
+            await DisconnectAsync();
+            _fullShutdownSource.Dispose();
+            _logger.Information("Connection for {Connection} successfully disposed", ConnectionInfo);
         }
     }
 }

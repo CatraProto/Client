@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
+using CatraProto.Client.TL.Schemas.CloudChats;
 using CatraProto.Client.Updates;
 using Serilog;
 
@@ -11,11 +13,11 @@ namespace CatraProto.Client.Connections
 {
     class ConnectionPool : IAsyncDisposable
     {
-        private readonly Dictionary<int, Connection> _connections = new Dictionary<int, Connection>();
+        private readonly Dictionary<Connection, int> _referenceCounts = new Dictionary<Connection, int>();
         private readonly TelegramClient _client;
         private readonly object _mutex = new object();
         private UpdatesReceiver? _updatesHandler;
-        private Connection? _accountConnection;
+        private Connection? _mainConnection;
         private readonly ILogger _logger;
 
         public ConnectionPool(TelegramClient client, ILogger logger)
@@ -24,102 +26,126 @@ namespace CatraProto.Client.Connections
             _logger = logger.ForContext<ConnectionPool>();
         }
 
-        public async ValueTask<Connection> GetConnectionByDcAsync(int dc)
+        public async Task InitMainConnectionAsync(CancellationToken token)
         {
-            if (GetConnection(dc, out var connection))
-            {
-                return connection;
-            }
+            var conn = new Connection(_client.ClientSession.Settings.ConnectionSettings.DefaultDatacenter, _client);
+            await SetAccountConnectionAsync(conn, false);
+            await conn.ConnectAsync(token);
+        }
 
-            var defaultConnection = await GetConnectionAsync();
-            if (defaultConnection.ConnectionInfo.DcId == dc)
+        public async ValueTask<ConnectionItem> GetConnectionByDcAsync(int dcId, bool forceNew, bool isMediaPreferred, CancellationToken token)
+        {
+            ConnectionItem connectionItem;
+            lock (_mutex)
             {
-                return defaultConnection;
-            }
-            else
-            {
-                var config = await defaultConnection.MtProtoState.Api.CloudChatsApi.Help.GetConfigAsync();
-                var datacenter = config.Response!.DcOptions.FirstOrDefault(x => !x.MediaOnly && !x.TcpoOnly && x.Id == dc && !x.Ipv6);
-                if (datacenter == null)
+                if (!forceNew && TryFindLocal(dcId, isMediaPreferred, out var connection))
                 {
-                    throw new Exception("Datacenter could not be found");
+                    return CreateConnectionItem(connection);
                 }
 
-                var connectionInfo = new ConnectionInfo(ConnectionProtocol.TcpAbridged, IPAddress.Parse(datacenter.IpAddress), datacenter.Port, dc);
-                return await GetConnectionAsync(connectionInfo);
-            }
-        }
-
-        public async ValueTask<Connection> GetConnectionAsync(ConnectionInfo? connectionInfo = null)
-        {
-            Connection connection;
-            bool justCreated;
-            lock (_mutex)
-            {
-                connectionInfo ??= _client.ClientSession.Settings.ConnectionSettings.DefaultDatacenter;
-                connection = CreateConnection(connectionInfo, out justCreated);
-                _accountConnection ??= connection;
-            }
-
-            if (!justCreated)
-            {
-                return connection;
-            }
-
-            await connection.ConnectAsync();
-            return connection;
-        }
-
-        public Connection CreateConnection(ConnectionInfo connectionInfo, out bool justCreated)
-        {
-            lock (_mutex)
-            {
-                if (_connections.TryGetValue(connectionInfo.DcId, out var connection))
+                var matches = _client.StoredConfig.DcOptions.Where(x => Matches(ConnectionInfo.FromDcOption(x), dcId, isMediaPreferred)).OrderBy(x => x.MediaOnly).ToList();
+                if (matches.Count == 0)
                 {
-                    justCreated = false;
-                    return connection;
+                    throw new Exception("Couldn't find matching dcOption");
                 }
-                else
-                {
-                    var newConnection = new Connection(connectionInfo, _client);
-                    _connections.TryAdd(connectionInfo.DcId, newConnection);
 
-                    justCreated = true;
-                    return newConnection;
+                var datacenter = matches[0];
+                var connectionInfo = new ConnectionInfo(IPAddress.Parse(datacenter.IpAddress), datacenter.Port, dcId);
+                connectionItem = CreateConnectionItem(new Connection(connectionInfo, _client));
+            }
+
+            try
+            {
+                await connectionItem.Connection.ConnectAsync(token);
+            }
+            catch (OperationCanceledException)
+            {
+                await connectionItem.DisposeAsync();
+                throw;
+            }
+
+            return connectionItem;
+        }
+
+        private ConnectionItem CreateConnectionItem(Connection connection)
+        {
+            var connItem = new ConnectionItem(connection, this);
+            _referenceCounts.Remove(connection, out var count);
+            _referenceCounts.Add(connection, ++count);
+            return connItem;
+        }
+
+        public ValueTask DecreaseReferenceAsync(Connection connection)
+        {
+            lock (_mutex)
+            {
+                if (_referenceCounts.Remove(connection, out var rCount))
+                {
+                    if (rCount - 1 == 0)
+                    {
+                        if (_mainConnection != connection)
+                        {
+                            return connection.DisposeAsync();
+                        }
+                    }
+                    else
+                    {
+                        _referenceCounts.Add(connection, --rCount);
+                    }
+                }
+
+                return ValueTask.CompletedTask;
+            }
+        }
+
+        public Connection? GetMainConnection()
+        {
+            lock (_mutex)
+            {
+                return _mainConnection;
+            }
+        }
+
+        public void ConfirmMain()
+        {
+            lock (_mutex)
+            {
+                if(_mainConnection is not null)
+                {
+                    _mainConnection.ConnectionInfo.Main = true;
                 }
             }
         }
 
-        public bool GetConnection(int dcId, [MaybeNullWhen(false)] out Connection connection)
+        public async Task SetAccountConnectionAsync(Connection connection, bool isConfirmedMain)
         {
+            ValueTask disposeTask = ValueTask.CompletedTask;
             lock (_mutex)
             {
-                return _connections.TryGetValue(dcId, out connection);
-            }
-        }
-
-        public Connection? GetAccountConnection()
-        {
-            lock (_mutex)
-            {
-                return _accountConnection;
-            }
-        }
-
-        public void SetAccountConnection(Connection connection)
-        {
-            lock (_mutex)
-            {
-                if (_accountConnection != null)
+                if(_mainConnection is not null)
                 {
-                    connection.MessagesDispatcher.UpdatesHandler = null;
-                    _accountConnection.ConnectionInfo.Main = false;
+                    _mainConnection!.MessagesDispatcher.UpdatesHandler = null;
+                    _mainConnection!.ConnectionInfo.Main = false;
+                    if (_referenceCounts.TryGetValue(_mainConnection, out var count))
+                    {
+                        if (count == 0)
+                        {
+                            _referenceCounts.Remove(_mainConnection);
+                            disposeTask = _mainConnection.DisposeAsync();
+                        }
+                    }
+                    else
+                    {
+                        disposeTask = _mainConnection.DisposeAsync();
+                    }
                 }
 
                 connection.MessagesDispatcher.UpdatesHandler = _updatesHandler;
-                connection.ConnectionInfo.Main = true;
-                _accountConnection = connection;
+                connection.ConnectionInfo.Main = isConfirmedMain;
+                _mainConnection = connection;
             }
+
+            await disposeTask;
         }
 
         public void SetUpdatesHandler(UpdatesReceiver updatesReceiver)
@@ -127,9 +153,9 @@ namespace CatraProto.Client.Connections
             lock (_mutex)
             {
                 _updatesHandler = updatesReceiver;
-                if (_accountConnection != null)
+                if (_mainConnection != null)
                 {
-                    _accountConnection.MessagesDispatcher.UpdatesHandler = _updatesHandler;
+                    _mainConnection.MessagesDispatcher.UpdatesHandler = _updatesHandler;
                 }
             }
         }
@@ -139,13 +165,19 @@ namespace CatraProto.Client.Connections
             ValueTask[] toWait;
             lock (_mutex)
             {
-                toWait = new ValueTask[_connections.Count];
+                toWait = new ValueTask[_referenceCounts.Count + 1];
                 var i = 0;
-                foreach (var connection in _connections)
+                foreach(var (conn, _) in _referenceCounts)
                 {
-                    _logger.Information("Disposing connection {Connection}", connection);
-                    toWait[i++] = connection.Value.DisposeAsync();
+                    if(_mainConnection == conn)
+                    {
+                        continue;
+                    }
+
+                    toWait[i++] = conn.DisposeAsync();
                 }
+
+                toWait[_referenceCounts.Count] = _mainConnection is null ? ValueTask.CompletedTask : _mainConnection.DisposeAsync();
             }
 
             foreach (var vTask in toWait)
@@ -154,6 +186,52 @@ namespace CatraProto.Client.Connections
             }
 
             _logger.Information("Connection pool disposed");
+        }
+
+        private bool Matches(ConnectionInfo connectionInfo, int dcId, bool isMediaPreferred)
+        {
+            //TODO: Proper ipv6 support
+            if(connectionInfo.DcId != dcId)
+            {
+                return false;
+            }
+
+            if(connectionInfo.Ipv6 && !_client.ClientSession.Settings.ConnectionSettings.Ipv6Allowed)
+            {
+                return false;
+            }
+
+            if(!connectionInfo.Ipv6 && _client.ClientSession.Settings.ConnectionSettings.Ipv6Only)
+            {
+                return false;
+            }
+
+            if(connectionInfo.MediaOnly && !isMediaPreferred)
+            {
+                return false;
+            }
+
+            if (connectionInfo.TcpoOnly)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool TryFindLocal(int dc, bool isMediaPreferred, [MaybeNullWhen(false)] out Connection connection)
+        {
+            foreach (var (conn, _) in _referenceCounts)
+            {
+                if (Matches(conn.ConnectionInfo, dc, isMediaPreferred))
+                {
+                    connection = conn;
+                    return true;
+                }
+            }
+
+            connection = null;
+            return false;
         }
     }
 }

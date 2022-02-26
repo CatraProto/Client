@@ -66,15 +66,14 @@ namespace CatraProto.Client.Connections.Loop
                     await _connection.MtProtoState.Api.MtProtoApi.PingAsync(CryptoTools.CreateRandomLong(), cancellationToken: linked.Token);
                     _logger.Information("Received pong from server {Connection}", _connection.ConnectionInfo);
                 }
-                catch (OperationCanceledException)when (timeout.Token.IsCancellationRequested)
+                catch (OperationCanceledException) when (timeout.Token.IsCancellationRequested)
                 {
-                    _logger.Warning("Didn't receive reply to ping in {Timeout} seconds, reconnecting to {Connection}", _timeout.TotalSeconds, _connection
-                    .ConnectionInfo);
+                    _logger.Warning("Didn't receive reply to ping in {Timeout} seconds, reconnecting to {Connection}", _timeout.TotalSeconds, _connection.ConnectionInfo);
                     _ = _connection.ConnectAsync(CancellationToken.None);
                     SetLoopState(ResumableLoopState.Stopped);
                     return;
                 }
-                catch (OperationCanceledException)when (stoppingToken.IsCancellationRequested)
+                catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
                 {
                     _logger.Information("Ping not completed because loop received stop signal on {Connection}", _connection.ConnectionInfo);
                     SetLoopState(ResumableLoopState.Stopped);

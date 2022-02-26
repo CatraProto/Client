@@ -5,9 +5,11 @@ namespace CatraProto.Client.MTProto.Settings
     public class SessionSettings
     {
         public string SessionName { get; }
+        public DatabaseSettings DatabaseSettings { get; }
         internal IAsyncSessionSerializer SessionSerializer { get; }
-        public SessionSettings(IAsyncSessionSerializer sessionSerializer, string sessionName)
+        public SessionSettings(IAsyncSessionSerializer sessionSerializer, DatabaseSettings databaseSettings, string sessionName)
         {
+            DatabaseSettings = databaseSettings;
             SessionSerializer = sessionSerializer;
             SessionName = sessionName;
         }

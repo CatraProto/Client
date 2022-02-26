@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections;
 using CatraProto.Client.Flows.LoginFlow.Interfaces;
@@ -26,10 +27,10 @@ namespace CatraProto.Client.Flows.LoginFlow
             _logger = clientSession.Logger.ForContext<LoginFlow>();
         }
 
-        public async Task<ILoginResult> AsUserAsync(string phoneNumber, CodeSettings codeSettings)
+        public async Task<ILoginResult> AsUserAsync(string phoneNumber, CodeSettings codeSettings, CancellationToken cancellationToken = default)
         {
             _logger.Information("Sending authorization code to {Number}", phoneNumber);
-            var auth = await _client.Api.CloudChatsApi.Auth.SendCodeAsync(phoneNumber, _clientSettings.ApiSettings.ApiId, _clientSettings.ApiSettings.ApiHash, codeSettings);
+            var auth = await _client.Api.CloudChatsApi.Auth.SendCodeAsync(phoneNumber, _clientSettings.ApiSettings.ApiId, _clientSettings.ApiSettings.ApiHash, codeSettings, cancellationToken: cancellationToken);
             if (auth.RpcCallFailed)
             {
                 _logger.Error("Login failed due to {Error}", auth.Error);
@@ -40,9 +41,9 @@ namespace CatraProto.Client.Flows.LoginFlow
             return new LoginNeedsCode(_client, auth.Response, phoneNumber, _sessionData);
         }
 
-        public async Task<ILoginResult> AsBotAsync(string token)
+        public async Task<ILoginResult> AsBotAsync(string token, CancellationToken cancellationToken = default)
         {
-            var auth = await _client.Api!.CloudChatsApi.Auth.ImportBotAuthorizationAsync(0, _clientSettings.ApiSettings.ApiId, _clientSettings.ApiSettings.ApiHash, token);
+            var auth = await _client.Api!.CloudChatsApi.Auth.ImportBotAuthorizationAsync(0, _clientSettings.ApiSettings.ApiId, _clientSettings.ApiSettings.ApiHash, token, cancellationToken: cancellationToken);
             if (auth.RpcCallFailed)
             {
                 return new LoginFailed(auth.Error);

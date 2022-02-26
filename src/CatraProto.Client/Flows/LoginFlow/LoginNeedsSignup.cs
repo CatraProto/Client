@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections;
 using CatraProto.Client.Flows.LoginFlow.Interfaces;
@@ -27,10 +28,10 @@ namespace CatraProto.Client.Flows.LoginFlow
             _sessionData = sessionData;
         }
 
-        public async Task<ILoginResult> WithProfileData(string firstName, string lastName)
+        public async Task<ILoginResult> WithProfileData(string firstName, string lastName, CancellationToken cancellationToken = default)
         {
-            await _client.Api!.CloudChatsApi.Help.AcceptTermsOfServiceAsync(TermsOfService.Id);
-            var rpcQuery = await _client.Api!.CloudChatsApi.Auth.SignUpAsync(_phoneNumber, _sentCode.PhoneCodeHash, firstName, lastName);
+            await _client.Api.CloudChatsApi.Help.AcceptTermsOfServiceAsync(TermsOfService.Id);
+            var rpcQuery = await _client.Api.CloudChatsApi.Auth.SignUpAsync(_phoneNumber, _sentCode.PhoneCodeHash, firstName, lastName, cancellationToken: cancellationToken);
             if (rpcQuery.RpcCallFailed)
             {
                 return new LoginFailed(rpcQuery.Error);

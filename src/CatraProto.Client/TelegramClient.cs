@@ -1,10 +1,14 @@
 using System;
+using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
+using CatraProto.Client.Connections;
 using CatraProto.Client.Database;
 using CatraProto.Client.Flows.LoginFlow;
 using CatraProto.Client.MTProto.Session;
 using CatraProto.Client.MTProto.Session.Models;
 using CatraProto.Client.MTProto.Settings;
+using CatraProto.Client.TL.Schemas.CloudChats;
 using CatraProto.Client.Updates;
 using CatraProto.Client.Updates.Interfaces;
 using Serilog;
@@ -18,7 +22,7 @@ namespace CatraProto.Client
         {
             get
             {
-                var accountConn = ClientSession.ConnectionPool.GetAccountConnection();
+                var accountConn = ClientSession.ConnectionPool.GetMainConnection();
                 if (accountConn is not null)
                 {
                     return accountConn.MtProtoState.Api;
@@ -33,11 +37,17 @@ namespace CatraProto.Client
             get => _randomIdHandler ?? throw new InvalidOperationException("Please call InitClientAsync first");
         }
 
+        internal Config StoredConfig
+        {
+            get => _config ?? throw new InvalidOperationException("Please call InitClientAsync first");
+        }
+
         internal DatabaseManager DatabaseManager { get; }
         internal UpdatesReceiver UpdatesReceiver { get; }
         internal ClientSession ClientSession { get; }
         internal UpdatesDispatcher UpdatesDispatcher { get; }
         internal IEventHandler? EventHandler { get; private set; }
+        private Config? _config;
         private RandomId? _randomIdHandler;
         private readonly SessionEvents _sessionEvents;
         private readonly ILogger _logger;
@@ -52,29 +62,32 @@ namespace CatraProto.Client
             _logger = ClientSession.Logger.ForContext<TelegramClient>();
         }
 
-        public async Task<ClientState> InitClientAsync()
+        public async Task<ClientState> InitClientAsync(CancellationToken token = default)
         {
-            await ClientSession.ReadSessionAsync();
+            await ClientSession.ReadSessionAsync(token);
             _randomIdHandler = ClientSession.SessionManager.SessionData.RandomId;
             DatabaseManager.InitDb();
             var sessionData = ClientSession.SessionManager.SessionData;
             sessionData.RegisterOnUpdated(_sessionEvents.OnDataUpdate);
             UpdatesReceiver.FillProcessors();
-            var defaultConnection = await ClientSession.ConnectionPool.GetConnectionAsync();
+            
+            await ClientSession.ConnectionPool.InitMainConnectionAsync(token);
+            _logger.Information("Requesting and storing current configuration");
+            _config = (Config)(await Api.CloudChatsApi.Help.GetConfigAsync(cancellationToken: token)).Response;
 
             if (!sessionData.Authorization.IsAuthorized(out var dcId, out _, out _))
             {
                 return ClientState.Unauthenticated;
             }
 
-            if (defaultConnection.ConnectionInfo.DcId == dcId)
+            if (ClientSession.ConnectionPool.GetMainConnection()!.ConnectionInfo.DcId == dcId)
             {
-                ClientSession.ConnectionPool.SetAccountConnection(defaultConnection);
+                ClientSession.ConnectionPool.ConfirmMain();
                 return ClientState.Authenticated;
             }
-
-            var newConnection = await ClientSession.ConnectionPool.GetConnectionByDcAsync(dcId!.Value);
-            ClientSession.ConnectionPool.SetAccountConnection(newConnection);
+            
+            var newConnection = await ClientSession.ConnectionPool.GetConnectionByDcAsync(dcId!.Value, false, false, token);
+            await ClientSession.ConnectionPool.SetAccountConnectionAsync(newConnection.Connection, true);
             return ClientState.Authenticated;
         }
 
@@ -91,9 +104,9 @@ namespace CatraProto.Client
             }
         }
 
-        public Task ForceSaveAsync()
+        public Task ForceSaveAsync(CancellationToken token = default)
         {
-            return ClientSession.SaveSessionAsync();
+            return ClientSession.SaveSessionAsync(token);
         }
 
         public ILogger GetLogger<T>()

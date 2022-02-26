@@ -7,7 +7,7 @@ namespace CatraProto.Client.MTProto.Session.Models
     class RandomId : SessionModel
     {
         private readonly object _mutex;
-        private long _lastId;
+        private long _lastId = CryptoTools.CreateRandomInt();
 
         public RandomId(object mutex) : base(mutex)
         {
@@ -26,8 +26,7 @@ namespace CatraProto.Client.MTProto.Session.Models
         {
             lock (_mutex)
             {
-                //temporary solution
-                _lastId = reader.Read<long>() + CryptoTools.CreateRandomInt();
+                _lastId += reader.Read<long>();
             }
         }
 
