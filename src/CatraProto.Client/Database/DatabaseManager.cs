@@ -35,6 +35,7 @@ namespace CatraProto.Client.Database
             {
                 _logger.Information("Initializing database and defining structures...");
                 _sqliteConnection.Open();
+                InternalDatabase.DefineStructures();
                 PeerDatabase.DefineStructures();
                 _logger.Information("Database initialized");
             }
