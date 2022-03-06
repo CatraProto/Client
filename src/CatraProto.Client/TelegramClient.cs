@@ -69,7 +69,6 @@ namespace CatraProto.Client
             DatabaseManager.InitDb();
             var sessionData = ClientSession.SessionManager.SessionData;
             sessionData.RegisterOnUpdated(_sessionEvents.OnDataUpdate);
-            UpdatesReceiver.FillProcessors();
             
             await ClientSession.ConnectionPool.InitMainConnectionAsync(token);
             _logger.Information("Requesting and storing current configuration");
@@ -83,11 +82,14 @@ namespace CatraProto.Client
             if (ClientSession.ConnectionPool.GetMainConnection()!.ConnectionInfo.DcId == dcId)
             {
                 ClientSession.ConnectionPool.ConfirmMain();
-                return ClientState.Authenticated;
+            }
+            else
+            {
+                await using var newConnection = await ClientSession.ConnectionPool.GetConnectionByDcAsync(dcId!.Value, false, false, token);
+                await ClientSession.ConnectionPool.SetAccountConnectionAsync(newConnection.Connection, true);
             }
             
-            var newConnection = await ClientSession.ConnectionPool.GetConnectionByDcAsync(dcId!.Value, false, false, token);
-            await ClientSession.ConnectionPool.SetAccountConnectionAsync(newConnection.Connection, true);
+            UpdatesReceiver.FillProcessors();
             return ClientState.Authenticated;
         }
 

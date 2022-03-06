@@ -41,7 +41,17 @@ namespace CatraProto.Client.Connections
                 aStart = _ackLoop.Controller.SignalAsync(ResumableSignalState.Start);
 
                 _keyLoop.Loop ??= new KeyGeneratorLoop(_connection.MtProtoState.KeysHandler.TemporaryAuthKey, _connection, _logger);
-                _keyLoop.Controller = new PeriodicLoopController(TimeSpan.FromSeconds(_clientSettings.ConnectionSettings.PfsKeyDuration), _logger);
+                var pfsSeconds = TimeSpan.FromSeconds(_clientSettings.ConnectionSettings.PfsKeyDuration);
+                if (_connection.MtProtoState.KeysHandler.TemporaryAuthKey.Exists())
+                {
+                    var delta = _connection.MtProtoState.KeysHandler.TemporaryAuthKey.GetCachedKey().ExpiresAt!.Value - (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                    if (delta > 0)
+                    {
+                        pfsSeconds = TimeSpan.FromSeconds(delta);
+                    }
+                }
+
+                _keyLoop.Controller = new PeriodicLoopController(pfsSeconds, _logger);
                 _keyLoop.Controller.BindTo(_keyLoop.Loop);
                 kStart = _keyLoop.Controller.SignalAsync(ResumableSignalState.Start);
 
@@ -97,6 +107,14 @@ namespace CatraProto.Client.Connections
 
             await Task.WhenAll(wStop, rStop, kStop, pStop, aStop);
             _logger.Information("All loops for {Connection} stopped", _connection.ConnectionInfo);
+        }
+
+        internal void ResetKeyLoop()
+        {
+            lock (_mutex)
+            {
+                _keyLoop.Controller?.ChangeInterval(TimeSpan.FromSeconds(_clientSettings.ConnectionSettings.PfsKeyDuration));
+            }
         }
 
         public void WakeUpWriteLoop()

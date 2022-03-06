@@ -5,9 +5,11 @@ namespace CatraProto.Client.MTProto
 {
     public enum PeerType
     {
+        Unrecognized = -1,
         User,
         Channel,
-        Group
+        Group,
+        Secret
     }
 
     public readonly struct PeerId
@@ -15,7 +17,7 @@ namespace CatraProto.Client.MTProto
         public PeerType Type { get; }
         public long Id { get; }
 
-        private PeerId(long id, PeerType peerType)
+        internal PeerId(long id, PeerType peerType)
         {
             Id = id;
             Type = peerType;
@@ -36,6 +38,11 @@ namespace CatraProto.Client.MTProto
             return new PeerId(id, PeerType.Group);
         }
 
+        public static PeerId AsSecret(long id)
+        {
+            return new PeerId(id, PeerType.Secret);
+        }
+
         public static PeerId FromPeer(PeerBase peer)
         {
             return peer switch
@@ -54,7 +61,8 @@ namespace CatraProto.Client.MTProto
                 PeerType.User => "user#" + Id,
                 PeerType.Channel => "channel#" + Id,
                 PeerType.Group => "group#" + Id,
-                _ => "Unreachable",
+                PeerType.Secret => "secret#" + Id,
+                _ => "unknown#-1",
             };
         }
 
@@ -67,6 +75,7 @@ namespace CatraProto.Client.MTProto
 
             return other.Type == Type && other.Id == Id;
         }
+
 
         public override int GetHashCode()
         {

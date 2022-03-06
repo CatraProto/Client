@@ -109,6 +109,12 @@ namespace CatraProto.Client.Connections.Loop
                         continue;
                     }
 
+                    if (messageItem.Body is MsgsStateReq)
+                    {
+                        encryptedList.Value.Add(messageItem);
+                        break;
+                    }
+
                     if (_mtProtoState.KeysHandler.TemporaryAuthKey.CanBeUsed())
                     {
                         if (messageItem.Body is InvokeWithLayer { Query: InitConnection })

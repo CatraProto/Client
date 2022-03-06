@@ -48,17 +48,6 @@ namespace CatraProto.Client.Connections
             Protocol = CreateProtocol();
         }
 
-        private IProtocol CreateProtocol()
-        {
-            switch (_protocolType)
-            {
-                case ConnectionProtocol.TcpAbridged:
-                    return new Abridged(ConnectionInfo, _logger);
-                default:
-                    throw new NotSupportedException("Protocol not supported");
-            }
-        }
-
         public Task ConnectAsync(CancellationToken token = default)
         {
             return _singleCallAsync.GetCall(token);
@@ -66,41 +55,43 @@ namespace CatraProto.Client.Connections
 
         private async Task InternalConnectAsync(CancellationToken token)
         {
-            if (!token.IsCancellationRequested)
+            if (token.IsCancellationRequested)
             {
-                await DisconnectAsync();
-                Protocol = CreateProtocol();
-                token = CancellationTokenSource.CreateLinkedTokenSource(token, _fullShutdownSource.Token).Token;
-                while (true)
+                return;
+            }
+            
+            await DisconnectAsync();
+            Protocol = CreateProtocol();
+            token = CancellationTokenSource.CreateLinkedTokenSource(token, _fullShutdownSource.Token).Token;
+            while (true)
+            {
+                try
                 {
+                    _logger.Information("Connecting to {Connection}", ConnectionInfo);
+                    await Protocol.ConnectAsync(token);
+
+                    _logger.Information("Successfully connected to {Connection}", ConnectionInfo);
+                    await _loopsHandler.StartLoopsAsync();
+                    break;
+                }
+                catch (SocketException e)
+                {
+                    var seconds = _clientSettings.ConnectionSettings.ConnectionRetry;
+                    _logger.Error("Couldn't connect to {Connection} due to {Message}, trying again in {Seconds} seconds", ConnectionInfo, e.Message, seconds);
                     try
                     {
-                        _logger.Information("Connecting to {Connection}", ConnectionInfo);
-                        await Protocol.ConnectAsync(token);
-
-                        _logger.Information("Successfully connected to {Connection}", ConnectionInfo);
-                        await _loopsHandler.StartLoopsAsync();
-                        break;
+                        await Task.Delay(TimeSpan.FromSeconds(seconds), token);
                     }
-                    catch (SocketException e)
-                    {
-                        var seconds = _clientSettings.ConnectionSettings.ConnectionRetry;
-                        _logger.Error("Couldn't connect to {Connection} due to {Message}, trying again in {Seconds} seconds", ConnectionInfo, e.Message, seconds);
-                        try
-                        {
-                            await Task.Delay(TimeSpan.FromSeconds(seconds), token);
-                        }
-                        catch (OperationCanceledException oe) when (oe.CancellationToken == token)
-                        {
-                            _logger.Information("Connection to {Connection} aborted", ConnectionInfo);
-                            return;
-                        }
-                    }
-                    catch (OperationCanceledException e) when (e.CancellationToken == token)
+                    catch (OperationCanceledException oe) when (oe.CancellationToken == token)
                     {
                         _logger.Information("Connection to {Connection} aborted", ConnectionInfo);
                         return;
                     }
+                }
+                catch (OperationCanceledException e) when (e.CancellationToken == token)
+                {
+                    _logger.Information("Connection to {Connection} aborted", ConnectionInfo);
+                    return;
                 }
             }
         }
@@ -112,6 +103,12 @@ namespace CatraProto.Client.Connections
             await Protocol.CloseAsync();
 
             SetIsInited(false);
+        }
+
+        public void OnKeyGenerated()
+        {
+            _logger.Information("Resetting key loop timer after key generation");
+            _loopsHandler.ResetKeyLoop();
         }
 
         public async Task InitConnectionAsync(CancellationToken token = default)
@@ -135,6 +132,17 @@ namespace CatraProto.Client.Connections
             if (ConnectionInfo.Main)
             {
                 await _client.UpdatesReceiver.ForceGetDifferenceAllAsync(false);
+            }
+        }
+
+        private IProtocol CreateProtocol()
+        {
+            switch (_protocolType)
+            {
+                case ConnectionProtocol.TcpAbridged:
+                    return new Abridged(ConnectionInfo, _logger);
+                default:
+                    throw new NotSupportedException("Protocol not supported");
             }
         }
 

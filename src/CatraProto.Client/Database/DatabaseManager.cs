@@ -10,8 +10,8 @@ namespace CatraProto.Client.Database
 {
     class DatabaseManager : IDisposable
     {
-        public ChatsManager ChatsManager { get; }
         public PeerDatabase PeerDatabase { get; }
+        public InternalDatabase InternalDatabase { get; }
 
         private readonly TelegramClient _client;
         private readonly SqliteConnection _sqliteConnection;
@@ -22,10 +22,11 @@ namespace CatraProto.Client.Database
         {
             _client = client;
             _logger = logger.ForContext<DatabaseManager>();
-            Directory.CreateDirectory(client.ClientSession.Settings.SessionSettings.DatabaseSettings.Path);
-            _sqliteConnection = new SqliteConnection($"Data Source={client.ClientSession.Settings.SessionSettings.DatabaseSettings.Path}{client.ClientSession.Name}.db");
-            PeerDatabase = new PeerDatabase(_sqliteConnection, _mutex, logger);
-            ChatsManager = new ChatsManager();
+            var settings = client.ClientSession.Settings.SessionSettings.DatabaseSettings;
+            Directory.CreateDirectory(settings.Path);
+            _sqliteConnection = new SqliteConnection($"Data Source={settings.Path}{client.ClientSession.Name}.db");
+            PeerDatabase = new PeerDatabase(_sqliteConnection, settings.PeerCacheSize, _mutex, logger);
+            InternalDatabase = new InternalDatabase(_sqliteConnection, _mutex, logger);
         }
 
         public void InitDb()
@@ -57,21 +58,7 @@ namespace CatraProto.Client.Database
                 {
                     foreach (var chat in chats)
                     {
-                        switch (chat)
-                        {
-                            case Channel channel:
-                                if (channel.AccessHash is not null)
-                                {
-                                    manager.PeerDatabase.UpdateChannel(channel.Id, channel.AccessHash.Value, transaction);
-                                }
-
-                                break;
-                            case ChannelForbidden channel:
-                                manager.PeerDatabase.UpdateChannel(channel.Id, channel.AccessHash, transaction);
-                                break;
-                        }
-
-
+                        manager.PeerDatabase.UpdateChat(chat, transaction);
                         if (chat is Channel or ChannelForbidden)
                         {
                             if (Updates.UpdatesTools.IsInChat(chat))
@@ -94,7 +81,7 @@ namespace CatraProto.Client.Database
                         {
                             if (userFull.AccessHash is not null)
                             {
-                                manager.PeerDatabase.UpdateUser(user.Id, userFull.AccessHash.Value, transaction);
+                                manager.PeerDatabase.UpdateChat(user, transaction);
                             }
                         }
                     }

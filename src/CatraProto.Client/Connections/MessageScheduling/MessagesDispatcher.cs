@@ -6,6 +6,7 @@ using CatraProto.Client.MTProto.Rpc;
 using CatraProto.Client.MTProto.Rpc.Parsers;
 using CatraProto.Client.MTProto.Rpc.RpcErrors.Migrations.Interfaces;
 using CatraProto.Client.MTProto.Session;
+using CatraProto.Client.TL;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.Client.TL.Schemas.CloudChats;
 using CatraProto.Client.TL.Schemas.MTProto;
@@ -120,6 +121,12 @@ namespace CatraProto.Client.Connections.MessageScheduling
                         break;
                     case UpdateBase updateBase:
                         UpdatesHandler?.OnNewUpdates(updateBase);
+                        break;
+                    case NewSessionCreated:
+                    case BadServerSalt:
+                        break;
+                    default:
+                        _logger.Information("Received object {Obj}", obj.ToJson());
                         break;
                 }
             }

@@ -34,15 +34,15 @@ namespace CatraProto.Client.Updates
             _commonSequence = client.ClientSession.SessionManager.SessionData.UpdatesStates.GetState();
             _commonLoop.Processor = new UpdateProcessor(client, null, logger, _commonSequence);
             _commonLoop.Controller = new ResumableLoopController(_logger);
-            _commonLoop.Controller.BindTo(_commonLoop.Processor);
-            _commonLoop.Controller.SendSignal(ResumableSignalState.Start, out _);
-            _commonLoop.Controller.SendSignal(ResumableSignalState.Suspend, out _);
         }
 
         public void FillProcessors()
         {
             lock (_mutex)
             {
+                _commonLoop.Controller.BindTo(_commonLoop.Processor);
+                _commonLoop.Controller.SendSignal(ResumableSignalState.Start, out _);
+                _commonLoop.Controller.SendSignal(ResumableSignalState.Suspend, out _);
                 foreach (var (chatId, state) in _client.ClientSession.SessionManager.SessionData.UpdatesStates.GetAllChannelsStates())
                 {
                     if (!state.GetData().isActive)
@@ -86,7 +86,10 @@ namespace CatraProto.Client.Updates
                                 }
                             }
 
-                            _commonSequence.SetData(seq: finalSeq, date: date);
+                            if(finalSeq > 0 && date > 0)
+                            {
+                                _commonSequence.SetData(seq: finalSeq, date: date);
+                            }
                         }
                     }
                     else if (localSeq + 1 > seqStart)

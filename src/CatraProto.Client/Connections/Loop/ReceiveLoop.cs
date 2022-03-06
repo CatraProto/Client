@@ -58,11 +58,25 @@ namespace CatraProto.Client.Connections.Loop
                     var message = await _connection.Protocol.Reader.ReadMessageAsync(cancellationToken);
                     using var reader = new Reader(MergedProvider.Singleton, message.ToMemoryStream());
 
+                    if(message.Length < 4)
+                    {
+                        _logger.Warning("Ignoring payload {Payload} because length is less than 4", message);
+                        continue;
+                    }
+
                     if (message.Length == 4)
                     {
                         _messagesDispatcher.DispatchMessage(new UnencryptedConnectionMessage(message));
                         continue;
                     }
+
+                    //8 + 16 + 8 + 8 + 8 + 4 + 4
+                    if (message.Length < 56)
+                    {
+                        _logger.Warning("Ignoring payload {Payload} because length is less than 56", message);
+                        continue;
+                    }
+
 
                     var authKeyId = reader.Read<long>();
                     IConnectionMessage imported;
@@ -88,12 +102,13 @@ namespace CatraProto.Client.Connections.Loop
                 }
                 catch (OperationCanceledException e) when (e.CancellationToken == cancellationToken)
                 {
-                    //Ignored on purpose
+                    _logger.Information("{Loop} stopped after cancellation token threw exception", ToString());
+                    SetLoopState(GenericLoopState.Stopped);
+                    return;
                 }
                 catch (IOException e)
                 {
                     _logger.Error("IOException received. Message: \"{Info}\", reconnecting...", e.Message);
-                    // ReSharper disable once MethodSupportsCancellation
                     _ = _connection.ConnectAsync();
                     SetLoopState(GenericLoopState.Stopped);
                     return;

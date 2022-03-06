@@ -53,7 +53,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
 
             var temporaryKey = (AuthKeySuccess)temporaryKeyResult;
 
-            var expiresAt = (int)DateTimeOffset.Now.Add(TimeSpan.FromSeconds(duration)).ToUnixTimeSeconds();
+            var expiresAt = (int)DateTimeOffset.UtcNow.Add(TimeSpan.FromSeconds(duration)).ToUnixTimeSeconds();
             lock (_mutex)
             {
                 _keyCacheCache.SetData(temporaryKey.KeyArray, temporaryKey.AuthKeyId, temporaryKey.ServerSalt, expiresAt, false);
@@ -136,7 +136,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
                     return true;
                 }
 
-                return DateTimeOffset.Now.ToUnixTimeSeconds() - (data.Value.ExpirationDate - toSubtract) > 0;
+                return DateTimeOffset.UtcNow.ToUnixTimeSeconds() - (data.Value.ExpirationDate - toSubtract) >= 0;
             }
         }
 

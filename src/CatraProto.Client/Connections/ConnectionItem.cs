@@ -17,7 +17,7 @@ namespace CatraProto.Client.Connections
         }
 
         private Connection? _connection;
-        private ConnectionPool _connectionPool;
+        private readonly ConnectionPool _connectionPool;
         public ConnectionItem(Connection connection, ConnectionPool connectionPool)
         {
             _connection = connection;

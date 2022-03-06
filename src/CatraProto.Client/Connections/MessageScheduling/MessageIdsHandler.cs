@@ -18,7 +18,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
         {
             lock (_mutex)
             {
-                var currentSecond = DateTimeOffset.Now.ToUnixTimeSeconds();
+                var currentSecond = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
                 if (_lastGeneratedId != 0)
                 {
                     var lastSecond = _lastGeneratedId / 4294967296;
@@ -44,12 +44,12 @@ namespace CatraProto.Client.Connections.MessageScheduling
         
         public static bool IsOlderThan(long messageId, int seconds)
         {
-            return DateTimeOffset.Now.ToUnixTimeSeconds() - GetSeconds(messageId) >= seconds;
+            return DateTimeOffset.UtcNow.ToUnixTimeSeconds() - GetSeconds(messageId) >= seconds;
         }
         
         public static bool IsNewerThan(long messageId, int seconds)
         {
-            return DateTimeOffset.Now.ToUnixTimeSeconds() - GetSeconds(messageId) <= seconds;
+            return DateTimeOffset.UtcNow.ToUnixTimeSeconds() - GetSeconds(messageId) <= seconds;
         }
         
         public static int GetSeconds(long messageId)

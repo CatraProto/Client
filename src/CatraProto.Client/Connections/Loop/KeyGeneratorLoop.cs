@@ -88,6 +88,7 @@ namespace CatraProto.Client.Connections.Loop
                             _ = _connection.ConnectAsync(CancellationToken.None);
                             continue;
                         }
+                        _connection.OnKeyGenerated();
                     }
 
                     if (!_connection.GetIsInited())

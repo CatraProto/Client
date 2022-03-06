@@ -116,7 +116,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
                         var serverSalt = BitConverter.ToInt64(KeyExchangeTools.ComputeServerSalt(serverNonce, newNonce));
 
                         logger.Information("Nonce and serverNonce match, AuthKey successfully generated. AuthKeyId: {Id} ServerSalt: {Salt}", authKeyId, serverSalt);
-                        return new AuthKeySuccess(rawKey, authKeyId, serverSalt, duration > 0 ? (int)DateTimeOffset.Now.Add(TimeSpan.FromSeconds(duration)).ToUnixTimeSeconds() : null);
+                        return new AuthKeySuccess(rawKey, authKeyId, serverSalt, duration > 0 ? (int)DateTimeOffset.UtcNow.Add(TimeSpan.FromSeconds(duration)).ToUnixTimeSeconds() : null);
                     }
                     else
                     {

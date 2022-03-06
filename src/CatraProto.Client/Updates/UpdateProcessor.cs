@@ -224,16 +224,17 @@ namespace CatraProto.Client.Updates
                     switch (difference.Response)
                     {
                         case DifferenceEmpty empty:
-                            _logger.Information("Received differenceEmpty from server");
+                            _logger.Information("Received differenceEmpty for common sequence");
                             _updatesState.SetData(date: empty.Date, seq: empty.Seq);
                             yield break;
                         case DifferenceTooLong differenceTooLong:
-                            _logger.Information("Received difference too long repeating request with PTS {Pts}", differenceTooLong.Pts);
+                            _logger.Information("Received difference too long repeating request with PTS {Pts} for common sequence", differenceTooLong.Pts);
                             _updatesState.SetData(differenceTooLong.Pts);
                             continue;
                         case DifferenceSlice or Difference:
                             {
                                 DifferenceTools.GetDifferenceChanges(difference.Response, out var newMessages, out var newEncryptedMessages, out var newUpdates, out var chats, out var users, out var state);
+                                _logger.Information("Received difference, new messages: {MCount}, new encrypted messages: {MECount}, other updates: {OCount}, chats: {CCount}, users: {UCount}", newMessages.Count, newEncryptedMessages.Count, newUpdates.Count, chats.Count, users.Count);
                                 _client.DatabaseManager.UpdateChats(chats, users);
                                 _updatesState.SetData(state.Pts, state.Qts, state.Seq, state.Date);
                                 yield return newMessages.Select(UpdatesTools.FromMessageToUpdate).Concat(newUpdates).ToList();
@@ -255,16 +256,18 @@ namespace CatraProto.Client.Updates
                     switch (difference.Response)
                     {
                         case ChannelDifferenceEmpty empty:
-                            _logger.Information("Received differenceEmpty from server");
+                            _logger.Information("Received differenceEmpty for channel {ChannelId}", _channelId.Value);
                             _updatesState.SetData(pts: empty.Pts);
                             yield break;
                         case ChannelDifferenceTooLong differenceTooLong:
                             //TODO: Implement this
-                            _logger.Information("Received difference too long, not yet implemented. Setting new PTS");
+                            _client.DatabaseManager.UpdateChats(differenceTooLong.Chats, differenceTooLong.Users);
+                            _logger.Information("Received difference too long, not yet implemented. Setting new PTS for {ChannelId}", _channelId.Value);
                             _updatesState.SetData(((Dialog)differenceTooLong.Dialog).Pts);
                             continue;
                         case ChannelDifference channelDifference:
                             {
+                                _logger.Information("Received difference for channel {ChannelId}, new messages: {MCount}, other updates: {OCount}, chats: {CCount}, users: {UCount}", _channelId.Value, channelDifference.NewMessages.Count, channelDifference.OtherUpdates.Count, channelDifference.Chats.Count, channelDifference.Users.Count);
                                 _client.DatabaseManager.UpdateChats(channelDifference.Chats, channelDifference.Users);
                                 _updatesState.SetData(channelDifference.Pts);
                                 yield return channelDifference.NewMessages.Select(UpdatesTools.FromMessageToUpdate).Concat(channelDifference.OtherUpdates).ToList();
