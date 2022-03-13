@@ -17,7 +17,7 @@ namespace CatraProto.TL
             get => _reader.BaseStream;
         }
 
-        private ICustomObjectDeserializer? _rpcDeserializer;
+        private ICustomObjectDeserializer? _customDeserializer;
         private readonly ObjectProvider _provider;
         private readonly BinaryReader _reader;
 
@@ -27,9 +27,9 @@ namespace CatraProto.TL
             _reader = new BinaryReader(stream, Encoding.UTF8, leaveOpen);
         }
 
-        public void SetRpcDeserializer(ICustomObjectDeserializer customObjectDeserializer)
+        public void SetCustomDeserializer(ICustomObjectDeserializer customObjectDeserializer)
         {
-            _rpcDeserializer = customObjectDeserializer;
+            _customDeserializer = customObjectDeserializer;
         }
 
 
@@ -38,7 +38,7 @@ namespace CatraProto.TL
             return (T)Read(typeof(T), bitSize);
         }
 
-        public object Read(Type type, int? bitSize = null, DeserializationOptions? deserializationOptions = null)
+        public object Read(Type type, int? bitSize = null)
         {
             if (type == typeof(int))
             {
@@ -93,9 +93,9 @@ namespace CatraProto.TL
                     var gzippedBytes = _provider.GetGzippedBytes(gzipInstance);
                     instance = GzipHandler.DeserializeGzippedObject(gzippedBytes, _provider);
                 } 
-                else if (_rpcDeserializer != null && id == _provider.RpcResultId)
+                else if (_customDeserializer != null && id == _provider.RpcResultId)
                 {
-                    _rpcDeserializer.DeserializeObject(instance, this);
+                    _customDeserializer.DeserializeObject(instance, this);
                     return instance;
                 }
                 else
