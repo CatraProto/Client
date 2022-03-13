@@ -1,42 +1,45 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
-    public partial class CodeTypeMissedCall : CatraProto.Client.TL.Schemas.CloudChats.Auth.CodeTypeBase
-    {
-        public static int StaticConstructorId
-        {
-            get => -702884114;
-        }
+	public partial class CodeTypeMissedCall : CatraProto.Client.TL.Schemas.CloudChats.Auth.CodeTypeBase
+	{
 
+
+        public static int StaticConstructorId { get => -702884114; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
+        public int ConstructorId { get => StaticConstructorId; }
+        
 
-
-        public CodeTypeMissedCall()
+        
+        public CodeTypeMissedCall() 
         {
         }
+		
+		public override void UpdateFlags() 
+		{
 
-        public override void UpdateFlags()
-        {
-        }
+		}
 
-        public override void Serialize(Writer writer)
-        {
-            writer.Write(ConstructorId);
-        }
+		public override void Serialize(Writer writer)
+		{
+writer.Write(ConstructorId);
 
-        public override void Deserialize(Reader reader)
-        {
-        }
+		}
 
-        public override string ToString()
-        {
-            return "auth.codeTypeMissedCall";
-        }
-    }
+		public override void Deserialize(Reader reader)
+		{
+
+		}
+				
+		public override string ToString()
+		{
+		    return "auth.codeTypeMissedCall";
+		}
+	}
 }

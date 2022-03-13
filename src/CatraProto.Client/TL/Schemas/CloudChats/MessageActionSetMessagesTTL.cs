@@ -1,53 +1,56 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class MessageActionSetMessagesTTL : CatraProto.Client.TL.Schemas.CloudChats.MessageActionBase
-    {
-        public static int StaticConstructorId
-        {
-            get => -1441072131;
-        }
+	public partial class MessageActionSetMessagesTTL : CatraProto.Client.TL.Schemas.CloudChats.MessageActionBase
+	{
 
+
+        public static int StaticConstructorId { get => -1441072131; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [Newtonsoft.Json.JsonProperty("period")]
-        public int Period { get; set; }
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonProperty("period")]
+		public int Period { get; set; }
 
 
-    #nullable enable
-        public MessageActionSetMessagesTTL(int period)
+        #nullable enable
+ public MessageActionSetMessagesTTL (int period)
+{
+ Period = period;
+ 
+}
+#nullable disable
+        internal MessageActionSetMessagesTTL() 
         {
-            Period = period;
         }
-    #nullable disable
-        internal MessageActionSetMessagesTTL()
-        {
-        }
+		
+		public override void UpdateFlags() 
+		{
 
-        public override void UpdateFlags()
-        {
-        }
+		}
 
-        public override void Serialize(Writer writer)
-        {
-            writer.Write(ConstructorId);
-            writer.Write(Period);
-        }
+		public override void Serialize(Writer writer)
+		{
+writer.Write(ConstructorId);
+			writer.Write(Period);
 
-        public override void Deserialize(Reader reader)
-        {
-            Period = reader.Read<int>();
-        }
+		}
 
-        public override string ToString()
-        {
-            return "messageActionSetMessagesTTL";
-        }
-    }
+		public override void Deserialize(Reader reader)
+		{
+			Period = reader.Read<int>();
+
+		}
+				
+		public override string ToString()
+		{
+		    return "messageActionSetMessagesTTL";
+		}
+	}
 }

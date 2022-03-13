@@ -1,42 +1,45 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class InputMessagesFilterGif : CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase
-    {
-        public static int StaticConstructorId
-        {
-            get => -3644025;
-        }
+	public partial class InputMessagesFilterGif : CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase
+	{
 
+
+        public static int StaticConstructorId { get => -3644025; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
+        public int ConstructorId { get => StaticConstructorId; }
+        
 
-
-        public InputMessagesFilterGif()
+        
+        public InputMessagesFilterGif() 
         {
         }
+		
+		public override void UpdateFlags() 
+		{
 
-        public override void UpdateFlags()
-        {
-        }
+		}
 
-        public override void Serialize(Writer writer)
-        {
-            writer.Write(ConstructorId);
-        }
+		public override void Serialize(Writer writer)
+		{
+writer.Write(ConstructorId);
 
-        public override void Deserialize(Reader reader)
-        {
-        }
+		}
 
-        public override string ToString()
-        {
-            return "inputMessagesFilterGif";
-        }
-    }
+		public override void Deserialize(Reader reader)
+		{
+
+		}
+				
+		public override string ToString()
+		{
+		    return "inputMessagesFilterGif";
+		}
+	}
 }

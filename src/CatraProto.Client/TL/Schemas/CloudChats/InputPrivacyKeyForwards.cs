@@ -1,42 +1,45 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class InputPrivacyKeyForwards : CatraProto.Client.TL.Schemas.CloudChats.InputPrivacyKeyBase
-    {
-        public static int StaticConstructorId
-        {
-            get => -1529000952;
-        }
+	public partial class InputPrivacyKeyForwards : CatraProto.Client.TL.Schemas.CloudChats.InputPrivacyKeyBase
+	{
 
+
+        public static int StaticConstructorId { get => -1529000952; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
+        public int ConstructorId { get => StaticConstructorId; }
+        
 
-
-        public InputPrivacyKeyForwards()
+        
+        public InputPrivacyKeyForwards() 
         {
         }
+		
+		public override void UpdateFlags() 
+		{
 
-        public override void UpdateFlags()
-        {
-        }
+		}
 
-        public override void Serialize(Writer writer)
-        {
-            writer.Write(ConstructorId);
-        }
+		public override void Serialize(Writer writer)
+		{
+writer.Write(ConstructorId);
 
-        public override void Deserialize(Reader reader)
-        {
-        }
+		}
 
-        public override string ToString()
-        {
-            return "inputPrivacyKeyForwards";
-        }
-    }
+		public override void Deserialize(Reader reader)
+		{
+
+		}
+				
+		public override string ToString()
+		{
+		    return "inputPrivacyKeyForwards";
+		}
+	}
 }

@@ -1,66 +1,71 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class StartHistoryImport : IMethod
-    {
-        [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => -1271008444;
-        }
+	public partial class StartHistoryImport : IMethod
+	{
+
 
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId
+        public static int StaticConstructorId { get => -1271008444; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(bool);
+
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[Newtonsoft.Json.JsonProperty("peer")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
+
+[Newtonsoft.Json.JsonProperty("import_id")]
+		public long ImportId { get; set; }
+
+        
+        #nullable enable
+ public StartHistoryImport (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer,long importId)
+{
+ Peer = peer;
+ImportId = importId;
+ 
+}
+#nullable disable
+                
+        internal StartHistoryImport() 
         {
-            get => StaticConstructorId;
         }
+        
+		public void UpdateFlags() 
+		{
 
-        [Newtonsoft.Json.JsonIgnore] System.Type IMethod.Type { get; init; } = typeof(bool);
+		}
 
-        [Newtonsoft.Json.JsonIgnore] bool IMethod.IsVector { get; init; } = false;
+		public void Serialize(Writer writer)
+		{
+writer.Write(ConstructorId);
+			writer.Write(Peer);
+			writer.Write(ImportId);
 
-        [Newtonsoft.Json.JsonProperty("peer")] public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
+		}
 
-        [Newtonsoft.Json.JsonProperty("import_id")]
-        public long ImportId { get; set; }
+		public void Deserialize(Reader reader)
+		{
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+			ImportId = reader.Read<long>();
 
-
-    #nullable enable
-        public StartHistoryImport(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, long importId)
-        {
-            Peer = peer;
-            ImportId = importId;
-        }
-    #nullable disable
-
-        internal StartHistoryImport()
-        {
-        }
-
-        public void UpdateFlags()
-        {
-        }
-
-        public void Serialize(Writer writer)
-        {
-            writer.Write(ConstructorId);
-            writer.Write(Peer);
-            writer.Write(ImportId);
-        }
-
-        public void Deserialize(Reader reader)
-        {
-            Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
-            ImportId = reader.Read<long>();
-        }
-
-        public override string ToString()
-        {
-            return "messages.startHistoryImport";
-        }
-    }
+		}
+		
+		public override string ToString()
+		{
+		    return "messages.startHistoryImport";
+		}
+	}
 }

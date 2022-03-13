@@ -1,42 +1,45 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class SendMessageCancelAction : CatraProto.Client.TL.Schemas.CloudChats.SendMessageActionBase
-    {
-        public static int StaticConstructorId
-        {
-            get => -44119819;
-        }
+	public partial class SendMessageCancelAction : CatraProto.Client.TL.Schemas.CloudChats.SendMessageActionBase
+	{
 
+
+        public static int StaticConstructorId { get => -44119819; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
+        public int ConstructorId { get => StaticConstructorId; }
+        
 
-
-        public SendMessageCancelAction()
+        
+        public SendMessageCancelAction() 
         {
         }
+		
+		public override void UpdateFlags() 
+		{
 
-        public override void UpdateFlags()
-        {
-        }
+		}
 
-        public override void Serialize(Writer writer)
-        {
-            writer.Write(ConstructorId);
-        }
+		public override void Serialize(Writer writer)
+		{
+writer.Write(ConstructorId);
 
-        public override void Deserialize(Reader reader)
-        {
-        }
+		}
 
-        public override string ToString()
-        {
-            return "sendMessageCancelAction";
-        }
-    }
+		public override void Deserialize(Reader reader)
+		{
+
+		}
+				
+		public override string ToString()
+		{
+		    return "sendMessageCancelAction";
+		}
+	}
 }

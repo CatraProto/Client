@@ -1,49 +1,54 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public partial class GetAutoDownloadSettings : IMethod
-    {
-        [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => 1457130303;
-        }
+	public partial class GetAutoDownloadSettings : IMethod
+	{
+
 
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
+        public static int StaticConstructorId { get => 1457130303; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Account.AutoDownloadSettingsBase);
 
-        [Newtonsoft.Json.JsonIgnore] System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Account.AutoDownloadSettingsBase);
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-        [Newtonsoft.Json.JsonIgnore] bool IMethod.IsVector { get; init; } = false;
-
-
-        public GetAutoDownloadSettings()
-        {
-        }
-
-        public void UpdateFlags()
-        {
-        }
-
-        public void Serialize(Writer writer)
-        {
-            writer.Write(ConstructorId);
-        }
-
-        public void Deserialize(Reader reader)
+        
+        
+                
+        public GetAutoDownloadSettings() 
         {
         }
+        
+		public void UpdateFlags() 
+		{
 
-        public override string ToString()
-        {
-            return "account.getAutoDownloadSettings";
-        }
-    }
+		}
+
+		public void Serialize(Writer writer)
+		{
+writer.Write(ConstructorId);
+
+		}
+
+		public void Deserialize(Reader reader)
+		{
+
+		}
+		
+		public override string ToString()
+		{
+		    return "account.getAutoDownloadSettings";
+		}
+	}
 }

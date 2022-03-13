@@ -1,60 +1,65 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class ImportChatInvite : IMethod
-    {
-        [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => 1817183516;
-        }
+	public partial class ImportChatInvite : IMethod
+	{
+
 
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId
+        public static int StaticConstructorId { get => 1817183516; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
+
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[Newtonsoft.Json.JsonProperty("hash")]
+		public string Hash { get; set; }
+
+        
+        #nullable enable
+ public ImportChatInvite (string hash)
+{
+ Hash = hash;
+ 
+}
+#nullable disable
+                
+        internal ImportChatInvite() 
         {
-            get => StaticConstructorId;
         }
+        
+		public void UpdateFlags() 
+		{
 
-        [Newtonsoft.Json.JsonIgnore] System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
+		}
 
-        [Newtonsoft.Json.JsonIgnore] bool IMethod.IsVector { get; init; } = false;
+		public void Serialize(Writer writer)
+		{
+writer.Write(ConstructorId);
+			writer.Write(Hash);
 
-        [Newtonsoft.Json.JsonProperty("hash")] public string Hash { get; set; }
+		}
 
+		public void Deserialize(Reader reader)
+		{
+			Hash = reader.Read<string>();
 
-    #nullable enable
-        public ImportChatInvite(string hash)
-        {
-            Hash = hash;
-        }
-    #nullable disable
-
-        internal ImportChatInvite()
-        {
-        }
-
-        public void UpdateFlags()
-        {
-        }
-
-        public void Serialize(Writer writer)
-        {
-            writer.Write(ConstructorId);
-            writer.Write(Hash);
-        }
-
-        public void Deserialize(Reader reader)
-        {
-            Hash = reader.Read<string>();
-        }
-
-        public override string ToString()
-        {
-            return "messages.importChatInvite";
-        }
-    }
+		}
+		
+		public override string ToString()
+		{
+		    return "messages.importChatInvite";
+		}
+	}
 }

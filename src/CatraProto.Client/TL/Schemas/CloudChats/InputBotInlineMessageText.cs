@@ -1,99 +1,101 @@
 using System;
 using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class InputBotInlineMessageText : CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageBase
-    {
-        [Flags]
-        public enum FlagsEnum
-        {
-            NoWebpage = 1 << 0,
-            Entities = 1 << 1,
-            ReplyMarkup = 1 << 2
-        }
+	public partial class InputBotInlineMessageText : CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageBase
+	{
+		[Flags]
+		public enum FlagsEnum 
+		{
+			NoWebpage = 1 << 0,
+			Entities = 1 << 1,
+			ReplyMarkup = 1 << 2
+		}
 
-        public static int StaticConstructorId
-        {
-            get => 1036876423;
-        }
-
+        public static int StaticConstructorId { get => 1036876423; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		public int Flags { get; set; }
+
+[Newtonsoft.Json.JsonProperty("no_webpage")]
+		public bool NoWebpage { get; set; }
+
+[Newtonsoft.Json.JsonProperty("message")]
+		public string Message { get; set; }
+
+[Newtonsoft.Json.JsonProperty("entities")]
+		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
+
+[Newtonsoft.Json.JsonProperty("reply_markup")]
+		public sealed override CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase ReplyMarkup { get; set; }
+
+
+        #nullable enable
+ public InputBotInlineMessageText (string message)
+{
+ Message = message;
+ 
+}
+#nullable disable
+        internal InputBotInlineMessageText() 
         {
-            get => StaticConstructorId;
         }
+		
+		public override void UpdateFlags() 
+		{
+			Flags = NoWebpage ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
+			Flags = Entities == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
+			Flags = ReplyMarkup == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
 
-        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
+		}
 
-        [Newtonsoft.Json.JsonProperty("no_webpage")]
-        public bool NoWebpage { get; set; }
+		public override void Serialize(Writer writer)
+		{
+writer.Write(ConstructorId);
+			UpdateFlags();
+			writer.Write(Flags);
+			writer.Write(Message);
+			if(FlagsHelper.IsFlagSet(Flags, 1))
+			{
+				writer.Write(Entities);
+			}
 
-        [Newtonsoft.Json.JsonProperty("message")]
-        public string Message { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("entities")]
-        public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("reply_markup")]
-        public sealed override CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase ReplyMarkup { get; set; }
+			if(FlagsHelper.IsFlagSet(Flags, 2))
+			{
+				writer.Write(ReplyMarkup);
+			}
 
 
-    #nullable enable
-        public InputBotInlineMessageText(string message)
-        {
-            Message = message;
-        }
-    #nullable disable
-        internal InputBotInlineMessageText()
-        {
-        }
+		}
 
-        public override void UpdateFlags()
-        {
-            Flags = NoWebpage ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
-            Flags = Entities == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
-            Flags = ReplyMarkup == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
-        }
+		public override void Deserialize(Reader reader)
+		{
+			Flags = reader.Read<int>();
+			NoWebpage = FlagsHelper.IsFlagSet(Flags, 0);
+			Message = reader.Read<string>();
+			if(FlagsHelper.IsFlagSet(Flags, 1))
+			{
+				Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
+			}
 
-        public override void Serialize(Writer writer)
-        {
-            writer.Write(ConstructorId);
-            UpdateFlags();
-            writer.Write(Flags);
-            writer.Write(Message);
-            if (FlagsHelper.IsFlagSet(Flags, 1))
-            {
-                writer.Write(Entities);
-            }
+			if(FlagsHelper.IsFlagSet(Flags, 2))
+			{
+				ReplyMarkup = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase>();
+			}
 
-            if (FlagsHelper.IsFlagSet(Flags, 2))
-            {
-                writer.Write(ReplyMarkup);
-            }
-        }
 
-        public override void Deserialize(Reader reader)
-        {
-            Flags = reader.Read<int>();
-            NoWebpage = FlagsHelper.IsFlagSet(Flags, 0);
-            Message = reader.Read<string>();
-            if (FlagsHelper.IsFlagSet(Flags, 1))
-            {
-                Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
-            }
-
-            if (FlagsHelper.IsFlagSet(Flags, 2))
-            {
-                ReplyMarkup = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase>();
-            }
-        }
-
-        public override string ToString()
-        {
-            return "inputBotInlineMessageText";
-        }
-    }
+		}
+				
+		public override string ToString()
+		{
+		    return "inputBotInlineMessageText";
+		}
+	}
 }

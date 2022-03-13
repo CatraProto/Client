@@ -19,6 +19,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("animated")]
 		public abstract bool Animated { get; set; }
 
+[Newtonsoft.Json.JsonProperty("videos")]
+		public abstract bool Videos { get; set; }
+
 [Newtonsoft.Json.JsonProperty("installed_date")]
 		public abstract int? InstalledDate { get; set; }
 

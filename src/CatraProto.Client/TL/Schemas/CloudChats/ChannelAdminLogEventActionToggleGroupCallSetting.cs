@@ -1,53 +1,56 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class ChannelAdminLogEventActionToggleGroupCallSetting : CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionBase
-    {
-        public static int StaticConstructorId
-        {
-            get => 1456906823;
-        }
+	public partial class ChannelAdminLogEventActionToggleGroupCallSetting : CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionBase
+	{
 
+
+        public static int StaticConstructorId { get => 1456906823; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
-
-        [Newtonsoft.Json.JsonProperty("join_muted")]
-        public bool JoinMuted { get; set; }
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonProperty("join_muted")]
+		public bool JoinMuted { get; set; }
 
 
-    #nullable enable
-        public ChannelAdminLogEventActionToggleGroupCallSetting(bool joinMuted)
+        #nullable enable
+ public ChannelAdminLogEventActionToggleGroupCallSetting (bool joinMuted)
+{
+ JoinMuted = joinMuted;
+ 
+}
+#nullable disable
+        internal ChannelAdminLogEventActionToggleGroupCallSetting() 
         {
-            JoinMuted = joinMuted;
         }
-    #nullable disable
-        internal ChannelAdminLogEventActionToggleGroupCallSetting()
-        {
-        }
+		
+		public override void UpdateFlags() 
+		{
 
-        public override void UpdateFlags()
-        {
-        }
+		}
 
-        public override void Serialize(Writer writer)
-        {
-            writer.Write(ConstructorId);
-            writer.Write(JoinMuted);
-        }
+		public override void Serialize(Writer writer)
+		{
+writer.Write(ConstructorId);
+			writer.Write(JoinMuted);
 
-        public override void Deserialize(Reader reader)
-        {
-            JoinMuted = reader.Read<bool>();
-        }
+		}
 
-        public override string ToString()
-        {
-            return "channelAdminLogEventActionToggleGroupCallSetting";
-        }
-    }
+		public override void Deserialize(Reader reader)
+		{
+			JoinMuted = reader.Read<bool>();
+
+		}
+				
+		public override string ToString()
+		{
+		    return "channelAdminLogEventActionToggleGroupCallSetting";
+		}
+	}
 }

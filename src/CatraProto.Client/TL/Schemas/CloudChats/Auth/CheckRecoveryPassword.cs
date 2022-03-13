@@ -1,60 +1,65 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
-    public partial class CheckRecoveryPassword : IMethod
-    {
-        [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => 221691769;
-        }
+	public partial class CheckRecoveryPassword : IMethod
+	{
+
 
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId
+        public static int StaticConstructorId { get => 221691769; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(bool);
+
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[Newtonsoft.Json.JsonProperty("code")]
+		public string Code { get; set; }
+
+        
+        #nullable enable
+ public CheckRecoveryPassword (string code)
+{
+ Code = code;
+ 
+}
+#nullable disable
+                
+        internal CheckRecoveryPassword() 
         {
-            get => StaticConstructorId;
         }
+        
+		public void UpdateFlags() 
+		{
 
-        [Newtonsoft.Json.JsonIgnore] System.Type IMethod.Type { get; init; } = typeof(bool);
+		}
 
-        [Newtonsoft.Json.JsonIgnore] bool IMethod.IsVector { get; init; } = false;
+		public void Serialize(Writer writer)
+		{
+writer.Write(ConstructorId);
+			writer.Write(Code);
 
-        [Newtonsoft.Json.JsonProperty("code")] public string Code { get; set; }
+		}
 
+		public void Deserialize(Reader reader)
+		{
+			Code = reader.Read<string>();
 
-    #nullable enable
-        public CheckRecoveryPassword(string code)
-        {
-            Code = code;
-        }
-    #nullable disable
-
-        internal CheckRecoveryPassword()
-        {
-        }
-
-        public void UpdateFlags()
-        {
-        }
-
-        public void Serialize(Writer writer)
-        {
-            writer.Write(ConstructorId);
-            writer.Write(Code);
-        }
-
-        public void Deserialize(Reader reader)
-        {
-            Code = reader.Read<string>();
-        }
-
-        public override string ToString()
-        {
-            return "auth.checkRecoveryPassword";
-        }
-    }
+		}
+		
+		public override string ToString()
+		{
+		    return "auth.checkRecoveryPassword";
+		}
+	}
 }

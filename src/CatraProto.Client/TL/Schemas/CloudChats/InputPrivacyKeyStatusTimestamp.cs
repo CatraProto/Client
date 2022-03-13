@@ -1,42 +1,45 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class InputPrivacyKeyStatusTimestamp : CatraProto.Client.TL.Schemas.CloudChats.InputPrivacyKeyBase
-    {
-        public static int StaticConstructorId
-        {
-            get => 1335282456;
-        }
+	public partial class InputPrivacyKeyStatusTimestamp : CatraProto.Client.TL.Schemas.CloudChats.InputPrivacyKeyBase
+	{
 
+
+        public static int StaticConstructorId { get => 1335282456; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
+        public int ConstructorId { get => StaticConstructorId; }
+        
 
-
-        public InputPrivacyKeyStatusTimestamp()
+        
+        public InputPrivacyKeyStatusTimestamp() 
         {
         }
+		
+		public override void UpdateFlags() 
+		{
 
-        public override void UpdateFlags()
-        {
-        }
+		}
 
-        public override void Serialize(Writer writer)
-        {
-            writer.Write(ConstructorId);
-        }
+		public override void Serialize(Writer writer)
+		{
+writer.Write(ConstructorId);
 
-        public override void Deserialize(Reader reader)
-        {
-        }
+		}
 
-        public override string ToString()
-        {
-            return "inputPrivacyKeyStatusTimestamp";
-        }
-    }
+		public override void Deserialize(Reader reader)
+		{
+
+		}
+				
+		public override string ToString()
+		{
+		    return "inputPrivacyKeyStatusTimestamp";
+		}
+	}
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
 using CatraProto.Client.Connections.MessageScheduling.Items;
 using CatraProto.Client.TL.Schemas;
@@ -17,7 +18,7 @@ namespace CatraProto.Client.Connections.Loop
                 serialized = item.Body.ToArray(MergedProvider.Singleton);
                 return true;
             }
-            catch (SerializationException e)
+            catch (Exception e)
             {
                 logger.Error("Serialization of message of type {Type} failed, throwing exception on caller", item.Body);
                 item.SetFailed(e);

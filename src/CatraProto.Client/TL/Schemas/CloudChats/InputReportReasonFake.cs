@@ -1,42 +1,45 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class InputReportReasonFake : CatraProto.Client.TL.Schemas.CloudChats.ReportReasonBase
-    {
-        public static int StaticConstructorId
-        {
-            get => -170010905;
-        }
+	public partial class InputReportReasonFake : CatraProto.Client.TL.Schemas.CloudChats.ReportReasonBase
+	{
 
+
+        public static int StaticConstructorId { get => -170010905; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
+        public int ConstructorId { get => StaticConstructorId; }
+        
 
-
-        public InputReportReasonFake()
+        
+        public InputReportReasonFake() 
         {
         }
+		
+		public override void UpdateFlags() 
+		{
 
-        public override void UpdateFlags()
-        {
-        }
+		}
 
-        public override void Serialize(Writer writer)
-        {
-            writer.Write(ConstructorId);
-        }
+		public override void Serialize(Writer writer)
+		{
+writer.Write(ConstructorId);
 
-        public override void Deserialize(Reader reader)
-        {
-        }
+		}
 
-        public override string ToString()
-        {
-            return "inputReportReasonFake";
-        }
-    }
+		public override void Deserialize(Reader reader)
+		{
+
+		}
+				
+		public override string ToString()
+		{
+		    return "inputReportReasonFake";
+		}
+	}
 }

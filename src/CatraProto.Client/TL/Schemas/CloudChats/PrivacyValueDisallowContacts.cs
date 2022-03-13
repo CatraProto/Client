@@ -1,42 +1,45 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class PrivacyValueDisallowContacts : CatraProto.Client.TL.Schemas.CloudChats.PrivacyRuleBase
-    {
-        public static int StaticConstructorId
-        {
-            get => -125240806;
-        }
+	public partial class PrivacyValueDisallowContacts : CatraProto.Client.TL.Schemas.CloudChats.PrivacyRuleBase
+	{
 
+
+        public static int StaticConstructorId { get => -125240806; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
+        public int ConstructorId { get => StaticConstructorId; }
+        
 
-
-        public PrivacyValueDisallowContacts()
+        
+        public PrivacyValueDisallowContacts() 
         {
         }
+		
+		public override void UpdateFlags() 
+		{
 
-        public override void UpdateFlags()
-        {
-        }
+		}
 
-        public override void Serialize(Writer writer)
-        {
-            writer.Write(ConstructorId);
-        }
+		public override void Serialize(Writer writer)
+		{
+writer.Write(ConstructorId);
 
-        public override void Deserialize(Reader reader)
-        {
-        }
+		}
 
-        public override string ToString()
-        {
-            return "privacyValueDisallowContacts";
-        }
-    }
+		public override void Deserialize(Reader reader)
+		{
+
+		}
+				
+		public override string ToString()
+		{
+		    return "privacyValueDisallowContacts";
+		}
+	}
 }

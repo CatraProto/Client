@@ -1,66 +1,71 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-    public partial class SendConfirmPhoneCode : IMethod
-    {
-        [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => 457157256;
-        }
+	public partial class SendConfirmPhoneCode : IMethod
+	{
+
 
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId
+        public static int StaticConstructorId { get => 457157256; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeBase);
+
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[Newtonsoft.Json.JsonProperty("hash")]
+		public string Hash { get; set; }
+
+[Newtonsoft.Json.JsonProperty("settings")]
+		public CatraProto.Client.TL.Schemas.CloudChats.CodeSettingsBase Settings { get; set; }
+
+        
+        #nullable enable
+ public SendConfirmPhoneCode (string hash,CatraProto.Client.TL.Schemas.CloudChats.CodeSettingsBase settings)
+{
+ Hash = hash;
+Settings = settings;
+ 
+}
+#nullable disable
+                
+        internal SendConfirmPhoneCode() 
         {
-            get => StaticConstructorId;
         }
+        
+		public void UpdateFlags() 
+		{
 
-        [Newtonsoft.Json.JsonIgnore] System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeBase);
+		}
 
-        [Newtonsoft.Json.JsonIgnore] bool IMethod.IsVector { get; init; } = false;
+		public void Serialize(Writer writer)
+		{
+writer.Write(ConstructorId);
+			writer.Write(Hash);
+			writer.Write(Settings);
 
-        [Newtonsoft.Json.JsonProperty("hash")] public string Hash { get; set; }
+		}
 
-        [Newtonsoft.Json.JsonProperty("settings")]
-        public CatraProto.Client.TL.Schemas.CloudChats.CodeSettingsBase Settings { get; set; }
+		public void Deserialize(Reader reader)
+		{
+			Hash = reader.Read<string>();
+			Settings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.CodeSettingsBase>();
 
-
-    #nullable enable
-        public SendConfirmPhoneCode(string hash, CatraProto.Client.TL.Schemas.CloudChats.CodeSettingsBase settings)
-        {
-            Hash = hash;
-            Settings = settings;
-        }
-    #nullable disable
-
-        internal SendConfirmPhoneCode()
-        {
-        }
-
-        public void UpdateFlags()
-        {
-        }
-
-        public void Serialize(Writer writer)
-        {
-            writer.Write(ConstructorId);
-            writer.Write(Hash);
-            writer.Write(Settings);
-        }
-
-        public void Deserialize(Reader reader)
-        {
-            Hash = reader.Read<string>();
-            Settings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.CodeSettingsBase>();
-        }
-
-        public override string ToString()
-        {
-            return "account.sendConfirmPhoneCode";
-        }
-    }
+		}
+		
+		public override string ToString()
+		{
+		    return "account.sendConfirmPhoneCode";
+		}
+	}
 }

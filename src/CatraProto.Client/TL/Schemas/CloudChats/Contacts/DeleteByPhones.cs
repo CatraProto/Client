@@ -1,62 +1,65 @@
+using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
-    public partial class DeleteByPhones : IMethod
-    {
-        [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => 269745566;
-        }
+	public partial class DeleteByPhones : IMethod
+	{
+
 
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
+        public static int StaticConstructorId { get => 269745566; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(bool);
 
-        [Newtonsoft.Json.JsonIgnore] System.Type IMethod.Type { get; init; } = typeof(bool);
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
 
-        [Newtonsoft.Json.JsonIgnore] bool IMethod.IsVector { get; init; } = false;
+[Newtonsoft.Json.JsonProperty("phones")]
+		public IList<string> Phones { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("phones")]
-        public IList<string> Phones { get; set; }
-
-
-    #nullable enable
-        public DeleteByPhones(IList<string> phones)
-        {
-            Phones = phones;
-        }
-    #nullable disable
-
-        internal DeleteByPhones()
-        {
-        }
-
-        public void UpdateFlags()
+        
+        #nullable enable
+ public DeleteByPhones (IList<string> phones)
+{
+ Phones = phones;
+ 
+}
+#nullable disable
+                
+        internal DeleteByPhones() 
         {
         }
+        
+		public void UpdateFlags() 
+		{
 
-        public void Serialize(Writer writer)
-        {
-            writer.Write(ConstructorId);
-            writer.Write(Phones);
-        }
+		}
 
-        public void Deserialize(Reader reader)
-        {
-            Phones = reader.ReadVector<string>();
-        }
+		public void Serialize(Writer writer)
+		{
+writer.Write(ConstructorId);
+			writer.Write(Phones);
 
-        public override string ToString()
-        {
-            return "contacts.deleteByPhones";
-        }
-    }
+		}
+
+		public void Deserialize(Reader reader)
+		{
+			Phones = reader.ReadVector<string>();
+
+		}
+		
+		public override string ToString()
+		{
+		    return "contacts.deleteByPhones";
+		}
+	}
 }

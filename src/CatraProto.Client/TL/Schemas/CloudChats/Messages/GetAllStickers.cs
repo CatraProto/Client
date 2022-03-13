@@ -1,60 +1,65 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class GetAllStickers : IMethod
-    {
-        [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => -1197432408;
-        }
+	public partial class GetAllStickers : IMethod
+	{
+
 
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId
+        public static int StaticConstructorId { get => -1197432408; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.AllStickersBase);
+
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[Newtonsoft.Json.JsonProperty("hash")]
+		public long Hash { get; set; }
+
+        
+        #nullable enable
+ public GetAllStickers (long hash)
+{
+ Hash = hash;
+ 
+}
+#nullable disable
+                
+        internal GetAllStickers() 
         {
-            get => StaticConstructorId;
         }
+        
+		public void UpdateFlags() 
+		{
 
-        [Newtonsoft.Json.JsonIgnore] System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.AllStickersBase);
+		}
 
-        [Newtonsoft.Json.JsonIgnore] bool IMethod.IsVector { get; init; } = false;
+		public void Serialize(Writer writer)
+		{
+writer.Write(ConstructorId);
+			writer.Write(Hash);
 
-        [Newtonsoft.Json.JsonProperty("hash")] public long Hash { get; set; }
+		}
 
+		public void Deserialize(Reader reader)
+		{
+			Hash = reader.Read<long>();
 
-    #nullable enable
-        public GetAllStickers(long hash)
-        {
-            Hash = hash;
-        }
-    #nullable disable
-
-        internal GetAllStickers()
-        {
-        }
-
-        public void UpdateFlags()
-        {
-        }
-
-        public void Serialize(Writer writer)
-        {
-            writer.Write(ConstructorId);
-            writer.Write(Hash);
-        }
-
-        public void Deserialize(Reader reader)
-        {
-            Hash = reader.Read<long>();
-        }
-
-        public override string ToString()
-        {
-            return "messages.getAllStickers";
-        }
-    }
+		}
+		
+		public override string ToString()
+		{
+		    return "messages.getAllStickers";
+		}
+	}
 }

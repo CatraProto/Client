@@ -234,6 +234,10 @@ case CatraProto.Client.TL.Schemas.CloudChats.Messages.PeerSettings peerSettings:
 chatsVector = peerSettings.Chats;
 usersVector = peerSettings.Users;
 break;
+case CatraProto.Client.TL.Schemas.CloudChats.Messages.MessageReactionsList messageReactionsList:
+chatsVector = messageReactionsList.Chats;
+usersVector = messageReactionsList.Users;
+break;
 
             }
 
@@ -426,6 +430,8 @@ case CatraProto.Client.TL.Schemas.CloudChats.UpdatePendingJoinRequests updatePen
 peerId = CatraProto.Client.MTProto.PeerId.FromPeer(updatePendingJoinRequests.Peer);return true;
 case CatraProto.Client.TL.Schemas.CloudChats.UpdateBotChatInviteRequester updateBotChatInviteRequester:
 peerId = CatraProto.Client.MTProto.PeerId.AsUser(updateBotChatInviteRequester.UserId);return true;
+case CatraProto.Client.TL.Schemas.CloudChats.UpdateMessageReactions updateMessageReactions:
+peerId = CatraProto.Client.MTProto.PeerId.FromPeer(updateMessageReactions.Peer);return true;
 
             }
             

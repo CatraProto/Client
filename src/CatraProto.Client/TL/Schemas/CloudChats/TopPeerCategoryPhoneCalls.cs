@@ -1,42 +1,45 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class TopPeerCategoryPhoneCalls : CatraProto.Client.TL.Schemas.CloudChats.TopPeerCategoryBase
-    {
-        public static int StaticConstructorId
-        {
-            get => 511092620;
-        }
+	public partial class TopPeerCategoryPhoneCalls : CatraProto.Client.TL.Schemas.CloudChats.TopPeerCategoryBase
+	{
 
+
+        public static int StaticConstructorId { get => 511092620; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId
-        {
-            get => StaticConstructorId;
-        }
+        public int ConstructorId { get => StaticConstructorId; }
+        
 
-
-        public TopPeerCategoryPhoneCalls()
+        
+        public TopPeerCategoryPhoneCalls() 
         {
         }
+		
+		public override void UpdateFlags() 
+		{
 
-        public override void UpdateFlags()
-        {
-        }
+		}
 
-        public override void Serialize(Writer writer)
-        {
-            writer.Write(ConstructorId);
-        }
+		public override void Serialize(Writer writer)
+		{
+writer.Write(ConstructorId);
 
-        public override void Deserialize(Reader reader)
-        {
-        }
+		}
 
-        public override string ToString()
-        {
-            return "topPeerCategoryPhoneCalls";
-        }
-    }
+		public override void Deserialize(Reader reader)
+		{
+
+		}
+				
+		public override string ToString()
+		{
+		    return "topPeerCategoryPhoneCalls";
+		}
+	}
 }

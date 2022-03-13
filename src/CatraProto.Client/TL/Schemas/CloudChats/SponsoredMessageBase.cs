@@ -13,6 +13,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("from_id")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.PeerBase FromId { get; set; }
 
+[Newtonsoft.Json.JsonProperty("chat_invite")]
+		public abstract CatraProto.Client.TL.Schemas.CloudChats.ChatInviteBase ChatInvite { get; set; }
+
+[Newtonsoft.Json.JsonProperty("chat_invite_hash")]
+		public abstract string ChatInviteHash { get; set; }
+
 [Newtonsoft.Json.JsonProperty("channel_post")]
 		public abstract int? ChannelPost { get; set; }
 

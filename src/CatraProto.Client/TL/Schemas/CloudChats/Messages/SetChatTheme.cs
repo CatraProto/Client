@@ -1,66 +1,71 @@
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public partial class SetChatTheme : IMethod
-    {
-        [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId
-        {
-            get => -432283329;
-        }
+	public partial class SetChatTheme : IMethod
+	{
+
 
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId
+        public static int StaticConstructorId { get => -432283329; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
+
+[Newtonsoft.Json.JsonIgnore]
+		bool IMethod.IsVector { get; init; } = false;
+
+[Newtonsoft.Json.JsonProperty("peer")]
+		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
+
+[Newtonsoft.Json.JsonProperty("emoticon")]
+		public string Emoticon { get; set; }
+
+        
+        #nullable enable
+ public SetChatTheme (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer,string emoticon)
+{
+ Peer = peer;
+Emoticon = emoticon;
+ 
+}
+#nullable disable
+                
+        internal SetChatTheme() 
         {
-            get => StaticConstructorId;
         }
+        
+		public void UpdateFlags() 
+		{
 
-        [Newtonsoft.Json.JsonIgnore] System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
+		}
 
-        [Newtonsoft.Json.JsonIgnore] bool IMethod.IsVector { get; init; } = false;
+		public void Serialize(Writer writer)
+		{
+writer.Write(ConstructorId);
+			writer.Write(Peer);
+			writer.Write(Emoticon);
 
-        [Newtonsoft.Json.JsonProperty("peer")] public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
+		}
 
-        [Newtonsoft.Json.JsonProperty("emoticon")]
-        public string Emoticon { get; set; }
+		public void Deserialize(Reader reader)
+		{
+			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+			Emoticon = reader.Read<string>();
 
-
-    #nullable enable
-        public SetChatTheme(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, string emoticon)
-        {
-            Peer = peer;
-            Emoticon = emoticon;
-        }
-    #nullable disable
-
-        internal SetChatTheme()
-        {
-        }
-
-        public void UpdateFlags()
-        {
-        }
-
-        public void Serialize(Writer writer)
-        {
-            writer.Write(ConstructorId);
-            writer.Write(Peer);
-            writer.Write(Emoticon);
-        }
-
-        public void Deserialize(Reader reader)
-        {
-            Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
-            Emoticon = reader.Read<string>();
-        }
-
-        public override string ToString()
-        {
-            return "messages.setChatTheme";
-        }
-    }
+		}
+		
+		public override string ToString()
+		{
+		    return "messages.setChatTheme";
+		}
+	}
 }

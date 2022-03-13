@@ -1,75 +1,77 @@
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class KeyboardButtonSwitchInline : CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonBase
-    {
-        [Flags]
-        public enum FlagsEnum
-        {
-            SamePeer = 1 << 0
-        }
+	public partial class KeyboardButtonSwitchInline : CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonBase
+	{
+		[Flags]
+		public enum FlagsEnum 
+		{
+			SamePeer = 1 << 0
+		}
 
-        public static int StaticConstructorId
-        {
-            get => 90744648;
-        }
-
+        public static int StaticConstructorId { get => 90744648; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId
+        public int ConstructorId { get => StaticConstructorId; }
+        
+[Newtonsoft.Json.JsonIgnore]
+		public int Flags { get; set; }
+
+[Newtonsoft.Json.JsonProperty("same_peer")]
+		public bool SamePeer { get; set; }
+
+[Newtonsoft.Json.JsonProperty("text")]
+		public sealed override string Text { get; set; }
+
+[Newtonsoft.Json.JsonProperty("query")]
+		public string Query { get; set; }
+
+
+        #nullable enable
+ public KeyboardButtonSwitchInline (string text,string query)
+{
+ Text = text;
+Query = query;
+ 
+}
+#nullable disable
+        internal KeyboardButtonSwitchInline() 
         {
-            get => StaticConstructorId;
         }
+		
+		public override void UpdateFlags() 
+		{
+			Flags = SamePeer ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
 
-        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
+		}
 
-        [Newtonsoft.Json.JsonProperty("same_peer")]
-        public bool SamePeer { get; set; }
+		public override void Serialize(Writer writer)
+		{
+writer.Write(ConstructorId);
+			UpdateFlags();
+			writer.Write(Flags);
+			writer.Write(Text);
+			writer.Write(Query);
 
-        [Newtonsoft.Json.JsonProperty("text")] public sealed override string Text { get; set; }
+		}
 
-        [Newtonsoft.Json.JsonProperty("query")]
-        public string Query { get; set; }
+		public override void Deserialize(Reader reader)
+		{
+			Flags = reader.Read<int>();
+			SamePeer = FlagsHelper.IsFlagSet(Flags, 0);
+			Text = reader.Read<string>();
+			Query = reader.Read<string>();
 
-
-    #nullable enable
-        public KeyboardButtonSwitchInline(string text, string query)
-        {
-            Text = text;
-            Query = query;
-        }
-    #nullable disable
-        internal KeyboardButtonSwitchInline()
-        {
-        }
-
-        public override void UpdateFlags()
-        {
-            Flags = SamePeer ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
-        }
-
-        public override void Serialize(Writer writer)
-        {
-            writer.Write(ConstructorId);
-            UpdateFlags();
-            writer.Write(Flags);
-            writer.Write(Text);
-            writer.Write(Query);
-        }
-
-        public override void Deserialize(Reader reader)
-        {
-            Flags = reader.Read<int>();
-            SamePeer = FlagsHelper.IsFlagSet(Flags, 0);
-            Text = reader.Read<string>();
-            Query = reader.Read<string>();
-        }
-
-        public override string ToString()
-        {
-            return "keyboardButtonSwitchInline";
-        }
-    }
+		}
+				
+		public override string ToString()
+		{
+		    return "keyboardButtonSwitchInline";
+		}
+	}
 }
