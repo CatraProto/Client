@@ -43,7 +43,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
         public void DispatchMessage(IConnectionMessage connectionMessage)
         {
             using var reader = new Reader(MergedProvider.Singleton, connectionMessage.Body.ToMemoryStream());
-            reader.SetRpcDeserializer(_rpcDeserializer);
+            reader.SetCustomDeserializer(_rpcDeserializer);
             if (connectionMessage.Body.Length == 4)
             {
                 var error = reader.Read<int>();
@@ -84,6 +84,9 @@ namespace CatraProto.Client.Connections.MessageScheduling
         {
             if (connectionMessage is EncryptedConnectionMessage encryptedConnectionMessage)
             {
+                UpdatesTools.ExtractChats(obj, out var chats, out var users);
+                _mtProtoState.Client.DatabaseManager.UpdateChats(chats, users);
+
                 switch (obj)
                 {
                     case MsgsStateInfo msgsStateInfo:

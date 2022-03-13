@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CatraProto.TL.Generator.Objects;
 using CatraProto.TL.Generator.Objects.Interfaces;
 using CatraProto.TL.Generator.Settings;
+using Microsoft.VisualBasic;
 
 namespace CatraProto.TL.Generator.CodeGeneration.Writing
 {
@@ -29,9 +30,52 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
         public async Task WriteAsync()
         {
             var template = await File.ReadAllTextAsync(Configuration.UpdateToolsTemplatePath);
-            var replaced = template.Replace("^PtsConditions^", GetPtsConditions()).Replace("^QtsConditions^", GetQtsConditions()).Replace("^PeerConditions^", GetPeerConditions());
+            var replaced = template.Replace("^PtsConditions^", GetPtsConditions()).Replace("^QtsConditions^", GetQtsConditions()).Replace("^PeerConditions^", GetPeerConditions()).Replace("^VectorChatsConditions^", GetChatsConditions());
             Directory.CreateDirectory(Configuration.UpdatesToolsWritePath[0..^1]);
             await File.WriteAllTextAsync(Configuration.UpdatesToolsWritePath, replaced);
+        }
+
+        private string GetChatsConditions()
+        {
+            var stringBuilder = new StringBuilder();
+            foreach (var obj in _objects.Where(x => x.Type.Namespace is not null && x is not Method))
+            {
+                Parameter chats = obj.Parameters.Find(x => x.Type.Namespace is not null && x.Type.Namespace.FullNamespace == "CatraProto.Client.TL.Schemas.CloudChats.Chat");
+                Parameter users = obj.Parameters.Find(x => x.Type.Namespace is not null && x.Type.Namespace.FullNamespace == "CatraProto.Client.TL.Schemas.CloudChats.User");
+                if(chats is null && users is null)
+                {
+                    continue;
+                }
+
+
+                stringBuilder.Append("case ");
+                stringBuilder.Append(obj.Namespace.FullNamespace);
+                stringBuilder.Append(' ');
+                stringBuilder.Append(obj.NamingInfo.CamelCaseName);
+                stringBuilder.Append(":\n");
+                void WriteParameter(string varName, string typeName, Parameter parameter)
+                {
+                    if (parameter is not null)
+                    {
+                        stringBuilder.Append($"{varName} = ");
+                        if (parameter.VectorInfo.IsVector)
+                        {
+                            stringBuilder.AppendLine(obj.NamingInfo.CamelCaseName + "." + parameter.NamingInfo.PascalCaseName + ";");
+                        }
+                        else
+                        {
+                            stringBuilder.AppendLine($"new System.Collections.Generic.List<{typeName}>(1){{ " + obj.NamingInfo.CamelCaseName + "." + parameter.NamingInfo.PascalCaseName + "};");
+                        }
+                    }
+                }
+
+                WriteParameter("chatsVector", "CatraProto.Client.TL.Schemas.CloudChats.ChatBase", chats);
+                WriteParameter("usersVector", "CatraProto.Client.TL.Schemas.CloudChats.UserBase", users);
+
+                stringBuilder.AppendLine("break;");
+            }
+
+            return stringBuilder.ToString();
         }
 
         private string GetQtsConditions()

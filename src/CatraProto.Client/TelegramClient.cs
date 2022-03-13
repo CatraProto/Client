@@ -41,7 +41,7 @@ namespace CatraProto.Client
         {
             get => _config ?? throw new InvalidOperationException("Please call InitClientAsync first");
         }
-
+        
         internal DatabaseManager DatabaseManager { get; }
         internal UpdatesReceiver UpdatesReceiver { get; }
         internal ClientSession ClientSession { get; }

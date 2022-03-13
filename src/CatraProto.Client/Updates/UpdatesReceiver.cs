@@ -71,9 +71,8 @@ namespace CatraProto.Client.Updates
                 {
                     if (seqStart == 0 || localSeq + 1 == seqStart)
                     {
-                        if (UpdatesTools.GetUpdatesData(updatesBase, out var chats, out var users, out var updates))
+                        if (UpdatesTools.GetUpdatesData(updatesBase, out var updates))
                         {
-                            _client.DatabaseManager.UpdateChats(chats, users);
                             foreach (var updateObj in updates)
                             {
                                 if (UpdatesTools.IsFromChannel(updateObj, out var channelId))

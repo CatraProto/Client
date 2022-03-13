@@ -3,6 +3,18 @@ namespace CatraProto.Client.Updates
 {
     static partial class UpdatesTools
     {
+        public static void ExtractChats(CatraProto.TL.Interfaces.IObject obj, out System.Collections.Generic.IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>? chatsVector, out System.Collections.Generic.IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase>? usersVector)
+        {
+            chatsVector = null;
+            usersVector = null;
+
+            switch(obj)
+            {
+                ^VectorChatsConditions^
+            }
+
+        }
+
         public static bool TryExtractPeerId(CatraProto.TL.Interfaces.IObject update, out CatraProto.Client.MTProto.PeerId? peerId)
         {
             switch(update)

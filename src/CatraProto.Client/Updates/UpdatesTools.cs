@@ -195,24 +195,18 @@ namespace CatraProto.Client.Updates
             return false;
         }
 
-        public static bool GetUpdatesData(UpdatesBase updatesBase, [MaybeNullWhen(false)] out IList<ChatBase> chats, [MaybeNullWhen(false)] out IList<UserBase> users, [MaybeNullWhen(false)] out IList<UpdateBase> updates)
+        public static bool GetUpdatesData(UpdatesBase updatesBase, [MaybeNullWhen(false)] out IList<UpdateBase> updates)
         {
             switch (updatesBase)
             {
                 case ApiUpdates apiUpdates:
-                    chats = apiUpdates.Chats;
-                    users = apiUpdates.Users;
                     updates = apiUpdates.Updates;
                     return true;
                 case UpdatesCombined updatesCombined:
-                    chats = updatesCombined.Chats;
-                    users = updatesCombined.Users;
                     updates = updatesCombined.Updates;
                     return true;
             }
 
-            chats = null;
-            users = null;
             updates = null;
             return false;
         }
