@@ -1,4 +1,6 @@
-﻿namespace CatraProto.TL
+﻿using System;
+
+namespace CatraProto.TL
 {
 	public static class FlagsHelper
 	{
@@ -9,7 +11,7 @@
 				return flagInt;
 			}
 
-			return flagInt | value;
+			return flagInt | (1 << value);
 		}
 
 		public static int UnsetFlag(int flagInt, int value)
@@ -24,7 +26,7 @@
 
 		public static bool IsFlagSet(int flagInt, int value)
 		{
-			return (flagInt & (1 << value)) != 0;
+            return (flagInt & (1 << value)) != 0;
 		}
 	}
 }
