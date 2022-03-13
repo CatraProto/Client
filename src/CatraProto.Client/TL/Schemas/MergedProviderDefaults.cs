@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using CatraProto.Client.MTProto.Deserializers;
 using CatraProto.Client.MTProto.Rpc;
+using CatraProto.Client.TL.Schemas.Database;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL.Interfaces;
 
@@ -40,6 +41,12 @@ namespace CatraProto.Client.TL.Schemas
         {
             switch (constructorId)
             {
+                case 1823163441:
+                    obj = new DbPeer();
+                    return true;
+                case 1111983006:
+                    obj = new DbPeerFull();
+                    return true;
                 case -212046591:
                     obj = new RpcObject();
                     return true;

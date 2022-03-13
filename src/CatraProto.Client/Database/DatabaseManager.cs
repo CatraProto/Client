@@ -92,7 +92,6 @@ namespace CatraProto.Client.Database
             });
         }
 
-
         public void Dispose()
         {
             lock (_mutex)

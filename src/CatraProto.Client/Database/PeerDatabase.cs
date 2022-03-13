@@ -1,8 +1,10 @@
-using System.Threading;
+using System;
 using CatraProto.Client.Collections;
 using CatraProto.Client.MTProto;
+using CatraProto.Client.TL;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.Client.TL.Schemas.CloudChats;
+using CatraProto.Client.TL.Schemas.Database;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using Microsoft.Data.Sqlite;
@@ -10,8 +12,9 @@ using Serilog;
 
 namespace CatraProto.Client.Database
 {
-    public class PeerDatabase
+    internal class PeerDatabase
     {
+        private readonly Cache<long, IObject> _peerFullCache;
         private readonly Cache<long, IObject> _peerCache;
         private readonly SqliteConnection _sqliteConnection;
         private readonly object _commonMutex;
@@ -20,6 +23,7 @@ namespace CatraProto.Client.Database
         public PeerDatabase(SqliteConnection sqliteConnection, uint cacheSize, object commonMutex, ILogger logger)
         {
             _peerCache = new Cache<long, IObject>(cacheSize);
+            _peerFullCache = new Cache<long, IObject>(cacheSize);
             _sqliteConnection = sqliteConnection;
             _commonMutex = commonMutex;
             _logger = logger.ForContext<PeerDatabase>();
@@ -30,86 +34,98 @@ namespace CatraProto.Client.Database
             lock (_commonMutex)
             {
                 _logger.Information("Creating database table for peer database");
-                _sqliteConnection.ExecuteNonQuery("CREATE TABLE IF NOT EXISTS Chats(chatId INT8 PRIMARY KEY UNIQUE, data BLOB)");
+                _sqliteConnection.ExecuteNonQuery("CREATE TABLE IF NOT EXISTS Peers(chatId INT8 PRIMARY KEY, data BLOB NOT NULL)");
+                _sqliteConnection.ExecuteNonQuery("CREATE TABLE IF NOT EXISTS PeersFull(chatId INT8 PRIMARY KEY, data BLOB NOT NULL)");
             }
         }
 
-        private long? GetPeerAccessHash(PeerId peer, SqliteTransaction? sqliteTransaction = null)
+        public IObject? GetPeerObject(PeerId peerId, bool fetchFull, SqliteTransaction? sqliteTransaction = null)
         {
-            var item = GetPeerObject(peer);
-            if (item is null)
+            lock (_commonMutex)
             {
-                return null;
+                Cache<long, IObject>? cache = fetchFull ? _peerFullCache : _peerCache;
+                var toId = IdTools.FromApiToTd(peerId.Id, peerId.Type);
+                if(cache.TryGetValue(toId, out var cacheObject))
+                {
+                    return cacheObject;
+                }
+
+                _logger.Information("Couldn't find peer {Peer} in memory cache, fetch full: {Full}", peerId, fetchFull);
+                var query = fetchFull ? "SELECT * FROM PeersFull WHERE chatId = @p0" : "SELECT * FROM Peers WHERE chatId = @p0";
+                var result = _sqliteConnection.ExecuteReaderSingle(query, new object[] { toId }, sqliteTransaction);
+                if (result is null)
+                {
+                    _logger.Warning(messageTemplate: "Couldn't find peer {Peer} inside database, fetch full: {Full}", peerId, fetchFull);
+                    return null;
+                }
+
+                var serialized = ((byte[])result[1]).ToObject<IObject>(MergedProvider.Singleton);
+                cache.CacheItem(toId, serialized, out _);
+                return serialized;
             }
-
-            switch (item)
-            {
-                case Channel channel:
-                    return channel.AccessHash != null ? channel.AccessHash.Value : 0;
-                case ChannelForbidden channelForbidden:
-                    return channelForbidden.AccessHash;
-                case User user:
-                    return user.AccessHash != null ? user.AccessHash.Value : 0;
-                default:
-                    _logger.Warning("Trying to fetch access hash from type {Type}", item);
-                    return 0;
-            }
-        }
-
-        private IObject? GetPeerObject(PeerId peerId, SqliteTransaction? sqliteTransaction = null)
-        {
-            IObject? item;
-            var toTdId = IdTools.FromApiToTd(peerId.Id, peerId.Type);
-            if (!_peerCache.TryGetValue(toTdId, out item))
-            {
-                item = FetchFromDatabase(toTdId, sqliteTransaction);
-            }
-
-            return item;
-        }
-
-        private IObject? FetchFromDatabase(long peerId, SqliteTransaction? sqliteTransaction = null)
-        {
-            _logger.Information("Fetching peer {Peer} from database", peerId);
-            var result = _sqliteConnection.ExecuteReaderSingle("SELECT data FROM Chats WHERE chatId = @p0", new object[] { peerId }, sqliteTransaction);
-            if (result is null)
-            {
-                _logger.Warning(messageTemplate: "Couldn't find peer {Peer}", peerId);
-                return null;
-            }
-
-            var serialized = ((byte[])result[0]).ToObject<IObject>(MergedProvider.Singleton);
-            _peerCache.CacheItem(peerId, serialized, out _);
-            return serialized;
         }
 
         public void UpdateChat(IObject obj, SqliteTransaction? sqliteTransaction = null)
         {
             lock (_commonMutex)
             {
+                bool full = false;
                 long peerId;
+                IObject toSerialize;
                 switch (obj)
                 {
                     case User user:
                         peerId = IdTools.FromApiToTd(user.Id, PeerType.User);
+                        toSerialize = new DbPeer { AccessHash = user.AccessHash ?? 0, LayerVersion = MergedProvider.LayerId, Object = user };
                         break;
-                    case Channel:
-                    case ChannelForbidden:
-                        peerId = IdTools.FromApiToTd(((ChatBase)obj).Id, PeerType.Channel);
+                    case UserFull userFull:
+                        full = true;
+                        peerId = IdTools.FromApiToTd(userFull.Id, PeerType.User);
+                        toSerialize = new DbPeerFull { UpdatedAt = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds(), LayerVersion = MergedProvider.LayerId, Object = userFull };
+                        break;
+                    case Channel channel:
+                        peerId = IdTools.FromApiToTd(channel.Id, PeerType.Channel);
+                        toSerialize = new DbPeer { AccessHash = channel.AccessHash ?? 0, LayerVersion = MergedProvider.LayerId, Object = channel };
+                        break;
+                    case ChannelForbidden channelForbidden:
+                        peerId = IdTools.FromApiToTd(channelForbidden.Id, PeerType.Channel);
+                        toSerialize = new DbPeer { AccessHash = channelForbidden.AccessHash, LayerVersion = MergedProvider.LayerId, Object = channelForbidden };
+                        break;
+                    case ChannelFull channelFull:
+                        full = true;
+                        peerId = IdTools.FromApiToTd(channelFull.Id, PeerType.Channel);
+                        toSerialize = new DbPeerFull { UpdatedAt = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds(), LayerVersion = MergedProvider.LayerId, Object = channelFull };
                         break;
                     case Chat:
-                    case ChatForbidden ch:
+                    case ChatForbidden:
                         peerId = IdTools.FromApiToTd(((ChatBase)obj).Id, PeerType.Group);
+                        toSerialize = new DbPeer { AccessHash = 0, LayerVersion = MergedProvider.LayerId, Object = obj};
+                        break;
+                    case ChatFull chatFull:
+                        full = true;
+                        peerId = IdTools.FromApiToTd(chatFull.Id, PeerType.Group);
+                        toSerialize = new DbPeerFull { UpdatedAt = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds(), LayerVersion = MergedProvider.LayerId, Object = chatFull };
                         break;
                     default:
-                        _logger.Warning("Can't update database data from received object {Obj}", obj);
+                        _logger.Debug("Trying to update chat from object {Constructor}", obj.ToJson());
                         return;
                 }
 
-                _logger.Information("Updating stored object for peer {Peer}", peerId);
-                _sqliteConnection.ExecuteNonQuery("REPLACE INTO Chats VALUES (@p0, @p1)", new object[] {peerId, obj.ToArray(MergedProvider.Singleton)}, sqliteTransaction);
-                _peerCache.CacheItem(peerId, obj, out _);
+                var query = full ? "REPLACE INTO PeersFull VALUES (@p0, @p1)" : "REPLACE INTO Peers VALUES (@p0, @p1)";
+                _sqliteConnection.ExecuteNonQuery(query, new object[] { peerId, toSerialize.ToArray(MergedProvider.Singleton) }, sqliteTransaction);
+                (full ? _peerFullCache : _peerCache).CacheItem(peerId, toSerialize, out _);
             }
+        }
+
+        public long? GetPeerAccessHash(PeerId peer)
+        {
+            var obj = (DbPeer?)GetPeerObject(peer, false);
+            if(obj is not null)
+            {
+                return obj.AccessHash; 
+            }
+
+            return null;
         }
 
         public InputPeerBase? ResolvePeer(PeerId peerId)
