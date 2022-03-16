@@ -1,6 +1,12 @@
+using System;
+using System.Threading.Tasks;
+using CatraProto.Client.Async.Loops;
 using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.Crypto;
 using CatraProto.Client.MTProto.Auth;
+using CatraProto.Client.Async.Loops.Enums.Generic;
+using CatraProto.Client.Async.Loops.Enums.Generic;
+using CatraProto.Client.Async.Loops.Extensions;
 
 namespace CatraProto.Client.Connections
 {
@@ -19,7 +25,7 @@ namespace CatraProto.Client.Connections
         {
             get => Connection.ConnectionInfo;
         }
-
+        private readonly GenericLoopController _saltController;
         public MTProtoState(Connection connection, Api api, TelegramClient client)
         {
             Api = api;
@@ -31,13 +37,25 @@ namespace CatraProto.Client.Connections
             SessionIdHandler = new SessionIdHandler();
             SessionIdHandler.SetSessionId(CryptoTools.CreateRandomLong());
             KeysHandler = new KeysHandler(this, api, client.ClientSession, client.ClientSession.Logger);
-            SaltHandler = new SaltHandler(api, KeysHandler.TemporaryAuthKey, client.ClientSession.Logger);
+            SaltHandler = new SaltHandler(this, client.ClientSession.Logger);
+            _saltController = new GenericLoopController(client.ClientSession.Logger);
+            _saltController.BindTo(SaltHandler);
         }
 
-        public void StartLoops()
+        public async ValueTask StartSaltHandlerAsync()
         {
-            //TODO: fix
-            //SaltHandler.Start();
+            if (_saltController.GetCurrentState() is GenericLoopState.NotYetStarted)
+            {
+                await _saltController.SignalAsync(GenericSignalState.Start);
+            }
+        }
+
+        public async Task StopSaltHandlerAsync()
+        {
+            if (_saltController.GetCurrentState() is GenericLoopState.Running)
+            {
+                await _saltController.SignalAsync(GenericSignalState.Stop);
+            }
         }
     }
 }

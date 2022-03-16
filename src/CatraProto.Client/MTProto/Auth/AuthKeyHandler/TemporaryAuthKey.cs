@@ -76,7 +76,6 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
             var encryptedInnerData = Pfs.Encrypt(permanentKey, innerData, messageId);
             var messageOptions = new MessageSendingOptions(true, messageId);
 
-            _mtProtoState.Connection.SetIsInited(false);
             _mtProtoState.SaltHandler.SetSalt(temporaryKey.ServerSalt, true);
             var res = await _mtProtoState.Api.CloudChatsApi.Auth.BindTempAuthKeyAsync(permanentKey.AuthKeyId, innerData.Nonce, expiresAt, encryptedInnerData, messageOptions, token);
             if (res.RpcCallFailed)

@@ -20,7 +20,7 @@ namespace CatraProto.Client.Updates
 {
     class UpdatesReceiver
     {
-        private readonly ConcurrentDictionary<long, (ResumableLoopController Controller, UpdateProcessor Processor)> _processors = new ConcurrentDictionary<long, (ResumableLoopController, UpdateProcessor)>();
+        private readonly Dictionary<long, (ResumableLoopController Controller, UpdateProcessor Processor)> _processors = new Dictionary<long, (ResumableLoopController, UpdateProcessor)>();
         private readonly (ResumableLoopController Controller, UpdateProcessor Processor) _commonLoop;
         private readonly object _mutex = new object();
         private readonly UpdatesState _commonSequence;
@@ -198,13 +198,16 @@ namespace CatraProto.Client.Updates
 
         public (ResumableLoopController Controller, UpdateProcessor Processor)? GetProcessor(long channelId)
         {
-            if (_processors.TryGetValue(channelId, out var tuple))
+            lock (_mutex)
             {
-                return tuple;
-            }
-            else
-            {
-                return null;
+                if (_processors.TryGetValue(channelId, out var tuple))
+                {
+                    return tuple;
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
 
@@ -240,7 +243,7 @@ namespace CatraProto.Client.Updates
         {
             lock (_mutex)
             {
-                if (_processors.TryRemove(channelId, out var tuple))
+                if (_processors.Remove(channelId, out var tuple))
                 {
                     _logger.Information("Closing processor for channel {Id}", channelId);
                     tuple.Controller.SendSignal(ResumableSignalState.Stop, out _);
@@ -280,6 +283,26 @@ namespace CatraProto.Client.Updates
             }
 
             return waitTask;
+        }
+
+        public Task CloseAllAsync()
+        {
+            lock (_mutex)
+            {
+                _logger.Information("Stopping all updates processors");
+                var size = _processors.Count;
+                var tasksToWait = new Task[size + 1];
+
+                var i = 0;
+                foreach (var (chatId, (controller, processor)) in _processors)
+                {
+                    _logger.Information("Stopping update processor for channel {ChatId}", chatId);
+                    tasksToWait[i++] = controller.SignalAsync(ResumableSignalState.Stop);
+                }
+
+                tasksToWait[size] = _commonLoop.Controller.SignalAsync(ResumableSignalState.Stop);
+                return Task.WhenAll(tasksToWait);
+            }
         }
     }
 }

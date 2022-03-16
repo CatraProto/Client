@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using CatraProto.Client.Connections;
 using CatraProto.Client.Database;
 using CatraProto.Client.Flows.LoginFlow;
+using CatraProto.Client.MTProto;
 using CatraProto.Client.MTProto.Session;
 using CatraProto.Client.MTProto.Session.Models;
 using CatraProto.Client.MTProto.Settings;
 using CatraProto.Client.TL.Schemas.CloudChats;
+using CatraProto.Client.TL.Schemas.CloudChats.Help;
 using CatraProto.Client.Updates;
 using CatraProto.Client.Updates.Interfaces;
 using Serilog;
@@ -72,6 +74,7 @@ namespace CatraProto.Client
             
             await ClientSession.ConnectionPool.InitMainConnectionAsync(token);
             _logger.Information("Requesting and storing current configuration");
+            await Task.Delay(3000);
             _config = (Config)(await Api.CloudChatsApi.Help.GetConfigAsync(cancellationToken: token)).Response;
 
             if (!sessionData.Authorization.IsAuthorized(out var dcId, out _, out _))
@@ -88,7 +91,7 @@ namespace CatraProto.Client
                 await using var newConnection = await ClientSession.ConnectionPool.GetConnectionByDcAsync(dcId!.Value, false, false, token);
                 await ClientSession.ConnectionPool.SetAccountConnectionAsync(newConnection.Connection, true);
             }
-            
+
             UpdatesReceiver.FillProcessors();
             return ClientState.Authenticated;
         }
@@ -130,6 +133,8 @@ namespace CatraProto.Client
         public async ValueTask DisposeAsync()
         {
             await ClientSession.DisposeAsync();
+            await UpdatesReceiver.CloseAllAsync();
+            DatabaseManager.Dispose();
         }
     }
 }

@@ -175,6 +175,12 @@ namespace CatraProto.Client.Connections.MessageScheduling
 
             if (_messagesHandler.MessagesTrackers.MessageCompletionTracker.GetRpcMethod(rpcObject.MessageId, out var method))
             {
+                if(rpcObject.Response is IObject iObj)
+                {
+                    UpdatesTools.ExtractChats(iObj, out var chats, out var users);
+                    _mtProtoState.Client.DatabaseManager.UpdateChats(chats, users);
+                }
+
                 if (rpcObject.Response is UpdatesBase update)
                 {
                     UpdatesHandler?.OnNewUpdates(update, method);

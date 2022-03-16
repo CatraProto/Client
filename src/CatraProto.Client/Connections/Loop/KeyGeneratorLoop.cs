@@ -90,11 +90,6 @@ namespace CatraProto.Client.Connections.Loop
                         }
                         _connection.OnKeyGenerated();
                     }
-
-                    if (!_connection.GetIsInited())
-                    {
-                        _ = _connection.InitConnectionAsync(stoppingToken).ContinueWith((_) => _connection.SignalNewMessage(), TaskContinuationOptions.OnlyOnRanToCompletion);
-                    }
                 }
                 catch (OperationCanceledException) when (timeout.Token.IsCancellationRequested)
                 {

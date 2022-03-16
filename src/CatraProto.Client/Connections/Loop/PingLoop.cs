@@ -62,9 +62,12 @@ namespace CatraProto.Client.Connections.Loop
                 
                 try
                 {
-                    _logger.Information("Sending ping to server {Connection} with timeout of {Time} seconds", _connection.ConnectionInfo, _timeout.TotalSeconds);
-                    await _connection.MtProtoState.Api.MtProtoApi.PingAsync(CryptoTools.CreateRandomLong(), cancellationToken: linked.Token);
-                    _logger.Information("Received pong from server {Connection}", _connection.ConnectionInfo);
+                    if (_connection.MtProtoState.KeysHandler.TemporaryAuthKey.CanBeUsed())
+                    {
+                        _logger.Information("Sending ping to server {Connection} with timeout of {Time} seconds", _connection.ConnectionInfo, _timeout.TotalSeconds);
+                        await _connection.MtProtoState.Api.MtProtoApi.PingAsync(CryptoTools.CreateRandomLong(), cancellationToken: linked.Token);
+                        _logger.Information("Received pong from server {Connection}", _connection.ConnectionInfo);
+                    }
                 }
                 catch (OperationCanceledException) when (timeout.Token.IsCancellationRequested)
                 {

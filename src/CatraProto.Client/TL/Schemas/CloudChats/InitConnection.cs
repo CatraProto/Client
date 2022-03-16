@@ -90,7 +90,7 @@ Query = query;
 
 		public void Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+            writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
 			writer.Write(ApiId);

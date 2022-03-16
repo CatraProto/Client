@@ -75,54 +75,57 @@ namespace CatraProto.Client.Connections.Loop
                     }
                 }
 
-                _logger.Information("Getting list of old messages that have not yet received an answer from the server");
-                var messages = _connection.MessagesHandler.MessagesTrackers.MessageCompletionTracker.GetUnanswered(isStart);
-                var listOfIds = new List<Tuple<long, MessageItem>>();
-
-                foreach (var message in messages)
+                if (_connection.MtProtoState.KeysHandler.TemporaryAuthKey.CanBeUsed())
                 {
-                    var messageId = message.GetProtocolInfo().MessageId!.Value;
-                    if (isStart || MessageIdsHandler.IsOlderThan(messageId, 30))
-                    {
-                        _logger.Information("Going to send state request for message {Message}", messageId);
-                        listOfIds.Add(new Tuple<long, MessageItem>(messageId, message));
-                    }
-                }
+                    _logger.Information("Getting list of old messages that have not yet received an answer from the server");
+                    var messages = _connection.MessagesHandler.MessagesTrackers.MessageCompletionTracker.GetUnanswered(isStart);
+                    var listOfIds = new List<Tuple<long, MessageItem>>();
 
-                _logger.Information("Sending state request for {Count} messages to {Connection}", listOfIds.Count, _connection.ConnectionInfo);
-                if (listOfIds.Count > 0)
-                {
-                    try
+                    foreach (var message in messages)
                     {
-                        var msgStates = (await _connection.MtProtoState.Api.MtProtoApi.MsgsStateReqAsync(listOfIds.Select(x => x.Item1).ToList(), cancellationToken: stoppingToken)).Response;
-                        for (var index = 0; index < msgStates.Info.Length; index++)
+                        var messageId = message.GetProtocolInfo().MessageId!.Value;
+                        if (isStart || MessageIdsHandler.IsOlderThan(messageId, 30))
                         {
-                            var originalMessage = listOfIds[index];
-                            var state = msgStates.Info[index];
-                            if (FlagsHelper.IsFlagSet(state, 0) || FlagsHelper.IsFlagSet(state, 1) || (state & 3) != 0)
-                            {
-                                _logger.Information("Received state {State} for message {Message}, scheduling message to be resent", state, originalMessage.Item1);
-                                originalMessage.Item2.SetToSend();
-                            }
-
-                            if (FlagsHelper.IsFlagSet(state, 3) || FlagsHelper.IsFlagSet(state, 4))
-                            {
-                                _logger.Information("Received state {State} for message {Message}, setting as acknowledged and waiting for message to arrive", state, originalMessage.Item1);
-                                originalMessage.Item2.SetAcknowledged(new ExecutionInfo(_connection.ConnectionInfo));
-                            }
-
-                            //msg_resend_ans_req doesn't seem to be working so I'm not bothering implementing it
-                            /*if (FlagsHelper.IsFlagSet(state, 5) && FlagsHelper.IsFlagSet(state, 6))
-                            {
-                                _logger.Information("Server already generated a response for {MessageId} but we didn't receive it, asking to resend...", originalMessage.Item1);
-                            }*/
+                            _logger.Information("Going to send state request for message {Message}", messageId);
+                            listOfIds.Add(new Tuple<long, MessageItem>(messageId, message));
                         }
                     }
-                    catch (OperationCanceledException e) when (e.CancellationToken == stoppingToken)
+
+                    _logger.Information("Sending state request for {Count} messages to {Connection}", listOfIds.Count, _connection.ConnectionInfo);
+                    if (listOfIds.Count > 0)
                     {
-                        _logger.Information("Operation canceled because loop stopped on connection {Connection}", _connection.ConnectionInfo);
-                        SetLoopState(ResumableLoopState.Stopped);
-                        return;
+                        try
+                        {
+                            var msgStates = (await _connection.MtProtoState.Api.MtProtoApi.MsgsStateReqAsync(listOfIds.Select(x => x.Item1).ToList(), cancellationToken: stoppingToken)).Response;
+                            for (var index = 0; index < msgStates.Info.Length; index++)
+                            {
+                                var originalMessage = listOfIds[index];
+                                var state = msgStates.Info[index];
+                                if (FlagsHelper.IsFlagSet(state, 0) || FlagsHelper.IsFlagSet(state, 1) || (state & 3) != 0)
+                                {
+                                    _logger.Information("Received state {State} for message {Message}, scheduling message to be resent", state, originalMessage.Item1);
+                                    originalMessage.Item2.SetToSend();
+                                }
+
+                                if (FlagsHelper.IsFlagSet(state, 3) || FlagsHelper.IsFlagSet(state, 4))
+                                {
+                                    _logger.Information("Received state {State} for message {Message}, setting as acknowledged and waiting for message to arrive", state, originalMessage.Item1);
+                                    originalMessage.Item2.SetAcknowledged(new ExecutionInfo(_connection.ConnectionInfo));
+                                }
+
+                                //msg_resend_ans_req doesn't seem to be working so I'm not bothering implementing it
+                                /*if (FlagsHelper.IsFlagSet(state, 5) && FlagsHelper.IsFlagSet(state, 6))
+                                {
+                                    _logger.Information("Server already generated a response for {MessageId} but we didn't receive it, asking to resend...", originalMessage.Item1);
+                                }*/
+                            }
+                        }
+                        catch (OperationCanceledException e) when (e.CancellationToken == stoppingToken)
+                        {
+                            _logger.Information("Operation canceled because loop stopped on connection {Connection}", _connection.ConnectionInfo);
+                            SetLoopState(ResumableLoopState.Stopped);
+                            return;
+                        }
                     }
                 }
             }

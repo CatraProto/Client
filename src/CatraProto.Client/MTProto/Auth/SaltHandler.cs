@@ -1,68 +1,90 @@
 using System;
 using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Async.Loops;
+using CatraProto.Client.Async.Loops.Enums.Generic;
 using CatraProto.Client.Async.Loops.Enums.Resumable;
+using CatraProto.Client.Async.Loops.Interfaces;
+using CatraProto.Client.Connections;
 using CatraProto.Client.MTProto.Auth.AuthKeyHandler;
 using CatraProto.Client.TL.Schemas.MTProto;
 using Serilog;
 
 namespace CatraProto.Client.MTProto.Auth
 {
-    //TODO: Impl
-    class SaltHandler : PeriodicLoopController
+    class SaltHandler : LoopImplementation<GenericLoopState, GenericSignalState>
     {
         private readonly ConcurrentDictionary<long, FutureSalt> _futureSalts = new ConcurrentDictionary<long, FutureSalt>();
+        private readonly MTProtoState _mtProtoState;
         private readonly ILogger _logger;
-        private readonly Api _api;
-
-        public SaltHandler(Api api, TemporaryAuthKey? temporaryAuthKey, ILogger logger) : base(TimeSpan.FromMinutes(1), logger)
+        public SaltHandler(MTProtoState mtProtoState, ILogger logger)
         {
             _logger = logger.ForContext<SaltHandler>();
-            _api = api;
-            if (temporaryAuthKey is not null)
-            {
-                temporaryAuthKey.OnAuthKeyChanged += OnAuthKeyChanged;
-            }
-
-            Task.Run(UpdateLoop);
+            _mtProtoState = mtProtoState;
+            mtProtoState.KeysHandler.TemporaryAuthKey.OnAuthKeyChanged += OnAuthKeyChanged;
         }
 
-        private async Task UpdateLoop()
+        public override async Task LoopAsync(CancellationToken stoppingToken)
         {
+            var currentState = StateSignaler.GetCurrentState(true);
             while (true)
             {
-                //await StateSignaler.WaitStateAsync(false, default, ResumableSignalState.Resume, ResumableSignalState.Start);
-                _logger.Information("Cleaning up salts");
-                foreach (var (key, value) in _futureSalts)
+                if (currentState!.AlreadyHandled)
                 {
-                    var expiredSince = DateTimeOffset.UtcNow.ToUnixTimeSeconds() - value.ValidUntil;
-                    if (expiredSince >= 1800)
+                    currentState = StateSignaler.GetCurrentState(true);
+                }
+
+                if (!currentState!.AlreadyHandled)
+                {
+                    switch (currentState.Signal)
                     {
-                        _logger.Verbose("Removed salt {Salt} because it expired {Seconds} seconds ago", key, expiredSince);
-                        _futureSalts.TryRemove(key, out _);
+                        case GenericSignalState.Start:
+                            SetSignalHandled(GenericLoopState.Running, currentState);
+                            _logger.Information("Salt loop started for connection {Connection}", _mtProtoState.ConnectionInfo);
+                            break;
+                        case GenericSignalState.Stop:
+                            _logger.Information("Salt loop stopped for connection {Connection}", _mtProtoState.ConnectionInfo);
+                            SetSignalHandled(GenericLoopState.Stopped, currentState);
+                            return;
                     }
                 }
 
-                _logger.Information("Cleanup completed");
-
-                _logger.Information("Requesting 64 future salts");
-                var futureSalts = await _api.MtProtoApi.GetFutureSaltsAsync(64);
-                var receivedSalts = futureSalts.Response!.Salts;
-
-                _logger.Information("Received {Count} new salts from the server", receivedSalts.Count);
-                foreach (var responseSalt in futureSalts.Response.Salts)
+                try
                 {
-                    _logger.Verbose("Adding new salt {Salt} which is valid since {Since} and expires at {Until}", responseSalt.Salt,
-                        responseSalt.ValidSince, responseSalt.ValidUntil);
-                    _futureSalts.TryAdd(responseSalt.Salt, responseSalt);
-                }
+                    _logger.Information("Cleaning up salts");
+                    foreach (var (key, value) in _futureSalts)
+                    {
+                        var expiredSince = DateTimeOffset.UtcNow.ToUnixTimeSeconds() - value.ValidUntil;
+                        if (expiredSince >= 1800)
+                        {
+                            _logger.Verbose(messageTemplate: "Removed salt {Salt} because it expired {Seconds} seconds ago", key, expiredSince);
+                            _futureSalts.TryRemove(key, out _);
+                        }
+                    }
 
-                var oldestSalt = receivedSalts.Aggregate((first, second) => first.ValidSince > second.ValidSince ? first : second);
-                var unixTimeSeconds = oldestSalt.ValidSince - DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-                _logger.Information("Requesting new salts in {UnixTimeSeconds} seconds", unixTimeSeconds);
-                await Task.Delay(TimeSpan.FromSeconds(unixTimeSeconds));
+                    _logger.Information("Cleanup completed, requesting 64 future salts");
+                    var futureSalts = await _mtProtoState.Api.MtProtoApi.GetFutureSaltsAsync(64, cancellationToken: stoppingToken);
+                    var receivedSalts = futureSalts.Response!.Salts;
+
+                    _logger.Information("Received {Count} new salts from the server", receivedSalts.Count);
+                    foreach (var responseSalt in futureSalts.Response.Salts)
+                    {
+                        _logger.Verbose("Adding new salt {Salt} which is valid since {Since} and expires at {Until}", responseSalt.Salt, responseSalt.ValidSince, responseSalt.ValidUntil);
+                        _futureSalts.TryAdd(responseSalt.Salt, responseSalt);
+                    }
+
+                    var oldestSalt = receivedSalts.Aggregate((first, second) => first.ValidSince > second.ValidSince ? first : second);
+                    var unixTimeSeconds = oldestSalt.ValidSince - DateTimeOffset.UtcNow.ToUnixTimeSeconds() - 30;
+                    _logger.Information("Requesting new salts in {UnixTimeSeconds} seconds", unixTimeSeconds);
+                    await Task.Delay(TimeSpan.FromSeconds(unixTimeSeconds), stoppingToken);
+                }
+                catch(OperationCanceledException e) when(e.CancellationToken == stoppingToken)
+                {
+                    _logger.Information("Salt loop for connection {Connection} stopped from cancellation token", _mtProtoState.ConnectionInfo);
+                }
             }
         }
 
@@ -142,9 +164,9 @@ namespace CatraProto.Client.MTProto.Auth
             SetSalt(authKeyGen.ServerSalt, false);
         }
 
-        protected override void LoopFaulted(Exception e)
+        public override string ToString()
         {
-            throw new NotImplementedException();
+            return "Salt updater loop";
         }
     }
 }

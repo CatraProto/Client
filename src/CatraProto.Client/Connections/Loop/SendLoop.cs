@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Async.Loops.Enums.Resumable;
@@ -8,9 +11,11 @@ using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.Connections.MessageScheduling.ConnectionMessages;
 using CatraProto.Client.Connections.MessageScheduling.Items;
 using CatraProto.Client.MTProto.Containers;
+using CatraProto.Client.TL.Schemas;
 using CatraProto.Client.TL.Schemas.CloudChats;
 using CatraProto.Client.TL.Schemas.CloudChats.Auth;
 using CatraProto.Client.TL.Schemas.MTProto;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using Serilog;
 
@@ -18,11 +23,15 @@ namespace CatraProto.Client.Connections.Loop
 {
     class SendLoop : LoopImplementation<ResumableLoopState, ResumableSignalState>
     {
+
+        public const int ContainerMessagesLimit = 1020;
+        public const int ContainerBytesLimit = 2 << 15;
+        private const int InitConnectionSeconds = 60;
         private readonly MessagesHandler _messagesHandler;
         private readonly MTProtoState _mtProtoState;
         private readonly Connection _connection;
         private readonly ILogger _logger;
-
+        private int _lastInitConnection = 0;
         public SendLoop(Connection connection, ILogger logger)
         {
             _connection = connection;
@@ -90,6 +99,7 @@ namespace CatraProto.Client.Connections.Loop
             var totalSent = 0;
             if (count > 0)
             {
+                bool mustWrap = false;
                 _logger.Verbose("Pulling {Count} encrypted messages out of queue to send to {Connection}...", count, _connection.ConnectionInfo);
                 for (int i = 0; i < count; i++)
                 {
@@ -117,19 +127,21 @@ namespace CatraProto.Client.Connections.Loop
 
                     if (_mtProtoState.KeysHandler.TemporaryAuthKey.CanBeUsed())
                     {
-                        if (messageItem.Body is InvokeWithLayer { Query: InitConnection })
+                        if (_lastInitConnection == -1)
                         {
                             encryptedList.Value.Add(messageItem);
-                            break;
                         }
-
-                        if (!_connection.GetIsInited())
+                        else if (_lastInitConnection == 0 || DateTimeOffset.UtcNow.ToUnixTimeSeconds() - _lastInitConnection <= InitConnectionSeconds)
                         {
-                            messageItem.SetToSend(wakeUpLoop: false);
-                            continue;
+                            _lastInitConnection = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                            mustWrap = true;
+                            encryptedList.Value.Add(messageItem);
                         }
-
-                        encryptedList.Value.Add(messageItem);
+                        else
+                        {
+                            encryptedList.Value.Add(messageItem);
+                            _lastInitConnection = -1;
+                        }
                     }
                     else
                     {
@@ -142,7 +154,6 @@ namespace CatraProto.Client.Connections.Loop
                         }
 
                         //Even if we check afterwards, it's better to check here because we'll avoid allocating a List
-                        //The reason why we check twice is that the key may be invalid at any time
                         _logger.Verbose("Skipping {Message} because authorization key is not ready (while dequeuing)", messageItem.Body);
 
                         //Not waking up the loop because it's going to be woken up by the authorization key generation.
@@ -160,9 +171,9 @@ namespace CatraProto.Client.Connections.Loop
                     if (encryptedList.Value.Count == 1)
                     {
                         var message = encryptedList.Value[0];
-                        if (SocketTools.TrySerialize(message, _logger, out msgSerialization))
+                        if (TrySerialize(message, mustWrap, out msgSerialization))
                         {
-                            if (!_mtProtoState.KeysHandler.TemporaryAuthKey.CanBeUsed() && message.Body is not InvokeWithLayer { Query: InitConnection } && message.Body is not BindTempAuthKey && message.Body is not MsgsAck)
+                            if (!_mtProtoState.KeysHandler.TemporaryAuthKey.CanBeUsed() && message.Body is not BindTempAuthKey && message.Body is not MsgsAck)
                             {
                                 _logger.Verbose("Postponing {Message} because the authorization key is not ready", message.Body);
 
@@ -180,7 +191,7 @@ namespace CatraProto.Client.Connections.Loop
                             return;
                         }
                     }
-                    else if (ContainersWriter.GetContainer(encryptedList.Value, _mtProtoState, out var containerizedItems, out msgSerialization, _logger))
+                    else if (GetContainer(encryptedList.Value, mustWrap, out var containerizedItems, out msgSerialization))
                     {
                         if (!_mtProtoState.KeysHandler.TemporaryAuthKey.CanBeUsed())
                         {
@@ -263,7 +274,7 @@ namespace CatraProto.Client.Connections.Loop
 
         public async Task SendUnencryptedAsync(MessageItem messageItem, CancellationToken token)
         {
-            if (SocketTools.TrySerialize(messageItem, _logger, out var serializedBody))
+            if (TrySerialize(messageItem, false, out var serializedBody))
             {
                 var messageId = _connection.MtProtoState.MessageIdsHandler.ComputeMessageId();
                 var unencryptedMessage = new UnencryptedConnectionMessage(messageId, serializedBody);
@@ -273,6 +284,96 @@ namespace CatraProto.Client.Connections.Loop
                 await _connection.Protocol.Writer.SendAsync(unencryptedBody, token);
                 _logger.Verbose("Sent unencrypted message to {Connection}", _connection.ConnectionInfo);
             }
+        }
+
+        public bool TrySerialize(MessageItem item, bool mustWrap, [MaybeNullWhen(false)] out byte[] serialized)
+        {
+            var body = item.Body;
+            _logger.Verbose("Trying to serialize {Type}", body);
+            try
+            {
+                if (mustWrap && body is not Ping and not GetFutureSalts and not MsgsStateReq and not Pong and not MsgsAck)
+                {
+                    var clientSettings = _mtProtoState.Client.ClientSession.Settings;
+                    _logger.Information("Wrapping {Type} inside initConnection", item.Body);
+                    var initConnection = new InitConnection
+                    {
+                        ApiId = clientSettings.ApiSettings.ApiId,
+                        AppVersion = clientSettings.ApiSettings.AppVersion,
+                        DeviceModel = clientSettings.ApiSettings.DeviceModel,
+                        LangCode = clientSettings.ApiSettings.LangCode,
+                        LangPack = clientSettings.ApiSettings.LangPack,
+                        SystemLangCode = clientSettings.ApiSettings.SystemLangCode,
+                        SystemVersion = clientSettings.ApiSettings.SystemVersion,
+                        Query = body
+                    };
+                    var invokeWithLayer = new InvokeWithLayer(MergedProvider.LayerId, initConnection);
+                    serialized = invokeWithLayer.ToArray(MergedProvider.Singleton);
+                }
+                else
+                {
+                    serialized = body.ToArray(MergedProvider.Singleton);
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                _logger.Error("Serialization of message of type {Type} failed, throwing exception on caller", item.Body);
+                item.SetFailed(e);
+            }
+            serialized = null;
+            return false;
+        }
+
+        public bool GetContainer(List<MessageItem> messageItems, bool mustWrap, [MaybeNullWhen(false)] out List<MessageItem> containerizedItems, [MaybeNullWhen(false)] out byte[] container)
+        {
+            var currentBytes = 0;
+            var currentMessagesCount = 0;
+            var fineList = new List<Tuple<MessageItem, byte[]>>();
+            foreach (var messageItem in messageItems)
+            {
+                if (TrySerialize(messageItem, mustWrap, out var serialized))
+                {
+                    if (currentBytes + (serialized.Length + 8 + 4 + 4) > ContainerBytesLimit || currentMessagesCount > ContainerMessagesLimit)
+                    {
+                        _logger.Information("Postponing {Message} as container size would be too big", messageItem.Body);
+                        messageItem.SetToSend();
+                        continue;
+                    }
+
+                    currentMessagesCount++;
+                    currentBytes = serialized.Length + 8 + 4 + 4;
+                    fineList.Add(Tuple.Create(messageItem, serialized));
+                }
+            }
+
+            if (fineList.Count == 0)
+            {
+                _logger.Verbose("No message made it into the container");
+                containerizedItems = null;
+                container = null;
+                return false;
+            }
+
+            containerizedItems = fineList.Select(x => x.Item1).ToList();
+
+            using var writer = new Writer(MergedProvider.Singleton, new MemoryStream());
+            writer.Write(MsgContainer.StaticConstructorId);
+            writer.Write(containerizedItems.Count);
+            foreach (var item in fineList)
+            {
+                var messageItem = item.Item1;
+                var messageId = _mtProtoState.MessageIdsHandler.ComputeMessageId();
+                var seqno = _mtProtoState.SeqnoHandler.ComputeSeqno(messageItem.Body);
+                messageItem.SetProtocolInfo(messageId, seqno);
+                writer.Write(messageId);
+                writer.Write(seqno);
+                writer.Write(item.Item2.Length);
+                writer.Stream.Write(item.Item2);
+            }
+
+            container = ((MemoryStream)writer.Stream).ToArray();
+            return true;
         }
 
         public override string ToString() => $"Send loop for connection {_connection.ConnectionInfo}";

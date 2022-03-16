@@ -6,6 +6,7 @@ using CatraProto.Client.Async.Locks;
 using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.Connections.Protocols.Interfaces;
 using CatraProto.Client.Connections.Protocols.TcpAbridged;
+using CatraProto.Client.MTProto.Auth;
 using CatraProto.Client.MTProto.Settings;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.Client.TL.Schemas.CloudChats;
@@ -28,7 +29,6 @@ namespace CatraProto.Client.Connections
         private readonly ClientSettings _clientSettings;
         private readonly ConnectionProtocol _protocolType;
         private readonly LoopsHandler _loopsHandler;
-        private readonly object _mutex = new object();
         private readonly ILogger _logger;
         private bool _isInited;
 
@@ -71,6 +71,8 @@ namespace CatraProto.Client.Connections
                     await Protocol.ConnectAsync(token);
 
                     _logger.Information("Successfully connected to {Connection}", ConnectionInfo);
+
+                    await MtProtoState.StartSaltHandlerAsync();
                     await _loopsHandler.StartLoopsAsync();
                     break;
                 }
@@ -101,37 +103,15 @@ namespace CatraProto.Client.Connections
             _logger.Information("Disconnecting from {Connection} and stopping existing loops", ConnectionInfo);
             await _loopsHandler.StopLoopsAsync();
             await Protocol.CloseAsync();
-
-            SetIsInited(false);
         }
 
         public void OnKeyGenerated()
         {
-            _logger.Information("Resetting key loop timer after key generation");
+            _logger.Information("Resetting key loop timer after key generation and forcing updates");
             _loopsHandler.ResetKeyLoop();
-        }
-
-        public async Task InitConnectionAsync(CancellationToken token = default)
-        {
-            _logger.Information("Initializing connection {Connection}", ConnectionInfo);
-            var initConnection = new InitConnection
-            {
-                ApiId = _clientSettings.ApiSettings.ApiId,
-                AppVersion = _clientSettings.ApiSettings.AppVersion,
-                DeviceModel = _clientSettings.ApiSettings.DeviceModel,
-                LangCode = _clientSettings.ApiSettings.LangCode,
-                LangPack = _clientSettings.ApiSettings.LangPack,
-                SystemLangCode = _clientSettings.ApiSettings.SystemLangCode,
-                SystemVersion = _clientSettings.ApiSettings.SystemVersion,
-                Query = new GetConfig()
-            };
-
-            var r = await MtProtoState.Api.CloudChatsApi.InvokeWithLayerAsync(MergedProvider.LayerId, initConnection, cancellationToken: token);
-            SetIsInited(true);
-            _logger.Information("Connection {Connection} initialized", ConnectionInfo);
             if (ConnectionInfo.Main)
             {
-                await _client.UpdatesReceiver.ForceGetDifferenceAllAsync(false);
+                _client.UpdatesReceiver.ForceGetDifferenceAllAsync(false);
             }
         }
 
@@ -161,22 +141,6 @@ namespace CatraProto.Client.Connections
             }
         }
 
-        public bool GetIsInited()
-        {
-            lock (_mutex)
-            {
-                return _isInited;
-            }
-        }
-
-        public void SetIsInited(bool value)
-        {
-            lock (_mutex)
-            {
-                _isInited = value;
-            }
-        }
-
         public async ValueTask DisposeAsync()
         {
             _fullShutdownSource.Cancel();
@@ -185,6 +149,7 @@ namespace CatraProto.Client.Connections
             await ConnectAsync();
             //Since we can't be sure, we call DisconnectAsync manually.
             await DisconnectAsync();
+            await MtProtoState.StopSaltHandlerAsync();
             _fullShutdownSource.Dispose();
             _logger.Information("Connection for {Connection} successfully disposed", ConnectionInfo);
         }

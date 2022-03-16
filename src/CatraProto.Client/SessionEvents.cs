@@ -24,6 +24,7 @@ namespace CatraProto.Client
                     if (authorization.IsAuthorized(out _, out _, out _))
                     {
                         //Not awaiting is fine here.
+                        _client.UpdatesReceiver.FillProcessors();
                         _client.UpdatesReceiver.ForceGetDifferenceAllAsync(false);
                     }
 

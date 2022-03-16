@@ -183,7 +183,7 @@ namespace CatraProto.Client.Database
         {
             lock (_commonMutex)
             {
-                var userHash = GetPeerAccessHash(PeerId.AsChannel(id));
+                var userHash = GetPeerAccessHash(PeerId.AsUser(id));
                 if (userHash.HasValue)
                 {
                     return new InputUser()
