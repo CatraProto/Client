@@ -19,9 +19,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			LogoutTokens = 1 << 6
 		}
 
-        public static int StaticConstructorId { get => -1973130814; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1973130814; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -84,10 +83,15 @@ writer.Write(ConstructorId);
 
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "codeSettings";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

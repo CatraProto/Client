@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using CatraProto.Client.Async.Collections;
 using CatraProto.Client.Async.Loops.Enums.Resumable;
 using CatraProto.Client.Async.Loops.Interfaces;
+using CatraProto.Client.Collections;
 using CatraProto.Client.MTProto.Session.Models;
 using CatraProto.Client.TL.Schemas.CloudChats;
 using CatraProto.Client.TL.Schemas.CloudChats.Updates;
@@ -19,6 +20,7 @@ namespace CatraProto.Client.Updates
 {
     class UpdateProcessor : LoopImplementation<ResumableLoopState, ResumableSignalState>
     {
+        private static readonly MultiValueDictionary<int, UpdateBase> _applyAt = new MultiValueDictionary<int, UpdateBase>();
         private readonly BrowsableQueue<IObject> _updatesQueue = new BrowsableQueue<IObject>();
         private static readonly TimeSpan WaitTime = TimeSpan.FromSeconds(0.5);
         private readonly UpdatesState _updatesState;
@@ -143,6 +145,18 @@ namespace CatraProto.Client.Updates
                 SearchType? searchType = null;
                 int? newPts;
                 int? newQts = null;
+                if(UpdatesTools.GetApplyOnPts(update.Item, out var at))
+                {
+                    var (localPts, _, _, _, _) = _updatesState.GetData();
+                    if (localPts < at.Value)
+                    {
+                        _logger.Information("Postponing update {Update} to be applied at pts {Pts}", update.Item, at.Value);
+                        _applyAt.Insert(at.Value, (UpdateBase)update.Item);
+                    }
+                    
+                    update.DequeueItem();
+                    continue;
+                }
 
                 if (UpdatesTools.TryExtractPts(update.Item, out newPts, out var ptsCount))
                 {
@@ -164,7 +178,7 @@ namespace CatraProto.Client.Updates
                 {
                     case UpdateCheckResult.GapDetected:
                         {
-                            _logger.Information("Waiting {Time}ms before fetching difference", WaitTime.TotalMilliseconds);
+                            _logger.Information(messageTemplate: "Waiting {Time}ms before fetching difference", WaitTime.TotalMilliseconds);
                             await Task.Delay(WaitTime, stoppingToken);
 
                             var findGapFillingUpdate = FindGapFillingUpdate(searchType!.Value, out newQts, out newPts);
@@ -172,7 +186,17 @@ namespace CatraProto.Client.Updates
                             {
                                 _logger.Information("Update gap filled after waiting without fetching difference");
                                 toBeApplied.Add((UpdateBase)findGapFillingUpdate);
-
+                                if (newPts is not null)
+                                {
+                                    if (_applyAt.TryRemoveAll(newPts.Value, out var postponedUpdates))
+                                    {
+                                        foreach (var psUpdate in postponedUpdates)
+                                        {
+                                            _logger.Information("Applying postponed update {Upd}", psUpdate);
+                                            toBeApplied.Add(psUpdate);
+                                        }
+                                    }
+                                }
                                 //Not dequeuing update here because FindGapFillingUpdate resetted the current item handle
                                 _updatesState.SetData(qts: newQts, pts: newPts);
                             }
@@ -189,6 +213,18 @@ namespace CatraProto.Client.Updates
                             if (update.Item is UpdateBase updBase)
                             {
                                 toBeApplied.Add(updBase);
+                            }
+
+                            if(newPts is not null)
+                            {
+                                if(_applyAt.TryRemoveAll(newPts.Value, out var postponedUpdates))
+                                {
+                                    foreach(var psUpdate in postponedUpdates)
+                                    {
+                                        _logger.Information("Applying postponed update {Upd}", psUpdate);
+                                        toBeApplied.Add(psUpdate);
+                                    }
+                                }
                             }
 
                             update.DequeueItem();
@@ -248,7 +284,6 @@ namespace CatraProto.Client.Updates
                     if (difference.RpcCallFailed)
                     {
                         _logger.Error("Couldn't get difference because error {Error} occured for channel {Channel}, removing channel from states", difference.Error, _channelId.Value);
-                        _client.UpdatesReceiver.CloseProcessor(_channelId.Value);
                         yield break;
                     }
 

@@ -15,9 +15,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Pinned = 1 << 2
 		}
 
-        public static int StaticConstructorId { get => 1908216652; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 1908216652; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -98,10 +97,15 @@ writer.Write(ConstructorId);
 			UnreadUnmutedMessagesCount = reader.Read<int>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "dialogFolder";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

@@ -13,9 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => -731601877; }
-        [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -731601877; }
         
 [Newtonsoft.Json.JsonIgnore]
 		System.Type IMethod.Type { get; init; } = typeof(bool);
@@ -62,10 +60,15 @@ writer.Write(ConstructorId);
 			Link = reader.Read<string>();
 
 		}
-		
+
 		public override string ToString()
 		{
 		    return "messages.deleteExportedChatInvite";
+		}
+
+		public int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

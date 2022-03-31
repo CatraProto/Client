@@ -7,13 +7,12 @@ using System.Linq;
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class PQInnerDataTemp : CatraProto.Client.TL.Schemas.MTProto.PQInnerDataBase
+	public partial class PQInnerDataDc : CatraProto.Client.TL.Schemas.MTProto.PQInnerDataBase
 	{
 
 
-        public static int StaticConstructorId { get => 1013613780; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1443537003; }
         
 [Newtonsoft.Json.JsonProperty("pq")]
 		public sealed override byte[] Pq { get; set; }
@@ -33,12 +32,12 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 [Newtonsoft.Json.JsonProperty("new_nonce")]
 		public sealed override System.Numerics.BigInteger NewNonce { get; set; }
 
-[Newtonsoft.Json.JsonProperty("expires_in")]
-		public int ExpiresIn { get; set; }
+[Newtonsoft.Json.JsonProperty("dc")]
+		public sealed override int Dc { get; set; }
 
 
         #nullable enable
- public PQInnerDataTemp (byte[] pq,byte[] p,byte[] q,System.Numerics.BigInteger nonce,System.Numerics.BigInteger serverNonce,System.Numerics.BigInteger newNonce,int expiresIn)
+ public PQInnerDataDc (byte[] pq,byte[] p,byte[] q,System.Numerics.BigInteger nonce,System.Numerics.BigInteger serverNonce,System.Numerics.BigInteger newNonce,int dc)
 {
  Pq = pq;
 P = p;
@@ -46,11 +45,11 @@ Q = q;
 Nonce = nonce;
 ServerNonce = serverNonce;
 NewNonce = newNonce;
-ExpiresIn = expiresIn;
+Dc = dc;
  
 }
 #nullable disable
-        internal PQInnerDataTemp() 
+        internal PQInnerDataDc() 
         {
         }
 		
@@ -68,7 +67,7 @@ writer.Write(ConstructorId);
 			writer.Write(Nonce);
 			writer.Write(ServerNonce);
 			writer.Write(NewNonce);
-			writer.Write(ExpiresIn);
+			writer.Write(Dc);
 
 		}
 
@@ -80,13 +79,18 @@ writer.Write(ConstructorId);
 			Nonce = reader.Read<System.Numerics.BigInteger>(128);
 			ServerNonce = reader.Read<System.Numerics.BigInteger>(128);
 			NewNonce = reader.Read<System.Numerics.BigInteger>(256);
-			ExpiresIn = reader.Read<int>();
+			Dc = reader.Read<int>();
 
 		}
-				
+		
 		public override string ToString()
 		{
-		    return "p_q_inner_data_temp";
+		    return "p_q_inner_data_dc";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

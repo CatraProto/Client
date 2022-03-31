@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 	{
 
 
-        public static int StaticConstructorId { get => 326715557; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 326715557; }
         
 [Newtonsoft.Json.JsonProperty("email_pattern")]
 		public sealed override string EmailPattern { get; set; }
@@ -47,10 +46,15 @@ writer.Write(ConstructorId);
 			EmailPattern = reader.Read<string>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "auth.passwordRecovery";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

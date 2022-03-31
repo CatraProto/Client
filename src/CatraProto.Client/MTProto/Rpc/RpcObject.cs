@@ -24,5 +24,15 @@ namespace CatraProto.Client.MTProto.Rpc
         {
             throw new NotImplementedException();
         }
+
+        public override string ToString()
+        {
+            return "rpc_object";
+        }
+
+        public int GetConstructorId()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

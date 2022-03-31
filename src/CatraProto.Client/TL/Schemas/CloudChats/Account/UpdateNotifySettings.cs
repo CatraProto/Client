@@ -13,9 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => -2067899501; }
-        [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -2067899501; }
         
 [Newtonsoft.Json.JsonIgnore]
 		System.Type IMethod.Type { get; init; } = typeof(bool);
@@ -62,10 +60,15 @@ writer.Write(ConstructorId);
 			Settings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerNotifySettingsBase>();
 
 		}
-		
+
 		public override string ToString()
 		{
 		    return "account.updateNotifySettings";
+		}
+
+		public int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

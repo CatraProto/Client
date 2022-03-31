@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 	{
 
 
-        public static int StaticConstructorId { get => 235081943; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 235081943; }
         
 [Newtonsoft.Json.JsonProperty("urls")]
 		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.RecentMeUrlBase> Urls { get; set; }
@@ -59,10 +58,15 @@ writer.Write(ConstructorId);
 			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "help.recentMeUrls";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

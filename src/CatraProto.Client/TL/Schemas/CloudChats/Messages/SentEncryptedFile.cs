@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 	{
 
 
-        public static int StaticConstructorId { get => -1802240206; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1802240206; }
         
 [Newtonsoft.Json.JsonProperty("date")]
 		public sealed override int Date { get; set; }
@@ -53,10 +52,15 @@ writer.Write(ConstructorId);
 			File = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.EncryptedFileBase>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "messages.sentEncryptedFile";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

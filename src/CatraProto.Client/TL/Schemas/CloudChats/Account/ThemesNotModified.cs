@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 	{
 
 
-        public static int StaticConstructorId { get => -199313886; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -199313886; }
         
 
         
@@ -36,10 +35,15 @@ writer.Write(ConstructorId);
 		{
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "account.themesNotModified";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

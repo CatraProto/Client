@@ -15,9 +15,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Left = 1 << 0
 		}
 
-        public static int StaticConstructorId { get => 1844969806; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 1844969806; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -80,10 +79,15 @@ writer.Write(ConstructorId);
 			BannedRights = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "channelParticipantBanned";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

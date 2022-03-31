@@ -13,9 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => 1369162417; }
-        [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 1369162417; }
         
 [Newtonsoft.Json.JsonIgnore]
 		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase);
@@ -62,10 +60,15 @@ writer.Write(ConstructorId);
 			Media = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase>();
 
 		}
-		
+
 		public override string ToString()
 		{
 		    return "messages.uploadMedia";
+		}
+
+		public int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

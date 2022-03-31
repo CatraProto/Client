@@ -13,9 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => 676017721; }
-        [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 676017721; }
         
 [Newtonsoft.Json.JsonIgnore]
 		System.Type IMethod.Type { get; init; } = typeof(bool);
@@ -56,10 +54,15 @@ writer.Write(ConstructorId);
 			ShortName = reader.Read<string>();
 
 		}
-		
+
 		public override string ToString()
 		{
 		    return "stickers.checkShortName";
+		}
+
+		public int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

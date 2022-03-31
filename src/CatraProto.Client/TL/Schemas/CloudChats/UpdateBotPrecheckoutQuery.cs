@@ -16,9 +16,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ShippingOptionId = 1 << 1
 		}
 
-        public static int StaticConstructorId { get => -1934976362; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1934976362; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -110,10 +109,15 @@ writer.Write(ConstructorId);
 			TotalAmount = reader.Read<long>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "updateBotPrecheckoutQuery";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

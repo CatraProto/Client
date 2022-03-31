@@ -26,9 +26,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			PinMessages = 1 << 17
 		}
 
-        public static int StaticConstructorId { get => -1626209256; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1626209256; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -128,10 +127,15 @@ writer.Write(ConstructorId);
 			UntilDate = reader.Read<int>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "chatBannedRights";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

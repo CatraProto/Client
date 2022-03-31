@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 	{
 
 
-        public static int StaticConstructorId { get => -2112423005; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -2112423005; }
         
 [Newtonsoft.Json.JsonProperty("theme")]
 		public CatraProto.Client.TL.Schemas.CloudChats.ThemeBase Theme { get; set; }
@@ -47,10 +46,15 @@ writer.Write(ConstructorId);
 			Theme = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ThemeBase>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "updateTheme";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

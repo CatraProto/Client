@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -16,9 +17,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			StrippedThumb = 1 << 1
 		}
 
-        public static int StaticConstructorId { get => -2100168954; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -2100168954; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -31,7 +31,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 [Newtonsoft.Json.JsonProperty("stripped_thumb")]
 		public byte[] StrippedThumb { get; set; }
-
+        
 [Newtonsoft.Json.JsonProperty("dc_id")]
 		public int DcId { get; set; }
 
@@ -83,10 +83,15 @@ writer.Write(ConstructorId);
 			DcId = reader.Read<int>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "userProfilePhoto";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

@@ -18,9 +18,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ReceiptMsgId = 1 << 2
 		}
 
-        public static int StaticConstructorId { get => -2074799289; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -2074799289; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -122,10 +121,15 @@ writer.Write(ConstructorId);
 			StartParam = reader.Read<string>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "messageMediaInvoice";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

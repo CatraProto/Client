@@ -13,9 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => -1516564433; }
-        [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1516564433; }
         
 [Newtonsoft.Json.JsonIgnore]
 		System.Type IMethod.Type { get; init; } = typeof(bool);
@@ -62,10 +60,15 @@ writer.Write(ConstructorId);
 			NewSettings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.Account.PasswordInputSettingsBase>();
 
 		}
-		
+
 		public override string ToString()
 		{
 		    return "account.updatePasswordSettings";
+		}
+
+		public int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

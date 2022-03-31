@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 	{
 
 
-        public static int StaticConstructorId { get => -478701471; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -478701471; }
         
 [Newtonsoft.Json.JsonProperty("retry_date")]
 		public int RetryDate { get; set; }
@@ -47,10 +46,15 @@ writer.Write(ConstructorId);
 			RetryDate = reader.Read<int>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "account.resetPasswordFailedWait";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

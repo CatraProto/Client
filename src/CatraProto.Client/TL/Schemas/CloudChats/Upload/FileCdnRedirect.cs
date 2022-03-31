@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 	{
 
 
-        public static int StaticConstructorId { get => -242427324; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -242427324; }
         
 [Newtonsoft.Json.JsonProperty("dc_id")]
 		public int DcId { get; set; }
@@ -71,10 +70,15 @@ writer.Write(ConstructorId);
 			FileHashes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "upload.fileCdnRedirect";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

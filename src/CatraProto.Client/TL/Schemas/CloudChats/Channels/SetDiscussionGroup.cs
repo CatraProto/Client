@@ -13,9 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => 1079520178; }
-        [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 1079520178; }
         
 [Newtonsoft.Json.JsonIgnore]
 		System.Type IMethod.Type { get; init; } = typeof(bool);
@@ -62,10 +60,15 @@ writer.Write(ConstructorId);
 			Group = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
 
 		}
-		
+
 		public override string ToString()
 		{
 		    return "channels.setDiscussionGroup";
+		}
+
+		public int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

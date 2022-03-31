@@ -15,9 +15,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Presentation = 1 << 0
 		}
 
-        public static int StaticConstructorId { get => 192428418; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 192428418; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -62,10 +61,15 @@ writer.Write(ConstructorId);
 			Params = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "updateGroupCallConnection";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

@@ -15,9 +15,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Poll = 1 << 0
 		}
 
-        public static int StaticConstructorId { get => -1398708869; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1398708869; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -77,10 +76,15 @@ writer.Write(ConstructorId);
 			Results = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PollResultsBase>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "updateMessagePoll";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

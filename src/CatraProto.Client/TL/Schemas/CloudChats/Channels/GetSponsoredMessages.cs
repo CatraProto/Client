@@ -13,9 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => -333377601; }
-        [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -333377601; }
         
 [Newtonsoft.Json.JsonIgnore]
 		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.SponsoredMessagesBase);
@@ -56,10 +54,15 @@ writer.Write(ConstructorId);
 			Channel = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
 
 		}
-		
+
 		public override string ToString()
 		{
 		    return "channels.getSponsoredMessages";
+		}
+
+		public int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

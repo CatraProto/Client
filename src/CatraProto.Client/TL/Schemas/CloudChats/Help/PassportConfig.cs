@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 	{
 
 
-        public static int StaticConstructorId { get => -1600596305; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1600596305; }
         
 [Newtonsoft.Json.JsonProperty("hash")]
 		public int Hash { get; set; }
@@ -53,10 +52,15 @@ writer.Write(ConstructorId);
 			CountriesLangs = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "help.passportConfig";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

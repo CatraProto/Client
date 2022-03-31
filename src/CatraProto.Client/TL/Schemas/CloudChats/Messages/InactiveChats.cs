@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 	{
 
 
-        public static int StaticConstructorId { get => -1456996667; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1456996667; }
         
 [Newtonsoft.Json.JsonProperty("dates")]
 		public sealed override IList<int> Dates { get; set; }
@@ -59,10 +58,15 @@ writer.Write(ConstructorId);
 			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "messages.inactiveChats";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

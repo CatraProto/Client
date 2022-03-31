@@ -13,9 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => -400399203; }
-        [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -400399203; }
         
 [Newtonsoft.Json.JsonIgnore]
 		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.HighScoresBase);
@@ -68,10 +66,15 @@ writer.Write(ConstructorId);
 			UserId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
 
 		}
-		
+
 		public override string ToString()
 		{
 		    return "messages.getGameHighScores";
+		}
+
+		public int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

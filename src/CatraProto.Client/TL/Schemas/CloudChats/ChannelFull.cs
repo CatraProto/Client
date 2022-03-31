@@ -48,9 +48,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			AvailableReactions = 1 << 30
 		}
 
-        public static int StaticConstructorId { get => -516145888; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -516145888; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -542,10 +541,15 @@ writer.Write(ConstructorId);
 
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "channelFull";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

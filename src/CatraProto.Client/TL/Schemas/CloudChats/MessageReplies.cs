@@ -19,9 +19,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ReadMaxId = 1 << 3
 		}
 
-        public static int StaticConstructorId { get => -2083123262; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -2083123262; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -128,10 +127,15 @@ writer.Write(ConstructorId);
 
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "messageReplies";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

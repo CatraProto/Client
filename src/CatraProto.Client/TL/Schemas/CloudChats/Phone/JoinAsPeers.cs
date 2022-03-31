@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 	{
 
 
-        public static int StaticConstructorId { get => -1343921601; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1343921601; }
         
 [Newtonsoft.Json.JsonProperty("peers")]
 		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.PeerBase> Peers { get; set; }
@@ -59,10 +58,15 @@ writer.Write(ConstructorId);
 			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "phone.joinAsPeers";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

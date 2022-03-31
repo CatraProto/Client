@@ -31,9 +31,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Send = 1 << 16
 		}
 
-        public static int StaticConstructorId { get => -368018716; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -368018716; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -147,10 +146,15 @@ writer.Write(ConstructorId);
 			Send = FlagsHelper.IsFlagSet(Flags, 16);
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "channelAdminLogEventsFilter";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

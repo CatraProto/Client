@@ -24,9 +24,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			SuggestedTipAmounts = 1 << 8
 		}
 
-        public static int StaticConstructorId { get => 215516896; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 215516896; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -140,10 +139,15 @@ writer.Write(ConstructorId);
 
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "invoice";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

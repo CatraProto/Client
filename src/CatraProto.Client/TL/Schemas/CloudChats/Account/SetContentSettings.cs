@@ -17,9 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		}
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => -1250643605; }
-        [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1250643605; }
         
 [Newtonsoft.Json.JsonIgnore]
 		System.Type IMethod.Type { get; init; } = typeof(bool);
@@ -60,10 +58,15 @@ writer.Write(ConstructorId);
 			SensitiveEnabled = FlagsHelper.IsFlagSet(Flags, 0);
 
 		}
-		
+
 		public override string ToString()
 		{
 		    return "account.setContentSettings";
+		}
+
+		public int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

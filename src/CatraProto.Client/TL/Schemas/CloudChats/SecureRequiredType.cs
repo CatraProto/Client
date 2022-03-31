@@ -17,9 +17,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			TranslationRequired = 1 << 2
 		}
 
-        public static int StaticConstructorId { get => -2103600678; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -2103600678; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -74,10 +73,15 @@ writer.Write(ConstructorId);
 			Type = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "secureRequiredType";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

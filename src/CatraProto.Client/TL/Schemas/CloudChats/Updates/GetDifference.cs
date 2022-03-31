@@ -17,9 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 		}
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => 630429265; }
-        [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 630429265; }
         
 [Newtonsoft.Json.JsonIgnore]
 		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Updates.DifferenceBase);
@@ -92,10 +90,15 @@ writer.Write(ConstructorId);
 			Qts = reader.Read<int>();
 
 		}
-		
+
 		public override string ToString()
 		{
 		    return "updates.getDifference";
+		}
+
+		public int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

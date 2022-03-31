@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 	{
 
 
-        public static int StaticConstructorId { get => 547062491; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 547062491; }
         
 [Newtonsoft.Json.JsonProperty("geo_point")]
 		public CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase GeoPoint { get; set; }
@@ -53,10 +52,15 @@ writer.Write(ConstructorId);
 			Address = reader.Read<string>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "channelLocation";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

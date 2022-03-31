@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 	{
 
 
-        public static int StaticConstructorId { get => -38694904; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -38694904; }
         
 [Newtonsoft.Json.JsonProperty("game")]
 		public CatraProto.Client.TL.Schemas.CloudChats.GameBase Game { get; set; }
@@ -47,10 +46,15 @@ writer.Write(ConstructorId);
 			Game = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.GameBase>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "messageMediaGame";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

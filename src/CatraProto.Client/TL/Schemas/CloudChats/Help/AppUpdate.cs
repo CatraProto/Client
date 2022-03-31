@@ -18,9 +18,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 			Sticker = 1 << 3
 		}
 
-        public static int StaticConstructorId { get => -860107216; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -860107216; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -125,10 +124,15 @@ writer.Write(ConstructorId);
 
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "help.appUpdate";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

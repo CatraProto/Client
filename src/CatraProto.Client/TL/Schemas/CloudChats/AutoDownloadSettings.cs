@@ -18,9 +18,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			PhonecallsLessData = 1 << 3
 		}
 
-        public static int StaticConstructorId { get => -532532493; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -532532493; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -98,10 +97,15 @@ writer.Write(ConstructorId);
 			VideoUploadMaxbitrate = reader.Read<int>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "autoDownloadSettings";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

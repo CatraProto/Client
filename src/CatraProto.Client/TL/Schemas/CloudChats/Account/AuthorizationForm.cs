@@ -15,9 +15,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 			PrivacyPolicyUrl = 1 << 0
 		}
 
-        public static int StaticConstructorId { get => -1389486888; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1389486888; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -89,10 +88,15 @@ writer.Write(ConstructorId);
 
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "account.authorizationForm";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

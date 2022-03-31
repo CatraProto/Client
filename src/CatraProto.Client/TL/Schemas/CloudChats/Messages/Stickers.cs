@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 	{
 
 
-        public static int StaticConstructorId { get => 816245886; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 816245886; }
         
 [Newtonsoft.Json.JsonProperty("hash")]
 		public long Hash { get; set; }
@@ -53,10 +52,15 @@ writer.Write(ConstructorId);
 			StickersField = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "messages.stickers";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

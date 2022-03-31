@@ -17,9 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		}
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => 1157265941; }
-        [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 1157265941; }
         
 [Newtonsoft.Json.JsonIgnore]
 		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.SentEncryptedMessageBase);
@@ -83,10 +81,15 @@ writer.Write(ConstructorId);
 			Data = reader.Read<byte[]>();
 
 		}
-		
+
 		public override string ToString()
 		{
 		    return "messages.sendEncrypted";
+		}
+
+		public int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

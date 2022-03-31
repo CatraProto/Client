@@ -17,9 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		}
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => -104078327; }
-        [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -104078327; }
         
 [Newtonsoft.Json.JsonIgnore]
 		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedFoundMessagesBase);
@@ -60,10 +58,15 @@ writer.Write(ConstructorId);
 			Revoke = FlagsHelper.IsFlagSet(Flags, 0);
 
 		}
-		
+
 		public override string ToString()
 		{
 		    return "messages.deletePhoneCallHistory";
+		}
+
+		public int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

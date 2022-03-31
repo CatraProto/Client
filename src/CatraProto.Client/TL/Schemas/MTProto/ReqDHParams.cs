@@ -13,9 +13,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => -686627650; }
-        [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -686627650; }
         
 [Newtonsoft.Json.JsonIgnore]
 		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.ServerDHParamsBase);
@@ -86,10 +84,15 @@ writer.Write(ConstructorId);
 			EncryptedData = reader.Read<byte[]>();
 
 		}
-		
+
 		public override string ToString()
 		{
 		    return "req_DH_params";
+		}
+
+		public int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

@@ -19,9 +19,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			PublishedDate = 1 << 4
 		}
 
-        public static int StaticConstructorId { get => -1282352120; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1282352120; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -137,10 +136,15 @@ writer.Write(ConstructorId);
 
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "pageRelatedArticle";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

@@ -15,9 +15,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Selective = 1 << 2
 		}
 
-        public static int StaticConstructorId { get => -1606526075; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1606526075; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -51,10 +50,15 @@ writer.Write(ConstructorId);
 			Selective = FlagsHelper.IsFlagSet(Flags, 2);
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "replyKeyboardHide";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

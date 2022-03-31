@@ -13,9 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => 1295590211; }
-        [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 1295590211; }
         
 [Newtonsoft.Json.JsonIgnore]
 		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Help.InviteTextBase);
@@ -45,10 +43,15 @@ writer.Write(ConstructorId);
 		{
 
 		}
-		
+
 		public override string ToString()
 		{
 		    return "help.getInviteText";
+		}
+
+		public int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

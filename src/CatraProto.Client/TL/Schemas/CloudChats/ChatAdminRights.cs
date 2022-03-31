@@ -25,9 +25,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Other = 1 << 12
 		}
 
-        public static int StaticConstructorId { get => 1605510357; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 1605510357; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -111,10 +110,15 @@ writer.Write(ConstructorId);
 			Other = FlagsHelper.IsFlagSet(Flags, 12);
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "chatAdminRights";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

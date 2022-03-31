@@ -18,9 +18,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Photo = 1 << 3
 		}
 
-        public static int StaticConstructorId { get => -11252123; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -11252123; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -95,10 +94,15 @@ writer.Write(ConstructorId);
 
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "folder";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

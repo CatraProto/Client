@@ -13,9 +13,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => -1099002127; }
-        [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1099002127; }
         
 [Newtonsoft.Json.JsonIgnore]
 		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.ResPQBase);
@@ -56,10 +54,15 @@ writer.Write(ConstructorId);
 			Nonce = reader.Read<System.Numerics.BigInteger>(128);
 
 		}
-		
+
 		public override string ToString()
 		{
 		    return "req_pq_multi";
+		}
+
+		public int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

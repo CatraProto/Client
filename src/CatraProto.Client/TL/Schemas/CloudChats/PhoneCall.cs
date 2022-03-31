@@ -16,9 +16,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Video = 1 << 6
 		}
 
-        public static int StaticConstructorId { get => -1770029977; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1770029977; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -122,10 +121,15 @@ writer.Write(ConstructorId);
 			StartDate = reader.Read<int>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "phoneCall";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

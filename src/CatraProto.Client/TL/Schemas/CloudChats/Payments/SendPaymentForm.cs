@@ -19,9 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 		}
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => 818134173; }
-        [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 818134173; }
         
 [Newtonsoft.Json.JsonIgnore]
 		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentResultBase);
@@ -128,10 +126,15 @@ writer.Write(ConstructorId);
 
 
 		}
-		
+
 		public override string ToString()
 		{
 		    return "payments.sendPaymentForm";
+		}
+
+		public int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

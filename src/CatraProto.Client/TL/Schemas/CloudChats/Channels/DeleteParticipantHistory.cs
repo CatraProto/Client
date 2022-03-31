@@ -13,9 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => 913655003; }
-        [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 913655003; }
         
 [Newtonsoft.Json.JsonIgnore]
 		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedHistoryBase);
@@ -62,10 +60,15 @@ writer.Write(ConstructorId);
 			Participant = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
 
 		}
-		
+
 		public override string ToString()
 		{
 		    return "channels.deleteParticipantHistory";
+		}
+
+		public int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

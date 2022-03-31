@@ -16,9 +16,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			UdpReflector = 1 << 1
 		}
 
-        public static int StaticConstructorId { get => -58224696; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -58224696; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -80,10 +79,15 @@ writer.Write(ConstructorId);
 			LibraryVersions = reader.ReadVector<string>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "phoneCallProtocol";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

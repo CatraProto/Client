@@ -68,6 +68,12 @@ namespace CatraProto.Client.Collections
             return true;
         }
 
+        public bool TryRemoveAll(TKey key, [MaybeNullWhen(false)] out List<TValue> value)
+        {
+            return _backingDictionary.Remove(key, out value);
+        }
+
+
         public IEnumerator<KeyValuePair<TKey, List<TValue>>> GetEnumerator()
         {
             return _backingDictionary.GetEnumerator();

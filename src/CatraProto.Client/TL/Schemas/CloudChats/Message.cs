@@ -40,9 +40,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			TtlPeriod = 1 << 25
 		}
 
-        public static int StaticConstructorId { get => 940666592; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 940666592; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -374,10 +373,15 @@ writer.Write(ConstructorId);
 
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "message";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

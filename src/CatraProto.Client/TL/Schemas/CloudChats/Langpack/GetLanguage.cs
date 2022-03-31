@@ -13,9 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Langpack
 
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => 1784243458; }
-        [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 1784243458; }
         
 [Newtonsoft.Json.JsonIgnore]
 		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.LangPackLanguageBase);
@@ -62,10 +60,15 @@ writer.Write(ConstructorId);
 			LangCode = reader.Read<string>();
 
 		}
-		
+
 		public override string ToString()
 		{
 		    return "langpack.getLanguage";
+		}
+
+		public int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

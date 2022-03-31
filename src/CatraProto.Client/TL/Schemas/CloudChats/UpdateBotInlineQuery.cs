@@ -16,9 +16,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			PeerType = 1 << 1
 		}
 
-        public static int StaticConstructorId { get => 1232025500; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 1232025500; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -104,10 +103,15 @@ writer.Write(ConstructorId);
 			Offset = reader.Read<string>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "updateBotInlineQuery";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

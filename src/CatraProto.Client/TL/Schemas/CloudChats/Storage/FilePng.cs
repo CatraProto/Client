@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Storage
 	{
 
 
-        public static int StaticConstructorId { get => 172975040; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 172975040; }
         
 
         
@@ -36,10 +35,15 @@ writer.Write(ConstructorId);
 		{
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "storage.filePng";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

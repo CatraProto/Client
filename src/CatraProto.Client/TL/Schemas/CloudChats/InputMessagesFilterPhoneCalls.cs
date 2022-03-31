@@ -15,9 +15,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Missed = 1 << 0
 		}
 
-        public static int StaticConstructorId { get => -2134272152; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -2134272152; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -51,10 +50,15 @@ writer.Write(ConstructorId);
 			Missed = FlagsHelper.IsFlagSet(Flags, 0);
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "inputMessagesFilterPhoneCalls";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

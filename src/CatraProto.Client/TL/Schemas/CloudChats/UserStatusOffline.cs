@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 	{
 
 
-        public static int StaticConstructorId { get => 9203775; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 9203775; }
         
 [Newtonsoft.Json.JsonProperty("was_online")]
 		public int WasOnline { get; set; }
@@ -47,10 +46,15 @@ writer.Write(ConstructorId);
 			WasOnline = reader.Read<int>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "userStatusOffline";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

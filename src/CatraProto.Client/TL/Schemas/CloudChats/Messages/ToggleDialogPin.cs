@@ -17,9 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		}
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => -1489903017; }
-        [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1489903017; }
         
 [Newtonsoft.Json.JsonIgnore]
 		System.Type IMethod.Type { get; init; } = typeof(bool);
@@ -71,10 +69,15 @@ writer.Write(ConstructorId);
 			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputDialogPeerBase>();
 
 		}
-		
+
 		public override string ToString()
 		{
 		    return "messages.toggleDialogPin";
+		}
+
+		public int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

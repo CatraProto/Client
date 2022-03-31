@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 	{
 
 
-        public static int StaticConstructorId { get => -2016381538; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -2016381538; }
         
 [Newtonsoft.Json.JsonProperty("countries")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.Help.CountryBase> Countries { get; set; }
@@ -53,10 +52,15 @@ writer.Write(ConstructorId);
 			Hash = reader.Read<int>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "help.countriesList";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

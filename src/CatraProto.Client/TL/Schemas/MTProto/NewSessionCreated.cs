@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 	{
 
 
-        public static int StaticConstructorId { get => -1631450872; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1631450872; }
         
 [Newtonsoft.Json.JsonProperty("first_msg_id")]
 		public sealed override long FirstMsgId { get; set; }
@@ -59,10 +58,15 @@ writer.Write(ConstructorId);
 			ServerSalt = reader.Read<long>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "new_session_created";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

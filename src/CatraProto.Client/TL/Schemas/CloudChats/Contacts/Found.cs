@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 	{
 
 
-        public static int StaticConstructorId { get => -1290580579; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1290580579; }
         
 [Newtonsoft.Json.JsonProperty("my_results")]
 		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.PeerBase> MyResults { get; set; }
@@ -65,10 +64,15 @@ writer.Write(ConstructorId);
 			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "contacts.found";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

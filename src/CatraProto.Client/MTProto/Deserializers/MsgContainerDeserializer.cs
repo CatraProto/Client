@@ -44,5 +44,10 @@ namespace CatraProto.Client.MTProto.Deserializers
         public override void UpdateFlags()
         {
         }
+
+        public override int GetConstructorId()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

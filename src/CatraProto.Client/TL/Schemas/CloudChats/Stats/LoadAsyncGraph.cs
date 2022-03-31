@@ -17,9 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 		}
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => 1646092192; }
-        [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 1646092192; }
         
 [Newtonsoft.Json.JsonIgnore]
 		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase);
@@ -80,10 +78,15 @@ writer.Write(ConstructorId);
 
 
 		}
-		
+
 		public override string ToString()
 		{
 		    return "stats.loadAsyncGraph";
+		}
+
+		public int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

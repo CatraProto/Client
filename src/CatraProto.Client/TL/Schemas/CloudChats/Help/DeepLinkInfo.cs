@@ -16,9 +16,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 			Entities = 1 << 1
 		}
 
-        public static int StaticConstructorId { get => 1783556146; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 1783556146; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -77,10 +76,15 @@ writer.Write(ConstructorId);
 
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "help.deepLinkInfo";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

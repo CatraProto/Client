@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 	{
 
 
-        public static int StaticConstructorId { get => 558156313; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 558156313; }
         
 [Newtonsoft.Json.JsonProperty("error_code")]
 		public sealed override int ErrorCode { get; set; }
@@ -53,10 +52,15 @@ writer.Write(ConstructorId);
 			ErrorMessage = reader.Read<string>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "rpc_error";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

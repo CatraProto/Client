@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CatraProto.Client.TL.Schemas.CloudChats;
+using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.MTProto
 {
@@ -58,6 +60,30 @@ namespace CatraProto.Client.MTProto
             }
 
             return new PeerId(-1, PeerType.Unrecognized);
+        }
+
+        public static PeerId GetPeerFromObject(IObject obj)
+        {
+            switch (obj)
+            {
+                case Chat:
+                case ChatForbidden:
+                case ChatEmpty:
+                    return PeerId.AsGroup(((ChatBase)obj).Id);
+                case Channel:
+                case ChannelForbidden:
+                    return PeerId.AsChannel(((ChatBase)obj).Id);
+                case UserBase user:
+                    return PeerId.AsUser(user.Id);
+                case UserFull fullUser:
+                    return PeerId.AsUser(fullUser.Id);
+                case ChatFull chatFull:
+                    return PeerId.AsGroup(chatFull.Id);
+                case ChannelFull channelFull:
+                    return PeerId.AsChannel(channelFull.Id);
+                default:
+                    return new PeerId(-1, PeerType.Unrecognized);
+            }
         }
     }
 }

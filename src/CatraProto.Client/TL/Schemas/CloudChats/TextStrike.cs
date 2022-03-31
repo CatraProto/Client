@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 	{
 
 
-        public static int StaticConstructorId { get => -1678197867; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1678197867; }
         
 [Newtonsoft.Json.JsonProperty("text")]
 		public CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Text { get; set; }
@@ -47,10 +46,15 @@ writer.Write(ConstructorId);
 			Text = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "textStrike";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 	{
 
 
-        public static int StaticConstructorId { get => -1107852396; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1107852396; }
         
 [Newtonsoft.Json.JsonProperty("period")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.StatsDateRangeDaysBase Period { get; set; }
@@ -131,10 +130,15 @@ writer.Write(ConstructorId);
 			RecentMessageInteractions = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageInteractionCountersBase>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "stats.broadcastStats";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

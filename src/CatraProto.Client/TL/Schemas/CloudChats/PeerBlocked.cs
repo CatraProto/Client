@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 	{
 
 
-        public static int StaticConstructorId { get => -386039788; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -386039788; }
         
 [Newtonsoft.Json.JsonProperty("peer_id")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.PeerBase PeerId { get; set; }
@@ -53,10 +52,15 @@ writer.Write(ConstructorId);
 			Date = reader.Read<int>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "peerBlocked";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

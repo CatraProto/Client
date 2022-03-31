@@ -13,9 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => 399855457; }
-        [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 399855457; }
         
 [Newtonsoft.Json.JsonIgnore]
 		System.Type IMethod.Type { get; init; } = typeof(bool);
@@ -56,10 +54,15 @@ writer.Write(ConstructorId);
 			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPhoneCallBase>();
 
 		}
-		
+
 		public override string ToString()
 		{
 		    return "phone.receivedCall";
+		}
+
+		public int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

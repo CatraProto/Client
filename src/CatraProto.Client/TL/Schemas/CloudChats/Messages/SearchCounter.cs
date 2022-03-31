@@ -15,9 +15,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Inexact = 1 << 1
 		}
 
-        public static int StaticConstructorId { get => -398136321; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -398136321; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -68,10 +67,15 @@ writer.Write(ConstructorId);
 			Count = reader.Read<int>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "messages.searchCounter";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

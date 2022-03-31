@@ -149,6 +149,7 @@ namespace CatraProto.Client.Connections.Loop
                         //This way, we're only gonna send this message
                         if (messageItem.Body is BindTempAuthKey)
                         {
+                            _lastInitConnection = 0;
                             encryptedList.Value.Add(messageItem);
                             break;
                         }
@@ -358,7 +359,7 @@ namespace CatraProto.Client.Connections.Loop
             containerizedItems = fineList.Select(x => x.Item1).ToList();
 
             using var writer = new Writer(MergedProvider.Singleton, new MemoryStream());
-            writer.Write(MsgContainer.StaticConstructorId);
+            writer.Write(MsgContainer.ConstructorId);
             writer.Write(containerizedItems.Count);
             foreach (var item in fineList)
             {

@@ -23,9 +23,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Emoticon = 1 << 25
 		}
 
-        public static int StaticConstructorId { get => 1949890536; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 1949890536; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -143,10 +142,15 @@ writer.Write(ConstructorId);
 			ExcludePeers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "dialogFilter";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

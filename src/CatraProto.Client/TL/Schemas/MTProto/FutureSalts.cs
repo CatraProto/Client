@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 	{
 
 
-        public static int StaticConstructorId { get => -1370486635; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1370486635; }
         
 [Newtonsoft.Json.JsonProperty("req_msg_id")]
 		public sealed override long ReqMsgId { get; set; }
@@ -59,10 +58,15 @@ writer.Write(ConstructorId);
 			Salts = reader.ReadVector(new CatraProto.TL.ObjectDeserializers.NakedObjectVectorDeserializer<CatraProto.Client.TL.Schemas.MTProto.FutureSalt>(CatraProto.Client.TL.Schemas.MergedProvider.Singleton), true);
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "future_salts";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

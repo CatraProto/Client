@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 	{
 
 
-        public static int StaticConstructorId { get => 812830625; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 812830625; }
         
 [Newtonsoft.Json.JsonProperty("packed_data")]
 		public byte[] PackedData { get; set; }
@@ -47,10 +46,15 @@ writer.Write(ConstructorId);
 			PackedData = reader.Read<byte[]>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "gzip_packed";
+		}
+
+		public int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

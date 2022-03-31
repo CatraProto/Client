@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 	{
 
 
-        public static int StaticConstructorId { get => -1246823043; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1246823043; }
         
 [Newtonsoft.Json.JsonProperty("query_id")]
 		public long QueryId { get; set; }
@@ -65,10 +64,15 @@ writer.Write(ConstructorId);
 			ShippingAddress = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PostAddressBase>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "updateBotShippingQuery";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

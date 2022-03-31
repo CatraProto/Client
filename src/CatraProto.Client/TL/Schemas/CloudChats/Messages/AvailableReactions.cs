@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 	{
 
 
-        public static int StaticConstructorId { get => 1989032621; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 1989032621; }
         
 [Newtonsoft.Json.JsonProperty("hash")]
 		public int Hash { get; set; }
@@ -53,10 +52,15 @@ writer.Write(ConstructorId);
 			Reactions = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.AvailableReactionBase>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "messages.availableReactions";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

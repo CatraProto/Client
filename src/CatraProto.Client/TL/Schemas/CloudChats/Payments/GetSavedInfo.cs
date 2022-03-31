@@ -13,9 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => 578650699; }
-        [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 578650699; }
         
 [Newtonsoft.Json.JsonIgnore]
 		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Payments.SavedInfoBase);
@@ -45,10 +43,15 @@ writer.Write(ConstructorId);
 		{
 
 		}
-		
+
 		public override string ToString()
 		{
 		    return "payments.getSavedInfo";
+		}
+
+		public int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

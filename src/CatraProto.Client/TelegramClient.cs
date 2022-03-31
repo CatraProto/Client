@@ -74,7 +74,6 @@ namespace CatraProto.Client
             
             await ClientSession.ConnectionPool.InitMainConnectionAsync(token);
             _logger.Information("Requesting and storing current configuration");
-            await Task.Delay(3000);
             _config = (Config)(await Api.CloudChatsApi.Help.GetConfigAsync(cancellationToken: token)).Response;
 
             if (!sessionData.Authorization.IsAuthorized(out var dcId, out _, out _))
@@ -93,6 +92,7 @@ namespace CatraProto.Client
             }
 
             UpdatesReceiver.FillProcessors();
+            await UpdatesReceiver.ForceGetDifferenceAllAsync(true);
             return ClientState.Authenticated;
         }
 

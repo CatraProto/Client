@@ -17,9 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 		}
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => -425040769; }
-        [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -425040769; }
         
 [Newtonsoft.Json.JsonIgnore]
 		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Phone.ExportedGroupCallInviteBase);
@@ -71,10 +69,15 @@ writer.Write(ConstructorId);
 			Call = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase>();
 
 		}
-		
+
 		public override string ToString()
 		{
 		    return "phone.exportGroupCallInvite";
+		}
+
+		public int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

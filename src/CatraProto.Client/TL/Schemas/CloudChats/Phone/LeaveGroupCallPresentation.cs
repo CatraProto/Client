@@ -13,9 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => 475058500; }
-        [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 475058500; }
         
 [Newtonsoft.Json.JsonIgnore]
 		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
@@ -56,10 +54,15 @@ writer.Write(ConstructorId);
 			Call = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase>();
 
 		}
-		
+
 		public override string ToString()
 		{
 		    return "phone.leaveGroupCallPresentation";
+		}
+
+		public int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

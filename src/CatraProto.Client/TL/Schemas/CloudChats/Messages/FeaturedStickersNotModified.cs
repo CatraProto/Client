@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 	{
 
 
-        public static int StaticConstructorId { get => -958657434; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -958657434; }
         
 [Newtonsoft.Json.JsonProperty("count")]
 		public sealed override int Count { get; set; }
@@ -47,10 +46,15 @@ writer.Write(ConstructorId);
 			Count = reader.Read<int>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "messages.featuredStickersNotModified";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

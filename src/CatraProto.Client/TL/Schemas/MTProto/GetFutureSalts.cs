@@ -13,9 +13,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => -1188971260; }
-        [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1188971260; }
         
 [Newtonsoft.Json.JsonIgnore]
 		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.FutureSaltsBase);
@@ -56,10 +54,15 @@ writer.Write(ConstructorId);
 			Num = reader.Read<int>();
 
 		}
-		
+
 		public override string ToString()
 		{
 		    return "get_future_salts";
+		}
+
+		public int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

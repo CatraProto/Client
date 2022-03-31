@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 	{
 
 
-        public static int StaticConstructorId { get => -1625153079; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1625153079; }
         
 [Newtonsoft.Json.JsonProperty("geo_point")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase GeoPoint { get; set; }
@@ -77,10 +76,15 @@ writer.Write(ConstructorId);
 			Scale = reader.Read<int>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "inputWebFileGeoPointLocation";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

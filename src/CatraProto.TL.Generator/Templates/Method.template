@@ -13,9 +13,7 @@ namespace ^Namespace^
 ^FlagsEnums^
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => ^ConstructorId^; }
-        [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => ^ConstructorId^; }
         ^Properties^
         
         ^PublicConstructor^
@@ -38,10 +36,15 @@ namespace ^Namespace^
 		{
 ^Deserialization^
 		}
-		
+
 		public override string ToString()
 		{
 		    return "^ObjectRawName^";
+		}
+
+		public int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

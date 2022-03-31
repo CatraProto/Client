@@ -23,9 +23,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 			PendingResetDate = 1 << 5
 		}
 
-        public static int StaticConstructorId { get => 408623183; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 408623183; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -176,10 +175,15 @@ writer.Write(ConstructorId);
 
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "account.password";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

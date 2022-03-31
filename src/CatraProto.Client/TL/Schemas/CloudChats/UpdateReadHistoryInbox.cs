@@ -15,9 +15,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			FolderId = 1 << 0
 		}
 
-        public static int StaticConstructorId { get => -1667805217; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1667805217; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -95,10 +94,15 @@ writer.Write(ConstructorId);
 			PtsCount = reader.Read<int>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "updateReadHistoryInbox";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

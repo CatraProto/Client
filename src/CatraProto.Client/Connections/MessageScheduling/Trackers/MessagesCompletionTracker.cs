@@ -171,18 +171,25 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
             }).Select(x => x.Value).ToList();
         }
 
-        public void OnNotFoundProtocolError(ExecutionInfo executionInfo)
+        public bool OnNotFoundProtocolError(ExecutionInfo executionInfo)
         {
             var error = new RpcError { ErrorCode = -404, ErrorMessage = "Incorrect server call" };
-            SetCompletion(0, error, executionInfo);
+            var isSet = SetCompletion(0, error, executionInfo);
+            if (isSet)
+            {
+                return true;
+            }
+
             foreach (var item in _messageCompletions)
             {
                 if (item.Value.GetMessageMethod() is BindTempAuthKey)
                 {
                     item.Value.SetCompleted(error, executionInfo);
-                    break;
+                    return true;
                 }
             }
+
+            return false;
         }
     }
 }

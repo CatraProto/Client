@@ -15,9 +15,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 			FutureAuthToken = 1 << 0
 		}
 
-        public static int StaticConstructorId { get => -1012759713; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1012759713; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -60,10 +59,15 @@ writer.Write(ConstructorId);
 
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "auth.loggedOut";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

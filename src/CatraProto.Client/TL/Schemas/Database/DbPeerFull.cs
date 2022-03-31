@@ -11,7 +11,7 @@ namespace CatraProto.Client.TL.Schemas.Database
 {
     internal class DbPeerFull : IObject
     {
-        public static int StaticConstructorId { get => 1111983006; }
+        public static int ConstructorId { get => 1111983006; }
         public long UpdatedAt { get; set; }
         public int LayerVersion { get; set; }
         public IObject? Object { get; set; }
@@ -30,9 +30,14 @@ namespace CatraProto.Client.TL.Schemas.Database
             }
         }
 
+        public int GetConstructorId()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Serialize(Writer writer)
         {
-            writer.Write(StaticConstructorId);
+            writer.Write(ConstructorId);
             writer.Write(UpdatedAt);
             writer.Write(LayerVersion);
             writer.Write(Object);

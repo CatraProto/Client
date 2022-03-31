@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 	{
 
 
-        public static int StaticConstructorId { get => -1459938943; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1459938943; }
         
 [Newtonsoft.Json.JsonProperty("new_messages")]
 		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageBase> NewMessages { get; set; }
@@ -77,10 +76,15 @@ writer.Write(ConstructorId);
 			IntermediateState = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.Updates.StateBase>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "updates.differenceSlice";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

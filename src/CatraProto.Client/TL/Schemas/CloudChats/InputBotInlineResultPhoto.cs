@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 	{
 
 
-        public static int StaticConstructorId { get => -1462213465; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1462213465; }
         
 [Newtonsoft.Json.JsonProperty("id")]
 		public sealed override string Id { get; set; }
@@ -65,10 +64,15 @@ writer.Write(ConstructorId);
 			SendMessage = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageBase>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "inputBotInlineResultPhoto";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

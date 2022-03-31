@@ -19,9 +19,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Url = 1 << 2
 		}
 
-        public static int StaticConstructorId { get => 911761060; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 911761060; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -104,10 +103,15 @@ writer.Write(ConstructorId);
 			CacheTime = reader.Read<int>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "messages.botCallbackAnswer";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

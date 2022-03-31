@@ -9,8 +9,10 @@ using CatraProto.Client.Async.Loops;
 using CatraProto.Client.Async.Loops.Enums.Resumable;
 using CatraProto.Client.Async.Loops.Extensions;
 using CatraProto.Client.Collections;
+using CatraProto.Client.Connections.MessageScheduling.Enums;
 using CatraProto.Client.MTProto.Session.Models;
 using CatraProto.Client.TL.Schemas.CloudChats;
+using CatraProto.Client.TL.Schemas.CloudChats.Messages;
 using CatraProto.Client.Tools;
 using CatraProto.Client.Updates.CustomTypes;
 using CatraProto.TL.Interfaces;
@@ -297,10 +299,10 @@ namespace CatraProto.Client.Updates
                 foreach (var (chatId, (controller, processor)) in _processors)
                 {
                     _logger.Information("Stopping update processor for channel {ChatId}", chatId);
-                    tasksToWait[i++] = controller.SignalAsync(ResumableSignalState.Stop);
+                    tasksToWait[i++] = controller.TrySignalAsync(ResumableSignalState.Stop);
                 }
 
-                tasksToWait[size] = _commonLoop.Controller.SignalAsync(ResumableSignalState.Stop);
+                tasksToWait[size] = _commonLoop.Controller.TrySignalAsync(ResumableSignalState.Stop);
                 return Task.WhenAll(tasksToWait);
             }
         }

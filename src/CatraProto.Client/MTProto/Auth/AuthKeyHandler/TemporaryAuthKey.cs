@@ -45,7 +45,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
             var permanentKeySuccess = (AuthKeySuccess)permanentKeyResult;
             var permanentKey = new AuthKeyObject(permanentKeySuccess.KeyArray, permanentKeySuccess.AuthKeyId, permanentKeySuccess.ServerSalt, null);
 
-            var temporaryKeyResult = await AuthKeyGen.ComputeAuthKey(duration, _mtProtoState.Api, _logger, token);
+            var temporaryKeyResult = await AuthKeyGen.ComputeAuthKey(duration, _mtProtoState, _logger, token);
             if (temporaryKeyResult is AuthKeyFail)
             {
                 return false;

@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 	{
 
 
-        public static int StaticConstructorId { get => -1730095465; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1730095465; }
         
 [Newtonsoft.Json.JsonProperty("from_id")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase FromId { get; set; }
@@ -59,10 +58,15 @@ writer.Write(ConstructorId);
 			Distance = reader.Read<int>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "messageActionGeoProximityReached";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

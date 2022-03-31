@@ -14,8 +14,8 @@ namespace CatraProto.Client.TL.Schemas
         public static readonly MergedProvider Singleton = new MergedProvider();
         public override int BoolTrueId { get; } = -1132882121;
         public override int BoolFalseId { get; } = -1720552011;
-        public override int GzipPackedId { get; } = GzipPacked.StaticConstructorId;
-        public override int RpcResultId { get; } = RpcResult.StaticConstructorId;
+        public override int GzipPackedId { get; } = GzipPacked.ConstructorId;
+        public override int RpcResultId { get; } = RpcResult.ConstructorId;
 
         public override int VectorId
         {

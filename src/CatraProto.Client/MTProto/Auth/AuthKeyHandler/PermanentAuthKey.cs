@@ -10,13 +10,13 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
     class PermanentAuthKey
     {
         private readonly AuthKeyCache _authKeyCache;
-        private readonly Api _api;
+        private readonly MTProtoState _state;
         private readonly ILogger _logger;
 
-        public PermanentAuthKey(AuthKeyCache authKeyCache, Api api, ILogger logger)
+        public PermanentAuthKey(AuthKeyCache authKeyCache, MTProtoState state, ILogger logger)
         {
             _authKeyCache = authKeyCache;
-            _api = api;
+            _state = state;
             _logger = logger.ForContext<PermanentAuthKey>();
         }
 
@@ -25,7 +25,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
             var getData = _authKeyCache.GetData();
             if (getData is null)
             {
-                var result = await AuthKeyGen.ComputeAuthKey(-1, _api, _logger, cancellationToken);
+                var result = await AuthKeyGen.ComputeAuthKey(-1, _state, _logger, cancellationToken);
                 if (result is AuthKeySuccess success)
                 {
                     _authKeyCache.SetData(success.KeyArray, success.AuthKeyId, success.ServerSalt);

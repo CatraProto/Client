@@ -5,6 +5,7 @@ using System.Security;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
+using CatraProto.Client.Connections;
 using CatraProto.Client.Crypto;
 using CatraProto.Client.Crypto.Aes;
 using CatraProto.Client.Crypto.KeyExchange;
@@ -18,10 +19,11 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
 {
     static class AuthKeyGen
     {
-        public static async Task<AuthKeyResult> ComputeAuthKey(int duration, Api api, ILogger logger, CancellationToken cancellationToken = default)
+        public static async Task<AuthKeyResult> ComputeAuthKey(int duration, MTProtoState state, ILogger logger, CancellationToken cancellationToken = default)
         {
             try
             {
+                var api = state.Api;
                 var isPermanent = duration <= 0;
                 logger.Information("Generating auth {Type} key", isPermanent ? "permanent" : "temporary");
                 var nonce = BigIntegerTools.GenerateBigInt(128);
@@ -47,17 +49,23 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
                 var rsaKey = found.Item2;
                 var (p, q) = CryptoTools.GetFastPq(BitConverter.ToUInt64(pq.Reverse().ToArray()));
                 var newNonce = BigIntegerTools.GenerateBigInt(256);
+                
+                PQInnerDataBase data = isPermanent ? new PQInnerDataDc() : new PQInnerDataTempDc { ExpiresIn = duration };
+                data.Nonce = nonce;
+                data.ServerNonce = reqPq.Response.ServerNonce;
+                data.NewNonce = newNonce;
+                data.P = p;
+                data.Q = q;
+                data.Pq = reqPq.Response.Pq;
+                data.Dc = state.ConnectionInfo.DcId;
+                if (state.ConnectionInfo.Test)
+                {
+                    data.Dc += 10000;
+                }
 
-                PQInnerDataBase toHash = isPermanent ? new PQInnerData() : new PQInnerDataTemp { ExpiresIn = duration };
-                toHash.Nonce = nonce;
-                toHash.ServerNonce = reqPq.Response.ServerNonce;
-                toHash.NewNonce = newNonce;
-                toHash.P = p;
-                toHash.Q = q;
-                toHash.Pq = reqPq.Response.Pq;
-
-
-                var encryptedData = rsaKey.EncryptData(Hashing.ComputeDataHashedFilling(toHash, MergedProvider.Singleton));
+                var toArr = data.ToArray(MergedProvider.Singleton);
+                logger.Information("Serialized data size: {Size}", toArr.Length);
+                var encryptedData = rsaKey.EncryptData(toArr);
                 rsaKey.Dispose();
 
                 logger.Verbose("Sending ReqDHParams request...");

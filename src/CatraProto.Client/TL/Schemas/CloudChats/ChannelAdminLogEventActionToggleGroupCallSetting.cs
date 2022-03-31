@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 	{
 
 
-        public static int StaticConstructorId { get => 1456906823; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 1456906823; }
         
 [Newtonsoft.Json.JsonProperty("join_muted")]
 		public bool JoinMuted { get; set; }
@@ -47,10 +46,15 @@ writer.Write(ConstructorId);
 			JoinMuted = reader.Read<bool>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "channelAdminLogEventActionToggleGroupCallSetting";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

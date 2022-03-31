@@ -75,7 +75,6 @@ namespace CatraProto.Client.Updates
                 case UpdateShortChatMessage updateShortChatMessage:
                     var toChatMessage = new UpdateNewMessage();
                     var originalMessage = new Message();
-
                     toChatMessage.Pts = updateShortChatMessage.Pts;
                     toChatMessage.PtsCount = updateShortChatMessage.PtsCount;
 

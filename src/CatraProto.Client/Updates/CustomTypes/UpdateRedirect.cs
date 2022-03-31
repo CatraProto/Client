@@ -26,5 +26,10 @@ namespace CatraProto.Client.Updates.CustomTypes
         {
             throw new System.NotImplementedException();
         }
+
+        public override int GetConstructorId()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

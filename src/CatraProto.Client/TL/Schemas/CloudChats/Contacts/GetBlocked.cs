@@ -13,9 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => -176409329; }
-        [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -176409329; }
         
 [Newtonsoft.Json.JsonIgnore]
 		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Contacts.BlockedBase);
@@ -62,10 +60,15 @@ writer.Write(ConstructorId);
 			Limit = reader.Read<int>();
 
 		}
-		
+
 		public override string ToString()
 		{
 		    return "contacts.getBlocked";
+		}
+
+		public int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

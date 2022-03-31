@@ -50,9 +50,11 @@ namespace CatraProto.Client.Connections.MessageScheduling
                 _logger.Warning("Received protocol error {Error} from server", error);
                 if (error == -404)
                 {
-                    _messagesHandler.MessagesTrackers.MessageCompletionTracker.OnNotFoundProtocolError(GetExecInfo());
-                    _logger.Information("Server forgot authorization key, regenerating...");
-                    _connection.RegenKey();
+                    if (!_messagesHandler.MessagesTrackers.MessageCompletionTracker.OnNotFoundProtocolError(GetExecInfo()))
+                    {
+                        _logger.Information("Server forgot authorization key, regenerating...");
+                        _connection.RegenKey();
+                    }
                 }
 
                 return;

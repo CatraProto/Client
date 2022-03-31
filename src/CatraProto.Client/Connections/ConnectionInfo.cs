@@ -17,13 +17,14 @@ namespace CatraProto.Client.Connections
         public bool Cdn { get; }
         public bool Static { get; }
         public bool Ipv6 { get; }
+        public bool Test { get; }
 
-        public ConnectionInfo(IPAddress ipAddress, int port, int dcId) : this(ConnectionProtocol.TcpAbridged, ipAddress, false, port, dcId, false, false, null, false, false)
+        public ConnectionInfo(IPAddress ipAddress, bool test, int port, int dcId) : this(ConnectionProtocol.TcpAbridged, ipAddress, test, false, port, dcId, false, false, null, false, false)
         {
 
         }
 
-        internal ConnectionInfo(ConnectionProtocol connectionProtocol, IPAddress ipAddress, bool ipv6, int port, int dcId, bool mediaOnly, bool tcpoOnly, byte[]? secret, bool cdn, bool isStatic)
+        internal ConnectionInfo(ConnectionProtocol connectionProtocol, IPAddress ipAddress, bool test, bool ipv6, int port, int dcId, bool mediaOnly, bool tcpoOnly, byte[]? secret, bool cdn, bool isStatic)
         {
             ConnectionProtocol = connectionProtocol;
             IpAddress = ipAddress ?? throw new ArgumentNullException(nameof(ipAddress));
@@ -32,19 +33,20 @@ namespace CatraProto.Client.Connections
             MediaOnly = mediaOnly;
             TcpoOnly = tcpoOnly;
             Secret = secret;
-            Cdn = Cdn;
+            Cdn = cdn;
             Static = isStatic;
             Ipv6 = ipv6;
+            Test = test;
         }
 
-        internal static ConnectionInfo FromDcOption(DcOptionBase dcOption)
+        internal static ConnectionInfo FromDcOption(DcOptionBase dcOption, bool isTest)
         {
-            return new ConnectionInfo(ConnectionProtocol.TcpAbridged, IPAddress.Parse(dcOption.IpAddress), dcOption.Ipv6, dcOption.Port, dcOption.Id, dcOption.MediaOnly, dcOption.TcpoOnly, dcOption.Secret, dcOption.Cdn, dcOption.Static);
+            return new ConnectionInfo(ConnectionProtocol.TcpAbridged, IPAddress.Parse(dcOption.IpAddress), isTest, dcOption.Ipv6, dcOption.Port, dcOption.Id, dcOption.MediaOnly, dcOption.TcpoOnly, dcOption.Secret, dcOption.Cdn, dcOption.Static);
         }
 
         public override string ToString()
         {
-            return $"DC{DcId} ({IpAddress}:{Port}, Main: {Main})";
+            return $"DC{DcId} ({IpAddress}:{Port}, Main: {Main}, Test: {Test})";
         }
     }
 }

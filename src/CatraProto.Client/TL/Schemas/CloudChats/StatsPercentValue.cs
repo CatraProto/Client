@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 	{
 
 
-        public static int StaticConstructorId { get => -875679776; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -875679776; }
         
 [Newtonsoft.Json.JsonProperty("part")]
 		public sealed override double Part { get; set; }
@@ -53,10 +52,15 @@ writer.Write(ConstructorId);
 			Total = reader.Read<double>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "statsPercentValue";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

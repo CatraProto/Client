@@ -17,9 +17,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 			TmpSessions = 1 << 0
 		}
 
-        public static int StaticConstructorId { get => 872119224; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 872119224; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -92,10 +91,15 @@ writer.Write(ConstructorId);
 			User = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "auth.authorization";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

@@ -25,7 +25,7 @@ namespace CatraProto.Client.Database
             var settings = client.ClientSession.Settings.SessionSettings.DatabaseSettings;
             Directory.CreateDirectory(settings.Path);
             _sqliteConnection = new SqliteConnection($"Data Source={settings.Path}{client.ClientSession.Name}.db");
-            PeerDatabase = new PeerDatabase(_sqliteConnection, settings.PeerCacheSize, _mutex, logger);
+            PeerDatabase = new PeerDatabase(client, _sqliteConnection, _mutex, logger);
             InternalDatabase = new InternalDatabase(_sqliteConnection, _mutex, logger);
         }
 
@@ -59,9 +59,9 @@ namespace CatraProto.Client.Database
                 {
                     foreach (var chat in chats)
                     {
-                        manager.PeerDatabase.UpdateChat(chat, transaction);
                         if (chat is Channel or ChannelForbidden)
                         {
+                            manager.PeerDatabase.UpdateChannel(chat, transaction);
                             if (Updates.UpdatesTools.IsInChat(chat))
                             {
                                 _client.UpdatesReceiver.CreateProcessor(chat.Id, true);
@@ -70,6 +70,10 @@ namespace CatraProto.Client.Database
                             {
                                 _client.UpdatesReceiver.CloseProcessor(chat.Id);
                             }
+                        }
+                        else
+                        {
+                            manager.PeerDatabase.UpdateChat(chat, transaction);
                         }
                     }
                 }
@@ -82,7 +86,7 @@ namespace CatraProto.Client.Database
                         {
                             if (userFull.AccessHash is not null)
                             {
-                                manager.PeerDatabase.UpdateChat(user, transaction);
+                                manager.PeerDatabase.PushChatToDb(user, transaction);
                             }
                         }
                     }

@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 	{
 
 
-        public static int StaticConstructorId { get => -96535659; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -96535659; }
         
 [Newtonsoft.Json.JsonProperty("type")]
 		public sealed override string Type { get; set; }
@@ -65,10 +64,15 @@ writer.Write(ConstructorId);
 			Sizes = reader.ReadVector<int>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "photoSizeProgressive";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

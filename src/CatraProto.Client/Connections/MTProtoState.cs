@@ -5,7 +5,6 @@ using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.Crypto;
 using CatraProto.Client.MTProto.Auth;
 using CatraProto.Client.Async.Loops.Enums.Generic;
-using CatraProto.Client.Async.Loops.Enums.Generic;
 using CatraProto.Client.Async.Loops.Extensions;
 
 namespace CatraProto.Client.Connections

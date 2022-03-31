@@ -16,9 +16,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			Stun = 1 << 1
 		}
 
-        public static int StaticConstructorId { get => 1667228533; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 1667228533; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -98,10 +97,15 @@ writer.Write(ConstructorId);
 			Password = reader.Read<string>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "phoneConnectionWebrtc";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

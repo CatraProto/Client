@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 	{
 
 
-        public static int StaticConstructorId { get => -1036396922; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1036396922; }
         
 [Newtonsoft.Json.JsonProperty("url")]
 		public string Url { get; set; }
@@ -53,10 +52,15 @@ writer.Write(ConstructorId);
 			AccessHash = reader.Read<long>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "inputWebFileLocation";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

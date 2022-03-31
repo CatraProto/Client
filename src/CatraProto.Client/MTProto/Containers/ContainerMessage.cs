@@ -28,5 +28,10 @@ namespace CatraProto.Client.MTProto.Containers
         {
             throw new NotImplementedException();
         }
+
+        public int GetConstructorId()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

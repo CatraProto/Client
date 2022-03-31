@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 	{
 
 
-        public static int StaticConstructorId { get => 1889215493; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 1889215493; }
         
 [Newtonsoft.Json.JsonProperty("prev_message")]
 		public CatraProto.Client.TL.Schemas.CloudChats.MessageBase PrevMessage { get; set; }
@@ -53,10 +52,15 @@ writer.Write(ConstructorId);
 			NewMessage = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageBase>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "channelAdminLogEventActionEditMessage";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

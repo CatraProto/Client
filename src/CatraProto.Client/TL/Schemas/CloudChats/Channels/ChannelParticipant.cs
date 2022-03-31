@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 	{
 
 
-        public static int StaticConstructorId { get => -541588713; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -541588713; }
         
 [Newtonsoft.Json.JsonProperty("participant")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantBase Participant { get; set; }
@@ -59,10 +58,15 @@ writer.Write(ConstructorId);
 			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "channels.channelParticipant";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

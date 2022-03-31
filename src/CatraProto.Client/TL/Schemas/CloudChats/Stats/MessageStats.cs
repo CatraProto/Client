@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 	{
 
 
-        public static int StaticConstructorId { get => -1986399595; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1986399595; }
         
 [Newtonsoft.Json.JsonProperty("views_graph")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase ViewsGraph { get; set; }
@@ -47,10 +46,15 @@ writer.Write(ConstructorId);
 			ViewsGraph = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "stats.messageStats";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

@@ -16,9 +16,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 			Name = 1 << 1
 		}
 
-        public static int StaticConstructorId { get => -1014526429; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1014526429; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -89,10 +88,15 @@ writer.Write(ConstructorId);
 			CountryCodes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.Help.CountryCodeBase>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "help.country";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

@@ -24,9 +24,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			DefaultBannedRights = 1 << 18
 		}
 
-        public static int StaticConstructorId { get => 1103884886; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 1103884886; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -173,10 +172,15 @@ writer.Write(ConstructorId);
 
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "chat";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

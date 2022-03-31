@@ -2750,10 +2750,10 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Stats.GetMessageStats();
 				case 85337187:
 					return new CatraProto.Client.TL.Schemas.MTProto.ResPQ();
-				case -2083955988:
-					return new CatraProto.Client.TL.Schemas.MTProto.PQInnerData();
-				case 1013613780:
-					return new CatraProto.Client.TL.Schemas.MTProto.PQInnerDataTemp();
+				case -1443537003:
+					return new CatraProto.Client.TL.Schemas.MTProto.PQInnerDataDc();
+				case 1459478408:
+					return new CatraProto.Client.TL.Schemas.MTProto.PQInnerDataTempDc();
 				case 2043348061:
 					return new CatraProto.Client.TL.Schemas.MTProto.ServerDHParamsFail();
 				case -790100132:
@@ -2851,13 +2851,13 @@ namespace CatraProto.Client.TL.Schemas
                 return obj;        
             }
         
-            if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.PQInnerData)) 
+            if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.PQInnerDataDc)) 
 {
- return new CatraProto.Client.TL.Schemas.MTProto.PQInnerData();
+ return new CatraProto.Client.TL.Schemas.MTProto.PQInnerDataDc();
 }
-if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.PQInnerDataTemp)) 
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.PQInnerDataTempDc)) 
 {
- return new CatraProto.Client.TL.Schemas.MTProto.PQInnerDataTemp();
+ return new CatraProto.Client.TL.Schemas.MTProto.PQInnerDataTempDc();
 }
 if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.ServerDHParamsFail)) 
 {

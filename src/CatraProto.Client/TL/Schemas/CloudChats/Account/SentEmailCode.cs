@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 	{
 
 
-        public static int StaticConstructorId { get => -2128640689; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -2128640689; }
         
 [Newtonsoft.Json.JsonProperty("email_pattern")]
 		public sealed override string EmailPattern { get; set; }
@@ -53,10 +52,15 @@ writer.Write(ConstructorId);
 			Length = reader.Read<int>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "account.sentEmailCode";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

@@ -15,9 +15,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ExcludeNewMessages = 1 << 1
 		}
 
-        public static int StaticConstructorId { get => -847783593; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -847783593; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -62,10 +61,15 @@ writer.Write(ConstructorId);
 			Ranges = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageRangeBase>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "channelMessagesFilter";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

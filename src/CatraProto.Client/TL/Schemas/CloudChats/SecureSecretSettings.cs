@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 	{
 
 
-        public static int StaticConstructorId { get => 354925740; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 354925740; }
         
 [Newtonsoft.Json.JsonProperty("secure_algo")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.SecurePasswordKdfAlgoBase SecureAlgo { get; set; }
@@ -59,10 +58,15 @@ writer.Write(ConstructorId);
 			SecureSecretId = reader.Read<long>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "secureSecretSettings";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

@@ -26,9 +26,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		}
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => 228423076; }
-        [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 228423076; }
         
 [Newtonsoft.Json.JsonIgnore]
 		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
@@ -109,7 +107,8 @@ RandomId = randomId;
 		}
 
 		public void Serialize(Writer writer)
-		{writer.Write(ConstructorId);
+		{
+writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
 			writer.Write(Peer);
@@ -181,10 +180,15 @@ RandomId = randomId;
 
 
 		}
-		
+
 		public override string ToString()
 		{
 		    return "messages.sendMessage";
+		}
+
+		public int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

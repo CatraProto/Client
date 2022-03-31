@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 	{
 
 
-        public static int StaticConstructorId { get => 1042605427; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 1042605427; }
         
 [Newtonsoft.Json.JsonProperty("title")]
 		public sealed override string Title { get; set; }
@@ -53,10 +52,15 @@ writer.Write(ConstructorId);
 			OpenUrls = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.BankCardOpenUrlBase>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "payments.bankCardData";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

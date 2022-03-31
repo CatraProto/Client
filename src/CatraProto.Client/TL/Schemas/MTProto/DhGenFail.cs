@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 	{
 
 
-        public static int StaticConstructorId { get => -1499615742; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1499615742; }
         
 [Newtonsoft.Json.JsonProperty("nonce")]
 		public sealed override System.Numerics.BigInteger Nonce { get; set; }
@@ -59,10 +58,15 @@ writer.Write(ConstructorId);
 			NewNonceHash3 = reader.Read<System.Numerics.BigInteger>(128);
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "dh_gen_fail";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

@@ -18,9 +18,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		}
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => 1995661875; }
-        [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 1995661875; }
         
 [Newtonsoft.Json.JsonIgnore]
 		System.Type IMethod.Type { get; init; } = typeof(bool);
@@ -77,10 +75,15 @@ writer.Write(ConstructorId);
 			Settings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase>();
 
 		}
-		
+
 		public override string ToString()
 		{
 		    return "account.saveAutoDownloadSettings";
+		}
+
+		public int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 	{
 
 
-        public static int StaticConstructorId { get => -530561358; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -530561358; }
         
 [Newtonsoft.Json.JsonProperty("orig_message")]
 		public sealed override CatraProto.Client.TL.Schemas.MTProto.MessageBase OrigMessage { get; set; }
@@ -47,10 +46,15 @@ writer.Write(ConstructorId);
 			OrigMessage = reader.Read<CatraProto.Client.TL.Schemas.MTProto.MessageBase>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "msg_copy";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 	{
 
 
-        public static int StaticConstructorId { get => 972174080; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 972174080; }
         
 [Newtonsoft.Json.JsonProperty("cover")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase Cover { get; set; }
@@ -47,10 +46,15 @@ writer.Write(ConstructorId);
 			Cover = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "pageBlockCover";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

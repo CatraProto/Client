@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 	{
 
 
-        public static int StaticConstructorId { get => -1910892683; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1910892683; }
         
 [Newtonsoft.Json.JsonProperty("country")]
 		public sealed override string Country { get; set; }
@@ -59,10 +58,15 @@ writer.Write(ConstructorId);
 			NearestDcField = reader.Read<int>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "nearestDc";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 	{
 
 
-        public static int StaticConstructorId { get => -219353309; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -219353309; }
         
 [Newtonsoft.Json.JsonProperty("admin_id")]
 		public sealed override long AdminId { get; set; }
@@ -59,10 +58,15 @@ writer.Write(ConstructorId);
 			RevokedInvitesCount = reader.Read<int>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "chatAdminWithInvites";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

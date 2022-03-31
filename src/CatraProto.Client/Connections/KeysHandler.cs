@@ -12,7 +12,7 @@ namespace CatraProto.Client.Connections
         public KeysHandler(MTProtoState state, Api api, ClientSession clientSession, ILogger logger)
         {
             var AuthData = clientSession.SessionManager.SessionData.AuthorizationKeys.GetAuthKeys(state.ConnectionInfo.DcId, out _); 
-            PermanentAuthKey = new PermanentAuthKey(AuthData.PermanentAuthKey, api, clientSession.Logger);
+            PermanentAuthKey = new PermanentAuthKey(AuthData.PermanentAuthKey, state, clientSession.Logger);
             TemporaryAuthKey = new TemporaryAuthKey(AuthData.TemporaryAuthKey, clientSession.Settings.ConnectionSettings, PermanentAuthKey, state, logger);
         }
     }

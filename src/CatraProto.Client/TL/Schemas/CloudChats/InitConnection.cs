@@ -18,9 +18,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		}
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => -1043505495; }
-        [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1043505495; }
         
 [Newtonsoft.Json.JsonIgnore]
 		System.Type IMethod.Type { get; init; } = typeof(IObject);
@@ -90,7 +88,7 @@ Query = query;
 
 		public void Serialize(Writer writer)
 		{
-            writer.Write(ConstructorId);
+writer.Write(ConstructorId);
 			UpdateFlags();
 			writer.Write(Flags);
 			writer.Write(ApiId);
@@ -137,10 +135,15 @@ Query = query;
 			Query = reader.Read<IObject>();
 
 		}
-		
+
 		public override string ToString()
 		{
 		    return "initConnection";
+		}
+
+		public int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

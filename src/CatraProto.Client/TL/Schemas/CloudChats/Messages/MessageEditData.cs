@@ -15,9 +15,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 			Caption = 1 << 0
 		}
 
-        public static int StaticConstructorId { get => 649453030; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 649453030; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -51,10 +50,15 @@ writer.Write(ConstructorId);
 			Caption = FlagsHelper.IsFlagSet(Flags, 0);
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "messages.messageEditData";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

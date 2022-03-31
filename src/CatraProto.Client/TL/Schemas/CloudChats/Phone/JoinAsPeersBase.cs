@@ -19,5 +19,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
         public abstract void UpdateFlags();
         public abstract void Deserialize(Reader reader);
         public abstract void Serialize(Writer writer);
+        public abstract int GetConstructorId();
     }
 }

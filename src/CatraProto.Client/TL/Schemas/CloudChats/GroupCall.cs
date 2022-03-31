@@ -27,9 +27,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			UnmutedVideoCount = 1 << 10
 		}
 
-        public static int StaticConstructorId { get => -711498484; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -711498484; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -203,10 +202,15 @@ writer.Write(ConstructorId);
 			Version = reader.Read<int>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "groupCall";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

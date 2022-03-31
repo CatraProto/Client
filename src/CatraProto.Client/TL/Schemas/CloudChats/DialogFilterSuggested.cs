@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 	{
 
 
-        public static int StaticConstructorId { get => 2004110666; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 2004110666; }
         
 [Newtonsoft.Json.JsonProperty("filter")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.DialogFilterBase Filter { get; set; }
@@ -53,10 +52,15 @@ writer.Write(ConstructorId);
 			Description = reader.Read<string>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "dialogFilterSuggested";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

@@ -17,9 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		}
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => -326762118; }
-        [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -326762118; }
         
 [Newtonsoft.Json.JsonIgnore]
 		System.Type IMethod.Type { get; init; } = typeof(bool);
@@ -95,10 +93,15 @@ writer.Write(ConstructorId);
 			OtherUids = reader.ReadVector<long>();
 
 		}
-		
+
 		public override string ToString()
 		{
 		    return "account.registerDevice";
+		}
+
+		public int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

@@ -16,9 +16,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 			SensitiveCanChange = 1 << 1
 		}
 
-        public static int StaticConstructorId { get => 1474462241; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 1474462241; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -57,10 +56,15 @@ writer.Write(ConstructorId);
 			SensitiveCanChange = FlagsHelper.IsFlagSet(Flags, 1);
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "account.contentSettings";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

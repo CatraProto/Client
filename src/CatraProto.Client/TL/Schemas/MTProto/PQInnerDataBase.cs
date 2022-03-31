@@ -25,8 +25,12 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 [Newtonsoft.Json.JsonProperty("new_nonce")]
 		public abstract System.Numerics.BigInteger NewNonce { get; set; }
 
+[Newtonsoft.Json.JsonProperty("dc")]
+		public abstract int Dc { get; set; }
+
         public abstract void UpdateFlags();
         public abstract void Deserialize(Reader reader);
         public abstract void Serialize(Writer writer);
+        public abstract int GetConstructorId();
     }
 }

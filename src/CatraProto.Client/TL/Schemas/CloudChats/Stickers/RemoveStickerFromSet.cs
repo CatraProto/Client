@@ -13,9 +13,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int StaticConstructorId { get => -143257775; }
-        [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -143257775; }
         
 [Newtonsoft.Json.JsonIgnore]
 		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetBase);
@@ -56,10 +54,15 @@ writer.Write(ConstructorId);
 			Sticker = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
 
 		}
-		
+
 		public override string ToString()
 		{
 		    return "stickers.removeStickerFromSet";
+		}
+
+		public int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

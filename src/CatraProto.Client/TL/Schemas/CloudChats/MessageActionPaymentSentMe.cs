@@ -16,9 +16,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 			ShippingOptionId = 1 << 1
 		}
 
-        public static int StaticConstructorId { get => -1892568281; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1892568281; }
         
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -104,10 +103,15 @@ writer.Write(ConstructorId);
 			Charge = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PaymentChargeBase>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "messageActionPaymentSentMe";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

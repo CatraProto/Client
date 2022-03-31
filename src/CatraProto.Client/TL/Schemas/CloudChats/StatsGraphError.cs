@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 	{
 
 
-        public static int StaticConstructorId { get => -1092839390; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1092839390; }
         
 [Newtonsoft.Json.JsonProperty("error")]
 		public string Error { get; set; }
@@ -47,10 +46,15 @@ writer.Write(ConstructorId);
 			Error = reader.Read<string>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "statsGraphError";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

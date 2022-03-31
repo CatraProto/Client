@@ -11,7 +11,7 @@ namespace CatraProto.Client
         {
             levelSwitch ??= new LoggingLevelSwitch();
             return new LoggerConfiguration().WriteTo
-                .Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}][{Session}][{SourceContext}] {Message:lj}{NewLine}{Exception}").MinimumLevel
+                .Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}][{Session}][{SourceContext}] {Message:lj} {NewLine}{Exception}").MinimumLevel
                 .ControlledBy(levelSwitch).CreateLogger();
         }
     }

@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 	{
 
 
-        public static int StaticConstructorId { get => 1404185519; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 1404185519; }
         
 [Newtonsoft.Json.JsonProperty("count")]
 		public sealed override int Count { get; set; }
@@ -53,10 +52,15 @@ writer.Write(ConstructorId);
 			Positions = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SearchResultsPositionBase>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "messages.searchResultsPositions";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

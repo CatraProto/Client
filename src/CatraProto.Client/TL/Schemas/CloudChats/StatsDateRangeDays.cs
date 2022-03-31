@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 	{
 
 
-        public static int StaticConstructorId { get => -1237848657; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => -1237848657; }
         
 [Newtonsoft.Json.JsonProperty("min_date")]
 		public sealed override int MinDate { get; set; }
@@ -53,10 +52,15 @@ writer.Write(ConstructorId);
 			MaxDate = reader.Read<int>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "statsDateRangeDays";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }

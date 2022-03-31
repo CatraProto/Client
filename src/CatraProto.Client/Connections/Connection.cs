@@ -109,10 +109,7 @@ namespace CatraProto.Client.Connections
         {
             _logger.Information("Resetting key loop timer after key generation and forcing updates");
             _loopsHandler.ResetKeyLoop();
-            if (ConnectionInfo.Main)
-            {
-                _client.UpdatesReceiver.ForceGetDifferenceAllAsync(false);
-            }
+            SignalNewMessage();
         }
 
         private IProtocol CreateProtocol()

@@ -11,9 +11,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 	{
 
 
-        public static int StaticConstructorId { get => 1275039392; }
         [Newtonsoft.Json.JsonIgnore]
-        public int ConstructorId { get => StaticConstructorId; }
+        public static int ConstructorId { get => 1275039392; }
         
 [Newtonsoft.Json.JsonProperty("authorization_ttl_days")]
 		public sealed override int AuthorizationTtlDays { get; set; }
@@ -53,10 +52,15 @@ writer.Write(ConstructorId);
 			AuthorizationsField = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.AuthorizationBase>();
 
 		}
-				
+		
 		public override string ToString()
 		{
 		    return "account.authorizations";
+		}
+
+		public override int GetConstructorId()
+		{
+			return ConstructorId;
 		}
 	}
 }
