@@ -296,11 +296,13 @@ namespace CatraProto.Client.Connections.Loop
                     };
                     var invokeWithLayer = new InvokeWithLayer(MergedProvider.LayerId, initConnection);
                     serialized = invokeWithLayer.ToArray(MergedProvider.Singleton);
+                    item.SetProtocolInfo(null, null, true, false);
                 }
                 else
                 {
                     serialized = body.ToArray(MergedProvider.Singleton);
                 }
+
                 return true;
             }
             catch (Exception e)

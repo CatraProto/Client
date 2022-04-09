@@ -202,34 +202,32 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
 
         public bool MustInitConnection()
         {
-            lock (_mutex)
+
+            if (_stopInitAt == -1)
             {
-                if (_stopInitAt == -1)
+                return false;
+            }
+            else if (_stopInitAt == -2)
+            {
+                return true;
+            }
+            else
+            {
+                if (DateTimeOffset.UtcNow.ToUnixTimeSeconds() - _stopInitAt < 0)
                 {
+                    _stopInitAt = -1;
                     return false;
                 }
-                else if (_stopInitAt == -2)
-                {
-                    return true;
-                }
-                else
-                {
-                    if (DateTimeOffset.UtcNow.ToUnixTimeSeconds() - _stopInitAt < 0)
-                    {
-                        _stopInitAt = -1;
-                        return false;
-                    }
-                    return true;
-                }
+                return true;
             }
+
         }
 
         public void ResetInitConnection()
         {
-            lock (_mutex)
-            {
-                _stopInitAt = -2;
-            }
+
+            _stopInitAt = -2;
+
         }
     }
 }

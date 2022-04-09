@@ -97,7 +97,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
 
                 if (resetProtocolInfo)
                 {
-                    SetProtocolInfo(null, null, true);
+                    SetProtocolInfo(null, null, false, true);
                 }
 
                 if (Body is MsgsAck msgsAck && canDelete)
@@ -207,21 +207,37 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
             }
         }
 
-        public void SetProtocolInfo(long? messageId, int? seqNo, bool force = false, bool initConn = false)
+        public void SetProtocolInfo(long? messageId, int? seqNo, bool? initConn = null, bool set = false)
         {
             lock (_mutex)
             {
-                if (MessageSendingOptions.SendWithMessageId.HasValue && !force)
+                if (set)
                 {
-                    _messageStatus.MessageProtocolInfo.MessageId = MessageSendingOptions.SendWithMessageId.Value;
+                    _messageStatus.MessageProtocolInfo.MessageId = messageId;
+                    _messageStatus.MessageProtocolInfo.SeqNo = seqNo;
+                    _messageStatus.MessageProtocolInfo.InitConn = initConn ?? false;
                 }
                 else
                 {
-                    _messageStatus.MessageProtocolInfo.MessageId = messageId;
-                }
+                    if(MessageSendingOptions.SendWithMessageId is not null)
+                    {
+                        _messageStatus.MessageProtocolInfo.MessageId = MessageSendingOptions.SendWithMessageId.Value;
+                    }
+                    else if(messageId is not null)
+                    {
+                        _messageStatus.MessageProtocolInfo.MessageId = messageId.Value;
+                    }
 
-                _messageStatus.MessageProtocolInfo.SeqNo = seqNo;
-                _messageStatus.MessageProtocolInfo.InitConn = initConn;
+                    if (seqNo is not null)
+                    {
+                        _messageStatus.MessageProtocolInfo.SeqNo = seqNo.Value;
+                    }
+
+                    if (initConn is not null)
+                    {
+                        _messageStatus.MessageProtocolInfo.InitConn = initConn.Value;
+                    }
+                }
             }
         }
 
