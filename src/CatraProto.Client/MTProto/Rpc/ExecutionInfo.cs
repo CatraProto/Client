@@ -5,8 +5,10 @@ namespace CatraProto.Client.MTProto.Rpc
     public class ExecutionInfo
     {
         public ConnectionInfo ExecutedBy { get; }
-        public ExecutionInfo(ConnectionInfo executedBy)
+        public bool IsTelegramRpc { get; }
+        public ExecutionInfo(ConnectionInfo executedBy, bool isTelegramRpc = false)
         {
+            IsTelegramRpc = isTelegramRpc;
             ExecutedBy = executedBy;
         }
     }

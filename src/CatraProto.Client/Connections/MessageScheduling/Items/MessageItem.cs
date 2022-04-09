@@ -199,15 +199,15 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
             }
         }
 
-        public (long? MessageId, int? SeqNo, long? upperMsgId, long? upperSeqno) GetProtocolInfo()
+        public (long? MessageId, int? SeqNo, long? upperMsgId, long? upperSeqno, bool initConn) GetProtocolInfo()
         {
             lock (_mutex)
             {
-                return (_messageStatus.MessageProtocolInfo.MessageId, _messageStatus.MessageProtocolInfo.SeqNo, _messageStatus.MessageProtocolInfo.UpperMessageId, _messageStatus.MessageProtocolInfo.UpperSeqno);
+                return (_messageStatus.MessageProtocolInfo.MessageId, _messageStatus.MessageProtocolInfo.SeqNo, _messageStatus.MessageProtocolInfo.UpperMessageId, _messageStatus.MessageProtocolInfo.UpperSeqno, _messageStatus.MessageProtocolInfo.InitConn);
             }
         }
 
-        public void SetProtocolInfo(long? messageId, int? seqNo, bool force = false)
+        public void SetProtocolInfo(long? messageId, int? seqNo, bool force = false, bool initConn = false)
         {
             lock (_mutex)
             {
@@ -221,6 +221,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
                 }
 
                 _messageStatus.MessageProtocolInfo.SeqNo = seqNo;
+                _messageStatus.MessageProtocolInfo.InitConn = initConn;
             }
         }
 

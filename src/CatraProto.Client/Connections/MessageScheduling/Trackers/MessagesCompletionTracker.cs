@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -14,10 +15,13 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
 {
     class MessageCompletionTracker
     {
+        private const int InitConnTime = 10;
         private readonly ConcurrentDictionary<long, MessageItem> _messageCompletions = new ConcurrentDictionary<long, MessageItem>();
         private readonly List<MessageItem> _unencryptedCompletions = new List<MessageItem>();
         private readonly object _mutex = new object();
         private readonly ILogger _logger;
+        //-2, must check, -1 no need to check, time has already passed otherwise check the time 
+        private int _stopInitAt = -2;
 
         public MessageCompletionTracker(ILogger logger)
         {
@@ -104,9 +108,13 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
                 }
             }
 
-            if (GetMessageCompletion(messageId, out var messageCompletion))
+            if (GetMessageCompletion(messageId, out var messageItem))
             {
-                messageCompletion.SetCompleted(response, executionInfo);
+                if (_stopInitAt == -2 && messageItem.GetProtocolInfo().initConn && executionInfo.IsTelegramRpc && response is not RpcError)
+                {
+                    _stopInitAt = ((int)DateTimeOffset.UtcNow.ToUnixTimeSeconds()) + InitConnTime;
+                }
+                messageItem.SetCompleted(response, executionInfo);
             }
 
             return true;
@@ -190,6 +198,38 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
             }
 
             return false;
+        }
+
+        public bool MustInitConnection()
+        {
+            lock (_mutex)
+            {
+                if (_stopInitAt == -1)
+                {
+                    return false;
+                }
+                else if (_stopInitAt == -2)
+                {
+                    return true;
+                }
+                else
+                {
+                    if (DateTimeOffset.UtcNow.ToUnixTimeSeconds() - _stopInitAt < 0)
+                    {
+                        _stopInitAt = -1;
+                        return false;
+                    }
+                    return true;
+                }
+            }
+        }
+
+        public void ResetInitConnection()
+        {
+            lock (_mutex)
+            {
+                _stopInitAt = -2;
+            }
         }
     }
 }

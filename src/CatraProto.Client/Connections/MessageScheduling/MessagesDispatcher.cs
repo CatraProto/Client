@@ -9,6 +9,8 @@ using CatraProto.Client.MTProto.Session;
 using CatraProto.Client.TL;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.Client.TL.Schemas.CloudChats;
+using CatraProto.Client.TL.Schemas.CloudChats.Messages;
+using CatraProto.Client.TL.Schemas.CloudChats.Users;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.Client.Updates;
 using CatraProto.TL;
@@ -84,7 +86,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
 
         private void HandleObject(IConnectionMessage connectionMessage, IObject obj, Reader reader)
         {
-            if (connectionMessage is EncryptedConnectionMessage encryptedConnectionMessage)
+            if (connectionMessage is EncryptedConnectionMessage)
             {
                 UpdatesTools.ExtractChats(obj, out var chats, out var users);
                 _mtProtoState.Client.DatabaseManager.UpdateChats(chats, users);
@@ -181,20 +183,27 @@ namespace CatraProto.Client.Connections.MessageScheduling
                 {
                     UpdatesTools.ExtractChats(iObj, out var chats, out var users);
                     _mtProtoState.Client.DatabaseManager.UpdateChats(chats, users);
+                    switch (rpcObject.Response)
+                    {
+                        case TL.Schemas.CloudChats.Users.UserFull uFull:
+                            _mtProtoState.Client.DatabaseManager.PeerDatabase.PushChatToDb(uFull.FullUser);
+                            break;
+                        case TL.Schemas.CloudChats.Messages.ChatFull cFull:
+                            _mtProtoState.Client.DatabaseManager.PeerDatabase.PushChatToDb(cFull.FullChat);
+                            break;
+                        case UpdatesBase update:
+                            UpdatesHandler?.OnNewUpdates(update, method);
+                            break;
+                    }
                 }
 
-                if (rpcObject.Response is UpdatesBase update)
-                {
-                    UpdatesHandler?.OnNewUpdates(update, method);
-                }
-
-                _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(rpcObject.MessageId, rpcObject.Response, GetExecInfo());
+                _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(rpcObject.MessageId, rpcObject.Response, GetExecInfo(true));
             }
         }
 
-        public ExecutionInfo GetExecInfo()
+        public ExecutionInfo GetExecInfo(bool rpcTelegram = false)
         {
-            return new ExecutionInfo(_mtProtoState.Connection.ConnectionInfo);
+            return new ExecutionInfo(_mtProtoState.Connection.ConnectionInfo, rpcTelegram);
         }
     }
 }

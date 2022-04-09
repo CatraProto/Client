@@ -26,12 +26,10 @@ namespace CatraProto.Client.Connections.Loop
 
         public const int ContainerMessagesLimit = 1020;
         public const int ContainerBytesLimit = 2 << 15;
-        private const int InitConnectionSeconds = 60;
         private readonly MessagesHandler _messagesHandler;
         private readonly MTProtoState _mtProtoState;
         private readonly Connection _connection;
         private readonly ILogger _logger;
-        private int _lastInitConnection = 0;
         public SendLoop(Connection connection, ILogger logger)
         {
             _connection = connection;
@@ -55,6 +53,7 @@ namespace CatraProto.Client.Connections.Loop
                     switch (currentState.Signal)
                     {
                         case ResumableSignalState.Start:
+                            _messagesHandler.MessagesTrackers.MessageCompletionTracker.ResetInitConnection();
                             SetSignalHandled(ResumableLoopState.Running, currentState);
                             _logger.Information("Send loop started for connection {Connection}", _connection.ConnectionInfo);
                             break;
@@ -127,21 +126,8 @@ namespace CatraProto.Client.Connections.Loop
 
                     if (_mtProtoState.KeysHandler.TemporaryAuthKey.CanBeUsed())
                     {
-                        if (_lastInitConnection == -1)
-                        {
-                            encryptedList.Value.Add(messageItem);
-                        }
-                        else if (_lastInitConnection == 0 || DateTimeOffset.UtcNow.ToUnixTimeSeconds() - _lastInitConnection <= InitConnectionSeconds)
-                        {
-                            _lastInitConnection = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-                            mustWrap = true;
-                            encryptedList.Value.Add(messageItem);
-                        }
-                        else
-                        {
-                            encryptedList.Value.Add(messageItem);
-                            _lastInitConnection = -1;
-                        }
+                        mustWrap = _messagesHandler.MessagesTrackers.MessageCompletionTracker.MustInitConnection();
+                        encryptedList.Value.Add(messageItem);
                     }
                     else
                     {
@@ -149,7 +135,7 @@ namespace CatraProto.Client.Connections.Loop
                         //This way, we're only gonna send this message
                         if (messageItem.Body is BindTempAuthKey)
                         {
-                            _lastInitConnection = 0;
+                            _messagesHandler.MessagesTrackers.MessageCompletionTracker.ResetInitConnection();
                             encryptedList.Value.Add(messageItem);
                             break;
                         }
