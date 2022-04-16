@@ -38,7 +38,7 @@ namespace CatraProto.Client.MTProto.Session.Models
         {
             lock (Mutex)
             {
-                _sessionVersion = reader.Read<int>();
+                _sessionVersion = reader.ReadInt32().Value;
                 EnsureVersion();
                 Authorization.Read(reader);
                 AuthorizationKeys.Read(reader);

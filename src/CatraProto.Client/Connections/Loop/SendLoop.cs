@@ -10,13 +10,15 @@ using CatraProto.Client.Async.Loops.Interfaces;
 using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.Connections.MessageScheduling.ConnectionMessages;
 using CatraProto.Client.Connections.MessageScheduling.Items;
-using CatraProto.Client.MTProto.Containers;
+using CatraProto.Client.MTProto.Rpc;
+using CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.Client.TL.Schemas.CloudChats;
 using CatraProto.Client.TL.Schemas.CloudChats.Auth;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
 using Serilog;
 
 namespace CatraProto.Client.Connections.Loop
@@ -277,41 +279,39 @@ namespace CatraProto.Client.Connections.Loop
         {
             var body = item.Body;
             _logger.Verbose("Trying to serialize {Type}", body);
-            try
+            WriteResult trySer;
+            if (mustWrap && body is not Ping and not GetFutureSalts and not MsgsStateReq and not Pong and not MsgsAck)
             {
-                if (mustWrap && body is not Ping and not GetFutureSalts and not MsgsStateReq and not Pong and not MsgsAck)
+                var clientSettings = _mtProtoState.Client.ClientSession.Settings;
+                _logger.Information("Wrapping {Type} inside initConnection", item.Body);
+                var initConnection = new InitConnection
                 {
-                    var clientSettings = _mtProtoState.Client.ClientSession.Settings;
-                    _logger.Information("Wrapping {Type} inside initConnection", item.Body);
-                    var initConnection = new InitConnection
-                    {
-                        ApiId = clientSettings.ApiSettings.ApiId,
-                        AppVersion = clientSettings.ApiSettings.AppVersion,
-                        DeviceModel = clientSettings.ApiSettings.DeviceModel,
-                        LangCode = clientSettings.ApiSettings.LangCode,
-                        LangPack = clientSettings.ApiSettings.LangPack,
-                        SystemLangCode = clientSettings.ApiSettings.SystemLangCode,
-                        SystemVersion = clientSettings.ApiSettings.SystemVersion,
-                        Query = body
-                    };
-                    var invokeWithLayer = new InvokeWithLayer(MergedProvider.LayerId, initConnection);
-                    serialized = invokeWithLayer.ToArray(MergedProvider.Singleton);
-                    item.SetProtocolInfo(null, null, true, false);
-                }
-                else
-                {
-                    serialized = body.ToArray(MergedProvider.Singleton);
-                }
+                    ApiId = clientSettings.ApiSettings.ApiId,
+                    AppVersion = clientSettings.ApiSettings.AppVersion,
+                    DeviceModel = clientSettings.ApiSettings.DeviceModel,
+                    LangCode = clientSettings.ApiSettings.LangCode,
+                    LangPack = clientSettings.ApiSettings.LangPack,
+                    SystemLangCode = clientSettings.ApiSettings.SystemLangCode,
+                    SystemVersion = clientSettings.ApiSettings.SystemVersion,
+                    Query = body
+                };
+                var invokeWithLayer = new InvokeWithLayer(MergedProvider.LayerId, initConnection);
+                trySer = invokeWithLayer.ToArray(MergedProvider.Singleton, out serialized);
+                item.SetProtocolInfo(null, null, true, false);
+            }
+            else
+            {
+                trySer = body.ToArray(MergedProvider.Singleton, out serialized);
+            }
 
-                return true;
-            }
-            catch (Exception e)
+            if (trySer.IsError)
             {
-                _logger.Error("Serialization of message of type {Type} failed, throwing exception on caller", item.Body);
-                item.SetFailed(e);
+                serialized = null;
+                item.SetCompleted(new SerializationFailed(trySer.GetError().Error), new ExecutionInfo(_mtProtoState.ConnectionInfo));
+                return false;
             }
-            serialized = null;
-            return false;
+
+            return true;
         }
 
         public bool GetContainer(List<MessageItem> messageItems, bool mustWrap, [MaybeNullWhen(false)] out List<MessageItem> containerizedItems, [MaybeNullWhen(false)] out byte[] container)
@@ -347,20 +347,20 @@ namespace CatraProto.Client.Connections.Loop
             containerizedItems = fineList.Select(x => x.Item1).ToList();
 
             using var writer = new Writer(MergedProvider.Singleton, new MemoryStream());
-            writer.Write(MsgContainer.ConstructorId);
-            writer.Write(containerizedItems.Count);
+            writer.WriteInt32(MsgContainer.ConstructorId);
+            writer.WriteInt32(containerizedItems.Count);
             foreach (var item in fineList)
             {
                 var messageItem = item.Item1;
                 var messageId = _mtProtoState.MessageIdsHandler.ComputeMessageId();
                 var seqno = _mtProtoState.SeqnoHandler.ComputeSeqno(messageItem.Body);
                 messageItem.SetProtocolInfo(messageId, seqno);
-                writer.Write(messageId);
-                writer.Write(seqno);
-                writer.Write(item.Item2.Length);
+                writer.WriteInt64(messageId);
+                writer.WriteInt32(seqno);
+                writer.WriteInt32(item.Item2.Length);
                 writer.Stream.Write(item.Item2);
             }
-
+            
             container = ((MemoryStream)writer.Stream).ToArray();
             return true;
         }

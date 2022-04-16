@@ -26,7 +26,7 @@ namespace CatraProto.Client.MTProto.Session.Models
         {
             lock (_mutex)
             {
-                _lastId += reader.Read<long>();
+                _lastId += reader.ReadInt64().Value;
             }
         }
 

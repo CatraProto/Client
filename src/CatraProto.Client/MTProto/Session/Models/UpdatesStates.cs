@@ -57,10 +57,10 @@ namespace CatraProto.Client.MTProto.Session.Models
             lock (Mutex)
             {
                 _commonUpdatesState.Read(reader);
-                var count = reader.Read<int>();
+                var count = reader.ReadInt32().Value;
                 for (var i = 0; i < count; i++)
                 {
-                    var channelId = reader.Read<long>();
+                    var channelId = reader.ReadInt64().Value;
                     var updatesState = new UpdatesState(Mutex);
                     _updatesStates.Add(channelId, updatesState);
                     updatesState.Read(reader);
@@ -73,10 +73,10 @@ namespace CatraProto.Client.MTProto.Session.Models
             lock (Mutex)
             {
                 _commonUpdatesState.Save(writer);
-                writer.Write(_updatesStates.Count);
+                writer.WriteInt32(_updatesStates.Count);
                 foreach (var (channelId, updatesState) in _updatesStates)
                 {
-                    writer.Write(channelId);
+                    writer.WriteInt64(channelId);
                     updatesState.Save(writer);
                 }
             }

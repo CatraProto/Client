@@ -78,7 +78,7 @@ namespace CatraProto.Client.Connections.Loop
                     }
 
 
-                    var authKeyId = reader.Read<long>();
+                    var authKeyId = reader.ReadInt64().Value;
                     IConnectionMessage imported;
                     if (authKeyId == 0)
                     {

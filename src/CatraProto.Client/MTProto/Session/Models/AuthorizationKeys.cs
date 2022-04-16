@@ -47,10 +47,10 @@ namespace CatraProto.Client.MTProto.Session.Models
         {
             lock (Mutex)
             {
-                var count = reader.Read<int>();
+                var count = reader.ReadInt32().Value;
                 for (var i = 0; i < count; i++)
                 {
-                    var dc = reader.Read<int>();
+                    var dc = reader.ReadInt32().Value;
                     var permKey = new AuthKeyCache(Mutex);
                     var tempKey = new AuthKeyCache(Mutex);
                     permKey.Read(reader);
@@ -69,10 +69,10 @@ namespace CatraProto.Client.MTProto.Session.Models
         {
             lock (Mutex)
             {
-                writer.Write(_authKeys.Count);
+                writer.WriteInt32(_authKeys.Count);
                 foreach (var (dc, key) in _authKeys)
                 {
-                    writer.Write(dc);
+                    writer.WriteInt32(dc);
                     key.PermanentAuthKey.Save(writer);
                     key.TemporaryAuthKey.Save(writer);
                 }

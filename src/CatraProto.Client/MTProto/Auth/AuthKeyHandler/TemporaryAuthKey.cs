@@ -1,13 +1,17 @@
 using System;
+using System.IO;
+using System.Linq;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections;
 using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.Crypto;
-using CatraProto.Client.MTProto.Auth.AuthKeyHandler.Results;
 using CatraProto.Client.MTProto.Session.Models;
 using CatraProto.Client.MTProto.Settings;
+using CatraProto.Client.TL.Schemas;
 using CatraProto.Client.TL.Schemas.MTProto;
+using CatraProto.TL;
 using Serilog;
 
 namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
@@ -36,47 +40,45 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
         public async Task<bool> GenerateNewAuthKey(CancellationToken token)
         {
             var duration = _connectionSettings.PfsKeyDuration;
-            var permanentKeyResult = await _permanentAuthKey.GetAuthKeyAsync(token);
-            if (permanentKeyResult is AuthKeyFail)
+            var permanentKey = await _permanentAuthKey.GetAuthKeyAsync(token);
+            if (permanentKey is null)
             {
                 return false;
             }
 
-            var permanentKeySuccess = (AuthKeySuccess)permanentKeyResult;
-            var permanentKey = new AuthKeyObject(permanentKeySuccess.KeyArray, permanentKeySuccess.AuthKeyId, permanentKeySuccess.ServerSalt, null);
-
-            var temporaryKeyResult = await AuthKeyGen.ComputeAuthKey(duration, _mtProtoState, _logger, token);
-            if (temporaryKeyResult is AuthKeyFail)
+            var keyObject = await new AuthKeyGen(_logger).ComputeAuthKey(duration, _mtProtoState, token);
+            if (keyObject is null)
             {
                 return false;
             }
-
-            var temporaryKey = (AuthKeySuccess)temporaryKeyResult;
 
             var expiresAt = (int)DateTimeOffset.UtcNow.Add(TimeSpan.FromSeconds(duration)).ToUnixTimeSeconds();
             lock (_mutex)
             {
-                _keyCacheCache.SetData(temporaryKey.KeyArray, temporaryKey.AuthKeyId, temporaryKey.ServerSalt, expiresAt, false);
+                _keyCacheCache.SetData(keyObject.KeyArray, keyObject.AuthKeyId, keyObject.ServerSalt, expiresAt, false);
             }
 
-            var keyObject = new AuthKeyObject(temporaryKey.KeyArray, temporaryKey.AuthKeyId, temporaryKey.ServerSalt, expiresAt);
-            _logger.Information("Generated temporary authentication key {AuthId} which expires at {Time}", temporaryKey.AuthKeyId, expiresAt);
+            _logger.Information("Generated temporary authentication key {AuthId} which expires at {Time}", keyObject.AuthKeyId, expiresAt);
             OnAuthKeyChanged?.Invoke(keyObject, false);
 
             var innerData = new BindAuthKeyInner
             {
                 Nonce = CryptoTools.CreateRandomLong(),
-                TempAuthKeyId = temporaryKey.AuthKeyId,
+                TempAuthKeyId = keyObject.AuthKeyId,
                 PermAuthKeyId = permanentKey.AuthKeyId,
                 TempSessionId = _mtProtoState.SessionIdHandler.GetSessionId(),
                 ExpiresAt = expiresAt
             };
 
             var messageId = _mtProtoState.MessageIdsHandler.ComputeMessageId();
-            var encryptedInnerData = Pfs.Encrypt(permanentKey, innerData, messageId);
-            var messageOptions = new MessageSendingOptions(true, messageId);
+            var encryptedInnerData = EncryptPfsPayload(permanentKey, innerData, messageId);
+            if(encryptedInnerData is null)
+            {
+                return false;
+            }
 
-            _mtProtoState.SaltHandler.SetSalt(temporaryKey.ServerSalt, true);
+            var messageOptions = new MessageSendingOptions(true, messageId);
+            _mtProtoState.SaltHandler.SetSalt(keyObject.ServerSalt, true);
             var res = await _mtProtoState.Api.CloudChatsApi.Auth.BindTempAuthKeyAsync(permanentKey.AuthKeyId, innerData.Nonce, expiresAt, encryptedInnerData, messageOptions, token);
             if (res.RpcCallFailed)
             {
@@ -88,11 +90,48 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
             lock (_mutex)
             {
                 OnAuthKeyChanged?.Invoke(keyObject, true);
-                _keyCacheCache.SetData(temporaryKey.KeyArray, temporaryKey.AuthKeyId, temporaryKey.ServerSalt, expiresAt, true);
+                _keyCacheCache.SetData(keyObject.KeyArray, keyObject.AuthKeyId, keyObject.ServerSalt, expiresAt, true);
             }
 
-            _logger.Information("Temporary authentication key {AuthId} bound to permanent {PAuthId}", temporaryKey.AuthKeyId, permanentKey.AuthKeyId);
+            _logger.Information("Temporary authentication key {AuthId} bound to permanent {PAuthId}", keyObject.AuthKeyId, permanentKey.AuthKeyId);
             return true;
+        }
+
+        private byte[]? EncryptPfsPayload(AuthKeyObject permAuthKey, BindAuthKeyInner inner, long messageId)
+        {
+            using (var encryptedWriter = new BinaryWriter(new MemoryStream()))
+            {
+                using (var plainWriter = new BinaryWriter(new MemoryStream()))
+                {
+                    var trySer = inner.ToArray(MergedProvider.Singleton, out var serializedPayload);
+                    if (trySer.IsError)
+                    {
+                        _logger.Error("Could not TL-serialize BindAuthKeyInner. Error: {Error}", trySer.GetError().Error);
+                        return null;
+                    }
+
+                    plainWriter.Write(CryptoTools.GenerateRandomBytes(16));
+                    plainWriter.Write(messageId);
+                    plainWriter.Write(0);
+                    plainWriter.Write(40);
+                    plainWriter.Write(serializedPayload);
+
+                    var plainToByte = ((MemoryStream)plainWriter.BaseStream).ToArray();
+                    var msgKey = SHA1.HashData(plainToByte).Skip(4).Take(16).ToArray();
+
+                    CryptoTools.AddPadding(plainWriter.BaseStream, 16);
+                    plainToByte = ((MemoryStream)plainWriter.BaseStream).ToArray();
+
+                    using var encryptor = AesCryptoCreator.CreateEncryptorV1(permAuthKey.KeyArray, msgKey, true);
+                    var encryptedData = encryptor.Encrypt(plainToByte);
+
+                    encryptedWriter.Write(permAuthKey.AuthKeyId);
+                    encryptedWriter.Write(msgKey);
+                    encryptedWriter.Write(encryptedData);
+                }
+
+                return ((MemoryStream)encryptedWriter.BaseStream).ToArray();
+            }
         }
 
         public void SetExpired()

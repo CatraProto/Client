@@ -8,6 +8,11 @@ namespace CatraProto.Client.Crypto
         public static BigInteger GenerateBigInt(int size, bool positive = false, bool isBigEndian = false)
         {
             var buffer = CryptoTools.GenerateRandomBytes(size / 8);
+            if (buffer[^1] == 255)
+            {
+                buffer[^1] = 254;
+            }
+
             if (positive)
             {
                 var zeroByte = new byte[] { 0x00 };

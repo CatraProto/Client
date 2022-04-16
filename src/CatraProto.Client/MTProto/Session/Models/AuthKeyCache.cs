@@ -45,16 +45,16 @@ namespace CatraProto.Client.MTProto.Session.Models
         {
             lock (Mutex)
             {
-                if (reader.Read<bool>())
+                if (reader.ReadBool().Value)
                 {
-                    _authKey = reader.Read<byte[]>();
-                    _authKeyId = reader.Read<long>();
-                    _firstSalt = reader.Read<long>();
-                    var isTemp = reader.Read<bool>();
+                    _authKey = reader.ReadBytes().Value;
+                    _authKeyId = reader.ReadInt64().Value;
+                    _firstSalt = reader.ReadInt64().Value;
+                    var isTemp = reader.ReadBool().Value;
                     if (isTemp)
                     {
-                        _expirationDate = reader.Read<int>();
-                        _isBound = reader.Read<bool>();
+                        _expirationDate = reader.ReadInt32().Value;
+                        _isBound = reader.ReadBool().Value;
                     }
                 }
             }
@@ -66,24 +66,24 @@ namespace CatraProto.Client.MTProto.Session.Models
             {
                 if (_authKeyId != null)
                 {
-                    writer.Write(true);
-                    writer.Write(_authKey);
-                    writer.Write(_authKeyId);
-                    writer.Write(_firstSalt);
+                    writer.WriteBool(true);
+                    writer.WriteBytes(_authKey!);
+                    writer.WriteInt64(_authKeyId!.Value);
+                    writer.WriteInt64(_firstSalt!.Value);
                     if (_expirationDate.HasValue && _isBound.HasValue)
                     {
-                        writer.Write(true);
-                        writer.Write(_expirationDate.Value);
-                        writer.Write(_isBound.Value);
+                        writer.WriteBool(true);
+                        writer.WriteInt32(_expirationDate.Value);
+                        writer.WriteBool(_isBound.Value);
                     }
                     else
                     {
-                        writer.Write(false);
+                        writer.WriteBool(false);
                     }
                 }
                 else
                 {
-                    writer.Write(false);
+                    writer.WriteBool(false);
                 }
             }
         }

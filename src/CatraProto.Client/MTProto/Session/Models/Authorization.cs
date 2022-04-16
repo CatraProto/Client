@@ -68,12 +68,12 @@ namespace CatraProto.Client.MTProto.Session.Models
         {
             lock (Mutex)
             {
-                _asyncSignaler.SetSignal(reader.Read<bool>());
+                _asyncSignaler.SetSignal(reader.ReadBool().Value);
                 if (_asyncSignaler.IsReleased())
                 {
-                    _dcId = reader.Read<int>();
-                    _userId = reader.Read<long>();
-                    _userAccessHash = reader.Read<long>();
+                    _dcId = reader.ReadInt32().Value;
+                    _userId = reader.ReadInt64().Value;
+                    _userAccessHash = reader.ReadInt64().Value;
                 }
             }
         }
@@ -83,12 +83,12 @@ namespace CatraProto.Client.MTProto.Session.Models
             lock (Mutex)
             {
                 var isAuth = IsAuthorized(out var dcId, out var userId, out var userAccessHash);
-                writer.Write(isAuth);
+                writer.WriteBool(isAuth);
                 if (isAuth)
                 {
-                    writer.Write(dcId!.Value);
-                    writer.Write(userId);
-                    writer.Write(userAccessHash!.Value);
+                    writer.WriteInt32(dcId!.Value);
+                    writer.WriteInt64(userId!.Value);
+                    writer.WriteInt64(userAccessHash!.Value);
                 }
             }
         }

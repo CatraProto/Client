@@ -41,11 +41,11 @@ namespace CatraProto.Client.MTProto.Session.Models
         {
             lock (Mutex)
             {
-                _pts = reader.Read<int>();
-                _qts = reader.Read<int>();
-                _seq = reader.Read<int>();
-                _date = reader.Read<int>();
-                _state = reader.Read<bool>();
+                _pts = reader.ReadInt32().Value;
+                _qts = reader.ReadInt32().Value;
+                _seq = reader.ReadInt32().Value;
+                _date = reader.ReadInt32().Value;
+                _state = reader.ReadBool().Value;
             }
         }
 
@@ -53,11 +53,11 @@ namespace CatraProto.Client.MTProto.Session.Models
         {
             lock (Mutex)
             {
-                writer.Write(_pts);
-                writer.Write(_qts);
-                writer.Write(_seq);
-                writer.Write(_date);
-                writer.Write(_state);
+                writer.WriteInt32(_pts);
+                writer.WriteInt32(_qts);
+                writer.WriteInt32(_seq);
+                writer.WriteInt32(_date);
+                writer.WriteBool(_state);
             }
         }
     }

@@ -5,31 +5,32 @@ using CatraProto.Client.MTProto.Rpc;
 using CatraProto.Client.TL.Schemas.Database;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
 
 namespace CatraProto.Client.TL.Schemas
 {
     partial class MergedProvider : ObjectProvider
     {
         public const int LayerId = 138;
-        public static readonly MergedProvider Singleton = new MergedProvider();
-        public override int BoolTrueId { get; } = -1132882121;
-        public override int BoolFalseId { get; } = -1720552011;
-        public override int GzipPackedId { get; } = GzipPacked.ConstructorId;
-        public override int RpcResultId { get; } = RpcResult.ConstructorId;
-
         public override int VectorId
         {
             get => 481674261;
         }
 
-        public override byte[] GetGzippedBytes(IObject obj)
+        public override int BoolTrueId { get; } = -1720552011;
+        public override int BoolFalseId { get; } = -1132882121;
+        public override int GzipPackedId { get; } = GzipPacked.ConstructorId;
+        public override int RpcResultId { get; } = RpcResult.ConstructorId;
+        public static readonly MergedProvider Singleton = new MergedProvider();
+
+        public override ReadResult<byte[]> GetGzippedBytes(IObject obj)
         {
             if (obj is not GzipPacked gzipPacked)
             {
-                throw new InvalidOperationException($"The provided object was not {typeof(GzipPacked)}");
+                return new ReadResult<byte[]>($"The provided object was not {typeof(GzipPacked)}", CatraProto.TL.Results.ParserErrors.ExternalError);
             }
 
-            return gzipPacked.PackedData;
+            return new ReadResult<byte[]>(gzipPacked.PackedData);
         }
 
         public override IObject GetGzippedObject(byte[] compressedData)
@@ -47,9 +48,6 @@ namespace CatraProto.Client.TL.Schemas
                 case 1111983006:
                     obj = new DbPeerFull();
                     return true;
-                case -212046591:
-                    obj = new RpcObject();
-                    return true;
             }
 
             obj = null;
@@ -58,12 +56,6 @@ namespace CatraProto.Client.TL.Schemas
 
         private bool InternalGetNakedFromType(Type type, [MaybeNullWhen(false)] out IObject obj)
         {
-            if (type == typeof(MsgContainerDeserializer))
-            {
-                obj = new MsgContainerDeserializer();
-                return true;
-            }
-
             obj = null;
             return false;
         }
