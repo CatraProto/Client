@@ -125,6 +125,10 @@ namespace CatraProto.Client.Updates
             var fetchDifference = false;
             while (!fetchDifference && _updatesQueue.TryPeek(out var update))
             {
+                if(update.Item is UpdateConfig)
+                {
+                    await _client.ConfigManager.ForceRefreshConfig(stoppingToken);
+                }
                 if (update.Item is UpdatesTooLong or UpdateChannelTooLong)
                 {
                     update.DequeueItem();
@@ -178,10 +182,14 @@ namespace CatraProto.Client.Updates
                 {
                     case UpdateCheckResult.GapDetected:
                         {
-                            _logger.Information(messageTemplate: "Waiting {Time}ms before fetching difference", WaitTime.TotalMilliseconds);
-                            await Task.Delay(WaitTime, stoppingToken);
-
                             var findGapFillingUpdate = FindGapFillingUpdate(searchType!.Value, out newQts, out newPts);
+                            if(findGapFillingUpdate is null)
+                            {
+                                _logger.Information(messageTemplate: "Waiting {Time}ms before fetching difference", WaitTime.TotalMilliseconds);
+                                await Task.Delay(WaitTime, stoppingToken);
+                                findGapFillingUpdate = FindGapFillingUpdate(searchType!.Value, out newQts, out newPts);
+                            }
+
                             if (findGapFillingUpdate is not null)
                             {
                                 _logger.Information("Update gap filled after waiting without fetching difference");

@@ -36,6 +36,7 @@ namespace CatraProto.Client.Connections
         public async ValueTask<ConnectionItem> GetConnectionByDcAsync(int dcId, bool forceNew, bool isMediaPreferred, CancellationToken token)
         {
             ConnectionItem connectionItem;
+            var config = await _client.ConfigManager.GetConfigAsync(token);
             lock (_mutex)
             {
                 if (!forceNew && TryFindLocal(dcId, isMediaPreferred, out var connection))
@@ -43,7 +44,7 @@ namespace CatraProto.Client.Connections
                     return CreateConnectionItem(connection);
                 }
                 var isTestDc = _client.ClientSession.Settings.ConnectionSettings.DefaultDatacenter.Test;
-                var matches = _client.StoredConfig.DcOptions.Where(x => Matches(ConnectionInfo.FromDcOption(x, isTestDc), dcId, isMediaPreferred)).OrderBy(x => x.MediaOnly).ToList();
+                var matches = config.DcOptions.Where(x => Matches(ConnectionInfo.FromDcOption(x, isTestDc), dcId, isMediaPreferred)).OrderBy(x => x.MediaOnly).ToList();
                 if (matches.Count == 0)
                 {
                     throw new Exception("Couldn't find matching dcOption");

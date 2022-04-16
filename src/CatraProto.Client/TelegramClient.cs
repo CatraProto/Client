@@ -39,17 +39,12 @@ namespace CatraProto.Client
             get => _randomIdHandler ?? throw new InvalidOperationException("Please call InitClientAsync first");
         }
 
-        internal Config StoredConfig
-        {
-            get => _config ?? throw new InvalidOperationException("Please call InitClientAsync first");
-        }
-        
+        internal ConfigManager ConfigManager { get; }
         internal DatabaseManager DatabaseManager { get; }
         internal UpdatesReceiver UpdatesReceiver { get; }
         internal ClientSession ClientSession { get; }
         internal UpdatesDispatcher UpdatesDispatcher { get; }
         internal IEventHandler? EventHandler { get; private set; }
-        private Config? _config;
         private RandomId? _randomIdHandler;
         private readonly SessionEvents _sessionEvents;
         private readonly ILogger _logger;
@@ -61,6 +56,7 @@ namespace CatraProto.Client
             UpdatesReceiver = new UpdatesReceiver(this, ClientSession.Logger);
             _sessionEvents = new SessionEvents(this, ClientSession.Logger);
             UpdatesDispatcher = new UpdatesDispatcher(this, ClientSession.Logger);
+            ConfigManager = new ConfigManager(this, ClientSession.Logger);
             _logger = ClientSession.Logger.ForContext<TelegramClient>();
         }
 
@@ -74,7 +70,6 @@ namespace CatraProto.Client
             
             await ClientSession.ConnectionPool.InitMainConnectionAsync(token);
             _logger.Information("Requesting and storing current configuration");
-            _config = (Config)(await Api.CloudChatsApi.Help.GetConfigAsync(cancellationToken: token)).Response;
 
             if (!sessionData.Authorization.IsAuthorized(out var dcId, out _, out _))
             {
@@ -92,7 +87,7 @@ namespace CatraProto.Client
             }
 
             UpdatesReceiver.FillProcessors();
-            await UpdatesReceiver.ForceGetDifferenceAllAsync(true);
+            await UpdatesReceiver.ForceGetDifferenceAllAsync(false);
             return ClientState.Authenticated;
         }
 
@@ -135,6 +130,7 @@ namespace CatraProto.Client
             await ClientSession.DisposeAsync();
             await UpdatesReceiver.CloseAllAsync();
             DatabaseManager.Dispose();
+            ConfigManager.Dispose();
         }
     }
 }
