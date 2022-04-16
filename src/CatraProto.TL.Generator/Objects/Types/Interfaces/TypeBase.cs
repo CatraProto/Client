@@ -3,6 +3,7 @@ using System.Text;
 using CatraProto.TL.Generator.CodeGeneration;
 using CatraProto.TL.Generator.DeclarationInfo;
 using CatraProto.TL.Generator.Objects.Interfaces;
+using CatraProto.TL.Generator.Objects.Types.InternalTypes;
 
 namespace CatraProto.TL.Generator.Objects.Types.Interfaces
 {
@@ -80,6 +81,10 @@ namespace CatraProto.TL.Generator.Objects.Types.Interfaces
         {
             var typeName = GetTypeName(NamingType.FullNamespace, parameter, true);
             typeName = parameter.HasFlag && TypeInfo.IsBare && !parameter.VectorInfo.IsVector ? typeName + "?" : typeName;
+            if(parameter.HasFlag && !TypeInfo.IsBare)
+            {
+                stringBuilder.Append("\n[MaybeNull]");
+            }
             stringBuilder.AppendLine($"\n[Newtonsoft.Json.JsonProperty(\"{parameter.NamingInfo.OriginalName}\")]\n{StringTools.TwoTabs}{GetParameterAccessibility(parameter, isAbstract)} {typeName} {parameter.NamingInfo.PascalCaseName} {{ get; set; }}");
         }
 
