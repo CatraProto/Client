@@ -38,7 +38,7 @@ namespace CatraProto.TL.Generator.Objects.Types.InternalTypes
             {
                 builder.AppendLine($"var {parameter.NamingInfo.CamelCaseName}ToResolve = _client.DatabaseManager.PeerDatabase.{GetResolver()}({toResolveName});");
                 builder.AppendLine($"if({parameter.NamingInfo.CamelCaseName}ToResolve is null) {{");
-                builder.AppendLine($"return RpcMessage<{returnType}>.FromError(new CantResolvePeer({toResolveName}, CatraProto.Client.MTProto.PeerType.{GetPeerTypeError()}));");
+                builder.AppendLine($"return RpcResponse<{returnType}>.FromError(new PeerNotFoundError({toResolveName}, CatraProto.Client.MTProto.PeerType.{GetPeerTypeError()}));");
                 builder.AppendLine("}");
             }
 

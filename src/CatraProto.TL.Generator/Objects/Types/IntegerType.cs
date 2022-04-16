@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using CatraProto.TL.Generator.CodeGeneration;
 using CatraProto.TL.Generator.DeclarationInfo;
 using CatraProto.TL.Generator.Objects.Types.Interfaces;
 
@@ -31,28 +32,64 @@ namespace CatraProto.TL.Generator.Objects.Types
         public override void WriteDeserializer(StringBuilder stringBuilder, Parameter parameter)
         {
             WriteFlagStart(stringBuilder, out var spacing, parameter);
-            var method = parameter.VectorInfo.IsVector ? "ReadVector" : "Read";
-            switch (BitSize)
+            if (parameter.VectorInfo.IsVector)
             {
-                case > 64:
-                    stringBuilder.AppendLine($"{spacing}{parameter.NamingInfo.PascalCaseName} = reader.{method}<System.Numerics.BigInteger>({BitSize});");
-                    break;
-                default:
-                    stringBuilder.AppendLine($"{spacing}{parameter.NamingInfo.PascalCaseName} = reader.{method}<{NamingInfo.OriginalName}>();");
-                    break;
+                var tp = BitSize == 32 ? "int" : "long";
+                stringBuilder.AppendLine($"{spacing}var try{parameter.NamingInfo.CamelCaseName} = reader.ReadVector<{tp}>(ParserTypes.{Tools.GetEnumValue(this)});");
+            }
+            else
+            {
+
+                switch (BitSize)
+                {
+                    case > 64:
+                        stringBuilder.AppendLine($"{spacing}var try{parameter.NamingInfo.CamelCaseName} = reader.ReadBigInteger({BitSize});");
+                        break;
+                    case 64:
+                        stringBuilder.AppendLine($"{spacing}var try{parameter.NamingInfo.CamelCaseName} = reader.ReadInt64();");
+                        break;
+                    case 32:
+                        stringBuilder.AppendLine($"{spacing}var try{parameter.NamingInfo.CamelCaseName} = reader.ReadInt32();");
+                        break;
+                    default:
+                        stringBuilder.AppendLine($"UNSUPPORTED");
+                        break;
+                }
             }
 
+            stringBuilder.AppendLine($"if(try{parameter.NamingInfo.CamelCaseName}.IsError){{\nreturn ReadResult<IObject>.Move(try{parameter.NamingInfo.CamelCaseName});\n}}");
+            stringBuilder.AppendLine($"{parameter.NamingInfo.PascalCaseName} = try{parameter.NamingInfo.CamelCaseName}.Value;");
             WriteFlagEnd(stringBuilder, spacing, parameter);
         }
 
         public override void WriteSerializer(StringBuilder stringBuilder, Parameter parameter)
         {
-            WriteFlagStart(stringBuilder, out var spacing, parameter);
-            var propertyValue = parameter.HasFlag && !parameter.VectorInfo.IsVector ? parameter.NamingInfo.PascalCaseName + ".Value" : parameter.NamingInfo.PascalCaseName;
-
-            stringBuilder.AppendLine($"{spacing}writer.Write({propertyValue});");
-
-            WriteFlagEnd(stringBuilder, spacing, parameter);
+            if (parameter.VectorInfo.IsVector)
+            {
+                base.WriteSerializer(stringBuilder, parameter);
+            }
+            else
+            {
+                WriteFlagStart(stringBuilder, out var spacing, parameter);
+                var propertyValue = parameter.HasFlag && !parameter.VectorInfo.IsVector ? parameter.NamingInfo.PascalCaseName + ".Value" : parameter.NamingInfo.PascalCaseName;
+                switch (BitSize)
+                {
+                    case > 64:
+                        stringBuilder.AppendLine($"var check{parameter.NamingInfo.PascalCaseName} = writer.WriteBigInteger({propertyValue});");
+                        stringBuilder.AppendLine($"if(check{parameter.NamingInfo.PascalCaseName}.IsError){{ return check{parameter.NamingInfo.PascalCaseName};}}");
+                        break;
+                    case 64:
+                        stringBuilder.AppendLine($"writer.WriteInt64({propertyValue});");
+                        break;
+                    case 32:
+                        stringBuilder.AppendLine($"writer.WriteInt32({propertyValue});");
+                        break;
+                    default:
+                        stringBuilder.AppendLine($"UNSUPPORTED");
+                        break;
+                }
+                WriteFlagEnd(stringBuilder, spacing, parameter);
+            }
         }
 
         public override void WriteParameter(StringBuilder stringBuilder, Parameter parameter, string customTypeName = null, bool isAbstract = false)

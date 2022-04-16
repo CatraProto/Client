@@ -42,8 +42,7 @@ namespace CatraProto.TL.Generator.Objects.Types
 				type += '?';
 			}
 
-			stringBuilder.AppendLine(
-				$"\n[Newtonsoft.Json.JsonProperty(\"{parameter.NamingInfo.OriginalName}\")]\n{StringTools.TwoTabs}{GetParameterAccessibility(parameter, allowOverride)} {type} {parameter.NamingInfo.PascalCaseName} {{ get; set; }}");
+			stringBuilder.AppendLine($"\n[Newtonsoft.Json.JsonProperty(\"{parameter.NamingInfo.OriginalName}\")]\n{StringTools.TwoTabs}{GetParameterAccessibility(parameter, allowOverride)} {type} {parameter.NamingInfo.PascalCaseName} {{ get; set; }}");
 		}
 
 		public override void WriteDeserializer(StringBuilder stringBuilder, Parameter parameter)
@@ -53,25 +52,24 @@ namespace CatraProto.TL.Generator.Objects.Types
 				stringBuilder.AppendLine($"{StringTools.ThreeTabs}{parameter.NamingInfo.PascalCaseName} = FlagsHelper.IsFlagSet({parameter.Flag.Name}, {parameter.Flag.Bit});");
 				return;
 			}
-			
 
-			WriteFlagStart(stringBuilder, out var spacing, parameter);
-			stringBuilder.AppendLine($"{StringTools.ThreeTabs}{parameter.NamingInfo.PascalCaseName} = reader.Read<bool>();");
-			WriteFlagEnd(stringBuilder, spacing, parameter);
+
+            base.WriteDeserializer(stringBuilder, parameter);
 		}
 
 		public override void WriteSerializer(StringBuilder stringBuilder, Parameter parameter)
 		{
 			if (parameter.HasFlag && InitialTypeName == "true")
-				//If the parameter is a flag, there's no need to "serialize" because the flag has already been set by UpdateFlags();
+				//If the parameter is a flag, there's no need to serialize because the flag has already been set by UpdateFlags();
 			{
 				return;
 			}
 
-			stringBuilder.AppendLine($"{StringTools.ThreeTabs}writer.Write({parameter.NamingInfo.PascalCaseName}{(parameter.HasFlag ? ".Value" : "")});");
-		}
+			stringBuilder.AppendLine($"var check{parameter.NamingInfo.CamelCaseName} = {StringTools.ThreeTabs}writer.WriteBool({parameter.NamingInfo.PascalCaseName}{(parameter.HasFlag ? ".Value" : "")});");
+            stringBuilder.AppendLine($"if(check{parameter.NamingInfo.CamelCaseName}.IsError){{\n return check{parameter.NamingInfo.CamelCaseName}; \n}}");
+        }
 
-		public override void WriteFlagUpdate(StringBuilder stringBuilder, Parameter parameter)
+        public override void WriteFlagUpdate(StringBuilder stringBuilder, Parameter parameter)
 		{
 			if (!parameter.HasFlag)
 			{
@@ -80,8 +78,7 @@ namespace CatraProto.TL.Generator.Objects.Types
 
 			if (InitialTypeName == "true")
 			{
-				stringBuilder.AppendLine(
-					$"{StringTools.ThreeTabs}{parameter.Flag.Name} = {parameter.NamingInfo.PascalCaseName} ? FlagsHelper.SetFlag({parameter.Flag.Name}, {parameter.Flag.Bit}) : FlagsHelper.UnsetFlag({parameter.Flag.Name}, {parameter.Flag.Bit});");
+				stringBuilder.AppendLine($"{StringTools.ThreeTabs}{parameter.Flag.Name} = {parameter.NamingInfo.PascalCaseName} ? FlagsHelper.SetFlag({parameter.Flag.Name}, {parameter.Flag.Bit}) : FlagsHelper.UnsetFlag({parameter.Flag.Name}, {parameter.Flag.Bit});");
 				return;
 			}
 

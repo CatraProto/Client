@@ -17,15 +17,7 @@ namespace CatraProto.TL.Generator.Objects.Types
 			string customTypeName = null, bool isAbstract = false)
 		{
 			var type = GetTypeName(NamingType.FullNamespace, parameter, true);
-			stringBuilder.AppendLine(
-				$"\n[Newtonsoft.Json.JsonProperty(\"{parameter.NamingInfo.OriginalName}\")]\n{StringTools.TwoTabs}{GetParameterAccessibility(parameter, isAbstract)} {type} {parameter.NamingInfo.PascalCaseName} {{ get; set; }}");
-		}
-
-		public override void WriteSerializer(StringBuilder stringBuilder, Parameter parameter)
-		{
-			WriteFlagStart(stringBuilder, out var spacing, parameter);
-			stringBuilder.AppendLine($"{spacing}writer.Write({parameter.NamingInfo.PascalCaseName});");
-			WriteFlagEnd(stringBuilder, spacing, parameter);
+			stringBuilder.AppendLine($"\n[Newtonsoft.Json.JsonProperty(\"{parameter.NamingInfo.OriginalName}\")]\n{StringTools.TwoTabs}{GetParameterAccessibility(parameter, isAbstract)} {type} {parameter.NamingInfo.PascalCaseName} {{ get; set; }}");
 		}
 
 		public override void WriteBaseParameters(StringBuilder stringBuilder, bool allowOverrides = false)

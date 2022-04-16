@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
 using System.Linq;
 
 #nullable disable
@@ -25,12 +26,12 @@ namespace ^Namespace^
 ^FlagsUpdate^
 		}
 
-		^MethodAccessibility^ void Serialize(Writer writer)
+		^MethodAccessibility^ WriteResult Serialize(Writer writer)
 		{
 ^Serialization^
 		}
 
-		^MethodAccessibility^ void Deserialize(Reader reader)
+		^MethodAccessibility^ ReadResult<IObject> Deserialize(Reader reader)
 		{
 ^Deserialization^
 		}

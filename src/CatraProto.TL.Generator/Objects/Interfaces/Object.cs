@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using CatraProto.TL.Generator.DeclarationInfo;
 using CatraProto.TL.Generator.Objects.Types;
@@ -116,19 +117,22 @@ namespace CatraProto.TL.Generator.Objects.Interfaces
             {
                 parameter.Type.WriteParameter(builder, parameter);
             }
+
         }
 
         public virtual void WriteSerializer(StringBuilder builder)
         {
             if (Id != 0)
             {
-                builder.AppendLine($"writer.Write(ConstructorId);");
+                builder.AppendLine($"writer.WriteInt32(ConstructorId);");
             }
 
             foreach (var parameter in Parameters)
             {
                 parameter.Type.WriteSerializer(builder, parameter);
             }
+
+            builder.AppendLine($"\nreturn new WriteResult();");
         }
 
         public virtual void WriteDeserializer(StringBuilder builder)
@@ -137,6 +141,8 @@ namespace CatraProto.TL.Generator.Objects.Interfaces
             {
                 parameter.Type.WriteDeserializer(builder, parameter);
             }
+
+            builder.AppendLine($"return new ReadResult<IObject>(this);");
         }
 
         public virtual string GetObjectName(NamingType type)

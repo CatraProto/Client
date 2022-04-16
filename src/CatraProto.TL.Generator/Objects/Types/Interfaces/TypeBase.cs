@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Text;
+using CatraProto.TL.Generator.CodeGeneration;
 using CatraProto.TL.Generator.DeclarationInfo;
 using CatraProto.TL.Generator.Objects.Interfaces;
 
@@ -22,35 +23,46 @@ namespace CatraProto.TL.Generator.Objects.Types.Interfaces
             var typeName = GetTypeName(NamingType.FullNamespace, parameter, false);
             if (parameter.VectorInfo.IsVector)
             {
-                if (parameter.VectorInfo.IsNaked)
-                {
-                    if (parameter.NamingInfo.OriginalName == "messages" && parameter.Type.Namespace.FullNamespace == "CatraProto.Client.TL.Schemas.MTProto.Message")
-                    {
-                        text = $"{spacing}{parameter.NamingInfo.PascalCaseName} = reader.ReadVector(new CatraProto.TL.ObjectDeserializers.NakedObjectVectorDeserializer<CatraProto.Client.MTProto.Deserializers.MsgContainerDeserializer>(CatraProto.Client.TL.Schemas.MergedProvider.Singleton), {parameter.VectorInfo.IsNaked.ToString().ToLower()}).Cast<CatraProto.Client.TL.Schemas.MTProto.MessageBase>().ToList();";
-                    }
-                    else
-                    {
-                        text = $"{spacing}{parameter.NamingInfo.PascalCaseName} = reader.ReadVector(new CatraProto.TL.ObjectDeserializers.NakedObjectVectorDeserializer<{typeName}>(CatraProto.Client.TL.Schemas.MergedProvider.Singleton), {parameter.VectorInfo.IsNaked.ToString().ToLower()});";
-                    }
-                }
-                else
-                {
-                    text = $"{spacing}{parameter.NamingInfo.PascalCaseName} = reader.ReadVector<{typeName}>();";
-                }
+                text = $"{spacing}var try{parameter.NamingInfo.CamelCaseName} = reader.ReadVector<{typeName}>(ParserTypes.{Tools.GetEnumValue(this)}, nakedVector: {parameter.VectorInfo.IsNaked.ToString().ToLower()}, nakedObjects: {TypeInfo.IsNaked.ToString().ToLower()});";
             }
             else
             {
-                text = parameter.Type.TypeInfo.IsNaked ? $"{spacing}{parameter.NamingInfo.PascalCaseName} = new {typeName}();\n{spacing}{parameter.NamingInfo.PascalCaseName}.Deserialize(reader);" : $"{spacing}{parameter.NamingInfo.PascalCaseName} = reader.Read<{typeName}>();";
+                text = $"{spacing}var try{parameter.NamingInfo.CamelCaseName} = reader.{Tools.GetReaderName(this, parameter)}();";
             }
 
             stringBuilder.AppendLine(text);
+            stringBuilder.AppendLine($"if(try{parameter.NamingInfo.CamelCaseName}.IsError){{\nreturn ReadResult<IObject>.Move(try{parameter.NamingInfo.CamelCaseName});\n}}");
+            stringBuilder.AppendLine($"{parameter.NamingInfo.PascalCaseName} = try{parameter.NamingInfo.CamelCaseName}.Value;");
             WriteFlagEnd(stringBuilder, spacing, parameter);
         }
 
         public virtual void WriteSerializer(StringBuilder stringBuilder, Parameter parameter)
         {
             WriteFlagStart(stringBuilder, out var spacing, parameter);
-            stringBuilder.AppendLine($"{spacing}writer.Write({parameter.NamingInfo.PascalCaseName});");
+            var methodName = Tools.GetWriterName(this, out var mustCheck);
+            if (mustCheck)
+            {
+                stringBuilder.Append($"var check{parameter.NamingInfo.CamelCaseName} = ");
+            }
+            else
+            {
+                stringBuilder.AppendLine();
+            }
+            if (parameter.VectorInfo.IsVector)
+            {
+                stringBuilder.AppendLine($"{spacing}writer.WriteVector({parameter.NamingInfo.PascalCaseName}, {parameter.VectorInfo.IsNaked.ToString().ToLower()});");
+            }
+            else
+            {
+                var paramName = parameter.Type is DoubleType && parameter.HasFlag ? parameter.NamingInfo.PascalCaseName + ".Value" : parameter.NamingInfo.PascalCaseName;
+                stringBuilder.AppendLine($"{spacing}writer.{methodName}({paramName});");
+            }
+
+            if (mustCheck)
+            {
+                stringBuilder.AppendLine($"if(check{parameter.NamingInfo.CamelCaseName}.IsError){{\n return check{parameter.NamingInfo.CamelCaseName}; \n}}");
+            }
+
             WriteFlagEnd(stringBuilder, spacing, parameter);
         }
 
@@ -66,14 +78,14 @@ namespace CatraProto.TL.Generator.Objects.Types.Interfaces
 
         public virtual void WriteParameter(StringBuilder stringBuilder, Parameter parameter, string customTypeName = null, bool isAbstract = false)
         {
-            var typeName = GetTypeName(NamingType.FullNamespace, parameter, true, parameter.Type.Namespace?.FullNamespace == "CatraProto.Client.TL.Schemas.MTProto.Message");
+            var typeName = GetTypeName(NamingType.FullNamespace, parameter, true);
             typeName = parameter.HasFlag && TypeInfo.IsBare && !parameter.VectorInfo.IsVector ? typeName + "?" : typeName;
             stringBuilder.AppendLine($"\n[Newtonsoft.Json.JsonProperty(\"{parameter.NamingInfo.OriginalName}\")]\n{StringTools.TwoTabs}{GetParameterAccessibility(parameter, isAbstract)} {typeName} {parameter.NamingInfo.PascalCaseName} {{ get; set; }}");
         }
 
         public virtual void WriteMethodParameter(StringBuilder stringBuilder, Parameter parameter, bool nullableContext = false)
         {
-            var writtenType = GetTypeName(NamingType.FullNamespace, parameter, true, parameter.Type.Namespace?.FullNamespace == "CatraProto.Client.TL.Schemas.MTProto.Message");
+            var writtenType = GetTypeName(NamingType.FullNamespace, parameter, true);
             if (nullableContext)
             {
                 writtenType = parameter.HasFlag ? $"{writtenType}? {parameter.NamingInfo.CamelCaseName} = null" : $"{writtenType} {parameter.NamingInfo.CamelCaseName}";
@@ -136,6 +148,7 @@ namespace CatraProto.TL.Generator.Objects.Types.Interfaces
 
         public virtual string GetTypeName(NamingType type, Parameter parameter, bool includeVector, bool forceBase = false, NameContext nameContext = NameContext.Deserialization)
         {
+
             string name = "INVALID NAME";
             if (NamingInfo.OriginalName == "BigInteger" && type == NamingType.FullNamespace)
             {
@@ -172,7 +185,7 @@ namespace CatraProto.TL.Generator.Objects.Types.Interfaces
 
             if (includeVector && parameter.VectorInfo.IsVector)
             {
-                name = "IList<" + name + ">";
+                name = "List<" + name + ">";
             }
 
             return name;
