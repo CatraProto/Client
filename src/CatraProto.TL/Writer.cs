@@ -1,9 +1,10 @@
 using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.IO;
+using System.Numerics;
 using System.Text;
-using CatraProto.TL.Exceptions;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
 
 namespace CatraProto.TL
 {
@@ -11,75 +12,73 @@ namespace CatraProto.TL
     {
         public Stream Stream
         {
-            get
-            {
-                _writer.Flush();
-                return _writer.BaseStream;
-            }
+            get => _writer.BaseStream;
         }
 
         private readonly ObjectProvider? _provider;
         private readonly BinaryWriter _writer;
 
-        public Writer(ObjectProvider? provider, Stream stream, bool leaveOpen = false) : this(provider, stream, Encoding.UTF8, leaveOpen)
-        {
-        }
-
-        public Writer(ObjectProvider? provider, Stream stream, Encoding encoding, bool leaveOpen = false)
+        public Writer(ObjectProvider? provider, Stream stream, bool leaveOpen = false)
         {
             _provider = provider;
-            _writer = new BinaryWriter(stream, encoding, leaveOpen);
+            _writer = new BinaryWriter(stream, Encoding.Default, leaveOpen);
         }
 
-        public void Write<T>(T value)
+        public void WriteInt32(int value)
         {
-            if (value == null)
-            {
-                throw new SerializationException($"{nameof(value)} is null", SerializationException.SerializationErrors.ValueNull);
-            }
-
-            switch (value)
-            {
-                case int i:
-                    _writer.Write(i);
-                    break;
-                case long l:
-                    _writer.Write(l);
-                    break;
-                case string s:
-                    Write(Encoding.UTF8.GetBytes(s));
-                    break;
-                case double d:
-                    _writer.Write(d);
-                    break;
-                case byte b:
-                    _writer.Write(b);
-                    break;
-                case byte[] bb:
-                    WriteBytes(bb);
-                    break;
-                case bool b:
-                    WriteBool(b);
-                    break;
-                case System.Numerics.BigInteger bigInteger:
-                    _writer.Write(bigInteger.ToByteArray().RemoveTrailingZeros());
-                    break;
-                case IObject obj:
-                    obj.Serialize(this);
-                    break;
-                default:
-                    throw new SerializationException($"The type {typeof(T)} is not supported", SerializationException.SerializationErrors.TypeNotFound);
-            }
+            _writer.Write(value);
         }
 
-        private void WriteBool(bool value)
+        public void WriteInt64(long value)
         {
-            ThrowIfProviderNull();
+            _writer.Write(value);
+        }
+
+        public void WriteDouble(double value)
+        {
+            _writer.Write(value);
+        }
+
+        public void WriteByte(byte value)
+        {
+            _writer.Write(value);
+        }
+
+        public WriteResult WriteBigInteger(BigInteger value)
+        {
+            var bArray = value.ToByteArray();
+            if (bArray.Length % 4 != 0)
+            {
+                return new WriteResult($"BigInteger array is not divisible by 4, value is {bArray.Length}", ParserErrors.NotDivisible);
+            }
+
+            _writer.Write(bArray);
+            return new WriteResult();
+        }
+
+        public WriteResult WriteObject(IObject value)
+        {
+            return value.Serialize(this);
+        }
+
+        public void WriteString(string value)
+        {
+            WriteBytes(Encoding.UTF8.GetBytes(value));
+        }
+
+        public WriteResult WriteBool(bool value)
+        {
+            var provNull = CheckProviderNull();
+            if (provNull.IsError)
+            {
+                return provNull;
+            }
+
             _writer.Write(value ? _provider!.BoolTrueId : _provider!.BoolFalseId);
+            return new WriteResult();
         }
 
-
-        private void WriteBytes(byte[] bytes)
+        public void WriteBytes(byte[] bytes)
         {
             var arrayLength = bytes.Length;
             var totalLenght = arrayLength;
@@ -109,29 +108,81 @@ namespace CatraProto.TL
             }
         }
 
-        public void Write<T>(IList<T> list)
+        public WriteResult WriteVector(IList list, bool naked = false)
         {
-            ThrowIfProviderNull();
-            Write(_provider!.VectorId);
+            if (!naked)
+            {
+                var provNull = CheckProviderNull();
+                if (provNull.IsError)
+                {
+                    return provNull;
+                }
 
-            WriteNakedVector(list);
-        }
+                Write(_provider!.VectorId);
+            }
 
-        public void WriteNakedVector<T>(IList<T> list)
-        {
             Write(list.Count);
             foreach (var element in list)
             {
-                Write(element);
+                var result = Write(element);
+                if (result.IsError)
+                {
+                    return result;
+                }
+            }
+
+            return new WriteResult();
+        }
+
+        public WriteResult Write(object value)
+        {
+            if (value == null)
+            {
+                return new WriteResult("Value is null", ParserErrors.NullValue);
+            }
+
+            switch (value)
+            {
+                case int i:
+                    WriteInt32(i);
+                    return new WriteResult();
+                case long l:
+                    WriteInt64(l);
+                    return new WriteResult();
+                case string s:
+                    WriteString(s);
+                    return new WriteResult();
+                case double d:
+                    WriteDouble(d);
+                    return new WriteResult();
+                case byte b:
+                    WriteByte(b);
+                    return new WriteResult();
+                case byte[] bb:
+                    WriteBytes(bb);
+                    return new WriteResult();
+                case bool b:
+                    return WriteBool(b);
+                case BigInteger bigInteger:
+                    WriteBigInteger(bigInteger);
+                    return new WriteResult();
+                case IObject obj:
+                    return WriteObject(obj);
+                case IList list:
+                    return WriteVector(list);
+                default:
+                    return new WriteResult($"{value.GetType()} type is not supported", ParserErrors.InvalidType);
             }
         }
 
-        private void ThrowIfProviderNull()
+        private WriteResult CheckProviderNull()
         {
             if (_provider is null)
             {
-                throw new NullReferenceException("Provide an object provider in the constructor");
+                return new WriteResult("Provider is null", ParserErrors.ProviderNull);
             }
+
+            return new WriteResult();
         }
 
         public void Dispose()
