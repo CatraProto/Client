@@ -1,6 +1,8 @@
 ﻿using CatraProto.Client.TL.Schemas;
+using CatraProto.Client.TL.Schemas.CloudChats;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,32 +18,61 @@ namespace CatraProto.Client.TL.Schemas.Database
         public int LayerVersion { get; set; }
         public IObject? Object { get; set; }
 
-        public void Deserialize(Reader reader)
+        public ReadResult<IObject> Deserialize(Reader reader)
         {
-            AccessHash = reader.Read<long>();
-            LayerVersion = reader.Read<int>();
-            if(LayerVersion == MergedProvider.LayerId)
+            var checkLength = reader.CheckLength<IObject>(12);
+            if (checkLength.IsError)
             {
-                Object = reader.Read<IObject>();
+                return checkLength;
+            }
+
+            AccessHash = reader.ReadInt64().Value;
+            LayerVersion = reader.ReadInt32().Value;
+            if (LayerVersion == MergedProvider.LayerId)
+            {
+                var tryRead = reader.ReadObject();
+                if (tryRead.IsError)
+                {
+                    Object = null;
+                    return tryRead;
+                }
+                else
+                {
+                    Object = tryRead.Value;
+                }
             }
             else
             {
                 Object = null;
             }
+
+            return new ReadResult<IObject>(this);
+        }
+
+        public WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
+            writer.WriteInt64(AccessHash);
+            writer.WriteInt32(LayerVersion);
+            if (Object is null)
+            {
+                return new WriteResult("Object is null", ParserErrors.NullValue);
+            }
+
+            var obj = writer.WriteObject(Object);
+            if (obj.IsError)
+            {
+                return obj;
+            }
+
+            return new WriteResult();
         }
 
         public int GetConstructorId()
         {
-            throw new NotImplementedException();
+            return ConstructorId;
         }
 
-        public void Serialize(Writer writer)
-        {
-            writer.Write(ConstructorId);
-            writer.Write(AccessHash);
-            writer.Write(LayerVersion);
-            writer.Write(Object);
-        }
 
         public void UpdateFlags()
         {

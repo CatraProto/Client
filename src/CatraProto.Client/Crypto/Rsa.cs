@@ -45,8 +45,8 @@ namespace CatraProto.Client.Crypto
             var modulus = new BigInteger(rsaParameters.Modulus!);
             var exponent = new BigInteger(rsaParameters.Exponent!);
 
-            writer.Write(modulus.ToByteArray());
-            writer.Write(exponent.ToByteArray());
+            writer.WriteBytes(modulus.ToByteArray());
+            writer.WriteBytes(exponent.ToByteArray());
             var data = ((MemoryStream)writer.Stream).ToArray();
 
             var hashedData = SHA1.HashData(data);

@@ -1,6 +1,7 @@
 ﻿using CatraProto.Client.TL.Schemas;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,31 +17,58 @@ namespace CatraProto.Client.TL.Schemas.Database
         public int LayerVersion { get; set; }
         public IObject? Object { get; set; }
 
-        public void Deserialize(Reader reader)
+        public ReadResult<IObject> Deserialize(Reader reader)
         {
-            UpdatedAt = reader.Read<int>();
-            LayerVersion = reader.Read<int>();
+            var checkLength = reader.CheckLength<IObject>(8);
+            if (checkLength.IsError)
+            {
+                return checkLength;
+            }
+
+            UpdatedAt = reader.ReadInt32().Value;
+            LayerVersion = reader.ReadInt32().Value;
             if (LayerVersion == MergedProvider.LayerId)
             {
-                Object = reader.Read<IObject>();
+                var tryRead = reader.ReadObject();
+                if (tryRead.IsError)
+                {
+                    Object = null;
+                }
+                else
+                {
+                    Object = tryRead.Value;
+                }
             }
             else
             {
                 Object = null;
             }
+
+            return new ReadResult<IObject>(this);
         }
 
         public int GetConstructorId()
         {
-            throw new NotImplementedException();
+            return ConstructorId;
         }
 
-        public void Serialize(Writer writer)
+        public WriteResult Serialize(Writer writer)
         {
-            writer.Write(ConstructorId);
-            writer.Write(UpdatedAt);
-            writer.Write(LayerVersion);
-            writer.Write(Object);
+            writer.WriteInt32(ConstructorId);
+            writer.WriteInt64(UpdatedAt);
+            writer.WriteInt32(LayerVersion);
+            if(Object is null)
+            {
+                return new WriteResult("Object is null", ParserErrors.NullValue);
+            }
+
+            var obj = writer.WriteObject(Object);
+            if (obj.IsError)
+            {
+                return obj;
+            }
+
+            return new WriteResult();
         }
 
         public void UpdateFlags()

@@ -1,5 +1,7 @@
 using CatraProto.Client.TL.Schemas.CloudChats;
 using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
 
 namespace CatraProto.Client.Updates.CustomTypes
 {
@@ -12,7 +14,7 @@ namespace CatraProto.Client.Updates.CustomTypes
             Update = update;
         }
 
-        public override void Serialize(Writer writer)
+        public override WriteResult Serialize(Writer writer)
         {
             throw new System.NotImplementedException();
         }
@@ -22,7 +24,7 @@ namespace CatraProto.Client.Updates.CustomTypes
             throw new System.NotImplementedException();
         }
 
-        public override void Deserialize(Reader reader)
+        public override ReadResult<IObject> Deserialize(Reader reader)
         {
             throw new System.NotImplementedException();
         }

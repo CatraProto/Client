@@ -39,7 +39,7 @@ namespace CatraProto.TL.Results
         {
             if (IsError)
             {
-                throw new InvalidOperationException($"Cannot get parsed object because error {_error}:{_parserError} occurred while parsing");
+                throw new InvalidOperationException($"Cannot get parsed object because error \"{_error}\":{_parserError} occurred while parsing");
             }
 
             return _parsedObject!;
@@ -50,7 +50,7 @@ namespace CatraProto.TL.Results
         {
             if (!IsError && !_parserError.HasValue)
             {
-                throw new InvalidOperationException($"Cannot get error {_error}:{_parserError} because the object was parsed successfully or this is a dummy result object");
+                throw new InvalidOperationException($"Cannot get error because the object was parsed successfully or this is a dummy result object");
             }
 
             return (_error!, _parserError!.Value);

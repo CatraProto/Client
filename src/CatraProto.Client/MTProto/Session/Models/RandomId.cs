@@ -34,7 +34,7 @@ namespace CatraProto.Client.MTProto.Session.Models
         {
             lock (_mutex)
             {
-                writer.Write(_lastId);
+                writer.WriteInt64(_lastId);
             }
         }
     }

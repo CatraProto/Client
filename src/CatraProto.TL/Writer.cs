@@ -118,10 +118,10 @@ namespace CatraProto.TL
                     return provNull;
                 }
 
-                Write(_provider!.VectorId);
+                WriteInt32(_provider!.VectorId);
             }
 
-            Write(list.Count);
+            WriteInt32(list.Count);
             foreach (var element in list)
             {
                 var result = Write(element);
