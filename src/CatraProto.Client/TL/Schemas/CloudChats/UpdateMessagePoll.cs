@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -24,6 +26,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("poll_id")]
 		public long PollId { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("poll")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PollBase Poll { get; set; }
 
@@ -49,31 +52,57 @@ Results = results;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(PollId);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt64(PollId);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(Poll);
+var checkpoll = 				writer.WriteObject(Poll);
+if(checkpoll.IsError){
+ return checkpoll; 
+}
 			}
 
-			writer.Write(Results);
+var checkresults = 			writer.WriteObject(Results);
+if(checkresults.IsError){
+ return checkresults; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			PollId = reader.Read<long>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var trypollId = reader.ReadInt64();
+if(trypollId.IsError){
+return ReadResult<IObject>.Move(trypollId);
+}
+PollId = trypollId.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Poll = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PollBase>();
+				var trypoll = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PollBase>();
+if(trypoll.IsError){
+return ReadResult<IObject>.Move(trypoll);
+}
+Poll = trypoll.Value;
 			}
 
-			Results = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PollResultsBase>();
+			var tryresults = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PollResultsBase>();
+if(tryresults.IsError){
+return ReadResult<IObject>.Move(tryresults);
+}
+Results = tryresults.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

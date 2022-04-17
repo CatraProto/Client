@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -22,10 +25,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int ConstructorId { get => -1257951254; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
 
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -40,11 +40,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public bool Unarchive { get; set; }
 
 [Newtonsoft.Json.JsonProperty("stickersets")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase> Stickersets { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase> Stickersets { get; set; }
 
         
         #nullable enable
- public ToggleStickerSets (IList<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase> stickersets)
+ public ToggleStickerSets (List<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase> stickersets)
 {
  Stickersets = stickersets;
  
@@ -63,22 +63,37 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Stickersets);
+
+			writer.WriteInt32(Flags);
+var checkstickersets = 			writer.WriteVector(Stickersets, false);
+if(checkstickersets.IsError){
+ return checkstickersets; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Uninstall = FlagsHelper.IsFlagSet(Flags, 0);
 			Archive = FlagsHelper.IsFlagSet(Flags, 1);
 			Unarchive = FlagsHelper.IsFlagSet(Flags, 2);
-			Stickersets = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase>();
+			var trystickersets = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trystickersets.IsError){
+return ReadResult<IObject>.Move(trystickersets);
+}
+Stickersets = trystickersets.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

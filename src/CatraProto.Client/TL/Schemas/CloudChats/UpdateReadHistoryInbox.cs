@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -61,37 +63,72 @@ PtsCount = ptsCount;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
+
+			writer.WriteInt32(Flags);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(FolderId.Value);
+writer.WriteInt32(FolderId.Value);
 			}
 
-			writer.Write(Peer);
-			writer.Write(MaxId);
-			writer.Write(StillUnreadCount);
-			writer.Write(Pts);
-			writer.Write(PtsCount);
+var checkpeer = 			writer.WriteObject(Peer);
+if(checkpeer.IsError){
+ return checkpeer; 
+}
+writer.WriteInt32(MaxId);
+writer.WriteInt32(StillUnreadCount);
+writer.WriteInt32(Pts);
+writer.WriteInt32(PtsCount);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				FolderId = reader.Read<int>();
+				var tryfolderId = reader.ReadInt32();
+if(tryfolderId.IsError){
+return ReadResult<IObject>.Move(tryfolderId);
+}
+FolderId = tryfolderId.Value;
 			}
 
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
-			MaxId = reader.Read<int>();
-			StillUnreadCount = reader.Read<int>();
-			Pts = reader.Read<int>();
-			PtsCount = reader.Read<int>();
+			var trypeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+if(trypeer.IsError){
+return ReadResult<IObject>.Move(trypeer);
+}
+Peer = trypeer.Value;
+			var trymaxId = reader.ReadInt32();
+if(trymaxId.IsError){
+return ReadResult<IObject>.Move(trymaxId);
+}
+MaxId = trymaxId.Value;
+			var trystillUnreadCount = reader.ReadInt32();
+if(trystillUnreadCount.IsError){
+return ReadResult<IObject>.Move(trystillUnreadCount);
+}
+StillUnreadCount = trystillUnreadCount.Value;
+			var trypts = reader.ReadInt32();
+if(trypts.IsError){
+return ReadResult<IObject>.Move(trypts);
+}
+Pts = trypts.Value;
+			var tryptsCount = reader.ReadInt32();
+if(tryptsCount.IsError){
+return ReadResult<IObject>.Move(tryptsCount);
+}
+PtsCount = tryptsCount.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

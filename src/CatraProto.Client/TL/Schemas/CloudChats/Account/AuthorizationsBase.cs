@@ -1,5 +1,7 @@
 using CatraProto.TL;
+using CatraProto.TL.Results;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL.Interfaces;
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
@@ -11,11 +13,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		public abstract int AuthorizationTtlDays { get; set; }
 
 [Newtonsoft.Json.JsonProperty("authorizations")]
-		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.AuthorizationBase> AuthorizationsField { get; set; }
+		public abstract List<CatraProto.Client.TL.Schemas.CloudChats.AuthorizationBase> AuthorizationsField { get; set; }
 
         public abstract void UpdateFlags();
-        public abstract void Deserialize(Reader reader);
-        public abstract void Serialize(Writer writer);
+        public abstract ReadResult<IObject> Deserialize(Reader reader);
+        public abstract WriteResult Serialize(Writer writer);
         public abstract int GetConstructorId();
     }
 }

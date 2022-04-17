@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,30 @@ ValidUntil = validUntil;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(TmpPasswordField);
-			writer.Write(ValidUntil);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteBytes(TmpPasswordField);
+writer.WriteInt32(ValidUntil);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			TmpPasswordField = reader.Read<byte[]>();
-			ValidUntil = reader.Read<int>();
+			var trytmpPasswordField = reader.ReadBytes();
+if(trytmpPasswordField.IsError){
+return ReadResult<IObject>.Move(trytmpPasswordField);
+}
+TmpPasswordField = trytmpPasswordField.Value;
+			var tryvalidUntil = reader.ReadInt32();
+if(tryvalidUntil.IsError){
+return ReadResult<IObject>.Move(tryvalidUntil);
+}
+ValidUntil = tryvalidUntil.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

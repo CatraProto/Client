@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -26,10 +29,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int ConstructorId { get => -134016113; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -53,17 +53,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public int? ReplyToMsgId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("multi_media")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputSingleMediaBase> MultiMedia { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.InputSingleMediaBase> MultiMedia { get; set; }
 
 [Newtonsoft.Json.JsonProperty("schedule_date")]
 		public int? ScheduleDate { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("send_as")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase SendAs { get; set; }
 
         
         #nullable enable
- public SendMultiMedia (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer,IList<CatraProto.Client.TL.Schemas.CloudChats.InputSingleMediaBase> multiMedia)
+ public SendMultiMedia (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer,List<CatraProto.Client.TL.Schemas.CloudChats.InputSingleMediaBase> multiMedia)
 {
  Peer = peer;
 MultiMedia = multiMedia;
@@ -87,55 +88,92 @@ MultiMedia = multiMedia;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Peer);
+
+			writer.WriteInt32(Flags);
+var checkpeer = 			writer.WriteObject(Peer);
+if(checkpeer.IsError){
+ return checkpeer; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(ReplyToMsgId.Value);
+writer.WriteInt32(ReplyToMsgId.Value);
 			}
 
-			writer.Write(MultiMedia);
+var checkmultiMedia = 			writer.WriteVector(MultiMedia, false);
+if(checkmultiMedia.IsError){
+ return checkmultiMedia; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 10))
 			{
-				writer.Write(ScheduleDate.Value);
+writer.WriteInt32(ScheduleDate.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 13))
 			{
-				writer.Write(SendAs);
+var checksendAs = 				writer.WriteObject(SendAs);
+if(checksendAs.IsError){
+ return checksendAs; 
+}
 			}
 
 
+return new WriteResult();
+
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Silent = FlagsHelper.IsFlagSet(Flags, 5);
 			Background = FlagsHelper.IsFlagSet(Flags, 6);
 			ClearDraft = FlagsHelper.IsFlagSet(Flags, 7);
 			Noforwards = FlagsHelper.IsFlagSet(Flags, 14);
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+			var trypeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+if(trypeer.IsError){
+return ReadResult<IObject>.Move(trypeer);
+}
+Peer = trypeer.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				ReplyToMsgId = reader.Read<int>();
+				var tryreplyToMsgId = reader.ReadInt32();
+if(tryreplyToMsgId.IsError){
+return ReadResult<IObject>.Move(tryreplyToMsgId);
+}
+ReplyToMsgId = tryreplyToMsgId.Value;
 			}
 
-			MultiMedia = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputSingleMediaBase>();
+			var trymultiMedia = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputSingleMediaBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trymultiMedia.IsError){
+return ReadResult<IObject>.Move(trymultiMedia);
+}
+MultiMedia = trymultiMedia.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 10))
 			{
-				ScheduleDate = reader.Read<int>();
+				var tryscheduleDate = reader.ReadInt32();
+if(tryscheduleDate.IsError){
+return ReadResult<IObject>.Move(tryscheduleDate);
+}
+ScheduleDate = tryscheduleDate.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 13))
 			{
-				SendAs = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+				var trysendAs = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+if(trysendAs.IsError){
+return ReadResult<IObject>.Move(trysendAs);
+}
+SendAs = trysendAs.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 

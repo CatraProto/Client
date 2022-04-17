@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -20,10 +23,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int ConstructorId { get => -1489903017; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
 
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -53,20 +53,35 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Peer);
+
+			writer.WriteInt32(Flags);
+var checkpeer = 			writer.WriteObject(Peer);
+if(checkpeer.IsError){
+ return checkpeer; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Pinned = FlagsHelper.IsFlagSet(Flags, 0);
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputDialogPeerBase>();
+			var trypeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputDialogPeerBase>();
+if(trypeer.IsError){
+return ReadResult<IObject>.Move(trypeer);
+}
+Peer = trypeer.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

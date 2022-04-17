@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -97,33 +99,42 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("access_hash")]
 		public long? AccessHash { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("first_name")]
 		public string FirstName { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("last_name")]
 		public string LastName { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("username")]
 		public string Username { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("phone")]
 		public string Phone { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("photo")]
 		public CatraProto.Client.TL.Schemas.CloudChats.UserProfilePhotoBase Photo { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("status")]
 		public CatraProto.Client.TL.Schemas.CloudChats.UserStatusBase Status { get; set; }
 
 [Newtonsoft.Json.JsonProperty("bot_info_version")]
 		public int? BotInfoVersion { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("restriction_reason")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase> RestrictionReason { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase> RestrictionReason { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("bot_inline_placeholder")]
 		public string BotInlinePlaceholder { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("lang_code")]
 		public string LangCode { get; set; }
 
@@ -170,73 +181,95 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Id);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt64(Id);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(AccessHash.Value);
+writer.WriteInt64(AccessHash.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(FirstName);
+
+				writer.WriteString(FirstName);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(LastName);
+
+				writer.WriteString(LastName);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				writer.Write(Username);
+
+				writer.WriteString(Username);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				writer.Write(Phone);
+
+				writer.WriteString(Phone);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				writer.Write(Photo);
+var checkphoto = 				writer.WriteObject(Photo);
+if(checkphoto.IsError){
+ return checkphoto; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
-				writer.Write(Status);
+var checkstatus = 				writer.WriteObject(Status);
+if(checkstatus.IsError){
+ return checkstatus; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 14))
 			{
-				writer.Write(BotInfoVersion.Value);
+writer.WriteInt32(BotInfoVersion.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 18))
 			{
-				writer.Write(RestrictionReason);
+var checkrestrictionReason = 				writer.WriteVector(RestrictionReason, false);
+if(checkrestrictionReason.IsError){
+ return checkrestrictionReason; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 19))
 			{
-				writer.Write(BotInlinePlaceholder);
+
+				writer.WriteString(BotInlinePlaceholder);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 22))
 			{
-				writer.Write(LangCode);
+
+				writer.WriteString(LangCode);
 			}
 
 
+return new WriteResult();
+
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Self = FlagsHelper.IsFlagSet(Flags, 10);
 			Contact = FlagsHelper.IsFlagSet(Flags, 11);
 			MutualContact = FlagsHelper.IsFlagSet(Flags, 12);
@@ -252,62 +285,111 @@ writer.Write(ConstructorId);
 			Scam = FlagsHelper.IsFlagSet(Flags, 24);
 			ApplyMinPhoto = FlagsHelper.IsFlagSet(Flags, 25);
 			Fake = FlagsHelper.IsFlagSet(Flags, 26);
-			Id = reader.Read<long>();
+			var tryid = reader.ReadInt64();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				AccessHash = reader.Read<long>();
+				var tryaccessHash = reader.ReadInt64();
+if(tryaccessHash.IsError){
+return ReadResult<IObject>.Move(tryaccessHash);
+}
+AccessHash = tryaccessHash.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				FirstName = reader.Read<string>();
+				var tryfirstName = reader.ReadString();
+if(tryfirstName.IsError){
+return ReadResult<IObject>.Move(tryfirstName);
+}
+FirstName = tryfirstName.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				LastName = reader.Read<string>();
+				var trylastName = reader.ReadString();
+if(trylastName.IsError){
+return ReadResult<IObject>.Move(trylastName);
+}
+LastName = trylastName.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				Username = reader.Read<string>();
+				var tryusername = reader.ReadString();
+if(tryusername.IsError){
+return ReadResult<IObject>.Move(tryusername);
+}
+Username = tryusername.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				Phone = reader.Read<string>();
+				var tryphone = reader.ReadString();
+if(tryphone.IsError){
+return ReadResult<IObject>.Move(tryphone);
+}
+Phone = tryphone.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.UserProfilePhotoBase>();
+				var tryphoto = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.UserProfilePhotoBase>();
+if(tryphoto.IsError){
+return ReadResult<IObject>.Move(tryphoto);
+}
+Photo = tryphoto.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
-				Status = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.UserStatusBase>();
+				var trystatus = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.UserStatusBase>();
+if(trystatus.IsError){
+return ReadResult<IObject>.Move(trystatus);
+}
+Status = trystatus.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 14))
 			{
-				BotInfoVersion = reader.Read<int>();
+				var trybotInfoVersion = reader.ReadInt32();
+if(trybotInfoVersion.IsError){
+return ReadResult<IObject>.Move(trybotInfoVersion);
+}
+BotInfoVersion = trybotInfoVersion.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 18))
 			{
-				RestrictionReason = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase>();
+				var tryrestrictionReason = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryrestrictionReason.IsError){
+return ReadResult<IObject>.Move(tryrestrictionReason);
+}
+RestrictionReason = tryrestrictionReason.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 19))
 			{
-				BotInlinePlaceholder = reader.Read<string>();
+				var trybotInlinePlaceholder = reader.ReadString();
+if(trybotInlinePlaceholder.IsError){
+return ReadResult<IObject>.Move(trybotInlinePlaceholder);
+}
+BotInlinePlaceholder = trybotInlinePlaceholder.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 22))
 			{
-				LangCode = reader.Read<string>();
+				var trylangCode = reader.ReadString();
+if(trylangCode.IsError){
+return ReadResult<IObject>.Move(trylangCode);
+}
+LangCode = trylangCode.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

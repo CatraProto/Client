@@ -1,5 +1,7 @@
 using CatraProto.TL;
+using CatraProto.TL.Results;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL.Interfaces;
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
@@ -13,12 +15,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [Newtonsoft.Json.JsonProperty("group")]
 		public abstract bool Group { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("title")]
 		public abstract string Title { get; set; }
 
         public abstract void UpdateFlags();
-        public abstract void Deserialize(Reader reader);
-        public abstract void Serialize(Writer writer);
+        public abstract ReadResult<IObject> Deserialize(Reader reader);
+        public abstract WriteResult Serialize(Writer writer);
         public abstract int GetConstructorId();
     }
 }

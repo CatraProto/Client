@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -31,9 +33,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("imported")]
 		public sealed override bool Imported { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("from_id")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.PeerBase FromId { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("from_name")]
 		public sealed override string FromName { get; set; }
 
@@ -43,15 +47,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("channel_post")]
 		public sealed override int? ChannelPost { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("post_author")]
 		public sealed override string PostAuthor { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("saved_from_peer")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.PeerBase SavedFromPeer { get; set; }
 
 [Newtonsoft.Json.JsonProperty("saved_from_msg_id")]
 		public sealed override int? SavedFromMsgId { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("psa_type")]
 		public sealed override string PsaType { get; set; }
 
@@ -80,90 +87,139 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
+
+			writer.WriteInt32(Flags);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(FromId);
+var checkfromId = 				writer.WriteObject(FromId);
+if(checkfromId.IsError){
+ return checkfromId; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				writer.Write(FromName);
+
+				writer.WriteString(FromName);
 			}
 
-			writer.Write(Date);
+writer.WriteInt32(Date);
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(ChannelPost.Value);
+writer.WriteInt32(ChannelPost.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				writer.Write(PostAuthor);
+
+				writer.WriteString(PostAuthor);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				writer.Write(SavedFromPeer);
+var checksavedFromPeer = 				writer.WriteObject(SavedFromPeer);
+if(checksavedFromPeer.IsError){
+ return checksavedFromPeer; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				writer.Write(SavedFromMsgId.Value);
+writer.WriteInt32(SavedFromMsgId.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
-				writer.Write(PsaType);
+
+				writer.WriteString(PsaType);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Imported = FlagsHelper.IsFlagSet(Flags, 7);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				FromId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+				var tryfromId = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+if(tryfromId.IsError){
+return ReadResult<IObject>.Move(tryfromId);
+}
+FromId = tryfromId.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				FromName = reader.Read<string>();
+				var tryfromName = reader.ReadString();
+if(tryfromName.IsError){
+return ReadResult<IObject>.Move(tryfromName);
+}
+FromName = tryfromName.Value;
 			}
 
-			Date = reader.Read<int>();
+			var trydate = reader.ReadInt32();
+if(trydate.IsError){
+return ReadResult<IObject>.Move(trydate);
+}
+Date = trydate.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				ChannelPost = reader.Read<int>();
+				var trychannelPost = reader.ReadInt32();
+if(trychannelPost.IsError){
+return ReadResult<IObject>.Move(trychannelPost);
+}
+ChannelPost = trychannelPost.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				PostAuthor = reader.Read<string>();
+				var trypostAuthor = reader.ReadString();
+if(trypostAuthor.IsError){
+return ReadResult<IObject>.Move(trypostAuthor);
+}
+PostAuthor = trypostAuthor.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				SavedFromPeer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+				var trysavedFromPeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+if(trysavedFromPeer.IsError){
+return ReadResult<IObject>.Move(trysavedFromPeer);
+}
+SavedFromPeer = trysavedFromPeer.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				SavedFromMsgId = reader.Read<int>();
+				var trysavedFromMsgId = reader.ReadInt32();
+if(trysavedFromMsgId.IsError){
+return ReadResult<IObject>.Move(trysavedFromMsgId);
+}
+SavedFromMsgId = trysavedFromMsgId.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
-				PsaType = reader.Read<string>();
+				var trypsaType = reader.ReadString();
+if(trypsaType.IsError){
+return ReadResult<IObject>.Move(trypsaType);
+}
+PsaType = trypsaType.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

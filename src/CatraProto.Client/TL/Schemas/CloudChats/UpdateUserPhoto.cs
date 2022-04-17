@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -46,22 +48,47 @@ Previous = previous;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(UserId);
-			writer.Write(Date);
-			writer.Write(Photo);
-			writer.Write(Previous);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(UserId);
+writer.WriteInt32(Date);
+var checkphoto = 			writer.WriteObject(Photo);
+if(checkphoto.IsError){
+ return checkphoto; 
+}
+var checkprevious = 			writer.WriteBool(Previous);
+if(checkprevious.IsError){
+ return checkprevious; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			UserId = reader.Read<long>();
-			Date = reader.Read<int>();
-			Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.UserProfilePhotoBase>();
-			Previous = reader.Read<bool>();
+			var tryuserId = reader.ReadInt64();
+if(tryuserId.IsError){
+return ReadResult<IObject>.Move(tryuserId);
+}
+UserId = tryuserId.Value;
+			var trydate = reader.ReadInt32();
+if(trydate.IsError){
+return ReadResult<IObject>.Move(trydate);
+}
+Date = trydate.Value;
+			var tryphoto = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.UserProfilePhotoBase>();
+if(tryphoto.IsError){
+return ReadResult<IObject>.Move(tryphoto);
+}
+Photo = tryphoto.Value;
+			var tryprevious = reader.ReadBool();
+if(tryprevious.IsError){
+return ReadResult<IObject>.Move(tryprevious);
+}
+Previous = tryprevious.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

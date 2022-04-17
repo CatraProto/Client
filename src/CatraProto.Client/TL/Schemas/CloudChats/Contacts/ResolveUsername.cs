@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
         public static int ConstructorId { get => -113456221; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Contacts.ResolvedPeerBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("username")]
 		public string Username { get; set; }
@@ -42,16 +42,24 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Username);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteString(Username);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Username = reader.Read<string>();
+			var tryusername = reader.ReadString();
+if(tryusername.IsError){
+return ReadResult<IObject>.Move(tryusername);
+}
+Username = tryusername.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

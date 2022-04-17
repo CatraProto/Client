@@ -1,5 +1,7 @@
 using CatraProto.TL;
+using CatraProto.TL.Results;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL.Interfaces;
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
@@ -50,11 +52,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase LanguagesGraph { get; set; }
 
 [Newtonsoft.Json.JsonProperty("recent_message_interactions")]
-		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.MessageInteractionCountersBase> RecentMessageInteractions { get; set; }
+		public abstract List<CatraProto.Client.TL.Schemas.CloudChats.MessageInteractionCountersBase> RecentMessageInteractions { get; set; }
 
         public abstract void UpdateFlags();
-        public abstract void Deserialize(Reader reader);
-        public abstract void Serialize(Writer writer);
+        public abstract ReadResult<IObject> Deserialize(Reader reader);
+        public abstract WriteResult Serialize(Writer writer);
         public abstract int GetConstructorId();
     }
 }

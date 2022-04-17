@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -33,6 +35,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("vcard")]
 		public string Vcard { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("reply_markup")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase ReplyMarkup { get; set; }
 
@@ -57,35 +60,70 @@ Vcard = vcard;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(PhoneNumber);
-			writer.Write(FirstName);
-			writer.Write(LastName);
-			writer.Write(Vcard);
+
+			writer.WriteInt32(Flags);
+
+			writer.WriteString(PhoneNumber);
+
+			writer.WriteString(FirstName);
+
+			writer.WriteString(LastName);
+
+			writer.WriteString(Vcard);
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(ReplyMarkup);
+var checkreplyMarkup = 				writer.WriteObject(ReplyMarkup);
+if(checkreplyMarkup.IsError){
+ return checkreplyMarkup; 
+}
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			PhoneNumber = reader.Read<string>();
-			FirstName = reader.Read<string>();
-			LastName = reader.Read<string>();
-			Vcard = reader.Read<string>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var tryphoneNumber = reader.ReadString();
+if(tryphoneNumber.IsError){
+return ReadResult<IObject>.Move(tryphoneNumber);
+}
+PhoneNumber = tryphoneNumber.Value;
+			var tryfirstName = reader.ReadString();
+if(tryfirstName.IsError){
+return ReadResult<IObject>.Move(tryfirstName);
+}
+FirstName = tryfirstName.Value;
+			var trylastName = reader.ReadString();
+if(trylastName.IsError){
+return ReadResult<IObject>.Move(trylastName);
+}
+LastName = trylastName.Value;
+			var tryvcard = reader.ReadString();
+if(tryvcard.IsError){
+return ReadResult<IObject>.Move(tryvcard);
+}
+Vcard = tryvcard.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				ReplyMarkup = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase>();
+				var tryreplyMarkup = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase>();
+if(tryreplyMarkup.IsError){
+return ReadResult<IObject>.Move(tryreplyMarkup);
+}
+ReplyMarkup = tryreplyMarkup.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

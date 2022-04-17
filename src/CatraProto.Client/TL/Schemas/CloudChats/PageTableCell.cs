@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -43,6 +45,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("valign_bottom")]
 		public sealed override bool ValignBottom { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("text")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Text { get; set; }
 
@@ -71,32 +74,42 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
+
+			writer.WriteInt32(Flags);
 			if(FlagsHelper.IsFlagSet(Flags, 7))
 			{
-				writer.Write(Text);
+var checktext = 				writer.WriteObject(Text);
+if(checktext.IsError){
+ return checktext; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(Colspan.Value);
+writer.WriteInt32(Colspan.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(Rowspan.Value);
+writer.WriteInt32(Rowspan.Value);
 			}
 
 
+return new WriteResult();
+
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Header = FlagsHelper.IsFlagSet(Flags, 0);
 			AlignCenter = FlagsHelper.IsFlagSet(Flags, 3);
 			AlignRight = FlagsHelper.IsFlagSet(Flags, 4);
@@ -104,19 +117,32 @@ writer.Write(ConstructorId);
 			ValignBottom = FlagsHelper.IsFlagSet(Flags, 6);
 			if(FlagsHelper.IsFlagSet(Flags, 7))
 			{
-				Text = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
+				var trytext = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
+if(trytext.IsError){
+return ReadResult<IObject>.Move(trytext);
+}
+Text = trytext.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Colspan = reader.Read<int>();
+				var trycolspan = reader.ReadInt32();
+if(trycolspan.IsError){
+return ReadResult<IObject>.Move(trycolspan);
+}
+Colspan = trycolspan.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				Rowspan = reader.Read<int>();
+				var tryrowspan = reader.ReadInt32();
+if(tryrowspan.IsError){
+return ReadResult<IObject>.Move(tryrowspan);
+}
+Rowspan = tryrowspan.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

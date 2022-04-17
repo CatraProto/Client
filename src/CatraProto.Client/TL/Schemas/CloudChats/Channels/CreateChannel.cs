@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -24,10 +27,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
         public static int ConstructorId { get => 1029681423; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -47,9 +47,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 [Newtonsoft.Json.JsonProperty("about")]
 		public string About { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("geo_point")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase GeoPoint { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("address")]
 		public string Address { get; set; }
 
@@ -77,44 +79,74 @@ About = about;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Title);
-			writer.Write(About);
+
+			writer.WriteInt32(Flags);
+
+			writer.WriteString(Title);
+
+			writer.WriteString(About);
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(GeoPoint);
+var checkgeoPoint = 				writer.WriteObject(GeoPoint);
+if(checkgeoPoint.IsError){
+ return checkgeoPoint; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(Address);
+
+				writer.WriteString(Address);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Broadcast = FlagsHelper.IsFlagSet(Flags, 0);
 			Megagroup = FlagsHelper.IsFlagSet(Flags, 1);
 			ForImport = FlagsHelper.IsFlagSet(Flags, 3);
-			Title = reader.Read<string>();
-			About = reader.Read<string>();
+			var trytitle = reader.ReadString();
+if(trytitle.IsError){
+return ReadResult<IObject>.Move(trytitle);
+}
+Title = trytitle.Value;
+			var tryabout = reader.ReadString();
+if(tryabout.IsError){
+return ReadResult<IObject>.Move(tryabout);
+}
+About = tryabout.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				GeoPoint = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase>();
+				var trygeoPoint = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase>();
+if(trygeoPoint.IsError){
+return ReadResult<IObject>.Move(trygeoPoint);
+}
+GeoPoint = trygeoPoint.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				Address = reader.Read<string>();
+				var tryaddress = reader.ReadString();
+if(tryaddress.IsError){
+return ReadResult<IObject>.Move(tryaddress);
+}
+Address = tryaddress.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 

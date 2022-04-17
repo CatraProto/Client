@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -22,10 +25,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
         public static int ConstructorId { get => -1322057861; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -42,6 +42,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 [Newtonsoft.Json.JsonProperty("join_as")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase JoinAs { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("invite_hash")]
 		public string InviteHash { get; set; }
 
@@ -71,35 +72,69 @@ Params = pparams;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Call);
-			writer.Write(JoinAs);
+
+			writer.WriteInt32(Flags);
+var checkcall = 			writer.WriteObject(Call);
+if(checkcall.IsError){
+ return checkcall; 
+}
+var checkjoinAs = 			writer.WriteObject(JoinAs);
+if(checkjoinAs.IsError){
+ return checkjoinAs; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(InviteHash);
+
+				writer.WriteString(InviteHash);
 			}
 
-			writer.Write(Params);
+var checkpparams = 			writer.WriteObject(Params);
+if(checkpparams.IsError){
+ return checkpparams; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Muted = FlagsHelper.IsFlagSet(Flags, 0);
 			VideoStopped = FlagsHelper.IsFlagSet(Flags, 2);
-			Call = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase>();
-			JoinAs = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+			var trycall = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase>();
+if(trycall.IsError){
+return ReadResult<IObject>.Move(trycall);
+}
+Call = trycall.Value;
+			var tryjoinAs = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+if(tryjoinAs.IsError){
+return ReadResult<IObject>.Move(tryjoinAs);
+}
+JoinAs = tryjoinAs.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				InviteHash = reader.Read<string>();
+				var tryinviteHash = reader.ReadString();
+if(tryinviteHash.IsError){
+return ReadResult<IObject>.Move(tryinviteHash);
+}
+InviteHash = tryinviteHash.Value;
 			}
 
-			Params = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
+			var trypparams = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
+if(trypparams.IsError){
+return ReadResult<IObject>.Move(trypparams);
+}
+Params = trypparams.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

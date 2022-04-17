@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -15,11 +17,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get => 1218642516; }
         
 [Newtonsoft.Json.JsonProperty("rows")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonRowBase> Rows { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonRowBase> Rows { get; set; }
 
 
         #nullable enable
- public ReplyInlineMarkup (IList<CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonRowBase> rows)
+ public ReplyInlineMarkup (List<CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonRowBase> rows)
 {
  Rows = rows;
  
@@ -34,16 +36,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Rows);
+writer.WriteInt32(ConstructorId);
+var checkrows = 			writer.WriteVector(Rows, false);
+if(checkrows.IsError){
+ return checkrows; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Rows = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonRowBase>();
+			var tryrows = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonRowBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryrows.IsError){
+return ReadResult<IObject>.Move(tryrows);
+}
+Rows = tryrows.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

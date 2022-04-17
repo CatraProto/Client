@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -57,26 +59,56 @@ BannedRights = bannedRights;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Peer);
-			writer.Write(KickedBy);
-			writer.Write(Date);
-			writer.Write(BannedRights);
+
+			writer.WriteInt32(Flags);
+var checkpeer = 			writer.WriteObject(Peer);
+if(checkpeer.IsError){
+ return checkpeer; 
+}
+writer.WriteInt64(KickedBy);
+writer.WriteInt32(Date);
+var checkbannedRights = 			writer.WriteObject(BannedRights);
+if(checkbannedRights.IsError){
+ return checkbannedRights; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Left = FlagsHelper.IsFlagSet(Flags, 0);
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
-			KickedBy = reader.Read<long>();
-			Date = reader.Read<int>();
-			BannedRights = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase>();
+			var trypeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+if(trypeer.IsError){
+return ReadResult<IObject>.Move(trypeer);
+}
+Peer = trypeer.Value;
+			var trykickedBy = reader.ReadInt64();
+if(trykickedBy.IsError){
+return ReadResult<IObject>.Move(trykickedBy);
+}
+KickedBy = trykickedBy.Value;
+			var trydate = reader.ReadInt32();
+if(trydate.IsError){
+return ReadResult<IObject>.Move(trydate);
+}
+Date = trydate.Value;
+			var trybannedRights = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase>();
+if(trybannedRights.IsError){
+return ReadResult<IObject>.Move(trybannedRights);
+}
+BannedRights = trybannedRights.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

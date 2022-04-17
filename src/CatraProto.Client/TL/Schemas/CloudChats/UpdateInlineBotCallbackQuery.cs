@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -37,6 +39,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("data")]
 		public byte[] Data { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("game_short_name")]
 		public string GameShortName { get; set; }
 
@@ -62,45 +65,82 @@ ChatInstance = chatInstance;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(QueryId);
-			writer.Write(UserId);
-			writer.Write(MsgId);
-			writer.Write(ChatInstance);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt64(QueryId);
+writer.WriteInt64(UserId);
+var checkmsgId = 			writer.WriteObject(MsgId);
+if(checkmsgId.IsError){
+ return checkmsgId; 
+}
+writer.WriteInt64(ChatInstance);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(Data);
+
+				writer.WriteBytes(Data);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(GameShortName);
+
+				writer.WriteString(GameShortName);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			QueryId = reader.Read<long>();
-			UserId = reader.Read<long>();
-			MsgId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageIDBase>();
-			ChatInstance = reader.Read<long>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var tryqueryId = reader.ReadInt64();
+if(tryqueryId.IsError){
+return ReadResult<IObject>.Move(tryqueryId);
+}
+QueryId = tryqueryId.Value;
+			var tryuserId = reader.ReadInt64();
+if(tryuserId.IsError){
+return ReadResult<IObject>.Move(tryuserId);
+}
+UserId = tryuserId.Value;
+			var trymsgId = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageIDBase>();
+if(trymsgId.IsError){
+return ReadResult<IObject>.Move(trymsgId);
+}
+MsgId = trymsgId.Value;
+			var trychatInstance = reader.ReadInt64();
+if(trychatInstance.IsError){
+return ReadResult<IObject>.Move(trychatInstance);
+}
+ChatInstance = trychatInstance.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Data = reader.Read<byte[]>();
+				var trydata = reader.ReadBytes();
+if(trydata.IsError){
+return ReadResult<IObject>.Move(trydata);
+}
+Data = trydata.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				GameShortName = reader.Read<string>();
+				var trygameShortName = reader.ReadString();
+if(trygameShortName.IsError){
+return ReadResult<IObject>.Move(trygameShortName);
+}
+GameShortName = trygameShortName.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

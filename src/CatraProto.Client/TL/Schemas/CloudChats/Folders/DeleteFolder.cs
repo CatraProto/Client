@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Folders
         public static int ConstructorId { get => 472471681; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("folder_id")]
 		public int FolderId { get; set; }
@@ -42,16 +42,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Folders
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(FolderId);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt32(FolderId);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			FolderId = reader.Read<int>();
+			var tryfolderId = reader.ReadInt32();
+if(tryfolderId.IsError){
+return ReadResult<IObject>.Move(tryfolderId);
+}
+FolderId = tryfolderId.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public static int ConstructorId { get => -1516022023; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("phone_number")]
 		public string PhoneNumber { get; set; }
@@ -46,18 +46,33 @@ Settings = settings;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(PhoneNumber);
-			writer.Write(Settings);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteString(PhoneNumber);
+var checksettings = 			writer.WriteObject(Settings);
+if(checksettings.IsError){
+ return checksettings; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			PhoneNumber = reader.Read<string>();
-			Settings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.CodeSettingsBase>();
+			var tryphoneNumber = reader.ReadString();
+if(tryphoneNumber.IsError){
+return ReadResult<IObject>.Move(tryphoneNumber);
+}
+PhoneNumber = tryphoneNumber.Value;
+			var trysettings = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.CodeSettingsBase>();
+if(trysettings.IsError){
+return ReadResult<IObject>.Move(trysettings);
+}
+Settings = trysettings.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

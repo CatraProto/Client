@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -50,30 +52,46 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Pts);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt32(Pts);
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(Timeout.Value);
+writer.WriteInt32(Timeout.Value);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Final = FlagsHelper.IsFlagSet(Flags, 0);
-			Pts = reader.Read<int>();
+			var trypts = reader.ReadInt32();
+if(trypts.IsError){
+return ReadResult<IObject>.Move(trypts);
+}
+Pts = trypts.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Timeout = reader.Read<int>();
+				var trytimeout = reader.ReadInt32();
+if(trytimeout.IsError){
+return ReadResult<IObject>.Move(trytimeout);
+}
+Timeout = trytimeout.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

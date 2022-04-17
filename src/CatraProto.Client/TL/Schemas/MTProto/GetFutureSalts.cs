@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
         public static int ConstructorId { get => -1188971260; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.FutureSaltsBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("num")]
 		public int Num { get; set; }
@@ -42,16 +42,23 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Num);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt32(Num);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Num = reader.Read<int>();
+			var trynum = reader.ReadInt32();
+if(trynum.IsError){
+return ReadResult<IObject>.Move(trynum);
+}
+Num = trynum.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

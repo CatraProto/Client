@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,35 @@ Credit = credit;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Text);
-			writer.Write(Credit);
+writer.WriteInt32(ConstructorId);
+var checktext = 			writer.WriteObject(Text);
+if(checktext.IsError){
+ return checktext; 
+}
+var checkcredit = 			writer.WriteObject(Credit);
+if(checkcredit.IsError){
+ return checkcredit; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Text = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
-			Credit = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
+			var trytext = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
+if(trytext.IsError){
+return ReadResult<IObject>.Move(trytext);
+}
+Text = trytext.Value;
+			var trycredit = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
+if(trycredit.IsError){
+return ReadResult<IObject>.Move(trycredit);
+}
+Credit = trycredit.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

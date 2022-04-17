@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,31 @@ StartParam = startParam;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Text);
-			writer.Write(StartParam);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteString(Text);
+
+			writer.WriteString(StartParam);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Text = reader.Read<string>();
-			StartParam = reader.Read<string>();
+			var trytext = reader.ReadString();
+if(trytext.IsError){
+return ReadResult<IObject>.Move(trytext);
+}
+Text = trytext.Value;
+			var trystartParam = reader.ReadString();
+if(trystartParam.IsError){
+return ReadResult<IObject>.Move(trystartParam);
+}
+StartParam = trystartParam.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -21,10 +24,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
         public static int ConstructorId { get => 1958458429; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -58,26 +58,48 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Call);
-			writer.Write(JoinMuted.Value);
+
+			writer.WriteInt32(Flags);
+var checkcall = 			writer.WriteObject(Call);
+if(checkcall.IsError){
+ return checkcall; 
+}
+var checkjoinMuted = 			writer.WriteBool(JoinMuted.Value);
+if(checkjoinMuted.IsError){
+ return checkjoinMuted; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			ResetInviteHash = FlagsHelper.IsFlagSet(Flags, 1);
-			Call = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase>();
+			var trycall = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase>();
+if(trycall.IsError){
+return ReadResult<IObject>.Move(trycall);
+}
+Call = trycall.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-			JoinMuted = reader.Read<bool>();
+				var tryjoinMuted = reader.ReadBool();
+if(tryjoinMuted.IsError){
+return ReadResult<IObject>.Move(tryjoinMuted);
+}
+JoinMuted = tryjoinMuted.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 

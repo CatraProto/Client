@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int ConstructorId { get => -946871200; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetInstallResultBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("stickerset")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase Stickerset { get; set; }
@@ -46,18 +46,35 @@ Archived = archived;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Stickerset);
-			writer.Write(Archived);
+writer.WriteInt32(ConstructorId);
+var checkstickerset = 			writer.WriteObject(Stickerset);
+if(checkstickerset.IsError){
+ return checkstickerset; 
+}
+var checkarchived = 			writer.WriteBool(Archived);
+if(checkarchived.IsError){
+ return checkarchived; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Stickerset = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase>();
-			Archived = reader.Read<bool>();
+			var trystickerset = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase>();
+if(trystickerset.IsError){
+return ReadResult<IObject>.Move(trystickerset);
+}
+Stickerset = trystickerset.Value;
+			var tryarchived = reader.ReadBool();
+if(tryarchived.IsError){
+return ReadResult<IObject>.Move(tryarchived);
+}
+Archived = tryarchived.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

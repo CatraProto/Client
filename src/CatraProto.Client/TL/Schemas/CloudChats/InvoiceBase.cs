@@ -1,5 +1,7 @@
 using CatraProto.TL;
+using CatraProto.TL.Results;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL.Interfaces;
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -35,17 +37,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public abstract string Currency { get; set; }
 
 [Newtonsoft.Json.JsonProperty("prices")]
-		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase> Prices { get; set; }
+		public abstract List<CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase> Prices { get; set; }
 
 [Newtonsoft.Json.JsonProperty("max_tip_amount")]
 		public abstract long? MaxTipAmount { get; set; }
 
 [Newtonsoft.Json.JsonProperty("suggested_tip_amounts")]
-		public abstract IList<long> SuggestedTipAmounts { get; set; }
+		public abstract List<long> SuggestedTipAmounts { get; set; }
 
         public abstract void UpdateFlags();
-        public abstract void Deserialize(Reader reader);
-        public abstract void Serialize(Writer writer);
+        public abstract ReadResult<IObject> Deserialize(Reader reader);
+        public abstract WriteResult Serialize(Writer writer);
         public abstract int GetConstructorId();
     }
 }

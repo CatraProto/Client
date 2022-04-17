@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -29,9 +31,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("message")]
 		public string Message { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("entities")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("reply_markup")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase ReplyMarkup { get; set; }
 
@@ -55,40 +59,67 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Message);
+
+			writer.WriteInt32(Flags);
+
+			writer.WriteString(Message);
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(Entities);
+var checkentities = 				writer.WriteVector(Entities, false);
+if(checkentities.IsError){
+ return checkentities; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(ReplyMarkup);
+var checkreplyMarkup = 				writer.WriteObject(ReplyMarkup);
+if(checkreplyMarkup.IsError){
+ return checkreplyMarkup; 
+}
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			NoWebpage = FlagsHelper.IsFlagSet(Flags, 0);
-			Message = reader.Read<string>();
+			var trymessage = reader.ReadString();
+if(trymessage.IsError){
+return ReadResult<IObject>.Move(trymessage);
+}
+Message = trymessage.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
+				var tryentities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryentities.IsError){
+return ReadResult<IObject>.Move(tryentities);
+}
+Entities = tryentities.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				ReplyMarkup = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase>();
+				var tryreplyMarkup = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase>();
+if(tryreplyMarkup.IsError){
+return ReadResult<IObject>.Move(tryreplyMarkup);
+}
+ReplyMarkup = tryreplyMarkup.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

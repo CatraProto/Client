@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -31,18 +33,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("type")]
 		public sealed override string Type { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("title")]
 		public string Title { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("description")]
 		public string Description { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("url")]
 		public string Url { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("thumb")]
 		public CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase Thumb { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("content")]
 		public CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase Content { get; set; }
 
@@ -73,73 +80,127 @@ SendMessage = sendMessage;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Id);
-			writer.Write(Type);
+
+			writer.WriteInt32(Flags);
+
+			writer.WriteString(Id);
+
+			writer.WriteString(Type);
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(Title);
+
+				writer.WriteString(Title);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(Description);
+
+				writer.WriteString(Description);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				writer.Write(Url);
+
+				writer.WriteString(Url);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				writer.Write(Thumb);
+var checkthumb = 				writer.WriteObject(Thumb);
+if(checkthumb.IsError){
+ return checkthumb; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				writer.Write(Content);
+var checkcontent = 				writer.WriteObject(Content);
+if(checkcontent.IsError){
+ return checkcontent; 
+}
 			}
 
-			writer.Write(SendMessage);
+var checksendMessage = 			writer.WriteObject(SendMessage);
+if(checksendMessage.IsError){
+ return checksendMessage; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			Id = reader.Read<string>();
-			Type = reader.Read<string>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var tryid = reader.ReadString();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var trytype = reader.ReadString();
+if(trytype.IsError){
+return ReadResult<IObject>.Move(trytype);
+}
+Type = trytype.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Title = reader.Read<string>();
+				var trytitle = reader.ReadString();
+if(trytitle.IsError){
+return ReadResult<IObject>.Move(trytitle);
+}
+Title = trytitle.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				Description = reader.Read<string>();
+				var trydescription = reader.ReadString();
+if(trydescription.IsError){
+return ReadResult<IObject>.Move(trydescription);
+}
+Description = trydescription.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				Url = reader.Read<string>();
+				var tryurl = reader.ReadString();
+if(tryurl.IsError){
+return ReadResult<IObject>.Move(tryurl);
+}
+Url = tryurl.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				Thumb = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase>();
+				var trythumb = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase>();
+if(trythumb.IsError){
+return ReadResult<IObject>.Move(trythumb);
+}
+Thumb = trythumb.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				Content = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase>();
+				var trycontent = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase>();
+if(trycontent.IsError){
+return ReadResult<IObject>.Move(trycontent);
+}
+Content = trycontent.Value;
 			}
 
-			SendMessage = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.BotInlineMessageBase>();
+			var trysendMessage = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.BotInlineMessageBase>();
+if(trysendMessage.IsError){
+return ReadResult<IObject>.Move(trysendMessage);
+}
+SendMessage = trysendMessage.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

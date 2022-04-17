@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -20,10 +23,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
         public static int ConstructorId { get => 630429265; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Updates.DifferenceBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -61,33 +61,57 @@ Qts = qts;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Pts);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt32(Pts);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(PtsTotalLimit.Value);
+writer.WriteInt32(PtsTotalLimit.Value);
 			}
 
-			writer.Write(Date);
-			writer.Write(Qts);
+writer.WriteInt32(Date);
+writer.WriteInt32(Qts);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			Pts = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var trypts = reader.ReadInt32();
+if(trypts.IsError){
+return ReadResult<IObject>.Move(trypts);
+}
+Pts = trypts.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				PtsTotalLimit = reader.Read<int>();
+				var tryptsTotalLimit = reader.ReadInt32();
+if(tryptsTotalLimit.IsError){
+return ReadResult<IObject>.Move(tryptsTotalLimit);
+}
+PtsTotalLimit = tryptsTotalLimit.Value;
 			}
 
-			Date = reader.Read<int>();
-			Qts = reader.Read<int>();
+			var trydate = reader.ReadInt32();
+if(trydate.IsError){
+return ReadResult<IObject>.Move(trydate);
+}
+Date = trydate.Value;
+			var tryqts = reader.ReadInt32();
+if(tryqts.IsError){
+return ReadResult<IObject>.Move(tryqts);
+}
+Qts = tryqts.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

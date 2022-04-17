@@ -6,7 +6,7 @@ using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.MTProto.Rpc;
 using CatraProto.TL.Interfaces;
 using CatraProto.Client;
-using CatraProto.Client.MTProto.Rpc.RpcErrors.CatraErrors;
+using CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors;
 using System.Collections.Generic;
 using System.Numerics;
 
@@ -26,10 +26,10 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 	        
 	    }
 	    
-	    public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> EditPeerFoldersAsync(IList<CatraProto.Client.TL.Schemas.CloudChats.InputFolderPeerBase> folderPeers, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+	    public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> EditPeerFoldersAsync(List<CatraProto.Client.TL.Schemas.CloudChats.InputFolderPeerBase> folderPeers, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
+var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
 messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Folders.EditPeerFolders(){
@@ -40,10 +40,10 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource!;
 return rpcResponse;
 }
-public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> DeleteFolderAsync(int folderId, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> DeleteFolderAsync(int folderId, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
+var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
 messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Folders.DeleteFolder(){

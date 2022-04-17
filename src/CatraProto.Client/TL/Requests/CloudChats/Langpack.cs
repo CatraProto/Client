@@ -6,7 +6,7 @@ using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.MTProto.Rpc;
 using CatraProto.TL.Interfaces;
 using CatraProto.Client;
-using CatraProto.Client.MTProto.Rpc.RpcErrors.CatraErrors;
+using CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors;
 using System.Collections.Generic;
 using System.Numerics;
 
@@ -26,10 +26,10 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 	        
 	    }
 	    
-	    public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.LangPackDifferenceBase>> GetLangPackAsync(string langPack, string langCode, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+	    public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.LangPackDifferenceBase>> GetLangPackAsync(string langPack, string langCode, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.LangPackDifferenceBase>(
+var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.LangPackDifferenceBase>(
 );
 messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Langpack.GetLangPack(){
@@ -41,10 +41,10 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource!;
 return rpcResponse;
 }
-public async Task<RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.LangPackStringBase>>> GetStringsAsync(string langPack, string langCode, IList<string> keys, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+public async Task<RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.LangPackStringBase>>> GetStringsAsync(string langPack, string langCode, List<string> keys, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.LangPackStringBase>>(
+var rpcResponse = new RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.LangPackStringBase>>(
 new CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.LangPackStringBase>()
 );
 messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
@@ -58,10 +58,10 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource!;
 return rpcResponse;
 }
-public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.LangPackDifferenceBase>> GetDifferenceAsync(string langPack, string langCode, int fromVersion, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.LangPackDifferenceBase>> GetDifferenceAsync(string langPack, string langCode, int fromVersion, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.LangPackDifferenceBase>(
+var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.LangPackDifferenceBase>(
 );
 messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Langpack.GetDifference(){
@@ -74,10 +74,10 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource!;
 return rpcResponse;
 }
-public async Task<RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.LangPackLanguageBase>>> GetLanguagesAsync(string langPack, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+public async Task<RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.LangPackLanguageBase>>> GetLanguagesAsync(string langPack, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcMessage<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.LangPackLanguageBase>>(
+var rpcResponse = new RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.LangPackLanguageBase>>(
 new CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.LangPackLanguageBase>()
 );
 messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
@@ -89,10 +89,10 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource!;
 return rpcResponse;
 }
-public async Task<RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.LangPackLanguageBase>> GetLanguageAsync(string langPack, string langCode, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.LangPackLanguageBase>> GetLanguageAsync(string langPack, string langCode, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.CloudChats.LangPackLanguageBase>(
+var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.LangPackLanguageBase>(
 );
 messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Langpack.GetLanguage(){

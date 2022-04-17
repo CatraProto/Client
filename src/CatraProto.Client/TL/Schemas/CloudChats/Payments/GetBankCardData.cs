@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
         public static int ConstructorId { get => 779736953; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Payments.BankCardDataBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("number")]
 		public string Number { get; set; }
@@ -42,16 +42,24 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Number);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteString(Number);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Number = reader.Read<string>();
+			var trynumber = reader.ReadString();
+if(trynumber.IsError){
+return ReadResult<IObject>.Move(trynumber);
+}
+Number = trynumber.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

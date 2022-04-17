@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,30 @@ PublicKey = publicKey;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(DcId);
-			writer.Write(PublicKey);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt32(DcId);
+
+			writer.WriteString(PublicKey);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			DcId = reader.Read<int>();
-			PublicKey = reader.Read<string>();
+			var trydcId = reader.ReadInt32();
+if(trydcId.IsError){
+return ReadResult<IObject>.Move(trydcId);
+}
+DcId = trydcId.Value;
+			var trypublicKey = reader.ReadString();
+if(trypublicKey.IsError){
+return ReadResult<IObject>.Move(trypublicKey);
+}
+PublicKey = trypublicKey.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

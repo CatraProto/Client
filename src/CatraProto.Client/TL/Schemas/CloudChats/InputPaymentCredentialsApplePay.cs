@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -34,16 +36,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(PaymentData);
+writer.WriteInt32(ConstructorId);
+var checkpaymentData = 			writer.WriteObject(PaymentData);
+if(checkpaymentData.IsError){
+ return checkpaymentData; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			PaymentData = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
+			var trypaymentData = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
+if(trypaymentData.IsError){
+return ReadResult<IObject>.Move(trypaymentData);
+}
+PaymentData = trypaymentData.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

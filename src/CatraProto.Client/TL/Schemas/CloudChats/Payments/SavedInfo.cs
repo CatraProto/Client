@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -25,6 +27,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 [Newtonsoft.Json.JsonProperty("has_saved_credentials")]
 		public sealed override bool HasSavedCredentials { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("saved_info")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase SavedInfoField { get; set; }
 
@@ -41,28 +44,43 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
+
+			writer.WriteInt32(Flags);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(SavedInfoField);
+var checksavedInfoField = 				writer.WriteObject(SavedInfoField);
+if(checksavedInfoField.IsError){
+ return checksavedInfoField; 
+}
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			HasSavedCredentials = FlagsHelper.IsFlagSet(Flags, 1);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				SavedInfoField = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase>();
+				var trysavedInfoField = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase>();
+if(trysavedInfoField.IsError){
+return ReadResult<IObject>.Move(trysavedInfoField);
+}
+SavedInfoField = trysavedInfoField.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

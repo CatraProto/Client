@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -42,6 +44,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("lang_code")]
 		public sealed override string LangCode { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("base_lang_code")]
 		public sealed override string BaseLangCode { get; set; }
 
@@ -84,44 +87,90 @@ TranslationsUrl = translationsUrl;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Name);
-			writer.Write(NativeName);
-			writer.Write(LangCode);
+
+			writer.WriteInt32(Flags);
+
+			writer.WriteString(Name);
+
+			writer.WriteString(NativeName);
+
+			writer.WriteString(LangCode);
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(BaseLangCode);
+
+				writer.WriteString(BaseLangCode);
 			}
 
-			writer.Write(PluralCode);
-			writer.Write(StringsCount);
-			writer.Write(TranslatedCount);
-			writer.Write(TranslationsUrl);
+
+			writer.WriteString(PluralCode);
+writer.WriteInt32(StringsCount);
+writer.WriteInt32(TranslatedCount);
+
+			writer.WriteString(TranslationsUrl);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Official = FlagsHelper.IsFlagSet(Flags, 0);
 			Rtl = FlagsHelper.IsFlagSet(Flags, 2);
 			Beta = FlagsHelper.IsFlagSet(Flags, 3);
-			Name = reader.Read<string>();
-			NativeName = reader.Read<string>();
-			LangCode = reader.Read<string>();
+			var tryname = reader.ReadString();
+if(tryname.IsError){
+return ReadResult<IObject>.Move(tryname);
+}
+Name = tryname.Value;
+			var trynativeName = reader.ReadString();
+if(trynativeName.IsError){
+return ReadResult<IObject>.Move(trynativeName);
+}
+NativeName = trynativeName.Value;
+			var trylangCode = reader.ReadString();
+if(trylangCode.IsError){
+return ReadResult<IObject>.Move(trylangCode);
+}
+LangCode = trylangCode.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				BaseLangCode = reader.Read<string>();
+				var trybaseLangCode = reader.ReadString();
+if(trybaseLangCode.IsError){
+return ReadResult<IObject>.Move(trybaseLangCode);
+}
+BaseLangCode = trybaseLangCode.Value;
 			}
 
-			PluralCode = reader.Read<string>();
-			StringsCount = reader.Read<int>();
-			TranslatedCount = reader.Read<int>();
-			TranslationsUrl = reader.Read<string>();
+			var trypluralCode = reader.ReadString();
+if(trypluralCode.IsError){
+return ReadResult<IObject>.Move(trypluralCode);
+}
+PluralCode = trypluralCode.Value;
+			var trystringsCount = reader.ReadInt32();
+if(trystringsCount.IsError){
+return ReadResult<IObject>.Move(trystringsCount);
+}
+StringsCount = trystringsCount.Value;
+			var trytranslatedCount = reader.ReadInt32();
+if(trytranslatedCount.IsError){
+return ReadResult<IObject>.Move(trytranslatedCount);
+}
+TranslatedCount = trytranslatedCount.Value;
+			var trytranslationsUrl = reader.ReadString();
+if(trytranslationsUrl.IsError){
+return ReadResult<IObject>.Move(trytranslationsUrl);
+}
+TranslationsUrl = trytranslationsUrl.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

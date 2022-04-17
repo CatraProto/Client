@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
         public static int ConstructorId { get => -1877938321; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("prev_app_version")]
 		public string PrevAppVersion { get; set; }
@@ -42,16 +42,24 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(PrevAppVersion);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteString(PrevAppVersion);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			PrevAppVersion = reader.Read<string>();
+			var tryprevAppVersion = reader.ReadString();
+if(tryprevAppVersion.IsError){
+return ReadResult<IObject>.Move(tryprevAppVersion);
+}
+PrevAppVersion = tryprevAppVersion.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

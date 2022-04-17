@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,33 @@ ShortName = shortName;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(BotId);
-			writer.Write(ShortName);
+writer.WriteInt32(ConstructorId);
+var checkbotId = 			writer.WriteObject(BotId);
+if(checkbotId.IsError){
+ return checkbotId; 
+}
+
+			writer.WriteString(ShortName);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			BotId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
-			ShortName = reader.Read<string>();
+			var trybotId = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
+if(trybotId.IsError){
+return ReadResult<IObject>.Move(trybotId);
+}
+BotId = trybotId.Value;
+			var tryshortName = reader.ReadString();
+if(tryshortName.IsError){
+return ReadResult<IObject>.Move(tryshortName);
+}
+ShortName = tryshortName.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public static int ConstructorId { get => -1986010339; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("value")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputSecureValueBase Value { get; set; }
@@ -46,18 +46,32 @@ SecureSecretId = secureSecretId;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Value);
-			writer.Write(SecureSecretId);
+writer.WriteInt32(ConstructorId);
+var checkvalue = 			writer.WriteObject(Value);
+if(checkvalue.IsError){
+ return checkvalue; 
+}
+writer.WriteInt64(SecureSecretId);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Value = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputSecureValueBase>();
-			SecureSecretId = reader.Read<long>();
+			var tryvalue = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputSecureValueBase>();
+if(tryvalue.IsError){
+return ReadResult<IObject>.Move(tryvalue);
+}
+Value = tryvalue.Value;
+			var trysecureSecretId = reader.ReadInt64();
+if(trysecureSecretId.IsError){
+return ReadResult<IObject>.Move(trysecureSecretId);
+}
+SecureSecretId = trysecureSecretId.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

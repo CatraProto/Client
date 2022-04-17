@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,35 @@ Draft = draft;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Peer);
-			writer.Write(Draft);
+writer.WriteInt32(ConstructorId);
+var checkpeer = 			writer.WriteObject(Peer);
+if(checkpeer.IsError){
+ return checkpeer; 
+}
+var checkdraft = 			writer.WriteObject(Draft);
+if(checkdraft.IsError){
+ return checkdraft; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
-			Draft = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DraftMessageBase>();
+			var trypeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+if(trypeer.IsError){
+return ReadResult<IObject>.Move(trypeer);
+}
+Peer = trypeer.Value;
+			var trydraft = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.DraftMessageBase>();
+if(trydraft.IsError){
+return ReadResult<IObject>.Move(trydraft);
+}
+Draft = trydraft.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

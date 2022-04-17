@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Langpack
         public static int ConstructorId { get => 1120311183; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.LangPackLanguageBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = true;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("lang_pack")]
 		public string LangPack { get; set; }
@@ -42,16 +42,24 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Langpack
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(LangPack);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteString(LangPack);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			LangPack = reader.Read<string>();
+			var trylangPack = reader.ReadString();
+if(trylangPack.IsError){
+return ReadResult<IObject>.Move(trylangPack);
+}
+LangPack = trylangPack.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -35,12 +37,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("user_id")]
 		public long UserId { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("prev_participant")]
 		public CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantBase PrevParticipant { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("new_participant")]
 		public CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantBase NewParticipant { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("invite")]
 		public CatraProto.Client.TL.Schemas.CloudChats.ExportedChatInviteBase Invite { get; set; }
 
@@ -71,57 +76,106 @@ Qts = qts;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(ChatId);
-			writer.Write(Date);
-			writer.Write(ActorId);
-			writer.Write(UserId);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt64(ChatId);
+writer.WriteInt32(Date);
+writer.WriteInt64(ActorId);
+writer.WriteInt64(UserId);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(PrevParticipant);
+var checkprevParticipant = 				writer.WriteObject(PrevParticipant);
+if(checkprevParticipant.IsError){
+ return checkprevParticipant; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(NewParticipant);
+var checknewParticipant = 				writer.WriteObject(NewParticipant);
+if(checknewParticipant.IsError){
+ return checknewParticipant; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(Invite);
+var checkinvite = 				writer.WriteObject(Invite);
+if(checkinvite.IsError){
+ return checkinvite; 
+}
 			}
 
-			writer.Write(Qts);
+writer.WriteInt32(Qts);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			ChatId = reader.Read<long>();
-			Date = reader.Read<int>();
-			ActorId = reader.Read<long>();
-			UserId = reader.Read<long>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var trychatId = reader.ReadInt64();
+if(trychatId.IsError){
+return ReadResult<IObject>.Move(trychatId);
+}
+ChatId = trychatId.Value;
+			var trydate = reader.ReadInt32();
+if(trydate.IsError){
+return ReadResult<IObject>.Move(trydate);
+}
+Date = trydate.Value;
+			var tryactorId = reader.ReadInt64();
+if(tryactorId.IsError){
+return ReadResult<IObject>.Move(tryactorId);
+}
+ActorId = tryactorId.Value;
+			var tryuserId = reader.ReadInt64();
+if(tryuserId.IsError){
+return ReadResult<IObject>.Move(tryuserId);
+}
+UserId = tryuserId.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				PrevParticipant = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantBase>();
+				var tryprevParticipant = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantBase>();
+if(tryprevParticipant.IsError){
+return ReadResult<IObject>.Move(tryprevParticipant);
+}
+PrevParticipant = tryprevParticipant.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				NewParticipant = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantBase>();
+				var trynewParticipant = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantBase>();
+if(trynewParticipant.IsError){
+return ReadResult<IObject>.Move(trynewParticipant);
+}
+NewParticipant = trynewParticipant.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				Invite = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ExportedChatInviteBase>();
+				var tryinvite = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ExportedChatInviteBase>();
+if(tryinvite.IsError){
+return ReadResult<IObject>.Move(tryinvite);
+}
+Invite = tryinvite.Value;
 			}
 
-			Qts = reader.Read<int>();
+			var tryqts = reader.ReadInt32();
+if(tryqts.IsError){
+return ReadResult<IObject>.Move(tryqts);
+}
+Qts = tryqts.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

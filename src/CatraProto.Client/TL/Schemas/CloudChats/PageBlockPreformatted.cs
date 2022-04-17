@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,33 @@ Language = language;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Text);
-			writer.Write(Language);
+writer.WriteInt32(ConstructorId);
+var checktext = 			writer.WriteObject(Text);
+if(checktext.IsError){
+ return checktext; 
+}
+
+			writer.WriteString(Language);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Text = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
-			Language = reader.Read<string>();
+			var trytext = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
+if(trytext.IsError){
+return ReadResult<IObject>.Move(trytext);
+}
+Text = trytext.Value;
+			var trylanguage = reader.ReadString();
+if(trylanguage.IsError){
+return ReadResult<IObject>.Move(trylanguage);
+}
+Language = trylanguage.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

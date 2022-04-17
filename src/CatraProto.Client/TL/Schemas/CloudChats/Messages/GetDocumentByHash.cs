@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int ConstructorId { get => 864953444; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.DocumentBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("sha256")]
 		public byte[] Sha256 { get; set; }
@@ -50,20 +50,37 @@ MimeType = mimeType;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Sha256);
-			writer.Write(Size);
-			writer.Write(MimeType);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteBytes(Sha256);
+writer.WriteInt32(Size);
+
+			writer.WriteString(MimeType);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Sha256 = reader.Read<byte[]>();
-			Size = reader.Read<int>();
-			MimeType = reader.Read<string>();
+			var trysha256 = reader.ReadBytes();
+if(trysha256.IsError){
+return ReadResult<IObject>.Move(trysha256);
+}
+Sha256 = trysha256.Value;
+			var trysize = reader.ReadInt32();
+if(trysize.IsError){
+return ReadResult<IObject>.Move(trysize);
+}
+Size = trysize.Value;
+			var trymimeType = reader.ReadString();
+if(trymimeType.IsError){
+return ReadResult<IObject>.Move(trymimeType);
+}
+MimeType = trymimeType.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

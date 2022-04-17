@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int ConstructorId { get => -866424884; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.StickerSetCoveredBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = true;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("media")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputStickeredMediaBase Media { get; set; }
@@ -42,16 +42,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Media);
+writer.WriteInt32(ConstructorId);
+var checkmedia = 			writer.WriteObject(Media);
+if(checkmedia.IsError){
+ return checkmedia; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Media = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputStickeredMediaBase>();
+			var trymedia = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputStickeredMediaBase>();
+if(trymedia.IsError){
+return ReadResult<IObject>.Move(trymedia);
+}
+Media = trymedia.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

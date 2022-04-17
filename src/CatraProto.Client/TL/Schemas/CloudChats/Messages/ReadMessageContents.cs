@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,17 +19,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int ConstructorId { get => 916930423; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedMessagesBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("id")]
-		public IList<int> Id { get; set; }
+		public List<int> Id { get; set; }
 
         
         #nullable enable
- public ReadMessageContents (IList<int> id)
+ public ReadMessageContents (List<int> id)
 {
  Id = id;
  
@@ -42,16 +42,24 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Id);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteVector(Id, false);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Id = reader.ReadVector<int>();
+			var tryid = reader.ReadVector<int>(ParserTypes.Int);
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

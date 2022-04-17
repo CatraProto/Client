@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,33 @@ ChatInvite = chatInvite;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Url);
-			writer.Write(ChatInvite);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteString(Url);
+var checkchatInvite = 			writer.WriteObject(ChatInvite);
+if(checkchatInvite.IsError){
+ return checkchatInvite; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Url = reader.Read<string>();
-			ChatInvite = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatInviteBase>();
+			var tryurl = reader.ReadString();
+if(tryurl.IsError){
+return ReadResult<IObject>.Move(tryurl);
+}
+Url = tryurl.Value;
+			var trychatInvite = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ChatInviteBase>();
+if(trychatInvite.IsError){
+return ReadResult<IObject>.Move(trychatInvite);
+}
+ChatInvite = trychatInvite.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

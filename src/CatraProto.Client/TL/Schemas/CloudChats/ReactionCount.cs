@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -49,22 +51,39 @@ Count = count;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Reaction);
-			writer.Write(Count);
+
+			writer.WriteInt32(Flags);
+
+			writer.WriteString(Reaction);
+writer.WriteInt32(Count);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Chosen = FlagsHelper.IsFlagSet(Flags, 0);
-			Reaction = reader.Read<string>();
-			Count = reader.Read<int>();
+			var tryreaction = reader.ReadString();
+if(tryreaction.IsError){
+return ReadResult<IObject>.Move(tryreaction);
+}
+Reaction = tryreaction.Value;
+			var trycount = reader.ReadInt32();
+if(trycount.IsError){
+return ReadResult<IObject>.Move(trycount);
+}
+Count = trycount.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
         public static int ConstructorId { get => -1210022402; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Auth.LoginTokenBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("api_id")]
 		public int ApiId { get; set; }
@@ -28,11 +28,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 		public string ApiHash { get; set; }
 
 [Newtonsoft.Json.JsonProperty("except_ids")]
-		public IList<long> ExceptIds { get; set; }
+		public List<long> ExceptIds { get; set; }
 
         
         #nullable enable
- public ExportLoginToken (int apiId,string apiHash,IList<long> exceptIds)
+ public ExportLoginToken (int apiId,string apiHash,List<long> exceptIds)
 {
  ApiId = apiId;
 ApiHash = apiHash;
@@ -50,20 +50,37 @@ ExceptIds = exceptIds;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(ApiId);
-			writer.Write(ApiHash);
-			writer.Write(ExceptIds);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt32(ApiId);
+
+			writer.WriteString(ApiHash);
+
+			writer.WriteVector(ExceptIds, false);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			ApiId = reader.Read<int>();
-			ApiHash = reader.Read<string>();
-			ExceptIds = reader.ReadVector<long>();
+			var tryapiId = reader.ReadInt32();
+if(tryapiId.IsError){
+return ReadResult<IObject>.Move(tryapiId);
+}
+ApiId = tryapiId.Value;
+			var tryapiHash = reader.ReadString();
+if(tryapiHash.IsError){
+return ReadResult<IObject>.Move(tryapiHash);
+}
+ApiHash = tryapiHash.Value;
+			var tryexceptIds = reader.ReadVector<long>(ParserTypes.Int64);
+if(tryexceptIds.IsError){
+return ReadResult<IObject>.Move(tryexceptIds);
+}
+ExceptIds = tryexceptIds.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

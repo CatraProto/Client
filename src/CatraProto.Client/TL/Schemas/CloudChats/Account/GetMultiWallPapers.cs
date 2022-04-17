@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,17 +19,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public static int ConstructorId { get => 1705865692; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = true;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("wallpapers")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase> Wallpapers { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase> Wallpapers { get; set; }
 
         
         #nullable enable
- public GetMultiWallPapers (IList<CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase> wallpapers)
+ public GetMultiWallPapers (List<CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase> wallpapers)
 {
  Wallpapers = wallpapers;
  
@@ -42,16 +42,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Wallpapers);
+writer.WriteInt32(ConstructorId);
+var checkwallpapers = 			writer.WriteVector(Wallpapers, false);
+if(checkwallpapers.IsError){
+ return checkwallpapers; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Wallpapers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase>();
+			var trywallpapers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trywallpapers.IsError){
+return ReadResult<IObject>.Move(trywallpapers);
+}
+Wallpapers = trywallpapers.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

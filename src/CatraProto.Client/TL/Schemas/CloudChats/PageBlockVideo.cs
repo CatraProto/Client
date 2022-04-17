@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -54,23 +56,42 @@ Caption = caption;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(VideoId);
-			writer.Write(Caption);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt64(VideoId);
+var checkcaption = 			writer.WriteObject(Caption);
+if(checkcaption.IsError){
+ return checkcaption; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Autoplay = FlagsHelper.IsFlagSet(Flags, 0);
 			Loop = FlagsHelper.IsFlagSet(Flags, 1);
-			VideoId = reader.Read<long>();
-			Caption = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase>();
+			var tryvideoId = reader.ReadInt64();
+if(tryvideoId.IsError){
+return ReadResult<IObject>.Move(tryvideoId);
+}
+VideoId = tryvideoId.Value;
+			var trycaption = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase>();
+if(trycaption.IsError){
+return ReadResult<IObject>.Move(trycaption);
+}
+Caption = trycaption.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

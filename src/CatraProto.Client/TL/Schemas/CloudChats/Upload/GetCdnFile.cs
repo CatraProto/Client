@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
         public static int ConstructorId { get => 536919235; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Upload.CdnFileBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("file_token")]
 		public byte[] FileToken { get; set; }
@@ -50,20 +50,36 @@ Limit = limit;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(FileToken);
-			writer.Write(Offset);
-			writer.Write(Limit);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteBytes(FileToken);
+writer.WriteInt32(Offset);
+writer.WriteInt32(Limit);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			FileToken = reader.Read<byte[]>();
-			Offset = reader.Read<int>();
-			Limit = reader.Read<int>();
+			var tryfileToken = reader.ReadBytes();
+if(tryfileToken.IsError){
+return ReadResult<IObject>.Move(tryfileToken);
+}
+FileToken = tryfileToken.Value;
+			var tryoffset = reader.ReadInt32();
+if(tryoffset.IsError){
+return ReadResult<IObject>.Move(tryoffset);
+}
+Offset = tryoffset.Value;
+			var trylimit = reader.ReadInt32();
+if(trylimit.IsError){
+return ReadResult<IObject>.Move(trylimit);
+}
+Limit = trylimit.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

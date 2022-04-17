@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -46,22 +48,46 @@ Data = data;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Time);
-			writer.Write(Type);
-			writer.Write(Peer);
-			writer.Write(Data);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteDouble(Time);
+
+			writer.WriteString(Type);
+writer.WriteInt64(Peer);
+var checkdata = 			writer.WriteObject(Data);
+if(checkdata.IsError){
+ return checkdata; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Time = reader.Read<double>();
-			Type = reader.Read<string>();
-			Peer = reader.Read<long>();
-			Data = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.JSONValueBase>();
+			var trytime = reader.ReadDouble();
+if(trytime.IsError){
+return ReadResult<IObject>.Move(trytime);
+}
+Time = trytime.Value;
+			var trytype = reader.ReadString();
+if(trytype.IsError){
+return ReadResult<IObject>.Move(trytype);
+}
+Type = trytype.Value;
+			var trypeer = reader.ReadInt64();
+if(trypeer.IsError){
+return ReadResult<IObject>.Move(trypeer);
+}
+Peer = trypeer.Value;
+			var trydata = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.JSONValueBase>();
+if(trydata.IsError){
+return ReadResult<IObject>.Move(trydata);
+}
+Data = trydata.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

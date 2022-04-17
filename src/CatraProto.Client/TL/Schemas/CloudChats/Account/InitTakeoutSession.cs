@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -26,10 +29,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public static int ConstructorId { get => -262453244; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Account.TakeoutBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -74,22 +74,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
+
+			writer.WriteInt32(Flags);
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				writer.Write(FileMaxSize.Value);
+writer.WriteInt32(FileMaxSize.Value);
 			}
 
 
+return new WriteResult();
+
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Contacts = FlagsHelper.IsFlagSet(Flags, 0);
 			MessageUsers = FlagsHelper.IsFlagSet(Flags, 1);
 			MessageChats = FlagsHelper.IsFlagSet(Flags, 2);
@@ -98,9 +105,14 @@ writer.Write(ConstructorId);
 			Files = FlagsHelper.IsFlagSet(Flags, 5);
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				FileMaxSize = reader.Read<int>();
+				var tryfileMaxSize = reader.ReadInt32();
+if(tryfileMaxSize.IsError){
+return ReadResult<IObject>.Move(tryfileMaxSize);
+}
+FileMaxSize = tryfileMaxSize.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 

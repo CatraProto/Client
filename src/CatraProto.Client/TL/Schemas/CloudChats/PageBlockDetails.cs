@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -25,14 +27,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public bool Open { get; set; }
 
 [Newtonsoft.Json.JsonProperty("blocks")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase> Blocks { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase> Blocks { get; set; }
 
 [Newtonsoft.Json.JsonProperty("title")]
 		public CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Title { get; set; }
 
 
         #nullable enable
- public PageBlockDetails (IList<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase> blocks,CatraProto.Client.TL.Schemas.CloudChats.RichTextBase title)
+ public PageBlockDetails (List<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase> blocks,CatraProto.Client.TL.Schemas.CloudChats.RichTextBase title)
 {
  Blocks = blocks;
 Title = title;
@@ -49,22 +51,44 @@ Title = title;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Blocks);
-			writer.Write(Title);
+
+			writer.WriteInt32(Flags);
+var checkblocks = 			writer.WriteVector(Blocks, false);
+if(checkblocks.IsError){
+ return checkblocks; 
+}
+var checktitle = 			writer.WriteObject(Title);
+if(checktitle.IsError){
+ return checktitle; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Open = FlagsHelper.IsFlagSet(Flags, 0);
-			Blocks = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase>();
-			Title = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
+			var tryblocks = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryblocks.IsError){
+return ReadResult<IObject>.Move(tryblocks);
+}
+Blocks = tryblocks.Value;
+			var trytitle = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
+if(trytitle.IsError){
+return ReadResult<IObject>.Move(trytitle);
+}
+Title = trytitle.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

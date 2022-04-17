@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -24,7 +26,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public int Flags { get; set; }
 
 [Newtonsoft.Json.JsonProperty("messages")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.MessageBase> Messages { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.MessageBase> Messages { get; set; }
 
 [Newtonsoft.Json.JsonProperty("max_id")]
 		public sealed override int? MaxId { get; set; }
@@ -39,14 +41,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public sealed override int UnreadCount { get; set; }
 
 [Newtonsoft.Json.JsonProperty("chats")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
 
 [Newtonsoft.Json.JsonProperty("users")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
 
         #nullable enable
- public DiscussionMessage (IList<CatraProto.Client.TL.Schemas.CloudChats.MessageBase> messages,int unreadCount,IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> chats,IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> users)
+ public DiscussionMessage (List<CatraProto.Client.TL.Schemas.CloudChats.MessageBase> messages,int unreadCount,List<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> chats,List<CatraProto.Client.TL.Schemas.CloudChats.UserBase> users)
 {
  Messages = messages;
 UnreadCount = unreadCount;
@@ -67,55 +69,100 @@ Users = users;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Messages);
+
+			writer.WriteInt32(Flags);
+var checkmessages = 			writer.WriteVector(Messages, false);
+if(checkmessages.IsError){
+ return checkmessages; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(MaxId.Value);
+writer.WriteInt32(MaxId.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(ReadInboxMaxId.Value);
+writer.WriteInt32(ReadInboxMaxId.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(ReadOutboxMaxId.Value);
+writer.WriteInt32(ReadOutboxMaxId.Value);
 			}
 
-			writer.Write(UnreadCount);
-			writer.Write(Chats);
-			writer.Write(Users);
+writer.WriteInt32(UnreadCount);
+var checkchats = 			writer.WriteVector(Chats, false);
+if(checkchats.IsError){
+ return checkchats; 
+}
+var checkusers = 			writer.WriteVector(Users, false);
+if(checkusers.IsError){
+ return checkusers; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			Messages = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageBase>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var trymessages = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trymessages.IsError){
+return ReadResult<IObject>.Move(trymessages);
+}
+Messages = trymessages.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				MaxId = reader.Read<int>();
+				var trymaxId = reader.ReadInt32();
+if(trymaxId.IsError){
+return ReadResult<IObject>.Move(trymaxId);
+}
+MaxId = trymaxId.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				ReadInboxMaxId = reader.Read<int>();
+				var tryreadInboxMaxId = reader.ReadInt32();
+if(tryreadInboxMaxId.IsError){
+return ReadResult<IObject>.Move(tryreadInboxMaxId);
+}
+ReadInboxMaxId = tryreadInboxMaxId.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				ReadOutboxMaxId = reader.Read<int>();
+				var tryreadOutboxMaxId = reader.ReadInt32();
+if(tryreadOutboxMaxId.IsError){
+return ReadResult<IObject>.Move(tryreadOutboxMaxId);
+}
+ReadOutboxMaxId = tryreadOutboxMaxId.Value;
 			}
 
-			UnreadCount = reader.Read<int>();
-			Chats = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
-			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+			var tryunreadCount = reader.ReadInt32();
+if(tryunreadCount.IsError){
+return ReadResult<IObject>.Move(tryunreadCount);
+}
+UnreadCount = tryunreadCount.Value;
+			var trychats = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trychats.IsError){
+return ReadResult<IObject>.Move(trychats);
+}
+Chats = trychats.Value;
+			var tryusers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryusers.IsError){
+return ReadResult<IObject>.Move(tryusers);
+}
+Users = tryusers.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

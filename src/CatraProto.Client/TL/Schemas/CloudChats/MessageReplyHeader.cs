@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -25,6 +27,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("reply_to_msg_id")]
 		public sealed override int ReplyToMsgId { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("reply_to_peer_id")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.PeerBase ReplyToPeerId { get; set; }
 
@@ -50,39 +53,62 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(ReplyToMsgId);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt32(ReplyToMsgId);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(ReplyToPeerId);
+var checkreplyToPeerId = 				writer.WriteObject(ReplyToPeerId);
+if(checkreplyToPeerId.IsError){
+ return checkreplyToPeerId; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(ReplyToTopId.Value);
+writer.WriteInt32(ReplyToTopId.Value);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			ReplyToMsgId = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var tryreplyToMsgId = reader.ReadInt32();
+if(tryreplyToMsgId.IsError){
+return ReadResult<IObject>.Move(tryreplyToMsgId);
+}
+ReplyToMsgId = tryreplyToMsgId.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				ReplyToPeerId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+				var tryreplyToPeerId = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+if(tryreplyToPeerId.IsError){
+return ReadResult<IObject>.Move(tryreplyToPeerId);
+}
+ReplyToPeerId = tryreplyToPeerId.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				ReplyToTopId = reader.Read<int>();
+				var tryreplyToTopId = reader.ReadInt32();
+if(tryreplyToTopId.IsError){
+return ReadResult<IObject>.Move(tryreplyToTopId);
+}
+ReplyToTopId = tryreplyToTopId.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -28,7 +30,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
 
 [Newtonsoft.Json.JsonProperty("messages")]
-		public IList<int> Messages { get; set; }
+		public List<int> Messages { get; set; }
 
 [Newtonsoft.Json.JsonProperty("pts")]
 		public int Pts { get; set; }
@@ -38,7 +40,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
         #nullable enable
- public UpdatePinnedMessages (CatraProto.Client.TL.Schemas.CloudChats.PeerBase peer,IList<int> messages,int pts,int ptsCount)
+ public UpdatePinnedMessages (CatraProto.Client.TL.Schemas.CloudChats.PeerBase peer,List<int> messages,int pts,int ptsCount)
 {
  Peer = peer;
 Messages = messages;
@@ -57,26 +59,54 @@ PtsCount = ptsCount;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Peer);
-			writer.Write(Messages);
-			writer.Write(Pts);
-			writer.Write(PtsCount);
+
+			writer.WriteInt32(Flags);
+var checkpeer = 			writer.WriteObject(Peer);
+if(checkpeer.IsError){
+ return checkpeer; 
+}
+
+			writer.WriteVector(Messages, false);
+writer.WriteInt32(Pts);
+writer.WriteInt32(PtsCount);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Pinned = FlagsHelper.IsFlagSet(Flags, 0);
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
-			Messages = reader.ReadVector<int>();
-			Pts = reader.Read<int>();
-			PtsCount = reader.Read<int>();
+			var trypeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+if(trypeer.IsError){
+return ReadResult<IObject>.Move(trypeer);
+}
+Peer = trypeer.Value;
+			var trymessages = reader.ReadVector<int>(ParserTypes.Int);
+if(trymessages.IsError){
+return ReadResult<IObject>.Move(trymessages);
+}
+Messages = trymessages.Value;
+			var trypts = reader.ReadInt32();
+if(trypts.IsError){
+return ReadResult<IObject>.Move(trypts);
+}
+Pts = trypts.Value;
+			var tryptsCount = reader.ReadInt32();
+if(tryptsCount.IsError){
+return ReadResult<IObject>.Move(tryptsCount);
+}
+PtsCount = tryptsCount.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

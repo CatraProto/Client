@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -18,11 +20,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public sealed override string Emoticon { get; set; }
 
 [Newtonsoft.Json.JsonProperty("documents")]
-		public sealed override IList<long> Documents { get; set; }
+		public sealed override List<long> Documents { get; set; }
 
 
         #nullable enable
- public StickerPack (string emoticon,IList<long> documents)
+ public StickerPack (string emoticon,List<long> documents)
 {
  Emoticon = emoticon;
 Documents = documents;
@@ -38,18 +40,31 @@ Documents = documents;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Emoticon);
-			writer.Write(Documents);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteString(Emoticon);
+
+			writer.WriteVector(Documents, false);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Emoticon = reader.Read<string>();
-			Documents = reader.ReadVector<long>();
+			var tryemoticon = reader.ReadString();
+if(tryemoticon.IsError){
+return ReadResult<IObject>.Move(tryemoticon);
+}
+Emoticon = tryemoticon.Value;
+			var trydocuments = reader.ReadVector<long>(ParserTypes.Int64);
+if(trydocuments.IsError){
+return ReadResult<IObject>.Move(trydocuments);
+}
+Documents = trydocuments.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

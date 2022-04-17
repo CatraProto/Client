@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
         public static int ConstructorId { get => 527021574; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("channel")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase Channel { get; set; }
@@ -46,18 +46,35 @@ Enabled = enabled;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Channel);
-			writer.Write(Enabled);
+writer.WriteInt32(ConstructorId);
+var checkchannel = 			writer.WriteObject(Channel);
+if(checkchannel.IsError){
+ return checkchannel; 
+}
+var checkenabled = 			writer.WriteBool(Enabled);
+if(checkenabled.IsError){
+ return checkenabled; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Channel = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
-			Enabled = reader.Read<bool>();
+			var trychannel = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
+if(trychannel.IsError){
+return ReadResult<IObject>.Move(trychannel);
+}
+Channel = trychannel.Value;
+			var tryenabled = reader.ReadBool();
+if(tryenabled.IsError){
+return ReadResult<IObject>.Move(tryenabled);
+}
+Enabled = tryenabled.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -42,20 +44,35 @@ ErrorCode = errorCode;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(BadMsgId);
-			writer.Write(BadMsgSeqno);
-			writer.Write(ErrorCode);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(BadMsgId);
+writer.WriteInt32(BadMsgSeqno);
+writer.WriteInt32(ErrorCode);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			BadMsgId = reader.Read<long>();
-			BadMsgSeqno = reader.Read<int>();
-			ErrorCode = reader.Read<int>();
+			var trybadMsgId = reader.ReadInt64();
+if(trybadMsgId.IsError){
+return ReadResult<IObject>.Move(trybadMsgId);
+}
+BadMsgId = trybadMsgId.Value;
+			var trybadMsgSeqno = reader.ReadInt32();
+if(trybadMsgSeqno.IsError){
+return ReadResult<IObject>.Move(trybadMsgSeqno);
+}
+BadMsgSeqno = trybadMsgSeqno.Value;
+			var tryerrorCode = reader.ReadInt32();
+if(tryerrorCode.IsError){
+return ReadResult<IObject>.Move(tryerrorCode);
+}
+ErrorCode = tryerrorCode.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

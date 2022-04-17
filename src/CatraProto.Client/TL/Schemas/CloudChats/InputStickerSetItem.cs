@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -27,6 +29,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("emoji")]
 		public sealed override string Emoji { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("mask_coords")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.MaskCoordsBase MaskCoords { get; set; }
 
@@ -49,31 +52,58 @@ Emoji = emoji;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Document);
-			writer.Write(Emoji);
+
+			writer.WriteInt32(Flags);
+var checkdocument = 			writer.WriteObject(Document);
+if(checkdocument.IsError){
+ return checkdocument; 
+}
+
+			writer.WriteString(Emoji);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(MaskCoords);
+var checkmaskCoords = 				writer.WriteObject(MaskCoords);
+if(checkmaskCoords.IsError){
+ return checkmaskCoords; 
+}
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			Document = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
-			Emoji = reader.Read<string>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var trydocument = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
+if(trydocument.IsError){
+return ReadResult<IObject>.Move(trydocument);
+}
+Document = trydocument.Value;
+			var tryemoji = reader.ReadString();
+if(tryemoji.IsError){
+return ReadResult<IObject>.Move(tryemoji);
+}
+Emoji = tryemoji.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				MaskCoords = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MaskCoordsBase>();
+				var trymaskCoords = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.MaskCoordsBase>();
+if(trymaskCoords.IsError){
+return ReadResult<IObject>.Move(trymaskCoords);
+}
+MaskCoords = trymaskCoords.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

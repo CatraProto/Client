@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int ConstructorId { get => 651135312; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.DhConfigBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("version")]
 		public int Version { get; set; }
@@ -46,18 +46,29 @@ RandomLength = randomLength;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Version);
-			writer.Write(RandomLength);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt32(Version);
+writer.WriteInt32(RandomLength);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Version = reader.Read<int>();
-			RandomLength = reader.Read<int>();
+			var tryversion = reader.ReadInt32();
+if(tryversion.IsError){
+return ReadResult<IObject>.Move(tryversion);
+}
+Version = tryversion.Value;
+			var tryrandomLength = reader.ReadInt32();
+if(tryrandomLength.IsError){
+return ReadResult<IObject>.Move(tryrandomLength);
+}
+RandomLength = tryrandomLength.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

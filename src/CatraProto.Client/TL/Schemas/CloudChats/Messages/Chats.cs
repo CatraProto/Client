@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -15,11 +17,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int ConstructorId { get => 1694474197; }
         
 [Newtonsoft.Json.JsonProperty("chats")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> ChatsField { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> ChatsField { get; set; }
 
 
         #nullable enable
- public Chats (IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> chatsField)
+ public Chats (List<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> chatsField)
 {
  ChatsField = chatsField;
  
@@ -34,16 +36,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(ChatsField);
+writer.WriteInt32(ConstructorId);
+var checkchatsField = 			writer.WriteVector(ChatsField, false);
+if(checkchatsField.IsError){
+ return checkchatsField; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			ChatsField = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
+			var trychatsField = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trychatsField.IsError){
+return ReadResult<IObject>.Move(trychatsField);
+}
+ChatsField = trychatsField.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

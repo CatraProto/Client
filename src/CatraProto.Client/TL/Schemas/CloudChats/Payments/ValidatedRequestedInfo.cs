@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -22,11 +24,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("id")]
 		public sealed override string Id { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("shipping_options")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.ShippingOptionBase> ShippingOptions { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.ShippingOptionBase> ShippingOptions { get; set; }
 
 
         
@@ -41,37 +45,57 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
+
+			writer.WriteInt32(Flags);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(Id);
+
+				writer.WriteString(Id);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(ShippingOptions);
+var checkshippingOptions = 				writer.WriteVector(ShippingOptions, false);
+if(checkshippingOptions.IsError){
+ return checkshippingOptions; 
+}
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Id = reader.Read<string>();
+				var tryid = reader.ReadString();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				ShippingOptions = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ShippingOptionBase>();
+				var tryshippingOptions = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ShippingOptionBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryshippingOptions.IsError){
+return ReadResult<IObject>.Move(tryshippingOptions);
+}
+ShippingOptions = tryshippingOptions.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

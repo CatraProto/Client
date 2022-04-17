@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -54,26 +56,61 @@ VenueType = venueType;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Geo);
-			writer.Write(Title);
-			writer.Write(Address);
-			writer.Write(Provider);
-			writer.Write(VenueId);
-			writer.Write(VenueType);
+writer.WriteInt32(ConstructorId);
+var checkgeo = 			writer.WriteObject(Geo);
+if(checkgeo.IsError){
+ return checkgeo; 
+}
+
+			writer.WriteString(Title);
+
+			writer.WriteString(Address);
+
+			writer.WriteString(Provider);
+
+			writer.WriteString(VenueId);
+
+			writer.WriteString(VenueType);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Geo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase>();
-			Title = reader.Read<string>();
-			Address = reader.Read<string>();
-			Provider = reader.Read<string>();
-			VenueId = reader.Read<string>();
-			VenueType = reader.Read<string>();
+			var trygeo = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase>();
+if(trygeo.IsError){
+return ReadResult<IObject>.Move(trygeo);
+}
+Geo = trygeo.Value;
+			var trytitle = reader.ReadString();
+if(trytitle.IsError){
+return ReadResult<IObject>.Move(trytitle);
+}
+Title = trytitle.Value;
+			var tryaddress = reader.ReadString();
+if(tryaddress.IsError){
+return ReadResult<IObject>.Move(tryaddress);
+}
+Address = tryaddress.Value;
+			var tryprovider = reader.ReadString();
+if(tryprovider.IsError){
+return ReadResult<IObject>.Move(tryprovider);
+}
+Provider = tryprovider.Value;
+			var tryvenueId = reader.ReadString();
+if(tryvenueId.IsError){
+return ReadResult<IObject>.Move(tryvenueId);
+}
+VenueId = tryvenueId.Value;
+			var tryvenueType = reader.ReadString();
+if(tryvenueType.IsError){
+return ReadResult<IObject>.Move(tryvenueType);
+}
+VenueType = tryvenueType.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

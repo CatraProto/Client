@@ -1,5 +1,7 @@
 using CatraProto.TL;
+using CatraProto.TL.Results;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL.Interfaces;
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -25,6 +27,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("lang_code")]
 		public abstract string LangCode { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("base_lang_code")]
 		public abstract string BaseLangCode { get; set; }
 
@@ -41,8 +44,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public abstract string TranslationsUrl { get; set; }
 
         public abstract void UpdateFlags();
-        public abstract void Deserialize(Reader reader);
-        public abstract void Serialize(Writer writer);
+        public abstract ReadResult<IObject> Deserialize(Reader reader);
+        public abstract WriteResult Serialize(Writer writer);
         public abstract int GetConstructorId();
     }
 }

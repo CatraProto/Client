@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -66,32 +68,76 @@ Region = region;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Hash);
-			writer.Write(BotId);
-			writer.Write(Domain);
-			writer.Write(Browser);
-			writer.Write(Platform);
-			writer.Write(DateCreated);
-			writer.Write(DateActive);
-			writer.Write(Ip);
-			writer.Write(Region);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(Hash);
+writer.WriteInt64(BotId);
+
+			writer.WriteString(Domain);
+
+			writer.WriteString(Browser);
+
+			writer.WriteString(Platform);
+writer.WriteInt32(DateCreated);
+writer.WriteInt32(DateActive);
+
+			writer.WriteString(Ip);
+
+			writer.WriteString(Region);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Hash = reader.Read<long>();
-			BotId = reader.Read<long>();
-			Domain = reader.Read<string>();
-			Browser = reader.Read<string>();
-			Platform = reader.Read<string>();
-			DateCreated = reader.Read<int>();
-			DateActive = reader.Read<int>();
-			Ip = reader.Read<string>();
-			Region = reader.Read<string>();
+			var tryhash = reader.ReadInt64();
+if(tryhash.IsError){
+return ReadResult<IObject>.Move(tryhash);
+}
+Hash = tryhash.Value;
+			var trybotId = reader.ReadInt64();
+if(trybotId.IsError){
+return ReadResult<IObject>.Move(trybotId);
+}
+BotId = trybotId.Value;
+			var trydomain = reader.ReadString();
+if(trydomain.IsError){
+return ReadResult<IObject>.Move(trydomain);
+}
+Domain = trydomain.Value;
+			var trybrowser = reader.ReadString();
+if(trybrowser.IsError){
+return ReadResult<IObject>.Move(trybrowser);
+}
+Browser = trybrowser.Value;
+			var tryplatform = reader.ReadString();
+if(tryplatform.IsError){
+return ReadResult<IObject>.Move(tryplatform);
+}
+Platform = tryplatform.Value;
+			var trydateCreated = reader.ReadInt32();
+if(trydateCreated.IsError){
+return ReadResult<IObject>.Move(trydateCreated);
+}
+DateCreated = trydateCreated.Value;
+			var trydateActive = reader.ReadInt32();
+if(trydateActive.IsError){
+return ReadResult<IObject>.Move(trydateActive);
+}
+DateActive = trydateActive.Value;
+			var tryip = reader.ReadString();
+if(tryip.IsError){
+return ReadResult<IObject>.Move(tryip);
+}
+Ip = tryip.Value;
+			var tryregion = reader.ReadString();
+if(tryregion.IsError){
+return ReadResult<IObject>.Move(tryregion);
+}
+Region = tryregion.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

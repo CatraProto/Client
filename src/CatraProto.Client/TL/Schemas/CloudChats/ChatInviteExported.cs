@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -62,6 +64,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("requested")]
 		public sealed override int? Requested { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("title")]
 		public sealed override string Title { get; set; }
 
@@ -93,86 +96,132 @@ Date = date;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Link);
-			writer.Write(AdminId);
-			writer.Write(Date);
+
+			writer.WriteInt32(Flags);
+
+			writer.WriteString(Link);
+writer.WriteInt64(AdminId);
+writer.WriteInt32(Date);
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				writer.Write(StartDate.Value);
+writer.WriteInt32(StartDate.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(ExpireDate.Value);
+writer.WriteInt32(ExpireDate.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(UsageLimit.Value);
+writer.WriteInt32(UsageLimit.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				writer.Write(Usage.Value);
+writer.WriteInt32(Usage.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 7))
 			{
-				writer.Write(Requested.Value);
+writer.WriteInt32(Requested.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 8))
 			{
-				writer.Write(Title);
+
+				writer.WriteString(Title);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Revoked = FlagsHelper.IsFlagSet(Flags, 0);
 			Permanent = FlagsHelper.IsFlagSet(Flags, 5);
 			RequestNeeded = FlagsHelper.IsFlagSet(Flags, 6);
-			Link = reader.Read<string>();
-			AdminId = reader.Read<long>();
-			Date = reader.Read<int>();
+			var trylink = reader.ReadString();
+if(trylink.IsError){
+return ReadResult<IObject>.Move(trylink);
+}
+Link = trylink.Value;
+			var tryadminId = reader.ReadInt64();
+if(tryadminId.IsError){
+return ReadResult<IObject>.Move(tryadminId);
+}
+AdminId = tryadminId.Value;
+			var trydate = reader.ReadInt32();
+if(trydate.IsError){
+return ReadResult<IObject>.Move(trydate);
+}
+Date = trydate.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				StartDate = reader.Read<int>();
+				var trystartDate = reader.ReadInt32();
+if(trystartDate.IsError){
+return ReadResult<IObject>.Move(trystartDate);
+}
+StartDate = trystartDate.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				ExpireDate = reader.Read<int>();
+				var tryexpireDate = reader.ReadInt32();
+if(tryexpireDate.IsError){
+return ReadResult<IObject>.Move(tryexpireDate);
+}
+ExpireDate = tryexpireDate.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				UsageLimit = reader.Read<int>();
+				var tryusageLimit = reader.ReadInt32();
+if(tryusageLimit.IsError){
+return ReadResult<IObject>.Move(tryusageLimit);
+}
+UsageLimit = tryusageLimit.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				Usage = reader.Read<int>();
+				var tryusage = reader.ReadInt32();
+if(tryusage.IsError){
+return ReadResult<IObject>.Move(tryusage);
+}
+Usage = tryusage.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 7))
 			{
-				Requested = reader.Read<int>();
+				var tryrequested = reader.ReadInt32();
+if(tryrequested.IsError){
+return ReadResult<IObject>.Move(tryrequested);
+}
+Requested = tryrequested.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 8))
 			{
-				Title = reader.Read<string>();
+				var trytitle = reader.ReadString();
+if(trytitle.IsError){
+return ReadResult<IObject>.Move(trytitle);
+}
+Title = trytitle.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

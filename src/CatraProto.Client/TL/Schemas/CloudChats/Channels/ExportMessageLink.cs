@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -21,10 +24,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
         public static int ConstructorId { get => -432034325; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.ExportedMessageLinkBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -62,23 +62,42 @@ Id = id;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Channel);
-			writer.Write(Id);
+
+			writer.WriteInt32(Flags);
+var checkchannel = 			writer.WriteObject(Channel);
+if(checkchannel.IsError){
+ return checkchannel; 
+}
+writer.WriteInt32(Id);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Grouped = FlagsHelper.IsFlagSet(Flags, 0);
 			Thread = FlagsHelper.IsFlagSet(Flags, 1);
-			Channel = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
-			Id = reader.Read<int>();
+			var trychannel = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
+if(trychannel.IsError){
+return ReadResult<IObject>.Move(trychannel);
+}
+Channel = trychannel.Value;
+			var tryid = reader.ReadInt32();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

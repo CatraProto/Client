@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -18,11 +20,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		public long Hash { get; set; }
 
 [Newtonsoft.Json.JsonProperty("themes")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.ThemeBase> ThemesField { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.ThemeBase> ThemesField { get; set; }
 
 
         #nullable enable
- public Themes (long hash,IList<CatraProto.Client.TL.Schemas.CloudChats.ThemeBase> themesField)
+ public Themes (long hash,List<CatraProto.Client.TL.Schemas.CloudChats.ThemeBase> themesField)
 {
  Hash = hash;
 ThemesField = themesField;
@@ -38,18 +40,32 @@ ThemesField = themesField;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Hash);
-			writer.Write(ThemesField);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(Hash);
+var checkthemesField = 			writer.WriteVector(ThemesField, false);
+if(checkthemesField.IsError){
+ return checkthemesField; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Hash = reader.Read<long>();
-			ThemesField = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ThemeBase>();
+			var tryhash = reader.ReadInt64();
+if(tryhash.IsError){
+return ReadResult<IObject>.Move(tryhash);
+}
+Hash = tryhash.Value;
+			var trythemesField = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ThemeBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trythemesField.IsError){
+return ReadResult<IObject>.Move(trythemesField);
+}
+ThemesField = trythemesField.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

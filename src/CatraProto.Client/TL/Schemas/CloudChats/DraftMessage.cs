@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -32,8 +34,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("message")]
 		public string Message { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("entities")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
 
 [Newtonsoft.Json.JsonProperty("date")]
 		public int Date { get; set; }
@@ -59,42 +62,70 @@ Date = date;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
+
+			writer.WriteInt32(Flags);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(ReplyToMsgId.Value);
+writer.WriteInt32(ReplyToMsgId.Value);
 			}
 
-			writer.Write(Message);
+
+			writer.WriteString(Message);
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				writer.Write(Entities);
+var checkentities = 				writer.WriteVector(Entities, false);
+if(checkentities.IsError){
+ return checkentities; 
+}
 			}
 
-			writer.Write(Date);
+writer.WriteInt32(Date);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			NoWebpage = FlagsHelper.IsFlagSet(Flags, 1);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				ReplyToMsgId = reader.Read<int>();
+				var tryreplyToMsgId = reader.ReadInt32();
+if(tryreplyToMsgId.IsError){
+return ReadResult<IObject>.Move(tryreplyToMsgId);
+}
+ReplyToMsgId = tryreplyToMsgId.Value;
 			}
 
-			Message = reader.Read<string>();
+			var trymessage = reader.ReadString();
+if(trymessage.IsError){
+return ReadResult<IObject>.Move(trymessage);
+}
+Message = trymessage.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
+				var tryentities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryentities.IsError){
+return ReadResult<IObject>.Move(tryentities);
+}
+Entities = tryentities.Value;
 			}
 
-			Date = reader.Read<int>();
+			var trydate = reader.ReadInt32();
+if(trydate.IsError){
+return ReadResult<IObject>.Move(trydate);
+}
+Date = trydate.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

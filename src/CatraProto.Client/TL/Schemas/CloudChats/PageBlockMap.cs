@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -50,24 +52,53 @@ Caption = caption;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Geo);
-			writer.Write(Zoom);
-			writer.Write(W);
-			writer.Write(H);
-			writer.Write(Caption);
+writer.WriteInt32(ConstructorId);
+var checkgeo = 			writer.WriteObject(Geo);
+if(checkgeo.IsError){
+ return checkgeo; 
+}
+writer.WriteInt32(Zoom);
+writer.WriteInt32(W);
+writer.WriteInt32(H);
+var checkcaption = 			writer.WriteObject(Caption);
+if(checkcaption.IsError){
+ return checkcaption; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Geo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase>();
-			Zoom = reader.Read<int>();
-			W = reader.Read<int>();
-			H = reader.Read<int>();
-			Caption = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase>();
+			var trygeo = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase>();
+if(trygeo.IsError){
+return ReadResult<IObject>.Move(trygeo);
+}
+Geo = trygeo.Value;
+			var tryzoom = reader.ReadInt32();
+if(tryzoom.IsError){
+return ReadResult<IObject>.Move(tryzoom);
+}
+Zoom = tryzoom.Value;
+			var tryw = reader.ReadInt32();
+if(tryw.IsError){
+return ReadResult<IObject>.Move(tryw);
+}
+W = tryw.Value;
+			var tryh = reader.ReadInt32();
+if(tryh.IsError){
+return ReadResult<IObject>.Move(tryh);
+}
+H = tryh.Value;
+			var trycaption = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase>();
+if(trycaption.IsError){
+return ReadResult<IObject>.Move(trycaption);
+}
+Caption = trycaption.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

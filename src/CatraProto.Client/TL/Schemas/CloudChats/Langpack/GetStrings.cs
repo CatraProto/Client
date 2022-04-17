@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Langpack
         public static int ConstructorId { get => -269862909; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.LangPackStringBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = true;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("lang_pack")]
 		public string LangPack { get; set; }
@@ -28,11 +28,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Langpack
 		public string LangCode { get; set; }
 
 [Newtonsoft.Json.JsonProperty("keys")]
-		public IList<string> Keys { get; set; }
+		public List<string> Keys { get; set; }
 
         
         #nullable enable
- public GetStrings (string langPack,string langCode,IList<string> keys)
+ public GetStrings (string langPack,string langCode,List<string> keys)
 {
  LangPack = langPack;
 LangCode = langCode;
@@ -50,20 +50,38 @@ Keys = keys;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(LangPack);
-			writer.Write(LangCode);
-			writer.Write(Keys);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteString(LangPack);
+
+			writer.WriteString(LangCode);
+
+			writer.WriteVector(Keys, false);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			LangPack = reader.Read<string>();
-			LangCode = reader.Read<string>();
-			Keys = reader.ReadVector<string>();
+			var trylangPack = reader.ReadString();
+if(trylangPack.IsError){
+return ReadResult<IObject>.Move(trylangPack);
+}
+LangPack = trylangPack.Value;
+			var trylangCode = reader.ReadString();
+if(trylangCode.IsError){
+return ReadResult<IObject>.Move(trylangCode);
+}
+LangCode = trylangCode.Value;
+			var trykeys = reader.ReadVector<string>(ParserTypes.String, nakedVector: false, nakedObjects: false);
+if(trykeys.IsError){
+return ReadResult<IObject>.Move(trykeys);
+}
+Keys = trykeys.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

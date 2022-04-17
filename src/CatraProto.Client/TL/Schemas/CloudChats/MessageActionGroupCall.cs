@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -45,29 +47,48 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Call);
+
+			writer.WriteInt32(Flags);
+var checkcall = 			writer.WriteObject(Call);
+if(checkcall.IsError){
+ return checkcall; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(Duration.Value);
+writer.WriteInt32(Duration.Value);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			Call = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var trycall = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase>();
+if(trycall.IsError){
+return ReadResult<IObject>.Move(trycall);
+}
+Call = trycall.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Duration = reader.Read<int>();
+				var tryduration = reader.ReadInt32();
+if(tryduration.IsError){
+return ReadResult<IObject>.Move(tryduration);
+}
+Duration = tryduration.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

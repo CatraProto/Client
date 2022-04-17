@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -53,14 +55,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase Protocol { get; set; }
 
 [Newtonsoft.Json.JsonProperty("connections")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.PhoneConnectionBase> Connections { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.PhoneConnectionBase> Connections { get; set; }
 
 [Newtonsoft.Json.JsonProperty("start_date")]
 		public int StartDate { get; set; }
 
 
         #nullable enable
- public PhoneCall (long id,long accessHash,int date,long adminId,long participantId,byte[] gAOrB,long keyFingerprint,CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase protocol,IList<CatraProto.Client.TL.Schemas.CloudChats.PhoneConnectionBase> connections,int startDate)
+ public PhoneCall (long id,long accessHash,int date,long adminId,long participantId,byte[] gAOrB,long keyFingerprint,CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase protocol,List<CatraProto.Client.TL.Schemas.CloudChats.PhoneConnectionBase> connections,int startDate)
 {
  Id = id;
 AccessHash = accessHash;
@@ -86,39 +88,94 @@ StartDate = startDate;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Id);
-			writer.Write(AccessHash);
-			writer.Write(Date);
-			writer.Write(AdminId);
-			writer.Write(ParticipantId);
-			writer.Write(GAOrB);
-			writer.Write(KeyFingerprint);
-			writer.Write(Protocol);
-			writer.Write(Connections);
-			writer.Write(StartDate);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt64(Id);
+writer.WriteInt64(AccessHash);
+writer.WriteInt32(Date);
+writer.WriteInt64(AdminId);
+writer.WriteInt64(ParticipantId);
+
+			writer.WriteBytes(GAOrB);
+writer.WriteInt64(KeyFingerprint);
+var checkprotocol = 			writer.WriteObject(Protocol);
+if(checkprotocol.IsError){
+ return checkprotocol; 
+}
+var checkconnections = 			writer.WriteVector(Connections, false);
+if(checkconnections.IsError){
+ return checkconnections; 
+}
+writer.WriteInt32(StartDate);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			P2pAllowed = FlagsHelper.IsFlagSet(Flags, 5);
 			Video = FlagsHelper.IsFlagSet(Flags, 6);
-			Id = reader.Read<long>();
-			AccessHash = reader.Read<long>();
-			Date = reader.Read<int>();
-			AdminId = reader.Read<long>();
-			ParticipantId = reader.Read<long>();
-			GAOrB = reader.Read<byte[]>();
-			KeyFingerprint = reader.Read<long>();
-			Protocol = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase>();
-			Connections = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PhoneConnectionBase>();
-			StartDate = reader.Read<int>();
+			var tryid = reader.ReadInt64();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var tryaccessHash = reader.ReadInt64();
+if(tryaccessHash.IsError){
+return ReadResult<IObject>.Move(tryaccessHash);
+}
+AccessHash = tryaccessHash.Value;
+			var trydate = reader.ReadInt32();
+if(trydate.IsError){
+return ReadResult<IObject>.Move(trydate);
+}
+Date = trydate.Value;
+			var tryadminId = reader.ReadInt64();
+if(tryadminId.IsError){
+return ReadResult<IObject>.Move(tryadminId);
+}
+AdminId = tryadminId.Value;
+			var tryparticipantId = reader.ReadInt64();
+if(tryparticipantId.IsError){
+return ReadResult<IObject>.Move(tryparticipantId);
+}
+ParticipantId = tryparticipantId.Value;
+			var trygAOrB = reader.ReadBytes();
+if(trygAOrB.IsError){
+return ReadResult<IObject>.Move(trygAOrB);
+}
+GAOrB = trygAOrB.Value;
+			var trykeyFingerprint = reader.ReadInt64();
+if(trykeyFingerprint.IsError){
+return ReadResult<IObject>.Move(trykeyFingerprint);
+}
+KeyFingerprint = trykeyFingerprint.Value;
+			var tryprotocol = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase>();
+if(tryprotocol.IsError){
+return ReadResult<IObject>.Move(tryprotocol);
+}
+Protocol = tryprotocol.Value;
+			var tryconnections = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PhoneConnectionBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryconnections.IsError){
+return ReadResult<IObject>.Move(tryconnections);
+}
+Connections = tryconnections.Value;
+			var trystartDate = reader.ReadInt32();
+if(trystartDate.IsError){
+return ReadResult<IObject>.Move(trystartDate);
+}
+StartDate = trystartDate.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

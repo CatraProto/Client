@@ -6,7 +6,7 @@ using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.MTProto.Rpc;
 using CatraProto.TL.Interfaces;
 using CatraProto.Client;
-using CatraProto.Client.MTProto.Rpc.RpcErrors.CatraErrors;
+using CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors;
 using System.Collections.Generic;
 using System.Numerics;
 
@@ -26,10 +26,10 @@ namespace CatraProto.Client.TL.Requests
 	        
 	    }
 	    
-	    public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.ResPQBase>> ReqPqAsync(System.Numerics.BigInteger nonce, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+	    public async Task<RpcResponse<CatraProto.Client.TL.Schemas.MTProto.ResPQBase>> ReqPqAsync(System.Numerics.BigInteger nonce, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.MTProto.ResPQBase>(
+var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.MTProto.ResPQBase>(
 );
 messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: false);
 var methodBody = new CatraProto.Client.TL.Schemas.MTProto.ReqPq(){
@@ -40,10 +40,10 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource!;
 return rpcResponse;
 }
-public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.ResPQBase>> ReqPqMultiAsync(System.Numerics.BigInteger nonce, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+public async Task<RpcResponse<CatraProto.Client.TL.Schemas.MTProto.ResPQBase>> ReqPqMultiAsync(System.Numerics.BigInteger nonce, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.MTProto.ResPQBase>(
+var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.MTProto.ResPQBase>(
 );
 messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: false);
 var methodBody = new CatraProto.Client.TL.Schemas.MTProto.ReqPqMulti(){
@@ -54,10 +54,10 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource!;
 return rpcResponse;
 }
-public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.ServerDHParamsBase>> ReqDHParamsAsync(System.Numerics.BigInteger nonce, System.Numerics.BigInteger serverNonce, byte[] p, byte[] q, long publicKeyFingerprint, byte[] encryptedData, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+public async Task<RpcResponse<CatraProto.Client.TL.Schemas.MTProto.ServerDHParamsBase>> ReqDHParamsAsync(System.Numerics.BigInteger nonce, System.Numerics.BigInteger serverNonce, byte[] p, byte[] q, long publicKeyFingerprint, byte[] encryptedData, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.MTProto.ServerDHParamsBase>(
+var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.MTProto.ServerDHParamsBase>(
 );
 messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: false);
 var methodBody = new CatraProto.Client.TL.Schemas.MTProto.ReqDHParams(){
@@ -73,10 +73,10 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource!;
 return rpcResponse;
 }
-public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.SetClientDHParamsAnswerBase>> SetClientDHParamsAsync(System.Numerics.BigInteger nonce, System.Numerics.BigInteger serverNonce, byte[] encryptedData, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+public async Task<RpcResponse<CatraProto.Client.TL.Schemas.MTProto.SetClientDHParamsAnswerBase>> SetClientDHParamsAsync(System.Numerics.BigInteger nonce, System.Numerics.BigInteger serverNonce, byte[] encryptedData, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.MTProto.SetClientDHParamsAnswerBase>(
+var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.MTProto.SetClientDHParamsAnswerBase>(
 );
 messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: false);
 var methodBody = new CatraProto.Client.TL.Schemas.MTProto.SetClientDHParams(){
@@ -89,10 +89,10 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource!;
 return rpcResponse;
 }
-public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.RpcDropAnswerBase>> RpcDropAnswerAsync(long reqMsgId, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+public async Task<RpcResponse<CatraProto.Client.TL.Schemas.MTProto.RpcDropAnswerBase>> RpcDropAnswerAsync(long reqMsgId, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.MTProto.RpcDropAnswerBase>(
+var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.MTProto.RpcDropAnswerBase>(
 );
 messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
 var methodBody = new CatraProto.Client.TL.Schemas.MTProto.RpcDropAnswer(){
@@ -103,10 +103,10 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource!;
 return rpcResponse;
 }
-public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.FutureSaltsBase>> GetFutureSaltsAsync(int num, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+public async Task<RpcResponse<CatraProto.Client.TL.Schemas.MTProto.FutureSaltsBase>> GetFutureSaltsAsync(int num, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.MTProto.FutureSaltsBase>(
+var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.MTProto.FutureSaltsBase>(
 );
 messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
 var methodBody = new CatraProto.Client.TL.Schemas.MTProto.GetFutureSalts(){
@@ -117,10 +117,10 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource!;
 return rpcResponse;
 }
-public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.PongBase>> PingAsync(long pingId, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+public async Task<RpcResponse<CatraProto.Client.TL.Schemas.MTProto.PongBase>> PingAsync(long pingId, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.MTProto.PongBase>(
+var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.MTProto.PongBase>(
 );
 messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
 var methodBody = new CatraProto.Client.TL.Schemas.MTProto.Ping(){
@@ -131,10 +131,10 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource!;
 return rpcResponse;
 }
-public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.PongBase>> PingDelayDisconnectAsync(long pingId, int disconnectDelay, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+public async Task<RpcResponse<CatraProto.Client.TL.Schemas.MTProto.PongBase>> PingDelayDisconnectAsync(long pingId, int disconnectDelay, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.MTProto.PongBase>(
+var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.MTProto.PongBase>(
 );
 messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
 var methodBody = new CatraProto.Client.TL.Schemas.MTProto.PingDelayDisconnect(){
@@ -146,10 +146,10 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource!;
 return rpcResponse;
 }
-public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.DestroySessionResBase>> DestroySessionAsync(long sessionId, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+public async Task<RpcResponse<CatraProto.Client.TL.Schemas.MTProto.DestroySessionResBase>> DestroySessionAsync(long sessionId, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.MTProto.DestroySessionResBase>(
+var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.MTProto.DestroySessionResBase>(
 );
 messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
 var methodBody = new CatraProto.Client.TL.Schemas.MTProto.DestroySession(){
@@ -160,10 +160,10 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource!;
 return rpcResponse;
 }
-public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.HttpWaitBase>> HttpWaitAsync(int maxDelay, int waitAfter, int maxWait, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+public async Task<RpcResponse<CatraProto.Client.TL.Schemas.MTProto.HttpWaitBase>> HttpWaitAsync(int maxDelay, int waitAfter, int maxWait, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.MTProto.HttpWaitBase>(
+var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.MTProto.HttpWaitBase>(
 );
 messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
 var methodBody = new CatraProto.Client.TL.Schemas.MTProto.HttpWait(){
@@ -176,10 +176,10 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource!;
 return rpcResponse;
 }
-public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.MsgsStateInfoBase>> MsgsStateReqAsync(IList<long> msgIds, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+public async Task<RpcResponse<CatraProto.Client.TL.Schemas.MTProto.MsgsStateInfoBase>> MsgsStateReqAsync(List<long> msgIds, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.MTProto.MsgsStateInfoBase>(
+var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.MTProto.MsgsStateInfoBase>(
 );
 messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
 var methodBody = new CatraProto.Client.TL.Schemas.MTProto.MsgsStateReq(){
@@ -190,10 +190,10 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource!;
 return rpcResponse;
 }
-public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.MsgsStateInfoBase>> MsgResendReqAsync(IList<long> msgIds, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+public async Task<RpcResponse<CatraProto.Client.TL.Schemas.MTProto.MsgsStateInfoBase>> MsgResendReqAsync(List<long> msgIds, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.MTProto.MsgsStateInfoBase>(
+var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.MTProto.MsgsStateInfoBase>(
 );
 messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
 var methodBody = new CatraProto.Client.TL.Schemas.MTProto.MsgResendReq(){
@@ -204,10 +204,10 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource!;
 return rpcResponse;
 }
-public async Task<RpcMessage<CatraProto.Client.TL.Schemas.MTProto.MsgsStateInfoBase>> MsgResendAnsReqAsync(IList<long> msgIds, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+public async Task<RpcResponse<CatraProto.Client.TL.Schemas.MTProto.MsgsStateInfoBase>> MsgResendAnsReqAsync(List<long> msgIds, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcMessage<CatraProto.Client.TL.Schemas.MTProto.MsgsStateInfoBase>(
+var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.MTProto.MsgsStateInfoBase>(
 );
 messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
 var methodBody = new CatraProto.Client.TL.Schemas.MTProto.MsgResendAnsReq(){

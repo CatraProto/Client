@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
         public static int ConstructorId { get => -4795190; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("sticker")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase Sticker { get; set; }
@@ -46,18 +46,32 @@ Position = position;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Sticker);
-			writer.Write(Position);
+writer.WriteInt32(ConstructorId);
+var checksticker = 			writer.WriteObject(Sticker);
+if(checksticker.IsError){
+ return checksticker; 
+}
+writer.WriteInt32(Position);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Sticker = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
-			Position = reader.Read<int>();
+			var trysticker = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
+if(trysticker.IsError){
+return ReadResult<IObject>.Move(trysticker);
+}
+Sticker = trysticker.Value;
+			var tryposition = reader.ReadInt32();
+if(tryposition.IsError){
+return ReadResult<IObject>.Move(tryposition);
+}
+Position = tryposition.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

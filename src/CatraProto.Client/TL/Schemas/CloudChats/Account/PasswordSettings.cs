@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -22,9 +24,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("email")]
 		public sealed override string Email { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("secure_settings")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.SecureSecretSettingsBase SecureSettings { get; set; }
 
@@ -41,37 +45,57 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
+
+			writer.WriteInt32(Flags);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(Email);
+
+				writer.WriteString(Email);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(SecureSettings);
+var checksecureSettings = 				writer.WriteObject(SecureSettings);
+if(checksecureSettings.IsError){
+ return checksecureSettings; 
+}
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Email = reader.Read<string>();
+				var tryemail = reader.ReadString();
+if(tryemail.IsError){
+return ReadResult<IObject>.Move(tryemail);
+}
+Email = tryemail.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				SecureSettings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SecureSecretSettingsBase>();
+				var trysecureSettings = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.SecureSecretSettingsBase>();
+if(trysecureSettings.IsError){
+return ReadResult<IObject>.Move(trysecureSettings);
+}
+SecureSettings = trysecureSettings.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

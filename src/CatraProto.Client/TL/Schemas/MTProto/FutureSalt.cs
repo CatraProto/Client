@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -42,20 +44,35 @@ Salt = salt;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(ValidSince);
-			writer.Write(ValidUntil);
-			writer.Write(Salt);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt32(ValidSince);
+writer.WriteInt32(ValidUntil);
+writer.WriteInt64(Salt);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			ValidSince = reader.Read<int>();
-			ValidUntil = reader.Read<int>();
-			Salt = reader.Read<long>();
+			var tryvalidSince = reader.ReadInt32();
+if(tryvalidSince.IsError){
+return ReadResult<IObject>.Move(tryvalidSince);
+}
+ValidSince = tryvalidSince.Value;
+			var tryvalidUntil = reader.ReadInt32();
+if(tryvalidUntil.IsError){
+return ReadResult<IObject>.Move(tryvalidUntil);
+}
+ValidUntil = tryvalidUntil.Value;
+			var trysalt = reader.ReadInt64();
+if(trysalt.IsError){
+return ReadResult<IObject>.Move(trysalt);
+}
+Salt = trysalt.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

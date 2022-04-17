@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public static int ConstructorId { get => -806076575; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
 
 [Newtonsoft.Json.JsonProperty("silent")]
 		public bool Silent { get; set; }
@@ -42,16 +42,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Silent);
+writer.WriteInt32(ConstructorId);
+var checksilent = 			writer.WriteBool(Silent);
+if(checksilent.IsError){
+ return checksilent; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Silent = reader.Read<bool>();
+			var trysilent = reader.ReadBool();
+if(trysilent.IsError){
+return ReadResult<IObject>.Move(trysilent);
+}
+Silent = trysilent.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

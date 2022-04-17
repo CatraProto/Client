@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -42,20 +44,35 @@ KeyFingerprint = keyFingerprint;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Id);
-			writer.Write(Parts);
-			writer.Write(KeyFingerprint);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(Id);
+writer.WriteInt32(Parts);
+writer.WriteInt32(KeyFingerprint);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Id = reader.Read<long>();
-			Parts = reader.Read<int>();
-			KeyFingerprint = reader.Read<int>();
+			var tryid = reader.ReadInt64();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var tryparts = reader.ReadInt32();
+if(tryparts.IsError){
+return ReadResult<IObject>.Move(tryparts);
+}
+Parts = tryparts.Value;
+			var trykeyFingerprint = reader.ReadInt32();
+if(trykeyFingerprint.IsError){
+return ReadResult<IObject>.Move(trykeyFingerprint);
+}
+KeyFingerprint = trykeyFingerprint.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

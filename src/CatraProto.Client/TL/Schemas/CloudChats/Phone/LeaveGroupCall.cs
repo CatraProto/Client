@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
         public static int ConstructorId { get => 1342404601; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("call")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase Call { get; set; }
@@ -46,18 +46,32 @@ Source = source;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Call);
-			writer.Write(Source);
+writer.WriteInt32(ConstructorId);
+var checkcall = 			writer.WriteObject(Call);
+if(checkcall.IsError){
+ return checkcall; 
+}
+writer.WriteInt32(Source);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Call = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase>();
-			Source = reader.Read<int>();
+			var trycall = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase>();
+if(trycall.IsError){
+return ReadResult<IObject>.Move(trycall);
+}
+Call = trycall.Value;
+			var trysource = reader.ReadInt32();
+if(trysource.IsError){
+return ReadResult<IObject>.Move(trysource);
+}
+Source = trysource.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

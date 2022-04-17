@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,35 @@ NotifySettings = notifySettings;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Peer);
-			writer.Write(NotifySettings);
+writer.WriteInt32(ConstructorId);
+var checkpeer = 			writer.WriteObject(Peer);
+if(checkpeer.IsError){
+ return checkpeer; 
+}
+var checknotifySettings = 			writer.WriteObject(NotifySettings);
+if(checknotifySettings.IsError){
+ return checknotifySettings; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.NotifyPeerBase>();
-			NotifySettings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase>();
+			var trypeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.NotifyPeerBase>();
+if(trypeer.IsError){
+return ReadResult<IObject>.Move(trypeer);
+}
+Peer = trypeer.Value;
+			var trynotifySettings = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase>();
+if(trynotifySettings.IsError){
+return ReadResult<IObject>.Move(trynotifySettings);
+}
+NotifySettings = trynotifySettings.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,35 @@ NewInvite = newInvite;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(PrevInvite);
-			writer.Write(NewInvite);
+writer.WriteInt32(ConstructorId);
+var checkprevInvite = 			writer.WriteObject(PrevInvite);
+if(checkprevInvite.IsError){
+ return checkprevInvite; 
+}
+var checknewInvite = 			writer.WriteObject(NewInvite);
+if(checknewInvite.IsError){
+ return checknewInvite; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			PrevInvite = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ExportedChatInviteBase>();
-			NewInvite = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ExportedChatInviteBase>();
+			var tryprevInvite = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ExportedChatInviteBase>();
+if(tryprevInvite.IsError){
+return ReadResult<IObject>.Move(tryprevInvite);
+}
+PrevInvite = tryprevInvite.Value;
+			var trynewInvite = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ExportedChatInviteBase>();
+if(trynewInvite.IsError){
+return ReadResult<IObject>.Move(trynewInvite);
+}
+NewInvite = trynewInvite.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

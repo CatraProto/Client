@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
         public static int ConstructorId { get => -1099002127; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.ResPQBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("nonce")]
 		public System.Numerics.BigInteger Nonce { get; set; }
@@ -42,16 +42,24 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Nonce);
+writer.WriteInt32(ConstructorId);
+var checkNonce = writer.WriteBigInteger(Nonce);
+if(checkNonce.IsError){ return checkNonce;}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Nonce = reader.Read<System.Numerics.BigInteger>(128);
+			var trynonce = reader.ReadBigInteger(128);
+if(trynonce.IsError){
+return ReadResult<IObject>.Move(trynonce);
+}
+Nonce = trynonce.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

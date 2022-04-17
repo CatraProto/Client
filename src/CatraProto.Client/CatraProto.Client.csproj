@@ -18,9 +18,4 @@
         <InternalsVisibleTo Include="CatraProto.Client.Benchmark" />
         <ProjectReference Include="..\CatraProto.TL\CatraProto.TL.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-        <Folder Include="Connections\MessageScheduling\Items\Interfaces" />
-        <Folder Include="Database\Exceptions" />
-    </ItemGroup>
 </Project>

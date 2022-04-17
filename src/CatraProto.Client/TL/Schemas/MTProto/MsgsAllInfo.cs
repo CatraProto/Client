@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -15,14 +17,14 @@ namespace CatraProto.Client.TL.Schemas.MTProto
         public static int ConstructorId { get => -1933520591; }
         
 [Newtonsoft.Json.JsonProperty("msg_ids")]
-		public sealed override IList<long> MsgIds { get; set; }
+		public sealed override List<long> MsgIds { get; set; }
 
 [Newtonsoft.Json.JsonProperty("info")]
 		public sealed override byte[] Info { get; set; }
 
 
         #nullable enable
- public MsgsAllInfo (IList<long> msgIds,byte[] info)
+ public MsgsAllInfo (List<long> msgIds,byte[] info)
 {
  MsgIds = msgIds;
 Info = info;
@@ -38,18 +40,31 @@ Info = info;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(MsgIds);
-			writer.Write(Info);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteVector(MsgIds, false);
+
+			writer.WriteBytes(Info);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			MsgIds = reader.ReadVector<long>();
-			Info = reader.Read<byte[]>();
+			var trymsgIds = reader.ReadVector<long>(ParserTypes.Int64);
+if(trymsgIds.IsError){
+return ReadResult<IObject>.Move(trymsgIds);
+}
+MsgIds = trymsgIds.Value;
+			var tryinfo = reader.ReadBytes();
+if(tryinfo.IsError){
+return ReadResult<IObject>.Move(tryinfo);
+}
+Info = tryinfo.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

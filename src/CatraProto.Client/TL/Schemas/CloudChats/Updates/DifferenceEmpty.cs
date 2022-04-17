@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,29 @@ Seq = seq;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Date);
-			writer.Write(Seq);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt32(Date);
+writer.WriteInt32(Seq);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Date = reader.Read<int>();
-			Seq = reader.Read<int>();
+			var trydate = reader.ReadInt32();
+if(trydate.IsError){
+return ReadResult<IObject>.Move(trydate);
+}
+Date = trydate.Value;
+			var tryseq = reader.ReadInt32();
+if(tryseq.IsError){
+return ReadResult<IObject>.Move(tryseq);
+}
+Seq = tryseq.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

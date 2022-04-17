@@ -123,7 +123,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
                 _messageStatus.MessageState = MessageState.Completed;
                 if (response != null)
                 {
-                    _messageStatus.MessageCompletion.RpcMessage?.SetResponse(response, executionInfo);
+                    _messageStatus.MessageCompletion.RpcResponse?.SetResponse(response, executionInfo);
                 }
 
                 _messageStatus.MessageCompletion.TaskCompletionSource?.TrySetResult();
@@ -238,6 +238,19 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
                         _messageStatus.MessageProtocolInfo.InitConn = initConn.Value;
                     }
                 }
+            }
+        }
+
+        public bool CanCastResponse(object o)
+        {
+            lock (_mutex)
+            {
+                var rpcResponse = _messageStatus.MessageCompletion.RpcResponse;
+                if(rpcResponse is null || !rpcResponse.CanCast(o))
+                {
+                    return false;
+                }
+                return true;
             }
         }
 

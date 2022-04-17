@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -54,23 +56,43 @@ Reaction = reaction;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(PeerId);
-			writer.Write(Reaction);
+
+			writer.WriteInt32(Flags);
+var checkpeerId = 			writer.WriteObject(PeerId);
+if(checkpeerId.IsError){
+ return checkpeerId; 
+}
+
+			writer.WriteString(Reaction);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Big = FlagsHelper.IsFlagSet(Flags, 0);
 			Unread = FlagsHelper.IsFlagSet(Flags, 1);
-			PeerId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
-			Reaction = reader.Read<string>();
+			var trypeerId = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+if(trypeerId.IsError){
+return ReadResult<IObject>.Move(trypeerId);
+}
+PeerId = trypeerId.Value;
+			var tryreaction = reader.ReadString();
+if(tryreaction.IsError){
+return ReadResult<IObject>.Move(tryreaction);
+}
+Reaction = tryreaction.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

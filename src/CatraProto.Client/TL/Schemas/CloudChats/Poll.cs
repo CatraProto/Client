@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -45,7 +47,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public sealed override string Question { get; set; }
 
 [Newtonsoft.Json.JsonProperty("answers")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.PollAnswerBase> Answers { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.PollAnswerBase> Answers { get; set; }
 
 [Newtonsoft.Json.JsonProperty("close_period")]
 		public sealed override int? ClosePeriod { get; set; }
@@ -55,7 +57,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
         #nullable enable
- public Poll (long id,string question,IList<CatraProto.Client.TL.Schemas.CloudChats.PollAnswerBase> answers)
+ public Poll (long id,string question,List<CatraProto.Client.TL.Schemas.CloudChats.PollAnswerBase> answers)
 {
  Id = id;
 Question = question;
@@ -78,47 +80,79 @@ Answers = answers;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Id);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(Id);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Question);
-			writer.Write(Answers);
+
+			writer.WriteInt32(Flags);
+
+			writer.WriteString(Question);
+var checkanswers = 			writer.WriteVector(Answers, false);
+if(checkanswers.IsError){
+ return checkanswers; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				writer.Write(ClosePeriod.Value);
+writer.WriteInt32(ClosePeriod.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				writer.Write(CloseDate.Value);
+writer.WriteInt32(CloseDate.Value);
 			}
 
 
+return new WriteResult();
+
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Id = reader.Read<long>();
-			Flags = reader.Read<int>();
+			var tryid = reader.ReadInt64();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Closed = FlagsHelper.IsFlagSet(Flags, 0);
 			PublicVoters = FlagsHelper.IsFlagSet(Flags, 1);
 			MultipleChoice = FlagsHelper.IsFlagSet(Flags, 2);
 			Quiz = FlagsHelper.IsFlagSet(Flags, 3);
-			Question = reader.Read<string>();
-			Answers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PollAnswerBase>();
+			var tryquestion = reader.ReadString();
+if(tryquestion.IsError){
+return ReadResult<IObject>.Move(tryquestion);
+}
+Question = tryquestion.Value;
+			var tryanswers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PollAnswerBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryanswers.IsError){
+return ReadResult<IObject>.Move(tryanswers);
+}
+Answers = tryanswers.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				ClosePeriod = reader.Read<int>();
+				var tryclosePeriod = reader.ReadInt32();
+if(tryclosePeriod.IsError){
+return ReadResult<IObject>.Move(tryclosePeriod);
+}
+ClosePeriod = tryclosePeriod.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				CloseDate = reader.Read<int>();
+				var trycloseDate = reader.ReadInt32();
+if(trycloseDate.IsError){
+return ReadResult<IObject>.Move(trycloseDate);
+}
+CloseDate = trycloseDate.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

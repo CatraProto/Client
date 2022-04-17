@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -20,10 +23,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
         public static int ConstructorId { get => 51854712; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Updates.ChannelDifferenceBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -65,26 +65,56 @@ Limit = limit;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Channel);
-			writer.Write(Filter);
-			writer.Write(Pts);
-			writer.Write(Limit);
+
+			writer.WriteInt32(Flags);
+var checkchannel = 			writer.WriteObject(Channel);
+if(checkchannel.IsError){
+ return checkchannel; 
+}
+var checkfilter = 			writer.WriteObject(Filter);
+if(checkfilter.IsError){
+ return checkfilter; 
+}
+writer.WriteInt32(Pts);
+writer.WriteInt32(Limit);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Force = FlagsHelper.IsFlagSet(Flags, 0);
-			Channel = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
-			Filter = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChannelMessagesFilterBase>();
-			Pts = reader.Read<int>();
-			Limit = reader.Read<int>();
+			var trychannel = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
+if(trychannel.IsError){
+return ReadResult<IObject>.Move(trychannel);
+}
+Channel = trychannel.Value;
+			var tryfilter = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ChannelMessagesFilterBase>();
+if(tryfilter.IsError){
+return ReadResult<IObject>.Move(tryfilter);
+}
+Filter = tryfilter.Value;
+			var trypts = reader.ReadInt32();
+if(trypts.IsError){
+return ReadResult<IObject>.Move(trypts);
+}
+Pts = trypts.Value;
+			var trylimit = reader.ReadInt32();
+if(trylimit.IsError){
+return ReadResult<IObject>.Move(trylimit);
+}
+Limit = trylimit.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public static int ConstructorId { get => 1099779595; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
 
 [Newtonsoft.Json.JsonProperty("reason")]
 		public string Reason { get; set; }
@@ -42,16 +42,24 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Reason);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteString(Reason);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Reason = reader.Read<string>();
+			var tryreason = reader.ReadString();
+if(tryreason.IsError){
+return ReadResult<IObject>.Move(tryreason);
+}
+Reason = tryreason.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

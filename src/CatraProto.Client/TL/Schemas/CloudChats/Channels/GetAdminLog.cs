@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -21,10 +24,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
         public static int ConstructorId { get => 870184064; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Channels.AdminLogResultsBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -35,11 +35,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 [Newtonsoft.Json.JsonProperty("q")]
 		public string Q { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("events_filter")]
 		public CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventsFilterBase EventsFilter { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("admins")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase> Admins { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase> Admins { get; set; }
 
 [Newtonsoft.Json.JsonProperty("max_id")]
 		public long MaxId { get; set; }
@@ -74,47 +76,93 @@ Limit = limit;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Channel);
-			writer.Write(Q);
+
+			writer.WriteInt32(Flags);
+var checkchannel = 			writer.WriteObject(Channel);
+if(checkchannel.IsError){
+ return checkchannel; 
+}
+
+			writer.WriteString(Q);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(EventsFilter);
+var checkeventsFilter = 				writer.WriteObject(EventsFilter);
+if(checkeventsFilter.IsError){
+ return checkeventsFilter; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(Admins);
+var checkadmins = 				writer.WriteVector(Admins, false);
+if(checkadmins.IsError){
+ return checkadmins; 
+}
 			}
 
-			writer.Write(MaxId);
-			writer.Write(MinId);
-			writer.Write(Limit);
+writer.WriteInt64(MaxId);
+writer.WriteInt64(MinId);
+writer.WriteInt32(Limit);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			Channel = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
-			Q = reader.Read<string>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var trychannel = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
+if(trychannel.IsError){
+return ReadResult<IObject>.Move(trychannel);
+}
+Channel = trychannel.Value;
+			var tryq = reader.ReadString();
+if(tryq.IsError){
+return ReadResult<IObject>.Move(tryq);
+}
+Q = tryq.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				EventsFilter = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventsFilterBase>();
+				var tryeventsFilter = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventsFilterBase>();
+if(tryeventsFilter.IsError){
+return ReadResult<IObject>.Move(tryeventsFilter);
+}
+EventsFilter = tryeventsFilter.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Admins = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
+				var tryadmins = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryadmins.IsError){
+return ReadResult<IObject>.Move(tryadmins);
+}
+Admins = tryadmins.Value;
 			}
 
-			MaxId = reader.Read<long>();
-			MinId = reader.Read<long>();
-			Limit = reader.Read<int>();
+			var trymaxId = reader.ReadInt64();
+if(trymaxId.IsError){
+return ReadResult<IObject>.Move(trymaxId);
+}
+MaxId = trymaxId.Value;
+			var tryminId = reader.ReadInt64();
+if(tryminId.IsError){
+return ReadResult<IObject>.Move(tryminId);
+}
+MinId = tryminId.Value;
+			var trylimit = reader.ReadInt32();
+if(trylimit.IsError){
+return ReadResult<IObject>.Move(trylimit);
+}
+Limit = trylimit.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

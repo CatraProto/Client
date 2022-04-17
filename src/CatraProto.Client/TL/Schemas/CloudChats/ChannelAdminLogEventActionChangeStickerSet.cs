@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,35 @@ NewStickerset = newStickerset;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(PrevStickerset);
-			writer.Write(NewStickerset);
+writer.WriteInt32(ConstructorId);
+var checkprevStickerset = 			writer.WriteObject(PrevStickerset);
+if(checkprevStickerset.IsError){
+ return checkprevStickerset; 
+}
+var checknewStickerset = 			writer.WriteObject(NewStickerset);
+if(checknewStickerset.IsError){
+ return checknewStickerset; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			PrevStickerset = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase>();
-			NewStickerset = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase>();
+			var tryprevStickerset = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase>();
+if(tryprevStickerset.IsError){
+return ReadResult<IObject>.Move(tryprevStickerset);
+}
+PrevStickerset = tryprevStickerset.Value;
+			var trynewStickerset = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase>();
+if(trynewStickerset.IsError){
+return ReadResult<IObject>.Move(trynewStickerset);
+}
+NewStickerset = trynewStickerset.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

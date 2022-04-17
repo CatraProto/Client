@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,20 +19,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int ConstructorId { get => -1120369398; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("peer")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
 
 [Newtonsoft.Json.JsonProperty("id")]
-		public IList<int> Id { get; set; }
+		public List<int> Id { get; set; }
 
         
         #nullable enable
- public SendScheduledMessages (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer,IList<int> id)
+ public SendScheduledMessages (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer,List<int> id)
 {
  Peer = peer;
 Id = id;
@@ -46,18 +46,33 @@ Id = id;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Peer);
-			writer.Write(Id);
+writer.WriteInt32(ConstructorId);
+var checkpeer = 			writer.WriteObject(Peer);
+if(checkpeer.IsError){
+ return checkpeer; 
+}
+
+			writer.WriteVector(Id, false);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
-			Id = reader.ReadVector<int>();
+			var trypeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+if(trypeer.IsError){
+return ReadResult<IObject>.Move(trypeer);
+}
+Peer = trypeer.Value;
+			var tryid = reader.ReadVector<int>(ParserTypes.Int);
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

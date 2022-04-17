@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get => -627372787; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(IObject);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("layer")]
 		public int Layer { get; set; }
@@ -46,18 +46,32 @@ Query = query;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Layer);
-			writer.Write(Query);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt32(Layer);
+var checkquery = 			writer.WriteObject(Query);
+if(checkquery.IsError){
+ return checkquery; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Layer = reader.Read<int>();
-			Query = reader.Read<IObject>();
+			var trylayer = reader.ReadInt32();
+if(trylayer.IsError){
+return ReadResult<IObject>.Move(trylayer);
+}
+Layer = trylayer.Value;
+			var tryquery = reader.ReadObject<IObject>();
+if(tryquery.IsError){
+return ReadResult<IObject>.Move(tryquery);
+}
+Query = tryquery.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

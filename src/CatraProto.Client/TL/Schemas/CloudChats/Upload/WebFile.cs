@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -50,24 +52,52 @@ Bytes = bytes;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Size);
-			writer.Write(MimeType);
-			writer.Write(FileType);
-			writer.Write(Mtime);
-			writer.Write(Bytes);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt32(Size);
+
+			writer.WriteString(MimeType);
+var checkfileType = 			writer.WriteObject(FileType);
+if(checkfileType.IsError){
+ return checkfileType; 
+}
+writer.WriteInt32(Mtime);
+
+			writer.WriteBytes(Bytes);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Size = reader.Read<int>();
-			MimeType = reader.Read<string>();
-			FileType = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.Storage.FileTypeBase>();
-			Mtime = reader.Read<int>();
-			Bytes = reader.Read<byte[]>();
+			var trysize = reader.ReadInt32();
+if(trysize.IsError){
+return ReadResult<IObject>.Move(trysize);
+}
+Size = trysize.Value;
+			var trymimeType = reader.ReadString();
+if(trymimeType.IsError){
+return ReadResult<IObject>.Move(trymimeType);
+}
+MimeType = trymimeType.Value;
+			var tryfileType = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.Storage.FileTypeBase>();
+if(tryfileType.IsError){
+return ReadResult<IObject>.Move(tryfileType);
+}
+FileType = tryfileType.Value;
+			var trymtime = reader.ReadInt32();
+if(trymtime.IsError){
+return ReadResult<IObject>.Move(trymtime);
+}
+Mtime = trymtime.Value;
+			var trybytes = reader.ReadBytes();
+if(trybytes.IsError){
+return ReadResult<IObject>.Move(trybytes);
+}
+Bytes = trybytes.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

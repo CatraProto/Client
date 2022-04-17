@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -21,11 +23,11 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 		public sealed override int Now { get; set; }
 
 [Newtonsoft.Json.JsonProperty("salts")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.MTProto.FutureSalt> Salts { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.MTProto.FutureSalt> Salts { get; set; }
 
 
         #nullable enable
- public FutureSalts (long reqMsgId,int now,IList<CatraProto.Client.TL.Schemas.MTProto.FutureSalt> salts)
+ public FutureSalts (long reqMsgId,int now,List<CatraProto.Client.TL.Schemas.MTProto.FutureSalt> salts)
 {
  ReqMsgId = reqMsgId;
 Now = now;
@@ -42,20 +44,38 @@ Salts = salts;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(ReqMsgId);
-			writer.Write(Now);
-			writer.Write(Salts);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(ReqMsgId);
+writer.WriteInt32(Now);
+var checksalts = 			writer.WriteVector(Salts, true);
+if(checksalts.IsError){
+ return checksalts; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			ReqMsgId = reader.Read<long>();
-			Now = reader.Read<int>();
-			Salts = reader.ReadVector(new CatraProto.TL.ObjectDeserializers.NakedObjectVectorDeserializer<CatraProto.Client.TL.Schemas.MTProto.FutureSalt>(CatraProto.Client.TL.Schemas.MergedProvider.Singleton), true);
+			var tryreqMsgId = reader.ReadInt64();
+if(tryreqMsgId.IsError){
+return ReadResult<IObject>.Move(tryreqMsgId);
+}
+ReqMsgId = tryreqMsgId.Value;
+			var trynow = reader.ReadInt32();
+if(trynow.IsError){
+return ReadResult<IObject>.Move(trynow);
+}
+Now = trynow.Value;
+			var trysalts = reader.ReadVector<CatraProto.Client.TL.Schemas.MTProto.FutureSalt>(ParserTypes.Object, nakedVector: true, nakedObjects: true);
+if(trysalts.IsError){
+return ReadResult<IObject>.Move(trysalts);
+}
+Salts = trysalts.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

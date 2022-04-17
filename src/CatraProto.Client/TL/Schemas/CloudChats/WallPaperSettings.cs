@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -71,79 +73,111 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
+
+			writer.WriteInt32(Flags);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(BackgroundColor.Value);
+writer.WriteInt32(BackgroundColor.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				writer.Write(SecondBackgroundColor.Value);
+writer.WriteInt32(SecondBackgroundColor.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				writer.Write(ThirdBackgroundColor.Value);
+writer.WriteInt32(ThirdBackgroundColor.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
-				writer.Write(FourthBackgroundColor.Value);
+writer.WriteInt32(FourthBackgroundColor.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				writer.Write(Intensity.Value);
+writer.WriteInt32(Intensity.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				writer.Write(Rotation.Value);
+writer.WriteInt32(Rotation.Value);
 			}
 
 
+return new WriteResult();
+
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Blur = FlagsHelper.IsFlagSet(Flags, 1);
 			Motion = FlagsHelper.IsFlagSet(Flags, 2);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				BackgroundColor = reader.Read<int>();
+				var trybackgroundColor = reader.ReadInt32();
+if(trybackgroundColor.IsError){
+return ReadResult<IObject>.Move(trybackgroundColor);
+}
+BackgroundColor = trybackgroundColor.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				SecondBackgroundColor = reader.Read<int>();
+				var trysecondBackgroundColor = reader.ReadInt32();
+if(trysecondBackgroundColor.IsError){
+return ReadResult<IObject>.Move(trysecondBackgroundColor);
+}
+SecondBackgroundColor = trysecondBackgroundColor.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				ThirdBackgroundColor = reader.Read<int>();
+				var trythirdBackgroundColor = reader.ReadInt32();
+if(trythirdBackgroundColor.IsError){
+return ReadResult<IObject>.Move(trythirdBackgroundColor);
+}
+ThirdBackgroundColor = trythirdBackgroundColor.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
-				FourthBackgroundColor = reader.Read<int>();
+				var tryfourthBackgroundColor = reader.ReadInt32();
+if(tryfourthBackgroundColor.IsError){
+return ReadResult<IObject>.Move(tryfourthBackgroundColor);
+}
+FourthBackgroundColor = tryfourthBackgroundColor.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				Intensity = reader.Read<int>();
+				var tryintensity = reader.ReadInt32();
+if(tryintensity.IsError){
+return ReadResult<IObject>.Move(tryintensity);
+}
+Intensity = tryintensity.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				Rotation = reader.Read<int>();
+				var tryrotation = reader.ReadInt32();
+if(tryrotation.IsError){
+return ReadResult<IObject>.Move(tryrotation);
+}
+Rotation = tryrotation.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

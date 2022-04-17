@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -22,20 +25,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public static int ConstructorId { get => 2018596725; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UserBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("first_name")]
 		public string FirstName { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("last_name")]
 		public string LastName { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("about")]
 		public string About { get; set; }
 
@@ -54,47 +57,70 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
+
+			writer.WriteInt32(Flags);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(FirstName);
+
+				writer.WriteString(FirstName);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(LastName);
+
+				writer.WriteString(LastName);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(About);
+
+				writer.WriteString(About);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				FirstName = reader.Read<string>();
+				var tryfirstName = reader.ReadString();
+if(tryfirstName.IsError){
+return ReadResult<IObject>.Move(tryfirstName);
+}
+FirstName = tryfirstName.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				LastName = reader.Read<string>();
+				var trylastName = reader.ReadString();
+if(trylastName.IsError){
+return ReadResult<IObject>.Move(trylastName);
+}
+LastName = trylastName.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				About = reader.Read<string>();
+				var tryabout = reader.ReadString();
+if(tryabout.IsError){
+return ReadResult<IObject>.Move(tryabout);
+}
+About = tryabout.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 

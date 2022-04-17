@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -42,20 +44,38 @@ NewNonceHash2 = newNonceHash2;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Nonce);
-			writer.Write(ServerNonce);
-			writer.Write(NewNonceHash2);
+writer.WriteInt32(ConstructorId);
+var checkNonce = writer.WriteBigInteger(Nonce);
+if(checkNonce.IsError){ return checkNonce;}
+var checkServerNonce = writer.WriteBigInteger(ServerNonce);
+if(checkServerNonce.IsError){ return checkServerNonce;}
+var checkNewNonceHash2 = writer.WriteBigInteger(NewNonceHash2);
+if(checkNewNonceHash2.IsError){ return checkNewNonceHash2;}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Nonce = reader.Read<System.Numerics.BigInteger>(128);
-			ServerNonce = reader.Read<System.Numerics.BigInteger>(128);
-			NewNonceHash2 = reader.Read<System.Numerics.BigInteger>(128);
+			var trynonce = reader.ReadBigInteger(128);
+if(trynonce.IsError){
+return ReadResult<IObject>.Move(trynonce);
+}
+Nonce = trynonce.Value;
+			var tryserverNonce = reader.ReadBigInteger(128);
+if(tryserverNonce.IsError){
+return ReadResult<IObject>.Move(tryserverNonce);
+}
+ServerNonce = tryserverNonce.Value;
+			var trynewNonceHash2 = reader.ReadBigInteger(128);
+if(trynewNonceHash2.IsError){
+return ReadResult<IObject>.Move(trynewNonceHash2);
+}
+NewNonceHash2 = trynewNonceHash2.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,11 +40,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase Media { get; set; }
 
 [Newtonsoft.Json.JsonProperty("entities")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
 
 
         #nullable enable
- public UpdateServiceNotification (string type,string message,CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase media,IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> entities)
+ public UpdateServiceNotification (string type,string message,CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase media,List<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> entities)
 {
  Type = type;
 Message = message;
@@ -62,36 +64,72 @@ Entities = entities;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
+
+			writer.WriteInt32(Flags);
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(InboxDate.Value);
+writer.WriteInt32(InboxDate.Value);
 			}
 
-			writer.Write(Type);
-			writer.Write(Message);
-			writer.Write(Media);
-			writer.Write(Entities);
+
+			writer.WriteString(Type);
+
+			writer.WriteString(Message);
+var checkmedia = 			writer.WriteObject(Media);
+if(checkmedia.IsError){
+ return checkmedia; 
+}
+var checkentities = 			writer.WriteVector(Entities, false);
+if(checkentities.IsError){
+ return checkentities; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Popup = FlagsHelper.IsFlagSet(Flags, 0);
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				InboxDate = reader.Read<int>();
+				var tryinboxDate = reader.ReadInt32();
+if(tryinboxDate.IsError){
+return ReadResult<IObject>.Move(tryinboxDate);
+}
+InboxDate = tryinboxDate.Value;
 			}
 
-			Type = reader.Read<string>();
-			Message = reader.Read<string>();
-			Media = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase>();
-			Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
+			var trytype = reader.ReadString();
+if(trytype.IsError){
+return ReadResult<IObject>.Move(trytype);
+}
+Type = trytype.Value;
+			var trymessage = reader.ReadString();
+if(trymessage.IsError){
+return ReadResult<IObject>.Move(trymessage);
+}
+Message = trymessage.Value;
+			var trymedia = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase>();
+if(trymedia.IsError){
+return ReadResult<IObject>.Move(trymedia);
+}
+Media = trymedia.Value;
+			var tryentities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryentities.IsError){
+return ReadResult<IObject>.Move(tryentities);
+}
+Entities = tryentities.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

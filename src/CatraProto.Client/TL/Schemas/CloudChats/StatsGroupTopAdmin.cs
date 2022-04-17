@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -46,22 +48,41 @@ Banned = banned;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(UserId);
-			writer.Write(Deleted);
-			writer.Write(Kicked);
-			writer.Write(Banned);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(UserId);
+writer.WriteInt32(Deleted);
+writer.WriteInt32(Kicked);
+writer.WriteInt32(Banned);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			UserId = reader.Read<long>();
-			Deleted = reader.Read<int>();
-			Kicked = reader.Read<int>();
-			Banned = reader.Read<int>();
+			var tryuserId = reader.ReadInt64();
+if(tryuserId.IsError){
+return ReadResult<IObject>.Move(tryuserId);
+}
+UserId = tryuserId.Value;
+			var trydeleted = reader.ReadInt32();
+if(trydeleted.IsError){
+return ReadResult<IObject>.Move(trydeleted);
+}
+Deleted = trydeleted.Value;
+			var trykicked = reader.ReadInt32();
+if(trykicked.IsError){
+return ReadResult<IObject>.Move(trykicked);
+}
+Kicked = trykicked.Value;
+			var trybanned = reader.ReadInt32();
+if(trybanned.IsError){
+return ReadResult<IObject>.Move(trybanned);
+}
+Banned = trybanned.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -21,10 +24,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int ConstructorId { get => 163765653; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
 
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -35,6 +35,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [Newtonsoft.Json.JsonProperty("query_id")]
 		public long QueryId { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("error")]
 		public string Error { get; set; }
 
@@ -58,30 +59,47 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(QueryId);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt64(QueryId);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(Error);
+
+				writer.WriteString(Error);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Success = FlagsHelper.IsFlagSet(Flags, 1);
-			QueryId = reader.Read<long>();
+			var tryqueryId = reader.ReadInt64();
+if(tryqueryId.IsError){
+return ReadResult<IObject>.Move(tryqueryId);
+}
+QueryId = tryqueryId.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Error = reader.Read<string>();
+				var tryerror = reader.ReadString();
+if(tryerror.IsError){
+return ReadResult<IObject>.Move(tryerror);
+}
+Error = tryerror.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 

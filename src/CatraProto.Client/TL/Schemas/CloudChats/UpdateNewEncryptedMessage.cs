@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,32 @@ Qts = qts;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Message);
-			writer.Write(Qts);
+writer.WriteInt32(ConstructorId);
+var checkmessage = 			writer.WriteObject(Message);
+if(checkmessage.IsError){
+ return checkmessage; 
+}
+writer.WriteInt32(Qts);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Message = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.EncryptedMessageBase>();
-			Qts = reader.Read<int>();
+			var trymessage = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.EncryptedMessageBase>();
+if(trymessage.IsError){
+return ReadResult<IObject>.Move(trymessage);
+}
+Message = trymessage.Value;
+			var tryqts = reader.ReadInt32();
+if(tryqts.IsError){
+return ReadResult<IObject>.Move(tryqts);
+}
+Qts = tryqts.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

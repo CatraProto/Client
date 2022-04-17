@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,32 @@ Expires = expires;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Chat);
-			writer.Write(Expires);
+writer.WriteInt32(ConstructorId);
+var checkchat = 			writer.WriteObject(Chat);
+if(checkchat.IsError){
+ return checkchat; 
+}
+writer.WriteInt32(Expires);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Chat = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
-			Expires = reader.Read<int>();
+			var trychat = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
+if(trychat.IsError){
+return ReadResult<IObject>.Move(trychat);
+}
+Chat = trychat.Value;
+			var tryexpires = reader.ReadInt32();
+if(tryexpires.IsError){
+return ReadResult<IObject>.Move(tryexpires);
+}
+Expires = tryexpires.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

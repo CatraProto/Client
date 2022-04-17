@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
         public static int ConstructorId { get => 1723407216; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Help.UserInfoBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("user_id")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase UserId { get; set; }
@@ -28,11 +28,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 		public string Message { get; set; }
 
 [Newtonsoft.Json.JsonProperty("entities")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
 
         
         #nullable enable
- public EditUserInfo (CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId,string message,IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> entities)
+ public EditUserInfo (CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId,string message,List<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> entities)
 {
  UserId = userId;
 Message = message;
@@ -50,20 +50,42 @@ Entities = entities;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(UserId);
-			writer.Write(Message);
-			writer.Write(Entities);
+writer.WriteInt32(ConstructorId);
+var checkuserId = 			writer.WriteObject(UserId);
+if(checkuserId.IsError){
+ return checkuserId; 
+}
+
+			writer.WriteString(Message);
+var checkentities = 			writer.WriteVector(Entities, false);
+if(checkentities.IsError){
+ return checkentities; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			UserId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
-			Message = reader.Read<string>();
-			Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
+			var tryuserId = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
+if(tryuserId.IsError){
+return ReadResult<IObject>.Move(tryuserId);
+}
+UserId = tryuserId.Value;
+			var trymessage = reader.ReadString();
+if(trymessage.IsError){
+return ReadResult<IObject>.Move(trymessage);
+}
+Message = trymessage.Value;
+			var tryentities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryentities.IsError){
+return ReadResult<IObject>.Move(tryentities);
+}
+Entities = tryentities.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

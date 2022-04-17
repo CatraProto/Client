@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -42,20 +44,38 @@ ChannelId = channelId;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Peer);
-			writer.Write(MsgId);
-			writer.Write(ChannelId);
+writer.WriteInt32(ConstructorId);
+var checkpeer = 			writer.WriteObject(Peer);
+if(checkpeer.IsError){
+ return checkpeer; 
+}
+writer.WriteInt32(MsgId);
+writer.WriteInt64(ChannelId);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
-			MsgId = reader.Read<int>();
-			ChannelId = reader.Read<long>();
+			var trypeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+if(trypeer.IsError){
+return ReadResult<IObject>.Move(trypeer);
+}
+Peer = trypeer.Value;
+			var trymsgId = reader.ReadInt32();
+if(trymsgId.IsError){
+return ReadResult<IObject>.Move(trymsgId);
+}
+MsgId = trymsgId.Value;
+			var trychannelId = reader.ReadInt64();
+if(trychannelId.IsError){
+return ReadResult<IObject>.Move(trychannelId);
+}
+ChannelId = trychannelId.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

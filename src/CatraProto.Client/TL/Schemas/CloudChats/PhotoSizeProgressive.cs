@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -24,11 +26,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int H { get; set; }
 
 [Newtonsoft.Json.JsonProperty("sizes")]
-		public IList<int> Sizes { get; set; }
+		public List<int> Sizes { get; set; }
 
 
         #nullable enable
- public PhotoSizeProgressive (string type,int w,int h,IList<int> sizes)
+ public PhotoSizeProgressive (string type,int w,int h,List<int> sizes)
 {
  Type = type;
 W = w;
@@ -46,22 +48,43 @@ Sizes = sizes;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Type);
-			writer.Write(W);
-			writer.Write(H);
-			writer.Write(Sizes);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteString(Type);
+writer.WriteInt32(W);
+writer.WriteInt32(H);
+
+			writer.WriteVector(Sizes, false);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Type = reader.Read<string>();
-			W = reader.Read<int>();
-			H = reader.Read<int>();
-			Sizes = reader.ReadVector<int>();
+			var trytype = reader.ReadString();
+if(trytype.IsError){
+return ReadResult<IObject>.Move(trytype);
+}
+Type = trytype.Value;
+			var tryw = reader.ReadInt32();
+if(tryw.IsError){
+return ReadResult<IObject>.Move(tryw);
+}
+W = tryw.Value;
+			var tryh = reader.ReadInt32();
+if(tryh.IsError){
+return ReadResult<IObject>.Move(tryh);
+}
+H = tryh.Value;
+			var trysizes = reader.ReadVector<int>(ParserTypes.Int);
+if(trysizes.IsError){
+return ReadResult<IObject>.Move(trysizes);
+}
+Sizes = trysizes.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -28,6 +30,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("text")]
 		public sealed override string Text { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("fwd_text")]
 		public string FwdText { get; set; }
 
@@ -58,34 +61,64 @@ Bot = bot;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Text);
+
+			writer.WriteInt32(Flags);
+
+			writer.WriteString(Text);
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(FwdText);
+
+				writer.WriteString(FwdText);
 			}
 
-			writer.Write(Url);
-			writer.Write(Bot);
+
+			writer.WriteString(Url);
+var checkbot = 			writer.WriteObject(Bot);
+if(checkbot.IsError){
+ return checkbot; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			RequestWriteAccess = FlagsHelper.IsFlagSet(Flags, 0);
-			Text = reader.Read<string>();
+			var trytext = reader.ReadString();
+if(trytext.IsError){
+return ReadResult<IObject>.Move(trytext);
+}
+Text = trytext.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				FwdText = reader.Read<string>();
+				var tryfwdText = reader.ReadString();
+if(tryfwdText.IsError){
+return ReadResult<IObject>.Move(tryfwdText);
+}
+FwdText = tryfwdText.Value;
 			}
 
-			Url = reader.Read<string>();
-			Bot = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
+			var tryurl = reader.ReadString();
+if(tryurl.IsError){
+return ReadResult<IObject>.Move(tryurl);
+}
+Url = tryurl.Value;
+			var trybot = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
+if(trybot.IsError){
+return ReadResult<IObject>.Move(trybot);
+}
+Bot = trybot.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

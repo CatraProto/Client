@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,32 @@ Caption = caption;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(AudioId);
-			writer.Write(Caption);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(AudioId);
+var checkcaption = 			writer.WriteObject(Caption);
+if(checkcaption.IsError){
+ return checkcaption; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			AudioId = reader.Read<long>();
-			Caption = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase>();
+			var tryaudioId = reader.ReadInt64();
+if(tryaudioId.IsError){
+return ReadResult<IObject>.Move(tryaudioId);
+}
+AudioId = tryaudioId.Value;
+			var trycaption = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase>();
+if(trycaption.IsError){
+return ReadResult<IObject>.Move(trycaption);
+}
+Caption = trycaption.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

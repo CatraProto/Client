@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -32,6 +34,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("dark")]
 		public sealed override bool Dark { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("settings")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase Settings { get; set; }
 
@@ -55,31 +58,50 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Id);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(Id);
 			UpdateFlags();
-			writer.Write(Flags);
+
+			writer.WriteInt32(Flags);
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(Settings);
+var checksettings = 				writer.WriteObject(Settings);
+if(checksettings.IsError){
+ return checksettings; 
+}
 			}
 
 
+return new WriteResult();
+
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Id = reader.Read<long>();
-			Flags = reader.Read<int>();
+			var tryid = reader.ReadInt64();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Default = FlagsHelper.IsFlagSet(Flags, 1);
 			Dark = FlagsHelper.IsFlagSet(Flags, 4);
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				Settings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase>();
+				var trysettings = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase>();
+if(trysettings.IsError){
+return ReadResult<IObject>.Move(trysettings);
+}
+Settings = trysettings.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

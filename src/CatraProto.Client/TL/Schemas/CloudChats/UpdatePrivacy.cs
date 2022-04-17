@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -18,11 +20,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public CatraProto.Client.TL.Schemas.CloudChats.PrivacyKeyBase Key { get; set; }
 
 [Newtonsoft.Json.JsonProperty("rules")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.PrivacyRuleBase> Rules { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.PrivacyRuleBase> Rules { get; set; }
 
 
         #nullable enable
- public UpdatePrivacy (CatraProto.Client.TL.Schemas.CloudChats.PrivacyKeyBase key,IList<CatraProto.Client.TL.Schemas.CloudChats.PrivacyRuleBase> rules)
+ public UpdatePrivacy (CatraProto.Client.TL.Schemas.CloudChats.PrivacyKeyBase key,List<CatraProto.Client.TL.Schemas.CloudChats.PrivacyRuleBase> rules)
 {
  Key = key;
 Rules = rules;
@@ -38,18 +40,35 @@ Rules = rules;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Key);
-			writer.Write(Rules);
+writer.WriteInt32(ConstructorId);
+var checkkey = 			writer.WriteObject(Key);
+if(checkkey.IsError){
+ return checkkey; 
+}
+var checkrules = 			writer.WriteVector(Rules, false);
+if(checkrules.IsError){
+ return checkrules; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Key = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PrivacyKeyBase>();
-			Rules = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PrivacyRuleBase>();
+			var trykey = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PrivacyKeyBase>();
+if(trykey.IsError){
+return ReadResult<IObject>.Move(trykey);
+}
+Key = trykey.Value;
+			var tryrules = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PrivacyRuleBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryrules.IsError){
+return ReadResult<IObject>.Move(tryrules);
+}
+Rules = tryrules.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

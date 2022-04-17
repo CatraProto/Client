@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,32 @@ Mutual = mutual;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(UserId);
-			writer.Write(Mutual);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(UserId);
+var checkmutual = 			writer.WriteBool(Mutual);
+if(checkmutual.IsError){
+ return checkmutual; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			UserId = reader.Read<long>();
-			Mutual = reader.Read<bool>();
+			var tryuserId = reader.ReadInt64();
+if(tryuserId.IsError){
+return ReadResult<IObject>.Move(tryuserId);
+}
+UserId = tryuserId.Value;
+			var trymutual = reader.ReadBool();
+if(trymutual.IsError){
+return ReadResult<IObject>.Move(trymutual);
+}
+Mutual = trymutual.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -15,14 +17,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public static int ConstructorId { get => -313079300; }
         
 [Newtonsoft.Json.JsonProperty("authorizations")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.WebAuthorizationBase> Authorizations { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.WebAuthorizationBase> Authorizations { get; set; }
 
 [Newtonsoft.Json.JsonProperty("users")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
 
         #nullable enable
- public WebAuthorizations (IList<CatraProto.Client.TL.Schemas.CloudChats.WebAuthorizationBase> authorizations,IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> users)
+ public WebAuthorizations (List<CatraProto.Client.TL.Schemas.CloudChats.WebAuthorizationBase> authorizations,List<CatraProto.Client.TL.Schemas.CloudChats.UserBase> users)
 {
  Authorizations = authorizations;
 Users = users;
@@ -38,18 +40,35 @@ Users = users;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Authorizations);
-			writer.Write(Users);
+writer.WriteInt32(ConstructorId);
+var checkauthorizations = 			writer.WriteVector(Authorizations, false);
+if(checkauthorizations.IsError){
+ return checkauthorizations; 
+}
+var checkusers = 			writer.WriteVector(Users, false);
+if(checkusers.IsError){
+ return checkusers; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Authorizations = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.WebAuthorizationBase>();
-			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+			var tryauthorizations = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.WebAuthorizationBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryauthorizations.IsError){
+return ReadResult<IObject>.Move(tryauthorizations);
+}
+Authorizations = tryauthorizations.Value;
+			var tryusers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryusers.IsError){
+return ReadResult<IObject>.Move(tryusers);
+}
+Users = tryusers.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

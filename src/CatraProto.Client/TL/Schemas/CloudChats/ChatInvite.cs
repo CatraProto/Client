@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -45,6 +47,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("title")]
 		public string Title { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("about")]
 		public string About { get; set; }
 
@@ -54,8 +57,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("participants_count")]
 		public int ParticipantsCount { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("participants")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Participants { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Participants { get; set; }
 
 
         #nullable enable
@@ -83,48 +87,84 @@ ParticipantsCount = participantsCount;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Title);
+
+			writer.WriteInt32(Flags);
+
+			writer.WriteString(Title);
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				writer.Write(About);
+
+				writer.WriteString(About);
 			}
 
-			writer.Write(Photo);
-			writer.Write(ParticipantsCount);
+var checkphoto = 			writer.WriteObject(Photo);
+if(checkphoto.IsError){
+ return checkphoto; 
+}
+writer.WriteInt32(ParticipantsCount);
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				writer.Write(Participants);
+var checkparticipants = 				writer.WriteVector(Participants, false);
+if(checkparticipants.IsError){
+ return checkparticipants; 
+}
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Channel = FlagsHelper.IsFlagSet(Flags, 0);
 			Broadcast = FlagsHelper.IsFlagSet(Flags, 1);
 			Public = FlagsHelper.IsFlagSet(Flags, 2);
 			Megagroup = FlagsHelper.IsFlagSet(Flags, 3);
 			RequestNeeded = FlagsHelper.IsFlagSet(Flags, 6);
-			Title = reader.Read<string>();
+			var trytitle = reader.ReadString();
+if(trytitle.IsError){
+return ReadResult<IObject>.Move(trytitle);
+}
+Title = trytitle.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				About = reader.Read<string>();
+				var tryabout = reader.ReadString();
+if(tryabout.IsError){
+return ReadResult<IObject>.Move(tryabout);
+}
+About = tryabout.Value;
 			}
 
-			Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
-			ParticipantsCount = reader.Read<int>();
+			var tryphoto = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
+if(tryphoto.IsError){
+return ReadResult<IObject>.Move(tryphoto);
+}
+Photo = tryphoto.Value;
+			var tryparticipantsCount = reader.ReadInt32();
+if(tryparticipantsCount.IsError){
+return ReadResult<IObject>.Move(tryparticipantsCount);
+}
+ParticipantsCount = tryparticipantsCount.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				Participants = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+				var tryparticipants = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryparticipants.IsError){
+return ReadResult<IObject>.Move(tryparticipants);
+}
+Participants = tryparticipants.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

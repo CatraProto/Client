@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int ConstructorId { get => -396644838; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("peer")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
@@ -62,26 +62,56 @@ MinId = minId;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Peer);
-			writer.Write(OffsetId);
-			writer.Write(AddOffset);
-			writer.Write(Limit);
-			writer.Write(MaxId);
-			writer.Write(MinId);
+writer.WriteInt32(ConstructorId);
+var checkpeer = 			writer.WriteObject(Peer);
+if(checkpeer.IsError){
+ return checkpeer; 
+}
+writer.WriteInt32(OffsetId);
+writer.WriteInt32(AddOffset);
+writer.WriteInt32(Limit);
+writer.WriteInt32(MaxId);
+writer.WriteInt32(MinId);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
-			OffsetId = reader.Read<int>();
-			AddOffset = reader.Read<int>();
-			Limit = reader.Read<int>();
-			MaxId = reader.Read<int>();
-			MinId = reader.Read<int>();
+			var trypeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+if(trypeer.IsError){
+return ReadResult<IObject>.Move(trypeer);
+}
+Peer = trypeer.Value;
+			var tryoffsetId = reader.ReadInt32();
+if(tryoffsetId.IsError){
+return ReadResult<IObject>.Move(tryoffsetId);
+}
+OffsetId = tryoffsetId.Value;
+			var tryaddOffset = reader.ReadInt32();
+if(tryaddOffset.IsError){
+return ReadResult<IObject>.Move(tryaddOffset);
+}
+AddOffset = tryaddOffset.Value;
+			var trylimit = reader.ReadInt32();
+if(trylimit.IsError){
+return ReadResult<IObject>.Move(trylimit);
+}
+Limit = trylimit.Value;
+			var trymaxId = reader.ReadInt32();
+if(trymaxId.IsError){
+return ReadResult<IObject>.Move(trymaxId);
+}
+MaxId = trymaxId.Value;
+			var tryminId = reader.ReadInt32();
+if(tryminId.IsError){
+return ReadResult<IObject>.Move(tryminId);
+}
+MinId = tryminId.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

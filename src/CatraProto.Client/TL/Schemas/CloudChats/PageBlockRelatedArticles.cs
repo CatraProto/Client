@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -18,11 +20,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Title { get; set; }
 
 [Newtonsoft.Json.JsonProperty("articles")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.PageRelatedArticleBase> Articles { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.PageRelatedArticleBase> Articles { get; set; }
 
 
         #nullable enable
- public PageBlockRelatedArticles (CatraProto.Client.TL.Schemas.CloudChats.RichTextBase title,IList<CatraProto.Client.TL.Schemas.CloudChats.PageRelatedArticleBase> articles)
+ public PageBlockRelatedArticles (CatraProto.Client.TL.Schemas.CloudChats.RichTextBase title,List<CatraProto.Client.TL.Schemas.CloudChats.PageRelatedArticleBase> articles)
 {
  Title = title;
 Articles = articles;
@@ -38,18 +40,35 @@ Articles = articles;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Title);
-			writer.Write(Articles);
+writer.WriteInt32(ConstructorId);
+var checktitle = 			writer.WriteObject(Title);
+if(checktitle.IsError){
+ return checktitle; 
+}
+var checkarticles = 			writer.WriteVector(Articles, false);
+if(checkarticles.IsError){
+ return checkarticles; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Title = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
-			Articles = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PageRelatedArticleBase>();
+			var trytitle = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
+if(trytitle.IsError){
+return ReadResult<IObject>.Move(trytitle);
+}
+Title = trytitle.Value;
+			var tryarticles = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PageRelatedArticleBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryarticles.IsError){
+return ReadResult<IObject>.Move(tryarticles);
+}
+Articles = tryarticles.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

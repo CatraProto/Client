@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -42,20 +44,44 @@ High = high;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Low);
-			writer.Write(Medium);
-			writer.Write(High);
+writer.WriteInt32(ConstructorId);
+var checklow = 			writer.WriteObject(Low);
+if(checklow.IsError){
+ return checklow; 
+}
+var checkmedium = 			writer.WriteObject(Medium);
+if(checkmedium.IsError){
+ return checkmedium; 
+}
+var checkhigh = 			writer.WriteObject(High);
+if(checkhigh.IsError){
+ return checkhigh; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Low = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase>();
-			Medium = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase>();
-			High = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase>();
+			var trylow = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase>();
+if(trylow.IsError){
+return ReadResult<IObject>.Move(trylow);
+}
+Low = trylow.Value;
+			var trymedium = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase>();
+if(trymedium.IsError){
+return ReadResult<IObject>.Move(trymedium);
+}
+Medium = trymedium.Value;
+			var tryhigh = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase>();
+if(tryhigh.IsError){
+return ReadResult<IObject>.Move(tryhigh);
+}
+High = tryhigh.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -39,6 +41,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("title")]
 		public sealed override string Title { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("photo")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.ChatPhotoBase Photo { get; set; }
 
@@ -64,34 +67,58 @@ Title = title;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Id);
-			writer.Write(Title);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt32(Id);
+
+			writer.WriteString(Title);
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				writer.Write(Photo);
+var checkphoto = 				writer.WriteObject(Photo);
+if(checkphoto.IsError){
+ return checkphoto; 
+}
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			AutofillNewBroadcasts = FlagsHelper.IsFlagSet(Flags, 0);
 			AutofillPublicGroups = FlagsHelper.IsFlagSet(Flags, 1);
 			AutofillNewCorrespondents = FlagsHelper.IsFlagSet(Flags, 2);
-			Id = reader.Read<int>();
-			Title = reader.Read<string>();
+			var tryid = reader.ReadInt32();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var trytitle = reader.ReadString();
+if(trytitle.IsError){
+return ReadResult<IObject>.Move(trytitle);
+}
+Title = trytitle.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatPhotoBase>();
+				var tryphoto = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ChatPhotoBase>();
+if(tryphoto.IsError){
+return ReadResult<IObject>.Move(tryphoto);
+}
+Photo = tryphoto.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

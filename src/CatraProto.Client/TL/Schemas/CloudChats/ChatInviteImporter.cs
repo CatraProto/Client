@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -32,6 +34,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("date")]
 		public sealed override int Date { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("about")]
 		public sealed override string About { get; set; }
 
@@ -59,42 +62,67 @@ Date = date;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(UserId);
-			writer.Write(Date);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt64(UserId);
+writer.WriteInt32(Date);
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(About);
+
+				writer.WriteString(About);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(ApprovedBy.Value);
+writer.WriteInt64(ApprovedBy.Value);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Requested = FlagsHelper.IsFlagSet(Flags, 0);
-			UserId = reader.Read<long>();
-			Date = reader.Read<int>();
+			var tryuserId = reader.ReadInt64();
+if(tryuserId.IsError){
+return ReadResult<IObject>.Move(tryuserId);
+}
+UserId = tryuserId.Value;
+			var trydate = reader.ReadInt32();
+if(trydate.IsError){
+return ReadResult<IObject>.Move(trydate);
+}
+Date = trydate.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				About = reader.Read<string>();
+				var tryabout = reader.ReadString();
+if(tryabout.IsError){
+return ReadResult<IObject>.Move(tryabout);
+}
+About = tryabout.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				ApprovedBy = reader.Read<long>();
+				var tryapprovedBy = reader.ReadInt64();
+if(tryapprovedBy.IsError){
+return ReadResult<IObject>.Move(tryapprovedBy);
+}
+ApprovedBy = tryapprovedBy.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

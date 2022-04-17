@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Transactions;
 using CatraProto.Client.TL.Schemas.CloudChats;
 using Microsoft.Data.Sqlite;
 using Serilog;
@@ -33,7 +34,7 @@ namespace CatraProto.Client.Database
         {
             lock (_mutex)
             {
-                _logger.Information("Initializing database and defining structures...");
+                _logger.Information("Opening database connection and defining structures");
                 _sqliteConnection.Open();
                 InternalDatabase.DefineStructures();
                 PeerDatabase.DefineStructures();
@@ -41,59 +42,42 @@ namespace CatraProto.Client.Database
             }
         }
 
-        public void AsTransaction(Action<DatabaseManager, SqliteTransaction> action, IsolationLevel isolationLevel = IsolationLevel.Serializable)
-        {
-            lock (_mutex)
-            {
-                var transaction = _sqliteConnection.BeginTransaction(isolationLevel);
-                action(this, transaction);
-                transaction.Dispose();
-            }
-        }
-
         public void UpdateChats(IList<ChatBase>? chats = null, IList<UserBase>? users = null)
         {
-            AsTransaction((manager, transaction) =>
+            using var transaction = _sqliteConnection.BeginTransaction(System.Data.IsolationLevel.Serializable);
+            if (chats is not null)
             {
-                if (chats is not null)
+                foreach (var chat in chats)
                 {
-                    foreach (var chat in chats)
+                    if (chat is Channel or ChannelForbidden)
                     {
-                        if (chat is Channel or ChannelForbidden)
+                        PeerDatabase.UpdateChannel(chat, transaction);
+                        if (Updates.UpdatesTools.IsInChat(chat))
                         {
-                            manager.PeerDatabase.UpdateChannel(chat, transaction);
-                            if (Updates.UpdatesTools.IsInChat(chat))
-                            {
-                                _client.UpdatesReceiver.CreateProcessor(chat.Id, true);
-                            }
-                            else
-                            {
-                                _client.UpdatesReceiver.CloseProcessor(chat.Id);
-                            }
+                            _client.UpdatesReceiver.CreateProcessor(chat.Id, true);
                         }
                         else
                         {
-                            manager.PeerDatabase.UpdateChat(chat, transaction);
+                            _client.UpdatesReceiver.CloseProcessor(chat.Id);
                         }
                     }
-                }
-
-                if (users is not null)
-                {
-                    foreach (var user in users)
+                    else
                     {
-                        if (user is User userFull)
-                        {
-                            if (userFull.AccessHash is not null)
-                            {
-                                manager.PeerDatabase.PushChatToDb(user, transaction);
-                            }
-                        }
+                        PeerDatabase.UpdateChat(chat, transaction);
                     }
                 }
+            }
 
-                transaction.Commit();
-            });
+            if (users is not null)
+            {
+                foreach (var user in users)
+                {
+                    PeerDatabase.UpdateUser(user, transaction);
+                }
+            }
+
+            transaction.Commit();
+            
         }
 
         public void Dispose()

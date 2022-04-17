@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -22,23 +24,24 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		public int Flags { get; set; }
 
 [Newtonsoft.Json.JsonProperty("required_types")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.SecureRequiredTypeBase> RequiredTypes { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.SecureRequiredTypeBase> RequiredTypes { get; set; }
 
 [Newtonsoft.Json.JsonProperty("values")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase> Values { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase> Values { get; set; }
 
 [Newtonsoft.Json.JsonProperty("errors")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase> Errors { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase> Errors { get; set; }
 
 [Newtonsoft.Json.JsonProperty("users")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("privacy_policy_url")]
 		public sealed override string PrivacyPolicyUrl { get; set; }
 
 
         #nullable enable
- public AuthorizationForm (IList<CatraProto.Client.TL.Schemas.CloudChats.SecureRequiredTypeBase> requiredTypes,IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase> values,IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase> errors,IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> users)
+ public AuthorizationForm (List<CatraProto.Client.TL.Schemas.CloudChats.SecureRequiredTypeBase> requiredTypes,List<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase> values,List<CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase> errors,List<CatraProto.Client.TL.Schemas.CloudChats.UserBase> users)
 {
  RequiredTypes = requiredTypes;
 Values = values;
@@ -57,35 +60,76 @@ Users = users;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(RequiredTypes);
-			writer.Write(Values);
-			writer.Write(Errors);
-			writer.Write(Users);
+
+			writer.WriteInt32(Flags);
+var checkrequiredTypes = 			writer.WriteVector(RequiredTypes, false);
+if(checkrequiredTypes.IsError){
+ return checkrequiredTypes; 
+}
+var checkvalues = 			writer.WriteVector(Values, false);
+if(checkvalues.IsError){
+ return checkvalues; 
+}
+var checkerrors = 			writer.WriteVector(Errors, false);
+if(checkerrors.IsError){
+ return checkerrors; 
+}
+var checkusers = 			writer.WriteVector(Users, false);
+if(checkusers.IsError){
+ return checkusers; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(PrivacyPolicyUrl);
+
+				writer.WriteString(PrivacyPolicyUrl);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			RequiredTypes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SecureRequiredTypeBase>();
-			Values = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase>();
-			Errors = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase>();
-			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var tryrequiredTypes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SecureRequiredTypeBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryrequiredTypes.IsError){
+return ReadResult<IObject>.Move(tryrequiredTypes);
+}
+RequiredTypes = tryrequiredTypes.Value;
+			var tryvalues = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryvalues.IsError){
+return ReadResult<IObject>.Move(tryvalues);
+}
+Values = tryvalues.Value;
+			var tryerrors = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryerrors.IsError){
+return ReadResult<IObject>.Move(tryerrors);
+}
+Errors = tryerrors.Value;
+			var tryusers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryusers.IsError){
+return ReadResult<IObject>.Move(tryusers);
+}
+Users = tryusers.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				PrivacyPolicyUrl = reader.Read<string>();
+				var tryprivacyPolicyUrl = reader.ReadString();
+if(tryprivacyPolicyUrl.IsError){
+return ReadResult<IObject>.Move(tryprivacyPolicyUrl);
+}
+PrivacyPolicyUrl = tryprivacyPolicyUrl.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -116,17 +118,24 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
+
+			writer.WriteInt32(Flags);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Join = FlagsHelper.IsFlagSet(Flags, 0);
 			Leave = FlagsHelper.IsFlagSet(Flags, 1);
 			Invite = FlagsHelper.IsFlagSet(Flags, 2);
@@ -144,6 +153,7 @@ writer.Write(ConstructorId);
 			GroupCall = FlagsHelper.IsFlagSet(Flags, 14);
 			Invites = FlagsHelper.IsFlagSet(Flags, 15);
 			Send = FlagsHelper.IsFlagSet(Flags, 16);
+return new ReadResult<IObject>(this);
 
 		}
 		

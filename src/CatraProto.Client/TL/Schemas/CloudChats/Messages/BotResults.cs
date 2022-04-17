@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -29,24 +31,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [Newtonsoft.Json.JsonProperty("query_id")]
 		public sealed override long QueryId { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("next_offset")]
 		public sealed override string NextOffset { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("switch_pm")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.InlineBotSwitchPMBase SwitchPm { get; set; }
 
 [Newtonsoft.Json.JsonProperty("results")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.BotInlineResultBase> Results { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.BotInlineResultBase> Results { get; set; }
 
 [Newtonsoft.Json.JsonProperty("cache_time")]
 		public sealed override int CacheTime { get; set; }
 
 [Newtonsoft.Json.JsonProperty("users")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
 
         #nullable enable
- public BotResults (long queryId,IList<CatraProto.Client.TL.Schemas.CloudChats.BotInlineResultBase> results,int cacheTime,IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> users)
+ public BotResults (long queryId,List<CatraProto.Client.TL.Schemas.CloudChats.BotInlineResultBase> results,int cacheTime,List<CatraProto.Client.TL.Schemas.CloudChats.UserBase> users)
 {
  QueryId = queryId;
 Results = results;
@@ -67,46 +71,88 @@ Users = users;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(QueryId);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt64(QueryId);
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(NextOffset);
+
+				writer.WriteString(NextOffset);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(SwitchPm);
+var checkswitchPm = 				writer.WriteObject(SwitchPm);
+if(checkswitchPm.IsError){
+ return checkswitchPm; 
+}
 			}
 
-			writer.Write(Results);
-			writer.Write(CacheTime);
-			writer.Write(Users);
+var checkresults = 			writer.WriteVector(Results, false);
+if(checkresults.IsError){
+ return checkresults; 
+}
+writer.WriteInt32(CacheTime);
+var checkusers = 			writer.WriteVector(Users, false);
+if(checkusers.IsError){
+ return checkusers; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Gallery = FlagsHelper.IsFlagSet(Flags, 0);
-			QueryId = reader.Read<long>();
+			var tryqueryId = reader.ReadInt64();
+if(tryqueryId.IsError){
+return ReadResult<IObject>.Move(tryqueryId);
+}
+QueryId = tryqueryId.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				NextOffset = reader.Read<string>();
+				var trynextOffset = reader.ReadString();
+if(trynextOffset.IsError){
+return ReadResult<IObject>.Move(trynextOffset);
+}
+NextOffset = trynextOffset.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				SwitchPm = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InlineBotSwitchPMBase>();
+				var tryswitchPm = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InlineBotSwitchPMBase>();
+if(tryswitchPm.IsError){
+return ReadResult<IObject>.Move(tryswitchPm);
+}
+SwitchPm = tryswitchPm.Value;
 			}
 
-			Results = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.BotInlineResultBase>();
-			CacheTime = reader.Read<int>();
-			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+			var tryresults = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.BotInlineResultBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryresults.IsError){
+return ReadResult<IObject>.Move(tryresults);
+}
+Results = tryresults.Value;
+			var trycacheTime = reader.ReadInt32();
+if(trycacheTime.IsError){
+return ReadResult<IObject>.Move(trycacheTime);
+}
+CacheTime = trycacheTime.Value;
+			var tryusers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryusers.IsError){
+return ReadResult<IObject>.Move(tryusers);
+}
+Users = tryusers.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

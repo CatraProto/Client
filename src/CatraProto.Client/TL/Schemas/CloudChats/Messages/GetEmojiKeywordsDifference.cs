@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int ConstructorId { get => 352892591; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.EmojiKeywordsDifferenceBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("lang_code")]
 		public string LangCode { get; set; }
@@ -46,18 +46,30 @@ FromVersion = fromVersion;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(LangCode);
-			writer.Write(FromVersion);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteString(LangCode);
+writer.WriteInt32(FromVersion);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			LangCode = reader.Read<string>();
-			FromVersion = reader.Read<int>();
+			var trylangCode = reader.ReadString();
+if(trylangCode.IsError){
+return ReadResult<IObject>.Move(trylangCode);
+}
+LangCode = trylangCode.Value;
+			var tryfromVersion = reader.ReadInt32();
+if(tryfromVersion.IsError){
+return ReadResult<IObject>.Move(tryfromVersion);
+}
+FromVersion = tryfromVersion.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

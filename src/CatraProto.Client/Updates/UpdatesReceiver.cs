@@ -1,18 +1,13 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using CatraProto.Client.Async.Locks;
 using CatraProto.Client.Async.Loops;
 using CatraProto.Client.Async.Loops.Enums.Resumable;
 using CatraProto.Client.Async.Loops.Extensions;
 using CatraProto.Client.Collections;
-using CatraProto.Client.Connections.MessageScheduling.Enums;
+using CatraProto.Client.MTProto;
 using CatraProto.Client.MTProto.Session.Models;
 using CatraProto.Client.TL.Schemas.CloudChats;
-using CatraProto.Client.TL.Schemas.CloudChats.Messages;
 using CatraProto.Client.Tools;
 using CatraProto.Client.Updates.CustomTypes;
 using CatraProto.TL.Interfaces;
@@ -36,27 +31,6 @@ namespace CatraProto.Client.Updates
             _commonSequence = client.ClientSession.SessionManager.SessionData.UpdatesStates.GetState();
             _commonLoop.Processor = new UpdateProcessor(client, null, logger, _commonSequence);
             _commonLoop.Controller = new ResumableLoopController(_logger);
-        }
-
-        public void FillProcessors()
-        {
-            lock (_mutex)
-            {
-                _commonLoop.Controller.BindTo(_commonLoop.Processor);
-                _commonLoop.Controller.SendSignal(ResumableSignalState.Start, out _);
-                _commonLoop.Controller.SendSignal(ResumableSignalState.Suspend, out _);
-                foreach (var (chatId, state) in _client.ClientSession.SessionManager.SessionData.UpdatesStates.GetAllChannelsStates())
-                {
-                    if (!state.GetData().isActive)
-                    {
-                        continue;
-                    }
-
-                    _logger.Information("Creating processor for chatId {ChatId}", chatId);
-                    var tuple = CreateProcessor(chatId);
-                    _processors.TryAdd(chatId, tuple);
-                }
-            }
         }
 
         public void OnNewUpdates(IObject socketObject, IMethod? callingMethod = null)
@@ -196,7 +170,27 @@ namespace CatraProto.Client.Updates
                 }
             }
         }
-        
+
+        public void FillProcessors()
+        {
+            lock (_mutex)
+            {
+                _commonLoop.Controller.BindTo(_commonLoop.Processor);
+                _commonLoop.Controller.SendSignal(ResumableSignalState.Start, out _);
+                _commonLoop.Controller.SendSignal(ResumableSignalState.Suspend, out _);
+                foreach (var (chatId, state) in _client.ClientSession.SessionManager.SessionData.UpdatesStates.GetAllChannelsStates())
+                {
+                    if (!state.GetData().isActive)
+                    {
+                        continue;
+                    }
+
+                    _logger.Information("Creating processor for chatId {ChatId}", chatId);
+                    var tuple = CreateProcessor(chatId);
+                    _processors.TryAdd(chatId, tuple);
+                }
+            }
+        }
 
         public (ResumableLoopController Controller, UpdateProcessor Processor)? GetProcessor(long channelId)
         {

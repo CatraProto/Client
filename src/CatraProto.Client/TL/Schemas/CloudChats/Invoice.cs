@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -58,17 +60,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public sealed override string Currency { get; set; }
 
 [Newtonsoft.Json.JsonProperty("prices")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase> Prices { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase> Prices { get; set; }
 
 [Newtonsoft.Json.JsonProperty("max_tip_amount")]
 		public sealed override long? MaxTipAmount { get; set; }
 
 [Newtonsoft.Json.JsonProperty("suggested_tip_amounts")]
-		public sealed override IList<long> SuggestedTipAmounts { get; set; }
+		public sealed override List<long> SuggestedTipAmounts { get; set; }
 
 
         #nullable enable
- public Invoice (string currency,IList<CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase> prices)
+ public Invoice (string currency,List<CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase> prices)
 {
  Currency = currency;
 Prices = prices;
@@ -94,29 +96,41 @@ Prices = prices;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Currency);
-			writer.Write(Prices);
+
+			writer.WriteInt32(Flags);
+
+			writer.WriteString(Currency);
+var checkprices = 			writer.WriteVector(Prices, false);
+if(checkprices.IsError){
+ return checkprices; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 8))
 			{
-				writer.Write(MaxTipAmount.Value);
+writer.WriteInt64(MaxTipAmount.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 8))
 			{
-				writer.Write(SuggestedTipAmounts);
+
+				writer.WriteVector(SuggestedTipAmounts, false);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Test = FlagsHelper.IsFlagSet(Flags, 0);
 			NameRequested = FlagsHelper.IsFlagSet(Flags, 1);
 			PhoneRequested = FlagsHelper.IsFlagSet(Flags, 2);
@@ -125,18 +139,35 @@ writer.Write(ConstructorId);
 			Flexible = FlagsHelper.IsFlagSet(Flags, 5);
 			PhoneToProvider = FlagsHelper.IsFlagSet(Flags, 6);
 			EmailToProvider = FlagsHelper.IsFlagSet(Flags, 7);
-			Currency = reader.Read<string>();
-			Prices = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase>();
+			var trycurrency = reader.ReadString();
+if(trycurrency.IsError){
+return ReadResult<IObject>.Move(trycurrency);
+}
+Currency = trycurrency.Value;
+			var tryprices = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryprices.IsError){
+return ReadResult<IObject>.Move(tryprices);
+}
+Prices = tryprices.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 8))
 			{
-				MaxTipAmount = reader.Read<long>();
+				var trymaxTipAmount = reader.ReadInt64();
+if(trymaxTipAmount.IsError){
+return ReadResult<IObject>.Move(trymaxTipAmount);
+}
+MaxTipAmount = trymaxTipAmount.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 8))
 			{
-				SuggestedTipAmounts = reader.ReadVector<long>();
+				var trysuggestedTipAmounts = reader.ReadVector<long>(ParserTypes.Int64);
+if(trysuggestedTipAmounts.IsError){
+return ReadResult<IObject>.Move(trysuggestedTipAmounts);
+}
+SuggestedTipAmounts = trysuggestedTipAmounts.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

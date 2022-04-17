@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,17 +40,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Date { get; set; }
 
 [Newtonsoft.Json.JsonProperty("sizes")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase> Sizes { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase> Sizes { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("video_sizes")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.VideoSizeBase> VideoSizes { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.VideoSizeBase> VideoSizes { get; set; }
 
 [Newtonsoft.Json.JsonProperty("dc_id")]
 		public int DcId { get; set; }
 
 
         #nullable enable
- public Photo (long id,long accessHash,byte[] fileReference,int date,IList<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase> sizes,int dcId)
+ public Photo (long id,long accessHash,byte[] fileReference,int date,List<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase> sizes,int dcId)
 {
  Id = id;
 AccessHash = accessHash;
@@ -70,40 +73,83 @@ DcId = dcId;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Id);
-			writer.Write(AccessHash);
-			writer.Write(FileReference);
-			writer.Write(Date);
-			writer.Write(Sizes);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt64(Id);
+writer.WriteInt64(AccessHash);
+
+			writer.WriteBytes(FileReference);
+writer.WriteInt32(Date);
+var checksizes = 			writer.WriteVector(Sizes, false);
+if(checksizes.IsError){
+ return checksizes; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(VideoSizes);
+var checkvideoSizes = 				writer.WriteVector(VideoSizes, false);
+if(checkvideoSizes.IsError){
+ return checkvideoSizes; 
+}
 			}
 
-			writer.Write(DcId);
+writer.WriteInt32(DcId);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			HasStickers = FlagsHelper.IsFlagSet(Flags, 0);
-			Id = reader.Read<long>();
-			AccessHash = reader.Read<long>();
-			FileReference = reader.Read<byte[]>();
-			Date = reader.Read<int>();
-			Sizes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase>();
+			var tryid = reader.ReadInt64();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var tryaccessHash = reader.ReadInt64();
+if(tryaccessHash.IsError){
+return ReadResult<IObject>.Move(tryaccessHash);
+}
+AccessHash = tryaccessHash.Value;
+			var tryfileReference = reader.ReadBytes();
+if(tryfileReference.IsError){
+return ReadResult<IObject>.Move(tryfileReference);
+}
+FileReference = tryfileReference.Value;
+			var trydate = reader.ReadInt32();
+if(trydate.IsError){
+return ReadResult<IObject>.Move(trydate);
+}
+Date = trydate.Value;
+			var trysizes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trysizes.IsError){
+return ReadResult<IObject>.Move(trysizes);
+}
+Sizes = trysizes.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				VideoSizes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.VideoSizeBase>();
+				var tryvideoSizes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.VideoSizeBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryvideoSizes.IsError){
+return ReadResult<IObject>.Move(tryvideoSizes);
+}
+VideoSizes = tryvideoSizes.Value;
 			}
 
-			DcId = reader.Read<int>();
+			var trydcId = reader.ReadInt32();
+if(trydcId.IsError){
+return ReadResult<IObject>.Move(trydcId);
+}
+DcId = trydcId.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

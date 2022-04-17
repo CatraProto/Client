@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -54,41 +56,68 @@ Period = period;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Geo);
+
+			writer.WriteInt32(Flags);
+var checkgeo = 			writer.WriteObject(Geo);
+if(checkgeo.IsError){
+ return checkgeo; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(Heading.Value);
+writer.WriteInt32(Heading.Value);
 			}
 
-			writer.Write(Period);
+writer.WriteInt32(Period);
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(ProximityNotificationRadius.Value);
+writer.WriteInt32(ProximityNotificationRadius.Value);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			Geo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var trygeo = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase>();
+if(trygeo.IsError){
+return ReadResult<IObject>.Move(trygeo);
+}
+Geo = trygeo.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Heading = reader.Read<int>();
+				var tryheading = reader.ReadInt32();
+if(tryheading.IsError){
+return ReadResult<IObject>.Move(tryheading);
+}
+Heading = tryheading.Value;
 			}
 
-			Period = reader.Read<int>();
+			var tryperiod = reader.ReadInt32();
+if(tryperiod.IsError){
+return ReadResult<IObject>.Move(tryperiod);
+}
+Period = tryperiod.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				ProximityNotificationRadius = reader.Read<int>();
+				var tryproximityNotificationRadius = reader.ReadInt32();
+if(tryproximityNotificationRadius.IsError){
+return ReadResult<IObject>.Move(tryproximityNotificationRadius);
+}
+ProximityNotificationRadius = tryproximityNotificationRadius.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

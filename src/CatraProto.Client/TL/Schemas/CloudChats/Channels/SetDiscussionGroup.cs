@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
         public static int ConstructorId { get => 1079520178; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
 
 [Newtonsoft.Json.JsonProperty("broadcast")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase Broadcast { get; set; }
@@ -46,18 +46,35 @@ Group = group;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Broadcast);
-			writer.Write(Group);
+writer.WriteInt32(ConstructorId);
+var checkbroadcast = 			writer.WriteObject(Broadcast);
+if(checkbroadcast.IsError){
+ return checkbroadcast; 
+}
+var checkgroup = 			writer.WriteObject(Group);
+if(checkgroup.IsError){
+ return checkgroup; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Broadcast = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
-			Group = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
+			var trybroadcast = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
+if(trybroadcast.IsError){
+return ReadResult<IObject>.Move(trybroadcast);
+}
+Broadcast = trybroadcast.Value;
+			var trygroup = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
+if(trygroup.IsError){
+return ReadResult<IObject>.Move(trygroup);
+}
+Group = trygroup.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

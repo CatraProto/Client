@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -70,7 +72,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public sealed override int ThisDc { get; set; }
 
 [Newtonsoft.Json.JsonProperty("dc_options")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase> DcOptions { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase> DcOptions { get; set; }
 
 [Newtonsoft.Json.JsonProperty("dc_txt_domain_name")]
 		public sealed override string DcTxtDomainName { get; set; }
@@ -156,18 +158,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("me_url_prefix")]
 		public sealed override string MeUrlPrefix { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("autoupdate_url_prefix")]
 		public sealed override string AutoupdateUrlPrefix { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("gif_search_username")]
 		public sealed override string GifSearchUsername { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("venue_search_username")]
 		public sealed override string VenueSearchUsername { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("img_search_username")]
 		public sealed override string ImgSearchUsername { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("static_maps_provider")]
 		public sealed override string StaticMapsProvider { get; set; }
 
@@ -180,6 +187,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("webfile_dc_id")]
 		public sealed override int WebfileDcId { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("suggested_lang_code")]
 		public sealed override string SuggestedLangCode { get; set; }
 
@@ -191,7 +199,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
         #nullable enable
- public Config (int date,int expires,bool testMode,int thisDc,IList<CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase> dcOptions,string dcTxtDomainName,int chatSizeMax,int megagroupSizeMax,int forwardedCountMax,int onlineUpdatePeriodMs,int offlineBlurTimeoutMs,int offlineIdleTimeoutMs,int onlineCloudTimeoutMs,int notifyCloudDelayMs,int notifyDefaultDelayMs,int pushChatPeriodMs,int pushChatLimit,int savedGifsLimit,int editTimeLimit,int revokeTimeLimit,int revokePmTimeLimit,int ratingEDecay,int stickersRecentLimit,int stickersFavedLimit,int channelsReadMediaPeriod,int pinnedDialogsCountMax,int pinnedInfolderCountMax,int callReceiveTimeoutMs,int callRingTimeoutMs,int callConnectTimeoutMs,int callPacketTimeoutMs,string meUrlPrefix,int captionLengthMax,int messageLengthMax,int webfileDcId)
+ public Config (int date,int expires,bool testMode,int thisDc,List<CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase> dcOptions,string dcTxtDomainName,int chatSizeMax,int megagroupSizeMax,int forwardedCountMax,int onlineUpdatePeriodMs,int offlineBlurTimeoutMs,int offlineIdleTimeoutMs,int onlineCloudTimeoutMs,int notifyCloudDelayMs,int notifyDefaultDelayMs,int pushChatPeriodMs,int pushChatLimit,int savedGifsLimit,int editTimeLimit,int revokeTimeLimit,int revokePmTimeLimit,int ratingEDecay,int stickersRecentLimit,int stickersFavedLimit,int channelsReadMediaPeriod,int pinnedDialogsCountMax,int pinnedInfolderCountMax,int callReceiveTimeoutMs,int callRingTimeoutMs,int callConnectTimeoutMs,int callPacketTimeoutMs,string meUrlPrefix,int captionLengthMax,int messageLengthMax,int webfileDcId)
 {
  Date = date;
 Expires = expires;
@@ -256,97 +264,118 @@ WebfileDcId = webfileDcId;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Date);
-			writer.Write(Expires);
-			writer.Write(TestMode);
-			writer.Write(ThisDc);
-			writer.Write(DcOptions);
-			writer.Write(DcTxtDomainName);
-			writer.Write(ChatSizeMax);
-			writer.Write(MegagroupSizeMax);
-			writer.Write(ForwardedCountMax);
-			writer.Write(OnlineUpdatePeriodMs);
-			writer.Write(OfflineBlurTimeoutMs);
-			writer.Write(OfflineIdleTimeoutMs);
-			writer.Write(OnlineCloudTimeoutMs);
-			writer.Write(NotifyCloudDelayMs);
-			writer.Write(NotifyDefaultDelayMs);
-			writer.Write(PushChatPeriodMs);
-			writer.Write(PushChatLimit);
-			writer.Write(SavedGifsLimit);
-			writer.Write(EditTimeLimit);
-			writer.Write(RevokeTimeLimit);
-			writer.Write(RevokePmTimeLimit);
-			writer.Write(RatingEDecay);
-			writer.Write(StickersRecentLimit);
-			writer.Write(StickersFavedLimit);
-			writer.Write(ChannelsReadMediaPeriod);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt32(Date);
+writer.WriteInt32(Expires);
+var checktestMode = 			writer.WriteBool(TestMode);
+if(checktestMode.IsError){
+ return checktestMode; 
+}
+writer.WriteInt32(ThisDc);
+var checkdcOptions = 			writer.WriteVector(DcOptions, false);
+if(checkdcOptions.IsError){
+ return checkdcOptions; 
+}
+
+			writer.WriteString(DcTxtDomainName);
+writer.WriteInt32(ChatSizeMax);
+writer.WriteInt32(MegagroupSizeMax);
+writer.WriteInt32(ForwardedCountMax);
+writer.WriteInt32(OnlineUpdatePeriodMs);
+writer.WriteInt32(OfflineBlurTimeoutMs);
+writer.WriteInt32(OfflineIdleTimeoutMs);
+writer.WriteInt32(OnlineCloudTimeoutMs);
+writer.WriteInt32(NotifyCloudDelayMs);
+writer.WriteInt32(NotifyDefaultDelayMs);
+writer.WriteInt32(PushChatPeriodMs);
+writer.WriteInt32(PushChatLimit);
+writer.WriteInt32(SavedGifsLimit);
+writer.WriteInt32(EditTimeLimit);
+writer.WriteInt32(RevokeTimeLimit);
+writer.WriteInt32(RevokePmTimeLimit);
+writer.WriteInt32(RatingEDecay);
+writer.WriteInt32(StickersRecentLimit);
+writer.WriteInt32(StickersFavedLimit);
+writer.WriteInt32(ChannelsReadMediaPeriod);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(TmpSessions.Value);
+writer.WriteInt32(TmpSessions.Value);
 			}
 
-			writer.Write(PinnedDialogsCountMax);
-			writer.Write(PinnedInfolderCountMax);
-			writer.Write(CallReceiveTimeoutMs);
-			writer.Write(CallRingTimeoutMs);
-			writer.Write(CallConnectTimeoutMs);
-			writer.Write(CallPacketTimeoutMs);
-			writer.Write(MeUrlPrefix);
+writer.WriteInt32(PinnedDialogsCountMax);
+writer.WriteInt32(PinnedInfolderCountMax);
+writer.WriteInt32(CallReceiveTimeoutMs);
+writer.WriteInt32(CallRingTimeoutMs);
+writer.WriteInt32(CallConnectTimeoutMs);
+writer.WriteInt32(CallPacketTimeoutMs);
+
+			writer.WriteString(MeUrlPrefix);
 			if(FlagsHelper.IsFlagSet(Flags, 7))
 			{
-				writer.Write(AutoupdateUrlPrefix);
+
+				writer.WriteString(AutoupdateUrlPrefix);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 9))
 			{
-				writer.Write(GifSearchUsername);
+
+				writer.WriteString(GifSearchUsername);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 10))
 			{
-				writer.Write(VenueSearchUsername);
+
+				writer.WriteString(VenueSearchUsername);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 11))
 			{
-				writer.Write(ImgSearchUsername);
+
+				writer.WriteString(ImgSearchUsername);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 12))
 			{
-				writer.Write(StaticMapsProvider);
+
+				writer.WriteString(StaticMapsProvider);
 			}
 
-			writer.Write(CaptionLengthMax);
-			writer.Write(MessageLengthMax);
-			writer.Write(WebfileDcId);
+writer.WriteInt32(CaptionLengthMax);
+writer.WriteInt32(MessageLengthMax);
+writer.WriteInt32(WebfileDcId);
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(SuggestedLangCode);
-			}
 
-			if(FlagsHelper.IsFlagSet(Flags, 2))
-			{
-				writer.Write(LangPackVersion.Value);
+				writer.WriteString(SuggestedLangCode);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(BaseLangPackVersion.Value);
+writer.WriteInt32(LangPackVersion.Value);
 			}
 
+			if(FlagsHelper.IsFlagSet(Flags, 2))
+			{
+writer.WriteInt32(BaseLangPackVersion.Value);
+			}
+
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			PhonecallsEnabled = FlagsHelper.IsFlagSet(Flags, 1);
 			DefaultP2pContacts = FlagsHelper.IsFlagSet(Flags, 3);
 			PreloadFeaturedStickers = FlagsHelper.IsFlagSet(Flags, 4);
@@ -354,86 +383,263 @@ writer.Write(ConstructorId);
 			RevokePmInbox = FlagsHelper.IsFlagSet(Flags, 6);
 			BlockedMode = FlagsHelper.IsFlagSet(Flags, 8);
 			PfsEnabled = FlagsHelper.IsFlagSet(Flags, 13);
-			Date = reader.Read<int>();
-			Expires = reader.Read<int>();
-			TestMode = reader.Read<bool>();
-			ThisDc = reader.Read<int>();
-			DcOptions = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase>();
-			DcTxtDomainName = reader.Read<string>();
-			ChatSizeMax = reader.Read<int>();
-			MegagroupSizeMax = reader.Read<int>();
-			ForwardedCountMax = reader.Read<int>();
-			OnlineUpdatePeriodMs = reader.Read<int>();
-			OfflineBlurTimeoutMs = reader.Read<int>();
-			OfflineIdleTimeoutMs = reader.Read<int>();
-			OnlineCloudTimeoutMs = reader.Read<int>();
-			NotifyCloudDelayMs = reader.Read<int>();
-			NotifyDefaultDelayMs = reader.Read<int>();
-			PushChatPeriodMs = reader.Read<int>();
-			PushChatLimit = reader.Read<int>();
-			SavedGifsLimit = reader.Read<int>();
-			EditTimeLimit = reader.Read<int>();
-			RevokeTimeLimit = reader.Read<int>();
-			RevokePmTimeLimit = reader.Read<int>();
-			RatingEDecay = reader.Read<int>();
-			StickersRecentLimit = reader.Read<int>();
-			StickersFavedLimit = reader.Read<int>();
-			ChannelsReadMediaPeriod = reader.Read<int>();
+			var trydate = reader.ReadInt32();
+if(trydate.IsError){
+return ReadResult<IObject>.Move(trydate);
+}
+Date = trydate.Value;
+			var tryexpires = reader.ReadInt32();
+if(tryexpires.IsError){
+return ReadResult<IObject>.Move(tryexpires);
+}
+Expires = tryexpires.Value;
+			var trytestMode = reader.ReadBool();
+if(trytestMode.IsError){
+return ReadResult<IObject>.Move(trytestMode);
+}
+TestMode = trytestMode.Value;
+			var trythisDc = reader.ReadInt32();
+if(trythisDc.IsError){
+return ReadResult<IObject>.Move(trythisDc);
+}
+ThisDc = trythisDc.Value;
+			var trydcOptions = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trydcOptions.IsError){
+return ReadResult<IObject>.Move(trydcOptions);
+}
+DcOptions = trydcOptions.Value;
+			var trydcTxtDomainName = reader.ReadString();
+if(trydcTxtDomainName.IsError){
+return ReadResult<IObject>.Move(trydcTxtDomainName);
+}
+DcTxtDomainName = trydcTxtDomainName.Value;
+			var trychatSizeMax = reader.ReadInt32();
+if(trychatSizeMax.IsError){
+return ReadResult<IObject>.Move(trychatSizeMax);
+}
+ChatSizeMax = trychatSizeMax.Value;
+			var trymegagroupSizeMax = reader.ReadInt32();
+if(trymegagroupSizeMax.IsError){
+return ReadResult<IObject>.Move(trymegagroupSizeMax);
+}
+MegagroupSizeMax = trymegagroupSizeMax.Value;
+			var tryforwardedCountMax = reader.ReadInt32();
+if(tryforwardedCountMax.IsError){
+return ReadResult<IObject>.Move(tryforwardedCountMax);
+}
+ForwardedCountMax = tryforwardedCountMax.Value;
+			var tryonlineUpdatePeriodMs = reader.ReadInt32();
+if(tryonlineUpdatePeriodMs.IsError){
+return ReadResult<IObject>.Move(tryonlineUpdatePeriodMs);
+}
+OnlineUpdatePeriodMs = tryonlineUpdatePeriodMs.Value;
+			var tryofflineBlurTimeoutMs = reader.ReadInt32();
+if(tryofflineBlurTimeoutMs.IsError){
+return ReadResult<IObject>.Move(tryofflineBlurTimeoutMs);
+}
+OfflineBlurTimeoutMs = tryofflineBlurTimeoutMs.Value;
+			var tryofflineIdleTimeoutMs = reader.ReadInt32();
+if(tryofflineIdleTimeoutMs.IsError){
+return ReadResult<IObject>.Move(tryofflineIdleTimeoutMs);
+}
+OfflineIdleTimeoutMs = tryofflineIdleTimeoutMs.Value;
+			var tryonlineCloudTimeoutMs = reader.ReadInt32();
+if(tryonlineCloudTimeoutMs.IsError){
+return ReadResult<IObject>.Move(tryonlineCloudTimeoutMs);
+}
+OnlineCloudTimeoutMs = tryonlineCloudTimeoutMs.Value;
+			var trynotifyCloudDelayMs = reader.ReadInt32();
+if(trynotifyCloudDelayMs.IsError){
+return ReadResult<IObject>.Move(trynotifyCloudDelayMs);
+}
+NotifyCloudDelayMs = trynotifyCloudDelayMs.Value;
+			var trynotifyDefaultDelayMs = reader.ReadInt32();
+if(trynotifyDefaultDelayMs.IsError){
+return ReadResult<IObject>.Move(trynotifyDefaultDelayMs);
+}
+NotifyDefaultDelayMs = trynotifyDefaultDelayMs.Value;
+			var trypushChatPeriodMs = reader.ReadInt32();
+if(trypushChatPeriodMs.IsError){
+return ReadResult<IObject>.Move(trypushChatPeriodMs);
+}
+PushChatPeriodMs = trypushChatPeriodMs.Value;
+			var trypushChatLimit = reader.ReadInt32();
+if(trypushChatLimit.IsError){
+return ReadResult<IObject>.Move(trypushChatLimit);
+}
+PushChatLimit = trypushChatLimit.Value;
+			var trysavedGifsLimit = reader.ReadInt32();
+if(trysavedGifsLimit.IsError){
+return ReadResult<IObject>.Move(trysavedGifsLimit);
+}
+SavedGifsLimit = trysavedGifsLimit.Value;
+			var tryeditTimeLimit = reader.ReadInt32();
+if(tryeditTimeLimit.IsError){
+return ReadResult<IObject>.Move(tryeditTimeLimit);
+}
+EditTimeLimit = tryeditTimeLimit.Value;
+			var tryrevokeTimeLimit = reader.ReadInt32();
+if(tryrevokeTimeLimit.IsError){
+return ReadResult<IObject>.Move(tryrevokeTimeLimit);
+}
+RevokeTimeLimit = tryrevokeTimeLimit.Value;
+			var tryrevokePmTimeLimit = reader.ReadInt32();
+if(tryrevokePmTimeLimit.IsError){
+return ReadResult<IObject>.Move(tryrevokePmTimeLimit);
+}
+RevokePmTimeLimit = tryrevokePmTimeLimit.Value;
+			var tryratingEDecay = reader.ReadInt32();
+if(tryratingEDecay.IsError){
+return ReadResult<IObject>.Move(tryratingEDecay);
+}
+RatingEDecay = tryratingEDecay.Value;
+			var trystickersRecentLimit = reader.ReadInt32();
+if(trystickersRecentLimit.IsError){
+return ReadResult<IObject>.Move(trystickersRecentLimit);
+}
+StickersRecentLimit = trystickersRecentLimit.Value;
+			var trystickersFavedLimit = reader.ReadInt32();
+if(trystickersFavedLimit.IsError){
+return ReadResult<IObject>.Move(trystickersFavedLimit);
+}
+StickersFavedLimit = trystickersFavedLimit.Value;
+			var trychannelsReadMediaPeriod = reader.ReadInt32();
+if(trychannelsReadMediaPeriod.IsError){
+return ReadResult<IObject>.Move(trychannelsReadMediaPeriod);
+}
+ChannelsReadMediaPeriod = trychannelsReadMediaPeriod.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				TmpSessions = reader.Read<int>();
+				var trytmpSessions = reader.ReadInt32();
+if(trytmpSessions.IsError){
+return ReadResult<IObject>.Move(trytmpSessions);
+}
+TmpSessions = trytmpSessions.Value;
 			}
 
-			PinnedDialogsCountMax = reader.Read<int>();
-			PinnedInfolderCountMax = reader.Read<int>();
-			CallReceiveTimeoutMs = reader.Read<int>();
-			CallRingTimeoutMs = reader.Read<int>();
-			CallConnectTimeoutMs = reader.Read<int>();
-			CallPacketTimeoutMs = reader.Read<int>();
-			MeUrlPrefix = reader.Read<string>();
+			var trypinnedDialogsCountMax = reader.ReadInt32();
+if(trypinnedDialogsCountMax.IsError){
+return ReadResult<IObject>.Move(trypinnedDialogsCountMax);
+}
+PinnedDialogsCountMax = trypinnedDialogsCountMax.Value;
+			var trypinnedInfolderCountMax = reader.ReadInt32();
+if(trypinnedInfolderCountMax.IsError){
+return ReadResult<IObject>.Move(trypinnedInfolderCountMax);
+}
+PinnedInfolderCountMax = trypinnedInfolderCountMax.Value;
+			var trycallReceiveTimeoutMs = reader.ReadInt32();
+if(trycallReceiveTimeoutMs.IsError){
+return ReadResult<IObject>.Move(trycallReceiveTimeoutMs);
+}
+CallReceiveTimeoutMs = trycallReceiveTimeoutMs.Value;
+			var trycallRingTimeoutMs = reader.ReadInt32();
+if(trycallRingTimeoutMs.IsError){
+return ReadResult<IObject>.Move(trycallRingTimeoutMs);
+}
+CallRingTimeoutMs = trycallRingTimeoutMs.Value;
+			var trycallConnectTimeoutMs = reader.ReadInt32();
+if(trycallConnectTimeoutMs.IsError){
+return ReadResult<IObject>.Move(trycallConnectTimeoutMs);
+}
+CallConnectTimeoutMs = trycallConnectTimeoutMs.Value;
+			var trycallPacketTimeoutMs = reader.ReadInt32();
+if(trycallPacketTimeoutMs.IsError){
+return ReadResult<IObject>.Move(trycallPacketTimeoutMs);
+}
+CallPacketTimeoutMs = trycallPacketTimeoutMs.Value;
+			var trymeUrlPrefix = reader.ReadString();
+if(trymeUrlPrefix.IsError){
+return ReadResult<IObject>.Move(trymeUrlPrefix);
+}
+MeUrlPrefix = trymeUrlPrefix.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 7))
 			{
-				AutoupdateUrlPrefix = reader.Read<string>();
+				var tryautoupdateUrlPrefix = reader.ReadString();
+if(tryautoupdateUrlPrefix.IsError){
+return ReadResult<IObject>.Move(tryautoupdateUrlPrefix);
+}
+AutoupdateUrlPrefix = tryautoupdateUrlPrefix.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 9))
 			{
-				GifSearchUsername = reader.Read<string>();
+				var trygifSearchUsername = reader.ReadString();
+if(trygifSearchUsername.IsError){
+return ReadResult<IObject>.Move(trygifSearchUsername);
+}
+GifSearchUsername = trygifSearchUsername.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 10))
 			{
-				VenueSearchUsername = reader.Read<string>();
+				var tryvenueSearchUsername = reader.ReadString();
+if(tryvenueSearchUsername.IsError){
+return ReadResult<IObject>.Move(tryvenueSearchUsername);
+}
+VenueSearchUsername = tryvenueSearchUsername.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 11))
 			{
-				ImgSearchUsername = reader.Read<string>();
+				var tryimgSearchUsername = reader.ReadString();
+if(tryimgSearchUsername.IsError){
+return ReadResult<IObject>.Move(tryimgSearchUsername);
+}
+ImgSearchUsername = tryimgSearchUsername.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 12))
 			{
-				StaticMapsProvider = reader.Read<string>();
+				var trystaticMapsProvider = reader.ReadString();
+if(trystaticMapsProvider.IsError){
+return ReadResult<IObject>.Move(trystaticMapsProvider);
+}
+StaticMapsProvider = trystaticMapsProvider.Value;
 			}
 
-			CaptionLengthMax = reader.Read<int>();
-			MessageLengthMax = reader.Read<int>();
-			WebfileDcId = reader.Read<int>();
+			var trycaptionLengthMax = reader.ReadInt32();
+if(trycaptionLengthMax.IsError){
+return ReadResult<IObject>.Move(trycaptionLengthMax);
+}
+CaptionLengthMax = trycaptionLengthMax.Value;
+			var trymessageLengthMax = reader.ReadInt32();
+if(trymessageLengthMax.IsError){
+return ReadResult<IObject>.Move(trymessageLengthMax);
+}
+MessageLengthMax = trymessageLengthMax.Value;
+			var trywebfileDcId = reader.ReadInt32();
+if(trywebfileDcId.IsError){
+return ReadResult<IObject>.Move(trywebfileDcId);
+}
+WebfileDcId = trywebfileDcId.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				SuggestedLangCode = reader.Read<string>();
+				var trysuggestedLangCode = reader.ReadString();
+if(trysuggestedLangCode.IsError){
+return ReadResult<IObject>.Move(trysuggestedLangCode);
+}
+SuggestedLangCode = trysuggestedLangCode.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				LangPackVersion = reader.Read<int>();
+				var trylangPackVersion = reader.ReadInt32();
+if(trylangPackVersion.IsError){
+return ReadResult<IObject>.Move(trylangPackVersion);
+}
+LangPackVersion = trylangPackVersion.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				BaseLangPackVersion = reader.Read<int>();
+				var trybaseLangPackVersion = reader.ReadInt32();
+if(trybaseLangPackVersion.IsError){
+return ReadResult<IObject>.Move(trybaseLangPackVersion);
+}
+BaseLangPackVersion = trybaseLangPackVersion.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

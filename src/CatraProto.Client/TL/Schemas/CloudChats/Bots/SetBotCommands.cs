@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Bots
         public static int ConstructorId { get => 85399130; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
 
 [Newtonsoft.Json.JsonProperty("scope")]
 		public CatraProto.Client.TL.Schemas.CloudChats.BotCommandScopeBase Scope { get; set; }
@@ -28,11 +28,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Bots
 		public string LangCode { get; set; }
 
 [Newtonsoft.Json.JsonProperty("commands")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.BotCommandBase> Commands { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.BotCommandBase> Commands { get; set; }
 
         
         #nullable enable
- public SetBotCommands (CatraProto.Client.TL.Schemas.CloudChats.BotCommandScopeBase scope,string langCode,IList<CatraProto.Client.TL.Schemas.CloudChats.BotCommandBase> commands)
+ public SetBotCommands (CatraProto.Client.TL.Schemas.CloudChats.BotCommandScopeBase scope,string langCode,List<CatraProto.Client.TL.Schemas.CloudChats.BotCommandBase> commands)
 {
  Scope = scope;
 LangCode = langCode;
@@ -50,20 +50,42 @@ Commands = commands;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Scope);
-			writer.Write(LangCode);
-			writer.Write(Commands);
+writer.WriteInt32(ConstructorId);
+var checkscope = 			writer.WriteObject(Scope);
+if(checkscope.IsError){
+ return checkscope; 
+}
+
+			writer.WriteString(LangCode);
+var checkcommands = 			writer.WriteVector(Commands, false);
+if(checkcommands.IsError){
+ return checkcommands; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Scope = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.BotCommandScopeBase>();
-			LangCode = reader.Read<string>();
-			Commands = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.BotCommandBase>();
+			var tryscope = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.BotCommandScopeBase>();
+if(tryscope.IsError){
+return ReadResult<IObject>.Move(tryscope);
+}
+Scope = tryscope.Value;
+			var trylangCode = reader.ReadString();
+if(trylangCode.IsError){
+return ReadResult<IObject>.Move(trylangCode);
+}
+LangCode = trylangCode.Value;
+			var trycommands = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.BotCommandBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trycommands.IsError){
+return ReadResult<IObject>.Move(trycommands);
+}
+Commands = trycommands.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

@@ -1,5 +1,7 @@
 using CatraProto.TL;
+using CatraProto.TL.Results;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL.Interfaces;
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
@@ -16,15 +18,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 [Newtonsoft.Json.JsonProperty("default_name")]
 		public abstract string DefaultName { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("name")]
 		public abstract string Name { get; set; }
 
 [Newtonsoft.Json.JsonProperty("country_codes")]
-		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.Help.CountryCodeBase> CountryCodes { get; set; }
+		public abstract List<CatraProto.Client.TL.Schemas.CloudChats.Help.CountryCodeBase> CountryCodes { get; set; }
 
         public abstract void UpdateFlags();
-        public abstract void Deserialize(Reader reader);
-        public abstract void Serialize(Writer writer);
+        public abstract ReadResult<IObject> Deserialize(Reader reader);
+        public abstract WriteResult Serialize(Writer writer);
         public abstract int GetConstructorId();
     }
 }

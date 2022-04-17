@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -34,16 +36,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Authorization);
+writer.WriteInt32(ConstructorId);
+var checkauthorization = 			writer.WriteObject(Authorization);
+if(checkauthorization.IsError){
+ return checkauthorization; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Authorization = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>();
+			var tryauthorization = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>();
+if(tryauthorization.IsError){
+return ReadResult<IObject>.Move(tryauthorization);
+}
+Authorization = tryauthorization.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

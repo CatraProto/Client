@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -34,16 +36,26 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(OrigMessage);
+writer.WriteInt32(ConstructorId);
+var checkorigMessage = 			writer.WriteObject(OrigMessage);
+if(checkorigMessage.IsError){
+ return checkorigMessage; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			OrigMessage = reader.Read<CatraProto.Client.TL.Schemas.MTProto.MessageBase>();
+			var tryorigMessage = reader.ReadObject<CatraProto.Client.TL.Schemas.MTProto.MessageBase>();
+if(tryorigMessage.IsError){
+return ReadResult<IObject>.Move(tryorigMessage);
+}
+OrigMessage = tryorigMessage.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

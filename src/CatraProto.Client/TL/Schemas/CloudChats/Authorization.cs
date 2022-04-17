@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -109,46 +111,110 @@ Region = region;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Hash);
-			writer.Write(DeviceModel);
-			writer.Write(Platform);
-			writer.Write(SystemVersion);
-			writer.Write(ApiId);
-			writer.Write(AppName);
-			writer.Write(AppVersion);
-			writer.Write(DateCreated);
-			writer.Write(DateActive);
-			writer.Write(Ip);
-			writer.Write(Country);
-			writer.Write(Region);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt64(Hash);
+
+			writer.WriteString(DeviceModel);
+
+			writer.WriteString(Platform);
+
+			writer.WriteString(SystemVersion);
+writer.WriteInt32(ApiId);
+
+			writer.WriteString(AppName);
+
+			writer.WriteString(AppVersion);
+writer.WriteInt32(DateCreated);
+writer.WriteInt32(DateActive);
+
+			writer.WriteString(Ip);
+
+			writer.WriteString(Country);
+
+			writer.WriteString(Region);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Current = FlagsHelper.IsFlagSet(Flags, 0);
 			OfficialApp = FlagsHelper.IsFlagSet(Flags, 1);
 			PasswordPending = FlagsHelper.IsFlagSet(Flags, 2);
 			EncryptedRequestsDisabled = FlagsHelper.IsFlagSet(Flags, 3);
 			CallRequestsDisabled = FlagsHelper.IsFlagSet(Flags, 4);
-			Hash = reader.Read<long>();
-			DeviceModel = reader.Read<string>();
-			Platform = reader.Read<string>();
-			SystemVersion = reader.Read<string>();
-			ApiId = reader.Read<int>();
-			AppName = reader.Read<string>();
-			AppVersion = reader.Read<string>();
-			DateCreated = reader.Read<int>();
-			DateActive = reader.Read<int>();
-			Ip = reader.Read<string>();
-			Country = reader.Read<string>();
-			Region = reader.Read<string>();
+			var tryhash = reader.ReadInt64();
+if(tryhash.IsError){
+return ReadResult<IObject>.Move(tryhash);
+}
+Hash = tryhash.Value;
+			var trydeviceModel = reader.ReadString();
+if(trydeviceModel.IsError){
+return ReadResult<IObject>.Move(trydeviceModel);
+}
+DeviceModel = trydeviceModel.Value;
+			var tryplatform = reader.ReadString();
+if(tryplatform.IsError){
+return ReadResult<IObject>.Move(tryplatform);
+}
+Platform = tryplatform.Value;
+			var trysystemVersion = reader.ReadString();
+if(trysystemVersion.IsError){
+return ReadResult<IObject>.Move(trysystemVersion);
+}
+SystemVersion = trysystemVersion.Value;
+			var tryapiId = reader.ReadInt32();
+if(tryapiId.IsError){
+return ReadResult<IObject>.Move(tryapiId);
+}
+ApiId = tryapiId.Value;
+			var tryappName = reader.ReadString();
+if(tryappName.IsError){
+return ReadResult<IObject>.Move(tryappName);
+}
+AppName = tryappName.Value;
+			var tryappVersion = reader.ReadString();
+if(tryappVersion.IsError){
+return ReadResult<IObject>.Move(tryappVersion);
+}
+AppVersion = tryappVersion.Value;
+			var trydateCreated = reader.ReadInt32();
+if(trydateCreated.IsError){
+return ReadResult<IObject>.Move(trydateCreated);
+}
+DateCreated = trydateCreated.Value;
+			var trydateActive = reader.ReadInt32();
+if(trydateActive.IsError){
+return ReadResult<IObject>.Move(trydateActive);
+}
+DateActive = trydateActive.Value;
+			var tryip = reader.ReadString();
+if(tryip.IsError){
+return ReadResult<IObject>.Move(tryip);
+}
+Ip = tryip.Value;
+			var trycountry = reader.ReadString();
+if(trycountry.IsError){
+return ReadResult<IObject>.Move(trycountry);
+}
+Country = trycountry.Value;
+			var tryregion = reader.ReadString();
+if(tryregion.IsError){
+return ReadResult<IObject>.Move(tryregion);
+}
+Region = tryregion.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

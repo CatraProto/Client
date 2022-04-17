@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -29,6 +31,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("forwards")]
 		public sealed override int? Forwards { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("replies")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.MessageRepliesBase Replies { get; set; }
 
@@ -46,47 +49,70 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
+
+			writer.WriteInt32(Flags);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(Views.Value);
+writer.WriteInt32(Views.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(Forwards.Value);
+writer.WriteInt32(Forwards.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(Replies);
+var checkreplies = 				writer.WriteObject(Replies);
+if(checkreplies.IsError){
+ return checkreplies; 
+}
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Views = reader.Read<int>();
+				var tryviews = reader.ReadInt32();
+if(tryviews.IsError){
+return ReadResult<IObject>.Move(tryviews);
+}
+Views = tryviews.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Forwards = reader.Read<int>();
+				var tryforwards = reader.ReadInt32();
+if(tryforwards.IsError){
+return ReadResult<IObject>.Move(tryforwards);
+}
+Forwards = tryforwards.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				Replies = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageRepliesBase>();
+				var tryreplies = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.MessageRepliesBase>();
+if(tryreplies.IsError){
+return ReadResult<IObject>.Move(tryreplies);
+}
+Replies = tryreplies.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -18,14 +20,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase Type { get; set; }
 
 [Newtonsoft.Json.JsonProperty("file_hash")]
-		public IList<byte[]> FileHash { get; set; }
+		public List<byte[]> FileHash { get; set; }
 
 [Newtonsoft.Json.JsonProperty("text")]
 		public sealed override string Text { get; set; }
 
 
         #nullable enable
- public SecureValueErrorTranslationFiles (CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase type,IList<byte[]> fileHash,string text)
+ public SecureValueErrorTranslationFiles (CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase type,List<byte[]> fileHash,string text)
 {
  Type = type;
 FileHash = fileHash;
@@ -42,20 +44,40 @@ Text = text;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Type);
-			writer.Write(FileHash);
-			writer.Write(Text);
+writer.WriteInt32(ConstructorId);
+var checktype = 			writer.WriteObject(Type);
+if(checktype.IsError){
+ return checktype; 
+}
+
+			writer.WriteVector(FileHash, false);
+
+			writer.WriteString(Text);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Type = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase>();
-			FileHash = reader.ReadVector<byte[]>();
-			Text = reader.Read<string>();
+			var trytype = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase>();
+if(trytype.IsError){
+return ReadResult<IObject>.Move(trytype);
+}
+Type = trytype.Value;
+			var tryfileHash = reader.ReadVector<byte[]>(ParserTypes.Bytes, nakedVector: false, nakedObjects: false);
+if(tryfileHash.IsError){
+return ReadResult<IObject>.Move(tryfileHash);
+}
+FileHash = tryfileHash.Value;
+			var trytext = reader.ReadString();
+if(trytext.IsError){
+return ReadResult<IObject>.Move(trytext);
+}
+Text = trytext.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

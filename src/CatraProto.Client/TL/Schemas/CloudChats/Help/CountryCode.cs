@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -25,11 +27,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 [Newtonsoft.Json.JsonProperty("country_code")]
 		public sealed override string CountryCodeField { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("prefixes")]
-		public sealed override IList<string> Prefixes { get; set; }
+		public sealed override List<string> Prefixes { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("patterns")]
-		public sealed override IList<string> Patterns { get; set; }
+		public sealed override List<string> Patterns { get; set; }
 
 
         #nullable enable
@@ -50,39 +54,62 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(CountryCodeField);
+
+			writer.WriteInt32(Flags);
+
+			writer.WriteString(CountryCodeField);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(Prefixes);
+
+				writer.WriteVector(Prefixes, false);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(Patterns);
+
+				writer.WriteVector(Patterns, false);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			CountryCodeField = reader.Read<string>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var trycountryCodeField = reader.ReadString();
+if(trycountryCodeField.IsError){
+return ReadResult<IObject>.Move(trycountryCodeField);
+}
+CountryCodeField = trycountryCodeField.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Prefixes = reader.ReadVector<string>();
+				var tryprefixes = reader.ReadVector<string>(ParserTypes.String, nakedVector: false, nakedObjects: false);
+if(tryprefixes.IsError){
+return ReadResult<IObject>.Move(tryprefixes);
+}
+Prefixes = tryprefixes.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Patterns = reader.ReadVector<string>();
+				var trypatterns = reader.ReadVector<string>(ParserTypes.String, nakedVector: false, nakedObjects: false);
+if(trypatterns.IsError){
+return ReadResult<IObject>.Move(trypatterns);
+}
+Patterns = trypatterns.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

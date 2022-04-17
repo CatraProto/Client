@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -34,16 +36,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Webpage);
+writer.WriteInt32(ConstructorId);
+var checkwebpage = 			writer.WriteObject(Webpage);
+if(checkwebpage.IsError){
+ return checkwebpage; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Webpage = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.WebPageBase>();
+			var trywebpage = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.WebPageBase>();
+if(trywebpage.IsError){
+return ReadResult<IObject>.Move(trywebpage);
+}
+Webpage = trywebpage.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

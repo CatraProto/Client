@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -27,11 +29,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public sealed override string MimeType { get; set; }
 
 [Newtonsoft.Json.JsonProperty("attributes")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase> Attributes { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase> Attributes { get; set; }
 
 
         #nullable enable
- public WebDocument (string url,long accessHash,int size,string mimeType,IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase> attributes)
+ public WebDocument (string url,long accessHash,int size,string mimeType,List<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase> attributes)
 {
  Url = url;
 AccessHash = accessHash;
@@ -50,24 +52,52 @@ Attributes = attributes;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Url);
-			writer.Write(AccessHash);
-			writer.Write(Size);
-			writer.Write(MimeType);
-			writer.Write(Attributes);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteString(Url);
+writer.WriteInt64(AccessHash);
+writer.WriteInt32(Size);
+
+			writer.WriteString(MimeType);
+var checkattributes = 			writer.WriteVector(Attributes, false);
+if(checkattributes.IsError){
+ return checkattributes; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Url = reader.Read<string>();
-			AccessHash = reader.Read<long>();
-			Size = reader.Read<int>();
-			MimeType = reader.Read<string>();
-			Attributes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase>();
+			var tryurl = reader.ReadString();
+if(tryurl.IsError){
+return ReadResult<IObject>.Move(tryurl);
+}
+Url = tryurl.Value;
+			var tryaccessHash = reader.ReadInt64();
+if(tryaccessHash.IsError){
+return ReadResult<IObject>.Move(tryaccessHash);
+}
+AccessHash = tryaccessHash.Value;
+			var trysize = reader.ReadInt32();
+if(trysize.IsError){
+return ReadResult<IObject>.Move(trysize);
+}
+Size = trysize.Value;
+			var trymimeType = reader.ReadString();
+if(trymimeType.IsError){
+return ReadResult<IObject>.Move(trymimeType);
+}
+MimeType = trymimeType.Value;
+			var tryattributes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryattributes.IsError){
+return ReadResult<IObject>.Move(tryattributes);
+}
+Attributes = tryattributes.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

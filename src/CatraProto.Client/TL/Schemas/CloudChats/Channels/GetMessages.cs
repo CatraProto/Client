@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,20 +19,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
         public static int ConstructorId { get => -1383294429; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("channel")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase Channel { get; set; }
 
 [Newtonsoft.Json.JsonProperty("id")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputMessageBase> Id { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.InputMessageBase> Id { get; set; }
 
         
         #nullable enable
- public GetMessages (CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase channel,IList<CatraProto.Client.TL.Schemas.CloudChats.InputMessageBase> id)
+ public GetMessages (CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase channel,List<CatraProto.Client.TL.Schemas.CloudChats.InputMessageBase> id)
 {
  Channel = channel;
 Id = id;
@@ -46,18 +46,35 @@ Id = id;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Channel);
-			writer.Write(Id);
+writer.WriteInt32(ConstructorId);
+var checkchannel = 			writer.WriteObject(Channel);
+if(checkchannel.IsError){
+ return checkchannel; 
+}
+var checkid = 			writer.WriteVector(Id, false);
+if(checkid.IsError){
+ return checkid; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Channel = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
-			Id = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputMessageBase>();
+			var trychannel = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
+if(trychannel.IsError){
+return ReadResult<IObject>.Move(trychannel);
+}
+Channel = trychannel.Value;
+			var tryid = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputMessageBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

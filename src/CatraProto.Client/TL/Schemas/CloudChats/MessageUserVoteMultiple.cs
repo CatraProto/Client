@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -18,14 +20,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public sealed override long UserId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("options")]
-		public IList<byte[]> Options { get; set; }
+		public List<byte[]> Options { get; set; }
 
 [Newtonsoft.Json.JsonProperty("date")]
 		public sealed override int Date { get; set; }
 
 
         #nullable enable
- public MessageUserVoteMultiple (long userId,IList<byte[]> options,int date)
+ public MessageUserVoteMultiple (long userId,List<byte[]> options,int date)
 {
  UserId = userId;
 Options = options;
@@ -42,20 +44,36 @@ Date = date;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(UserId);
-			writer.Write(Options);
-			writer.Write(Date);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(UserId);
+
+			writer.WriteVector(Options, false);
+writer.WriteInt32(Date);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			UserId = reader.Read<long>();
-			Options = reader.ReadVector<byte[]>();
-			Date = reader.Read<int>();
+			var tryuserId = reader.ReadInt64();
+if(tryuserId.IsError){
+return ReadResult<IObject>.Move(tryuserId);
+}
+UserId = tryuserId.Value;
+			var tryoptions = reader.ReadVector<byte[]>(ParserTypes.Bytes, nakedVector: false, nakedObjects: false);
+if(tryoptions.IsError){
+return ReadResult<IObject>.Move(tryoptions);
+}
+Options = tryoptions.Value;
+			var trydate = reader.ReadInt32();
+if(trydate.IsError){
+return ReadResult<IObject>.Move(trydate);
+}
+Date = trydate.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

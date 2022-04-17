@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -25,10 +28,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
         public static int ConstructorId { get => -1524155713; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -82,61 +82,122 @@ Participant = participant;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Call);
-			writer.Write(Participant);
-			writer.Write(Muted.Value);
+
+			writer.WriteInt32(Flags);
+var checkcall = 			writer.WriteObject(Call);
+if(checkcall.IsError){
+ return checkcall; 
+}
+var checkparticipant = 			writer.WriteObject(Participant);
+if(checkparticipant.IsError){
+ return checkparticipant; 
+}
+var checkmuted = 			writer.WriteBool(Muted.Value);
+if(checkmuted.IsError){
+ return checkmuted; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(Volume.Value);
+writer.WriteInt32(Volume.Value);
 			}
 
-			writer.Write(RaiseHand.Value);
-			writer.Write(VideoStopped.Value);
-			writer.Write(VideoPaused.Value);
-			writer.Write(PresentationPaused.Value);
+var checkraiseHand = 			writer.WriteBool(RaiseHand.Value);
+if(checkraiseHand.IsError){
+ return checkraiseHand; 
+}
+var checkvideoStopped = 			writer.WriteBool(VideoStopped.Value);
+if(checkvideoStopped.IsError){
+ return checkvideoStopped; 
+}
+var checkvideoPaused = 			writer.WriteBool(VideoPaused.Value);
+if(checkvideoPaused.IsError){
+ return checkvideoPaused; 
+}
+var checkpresentationPaused = 			writer.WriteBool(PresentationPaused.Value);
+if(checkpresentationPaused.IsError){
+ return checkpresentationPaused; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			Call = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase>();
-			Participant = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var trycall = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase>();
+if(trycall.IsError){
+return ReadResult<IObject>.Move(trycall);
+}
+Call = trycall.Value;
+			var tryparticipant = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+if(tryparticipant.IsError){
+return ReadResult<IObject>.Move(tryparticipant);
+}
+Participant = tryparticipant.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-			Muted = reader.Read<bool>();
+				var trymuted = reader.ReadBool();
+if(trymuted.IsError){
+return ReadResult<IObject>.Move(trymuted);
+}
+Muted = trymuted.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Volume = reader.Read<int>();
+				var tryvolume = reader.ReadInt32();
+if(tryvolume.IsError){
+return ReadResult<IObject>.Move(tryvolume);
+}
+Volume = tryvolume.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-			RaiseHand = reader.Read<bool>();
+				var tryraiseHand = reader.ReadBool();
+if(tryraiseHand.IsError){
+return ReadResult<IObject>.Move(tryraiseHand);
+}
+RaiseHand = tryraiseHand.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-			VideoStopped = reader.Read<bool>();
+				var tryvideoStopped = reader.ReadBool();
+if(tryvideoStopped.IsError){
+return ReadResult<IObject>.Move(tryvideoStopped);
+}
+VideoStopped = tryvideoStopped.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-			VideoPaused = reader.Read<bool>();
+				var tryvideoPaused = reader.ReadBool();
+if(tryvideoPaused.IsError){
+return ReadResult<IObject>.Move(tryvideoPaused);
+}
+VideoPaused = tryvideoPaused.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-			PresentationPaused = reader.Read<bool>();
+				var trypresentationPaused = reader.ReadBool();
+if(trypresentationPaused.IsError){
+return ReadResult<IObject>.Move(trypresentationPaused);
+}
+PresentationPaused = trypresentationPaused.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 

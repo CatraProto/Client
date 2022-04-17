@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -33,6 +35,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("mute_until")]
 		public sealed override int? MuteUntil { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("sound")]
 		public sealed override string Sound { get; set; }
 
@@ -51,49 +54,80 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(ShowPreviews.Value);
-			writer.Write(Silent.Value);
+
+			writer.WriteInt32(Flags);
+var checkshowPreviews = 			writer.WriteBool(ShowPreviews.Value);
+if(checkshowPreviews.IsError){
+ return checkshowPreviews; 
+}
+var checksilent = 			writer.WriteBool(Silent.Value);
+if(checksilent.IsError){
+ return checksilent; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(MuteUntil.Value);
+writer.WriteInt32(MuteUntil.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				writer.Write(Sound);
+
+				writer.WriteString(Sound);
 			}
 
 
+return new WriteResult();
+
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-			ShowPreviews = reader.Read<bool>();
+				var tryshowPreviews = reader.ReadBool();
+if(tryshowPreviews.IsError){
+return ReadResult<IObject>.Move(tryshowPreviews);
+}
+ShowPreviews = tryshowPreviews.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-			Silent = reader.Read<bool>();
+				var trysilent = reader.ReadBool();
+if(trysilent.IsError){
+return ReadResult<IObject>.Move(trysilent);
+}
+Silent = trysilent.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				MuteUntil = reader.Read<int>();
+				var trymuteUntil = reader.ReadInt32();
+if(trymuteUntil.IsError){
+return ReadResult<IObject>.Move(trymuteUntil);
+}
+MuteUntil = trymuteUntil.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				Sound = reader.Read<string>();
+				var trysound = reader.ReadString();
+if(trysound.IsError){
+return ReadResult<IObject>.Move(trysound);
+}
+Sound = trysound.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public static int ConstructorId { get => 517647042; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.GlobalPrivacySettingsBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("settings")]
 		public CatraProto.Client.TL.Schemas.CloudChats.GlobalPrivacySettingsBase Settings { get; set; }
@@ -42,16 +42,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Settings);
+writer.WriteInt32(ConstructorId);
+var checksettings = 			writer.WriteObject(Settings);
+if(checksettings.IsError){
+ return checksettings; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Settings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.GlobalPrivacySettingsBase>();
+			var trysettings = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.GlobalPrivacySettingsBase>();
+if(trysettings.IsError){
+return ReadResult<IObject>.Move(trysettings);
+}
+Settings = trysettings.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

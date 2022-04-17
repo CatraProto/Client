@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -45,29 +47,45 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(ChannelId);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt64(ChannelId);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(Pts.Value);
+writer.WriteInt32(Pts.Value);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			ChannelId = reader.Read<long>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var trychannelId = reader.ReadInt64();
+if(trychannelId.IsError){
+return ReadResult<IObject>.Move(trychannelId);
+}
+ChannelId = trychannelId.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Pts = reader.Read<int>();
+				var trypts = reader.ReadInt32();
+if(trypts.IsError){
+return ReadResult<IObject>.Move(trypts);
+}
+Pts = trypts.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

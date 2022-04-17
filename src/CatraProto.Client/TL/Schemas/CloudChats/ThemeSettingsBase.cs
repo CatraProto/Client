@@ -1,5 +1,7 @@
 using CatraProto.TL;
+using CatraProto.TL.Results;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL.Interfaces;
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -20,14 +22,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public abstract int? OutboxAccentColor { get; set; }
 
 [Newtonsoft.Json.JsonProperty("message_colors")]
-		public abstract IList<int> MessageColors { get; set; }
+		public abstract List<int> MessageColors { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("wallpaper")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase Wallpaper { get; set; }
 
         public abstract void UpdateFlags();
-        public abstract void Deserialize(Reader reader);
-        public abstract void Serialize(Writer writer);
+        public abstract ReadResult<IObject> Deserialize(Reader reader);
+        public abstract WriteResult Serialize(Writer writer);
         public abstract int GetConstructorId();
     }
 }

@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -23,23 +26,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int ConstructorId { get => 617508334; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.TranslatedTextBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("peer")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
 
 [Newtonsoft.Json.JsonProperty("msg_id")]
 		public int? MsgId { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("text")]
 		public string Text { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("from_lang")]
 		public string FromLang { get; set; }
 
@@ -68,59 +71,93 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
+
+			writer.WriteInt32(Flags);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(Peer);
+var checkpeer = 				writer.WriteObject(Peer);
+if(checkpeer.IsError){
+ return checkpeer; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(MsgId.Value);
+writer.WriteInt32(MsgId.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(Text);
+
+				writer.WriteString(Text);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(FromLang);
+
+				writer.WriteString(FromLang);
 			}
 
-			writer.Write(ToLang);
+
+			writer.WriteString(ToLang);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+				var trypeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+if(trypeer.IsError){
+return ReadResult<IObject>.Move(trypeer);
+}
+Peer = trypeer.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				MsgId = reader.Read<int>();
+				var trymsgId = reader.ReadInt32();
+if(trymsgId.IsError){
+return ReadResult<IObject>.Move(trymsgId);
+}
+MsgId = trymsgId.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Text = reader.Read<string>();
+				var trytext = reader.ReadString();
+if(trytext.IsError){
+return ReadResult<IObject>.Move(trytext);
+}
+Text = trytext.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				FromLang = reader.Read<string>();
+				var tryfromLang = reader.ReadString();
+if(tryfromLang.IsError){
+return ReadResult<IObject>.Move(tryfromLang);
+}
+FromLang = tryfromLang.Value;
 			}
 
-			ToLang = reader.Read<string>();
+			var trytoLang = reader.ReadString();
+if(trytoLang.IsError){
+return ReadResult<IObject>.Move(trytoLang);
+}
+ToLang = trytoLang.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -23,9 +25,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("file")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase File { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("video")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase Video { get; set; }
 
@@ -46,47 +50,74 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
+
+			writer.WriteInt32(Flags);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(File);
+var checkfile = 				writer.WriteObject(File);
+if(checkfile.IsError){
+ return checkfile; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(Video);
+var checkvideo = 				writer.WriteObject(Video);
+if(checkvideo.IsError){
+ return checkvideo; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(VideoStartTs);
+
+				writer.WriteDouble(VideoStartTs.Value);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				File = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
+				var tryfile = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
+if(tryfile.IsError){
+return ReadResult<IObject>.Move(tryfile);
+}
+File = tryfile.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Video = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
+				var tryvideo = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
+if(tryvideo.IsError){
+return ReadResult<IObject>.Move(tryvideo);
+}
+Video = tryvideo.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				VideoStartTs = reader.Read<double>();
+				var tryvideoStartTs = reader.ReadDouble();
+if(tryvideoStartTs.IsError){
+return ReadResult<IObject>.Move(tryvideoStartTs);
+}
+VideoStartTs = tryvideoStartTs.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -1,5 +1,7 @@
 using CatraProto.TL;
+using CatraProto.TL.Results;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL.Interfaces;
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -41,7 +43,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public abstract int ThisDc { get; set; }
 
 [Newtonsoft.Json.JsonProperty("dc_options")]
-		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase> DcOptions { get; set; }
+		public abstract List<CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase> DcOptions { get; set; }
 
 [Newtonsoft.Json.JsonProperty("dc_txt_domain_name")]
 		public abstract string DcTxtDomainName { get; set; }
@@ -127,18 +129,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("me_url_prefix")]
 		public abstract string MeUrlPrefix { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("autoupdate_url_prefix")]
 		public abstract string AutoupdateUrlPrefix { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("gif_search_username")]
 		public abstract string GifSearchUsername { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("venue_search_username")]
 		public abstract string VenueSearchUsername { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("img_search_username")]
 		public abstract string ImgSearchUsername { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("static_maps_provider")]
 		public abstract string StaticMapsProvider { get; set; }
 
@@ -151,6 +158,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("webfile_dc_id")]
 		public abstract int WebfileDcId { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("suggested_lang_code")]
 		public abstract string SuggestedLangCode { get; set; }
 
@@ -161,8 +169,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public abstract int? BaseLangPackVersion { get; set; }
 
         public abstract void UpdateFlags();
-        public abstract void Deserialize(Reader reader);
-        public abstract void Serialize(Writer writer);
+        public abstract ReadResult<IObject> Deserialize(Reader reader);
+        public abstract WriteResult Serialize(Writer writer);
         public abstract int GetConstructorId();
     }
 }

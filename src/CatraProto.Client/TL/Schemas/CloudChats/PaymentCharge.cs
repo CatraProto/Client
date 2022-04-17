@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,31 @@ ProviderChargeId = providerChargeId;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Id);
-			writer.Write(ProviderChargeId);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteString(Id);
+
+			writer.WriteString(ProviderChargeId);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Id = reader.Read<string>();
-			ProviderChargeId = reader.Read<string>();
+			var tryid = reader.ReadString();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var tryproviderChargeId = reader.ReadString();
+if(tryproviderChargeId.IsError){
+return ReadResult<IObject>.Move(tryproviderChargeId);
+}
+ProviderChargeId = tryproviderChargeId.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

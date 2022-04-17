@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -46,22 +48,44 @@ Zoom = zoom;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(N);
-			writer.Write(X);
-			writer.Write(Y);
-			writer.Write(Zoom);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt32(N);
+
+			writer.WriteDouble(X);
+
+			writer.WriteDouble(Y);
+
+			writer.WriteDouble(Zoom);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			N = reader.Read<int>();
-			X = reader.Read<double>();
-			Y = reader.Read<double>();
-			Zoom = reader.Read<double>();
+			var tryn = reader.ReadInt32();
+if(tryn.IsError){
+return ReadResult<IObject>.Move(tryn);
+}
+N = tryn.Value;
+			var tryx = reader.ReadDouble();
+if(tryx.IsError){
+return ReadResult<IObject>.Move(tryx);
+}
+X = tryx.Value;
+			var tryy = reader.ReadDouble();
+if(tryy.IsError){
+return ReadResult<IObject>.Move(tryy);
+}
+Y = tryy.Value;
+			var tryzoom = reader.ReadDouble();
+if(tryzoom.IsError){
+return ReadResult<IObject>.Move(tryzoom);
+}
+Zoom = tryzoom.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

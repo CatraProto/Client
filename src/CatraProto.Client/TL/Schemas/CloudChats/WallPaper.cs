@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -49,6 +51,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("document")]
 		public CatraProto.Client.TL.Schemas.CloudChats.DocumentBase Document { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("settings")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase Settings { get; set; }
 
@@ -77,39 +80,74 @@ Document = document;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Id);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(Id);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(AccessHash);
-			writer.Write(Slug);
-			writer.Write(Document);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt64(AccessHash);
+
+			writer.WriteString(Slug);
+var checkdocument = 			writer.WriteObject(Document);
+if(checkdocument.IsError){
+ return checkdocument; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(Settings);
+var checksettings = 				writer.WriteObject(Settings);
+if(checksettings.IsError){
+ return checksettings; 
+}
 			}
 
 
+return new WriteResult();
+
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Id = reader.Read<long>();
-			Flags = reader.Read<int>();
+			var tryid = reader.ReadInt64();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Creator = FlagsHelper.IsFlagSet(Flags, 0);
 			Default = FlagsHelper.IsFlagSet(Flags, 1);
 			Pattern = FlagsHelper.IsFlagSet(Flags, 3);
 			Dark = FlagsHelper.IsFlagSet(Flags, 4);
-			AccessHash = reader.Read<long>();
-			Slug = reader.Read<string>();
-			Document = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
+			var tryaccessHash = reader.ReadInt64();
+if(tryaccessHash.IsError){
+return ReadResult<IObject>.Move(tryaccessHash);
+}
+AccessHash = tryaccessHash.Value;
+			var tryslug = reader.ReadString();
+if(tryslug.IsError){
+return ReadResult<IObject>.Move(tryslug);
+}
+Slug = tryslug.Value;
+			var trydocument = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
+if(trydocument.IsError){
+return ReadResult<IObject>.Move(trydocument);
+}
+Document = trydocument.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				Settings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase>();
+				var trysettings = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase>();
+if(trysettings.IsError){
+return ReadResult<IObject>.Move(trysettings);
+}
+Settings = trysettings.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

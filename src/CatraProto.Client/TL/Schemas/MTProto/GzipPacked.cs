@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -15,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
         public static int ConstructorId { get => 812830625; }
         
 [Newtonsoft.Json.JsonProperty("packed_data")]
-		public byte[] PackedData { get; set; }
+		public sealed override byte[] PackedData { get; set; }
 
 
         #nullable enable
@@ -34,16 +36,24 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(PackedData);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteBytes(PackedData);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			PackedData = reader.Read<byte[]>();
+			var trypackedData = reader.ReadBytes();
+if(trypackedData.IsError){
+return ReadResult<IObject>.Move(trypackedData);
+}
+PackedData = trypackedData.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,17 +19,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int ConstructorId { get => -462373635; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.PeerDialogsBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("peers")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputDialogPeerBase> Peers { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.InputDialogPeerBase> Peers { get; set; }
 
         
         #nullable enable
- public GetPeerDialogs (IList<CatraProto.Client.TL.Schemas.CloudChats.InputDialogPeerBase> peers)
+ public GetPeerDialogs (List<CatraProto.Client.TL.Schemas.CloudChats.InputDialogPeerBase> peers)
 {
  Peers = peers;
  
@@ -42,16 +42,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Peers);
+writer.WriteInt32(ConstructorId);
+var checkpeers = 			writer.WriteVector(Peers, false);
+if(checkpeers.IsError){
+ return checkpeers; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Peers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputDialogPeerBase>();
+			var trypeers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputDialogPeerBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trypeers.IsError){
+return ReadResult<IObject>.Move(trypeers);
+}
+Peers = trypeers.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

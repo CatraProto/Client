@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -15,11 +17,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get => -1877932953; }
         
 [Newtonsoft.Json.JsonProperty("users")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase> Users { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase> Users { get; set; }
 
 
         #nullable enable
- public InputPrivacyValueDisallowUsers (IList<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase> users)
+ public InputPrivacyValueDisallowUsers (List<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase> users)
 {
  Users = users;
  
@@ -34,16 +36,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Users);
+writer.WriteInt32(ConstructorId);
+var checkusers = 			writer.WriteVector(Users, false);
+if(checkusers.IsError){
+ return checkusers; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
+			var tryusers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryusers.IsError){
+return ReadResult<IObject>.Move(tryusers);
+}
+Users = tryusers.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

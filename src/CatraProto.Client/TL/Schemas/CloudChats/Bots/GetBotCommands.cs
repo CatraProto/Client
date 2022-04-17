@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Bots
         public static int ConstructorId { get => -481554986; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.BotCommandBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = true;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("scope")]
 		public CatraProto.Client.TL.Schemas.CloudChats.BotCommandScopeBase Scope { get; set; }
@@ -46,18 +46,33 @@ LangCode = langCode;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Scope);
-			writer.Write(LangCode);
+writer.WriteInt32(ConstructorId);
+var checkscope = 			writer.WriteObject(Scope);
+if(checkscope.IsError){
+ return checkscope; 
+}
+
+			writer.WriteString(LangCode);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Scope = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.BotCommandScopeBase>();
-			LangCode = reader.Read<string>();
+			var tryscope = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.BotCommandScopeBase>();
+if(tryscope.IsError){
+return ReadResult<IObject>.Move(tryscope);
+}
+Scope = tryscope.Value;
+			var trylangCode = reader.ReadString();
+if(trylangCode.IsError){
+return ReadResult<IObject>.Move(trylangCode);
+}
+LangCode = trylangCode.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

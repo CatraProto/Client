@@ -27,7 +27,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
             _logger = logger.ForContext<MessagesQueue>();
         }
 
-        public void EnqueueMessage(IObject body, MessageSendingOptions messageSendingOptions, IRpcMessage? rpcMessage, out Task completionTask, CancellationToken requestCancellationToken)
+        public void EnqueueMessage(IObject body, MessageSendingOptions messageSendingOptions, IRpcResponse? rpcMessage, out Task completionTask, CancellationToken requestCancellationToken)
         {
             var taskCompletionSource = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
             completionTask = taskCompletionSource.Task;

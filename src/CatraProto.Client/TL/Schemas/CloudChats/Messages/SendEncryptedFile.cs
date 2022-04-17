@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -20,10 +23,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int ConstructorId { get => 1431914525; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.SentEncryptedMessageBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -65,26 +65,57 @@ File = file;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Peer);
-			writer.Write(RandomId);
-			writer.Write(Data);
-			writer.Write(File);
+
+			writer.WriteInt32(Flags);
+var checkpeer = 			writer.WriteObject(Peer);
+if(checkpeer.IsError){
+ return checkpeer; 
+}
+writer.WriteInt64(RandomId);
+
+			writer.WriteBytes(Data);
+var checkfile = 			writer.WriteObject(File);
+if(checkfile.IsError){
+ return checkfile; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Silent = FlagsHelper.IsFlagSet(Flags, 0);
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedChatBase>();
-			RandomId = reader.Read<long>();
-			Data = reader.Read<byte[]>();
-			File = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedFileBase>();
+			var trypeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedChatBase>();
+if(trypeer.IsError){
+return ReadResult<IObject>.Move(trypeer);
+}
+Peer = trypeer.Value;
+			var tryrandomId = reader.ReadInt64();
+if(tryrandomId.IsError){
+return ReadResult<IObject>.Move(tryrandomId);
+}
+RandomId = tryrandomId.Value;
+			var trydata = reader.ReadBytes();
+if(trydata.IsError){
+return ReadResult<IObject>.Move(trydata);
+}
+Data = trydata.Value;
+			var tryfile = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedFileBase>();
+if(tryfile.IsError){
+return ReadResult<IObject>.Move(tryfile);
+}
+File = tryfile.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

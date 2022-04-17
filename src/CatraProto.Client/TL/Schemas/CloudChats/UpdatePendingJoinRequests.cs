@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -21,11 +23,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int RequestsPending { get; set; }
 
 [Newtonsoft.Json.JsonProperty("recent_requesters")]
-		public IList<long> RecentRequesters { get; set; }
+		public List<long> RecentRequesters { get; set; }
 
 
         #nullable enable
- public UpdatePendingJoinRequests (CatraProto.Client.TL.Schemas.CloudChats.PeerBase peer,int requestsPending,IList<long> recentRequesters)
+ public UpdatePendingJoinRequests (CatraProto.Client.TL.Schemas.CloudChats.PeerBase peer,int requestsPending,List<long> recentRequesters)
 {
  Peer = peer;
 RequestsPending = requestsPending;
@@ -42,20 +44,39 @@ RecentRequesters = recentRequesters;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Peer);
-			writer.Write(RequestsPending);
-			writer.Write(RecentRequesters);
+writer.WriteInt32(ConstructorId);
+var checkpeer = 			writer.WriteObject(Peer);
+if(checkpeer.IsError){
+ return checkpeer; 
+}
+writer.WriteInt32(RequestsPending);
+
+			writer.WriteVector(RecentRequesters, false);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
-			RequestsPending = reader.Read<int>();
-			RecentRequesters = reader.ReadVector<long>();
+			var trypeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+if(trypeer.IsError){
+return ReadResult<IObject>.Move(trypeer);
+}
+Peer = trypeer.Value;
+			var tryrequestsPending = reader.ReadInt32();
+if(tryrequestsPending.IsError){
+return ReadResult<IObject>.Move(tryrequestsPending);
+}
+RequestsPending = tryrequestsPending.Value;
+			var tryrecentRequesters = reader.ReadVector<long>(ParserTypes.Int64);
+if(tryrecentRequesters.IsError){
+return ReadResult<IObject>.Move(tryrecentRequesters);
+}
+RecentRequesters = tryrecentRequesters.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

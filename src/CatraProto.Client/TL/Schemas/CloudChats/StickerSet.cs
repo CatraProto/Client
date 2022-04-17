@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -59,8 +61,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("short_name")]
 		public sealed override string ShortName { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("thumbs")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase> Thumbs { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase> Thumbs { get; set; }
 
 [Newtonsoft.Json.JsonProperty("thumb_dc_id")]
 		public sealed override int? ThumbDcId { get; set; }
@@ -105,43 +108,55 @@ Hash = hash;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
+
+			writer.WriteInt32(Flags);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(InstalledDate.Value);
+writer.WriteInt32(InstalledDate.Value);
 			}
 
-			writer.Write(Id);
-			writer.Write(AccessHash);
-			writer.Write(Title);
-			writer.Write(ShortName);
+writer.WriteInt64(Id);
+writer.WriteInt64(AccessHash);
+
+			writer.WriteString(Title);
+
+			writer.WriteString(ShortName);
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				writer.Write(Thumbs);
+var checkthumbs = 				writer.WriteVector(Thumbs, false);
+if(checkthumbs.IsError){
+ return checkthumbs; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				writer.Write(ThumbDcId.Value);
+writer.WriteInt32(ThumbDcId.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				writer.Write(ThumbVersion.Value);
+writer.WriteInt32(ThumbVersion.Value);
 			}
 
-			writer.Write(Count);
-			writer.Write(Hash);
+writer.WriteInt32(Count);
+writer.WriteInt32(Hash);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Archived = FlagsHelper.IsFlagSet(Flags, 1);
 			Official = FlagsHelper.IsFlagSet(Flags, 2);
 			Masks = FlagsHelper.IsFlagSet(Flags, 3);
@@ -149,30 +164,71 @@ writer.Write(ConstructorId);
 			Videos = FlagsHelper.IsFlagSet(Flags, 6);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				InstalledDate = reader.Read<int>();
+				var tryinstalledDate = reader.ReadInt32();
+if(tryinstalledDate.IsError){
+return ReadResult<IObject>.Move(tryinstalledDate);
+}
+InstalledDate = tryinstalledDate.Value;
 			}
 
-			Id = reader.Read<long>();
-			AccessHash = reader.Read<long>();
-			Title = reader.Read<string>();
-			ShortName = reader.Read<string>();
+			var tryid = reader.ReadInt64();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var tryaccessHash = reader.ReadInt64();
+if(tryaccessHash.IsError){
+return ReadResult<IObject>.Move(tryaccessHash);
+}
+AccessHash = tryaccessHash.Value;
+			var trytitle = reader.ReadString();
+if(trytitle.IsError){
+return ReadResult<IObject>.Move(trytitle);
+}
+Title = trytitle.Value;
+			var tryshortName = reader.ReadString();
+if(tryshortName.IsError){
+return ReadResult<IObject>.Move(tryshortName);
+}
+ShortName = tryshortName.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				Thumbs = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase>();
+				var trythumbs = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trythumbs.IsError){
+return ReadResult<IObject>.Move(trythumbs);
+}
+Thumbs = trythumbs.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				ThumbDcId = reader.Read<int>();
+				var trythumbDcId = reader.ReadInt32();
+if(trythumbDcId.IsError){
+return ReadResult<IObject>.Move(trythumbDcId);
+}
+ThumbDcId = trythumbDcId.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				ThumbVersion = reader.Read<int>();
+				var trythumbVersion = reader.ReadInt32();
+if(trythumbVersion.IsError){
+return ReadResult<IObject>.Move(trythumbVersion);
+}
+ThumbVersion = trythumbVersion.Value;
 			}
 
-			Count = reader.Read<int>();
-			Hash = reader.Read<int>();
+			var trycount = reader.ReadInt32();
+if(trycount.IsError){
+return ReadResult<IObject>.Move(trycount);
+}
+Count = trycount.Value;
+			var tryhash = reader.ReadInt32();
+if(tryhash.IsError){
+return ReadResult<IObject>.Move(tryhash);
+}
+Hash = tryhash.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

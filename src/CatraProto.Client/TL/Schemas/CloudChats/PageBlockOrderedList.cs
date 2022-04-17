@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -15,11 +17,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get => -1702174239; }
         
 [Newtonsoft.Json.JsonProperty("items")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.PageListOrderedItemBase> Items { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.PageListOrderedItemBase> Items { get; set; }
 
 
         #nullable enable
- public PageBlockOrderedList (IList<CatraProto.Client.TL.Schemas.CloudChats.PageListOrderedItemBase> items)
+ public PageBlockOrderedList (List<CatraProto.Client.TL.Schemas.CloudChats.PageListOrderedItemBase> items)
 {
  Items = items;
  
@@ -34,16 +36,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Items);
+writer.WriteInt32(ConstructorId);
+var checkitems = 			writer.WriteVector(Items, false);
+if(checkitems.IsError){
+ return checkitems; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Items = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PageListOrderedItemBase>();
+			var tryitems = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PageListOrderedItemBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryitems.IsError){
+return ReadResult<IObject>.Move(tryitems);
+}
+Items = tryitems.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

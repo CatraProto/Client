@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -24,6 +26,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("chat_id")]
 		public sealed override long ChatId { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("self_participant")]
 		public CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantBase SelfParticipant { get; set; }
 
@@ -45,29 +48,48 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(ChatId);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt64(ChatId);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(SelfParticipant);
+var checkselfParticipant = 				writer.WriteObject(SelfParticipant);
+if(checkselfParticipant.IsError){
+ return checkselfParticipant; 
+}
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			ChatId = reader.Read<long>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var trychatId = reader.ReadInt64();
+if(trychatId.IsError){
+return ReadResult<IObject>.Move(trychatId);
+}
+ChatId = trychatId.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				SelfParticipant = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantBase>();
+				var tryselfParticipant = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantBase>();
+if(tryselfParticipant.IsError){
+return ReadResult<IObject>.Move(tryselfParticipant);
+}
+SelfParticipant = tryselfParticipant.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

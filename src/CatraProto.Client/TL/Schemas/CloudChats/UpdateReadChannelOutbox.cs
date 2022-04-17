@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,29 @@ MaxId = maxId;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(ChannelId);
-			writer.Write(MaxId);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(ChannelId);
+writer.WriteInt32(MaxId);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			ChannelId = reader.Read<long>();
-			MaxId = reader.Read<int>();
+			var trychannelId = reader.ReadInt64();
+if(trychannelId.IsError){
+return ReadResult<IObject>.Move(trychannelId);
+}
+ChannelId = trychannelId.Value;
+			var trymaxId = reader.ReadInt32();
+if(trymaxId.IsError){
+return ReadResult<IObject>.Move(trymaxId);
+}
+MaxId = trymaxId.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

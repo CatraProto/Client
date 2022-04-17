@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -20,10 +23,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public static int ConstructorId { get => -326762118; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
 
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -44,11 +44,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		public byte[] Secret { get; set; }
 
 [Newtonsoft.Json.JsonProperty("other_uids")]
-		public IList<long> OtherUids { get; set; }
+		public List<long> OtherUids { get; set; }
 
         
         #nullable enable
- public RegisterDevice (int tokenType,string token,bool appSandbox,byte[] secret,IList<long> otherUids)
+ public RegisterDevice (int tokenType,string token,bool appSandbox,byte[] secret,List<long> otherUids)
 {
  TokenType = tokenType;
 Token = token;
@@ -69,28 +69,62 @@ OtherUids = otherUids;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(TokenType);
-			writer.Write(Token);
-			writer.Write(AppSandbox);
-			writer.Write(Secret);
-			writer.Write(OtherUids);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt32(TokenType);
+
+			writer.WriteString(Token);
+var checkappSandbox = 			writer.WriteBool(AppSandbox);
+if(checkappSandbox.IsError){
+ return checkappSandbox; 
+}
+
+			writer.WriteBytes(Secret);
+
+			writer.WriteVector(OtherUids, false);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			NoMuted = FlagsHelper.IsFlagSet(Flags, 0);
-			TokenType = reader.Read<int>();
-			Token = reader.Read<string>();
-			AppSandbox = reader.Read<bool>();
-			Secret = reader.Read<byte[]>();
-			OtherUids = reader.ReadVector<long>();
+			var trytokenType = reader.ReadInt32();
+if(trytokenType.IsError){
+return ReadResult<IObject>.Move(trytokenType);
+}
+TokenType = trytokenType.Value;
+			var trytoken = reader.ReadString();
+if(trytoken.IsError){
+return ReadResult<IObject>.Move(trytoken);
+}
+Token = trytoken.Value;
+			var tryappSandbox = reader.ReadBool();
+if(tryappSandbox.IsError){
+return ReadResult<IObject>.Move(tryappSandbox);
+}
+AppSandbox = tryappSandbox.Value;
+			var trysecret = reader.ReadBytes();
+if(trysecret.IsError){
+return ReadResult<IObject>.Move(trysecret);
+}
+Secret = trysecret.Value;
+			var tryotherUids = reader.ReadVector<long>(ParserTypes.Int64);
+if(tryotherUids.IsError){
+return ReadResult<IObject>.Move(tryotherUids);
+}
+OtherUids = tryotherUids.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

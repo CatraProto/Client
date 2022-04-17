@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
         public static int ConstructorId { get => -841733627; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
 
 [Newtonsoft.Json.JsonProperty("perm_auth_key_id")]
 		public long PermAuthKeyId { get; set; }
@@ -54,22 +54,42 @@ EncryptedMessage = encryptedMessage;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(PermAuthKeyId);
-			writer.Write(Nonce);
-			writer.Write(ExpiresAt);
-			writer.Write(EncryptedMessage);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(PermAuthKeyId);
+writer.WriteInt64(Nonce);
+writer.WriteInt32(ExpiresAt);
+
+			writer.WriteBytes(EncryptedMessage);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			PermAuthKeyId = reader.Read<long>();
-			Nonce = reader.Read<long>();
-			ExpiresAt = reader.Read<int>();
-			EncryptedMessage = reader.Read<byte[]>();
+			var trypermAuthKeyId = reader.ReadInt64();
+if(trypermAuthKeyId.IsError){
+return ReadResult<IObject>.Move(trypermAuthKeyId);
+}
+PermAuthKeyId = trypermAuthKeyId.Value;
+			var trynonce = reader.ReadInt64();
+if(trynonce.IsError){
+return ReadResult<IObject>.Move(trynonce);
+}
+Nonce = trynonce.Value;
+			var tryexpiresAt = reader.ReadInt32();
+if(tryexpiresAt.IsError){
+return ReadResult<IObject>.Move(tryexpiresAt);
+}
+ExpiresAt = tryexpiresAt.Value;
+			var tryencryptedMessage = reader.ReadBytes();
+if(tryencryptedMessage.IsError){
+return ReadResult<IObject>.Move(tryencryptedMessage);
+}
+EncryptedMessage = tryencryptedMessage.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

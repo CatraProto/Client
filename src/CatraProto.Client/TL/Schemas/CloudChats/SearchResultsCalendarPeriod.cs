@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -46,22 +48,41 @@ Count = count;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Date);
-			writer.Write(MinMsgId);
-			writer.Write(MaxMsgId);
-			writer.Write(Count);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt32(Date);
+writer.WriteInt32(MinMsgId);
+writer.WriteInt32(MaxMsgId);
+writer.WriteInt32(Count);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Date = reader.Read<int>();
-			MinMsgId = reader.Read<int>();
-			MaxMsgId = reader.Read<int>();
-			Count = reader.Read<int>();
+			var trydate = reader.ReadInt32();
+if(trydate.IsError){
+return ReadResult<IObject>.Move(trydate);
+}
+Date = trydate.Value;
+			var tryminMsgId = reader.ReadInt32();
+if(tryminMsgId.IsError){
+return ReadResult<IObject>.Move(tryminMsgId);
+}
+MinMsgId = tryminMsgId.Value;
+			var trymaxMsgId = reader.ReadInt32();
+if(trymaxMsgId.IsError){
+return ReadResult<IObject>.Move(trymaxMsgId);
+}
+MaxMsgId = trymaxMsgId.Value;
+			var trycount = reader.ReadInt32();
+if(trycount.IsError){
+return ReadResult<IObject>.Move(trycount);
+}
+Count = trycount.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

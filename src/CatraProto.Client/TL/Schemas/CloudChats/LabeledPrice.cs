@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,30 @@ Amount = amount;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Label);
-			writer.Write(Amount);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteString(Label);
+writer.WriteInt64(Amount);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Label = reader.Read<string>();
-			Amount = reader.Read<long>();
+			var trylabel = reader.ReadString();
+if(trylabel.IsError){
+return ReadResult<IObject>.Move(trylabel);
+}
+Label = trylabel.Value;
+			var tryamount = reader.ReadInt64();
+if(tryamount.IsError){
+return ReadResult<IObject>.Move(tryamount);
+}
+Amount = tryamount.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

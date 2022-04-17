@@ -1,21 +1,20 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections.MessageScheduling.ConnectionMessages;
 using CatraProto.Client.Connections.MessageScheduling.ConnectionMessages.Interfaces;
 using CatraProto.Client.MTProto.Deserializers;
 using CatraProto.Client.MTProto.Rpc;
-using CatraProto.Client.MTProto.Rpc.Parsers;
+using CatraProto.Client.MTProto.Rpc.Interfaces;
 using CatraProto.Client.MTProto.Rpc.RpcErrors.Migrations.Interfaces;
 using CatraProto.Client.MTProto.Session;
 using CatraProto.Client.TL;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.Client.TL.Schemas.CloudChats;
-using CatraProto.Client.TL.Schemas.CloudChats.Messages;
-using CatraProto.Client.TL.Schemas.CloudChats.Users;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.Client.Updates;
 using CatraProto.TL;
-using CatraProto.TL.Exceptions;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Interfaces.Deserializers;
 using Serilog;
 
 namespace CatraProto.Client.Connections.MessageScheduling
@@ -26,15 +25,15 @@ namespace CatraProto.Client.Connections.MessageScheduling
         private readonly MessagesValidator _messagesValidator;
         private readonly Connection _connection;
         private readonly MessagesHandler _messagesHandler;
-        private readonly RpcDeserializer _rpcDeserializer;
         private readonly ClientSession _clientSession;
         private readonly MTProtoState _mtProtoState;
+        private readonly List<IObjectParser> _parsers;
         private readonly ILogger _logger;
 
         public MessagesDispatcher(Connection connection, MessagesHandler messagesHandler, MTProtoState mtProtoState, ClientSession clientSession)
         {
-            _rpcDeserializer = new RpcDeserializer(messagesHandler.MessagesTrackers.MessageCompletionTracker, clientSession.Logger);
             _messagesValidator = new MessagesValidator(messagesHandler, mtProtoState, clientSession.Logger);
+            _parsers = new List<IObjectParser>(1) { new RpcDeserializer(messagesHandler.MessagesTrackers.MessageCompletionTracker, clientSession.Logger) };
             _logger = clientSession.Logger.ForContext<MessagesDispatcher>();
             _connection = connection;
             _messagesHandler = messagesHandler;
@@ -44,11 +43,10 @@ namespace CatraProto.Client.Connections.MessageScheduling
 
         public void DispatchMessage(IConnectionMessage connectionMessage)
         {
-            using var reader = new Reader(MergedProvider.Singleton, connectionMessage.Body.ToMemoryStream());
-            reader.SetCustomDeserializer(_rpcDeserializer);
+            using var reader = new Reader(MergedProvider.Singleton, connectionMessage.Body.ToMemoryStream(), false, _parsers);
             if (connectionMessage.Body.Length == 4)
             {
-                var error = reader.Read<int>();
+                var error = reader.ReadInt32().Value;
                 _logger.Warning("Received protocol error {Error} from server", error);
                 if (error == -404)
                 {
@@ -62,25 +60,26 @@ namespace CatraProto.Client.Connections.MessageScheduling
                 return;
             }
 
-            try
+
+            var tryRead = reader.ReadObject();
+            if (tryRead.IsError)
             {
-                var deserialized = reader.Read<IObject>();
-                _logger.Information("Handling message of type {T}", deserialized);
-                if (connectionMessage.AuthKeyId != 0)
-                {
-                    if (_messagesValidator.IsMessageValid((EncryptedConnectionMessage)connectionMessage, deserialized))
-                    {
-                        HandleObject(connectionMessage, deserialized, reader);
-                    }
-                }
-                else
+                _logger.Error("Could not deserialized received payload. Error {Error}", tryRead.GetError().Error);
+                return;
+            }
+
+            var deserialized = tryRead.Value;
+            _logger.Information("Handling message of type {T}", deserialized);
+            if (connectionMessage.AuthKeyId != 0)
+            {
+                if (_messagesValidator.IsMessageValid((EncryptedConnectionMessage)connectionMessage, deserialized))
                 {
                     HandleObject(connectionMessage, deserialized, reader);
                 }
             }
-            catch (DeserializationException e)
+            else
             {
-                _logger.Error(e, "Failed to deserialize received message");
+                HandleObject(connectionMessage, deserialized, reader);
             }
         }
 
@@ -113,7 +112,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
                     case FutureSalts futureSalts:
                         _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(futureSalts.ReqMsgId, futureSalts, GetExecInfo());
                         break;
-                    case RpcObject rpcResult:
+                    case RpcResult rpcResult:
                         HandleRpcResult(connectionMessage, obj, reader, rpcResult);
                         break;
                     case MsgContainer msgContainer:
@@ -152,17 +151,16 @@ namespace CatraProto.Client.Connections.MessageScheduling
             }, new MessageSendingOptions(true), null, out _, default);
         }
 
-        private void HandleRpcResult(IConnectionMessage connectionMessage, IObject obj, Reader reader, RpcObject rpcObject)
+        private void HandleRpcResult(IConnectionMessage connectionMessage, IObject obj, Reader reader, RpcResult rpcObject)
         {
-            _logger.Information("Handling rpc message in response to id {Id}", rpcObject.MessageId);
-            if (rpcObject.Response is RpcError error)
+            _logger.Information("Handling rpc message in response to id {Id}", rpcObject.ReqMsgId);
+            if (rpcObject.Result is MTProto.Rpc.Interfaces.RpcError error)
             {
-                var errorDetected = ParsersList.GetError(error);
-                if (errorDetected is IMigrateError migrateError)
+                if (error is IMigrateError migrateError)
                 {
                     Task.Run(async () =>
                     {
-                        if (_messagesHandler.MessagesTrackers.MessageCompletionTracker.RemoveCompletion(rpcObject.MessageId, out var item))
+                        if (_messagesHandler.MessagesTrackers.MessageCompletionTracker.RemoveCompletion(rpcObject.ReqMsgId, out var item))
                         {
                             _logger.Information("Received migrate error, moving request and setting account dc to DC{DcId} ", migrateError.DcId);
                             //TODO: Support cancellation
@@ -177,13 +175,13 @@ namespace CatraProto.Client.Connections.MessageScheduling
             }
 
 
-            if (_messagesHandler.MessagesTrackers.MessageCompletionTracker.GetRpcMethod(rpcObject.MessageId, out var method))
+            if (_messagesHandler.MessagesTrackers.MessageCompletionTracker.GetRpcMethod(rpcObject.ReqMsgId, out var method))
             {
-                if(rpcObject.Response is IObject iObj)
+                if (rpcObject.Result is IObject iObj)
                 {
                     UpdatesTools.ExtractChats(iObj, out var chats, out var users);
                     _mtProtoState.Client.DatabaseManager.UpdateChats(chats, users);
-                    switch (rpcObject.Response)
+                    switch (rpcObject.Result)
                     {
                         case TL.Schemas.CloudChats.Users.UserFull uFull:
                             _mtProtoState.Client.DatabaseManager.PeerDatabase.PushChatToDb(uFull.FullUser);
@@ -197,7 +195,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
                     }
                 }
 
-                _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(rpcObject.MessageId, rpcObject.Response, GetExecInfo(true));
+                _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(rpcObject.ReqMsgId, rpcObject.Result, GetExecInfo(true));
             }
         }
 

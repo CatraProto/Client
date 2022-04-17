@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -100,18 +102,25 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(UntilDate);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt32(UntilDate);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			ViewMessages = FlagsHelper.IsFlagSet(Flags, 0);
 			SendMessages = FlagsHelper.IsFlagSet(Flags, 1);
 			SendMedia = FlagsHelper.IsFlagSet(Flags, 2);
@@ -124,7 +133,12 @@ writer.Write(ConstructorId);
 			ChangeInfo = FlagsHelper.IsFlagSet(Flags, 10);
 			InviteUsers = FlagsHelper.IsFlagSet(Flags, 15);
 			PinMessages = FlagsHelper.IsFlagSet(Flags, 17);
-			UntilDate = reader.Read<int>();
+			var tryuntilDate = reader.ReadInt32();
+if(tryuntilDate.IsError){
+return ReadResult<IObject>.Move(tryuntilDate);
+}
+UntilDate = tryuntilDate.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

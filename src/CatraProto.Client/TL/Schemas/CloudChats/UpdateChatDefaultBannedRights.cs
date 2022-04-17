@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -42,20 +44,41 @@ Version = version;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Peer);
-			writer.Write(DefaultBannedRights);
-			writer.Write(Version);
+writer.WriteInt32(ConstructorId);
+var checkpeer = 			writer.WriteObject(Peer);
+if(checkpeer.IsError){
+ return checkpeer; 
+}
+var checkdefaultBannedRights = 			writer.WriteObject(DefaultBannedRights);
+if(checkdefaultBannedRights.IsError){
+ return checkdefaultBannedRights; 
+}
+writer.WriteInt32(Version);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
-			DefaultBannedRights = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase>();
-			Version = reader.Read<int>();
+			var trypeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+if(trypeer.IsError){
+return ReadResult<IObject>.Move(trypeer);
+}
+Peer = trypeer.Value;
+			var trydefaultBannedRights = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase>();
+if(trydefaultBannedRights.IsError){
+return ReadResult<IObject>.Move(trydefaultBannedRights);
+}
+DefaultBannedRights = trydefaultBannedRights.Value;
+			var tryversion = reader.ReadInt32();
+if(tryversion.IsError){
+return ReadResult<IObject>.Move(tryversion);
+}
+Version = tryversion.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

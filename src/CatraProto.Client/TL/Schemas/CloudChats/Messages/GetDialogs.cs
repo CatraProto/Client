@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -21,10 +24,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int ConstructorId { get => -1594569905; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.DialogsBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -74,38 +74,73 @@ Hash = hash;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
+
+			writer.WriteInt32(Flags);
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(FolderId.Value);
+writer.WriteInt32(FolderId.Value);
 			}
 
-			writer.Write(OffsetDate);
-			writer.Write(OffsetId);
-			writer.Write(OffsetPeer);
-			writer.Write(Limit);
-			writer.Write(Hash);
+writer.WriteInt32(OffsetDate);
+writer.WriteInt32(OffsetId);
+var checkoffsetPeer = 			writer.WriteObject(OffsetPeer);
+if(checkoffsetPeer.IsError){
+ return checkoffsetPeer; 
+}
+writer.WriteInt32(Limit);
+writer.WriteInt64(Hash);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			ExcludePinned = FlagsHelper.IsFlagSet(Flags, 0);
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				FolderId = reader.Read<int>();
+				var tryfolderId = reader.ReadInt32();
+if(tryfolderId.IsError){
+return ReadResult<IObject>.Move(tryfolderId);
+}
+FolderId = tryfolderId.Value;
 			}
 
-			OffsetDate = reader.Read<int>();
-			OffsetId = reader.Read<int>();
-			OffsetPeer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
-			Limit = reader.Read<int>();
-			Hash = reader.Read<long>();
+			var tryoffsetDate = reader.ReadInt32();
+if(tryoffsetDate.IsError){
+return ReadResult<IObject>.Move(tryoffsetDate);
+}
+OffsetDate = tryoffsetDate.Value;
+			var tryoffsetId = reader.ReadInt32();
+if(tryoffsetId.IsError){
+return ReadResult<IObject>.Move(tryoffsetId);
+}
+OffsetId = tryoffsetId.Value;
+			var tryoffsetPeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+if(tryoffsetPeer.IsError){
+return ReadResult<IObject>.Move(tryoffsetPeer);
+}
+OffsetPeer = tryoffsetPeer.Value;
+			var trylimit = reader.ReadInt32();
+if(trylimit.IsError){
+return ReadResult<IObject>.Move(trylimit);
+}
+Limit = trylimit.Value;
+			var tryhash = reader.ReadInt64();
+if(tryhash.IsError){
+return ReadResult<IObject>.Move(tryhash);
+}
+Hash = tryhash.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

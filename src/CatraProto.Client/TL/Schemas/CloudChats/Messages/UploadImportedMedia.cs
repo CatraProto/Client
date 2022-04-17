@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int ConstructorId { get => 713433234; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("peer")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
@@ -54,22 +54,48 @@ Media = media;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Peer);
-			writer.Write(ImportId);
-			writer.Write(FileName);
-			writer.Write(Media);
+writer.WriteInt32(ConstructorId);
+var checkpeer = 			writer.WriteObject(Peer);
+if(checkpeer.IsError){
+ return checkpeer; 
+}
+writer.WriteInt64(ImportId);
+
+			writer.WriteString(FileName);
+var checkmedia = 			writer.WriteObject(Media);
+if(checkmedia.IsError){
+ return checkmedia; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
-			ImportId = reader.Read<long>();
-			FileName = reader.Read<string>();
-			Media = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase>();
+			var trypeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+if(trypeer.IsError){
+return ReadResult<IObject>.Move(trypeer);
+}
+Peer = trypeer.Value;
+			var tryimportId = reader.ReadInt64();
+if(tryimportId.IsError){
+return ReadResult<IObject>.Move(tryimportId);
+}
+ImportId = tryimportId.Value;
+			var tryfileName = reader.ReadString();
+if(tryfileName.IsError){
+return ReadResult<IObject>.Move(tryfileName);
+}
+FileName = tryfileName.Value;
+			var trymedia = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase>();
+if(trymedia.IsError){
+return ReadResult<IObject>.Move(trymedia);
+}
+Media = trymedia.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

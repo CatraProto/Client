@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -42,20 +44,36 @@ NearestDcField = nearestDcField;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Country);
-			writer.Write(ThisDc);
-			writer.Write(NearestDcField);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteString(Country);
+writer.WriteInt32(ThisDc);
+writer.WriteInt32(NearestDcField);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Country = reader.Read<string>();
-			ThisDc = reader.Read<int>();
-			NearestDcField = reader.Read<int>();
+			var trycountry = reader.ReadString();
+if(trycountry.IsError){
+return ReadResult<IObject>.Move(trycountry);
+}
+Country = trycountry.Value;
+			var trythisDc = reader.ReadInt32();
+if(trythisDc.IsError){
+return ReadResult<IObject>.Move(trythisDc);
+}
+ThisDc = trythisDc.Value;
+			var trynearestDcField = reader.ReadInt32();
+if(trynearestDcField.IsError){
+return ReadResult<IObject>.Move(trynearestDcField);
+}
+NearestDcField = trynearestDcField.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

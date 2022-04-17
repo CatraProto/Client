@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -20,10 +23,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public static int ConstructorId { get => 473805619; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.DocumentBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -31,6 +31,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 [Newtonsoft.Json.JsonProperty("file")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase File { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("thumb")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase Thumb { get; set; }
 
@@ -61,33 +62,65 @@ MimeType = mimeType;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(File);
+
+			writer.WriteInt32(Flags);
+var checkfile = 			writer.WriteObject(File);
+if(checkfile.IsError){
+ return checkfile; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(Thumb);
+var checkthumb = 				writer.WriteObject(Thumb);
+if(checkthumb.IsError){
+ return checkthumb; 
+}
 			}
 
-			writer.Write(FileName);
-			writer.Write(MimeType);
+
+			writer.WriteString(FileName);
+
+			writer.WriteString(MimeType);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			File = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var tryfile = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
+if(tryfile.IsError){
+return ReadResult<IObject>.Move(tryfile);
+}
+File = tryfile.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Thumb = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
+				var trythumb = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
+if(trythumb.IsError){
+return ReadResult<IObject>.Move(trythumb);
+}
+Thumb = trythumb.Value;
 			}
 
-			FileName = reader.Read<string>();
-			MimeType = reader.Read<string>();
+			var tryfileName = reader.ReadString();
+if(tryfileName.IsError){
+return ReadResult<IObject>.Move(tryfileName);
+}
+FileName = tryfileName.Value;
+			var trymimeType = reader.ReadString();
+if(trymimeType.IsError){
+return ReadResult<IObject>.Move(trymimeType);
+}
+MimeType = trymimeType.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -20,10 +23,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
         public static int ConstructorId { get => 1646092192; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -53,29 +53,46 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Token);
+
+			writer.WriteInt32(Flags);
+
+			writer.WriteString(Token);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(X.Value);
+writer.WriteInt64(X.Value);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			Token = reader.Read<string>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var trytoken = reader.ReadString();
+if(trytoken.IsError){
+return ReadResult<IObject>.Move(trytoken);
+}
+Token = trytoken.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				X = reader.Read<long>();
+				var tryx = reader.ReadInt64();
+if(tryx.IsError){
+return ReadResult<IObject>.Move(tryx);
+}
+X = tryx.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 

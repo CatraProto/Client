@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -25,8 +27,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("file")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase File { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("stickers")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase> Stickers { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase> Stickers { get; set; }
 
 [Newtonsoft.Json.JsonProperty("ttl_seconds")]
 		public int? TtlSeconds { get; set; }
@@ -50,39 +53,65 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(File);
+
+			writer.WriteInt32(Flags);
+var checkfile = 			writer.WriteObject(File);
+if(checkfile.IsError){
+ return checkfile; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(Stickers);
+var checkstickers = 				writer.WriteVector(Stickers, false);
+if(checkstickers.IsError){
+ return checkstickers; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(TtlSeconds.Value);
+writer.WriteInt32(TtlSeconds.Value);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			File = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var tryfile = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
+if(tryfile.IsError){
+return ReadResult<IObject>.Move(tryfile);
+}
+File = tryfile.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Stickers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
+				var trystickers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trystickers.IsError){
+return ReadResult<IObject>.Move(trystickers);
+}
+Stickers = trystickers.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				TtlSeconds = reader.Read<int>();
+				var tryttlSeconds = reader.ReadInt32();
+if(tryttlSeconds.IsError){
+return ReadResult<IObject>.Move(tryttlSeconds);
+}
+TtlSeconds = tryttlSeconds.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

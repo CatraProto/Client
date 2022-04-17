@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -27,11 +29,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 		public byte[] EncryptionIv { get; set; }
 
 [Newtonsoft.Json.JsonProperty("file_hashes")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase> FileHashes { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase> FileHashes { get; set; }
 
 
         #nullable enable
- public FileCdnRedirect (int dcId,byte[] fileToken,byte[] encryptionKey,byte[] encryptionIv,IList<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase> fileHashes)
+ public FileCdnRedirect (int dcId,byte[] fileToken,byte[] encryptionKey,byte[] encryptionIv,List<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase> fileHashes)
 {
  DcId = dcId;
 FileToken = fileToken;
@@ -50,24 +52,53 @@ FileHashes = fileHashes;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(DcId);
-			writer.Write(FileToken);
-			writer.Write(EncryptionKey);
-			writer.Write(EncryptionIv);
-			writer.Write(FileHashes);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt32(DcId);
+
+			writer.WriteBytes(FileToken);
+
+			writer.WriteBytes(EncryptionKey);
+
+			writer.WriteBytes(EncryptionIv);
+var checkfileHashes = 			writer.WriteVector(FileHashes, false);
+if(checkfileHashes.IsError){
+ return checkfileHashes; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			DcId = reader.Read<int>();
-			FileToken = reader.Read<byte[]>();
-			EncryptionKey = reader.Read<byte[]>();
-			EncryptionIv = reader.Read<byte[]>();
-			FileHashes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>();
+			var trydcId = reader.ReadInt32();
+if(trydcId.IsError){
+return ReadResult<IObject>.Move(trydcId);
+}
+DcId = trydcId.Value;
+			var tryfileToken = reader.ReadBytes();
+if(tryfileToken.IsError){
+return ReadResult<IObject>.Move(tryfileToken);
+}
+FileToken = tryfileToken.Value;
+			var tryencryptionKey = reader.ReadBytes();
+if(tryencryptionKey.IsError){
+return ReadResult<IObject>.Move(tryencryptionKey);
+}
+EncryptionKey = tryencryptionKey.Value;
+			var tryencryptionIv = reader.ReadBytes();
+if(tryencryptionIv.IsError){
+return ReadResult<IObject>.Move(tryencryptionIv);
+}
+EncryptionIv = tryencryptionIv.Value;
+			var tryfileHashes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryfileHashes.IsError){
+return ReadResult<IObject>.Move(tryfileHashes);
+}
+FileHashes = tryfileHashes.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,7 +40,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public sealed override bool AllowMissedCall { get; set; }
 
 [Newtonsoft.Json.JsonProperty("logout_tokens")]
-		public sealed override IList<byte[]> LogoutTokens { get; set; }
+		public sealed override List<byte[]> LogoutTokens { get; set; }
 
 
         
@@ -56,31 +58,44 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
+
+			writer.WriteInt32(Flags);
 			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
-				writer.Write(LogoutTokens);
+
+				writer.WriteVector(LogoutTokens, false);
 			}
 
 
+return new WriteResult();
+
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			AllowFlashcall = FlagsHelper.IsFlagSet(Flags, 0);
 			CurrentNumber = FlagsHelper.IsFlagSet(Flags, 1);
 			AllowAppHash = FlagsHelper.IsFlagSet(Flags, 4);
 			AllowMissedCall = FlagsHelper.IsFlagSet(Flags, 5);
 			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
-				LogoutTokens = reader.ReadVector<byte[]>();
+				var trylogoutTokens = reader.ReadVector<byte[]>(ParserTypes.Bytes, nakedVector: false, nakedObjects: false);
+if(trylogoutTokens.IsError){
+return ReadResult<IObject>.Move(trylogoutTokens);
+}
+LogoutTokens = trylogoutTokens.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

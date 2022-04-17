@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -54,26 +56,54 @@ Secret = secret;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Id);
-			writer.Write(AccessHash);
-			writer.Write(FileReference);
-			writer.Write(VolumeId);
-			writer.Write(LocalId);
-			writer.Write(Secret);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(Id);
+writer.WriteInt64(AccessHash);
+
+			writer.WriteBytes(FileReference);
+writer.WriteInt64(VolumeId);
+writer.WriteInt32(LocalId);
+writer.WriteInt64(Secret);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Id = reader.Read<long>();
-			AccessHash = reader.Read<long>();
-			FileReference = reader.Read<byte[]>();
-			VolumeId = reader.Read<long>();
-			LocalId = reader.Read<int>();
-			Secret = reader.Read<long>();
+			var tryid = reader.ReadInt64();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var tryaccessHash = reader.ReadInt64();
+if(tryaccessHash.IsError){
+return ReadResult<IObject>.Move(tryaccessHash);
+}
+AccessHash = tryaccessHash.Value;
+			var tryfileReference = reader.ReadBytes();
+if(tryfileReference.IsError){
+return ReadResult<IObject>.Move(tryfileReference);
+}
+FileReference = tryfileReference.Value;
+			var tryvolumeId = reader.ReadInt64();
+if(tryvolumeId.IsError){
+return ReadResult<IObject>.Move(tryvolumeId);
+}
+VolumeId = tryvolumeId.Value;
+			var trylocalId = reader.ReadInt32();
+if(trylocalId.IsError){
+return ReadResult<IObject>.Move(trylocalId);
+}
+LocalId = trylocalId.Value;
+			var trysecret = reader.ReadInt64();
+if(trysecret.IsError){
+return ReadResult<IObject>.Move(trysecret);
+}
+Secret = trysecret.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

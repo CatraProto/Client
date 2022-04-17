@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -18,11 +20,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public long Hash { get; set; }
 
 [Newtonsoft.Json.JsonProperty("sets")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.StickerSetCoveredBase> Sets { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.StickerSetCoveredBase> Sets { get; set; }
 
 
         #nullable enable
- public FoundStickerSets (long hash,IList<CatraProto.Client.TL.Schemas.CloudChats.StickerSetCoveredBase> sets)
+ public FoundStickerSets (long hash,List<CatraProto.Client.TL.Schemas.CloudChats.StickerSetCoveredBase> sets)
 {
  Hash = hash;
 Sets = sets;
@@ -38,18 +40,32 @@ Sets = sets;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Hash);
-			writer.Write(Sets);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(Hash);
+var checksets = 			writer.WriteVector(Sets, false);
+if(checksets.IsError){
+ return checksets; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Hash = reader.Read<long>();
-			Sets = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.StickerSetCoveredBase>();
+			var tryhash = reader.ReadInt64();
+if(tryhash.IsError){
+return ReadResult<IObject>.Move(tryhash);
+}
+Hash = tryhash.Value;
+			var trysets = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.StickerSetCoveredBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trysets.IsError){
+return ReadResult<IObject>.Move(trysets);
+}
+Sets = trysets.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

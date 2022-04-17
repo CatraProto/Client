@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -42,20 +44,39 @@ Interaction = interaction;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Emoticon);
-			writer.Write(MsgId);
-			writer.Write(Interaction);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteString(Emoticon);
+writer.WriteInt32(MsgId);
+var checkinteraction = 			writer.WriteObject(Interaction);
+if(checkinteraction.IsError){
+ return checkinteraction; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Emoticon = reader.Read<string>();
-			MsgId = reader.Read<int>();
-			Interaction = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
+			var tryemoticon = reader.ReadString();
+if(tryemoticon.IsError){
+return ReadResult<IObject>.Move(tryemoticon);
+}
+Emoticon = tryemoticon.Value;
+			var trymsgId = reader.ReadInt32();
+if(trymsgId.IsError){
+return ReadResult<IObject>.Move(trymsgId);
+}
+MsgId = trymsgId.Value;
+			var tryinteraction = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
+if(tryinteraction.IsError){
+return ReadResult<IObject>.Move(tryinteraction);
+}
+Interaction = tryinteraction.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

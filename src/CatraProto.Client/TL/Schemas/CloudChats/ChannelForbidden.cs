@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -63,35 +65,60 @@ Title = title;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Id);
-			writer.Write(AccessHash);
-			writer.Write(Title);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt64(Id);
+writer.WriteInt64(AccessHash);
+
+			writer.WriteString(Title);
 			if(FlagsHelper.IsFlagSet(Flags, 16))
 			{
-				writer.Write(UntilDate.Value);
+writer.WriteInt32(UntilDate.Value);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Broadcast = FlagsHelper.IsFlagSet(Flags, 5);
 			Megagroup = FlagsHelper.IsFlagSet(Flags, 8);
-			Id = reader.Read<long>();
-			AccessHash = reader.Read<long>();
-			Title = reader.Read<string>();
+			var tryid = reader.ReadInt64();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var tryaccessHash = reader.ReadInt64();
+if(tryaccessHash.IsError){
+return ReadResult<IObject>.Move(tryaccessHash);
+}
+AccessHash = tryaccessHash.Value;
+			var trytitle = reader.ReadString();
+if(trytitle.IsError){
+return ReadResult<IObject>.Move(trytitle);
+}
+Title = trytitle.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 16))
 			{
-				UntilDate = reader.Read<int>();
+				var tryuntilDate = reader.ReadInt32();
+if(tryuntilDate.IsError){
+return ReadResult<IObject>.Move(tryuntilDate);
+}
+UntilDate = tryuntilDate.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

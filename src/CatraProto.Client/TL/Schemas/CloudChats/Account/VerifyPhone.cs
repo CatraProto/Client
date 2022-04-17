@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public static int ConstructorId { get => 1305716726; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
 
 [Newtonsoft.Json.JsonProperty("phone_number")]
 		public string PhoneNumber { get; set; }
@@ -50,20 +50,38 @@ PhoneCode = phoneCode;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(PhoneNumber);
-			writer.Write(PhoneCodeHash);
-			writer.Write(PhoneCode);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteString(PhoneNumber);
+
+			writer.WriteString(PhoneCodeHash);
+
+			writer.WriteString(PhoneCode);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			PhoneNumber = reader.Read<string>();
-			PhoneCodeHash = reader.Read<string>();
-			PhoneCode = reader.Read<string>();
+			var tryphoneNumber = reader.ReadString();
+if(tryphoneNumber.IsError){
+return ReadResult<IObject>.Move(tryphoneNumber);
+}
+PhoneNumber = tryphoneNumber.Value;
+			var tryphoneCodeHash = reader.ReadString();
+if(tryphoneCodeHash.IsError){
+return ReadResult<IObject>.Move(tryphoneCodeHash);
+}
+PhoneCodeHash = tryphoneCodeHash.Value;
+			var tryphoneCode = reader.ReadString();
+if(tryphoneCode.IsError){
+return ReadResult<IObject>.Move(tryphoneCode);
+}
+PhoneCode = tryphoneCode.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

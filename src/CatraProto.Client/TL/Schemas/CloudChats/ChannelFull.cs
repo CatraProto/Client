@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -114,11 +116,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("notify_settings")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase NotifySettings { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("exported_invite")]
 		public CatraProto.Client.TL.Schemas.CloudChats.ExportedChatInviteBase ExportedInvite { get; set; }
 
 [Newtonsoft.Json.JsonProperty("bot_info")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase> BotInfo { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase> BotInfo { get; set; }
 
 [Newtonsoft.Json.JsonProperty("migrated_from_chat_id")]
 		public long? MigratedFromChatId { get; set; }
@@ -129,6 +132,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("pinned_msg_id")]
 		public int? PinnedMsgId { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("stickerset")]
 		public CatraProto.Client.TL.Schemas.CloudChats.StickerSetBase Stickerset { get; set; }
 
@@ -141,6 +145,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("linked_chat_id")]
 		public long? LinkedChatId { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("location")]
 		public CatraProto.Client.TL.Schemas.CloudChats.ChannelLocationBase Location { get; set; }
 
@@ -156,18 +161,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("pts")]
 		public int Pts { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("call")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase Call { get; set; }
 
 [Newtonsoft.Json.JsonProperty("ttl_period")]
 		public int? TtlPeriod { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("pending_suggestions")]
-		public IList<string> PendingSuggestions { get; set; }
+		public List<string> PendingSuggestions { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("groupcall_default_join_as")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase GroupcallDefaultJoinAs { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("theme_emoticon")]
 		public string ThemeEmoticon { get; set; }
 
@@ -175,17 +184,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int? RequestsPending { get; set; }
 
 [Newtonsoft.Json.JsonProperty("recent_requesters")]
-		public IList<long> RecentRequesters { get; set; }
+		public List<long> RecentRequesters { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("default_send_as")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase DefaultSendAs { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("available_reactions")]
-		public IList<string> AvailableReactions { get; set; }
+		public List<string> AvailableReactions { get; set; }
 
 
         #nullable enable
- public ChannelFull (long id,string about,int readInboxMaxId,int readOutboxMaxId,int unreadCount,CatraProto.Client.TL.Schemas.CloudChats.PhotoBase chatPhoto,CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase notifySettings,IList<CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase> botInfo,int pts)
+ public ChannelFull (long id,string about,int readInboxMaxId,int readOutboxMaxId,int unreadCount,CatraProto.Client.TL.Schemas.CloudChats.PhotoBase chatPhoto,CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase notifySettings,List<CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase> botInfo,int pts)
 {
  Id = id;
 About = about;
@@ -242,156 +253,195 @@ Pts = pts;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Id);
-			writer.Write(About);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt64(Id);
+
+			writer.WriteString(About);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(ParticipantsCount.Value);
+writer.WriteInt32(ParticipantsCount.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(AdminsCount.Value);
+writer.WriteInt32(AdminsCount.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(KickedCount.Value);
+writer.WriteInt32(KickedCount.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(BannedCount.Value);
+writer.WriteInt32(BannedCount.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 13))
 			{
-				writer.Write(OnlineCount.Value);
+writer.WriteInt32(OnlineCount.Value);
 			}
 
-			writer.Write(ReadInboxMaxId);
-			writer.Write(ReadOutboxMaxId);
-			writer.Write(UnreadCount);
-			writer.Write(ChatPhoto);
-			writer.Write(NotifySettings);
+writer.WriteInt32(ReadInboxMaxId);
+writer.WriteInt32(ReadOutboxMaxId);
+writer.WriteInt32(UnreadCount);
+var checkchatPhoto = 			writer.WriteObject(ChatPhoto);
+if(checkchatPhoto.IsError){
+ return checkchatPhoto; 
+}
+var checknotifySettings = 			writer.WriteObject(NotifySettings);
+if(checknotifySettings.IsError){
+ return checknotifySettings; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 23))
 			{
-				writer.Write(ExportedInvite);
+var checkexportedInvite = 				writer.WriteObject(ExportedInvite);
+if(checkexportedInvite.IsError){
+ return checkexportedInvite; 
+}
 			}
 
-			writer.Write(BotInfo);
+var checkbotInfo = 			writer.WriteVector(BotInfo, false);
+if(checkbotInfo.IsError){
+ return checkbotInfo; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				writer.Write(MigratedFromChatId.Value);
+writer.WriteInt64(MigratedFromChatId.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				writer.Write(MigratedFromMaxId.Value);
+writer.WriteInt32(MigratedFromMaxId.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				writer.Write(PinnedMsgId.Value);
+writer.WriteInt32(PinnedMsgId.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 8))
 			{
-				writer.Write(Stickerset);
+var checkstickerset = 				writer.WriteObject(Stickerset);
+if(checkstickerset.IsError){
+ return checkstickerset; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 9))
 			{
-				writer.Write(AvailableMinId.Value);
+writer.WriteInt32(AvailableMinId.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 11))
 			{
-				writer.Write(FolderId.Value);
+writer.WriteInt32(FolderId.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 14))
 			{
-				writer.Write(LinkedChatId.Value);
+writer.WriteInt64(LinkedChatId.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 15))
 			{
-				writer.Write(Location);
+var checklocation = 				writer.WriteObject(Location);
+if(checklocation.IsError){
+ return checklocation; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 17))
 			{
-				writer.Write(SlowmodeSeconds.Value);
+writer.WriteInt32(SlowmodeSeconds.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 18))
 			{
-				writer.Write(SlowmodeNextSendDate.Value);
+writer.WriteInt32(SlowmodeNextSendDate.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 12))
 			{
-				writer.Write(StatsDc.Value);
+writer.WriteInt32(StatsDc.Value);
 			}
 
-			writer.Write(Pts);
+writer.WriteInt32(Pts);
 			if(FlagsHelper.IsFlagSet(Flags, 21))
 			{
-				writer.Write(Call);
+var checkcall = 				writer.WriteObject(Call);
+if(checkcall.IsError){
+ return checkcall; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 24))
 			{
-				writer.Write(TtlPeriod.Value);
+writer.WriteInt32(TtlPeriod.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 25))
 			{
-				writer.Write(PendingSuggestions);
+
+				writer.WriteVector(PendingSuggestions, false);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 26))
 			{
-				writer.Write(GroupcallDefaultJoinAs);
+var checkgroupcallDefaultJoinAs = 				writer.WriteObject(GroupcallDefaultJoinAs);
+if(checkgroupcallDefaultJoinAs.IsError){
+ return checkgroupcallDefaultJoinAs; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 27))
 			{
-				writer.Write(ThemeEmoticon);
+
+				writer.WriteString(ThemeEmoticon);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 28))
 			{
-				writer.Write(RequestsPending.Value);
+writer.WriteInt32(RequestsPending.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 28))
 			{
-				writer.Write(RecentRequesters);
+
+				writer.WriteVector(RecentRequesters, false);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 29))
 			{
-				writer.Write(DefaultSendAs);
+var checkdefaultSendAs = 				writer.WriteObject(DefaultSendAs);
+if(checkdefaultSendAs.IsError){
+ return checkdefaultSendAs; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 30))
 			{
-				writer.Write(AvailableReactions);
+
+				writer.WriteVector(AvailableReactions, false);
 			}
 
 
+return new WriteResult();
+
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			CanViewParticipants = FlagsHelper.IsFlagSet(Flags, 3);
 			CanSetUsername = FlagsHelper.IsFlagSet(Flags, 6);
 			CanSetStickers = FlagsHelper.IsFlagSet(Flags, 7);
@@ -400,145 +450,286 @@ writer.Write(ConstructorId);
 			HasScheduled = FlagsHelper.IsFlagSet(Flags, 19);
 			CanViewStats = FlagsHelper.IsFlagSet(Flags, 20);
 			Blocked = FlagsHelper.IsFlagSet(Flags, 22);
-			Id = reader.Read<long>();
-			About = reader.Read<string>();
+			var tryid = reader.ReadInt64();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var tryabout = reader.ReadString();
+if(tryabout.IsError){
+return ReadResult<IObject>.Move(tryabout);
+}
+About = tryabout.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				ParticipantsCount = reader.Read<int>();
+				var tryparticipantsCount = reader.ReadInt32();
+if(tryparticipantsCount.IsError){
+return ReadResult<IObject>.Move(tryparticipantsCount);
+}
+ParticipantsCount = tryparticipantsCount.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				AdminsCount = reader.Read<int>();
+				var tryadminsCount = reader.ReadInt32();
+if(tryadminsCount.IsError){
+return ReadResult<IObject>.Move(tryadminsCount);
+}
+AdminsCount = tryadminsCount.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				KickedCount = reader.Read<int>();
+				var trykickedCount = reader.ReadInt32();
+if(trykickedCount.IsError){
+return ReadResult<IObject>.Move(trykickedCount);
+}
+KickedCount = trykickedCount.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				BannedCount = reader.Read<int>();
+				var trybannedCount = reader.ReadInt32();
+if(trybannedCount.IsError){
+return ReadResult<IObject>.Move(trybannedCount);
+}
+BannedCount = trybannedCount.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 13))
 			{
-				OnlineCount = reader.Read<int>();
+				var tryonlineCount = reader.ReadInt32();
+if(tryonlineCount.IsError){
+return ReadResult<IObject>.Move(tryonlineCount);
+}
+OnlineCount = tryonlineCount.Value;
 			}
 
-			ReadInboxMaxId = reader.Read<int>();
-			ReadOutboxMaxId = reader.Read<int>();
-			UnreadCount = reader.Read<int>();
-			ChatPhoto = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
-			NotifySettings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase>();
+			var tryreadInboxMaxId = reader.ReadInt32();
+if(tryreadInboxMaxId.IsError){
+return ReadResult<IObject>.Move(tryreadInboxMaxId);
+}
+ReadInboxMaxId = tryreadInboxMaxId.Value;
+			var tryreadOutboxMaxId = reader.ReadInt32();
+if(tryreadOutboxMaxId.IsError){
+return ReadResult<IObject>.Move(tryreadOutboxMaxId);
+}
+ReadOutboxMaxId = tryreadOutboxMaxId.Value;
+			var tryunreadCount = reader.ReadInt32();
+if(tryunreadCount.IsError){
+return ReadResult<IObject>.Move(tryunreadCount);
+}
+UnreadCount = tryunreadCount.Value;
+			var trychatPhoto = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
+if(trychatPhoto.IsError){
+return ReadResult<IObject>.Move(trychatPhoto);
+}
+ChatPhoto = trychatPhoto.Value;
+			var trynotifySettings = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase>();
+if(trynotifySettings.IsError){
+return ReadResult<IObject>.Move(trynotifySettings);
+}
+NotifySettings = trynotifySettings.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 23))
 			{
-				ExportedInvite = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ExportedChatInviteBase>();
+				var tryexportedInvite = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ExportedChatInviteBase>();
+if(tryexportedInvite.IsError){
+return ReadResult<IObject>.Move(tryexportedInvite);
+}
+ExportedInvite = tryexportedInvite.Value;
 			}
 
-			BotInfo = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase>();
+			var trybotInfo = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trybotInfo.IsError){
+return ReadResult<IObject>.Move(trybotInfo);
+}
+BotInfo = trybotInfo.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				MigratedFromChatId = reader.Read<long>();
+				var trymigratedFromChatId = reader.ReadInt64();
+if(trymigratedFromChatId.IsError){
+return ReadResult<IObject>.Move(trymigratedFromChatId);
+}
+MigratedFromChatId = trymigratedFromChatId.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				MigratedFromMaxId = reader.Read<int>();
+				var trymigratedFromMaxId = reader.ReadInt32();
+if(trymigratedFromMaxId.IsError){
+return ReadResult<IObject>.Move(trymigratedFromMaxId);
+}
+MigratedFromMaxId = trymigratedFromMaxId.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				PinnedMsgId = reader.Read<int>();
+				var trypinnedMsgId = reader.ReadInt32();
+if(trypinnedMsgId.IsError){
+return ReadResult<IObject>.Move(trypinnedMsgId);
+}
+PinnedMsgId = trypinnedMsgId.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 8))
 			{
-				Stickerset = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StickerSetBase>();
+				var trystickerset = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.StickerSetBase>();
+if(trystickerset.IsError){
+return ReadResult<IObject>.Move(trystickerset);
+}
+Stickerset = trystickerset.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 9))
 			{
-				AvailableMinId = reader.Read<int>();
+				var tryavailableMinId = reader.ReadInt32();
+if(tryavailableMinId.IsError){
+return ReadResult<IObject>.Move(tryavailableMinId);
+}
+AvailableMinId = tryavailableMinId.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 11))
 			{
-				FolderId = reader.Read<int>();
+				var tryfolderId = reader.ReadInt32();
+if(tryfolderId.IsError){
+return ReadResult<IObject>.Move(tryfolderId);
+}
+FolderId = tryfolderId.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 14))
 			{
-				LinkedChatId = reader.Read<long>();
+				var trylinkedChatId = reader.ReadInt64();
+if(trylinkedChatId.IsError){
+return ReadResult<IObject>.Move(trylinkedChatId);
+}
+LinkedChatId = trylinkedChatId.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 15))
 			{
-				Location = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChannelLocationBase>();
+				var trylocation = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ChannelLocationBase>();
+if(trylocation.IsError){
+return ReadResult<IObject>.Move(trylocation);
+}
+Location = trylocation.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 17))
 			{
-				SlowmodeSeconds = reader.Read<int>();
+				var tryslowmodeSeconds = reader.ReadInt32();
+if(tryslowmodeSeconds.IsError){
+return ReadResult<IObject>.Move(tryslowmodeSeconds);
+}
+SlowmodeSeconds = tryslowmodeSeconds.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 18))
 			{
-				SlowmodeNextSendDate = reader.Read<int>();
+				var tryslowmodeNextSendDate = reader.ReadInt32();
+if(tryslowmodeNextSendDate.IsError){
+return ReadResult<IObject>.Move(tryslowmodeNextSendDate);
+}
+SlowmodeNextSendDate = tryslowmodeNextSendDate.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 12))
 			{
-				StatsDc = reader.Read<int>();
+				var trystatsDc = reader.ReadInt32();
+if(trystatsDc.IsError){
+return ReadResult<IObject>.Move(trystatsDc);
+}
+StatsDc = trystatsDc.Value;
 			}
 
-			Pts = reader.Read<int>();
+			var trypts = reader.ReadInt32();
+if(trypts.IsError){
+return ReadResult<IObject>.Move(trypts);
+}
+Pts = trypts.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 21))
 			{
-				Call = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase>();
+				var trycall = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase>();
+if(trycall.IsError){
+return ReadResult<IObject>.Move(trycall);
+}
+Call = trycall.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 24))
 			{
-				TtlPeriod = reader.Read<int>();
+				var tryttlPeriod = reader.ReadInt32();
+if(tryttlPeriod.IsError){
+return ReadResult<IObject>.Move(tryttlPeriod);
+}
+TtlPeriod = tryttlPeriod.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 25))
 			{
-				PendingSuggestions = reader.ReadVector<string>();
+				var trypendingSuggestions = reader.ReadVector<string>(ParserTypes.String, nakedVector: false, nakedObjects: false);
+if(trypendingSuggestions.IsError){
+return ReadResult<IObject>.Move(trypendingSuggestions);
+}
+PendingSuggestions = trypendingSuggestions.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 26))
 			{
-				GroupcallDefaultJoinAs = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+				var trygroupcallDefaultJoinAs = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+if(trygroupcallDefaultJoinAs.IsError){
+return ReadResult<IObject>.Move(trygroupcallDefaultJoinAs);
+}
+GroupcallDefaultJoinAs = trygroupcallDefaultJoinAs.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 27))
 			{
-				ThemeEmoticon = reader.Read<string>();
+				var trythemeEmoticon = reader.ReadString();
+if(trythemeEmoticon.IsError){
+return ReadResult<IObject>.Move(trythemeEmoticon);
+}
+ThemeEmoticon = trythemeEmoticon.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 28))
 			{
-				RequestsPending = reader.Read<int>();
+				var tryrequestsPending = reader.ReadInt32();
+if(tryrequestsPending.IsError){
+return ReadResult<IObject>.Move(tryrequestsPending);
+}
+RequestsPending = tryrequestsPending.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 28))
 			{
-				RecentRequesters = reader.ReadVector<long>();
+				var tryrecentRequesters = reader.ReadVector<long>(ParserTypes.Int64);
+if(tryrecentRequesters.IsError){
+return ReadResult<IObject>.Move(tryrecentRequesters);
+}
+RecentRequesters = tryrecentRequesters.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 29))
 			{
-				DefaultSendAs = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+				var trydefaultSendAs = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+if(trydefaultSendAs.IsError){
+return ReadResult<IObject>.Move(trydefaultSendAs);
+}
+DefaultSendAs = trydefaultSendAs.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 30))
 			{
-				AvailableReactions = reader.ReadVector<string>();
+				var tryavailableReactions = reader.ReadVector<string>(ParserTypes.String, nakedVector: false, nakedObjects: false);
+if(tryavailableReactions.IsError){
+return ReadResult<IObject>.Move(tryavailableReactions);
+}
+AvailableReactions = tryavailableReactions.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

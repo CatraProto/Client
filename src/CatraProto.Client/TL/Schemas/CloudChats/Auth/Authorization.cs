@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -55,40 +57,63 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
+
+			writer.WriteInt32(Flags);
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(OtherwiseReloginDays.Value);
+writer.WriteInt32(OtherwiseReloginDays.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(TmpSessions.Value);
+writer.WriteInt32(TmpSessions.Value);
 			}
 
-			writer.Write(User);
+var checkuser = 			writer.WriteObject(User);
+if(checkuser.IsError){
+ return checkuser; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			SetupPasswordRequired = FlagsHelper.IsFlagSet(Flags, 1);
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				OtherwiseReloginDays = reader.Read<int>();
+				var tryotherwiseReloginDays = reader.ReadInt32();
+if(tryotherwiseReloginDays.IsError){
+return ReadResult<IObject>.Move(tryotherwiseReloginDays);
+}
+OtherwiseReloginDays = tryotherwiseReloginDays.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				TmpSessions = reader.Read<int>();
+				var trytmpSessions = reader.ReadInt32();
+if(trytmpSessions.IsError){
+return ReadResult<IObject>.Move(trytmpSessions);
+}
+TmpSessions = trytmpSessions.Value;
 			}
 
-			User = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+			var tryuser = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+if(tryuser.IsError){
+return ReadResult<IObject>.Move(tryuser);
+}
+User = tryuser.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

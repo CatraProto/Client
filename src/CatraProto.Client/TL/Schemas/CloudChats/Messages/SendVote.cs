@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int ConstructorId { get => 283795844; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("peer")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
@@ -28,11 +28,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public int MsgId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("options")]
-		public IList<byte[]> Options { get; set; }
+		public List<byte[]> Options { get; set; }
 
         
         #nullable enable
- public SendVote (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer,int msgId,IList<byte[]> options)
+ public SendVote (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer,int msgId,List<byte[]> options)
 {
  Peer = peer;
 MsgId = msgId;
@@ -50,20 +50,39 @@ Options = options;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Peer);
-			writer.Write(MsgId);
-			writer.Write(Options);
+writer.WriteInt32(ConstructorId);
+var checkpeer = 			writer.WriteObject(Peer);
+if(checkpeer.IsError){
+ return checkpeer; 
+}
+writer.WriteInt32(MsgId);
+
+			writer.WriteVector(Options, false);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
-			MsgId = reader.Read<int>();
-			Options = reader.ReadVector<byte[]>();
+			var trypeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+if(trypeer.IsError){
+return ReadResult<IObject>.Move(trypeer);
+}
+Peer = trypeer.Value;
+			var trymsgId = reader.ReadInt32();
+if(trymsgId.IsError){
+return ReadResult<IObject>.Move(trymsgId);
+}
+MsgId = trymsgId.Value;
+			var tryoptions = reader.ReadVector<byte[]>(ParserTypes.Bytes, nakedVector: false, nakedObjects: false);
+if(tryoptions.IsError){
+return ReadResult<IObject>.Move(tryoptions);
+}
+Options = tryoptions.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

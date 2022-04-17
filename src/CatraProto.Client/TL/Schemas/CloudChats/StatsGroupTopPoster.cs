@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -42,20 +44,35 @@ AvgChars = avgChars;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(UserId);
-			writer.Write(Messages);
-			writer.Write(AvgChars);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(UserId);
+writer.WriteInt32(Messages);
+writer.WriteInt32(AvgChars);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			UserId = reader.Read<long>();
-			Messages = reader.Read<int>();
-			AvgChars = reader.Read<int>();
+			var tryuserId = reader.ReadInt64();
+if(tryuserId.IsError){
+return ReadResult<IObject>.Move(tryuserId);
+}
+UserId = tryuserId.Value;
+			var trymessages = reader.ReadInt32();
+if(trymessages.IsError){
+return ReadResult<IObject>.Move(trymessages);
+}
+Messages = trymessages.Value;
+			var tryavgChars = reader.ReadInt32();
+if(tryavgChars.IsError){
+return ReadResult<IObject>.Move(tryavgChars);
+}
+AvgChars = tryavgChars.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

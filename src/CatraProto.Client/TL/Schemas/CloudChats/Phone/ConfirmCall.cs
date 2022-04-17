@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
         public static int ConstructorId { get => 788404002; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Phone.PhoneCallBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("peer")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputPhoneCallBase Peer { get; set; }
@@ -54,22 +54,48 @@ Protocol = protocol;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Peer);
-			writer.Write(GA);
-			writer.Write(KeyFingerprint);
-			writer.Write(Protocol);
+writer.WriteInt32(ConstructorId);
+var checkpeer = 			writer.WriteObject(Peer);
+if(checkpeer.IsError){
+ return checkpeer; 
+}
+
+			writer.WriteBytes(GA);
+writer.WriteInt64(KeyFingerprint);
+var checkprotocol = 			writer.WriteObject(Protocol);
+if(checkprotocol.IsError){
+ return checkprotocol; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPhoneCallBase>();
-			GA = reader.Read<byte[]>();
-			KeyFingerprint = reader.Read<long>();
-			Protocol = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase>();
+			var trypeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPhoneCallBase>();
+if(trypeer.IsError){
+return ReadResult<IObject>.Move(trypeer);
+}
+Peer = trypeer.Value;
+			var trygA = reader.ReadBytes();
+if(trygA.IsError){
+return ReadResult<IObject>.Move(trygA);
+}
+GA = trygA.Value;
+			var trykeyFingerprint = reader.ReadInt64();
+if(trykeyFingerprint.IsError){
+return ReadResult<IObject>.Move(trykeyFingerprint);
+}
+KeyFingerprint = trykeyFingerprint.Value;
+			var tryprotocol = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase>();
+if(tryprotocol.IsError){
+return ReadResult<IObject>.Move(tryprotocol);
+}
+Protocol = tryprotocol.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

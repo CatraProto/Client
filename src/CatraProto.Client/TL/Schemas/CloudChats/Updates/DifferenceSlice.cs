@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -15,26 +17,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
         public static int ConstructorId { get => -1459938943; }
         
 [Newtonsoft.Json.JsonProperty("new_messages")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageBase> NewMessages { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.MessageBase> NewMessages { get; set; }
 
 [Newtonsoft.Json.JsonProperty("new_encrypted_messages")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.EncryptedMessageBase> NewEncryptedMessages { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.EncryptedMessageBase> NewEncryptedMessages { get; set; }
 
 [Newtonsoft.Json.JsonProperty("other_updates")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.UpdateBase> OtherUpdates { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.UpdateBase> OtherUpdates { get; set; }
 
 [Newtonsoft.Json.JsonProperty("chats")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
 
 [Newtonsoft.Json.JsonProperty("users")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
 [Newtonsoft.Json.JsonProperty("intermediate_state")]
 		public CatraProto.Client.TL.Schemas.CloudChats.Updates.StateBase IntermediateState { get; set; }
 
 
         #nullable enable
- public DifferenceSlice (IList<CatraProto.Client.TL.Schemas.CloudChats.MessageBase> newMessages,IList<CatraProto.Client.TL.Schemas.CloudChats.EncryptedMessageBase> newEncryptedMessages,IList<CatraProto.Client.TL.Schemas.CloudChats.UpdateBase> otherUpdates,IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> chats,IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> users,CatraProto.Client.TL.Schemas.CloudChats.Updates.StateBase intermediateState)
+ public DifferenceSlice (List<CatraProto.Client.TL.Schemas.CloudChats.MessageBase> newMessages,List<CatraProto.Client.TL.Schemas.CloudChats.EncryptedMessageBase> newEncryptedMessages,List<CatraProto.Client.TL.Schemas.CloudChats.UpdateBase> otherUpdates,List<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> chats,List<CatraProto.Client.TL.Schemas.CloudChats.UserBase> users,CatraProto.Client.TL.Schemas.CloudChats.Updates.StateBase intermediateState)
 {
  NewMessages = newMessages;
 NewEncryptedMessages = newEncryptedMessages;
@@ -54,26 +56,71 @@ IntermediateState = intermediateState;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(NewMessages);
-			writer.Write(NewEncryptedMessages);
-			writer.Write(OtherUpdates);
-			writer.Write(Chats);
-			writer.Write(Users);
-			writer.Write(IntermediateState);
+writer.WriteInt32(ConstructorId);
+var checknewMessages = 			writer.WriteVector(NewMessages, false);
+if(checknewMessages.IsError){
+ return checknewMessages; 
+}
+var checknewEncryptedMessages = 			writer.WriteVector(NewEncryptedMessages, false);
+if(checknewEncryptedMessages.IsError){
+ return checknewEncryptedMessages; 
+}
+var checkotherUpdates = 			writer.WriteVector(OtherUpdates, false);
+if(checkotherUpdates.IsError){
+ return checkotherUpdates; 
+}
+var checkchats = 			writer.WriteVector(Chats, false);
+if(checkchats.IsError){
+ return checkchats; 
+}
+var checkusers = 			writer.WriteVector(Users, false);
+if(checkusers.IsError){
+ return checkusers; 
+}
+var checkintermediateState = 			writer.WriteObject(IntermediateState);
+if(checkintermediateState.IsError){
+ return checkintermediateState; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			NewMessages = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageBase>();
-			NewEncryptedMessages = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.EncryptedMessageBase>();
-			OtherUpdates = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UpdateBase>();
-			Chats = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
-			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
-			IntermediateState = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.Updates.StateBase>();
+			var trynewMessages = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trynewMessages.IsError){
+return ReadResult<IObject>.Move(trynewMessages);
+}
+NewMessages = trynewMessages.Value;
+			var trynewEncryptedMessages = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.EncryptedMessageBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trynewEncryptedMessages.IsError){
+return ReadResult<IObject>.Move(trynewEncryptedMessages);
+}
+NewEncryptedMessages = trynewEncryptedMessages.Value;
+			var tryotherUpdates = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UpdateBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryotherUpdates.IsError){
+return ReadResult<IObject>.Move(tryotherUpdates);
+}
+OtherUpdates = tryotherUpdates.Value;
+			var trychats = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trychats.IsError){
+return ReadResult<IObject>.Move(trychats);
+}
+Chats = trychats.Value;
+			var tryusers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryusers.IsError){
+return ReadResult<IObject>.Move(tryusers);
+}
+Users = tryusers.Value;
+			var tryintermediateState = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.Updates.StateBase>();
+if(tryintermediateState.IsError){
+return ReadResult<IObject>.Move(tryintermediateState);
+}
+IntermediateState = tryintermediateState.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -18,14 +20,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public sealed override long ChatId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("participants")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantBase> Participants { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantBase> Participants { get; set; }
 
 [Newtonsoft.Json.JsonProperty("version")]
 		public int Version { get; set; }
 
 
         #nullable enable
- public ChatParticipants (long chatId,IList<CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantBase> participants,int version)
+ public ChatParticipants (long chatId,List<CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantBase> participants,int version)
 {
  ChatId = chatId;
 Participants = participants;
@@ -42,20 +44,38 @@ Version = version;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(ChatId);
-			writer.Write(Participants);
-			writer.Write(Version);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(ChatId);
+var checkparticipants = 			writer.WriteVector(Participants, false);
+if(checkparticipants.IsError){
+ return checkparticipants; 
+}
+writer.WriteInt32(Version);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			ChatId = reader.Read<long>();
-			Participants = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantBase>();
-			Version = reader.Read<int>();
+			var trychatId = reader.ReadInt64();
+if(trychatId.IsError){
+return ReadResult<IObject>.Move(trychatId);
+}
+ChatId = trychatId.Value;
+			var tryparticipants = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryparticipants.IsError){
+return ReadResult<IObject>.Move(tryparticipants);
+}
+Participants = tryparticipants.Value;
+			var tryversion = reader.ReadInt32();
+if(tryversion.IsError){
+return ReadResult<IObject>.Move(tryversion);
+}
+Version = tryversion.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

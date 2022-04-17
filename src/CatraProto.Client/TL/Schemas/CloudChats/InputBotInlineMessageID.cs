@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -42,20 +44,35 @@ AccessHash = accessHash;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(DcId);
-			writer.Write(Id);
-			writer.Write(AccessHash);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt32(DcId);
+writer.WriteInt64(Id);
+writer.WriteInt64(AccessHash);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			DcId = reader.Read<int>();
-			Id = reader.Read<long>();
-			AccessHash = reader.Read<long>();
+			var trydcId = reader.ReadInt32();
+if(trydcId.IsError){
+return ReadResult<IObject>.Move(trydcId);
+}
+DcId = trydcId.Value;
+			var tryid = reader.ReadInt64();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var tryaccessHash = reader.ReadInt64();
+if(tryaccessHash.IsError){
+return ReadResult<IObject>.Move(tryaccessHash);
+}
+AccessHash = tryaccessHash.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

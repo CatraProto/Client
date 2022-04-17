@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,35 @@ Results = results;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Poll);
-			writer.Write(Results);
+writer.WriteInt32(ConstructorId);
+var checkpoll = 			writer.WriteObject(Poll);
+if(checkpoll.IsError){
+ return checkpoll; 
+}
+var checkresults = 			writer.WriteObject(Results);
+if(checkresults.IsError){
+ return checkresults; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Poll = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PollBase>();
-			Results = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PollResultsBase>();
+			var trypoll = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PollBase>();
+if(trypoll.IsError){
+return ReadResult<IObject>.Move(trypoll);
+}
+Poll = trypoll.Value;
+			var tryresults = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PollResultsBase>();
+if(tryresults.IsError){
+return ReadResult<IObject>.Move(tryresults);
+}
+Results = tryresults.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

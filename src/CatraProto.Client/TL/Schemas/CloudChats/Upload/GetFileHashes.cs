@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
         public static int ConstructorId { get => -956147407; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.FileHashBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = true;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("location")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputFileLocationBase Location { get; set; }
@@ -46,18 +46,32 @@ Offset = offset;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Location);
-			writer.Write(Offset);
+writer.WriteInt32(ConstructorId);
+var checklocation = 			writer.WriteObject(Location);
+if(checklocation.IsError){
+ return checklocation; 
+}
+writer.WriteInt32(Offset);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Location = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputFileLocationBase>();
-			Offset = reader.Read<int>();
+			var trylocation = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputFileLocationBase>();
+if(trylocation.IsError){
+return ReadResult<IObject>.Move(trylocation);
+}
+Location = trylocation.Value;
+			var tryoffset = reader.ReadInt32();
+if(tryoffset.IsError){
+return ReadResult<IObject>.Move(tryoffset);
+}
+Offset = tryoffset.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

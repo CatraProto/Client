@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -50,24 +52,47 @@ UnreadCount = unreadCount;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Pts);
-			writer.Write(Qts);
-			writer.Write(Date);
-			writer.Write(Seq);
-			writer.Write(UnreadCount);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt32(Pts);
+writer.WriteInt32(Qts);
+writer.WriteInt32(Date);
+writer.WriteInt32(Seq);
+writer.WriteInt32(UnreadCount);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Pts = reader.Read<int>();
-			Qts = reader.Read<int>();
-			Date = reader.Read<int>();
-			Seq = reader.Read<int>();
-			UnreadCount = reader.Read<int>();
+			var trypts = reader.ReadInt32();
+if(trypts.IsError){
+return ReadResult<IObject>.Move(trypts);
+}
+Pts = trypts.Value;
+			var tryqts = reader.ReadInt32();
+if(tryqts.IsError){
+return ReadResult<IObject>.Move(tryqts);
+}
+Qts = tryqts.Value;
+			var trydate = reader.ReadInt32();
+if(trydate.IsError){
+return ReadResult<IObject>.Move(trydate);
+}
+Date = trydate.Value;
+			var tryseq = reader.ReadInt32();
+if(tryseq.IsError){
+return ReadResult<IObject>.Move(tryseq);
+}
+Seq = tryseq.Value;
+			var tryunreadCount = reader.ReadInt32();
+if(tryunreadCount.IsError){
+return ReadResult<IObject>.Move(tryunreadCount);
+}
+UnreadCount = tryunreadCount.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

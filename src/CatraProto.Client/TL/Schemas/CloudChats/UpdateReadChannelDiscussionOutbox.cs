@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -42,20 +44,35 @@ ReadMaxId = readMaxId;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(ChannelId);
-			writer.Write(TopMsgId);
-			writer.Write(ReadMaxId);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(ChannelId);
+writer.WriteInt32(TopMsgId);
+writer.WriteInt32(ReadMaxId);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			ChannelId = reader.Read<long>();
-			TopMsgId = reader.Read<int>();
-			ReadMaxId = reader.Read<int>();
+			var trychannelId = reader.ReadInt64();
+if(trychannelId.IsError){
+return ReadResult<IObject>.Move(trychannelId);
+}
+ChannelId = trychannelId.Value;
+			var trytopMsgId = reader.ReadInt32();
+if(trytopMsgId.IsError){
+return ReadResult<IObject>.Move(trytopMsgId);
+}
+TopMsgId = trytopMsgId.Value;
+			var tryreadMaxId = reader.ReadInt32();
+if(tryreadMaxId.IsError){
+return ReadResult<IObject>.Move(tryreadMaxId);
+}
+ReadMaxId = tryreadMaxId.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

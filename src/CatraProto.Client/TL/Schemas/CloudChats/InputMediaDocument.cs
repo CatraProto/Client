@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -28,6 +30,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("ttl_seconds")]
 		public int? TtlSeconds { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("query")]
 		public string Query { get; set; }
 
@@ -50,39 +53,63 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Id);
+
+			writer.WriteInt32(Flags);
+var checkid = 			writer.WriteObject(Id);
+if(checkid.IsError){
+ return checkid; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(TtlSeconds.Value);
+writer.WriteInt32(TtlSeconds.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(Query);
+
+				writer.WriteString(Query);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			Id = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var tryid = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				TtlSeconds = reader.Read<int>();
+				var tryttlSeconds = reader.ReadInt32();
+if(tryttlSeconds.IsError){
+return ReadResult<IObject>.Move(tryttlSeconds);
+}
+TtlSeconds = tryttlSeconds.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Query = reader.Read<string>();
+				var tryquery = reader.ReadString();
+if(tryquery.IsError){
+return ReadResult<IObject>.Move(tryquery);
+}
+Query = tryquery.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

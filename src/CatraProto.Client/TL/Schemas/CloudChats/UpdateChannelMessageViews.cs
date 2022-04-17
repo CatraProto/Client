@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -42,20 +44,35 @@ Views = views;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(ChannelId);
-			writer.Write(Id);
-			writer.Write(Views);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(ChannelId);
+writer.WriteInt32(Id);
+writer.WriteInt32(Views);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			ChannelId = reader.Read<long>();
-			Id = reader.Read<int>();
-			Views = reader.Read<int>();
+			var trychannelId = reader.ReadInt64();
+if(trychannelId.IsError){
+return ReadResult<IObject>.Move(trychannelId);
+}
+ChannelId = trychannelId.Value;
+			var tryid = reader.ReadInt32();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var tryviews = reader.ReadInt32();
+if(tryviews.IsError){
+return ReadResult<IObject>.Move(tryviews);
+}
+Views = tryviews.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,29 @@ AccessHash = accessHash;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(ChatId);
-			writer.Write(AccessHash);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt32(ChatId);
+writer.WriteInt64(AccessHash);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			ChatId = reader.Read<int>();
-			AccessHash = reader.Read<long>();
+			var trychatId = reader.ReadInt32();
+if(trychatId.IsError){
+return ReadResult<IObject>.Move(trychatId);
+}
+ChatId = trychatId.Value;
+			var tryaccessHash = reader.ReadInt64();
+if(tryaccessHash.IsError){
+return ReadResult<IObject>.Move(tryaccessHash);
+}
+AccessHash = tryaccessHash.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

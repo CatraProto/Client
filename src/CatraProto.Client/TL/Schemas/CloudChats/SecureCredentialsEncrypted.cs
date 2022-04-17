@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -42,20 +44,38 @@ Secret = secret;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Data);
-			writer.Write(Hash);
-			writer.Write(Secret);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteBytes(Data);
+
+			writer.WriteBytes(Hash);
+
+			writer.WriteBytes(Secret);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Data = reader.Read<byte[]>();
-			Hash = reader.Read<byte[]>();
-			Secret = reader.Read<byte[]>();
+			var trydata = reader.ReadBytes();
+if(trydata.IsError){
+return ReadResult<IObject>.Move(trydata);
+}
+Data = trydata.Value;
+			var tryhash = reader.ReadBytes();
+if(tryhash.IsError){
+return ReadResult<IObject>.Move(tryhash);
+}
+Hash = tryhash.Value;
+			var trysecret = reader.ReadBytes();
+if(trysecret.IsError){
+return ReadResult<IObject>.Move(trysecret);
+}
+Secret = trysecret.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

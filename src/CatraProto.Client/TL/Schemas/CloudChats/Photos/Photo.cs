@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -18,11 +20,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.PhotoBase PhotoField { get; set; }
 
 [Newtonsoft.Json.JsonProperty("users")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
 
         #nullable enable
- public Photo (CatraProto.Client.TL.Schemas.CloudChats.PhotoBase photoField,IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> users)
+ public Photo (CatraProto.Client.TL.Schemas.CloudChats.PhotoBase photoField,List<CatraProto.Client.TL.Schemas.CloudChats.UserBase> users)
 {
  PhotoField = photoField;
 Users = users;
@@ -38,18 +40,35 @@ Users = users;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(PhotoField);
-			writer.Write(Users);
+writer.WriteInt32(ConstructorId);
+var checkphotoField = 			writer.WriteObject(PhotoField);
+if(checkphotoField.IsError){
+ return checkphotoField; 
+}
+var checkusers = 			writer.WriteVector(Users, false);
+if(checkusers.IsError){
+ return checkusers; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			PhotoField = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
-			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+			var tryphotoField = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
+if(tryphotoField.IsError){
+return ReadResult<IObject>.Move(tryphotoField);
+}
+PhotoField = tryphotoField.Value;
+			var tryusers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryusers.IsError){
+return ReadResult<IObject>.Move(tryusers);
+}
+Users = tryusers.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

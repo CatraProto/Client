@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -42,20 +44,39 @@ SecureSecretId = secureSecretId;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(SecureAlgo);
-			writer.Write(SecureSecret);
-			writer.Write(SecureSecretId);
+writer.WriteInt32(ConstructorId);
+var checksecureAlgo = 			writer.WriteObject(SecureAlgo);
+if(checksecureAlgo.IsError){
+ return checksecureAlgo; 
+}
+
+			writer.WriteBytes(SecureSecret);
+writer.WriteInt64(SecureSecretId);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			SecureAlgo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SecurePasswordKdfAlgoBase>();
-			SecureSecret = reader.Read<byte[]>();
-			SecureSecretId = reader.Read<long>();
+			var trysecureAlgo = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.SecurePasswordKdfAlgoBase>();
+if(trysecureAlgo.IsError){
+return ReadResult<IObject>.Move(trysecureAlgo);
+}
+SecureAlgo = trysecureAlgo.Value;
+			var trysecureSecret = reader.ReadBytes();
+if(trysecureSecret.IsError){
+return ReadResult<IObject>.Move(trysecureSecret);
+}
+SecureSecret = trysecureSecret.Value;
+			var trysecureSecretId = reader.ReadInt64();
+if(trysecureSecretId.IsError){
+return ReadResult<IObject>.Move(trysecureSecretId);
+}
+SecureSecretId = trysecureSecretId.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

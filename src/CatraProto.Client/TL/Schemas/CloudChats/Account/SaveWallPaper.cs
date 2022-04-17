@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public static int ConstructorId { get => 1817860919; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
 
 [Newtonsoft.Json.JsonProperty("wallpaper")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase Wallpaper { get; set; }
@@ -50,20 +50,44 @@ Settings = settings;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Wallpaper);
-			writer.Write(Unsave);
-			writer.Write(Settings);
+writer.WriteInt32(ConstructorId);
+var checkwallpaper = 			writer.WriteObject(Wallpaper);
+if(checkwallpaper.IsError){
+ return checkwallpaper; 
+}
+var checkunsave = 			writer.WriteBool(Unsave);
+if(checkunsave.IsError){
+ return checkunsave; 
+}
+var checksettings = 			writer.WriteObject(Settings);
+if(checksettings.IsError){
+ return checksettings; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Wallpaper = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase>();
-			Unsave = reader.Read<bool>();
-			Settings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase>();
+			var trywallpaper = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase>();
+if(trywallpaper.IsError){
+return ReadResult<IObject>.Move(trywallpaper);
+}
+Wallpaper = trywallpaper.Value;
+			var tryunsave = reader.ReadBool();
+if(tryunsave.IsError){
+return ReadResult<IObject>.Move(tryunsave);
+}
+Unsave = tryunsave.Value;
+			var trysettings = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase>();
+if(trysettings.IsError){
+return ReadResult<IObject>.Move(trysettings);
+}
+Settings = trysettings.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

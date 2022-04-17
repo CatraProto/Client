@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,32 @@ CountriesLangs = countriesLangs;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Hash);
-			writer.Write(CountriesLangs);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt32(Hash);
+var checkcountriesLangs = 			writer.WriteObject(CountriesLangs);
+if(checkcountriesLangs.IsError){
+ return checkcountriesLangs; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Hash = reader.Read<int>();
-			CountriesLangs = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
+			var tryhash = reader.ReadInt32();
+if(tryhash.IsError){
+return ReadResult<IObject>.Move(tryhash);
+}
+Hash = tryhash.Value;
+			var trycountriesLangs = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
+if(trycountriesLangs.IsError){
+return ReadResult<IObject>.Move(trycountriesLangs);
+}
+CountriesLangs = trycountriesLangs.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

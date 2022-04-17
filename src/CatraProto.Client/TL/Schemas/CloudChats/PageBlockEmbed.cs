@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -33,9 +35,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("allow_scrolling")]
 		public bool AllowScrolling { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("url")]
 		public string Url { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("html")]
 		public string Html { get; set; }
 
@@ -75,71 +79,108 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
+
+			writer.WriteInt32(Flags);
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(Url);
+
+				writer.WriteString(Url);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(Html);
+
+				writer.WriteString(Html);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				writer.Write(PosterPhotoId.Value);
+writer.WriteInt64(PosterPhotoId.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				writer.Write(W.Value);
+writer.WriteInt32(W.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				writer.Write(H.Value);
+writer.WriteInt32(H.Value);
 			}
 
-			writer.Write(Caption);
+var checkcaption = 			writer.WriteObject(Caption);
+if(checkcaption.IsError){
+ return checkcaption; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			FullWidth = FlagsHelper.IsFlagSet(Flags, 0);
 			AllowScrolling = FlagsHelper.IsFlagSet(Flags, 3);
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Url = reader.Read<string>();
+				var tryurl = reader.ReadString();
+if(tryurl.IsError){
+return ReadResult<IObject>.Move(tryurl);
+}
+Url = tryurl.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				Html = reader.Read<string>();
+				var tryhtml = reader.ReadString();
+if(tryhtml.IsError){
+return ReadResult<IObject>.Move(tryhtml);
+}
+Html = tryhtml.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				PosterPhotoId = reader.Read<long>();
+				var tryposterPhotoId = reader.ReadInt64();
+if(tryposterPhotoId.IsError){
+return ReadResult<IObject>.Move(tryposterPhotoId);
+}
+PosterPhotoId = tryposterPhotoId.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				W = reader.Read<int>();
+				var tryw = reader.ReadInt32();
+if(tryw.IsError){
+return ReadResult<IObject>.Move(tryw);
+}
+W = tryw.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				H = reader.Read<int>();
+				var tryh = reader.ReadInt32();
+if(tryh.IsError){
+return ReadResult<IObject>.Move(tryh);
+}
+H = tryh.Value;
 			}
 
-			Caption = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase>();
+			var trycaption = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase>();
+if(trycaption.IsError){
+return ReadResult<IObject>.Move(trycaption);
+}
+Caption = trycaption.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

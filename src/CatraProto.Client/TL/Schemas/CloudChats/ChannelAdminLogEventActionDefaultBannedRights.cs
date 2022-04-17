@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,35 @@ NewBannedRights = newBannedRights;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(PrevBannedRights);
-			writer.Write(NewBannedRights);
+writer.WriteInt32(ConstructorId);
+var checkprevBannedRights = 			writer.WriteObject(PrevBannedRights);
+if(checkprevBannedRights.IsError){
+ return checkprevBannedRights; 
+}
+var checknewBannedRights = 			writer.WriteObject(NewBannedRights);
+if(checknewBannedRights.IsError){
+ return checknewBannedRights; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			PrevBannedRights = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase>();
-			NewBannedRights = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase>();
+			var tryprevBannedRights = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase>();
+if(tryprevBannedRights.IsError){
+return ReadResult<IObject>.Move(tryprevBannedRights);
+}
+PrevBannedRights = tryprevBannedRights.Value;
+			var trynewBannedRights = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase>();
+if(trynewBannedRights.IsError){
+return ReadResult<IObject>.Move(trynewBannedRights);
+}
+NewBannedRights = trynewBannedRights.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

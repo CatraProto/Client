@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -54,26 +56,56 @@ Scale = scale;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(GeoPoint);
-			writer.Write(AccessHash);
-			writer.Write(W);
-			writer.Write(H);
-			writer.Write(Zoom);
-			writer.Write(Scale);
+writer.WriteInt32(ConstructorId);
+var checkgeoPoint = 			writer.WriteObject(GeoPoint);
+if(checkgeoPoint.IsError){
+ return checkgeoPoint; 
+}
+writer.WriteInt64(AccessHash);
+writer.WriteInt32(W);
+writer.WriteInt32(H);
+writer.WriteInt32(Zoom);
+writer.WriteInt32(Scale);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			GeoPoint = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase>();
-			AccessHash = reader.Read<long>();
-			W = reader.Read<int>();
-			H = reader.Read<int>();
-			Zoom = reader.Read<int>();
-			Scale = reader.Read<int>();
+			var trygeoPoint = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase>();
+if(trygeoPoint.IsError){
+return ReadResult<IObject>.Move(trygeoPoint);
+}
+GeoPoint = trygeoPoint.Value;
+			var tryaccessHash = reader.ReadInt64();
+if(tryaccessHash.IsError){
+return ReadResult<IObject>.Move(tryaccessHash);
+}
+AccessHash = tryaccessHash.Value;
+			var tryw = reader.ReadInt32();
+if(tryw.IsError){
+return ReadResult<IObject>.Move(tryw);
+}
+W = tryw.Value;
+			var tryh = reader.ReadInt32();
+if(tryh.IsError){
+return ReadResult<IObject>.Move(tryh);
+}
+H = tryh.Value;
+			var tryzoom = reader.ReadInt32();
+if(tryzoom.IsError){
+return ReadResult<IObject>.Move(tryzoom);
+}
+Zoom = tryzoom.Value;
+			var tryscale = reader.ReadInt32();
+if(tryscale.IsError){
+return ReadResult<IObject>.Move(tryscale);
+}
+Scale = tryscale.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

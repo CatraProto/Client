@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
         public static int ConstructorId { get => -1848823128; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Photos.PhotosBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("user_id")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase UserId { get; set; }
@@ -54,22 +54,44 @@ Limit = limit;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(UserId);
-			writer.Write(Offset);
-			writer.Write(MaxId);
-			writer.Write(Limit);
+writer.WriteInt32(ConstructorId);
+var checkuserId = 			writer.WriteObject(UserId);
+if(checkuserId.IsError){
+ return checkuserId; 
+}
+writer.WriteInt32(Offset);
+writer.WriteInt64(MaxId);
+writer.WriteInt32(Limit);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			UserId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
-			Offset = reader.Read<int>();
-			MaxId = reader.Read<long>();
-			Limit = reader.Read<int>();
+			var tryuserId = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
+if(tryuserId.IsError){
+return ReadResult<IObject>.Move(tryuserId);
+}
+UserId = tryuserId.Value;
+			var tryoffset = reader.ReadInt32();
+if(tryoffset.IsError){
+return ReadResult<IObject>.Move(tryoffset);
+}
+Offset = tryoffset.Value;
+			var trymaxId = reader.ReadInt64();
+if(trymaxId.IsError){
+return ReadResult<IObject>.Move(trymaxId);
+}
+MaxId = trymaxId.Value;
+			var trylimit = reader.ReadInt32();
+if(trylimit.IsError){
+return ReadResult<IObject>.Move(trylimit);
+}
+Limit = trylimit.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

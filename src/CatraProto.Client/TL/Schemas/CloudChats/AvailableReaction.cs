@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -47,9 +49,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("effect_animation")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.DocumentBase EffectAnimation { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("around_animation")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.DocumentBase AroundAnimation { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("center_icon")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.DocumentBase CenterIcon { get; set; }
 
@@ -79,52 +83,119 @@ EffectAnimation = effectAnimation;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Reaction);
-			writer.Write(Title);
-			writer.Write(StaticIcon);
-			writer.Write(AppearAnimation);
-			writer.Write(SelectAnimation);
-			writer.Write(ActivateAnimation);
-			writer.Write(EffectAnimation);
+
+			writer.WriteInt32(Flags);
+
+			writer.WriteString(Reaction);
+
+			writer.WriteString(Title);
+var checkstaticIcon = 			writer.WriteObject(StaticIcon);
+if(checkstaticIcon.IsError){
+ return checkstaticIcon; 
+}
+var checkappearAnimation = 			writer.WriteObject(AppearAnimation);
+if(checkappearAnimation.IsError){
+ return checkappearAnimation; 
+}
+var checkselectAnimation = 			writer.WriteObject(SelectAnimation);
+if(checkselectAnimation.IsError){
+ return checkselectAnimation; 
+}
+var checkactivateAnimation = 			writer.WriteObject(ActivateAnimation);
+if(checkactivateAnimation.IsError){
+ return checkactivateAnimation; 
+}
+var checkeffectAnimation = 			writer.WriteObject(EffectAnimation);
+if(checkeffectAnimation.IsError){
+ return checkeffectAnimation; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(AroundAnimation);
+var checkaroundAnimation = 				writer.WriteObject(AroundAnimation);
+if(checkaroundAnimation.IsError){
+ return checkaroundAnimation; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(CenterIcon);
+var checkcenterIcon = 				writer.WriteObject(CenterIcon);
+if(checkcenterIcon.IsError){
+ return checkcenterIcon; 
+}
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Inactive = FlagsHelper.IsFlagSet(Flags, 0);
-			Reaction = reader.Read<string>();
-			Title = reader.Read<string>();
-			StaticIcon = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
-			AppearAnimation = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
-			SelectAnimation = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
-			ActivateAnimation = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
-			EffectAnimation = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
+			var tryreaction = reader.ReadString();
+if(tryreaction.IsError){
+return ReadResult<IObject>.Move(tryreaction);
+}
+Reaction = tryreaction.Value;
+			var trytitle = reader.ReadString();
+if(trytitle.IsError){
+return ReadResult<IObject>.Move(trytitle);
+}
+Title = trytitle.Value;
+			var trystaticIcon = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
+if(trystaticIcon.IsError){
+return ReadResult<IObject>.Move(trystaticIcon);
+}
+StaticIcon = trystaticIcon.Value;
+			var tryappearAnimation = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
+if(tryappearAnimation.IsError){
+return ReadResult<IObject>.Move(tryappearAnimation);
+}
+AppearAnimation = tryappearAnimation.Value;
+			var tryselectAnimation = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
+if(tryselectAnimation.IsError){
+return ReadResult<IObject>.Move(tryselectAnimation);
+}
+SelectAnimation = tryselectAnimation.Value;
+			var tryactivateAnimation = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
+if(tryactivateAnimation.IsError){
+return ReadResult<IObject>.Move(tryactivateAnimation);
+}
+ActivateAnimation = tryactivateAnimation.Value;
+			var tryeffectAnimation = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
+if(tryeffectAnimation.IsError){
+return ReadResult<IObject>.Move(tryeffectAnimation);
+}
+EffectAnimation = tryeffectAnimation.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				AroundAnimation = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
+				var tryaroundAnimation = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
+if(tryaroundAnimation.IsError){
+return ReadResult<IObject>.Move(tryaroundAnimation);
+}
+AroundAnimation = tryaroundAnimation.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				CenterIcon = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
+				var trycenterIcon = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
+if(trycenterIcon.IsError){
+return ReadResult<IObject>.Move(trycenterIcon);
+}
+CenterIcon = trycenterIcon.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

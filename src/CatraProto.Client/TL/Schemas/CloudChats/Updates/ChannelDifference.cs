@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -32,20 +34,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 		public sealed override int? Timeout { get; set; }
 
 [Newtonsoft.Json.JsonProperty("new_messages")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageBase> NewMessages { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.MessageBase> NewMessages { get; set; }
 
 [Newtonsoft.Json.JsonProperty("other_updates")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.UpdateBase> OtherUpdates { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.UpdateBase> OtherUpdates { get; set; }
 
 [Newtonsoft.Json.JsonProperty("chats")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
 
 [Newtonsoft.Json.JsonProperty("users")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
 
         #nullable enable
- public ChannelDifference (int pts,IList<CatraProto.Client.TL.Schemas.CloudChats.MessageBase> newMessages,IList<CatraProto.Client.TL.Schemas.CloudChats.UpdateBase> otherUpdates,IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> chats,IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> users)
+ public ChannelDifference (int pts,List<CatraProto.Client.TL.Schemas.CloudChats.MessageBase> newMessages,List<CatraProto.Client.TL.Schemas.CloudChats.UpdateBase> otherUpdates,List<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> chats,List<CatraProto.Client.TL.Schemas.CloudChats.UserBase> users)
 {
  Pts = pts;
 NewMessages = newMessages;
@@ -66,38 +68,82 @@ Users = users;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Pts);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt32(Pts);
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(Timeout.Value);
+writer.WriteInt32(Timeout.Value);
 			}
 
-			writer.Write(NewMessages);
-			writer.Write(OtherUpdates);
-			writer.Write(Chats);
-			writer.Write(Users);
+var checknewMessages = 			writer.WriteVector(NewMessages, false);
+if(checknewMessages.IsError){
+ return checknewMessages; 
+}
+var checkotherUpdates = 			writer.WriteVector(OtherUpdates, false);
+if(checkotherUpdates.IsError){
+ return checkotherUpdates; 
+}
+var checkchats = 			writer.WriteVector(Chats, false);
+if(checkchats.IsError){
+ return checkchats; 
+}
+var checkusers = 			writer.WriteVector(Users, false);
+if(checkusers.IsError){
+ return checkusers; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Final = FlagsHelper.IsFlagSet(Flags, 0);
-			Pts = reader.Read<int>();
+			var trypts = reader.ReadInt32();
+if(trypts.IsError){
+return ReadResult<IObject>.Move(trypts);
+}
+Pts = trypts.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Timeout = reader.Read<int>();
+				var trytimeout = reader.ReadInt32();
+if(trytimeout.IsError){
+return ReadResult<IObject>.Move(trytimeout);
+}
+Timeout = trytimeout.Value;
 			}
 
-			NewMessages = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageBase>();
-			OtherUpdates = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UpdateBase>();
-			Chats = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
-			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+			var trynewMessages = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trynewMessages.IsError){
+return ReadResult<IObject>.Move(trynewMessages);
+}
+NewMessages = trynewMessages.Value;
+			var tryotherUpdates = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UpdateBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryotherUpdates.IsError){
+return ReadResult<IObject>.Move(tryotherUpdates);
+}
+OtherUpdates = tryotherUpdates.Value;
+			var trychats = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trychats.IsError){
+return ReadResult<IObject>.Move(trychats);
+}
+Chats = trychats.Value;
+			var tryusers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryusers.IsError){
+return ReadResult<IObject>.Move(tryusers);
+}
+Users = tryusers.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

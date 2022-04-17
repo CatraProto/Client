@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -31,6 +33,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("stickerset")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase Stickerset { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("mask_coords")]
 		public CatraProto.Client.TL.Schemas.CloudChats.MaskCoordsBase MaskCoords { get; set; }
 
@@ -54,32 +57,59 @@ Stickerset = stickerset;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Alt);
-			writer.Write(Stickerset);
+
+			writer.WriteInt32(Flags);
+
+			writer.WriteString(Alt);
+var checkstickerset = 			writer.WriteObject(Stickerset);
+if(checkstickerset.IsError){
+ return checkstickerset; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(MaskCoords);
+var checkmaskCoords = 				writer.WriteObject(MaskCoords);
+if(checkmaskCoords.IsError){
+ return checkmaskCoords; 
+}
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Mask = FlagsHelper.IsFlagSet(Flags, 1);
-			Alt = reader.Read<string>();
-			Stickerset = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase>();
+			var tryalt = reader.ReadString();
+if(tryalt.IsError){
+return ReadResult<IObject>.Move(tryalt);
+}
+Alt = tryalt.Value;
+			var trystickerset = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase>();
+if(trystickerset.IsError){
+return ReadResult<IObject>.Move(trystickerset);
+}
+Stickerset = trystickerset.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				MaskCoords = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MaskCoordsBase>();
+				var trymaskCoords = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.MaskCoordsBase>();
+if(trymaskCoords.IsError){
+return ReadResult<IObject>.Move(trymaskCoords);
+}
+MaskCoords = trymaskCoords.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -78,38 +80,64 @@ Port = port;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Id);
-			writer.Write(IpAddress);
-			writer.Write(Port);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt32(Id);
+
+			writer.WriteString(IpAddress);
+writer.WriteInt32(Port);
 			if(FlagsHelper.IsFlagSet(Flags, 10))
 			{
-				writer.Write(Secret);
+
+				writer.WriteBytes(Secret);
 			}
 
 
+return new WriteResult();
+
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Ipv6 = FlagsHelper.IsFlagSet(Flags, 0);
 			MediaOnly = FlagsHelper.IsFlagSet(Flags, 1);
 			TcpoOnly = FlagsHelper.IsFlagSet(Flags, 2);
 			Cdn = FlagsHelper.IsFlagSet(Flags, 3);
 			Static = FlagsHelper.IsFlagSet(Flags, 4);
-			Id = reader.Read<int>();
-			IpAddress = reader.Read<string>();
-			Port = reader.Read<int>();
+			var tryid = reader.ReadInt32();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var tryipAddress = reader.ReadString();
+if(tryipAddress.IsError){
+return ReadResult<IObject>.Move(tryipAddress);
+}
+IpAddress = tryipAddress.Value;
+			var tryport = reader.ReadInt32();
+if(tryport.IsError){
+return ReadResult<IObject>.Move(tryport);
+}
+Port = tryport.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 10))
 			{
-				Secret = reader.Read<byte[]>();
+				var trysecret = reader.ReadBytes();
+if(trysecret.IsError){
+return ReadResult<IObject>.Move(trysecret);
+}
+Secret = trysecret.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -42,20 +44,41 @@ Distance = distance;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(FromId);
-			writer.Write(ToId);
-			writer.Write(Distance);
+writer.WriteInt32(ConstructorId);
+var checkfromId = 			writer.WriteObject(FromId);
+if(checkfromId.IsError){
+ return checkfromId; 
+}
+var checktoId = 			writer.WriteObject(ToId);
+if(checktoId.IsError){
+ return checktoId; 
+}
+writer.WriteInt32(Distance);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			FromId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
-			ToId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
-			Distance = reader.Read<int>();
+			var tryfromId = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+if(tryfromId.IsError){
+return ReadResult<IObject>.Move(tryfromId);
+}
+FromId = tryfromId.Value;
+			var trytoId = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+if(trytoId.IsError){
+return ReadResult<IObject>.Move(trytoId);
+}
+ToId = trytoId.Value;
+			var trydistance = reader.ReadInt32();
+if(trydistance.IsError){
+return ReadResult<IObject>.Move(trydistance);
+}
+Distance = trydistance.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

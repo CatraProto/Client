@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -42,20 +44,38 @@ Timeout = timeout;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(QueryId);
-			writer.Write(Data);
-			writer.Write(Timeout);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(QueryId);
+var checkdata = 			writer.WriteObject(Data);
+if(checkdata.IsError){
+ return checkdata; 
+}
+writer.WriteInt32(Timeout);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			QueryId = reader.Read<long>();
-			Data = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
-			Timeout = reader.Read<int>();
+			var tryqueryId = reader.ReadInt64();
+if(tryqueryId.IsError){
+return ReadResult<IObject>.Move(tryqueryId);
+}
+QueryId = tryqueryId.Value;
+			var trydata = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
+if(trydata.IsError){
+return ReadResult<IObject>.Move(trydata);
+}
+Data = trydata.Value;
+			var trytimeout = reader.ReadInt32();
+if(trytimeout.IsError){
+return ReadResult<IObject>.Move(trytimeout);
+}
+Timeout = trytimeout.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

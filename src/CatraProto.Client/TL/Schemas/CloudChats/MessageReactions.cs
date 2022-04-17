@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -30,14 +32,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public sealed override bool CanSeeList { get; set; }
 
 [Newtonsoft.Json.JsonProperty("results")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.ReactionCountBase> Results { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.ReactionCountBase> Results { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("recent_reactions")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.MessagePeerReactionBase> RecentReactions { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.MessagePeerReactionBase> RecentReactions { get; set; }
 
 
         #nullable enable
- public MessageReactions (IList<CatraProto.Client.TL.Schemas.CloudChats.ReactionCountBase> results)
+ public MessageReactions (List<CatraProto.Client.TL.Schemas.CloudChats.ReactionCountBase> results)
 {
  Results = results;
  
@@ -55,31 +58,53 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Results);
+
+			writer.WriteInt32(Flags);
+var checkresults = 			writer.WriteVector(Results, false);
+if(checkresults.IsError){
+ return checkresults; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(RecentReactions);
+var checkrecentReactions = 				writer.WriteVector(RecentReactions, false);
+if(checkrecentReactions.IsError){
+ return checkrecentReactions; 
+}
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Min = FlagsHelper.IsFlagSet(Flags, 0);
 			CanSeeList = FlagsHelper.IsFlagSet(Flags, 2);
-			Results = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ReactionCountBase>();
+			var tryresults = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ReactionCountBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryresults.IsError){
+return ReadResult<IObject>.Move(tryresults);
+}
+Results = tryresults.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				RecentReactions = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessagePeerReactionBase>();
+				var tryrecentReactions = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessagePeerReactionBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryrecentReactions.IsError){
+return ReadResult<IObject>.Move(tryrecentReactions);
+}
+RecentReactions = tryrecentReactions.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

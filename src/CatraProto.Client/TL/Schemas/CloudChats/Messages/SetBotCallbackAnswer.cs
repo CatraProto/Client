@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -22,10 +25,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int ConstructorId { get => -712043766; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
 
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -36,9 +36,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [Newtonsoft.Json.JsonProperty("query_id")]
 		public long QueryId { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("message")]
 		public string Message { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("url")]
 		public string Url { get; set; }
 
@@ -67,42 +69,68 @@ CacheTime = cacheTime;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(QueryId);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt64(QueryId);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(Message);
+
+				writer.WriteString(Message);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(Url);
+
+				writer.WriteString(Url);
 			}
 
-			writer.Write(CacheTime);
+writer.WriteInt32(CacheTime);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Alert = FlagsHelper.IsFlagSet(Flags, 1);
-			QueryId = reader.Read<long>();
+			var tryqueryId = reader.ReadInt64();
+if(tryqueryId.IsError){
+return ReadResult<IObject>.Move(tryqueryId);
+}
+QueryId = tryqueryId.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Message = reader.Read<string>();
+				var trymessage = reader.ReadString();
+if(trymessage.IsError){
+return ReadResult<IObject>.Move(trymessage);
+}
+Message = trymessage.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				Url = reader.Read<string>();
+				var tryurl = reader.ReadString();
+if(tryurl.IsError){
+return ReadResult<IObject>.Move(tryurl);
+}
+Url = tryurl.Value;
 			}
 
-			CacheTime = reader.Read<int>();
+			var trycacheTime = reader.ReadInt32();
+if(trycacheTime.IsError){
+return ReadResult<IObject>.Move(trycacheTime);
+}
+CacheTime = trycacheTime.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

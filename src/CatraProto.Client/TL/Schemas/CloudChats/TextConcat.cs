@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -15,11 +17,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get => 2120376535; }
         
 [Newtonsoft.Json.JsonProperty("texts")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase> Texts { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase> Texts { get; set; }
 
 
         #nullable enable
- public TextConcat (IList<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase> texts)
+ public TextConcat (List<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase> texts)
 {
  Texts = texts;
  
@@ -34,16 +36,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Texts);
+writer.WriteInt32(ConstructorId);
+var checktexts = 			writer.WriteVector(Texts, false);
+if(checktexts.IsError){
+ return checktexts; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Texts = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
+			var trytexts = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trytexts.IsError){
+return ReadResult<IObject>.Move(trytexts);
+}
+Texts = trytexts.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

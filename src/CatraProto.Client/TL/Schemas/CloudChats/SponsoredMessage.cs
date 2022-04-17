@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -29,26 +31,31 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("random_id")]
 		public sealed override byte[] RandomId { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("from_id")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.PeerBase FromId { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("chat_invite")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.ChatInviteBase ChatInvite { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("chat_invite_hash")]
 		public sealed override string ChatInviteHash { get; set; }
 
 [Newtonsoft.Json.JsonProperty("channel_post")]
 		public sealed override int? ChannelPost { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("start_param")]
 		public sealed override string StartParam { get; set; }
 
 [Newtonsoft.Json.JsonProperty("message")]
 		public sealed override string Message { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("entities")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
 
 
         #nullable enable
@@ -74,81 +81,134 @@ Message = message;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(RandomId);
+
+			writer.WriteInt32(Flags);
+
+			writer.WriteBytes(RandomId);
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				writer.Write(FromId);
+var checkfromId = 				writer.WriteObject(FromId);
+if(checkfromId.IsError){
+ return checkfromId; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				writer.Write(ChatInvite);
+var checkchatInvite = 				writer.WriteObject(ChatInvite);
+if(checkchatInvite.IsError){
+ return checkchatInvite; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				writer.Write(ChatInviteHash);
+
+				writer.WriteString(ChatInviteHash);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(ChannelPost.Value);
+writer.WriteInt32(ChannelPost.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(StartParam);
+
+				writer.WriteString(StartParam);
 			}
 
-			writer.Write(Message);
+
+			writer.WriteString(Message);
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(Entities);
+var checkentities = 				writer.WriteVector(Entities, false);
+if(checkentities.IsError){
+ return checkentities; 
+}
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			RandomId = reader.Read<byte[]>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var tryrandomId = reader.ReadBytes();
+if(tryrandomId.IsError){
+return ReadResult<IObject>.Move(tryrandomId);
+}
+RandomId = tryrandomId.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				FromId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+				var tryfromId = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+if(tryfromId.IsError){
+return ReadResult<IObject>.Move(tryfromId);
+}
+FromId = tryfromId.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				ChatInvite = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatInviteBase>();
+				var trychatInvite = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ChatInviteBase>();
+if(trychatInvite.IsError){
+return ReadResult<IObject>.Move(trychatInvite);
+}
+ChatInvite = trychatInvite.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				ChatInviteHash = reader.Read<string>();
+				var trychatInviteHash = reader.ReadString();
+if(trychatInviteHash.IsError){
+return ReadResult<IObject>.Move(trychatInviteHash);
+}
+ChatInviteHash = trychatInviteHash.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				ChannelPost = reader.Read<int>();
+				var trychannelPost = reader.ReadInt32();
+if(trychannelPost.IsError){
+return ReadResult<IObject>.Move(trychannelPost);
+}
+ChannelPost = trychannelPost.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				StartParam = reader.Read<string>();
+				var trystartParam = reader.ReadString();
+if(trystartParam.IsError){
+return ReadResult<IObject>.Move(trystartParam);
+}
+StartParam = trystartParam.Value;
 			}
 
-			Message = reader.Read<string>();
+			var trymessage = reader.ReadString();
+if(trymessage.IsError){
+return ReadResult<IObject>.Move(trymessage);
+}
+Message = trymessage.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
+				var tryentities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryentities.IsError){
+return ReadResult<IObject>.Move(tryentities);
+}
+Entities = tryentities.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

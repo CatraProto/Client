@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -15,11 +17,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get => 1462101002; }
         
 [Newtonsoft.Json.JsonProperty("public_keys")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.CdnPublicKeyBase> PublicKeys { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.CdnPublicKeyBase> PublicKeys { get; set; }
 
 
         #nullable enable
- public CdnConfig (IList<CatraProto.Client.TL.Schemas.CloudChats.CdnPublicKeyBase> publicKeys)
+ public CdnConfig (List<CatraProto.Client.TL.Schemas.CloudChats.CdnPublicKeyBase> publicKeys)
 {
  PublicKeys = publicKeys;
  
@@ -34,16 +36,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(PublicKeys);
+writer.WriteInt32(ConstructorId);
+var checkpublicKeys = 			writer.WriteVector(PublicKeys, false);
+if(checkpublicKeys.IsError){
+ return checkpublicKeys; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			PublicKeys = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.CdnPublicKeyBase>();
+			var trypublicKeys = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.CdnPublicKeyBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trypublicKeys.IsError){
+return ReadResult<IObject>.Move(trypublicKeys);
+}
+PublicKeys = trypublicKeys.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

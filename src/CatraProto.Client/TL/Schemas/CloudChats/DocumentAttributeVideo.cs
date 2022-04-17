@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -58,25 +60,45 @@ H = h;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Duration);
-			writer.Write(W);
-			writer.Write(H);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt32(Duration);
+writer.WriteInt32(W);
+writer.WriteInt32(H);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			RoundMessage = FlagsHelper.IsFlagSet(Flags, 0);
 			SupportsStreaming = FlagsHelper.IsFlagSet(Flags, 1);
-			Duration = reader.Read<int>();
-			W = reader.Read<int>();
-			H = reader.Read<int>();
+			var tryduration = reader.ReadInt32();
+if(tryduration.IsError){
+return ReadResult<IObject>.Move(tryduration);
+}
+Duration = tryduration.Value;
+			var tryw = reader.ReadInt32();
+if(tryw.IsError){
+return ReadResult<IObject>.Move(tryw);
+}
+W = tryw.Value;
+			var tryh = reader.ReadInt32();
+if(tryh.IsError){
+return ReadResult<IObject>.Move(tryh);
+}
+H = tryh.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

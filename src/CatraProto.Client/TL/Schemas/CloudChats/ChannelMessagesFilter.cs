@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -25,11 +27,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public bool ExcludeNewMessages { get; set; }
 
 [Newtonsoft.Json.JsonProperty("ranges")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageRangeBase> Ranges { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.MessageRangeBase> Ranges { get; set; }
 
 
         #nullable enable
- public ChannelMessagesFilter (IList<CatraProto.Client.TL.Schemas.CloudChats.MessageRangeBase> ranges)
+ public ChannelMessagesFilter (List<CatraProto.Client.TL.Schemas.CloudChats.MessageRangeBase> ranges)
 {
  Ranges = ranges;
  
@@ -45,20 +47,35 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Ranges);
+
+			writer.WriteInt32(Flags);
+var checkranges = 			writer.WriteVector(Ranges, false);
+if(checkranges.IsError){
+ return checkranges; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			ExcludeNewMessages = FlagsHelper.IsFlagSet(Flags, 1);
-			Ranges = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageRangeBase>();
+			var tryranges = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageRangeBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryranges.IsError){
+return ReadResult<IObject>.Move(tryranges);
+}
+Ranges = tryranges.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

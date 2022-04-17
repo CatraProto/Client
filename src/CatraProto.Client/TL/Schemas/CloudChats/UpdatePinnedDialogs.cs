@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -25,8 +27,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("folder_id")]
 		public int? FolderId { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("order")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.DialogPeerBase> Order { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.DialogPeerBase> Order { get; set; }
 
 
         
@@ -41,37 +44,56 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
+
+			writer.WriteInt32(Flags);
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(FolderId.Value);
+writer.WriteInt32(FolderId.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(Order);
+var checkorder = 				writer.WriteVector(Order, false);
+if(checkorder.IsError){
+ return checkorder; 
+}
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				FolderId = reader.Read<int>();
+				var tryfolderId = reader.ReadInt32();
+if(tryfolderId.IsError){
+return ReadResult<IObject>.Move(tryfolderId);
+}
+FolderId = tryfolderId.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Order = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DialogPeerBase>();
+				var tryorder = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DialogPeerBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryorder.IsError){
+return ReadResult<IObject>.Move(tryorder);
+}
+Order = tryorder.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

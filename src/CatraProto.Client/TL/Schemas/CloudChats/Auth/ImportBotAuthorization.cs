@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
         public static int ConstructorId { get => 1738800940; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("flags")]
 		public int Flags { get; set; }
@@ -54,22 +54,43 @@ BotAuthToken = botAuthToken;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Flags);
-			writer.Write(ApiId);
-			writer.Write(ApiHash);
-			writer.Write(BotAuthToken);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt32(Flags);
+writer.WriteInt32(ApiId);
+
+			writer.WriteString(ApiHash);
+
+			writer.WriteString(BotAuthToken);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			ApiId = reader.Read<int>();
-			ApiHash = reader.Read<string>();
-			BotAuthToken = reader.Read<string>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var tryapiId = reader.ReadInt32();
+if(tryapiId.IsError){
+return ReadResult<IObject>.Move(tryapiId);
+}
+ApiId = tryapiId.Value;
+			var tryapiHash = reader.ReadString();
+if(tryapiHash.IsError){
+return ReadResult<IObject>.Move(tryapiHash);
+}
+ApiHash = tryapiHash.Value;
+			var trybotAuthToken = reader.ReadString();
+if(trybotAuthToken.IsError){
+return ReadResult<IObject>.Move(trybotAuthToken);
+}
+BotAuthToken = trybotAuthToken.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

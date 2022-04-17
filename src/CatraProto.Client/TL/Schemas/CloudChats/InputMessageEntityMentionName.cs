@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -42,20 +44,38 @@ UserId = userId;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Offset);
-			writer.Write(Length);
-			writer.Write(UserId);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt32(Offset);
+writer.WriteInt32(Length);
+var checkuserId = 			writer.WriteObject(UserId);
+if(checkuserId.IsError){
+ return checkuserId; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Offset = reader.Read<int>();
-			Length = reader.Read<int>();
-			UserId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
+			var tryoffset = reader.ReadInt32();
+if(tryoffset.IsError){
+return ReadResult<IObject>.Move(tryoffset);
+}
+Offset = tryoffset.Value;
+			var trylength = reader.ReadInt32();
+if(trylength.IsError){
+return ReadResult<IObject>.Move(trylength);
+}
+Length = trylength.Value;
+			var tryuserId = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
+if(tryuserId.IsError){
+return ReadResult<IObject>.Move(tryuserId);
+}
+UserId = tryuserId.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -18,11 +20,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public sealed override int Count { get; set; }
 
 [Newtonsoft.Json.JsonProperty("sets")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.StickerSetCoveredBase> Sets { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.StickerSetCoveredBase> Sets { get; set; }
 
 
         #nullable enable
- public ArchivedStickers (int count,IList<CatraProto.Client.TL.Schemas.CloudChats.StickerSetCoveredBase> sets)
+ public ArchivedStickers (int count,List<CatraProto.Client.TL.Schemas.CloudChats.StickerSetCoveredBase> sets)
 {
  Count = count;
 Sets = sets;
@@ -38,18 +40,32 @@ Sets = sets;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Count);
-			writer.Write(Sets);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt32(Count);
+var checksets = 			writer.WriteVector(Sets, false);
+if(checksets.IsError){
+ return checksets; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Count = reader.Read<int>();
-			Sets = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.StickerSetCoveredBase>();
+			var trycount = reader.ReadInt32();
+if(trycount.IsError){
+return ReadResult<IObject>.Move(trycount);
+}
+Count = trycount.Value;
+			var trysets = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.StickerSetCoveredBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trysets.IsError){
+return ReadResult<IObject>.Move(trysets);
+}
+Sets = trysets.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

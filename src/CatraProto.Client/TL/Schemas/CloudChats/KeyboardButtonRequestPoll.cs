@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -45,25 +47,45 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Quiz.Value);
-			writer.Write(Text);
+
+			writer.WriteInt32(Flags);
+var checkquiz = 			writer.WriteBool(Quiz.Value);
+if(checkquiz.IsError){
+ return checkquiz; 
+}
+
+			writer.WriteString(Text);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-			Quiz = reader.Read<bool>();
+				var tryquiz = reader.ReadBool();
+if(tryquiz.IsError){
+return ReadResult<IObject>.Move(tryquiz);
+}
+Quiz = tryquiz.Value;
 			}
 
-			Text = reader.Read<string>();
+			var trytext = reader.ReadString();
+if(trytext.IsError){
+return ReadResult<IObject>.Move(trytext);
+}
+Text = trytext.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

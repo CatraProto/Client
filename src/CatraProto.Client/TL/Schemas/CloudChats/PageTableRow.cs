@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -15,11 +17,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get => -524237339; }
         
 [Newtonsoft.Json.JsonProperty("cells")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.PageTableCellBase> Cells { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.PageTableCellBase> Cells { get; set; }
 
 
         #nullable enable
- public PageTableRow (IList<CatraProto.Client.TL.Schemas.CloudChats.PageTableCellBase> cells)
+ public PageTableRow (List<CatraProto.Client.TL.Schemas.CloudChats.PageTableCellBase> cells)
 {
  Cells = cells;
  
@@ -34,16 +36,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Cells);
+writer.WriteInt32(ConstructorId);
+var checkcells = 			writer.WriteVector(Cells, false);
+if(checkcells.IsError){
+ return checkcells; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Cells = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PageTableCellBase>();
+			var trycells = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PageTableCellBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trycells.IsError){
+return ReadResult<IObject>.Move(trycells);
+}
+Cells = trycells.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

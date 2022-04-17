@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,30 @@ Token = token;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Expires);
-			writer.Write(Token);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt32(Expires);
+
+			writer.WriteBytes(Token);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Expires = reader.Read<int>();
-			Token = reader.Read<byte[]>();
+			var tryexpires = reader.ReadInt32();
+if(tryexpires.IsError){
+return ReadResult<IObject>.Move(tryexpires);
+}
+Expires = tryexpires.Value;
+			var trytoken = reader.ReadBytes();
+if(trytoken.IsError){
+return ReadResult<IObject>.Move(trytoken);
+}
+Token = trytoken.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

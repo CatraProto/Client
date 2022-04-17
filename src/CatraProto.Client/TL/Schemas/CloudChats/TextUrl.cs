@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -42,20 +44,39 @@ WebpageId = webpageId;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Text);
-			writer.Write(Url);
-			writer.Write(WebpageId);
+writer.WriteInt32(ConstructorId);
+var checktext = 			writer.WriteObject(Text);
+if(checktext.IsError){
+ return checktext; 
+}
+
+			writer.WriteString(Url);
+writer.WriteInt64(WebpageId);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Text = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
-			Url = reader.Read<string>();
-			WebpageId = reader.Read<long>();
+			var trytext = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
+if(trytext.IsError){
+return ReadResult<IObject>.Move(trytext);
+}
+Text = trytext.Value;
+			var tryurl = reader.ReadString();
+if(tryurl.IsError){
+return ReadResult<IObject>.Move(tryurl);
+}
+Url = tryurl.Value;
+			var trywebpageId = reader.ReadInt64();
+if(trywebpageId.IsError){
+return ReadResult<IObject>.Move(trywebpageId);
+}
+WebpageId = trywebpageId.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

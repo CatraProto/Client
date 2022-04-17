@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,29 @@ PingId = pingId;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(MsgId);
-			writer.Write(PingId);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(MsgId);
+writer.WriteInt64(PingId);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			MsgId = reader.Read<long>();
-			PingId = reader.Read<long>();
+			var trymsgId = reader.ReadInt64();
+if(trymsgId.IsError){
+return ReadResult<IObject>.Move(trymsgId);
+}
+MsgId = trymsgId.Value;
+			var trypingId = reader.ReadInt64();
+if(trypingId.IsError){
+return ReadResult<IObject>.Move(trypingId);
+}
+PingId = trypingId.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

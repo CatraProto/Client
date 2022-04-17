@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -36,6 +38,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("description")]
 		public string Description { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("photo")]
 		public CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase Photo { get; set; }
 
@@ -45,6 +48,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("total_amount")]
 		public long TotalAmount { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("reply_markup")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase ReplyMarkup { get; set; }
 
@@ -72,47 +76,88 @@ TotalAmount = totalAmount;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Title);
-			writer.Write(Description);
+
+			writer.WriteInt32(Flags);
+
+			writer.WriteString(Title);
+
+			writer.WriteString(Description);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(Photo);
+var checkphoto = 				writer.WriteObject(Photo);
+if(checkphoto.IsError){
+ return checkphoto; 
+}
 			}
 
-			writer.Write(Currency);
-			writer.Write(TotalAmount);
+
+			writer.WriteString(Currency);
+writer.WriteInt64(TotalAmount);
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(ReplyMarkup);
+var checkreplyMarkup = 				writer.WriteObject(ReplyMarkup);
+if(checkreplyMarkup.IsError){
+ return checkreplyMarkup; 
+}
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			ShippingAddressRequested = FlagsHelper.IsFlagSet(Flags, 1);
 			Test = FlagsHelper.IsFlagSet(Flags, 3);
-			Title = reader.Read<string>();
-			Description = reader.Read<string>();
+			var trytitle = reader.ReadString();
+if(trytitle.IsError){
+return ReadResult<IObject>.Move(trytitle);
+}
+Title = trytitle.Value;
+			var trydescription = reader.ReadString();
+if(trydescription.IsError){
+return ReadResult<IObject>.Move(trydescription);
+}
+Description = trydescription.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase>();
+				var tryphoto = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase>();
+if(tryphoto.IsError){
+return ReadResult<IObject>.Move(tryphoto);
+}
+Photo = tryphoto.Value;
 			}
 
-			Currency = reader.Read<string>();
-			TotalAmount = reader.Read<long>();
+			var trycurrency = reader.ReadString();
+if(trycurrency.IsError){
+return ReadResult<IObject>.Move(trycurrency);
+}
+Currency = trycurrency.Value;
+			var trytotalAmount = reader.ReadInt64();
+if(trytotalAmount.IsError){
+return ReadResult<IObject>.Move(trytotalAmount);
+}
+TotalAmount = trytotalAmount.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				ReplyMarkup = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase>();
+				var tryreplyMarkup = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase>();
+if(tryreplyMarkup.IsError){
+return ReadResult<IObject>.Move(tryreplyMarkup);
+}
+ReplyMarkup = tryreplyMarkup.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

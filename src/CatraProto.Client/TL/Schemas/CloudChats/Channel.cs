@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -104,6 +106,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("title")]
 		public string Title { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("username")]
 		public string Username { get; set; }
 
@@ -113,15 +116,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("date")]
 		public int Date { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("restriction_reason")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase> RestrictionReason { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase> RestrictionReason { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("admin_rights")]
 		public CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase AdminRights { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("banned_rights")]
 		public CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase BannedRights { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("default_banned_rights")]
 		public CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase DefaultBannedRights { get; set; }
 
@@ -172,56 +179,80 @@ Date = date;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Id);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt64(Id);
 			if(FlagsHelper.IsFlagSet(Flags, 13))
 			{
-				writer.Write(AccessHash.Value);
+writer.WriteInt64(AccessHash.Value);
 			}
 
-			writer.Write(Title);
+
+			writer.WriteString(Title);
 			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
-				writer.Write(Username);
+
+				writer.WriteString(Username);
 			}
 
-			writer.Write(Photo);
-			writer.Write(Date);
+var checkphoto = 			writer.WriteObject(Photo);
+if(checkphoto.IsError){
+ return checkphoto; 
+}
+writer.WriteInt32(Date);
 			if(FlagsHelper.IsFlagSet(Flags, 9))
 			{
-				writer.Write(RestrictionReason);
+var checkrestrictionReason = 				writer.WriteVector(RestrictionReason, false);
+if(checkrestrictionReason.IsError){
+ return checkrestrictionReason; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 14))
 			{
-				writer.Write(AdminRights);
+var checkadminRights = 				writer.WriteObject(AdminRights);
+if(checkadminRights.IsError){
+ return checkadminRights; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 15))
 			{
-				writer.Write(BannedRights);
+var checkbannedRights = 				writer.WriteObject(BannedRights);
+if(checkbannedRights.IsError){
+ return checkbannedRights; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 18))
 			{
-				writer.Write(DefaultBannedRights);
+var checkdefaultBannedRights = 				writer.WriteObject(DefaultBannedRights);
+if(checkdefaultBannedRights.IsError){
+ return checkdefaultBannedRights; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 17))
 			{
-				writer.Write(ParticipantsCount.Value);
+writer.WriteInt32(ParticipantsCount.Value);
 			}
 
 
+return new WriteResult();
+
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Creator = FlagsHelper.IsFlagSet(Flags, 0);
 			Left = FlagsHelper.IsFlagSet(Flags, 2);
 			Broadcast = FlagsHelper.IsFlagSet(Flags, 5);
@@ -239,45 +270,90 @@ writer.Write(ConstructorId);
 			Fake = FlagsHelper.IsFlagSet(Flags, 25);
 			Gigagroup = FlagsHelper.IsFlagSet(Flags, 26);
 			Noforwards = FlagsHelper.IsFlagSet(Flags, 27);
-			Id = reader.Read<long>();
+			var tryid = reader.ReadInt64();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 13))
 			{
-				AccessHash = reader.Read<long>();
+				var tryaccessHash = reader.ReadInt64();
+if(tryaccessHash.IsError){
+return ReadResult<IObject>.Move(tryaccessHash);
+}
+AccessHash = tryaccessHash.Value;
 			}
 
-			Title = reader.Read<string>();
+			var trytitle = reader.ReadString();
+if(trytitle.IsError){
+return ReadResult<IObject>.Move(trytitle);
+}
+Title = trytitle.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
-				Username = reader.Read<string>();
+				var tryusername = reader.ReadString();
+if(tryusername.IsError){
+return ReadResult<IObject>.Move(tryusername);
+}
+Username = tryusername.Value;
 			}
 
-			Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatPhotoBase>();
-			Date = reader.Read<int>();
+			var tryphoto = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ChatPhotoBase>();
+if(tryphoto.IsError){
+return ReadResult<IObject>.Move(tryphoto);
+}
+Photo = tryphoto.Value;
+			var trydate = reader.ReadInt32();
+if(trydate.IsError){
+return ReadResult<IObject>.Move(trydate);
+}
+Date = trydate.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 9))
 			{
-				RestrictionReason = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase>();
+				var tryrestrictionReason = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryrestrictionReason.IsError){
+return ReadResult<IObject>.Move(tryrestrictionReason);
+}
+RestrictionReason = tryrestrictionReason.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 14))
 			{
-				AdminRights = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase>();
+				var tryadminRights = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase>();
+if(tryadminRights.IsError){
+return ReadResult<IObject>.Move(tryadminRights);
+}
+AdminRights = tryadminRights.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 15))
 			{
-				BannedRights = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase>();
+				var trybannedRights = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase>();
+if(trybannedRights.IsError){
+return ReadResult<IObject>.Move(trybannedRights);
+}
+BannedRights = trybannedRights.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 18))
 			{
-				DefaultBannedRights = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase>();
+				var trydefaultBannedRights = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase>();
+if(trydefaultBannedRights.IsError){
+return ReadResult<IObject>.Move(trydefaultBannedRights);
+}
+DefaultBannedRights = trydefaultBannedRights.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 17))
 			{
-				ParticipantsCount = reader.Read<int>();
+				var tryparticipantsCount = reader.ReadInt32();
+if(tryparticipantsCount.IsError){
+return ReadResult<IObject>.Move(tryparticipantsCount);
+}
+ParticipantsCount = tryparticipantsCount.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

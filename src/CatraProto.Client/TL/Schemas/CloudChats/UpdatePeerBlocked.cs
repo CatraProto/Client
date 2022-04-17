@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,35 @@ Blocked = blocked;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(PeerId);
-			writer.Write(Blocked);
+writer.WriteInt32(ConstructorId);
+var checkpeerId = 			writer.WriteObject(PeerId);
+if(checkpeerId.IsError){
+ return checkpeerId; 
+}
+var checkblocked = 			writer.WriteBool(Blocked);
+if(checkblocked.IsError){
+ return checkblocked; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			PeerId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
-			Blocked = reader.Read<bool>();
+			var trypeerId = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+if(trypeerId.IsError){
+return ReadResult<IObject>.Move(trypeerId);
+}
+PeerId = trypeerId.Value;
+			var tryblocked = reader.ReadBool();
+if(tryblocked.IsError){
+return ReadResult<IObject>.Move(tryblocked);
+}
+Blocked = tryblocked.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

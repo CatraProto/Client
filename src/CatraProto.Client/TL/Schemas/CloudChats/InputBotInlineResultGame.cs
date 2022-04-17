@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -42,20 +44,40 @@ SendMessage = sendMessage;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Id);
-			writer.Write(ShortName);
-			writer.Write(SendMessage);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteString(Id);
+
+			writer.WriteString(ShortName);
+var checksendMessage = 			writer.WriteObject(SendMessage);
+if(checksendMessage.IsError){
+ return checksendMessage; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Id = reader.Read<string>();
-			ShortName = reader.Read<string>();
-			SendMessage = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageBase>();
+			var tryid = reader.ReadString();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var tryshortName = reader.ReadString();
+if(tryshortName.IsError){
+return ReadResult<IObject>.Move(tryshortName);
+}
+ShortName = tryshortName.Value;
+			var trysendMessage = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageBase>();
+if(trysendMessage.IsError){
+return ReadResult<IObject>.Move(trysendMessage);
+}
+SendMessage = trysendMessage.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

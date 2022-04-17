@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,29 @@ MaxDate = maxDate;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(MinDate);
-			writer.Write(MaxDate);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt32(MinDate);
+writer.WriteInt32(MaxDate);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			MinDate = reader.Read<int>();
-			MaxDate = reader.Read<int>();
+			var tryminDate = reader.ReadInt32();
+if(tryminDate.IsError){
+return ReadResult<IObject>.Move(tryminDate);
+}
+MinDate = tryminDate.Value;
+			var trymaxDate = reader.ReadInt32();
+if(trymaxDate.IsError){
+return ReadResult<IObject>.Move(trymaxDate);
+}
+MaxDate = trymaxDate.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

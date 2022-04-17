@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -46,22 +48,45 @@ Vcard = vcard;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(PhoneNumber);
-			writer.Write(FirstName);
-			writer.Write(LastName);
-			writer.Write(Vcard);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteString(PhoneNumber);
+
+			writer.WriteString(FirstName);
+
+			writer.WriteString(LastName);
+
+			writer.WriteString(Vcard);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			PhoneNumber = reader.Read<string>();
-			FirstName = reader.Read<string>();
-			LastName = reader.Read<string>();
-			Vcard = reader.Read<string>();
+			var tryphoneNumber = reader.ReadString();
+if(tryphoneNumber.IsError){
+return ReadResult<IObject>.Move(tryphoneNumber);
+}
+PhoneNumber = tryphoneNumber.Value;
+			var tryfirstName = reader.ReadString();
+if(tryfirstName.IsError){
+return ReadResult<IObject>.Move(tryfirstName);
+}
+FirstName = tryfirstName.Value;
+			var trylastName = reader.ReadString();
+if(trylastName.IsError){
+return ReadResult<IObject>.Move(trylastName);
+}
+LastName = trylastName.Value;
+			var tryvcard = reader.ReadString();
+if(tryvcard.IsError){
+return ReadResult<IObject>.Move(tryvcard);
+}
+Vcard = tryvcard.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -20,10 +23,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
         public static int ConstructorId { get => -386636848; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -65,26 +65,56 @@ Phone = phone;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Id);
-			writer.Write(FirstName);
-			writer.Write(LastName);
-			writer.Write(Phone);
+
+			writer.WriteInt32(Flags);
+var checkid = 			writer.WriteObject(Id);
+if(checkid.IsError){
+ return checkid; 
+}
+
+			writer.WriteString(FirstName);
+
+			writer.WriteString(LastName);
+
+			writer.WriteString(Phone);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			AddPhonePrivacyException = FlagsHelper.IsFlagSet(Flags, 0);
-			Id = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
-			FirstName = reader.Read<string>();
-			LastName = reader.Read<string>();
-			Phone = reader.Read<string>();
+			var tryid = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var tryfirstName = reader.ReadString();
+if(tryfirstName.IsError){
+return ReadResult<IObject>.Move(tryfirstName);
+}
+FirstName = tryfirstName.Value;
+			var trylastName = reader.ReadString();
+if(trylastName.IsError){
+return ReadResult<IObject>.Move(trylastName);
+}
+LastName = trylastName.Value;
+			var tryphone = reader.ReadString();
+if(tryphone.IsError){
+return ReadResult<IObject>.Move(tryphone);
+}
+Phone = tryphone.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,32 @@ ThumbVersion = thumbVersion;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Stickerset);
-			writer.Write(ThumbVersion);
+writer.WriteInt32(ConstructorId);
+var checkstickerset = 			writer.WriteObject(Stickerset);
+if(checkstickerset.IsError){
+ return checkstickerset; 
+}
+writer.WriteInt32(ThumbVersion);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Stickerset = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase>();
-			ThumbVersion = reader.Read<int>();
+			var trystickerset = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase>();
+if(trystickerset.IsError){
+return ReadResult<IObject>.Move(trystickerset);
+}
+Stickerset = trystickerset.Value;
+			var trythumbVersion = reader.ReadInt32();
+if(trythumbVersion.IsError){
+return ReadResult<IObject>.Move(trythumbVersion);
+}
+ThumbVersion = trythumbVersion.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

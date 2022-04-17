@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -49,22 +51,41 @@ Count = count;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Filter);
-			writer.Write(Count);
+
+			writer.WriteInt32(Flags);
+var checkfilter = 			writer.WriteObject(Filter);
+if(checkfilter.IsError){
+ return checkfilter; 
+}
+writer.WriteInt32(Count);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Inexact = FlagsHelper.IsFlagSet(Flags, 1);
-			Filter = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase>();
-			Count = reader.Read<int>();
+			var tryfilter = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase>();
+if(tryfilter.IsError){
+return ReadResult<IObject>.Move(tryfilter);
+}
+Filter = tryfilter.Value;
+			var trycount = reader.ReadInt32();
+if(trycount.IsError){
+return ReadResult<IObject>.Move(trycount);
+}
+Count = trycount.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

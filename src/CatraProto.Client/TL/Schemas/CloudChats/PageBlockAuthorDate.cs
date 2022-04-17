@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,32 @@ PublishedDate = publishedDate;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Author);
-			writer.Write(PublishedDate);
+writer.WriteInt32(ConstructorId);
+var checkauthor = 			writer.WriteObject(Author);
+if(checkauthor.IsError){
+ return checkauthor; 
+}
+writer.WriteInt32(PublishedDate);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Author = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
-			PublishedDate = reader.Read<int>();
+			var tryauthor = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
+if(tryauthor.IsError){
+return ReadResult<IObject>.Move(tryauthor);
+}
+Author = tryauthor.Value;
+			var trypublishedDate = reader.ReadInt32();
+if(trypublishedDate.IsError){
+return ReadResult<IObject>.Move(trypublishedDate);
+}
+PublishedDate = trypublishedDate.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

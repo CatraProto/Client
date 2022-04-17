@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -25,17 +27,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public sealed override int Count { get; set; }
 
 [Newtonsoft.Json.JsonProperty("votes")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.MessageUserVoteBase> Votes { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.MessageUserVoteBase> Votes { get; set; }
 
 [Newtonsoft.Json.JsonProperty("users")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("next_offset")]
 		public sealed override string NextOffset { get; set; }
 
 
         #nullable enable
- public VotesList (int count,IList<CatraProto.Client.TL.Schemas.CloudChats.MessageUserVoteBase> votes,IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> users)
+ public VotesList (int count,List<CatraProto.Client.TL.Schemas.CloudChats.MessageUserVoteBase> votes,List<CatraProto.Client.TL.Schemas.CloudChats.UserBase> users)
 {
  Count = count;
 Votes = votes;
@@ -53,33 +56,64 @@ Users = users;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Count);
-			writer.Write(Votes);
-			writer.Write(Users);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt32(Count);
+var checkvotes = 			writer.WriteVector(Votes, false);
+if(checkvotes.IsError){
+ return checkvotes; 
+}
+var checkusers = 			writer.WriteVector(Users, false);
+if(checkusers.IsError){
+ return checkusers; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(NextOffset);
+
+				writer.WriteString(NextOffset);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			Count = reader.Read<int>();
-			Votes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageUserVoteBase>();
-			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var trycount = reader.ReadInt32();
+if(trycount.IsError){
+return ReadResult<IObject>.Move(trycount);
+}
+Count = trycount.Value;
+			var tryvotes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageUserVoteBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryvotes.IsError){
+return ReadResult<IObject>.Move(tryvotes);
+}
+Votes = tryvotes.Value;
+			var tryusers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryusers.IsError){
+return ReadResult<IObject>.Move(tryusers);
+}
+Users = tryusers.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				NextOffset = reader.Read<string>();
+				var trynextOffset = reader.ReadString();
+if(trynextOffset.IsError){
+return ReadResult<IObject>.Move(trynextOffset);
+}
+NextOffset = trynextOffset.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

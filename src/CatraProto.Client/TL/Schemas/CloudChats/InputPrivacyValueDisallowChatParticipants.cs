@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -15,11 +17,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get => -380694650; }
         
 [Newtonsoft.Json.JsonProperty("chats")]
-		public IList<long> Chats { get; set; }
+		public List<long> Chats { get; set; }
 
 
         #nullable enable
- public InputPrivacyValueDisallowChatParticipants (IList<long> chats)
+ public InputPrivacyValueDisallowChatParticipants (List<long> chats)
 {
  Chats = chats;
  
@@ -34,16 +36,24 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Chats);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteVector(Chats, false);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Chats = reader.ReadVector<long>();
+			var trychats = reader.ReadVector<long>(ParserTypes.Int64);
+if(trychats.IsError){
+return ReadResult<IObject>.Move(trychats);
+}
+Chats = trychats.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

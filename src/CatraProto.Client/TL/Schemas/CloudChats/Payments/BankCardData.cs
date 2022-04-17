@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -18,11 +20,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 		public sealed override string Title { get; set; }
 
 [Newtonsoft.Json.JsonProperty("open_urls")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.BankCardOpenUrlBase> OpenUrls { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.BankCardOpenUrlBase> OpenUrls { get; set; }
 
 
         #nullable enable
- public BankCardData (string title,IList<CatraProto.Client.TL.Schemas.CloudChats.BankCardOpenUrlBase> openUrls)
+ public BankCardData (string title,List<CatraProto.Client.TL.Schemas.CloudChats.BankCardOpenUrlBase> openUrls)
 {
  Title = title;
 OpenUrls = openUrls;
@@ -38,18 +40,33 @@ OpenUrls = openUrls;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Title);
-			writer.Write(OpenUrls);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteString(Title);
+var checkopenUrls = 			writer.WriteVector(OpenUrls, false);
+if(checkopenUrls.IsError){
+ return checkopenUrls; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Title = reader.Read<string>();
-			OpenUrls = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.BankCardOpenUrlBase>();
+			var trytitle = reader.ReadString();
+if(trytitle.IsError){
+return ReadResult<IObject>.Move(trytitle);
+}
+Title = trytitle.Value;
+			var tryopenUrls = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.BankCardOpenUrlBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryopenUrls.IsError){
+return ReadResult<IObject>.Move(tryopenUrls);
+}
+OpenUrls = tryopenUrls.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

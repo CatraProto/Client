@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -42,20 +44,35 @@ RevokedInvitesCount = revokedInvitesCount;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(AdminId);
-			writer.Write(InvitesCount);
-			writer.Write(RevokedInvitesCount);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(AdminId);
+writer.WriteInt32(InvitesCount);
+writer.WriteInt32(RevokedInvitesCount);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			AdminId = reader.Read<long>();
-			InvitesCount = reader.Read<int>();
-			RevokedInvitesCount = reader.Read<int>();
+			var tryadminId = reader.ReadInt64();
+if(tryadminId.IsError){
+return ReadResult<IObject>.Move(tryadminId);
+}
+AdminId = tryadminId.Value;
+			var tryinvitesCount = reader.ReadInt32();
+if(tryinvitesCount.IsError){
+return ReadResult<IObject>.Move(tryinvitesCount);
+}
+InvitesCount = tryinvitesCount.Value;
+			var tryrevokedInvitesCount = reader.ReadInt32();
+if(tryrevokedInvitesCount.IsError){
+return ReadResult<IObject>.Move(tryrevokedInvitesCount);
+}
+RevokedInvitesCount = tryrevokedInvitesCount.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

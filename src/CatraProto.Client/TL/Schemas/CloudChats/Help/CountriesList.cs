@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -15,14 +17,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
         public static int ConstructorId { get => -2016381538; }
         
 [Newtonsoft.Json.JsonProperty("countries")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.Help.CountryBase> Countries { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.Help.CountryBase> Countries { get; set; }
 
 [Newtonsoft.Json.JsonProperty("hash")]
 		public int Hash { get; set; }
 
 
         #nullable enable
- public CountriesList (IList<CatraProto.Client.TL.Schemas.CloudChats.Help.CountryBase> countries,int hash)
+ public CountriesList (List<CatraProto.Client.TL.Schemas.CloudChats.Help.CountryBase> countries,int hash)
 {
  Countries = countries;
 Hash = hash;
@@ -38,18 +40,32 @@ Hash = hash;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Countries);
-			writer.Write(Hash);
+writer.WriteInt32(ConstructorId);
+var checkcountries = 			writer.WriteVector(Countries, false);
+if(checkcountries.IsError){
+ return checkcountries; 
+}
+writer.WriteInt32(Hash);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Countries = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.Help.CountryBase>();
-			Hash = reader.Read<int>();
+			var trycountries = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.Help.CountryBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trycountries.IsError){
+return ReadResult<IObject>.Move(trycountries);
+}
+Countries = trycountries.Value;
+			var tryhash = reader.ReadInt32();
+if(tryhash.IsError){
+return ReadResult<IObject>.Move(tryhash);
+}
+Hash = tryhash.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

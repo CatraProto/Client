@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -22,9 +24,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("documents")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase> Documents { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase> Documents { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("settings")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.ThemeSettingsBase Settings { get; set; }
 
@@ -41,37 +45,59 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
+
+			writer.WriteInt32(Flags);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(Documents);
+var checkdocuments = 				writer.WriteVector(Documents, false);
+if(checkdocuments.IsError){
+ return checkdocuments; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(Settings);
+var checksettings = 				writer.WriteObject(Settings);
+if(checksettings.IsError){
+ return checksettings; 
+}
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Documents = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
+				var trydocuments = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trydocuments.IsError){
+return ReadResult<IObject>.Move(trydocuments);
+}
+Documents = trydocuments.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Settings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ThemeSettingsBase>();
+				var trysettings = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ThemeSettingsBase>();
+if(trysettings.IsError){
+return ReadResult<IObject>.Move(trysettings);
+}
+Settings = trysettings.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

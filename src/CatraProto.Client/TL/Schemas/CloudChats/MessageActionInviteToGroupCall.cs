@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -18,11 +20,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase Call { get; set; }
 
 [Newtonsoft.Json.JsonProperty("users")]
-		public IList<long> Users { get; set; }
+		public List<long> Users { get; set; }
 
 
         #nullable enable
- public MessageActionInviteToGroupCall (CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase call,IList<long> users)
+ public MessageActionInviteToGroupCall (CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase call,List<long> users)
 {
  Call = call;
 Users = users;
@@ -38,18 +40,33 @@ Users = users;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Call);
-			writer.Write(Users);
+writer.WriteInt32(ConstructorId);
+var checkcall = 			writer.WriteObject(Call);
+if(checkcall.IsError){
+ return checkcall; 
+}
+
+			writer.WriteVector(Users, false);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Call = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase>();
-			Users = reader.ReadVector<long>();
+			var trycall = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase>();
+if(trycall.IsError){
+return ReadResult<IObject>.Move(trycall);
+}
+Call = trycall.Value;
+			var tryusers = reader.ReadVector<long>(ParserTypes.Int64);
+if(tryusers.IsError){
+return ReadResult<IObject>.Move(tryusers);
+}
+Users = tryusers.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

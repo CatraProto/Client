@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int ConstructorId { get => 2127598753; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.FeaturedStickersBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("offset")]
 		public int Offset { get; set; }
@@ -50,20 +50,35 @@ Hash = hash;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Offset);
-			writer.Write(Limit);
-			writer.Write(Hash);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt32(Offset);
+writer.WriteInt32(Limit);
+writer.WriteInt64(Hash);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Offset = reader.Read<int>();
-			Limit = reader.Read<int>();
-			Hash = reader.Read<long>();
+			var tryoffset = reader.ReadInt32();
+if(tryoffset.IsError){
+return ReadResult<IObject>.Move(tryoffset);
+}
+Offset = tryoffset.Value;
+			var trylimit = reader.ReadInt32();
+if(trylimit.IsError){
+return ReadResult<IObject>.Move(trylimit);
+}
+Limit = trylimit.Value;
+			var tryhash = reader.ReadInt64();
+if(tryhash.IsError){
+return ReadResult<IObject>.Move(tryhash);
+}
+Hash = tryhash.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

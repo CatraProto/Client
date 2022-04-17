@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -46,22 +48,44 @@ P = p;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Salt1);
-			writer.Write(Salt2);
-			writer.Write(G);
-			writer.Write(P);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteBytes(Salt1);
+
+			writer.WriteBytes(Salt2);
+writer.WriteInt32(G);
+
+			writer.WriteBytes(P);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Salt1 = reader.Read<byte[]>();
-			Salt2 = reader.Read<byte[]>();
-			G = reader.Read<int>();
-			P = reader.Read<byte[]>();
+			var trysalt1 = reader.ReadBytes();
+if(trysalt1.IsError){
+return ReadResult<IObject>.Move(trysalt1);
+}
+Salt1 = trysalt1.Value;
+			var trysalt2 = reader.ReadBytes();
+if(trysalt2.IsError){
+return ReadResult<IObject>.Move(trysalt2);
+}
+Salt2 = trysalt2.Value;
+			var tryg = reader.ReadInt32();
+if(tryg.IsError){
+return ReadResult<IObject>.Move(tryg);
+}
+G = tryg.Value;
+			var tryp = reader.ReadBytes();
+if(tryp.IsError){
+return ReadResult<IObject>.Move(tryp);
+}
+P = tryp.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

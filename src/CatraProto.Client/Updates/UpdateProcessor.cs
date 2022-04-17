@@ -8,6 +8,7 @@ using CatraProto.Client.Async.Collections;
 using CatraProto.Client.Async.Loops.Enums.Resumable;
 using CatraProto.Client.Async.Loops.Interfaces;
 using CatraProto.Client.Collections;
+using CatraProto.Client.MTProto;
 using CatraProto.Client.MTProto.Session.Models;
 using CatraProto.Client.TL.Schemas.CloudChats;
 using CatraProto.Client.TL.Schemas.CloudChats.Updates;
@@ -125,7 +126,7 @@ namespace CatraProto.Client.Updates
             var fetchDifference = false;
             while (!fetchDifference && _updatesQueue.TryPeek(out var update))
             {
-                if(update.Item is UpdateConfig)
+                if (update.Item is UpdateConfig)
                 {
                     await _client.ConfigManager.ForceRefreshConfig(stoppingToken);
                 }
@@ -149,15 +150,15 @@ namespace CatraProto.Client.Updates
                 SearchType? searchType = null;
                 int? newPts;
                 int? newQts = null;
-                if(UpdatesTools.GetApplyOnPts(update.Item, out var at))
+                if (UpdatesTools.GetApplyOnPts(update.Item, out var at))
                 {
                     var (localPts, _, _, _, _) = _updatesState.GetData();
-                    if (localPts < at.Value)
+                    if (localPts < at!.Value)
                     {
                         _logger.Information("Postponing update {Update} to be applied at pts {Pts}", update.Item, at.Value);
                         _applyAt.Insert(at.Value, (UpdateBase)update.Item);
                     }
-                    
+
                     update.DequeueItem();
                     continue;
                 }
@@ -183,7 +184,7 @@ namespace CatraProto.Client.Updates
                     case UpdateCheckResult.GapDetected:
                         {
                             var findGapFillingUpdate = FindGapFillingUpdate(searchType!.Value, out newQts, out newPts);
-                            if(findGapFillingUpdate is null)
+                            if (findGapFillingUpdate is null)
                             {
                                 _logger.Information(messageTemplate: "Waiting {Time}ms before fetching difference", WaitTime.TotalMilliseconds);
                                 await Task.Delay(WaitTime, stoppingToken);
@@ -193,24 +194,17 @@ namespace CatraProto.Client.Updates
                             if (findGapFillingUpdate is not null)
                             {
                                 _logger.Information("Update gap filled after waiting without fetching difference");
-                                toBeApplied.Add((UpdateBase)findGapFillingUpdate);
-                                if (newPts is not null)
+                                if(!ApplyUpdate((UpdateBase)findGapFillingUpdate, newPts, toBeApplied))
                                 {
-                                    if (_applyAt.TryRemoveAll(newPts.Value, out var postponedUpdates))
-                                    {
-                                        foreach (var psUpdate in postponedUpdates)
-                                        {
-                                            _logger.Information("Applying postponed update {Upd}", psUpdate);
-                                            toBeApplied.Add(psUpdate);
-                                        }
-                                    }
+                                    fetchDifference = true;
+                                    break;
                                 }
                                 //Not dequeuing update here because FindGapFillingUpdate resetted the current item handle
                                 _updatesState.SetData(qts: newQts, pts: newPts);
                             }
                             else
                             {
-                                _logger.Information("No update that could fill the gap arrived after waiting, fetching difference...");
+                                _logger.Information("No update that could fill the gap arrived even after waiting, fetching difference");
                                 fetchDifference = true;
                             }
 
@@ -220,18 +214,10 @@ namespace CatraProto.Client.Updates
                         {
                             if (update.Item is UpdateBase updBase)
                             {
-                                toBeApplied.Add(updBase);
-                            }
-
-                            if(newPts is not null)
-                            {
-                                if(_applyAt.TryRemoveAll(newPts.Value, out var postponedUpdates))
+                                if (!ApplyUpdate(updBase, newPts, toBeApplied))
                                 {
-                                    foreach(var psUpdate in postponedUpdates)
-                                    {
-                                        _logger.Information("Applying postponed update {Upd}", psUpdate);
-                                        toBeApplied.Add(psUpdate);
-                                    }
+                                    fetchDifference = true;
+                                    break;
                                 }
                             }
 
@@ -346,6 +332,238 @@ namespace CatraProto.Client.Updates
             }
 
             return null;
+        }
+
+        private bool MustFetchDifference(UpdateBase update)
+        {
+            switch (update)
+            {
+                case UpdateNewMessage message:
+                    return MustFetchDifference(message.Message);
+                case UpdateNewChannelMessage message:
+                    return MustFetchDifference(message.Message);
+                case UpdateNewScheduledMessage message:
+                    return MustFetchDifference(message.Message);
+                case UpdateEditChannelMessage updateEdit:
+                    return MustFetchDifference(updateEdit.Message);
+                case UpdateEditMessage updateEdit:
+                    return MustFetchDifference(updateEdit.Message);
+                case UpdateDraftMessage draft:
+                    var draftPeer = PeerId.FromPeer(draft.Peer);
+                    if (!_client.DatabaseManager.PeerDatabase.HavePeer(draftPeer))
+                    {
+                        _logger.Information("Must fetch difference because we're missing data about peer {Peer} in update_draft", draftPeer);
+                        return true;
+                    }
+
+                    if (draft.Draft is DraftMessage draftMessage && draftMessage.Entities is not null && MustFetchDifference(draftMessage.Entities))
+                    {
+                        return true;
+                    }
+                    break;
+            }
+
+            return false;
+        }
+
+        private bool MustFetchDifference(MessageBase messageBase)
+        {
+            PeerBase? replyTo = null;
+            PeerBase? fromId = null;
+            PeerBase? peerId = null;
+
+            switch (messageBase)
+            {
+                case Message message:
+                    peerId = message.PeerId;
+                    fromId = message.FromId;
+                    replyTo = message.ReplyTo?.ReplyToPeerId;
+                    if (message.FwdFrom is not null)
+                    {
+                        if (message.FwdFrom.SavedFromPeer is not null)
+                        {
+                            var savedFromPeer = PeerId.FromPeer(message.FwdFrom.SavedFromPeer);
+                            if (!_client.DatabaseManager.PeerDatabase.HavePeer(savedFromPeer))
+                            {
+                                _logger.Information("Must fetch difference because we're missing data about saved_from_peer {Peer} in fwd_from", savedFromPeer);
+                                return true;
+                            }
+                        }
+
+                        if (message.FwdFrom.FromId is not null)
+                        {
+                            var fwdFromId = PeerId.FromPeer(message.FwdFrom.FromId);
+                            if (!_client.DatabaseManager.PeerDatabase.HavePeer(fwdFromId))
+                            {
+                                _logger.Information("Must fetch difference because we're missing data about from_id {FromId} in fwd_from", fromId);
+                                return true;
+                            }
+                        }
+                    }
+
+                    if (message.Entities is not null && MustFetchDifference(message.Entities))
+                    {
+                        return true;
+                    }
+
+                    if (message.Media is not null && message.Media is MessageMediaContact contact && !_client.DatabaseManager.PeerDatabase.HavePeer(PeerId.AsUser(contact.UserId)))
+                    {
+                        _logger.Information("Must fetch difference because we're missing data about user {UserId} in message_media_contact", contact.UserId);
+                        return true;
+                    }
+
+                    if (message.ViaBotId is not null && !_client.DatabaseManager.PeerDatabase.HavePeer(PeerId.AsUser(message.ViaBotId.Value)))
+                    {
+                        _logger.Information("Must fetch difference because we're missing data about bot {Id} in via_bot", message.ViaBotId.Value);
+                        return true;
+                    }
+                    break;
+                case MessageService messageService:
+                    peerId = messageService.PeerId;
+                    fromId = messageService.FromId;
+                    replyTo = messageService.ReplyTo?.ReplyToPeerId;
+                    List<long>? userIds = null;
+                    switch (messageService.Action)
+                    {
+                        case MessageActionGeoProximityReached proximityReached:
+                            var proxPeer = PeerId.FromPeer(proximityReached.FromId);
+                            if (!_client.DatabaseManager.PeerDatabase.HavePeer(proxPeer))
+                            {
+                                _logger.Information("Must fetch difference because we're missing data about from_id peer {Peer} in geo proximity", proxPeer);
+                                return true;
+                            }
+
+                            var proxToId = PeerId.FromPeer(proximityReached.ToId);
+                            if (_client.DatabaseManager.PeerDatabase.HavePeer(proxToId))
+                            {
+                                _logger.Information("Must fetch difference because we're missing data about to_id peer {Peer} in geo proximity", proxPeer);
+                                return true;
+                            }
+                            break;
+                        case MessageActionChannelMigrateFrom migrateFrom:
+                            if (!_client.DatabaseManager.PeerDatabase.HavePeer(PeerId.AsGroup(migrateFrom.ChatId)))
+                            {
+                                _logger.Information("Must fetch difference because we're missing data about chat {ChatId} in migrate_from", migrateFrom.ChatId);
+                                return true;
+                            }
+                            break;
+                        case MessageActionChatMigrateTo migrate:
+                            if (!_client.DatabaseManager.PeerDatabase.HavePeer(PeerId.AsChannel(migrate.ChannelId)))
+                            {
+                                _logger.Information("Must fetch difference because we're missing data about channel {ChannelId} in migrate_to", migrate.ChannelId);
+                                return true;
+                            }
+                            break;
+                        case MessageActionChatJoinedByLink joinedByLink:
+                            if (!_client.DatabaseManager.PeerDatabase.HavePeer(PeerId.AsUser(joinedByLink.InviterId)))
+                            {
+                                _logger.Information("Must fetch difference because we're missing data about inviter {InviterId} in joined_by_link", joinedByLink.InviterId);
+                                return true;
+                            }
+                            break;
+                        case MessageActionChatDeleteUser deleteUser:
+                            if (!_client.DatabaseManager.PeerDatabase.HavePeer(PeerId.AsUser(deleteUser.UserId)))
+                            {
+                                _logger.Information("Must fetch difference because we're missing data about user {UserId} in joined_by_link", deleteUser.UserId);
+                                return true;
+                            }
+                            break;
+                        case MessageActionChatAddUser addUser:
+                            userIds = addUser.Users;
+                            break;
+                        case MessageActionChatCreate chatCreate:
+                            userIds = chatCreate.Users;
+                            break;
+                        case MessageActionInviteToGroupCall invite:
+                            userIds = invite.Users;
+                            break;
+                    }
+
+                    if (userIds is not null)
+                    {
+                        foreach (var user in userIds)
+                        {
+                            if (!_client.DatabaseManager.PeerDatabase.HavePeer(PeerId.AsUser(user)))
+                            {
+                                _logger.Information("Must fetch difference because we're missing data about user {UserId}", user);
+                                return true;
+                            }
+                        }
+                    }
+                    break;
+            }
+
+            if (peerId is not null)
+            {
+                var peerPeerId = PeerId.FromPeer(peerId);
+                if (!_client.DatabaseManager.PeerDatabase.HavePeer(peerPeerId))
+                {
+                    _logger.Information("Must fetch difference because we're missing data about peer {Peer}", peerPeerId);
+                    return true;
+                }
+            }
+
+            if (fromId is not null)
+            {
+                var fromPeerId = PeerId.FromPeer(fromId);
+                if (!_client.DatabaseManager.PeerDatabase.HavePeer(fromPeerId))
+                {
+                    _logger.Information("Must fetch difference because we're missing data about from_peer {Peer}", fromPeerId);
+                    return true;
+                }
+            }
+
+            if (replyTo is not null)
+            {
+                var replyPeerId = PeerId.FromPeer(replyTo);
+                if (!_client.DatabaseManager.PeerDatabase.HavePeer(replyPeerId))
+                {
+                    _logger.Information("Must fetch difference because we're missing data about reply_to {Peer}", replyPeerId);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool MustFetchDifference(List<MessageEntityBase> entities)
+        {
+            foreach (var entity in entities)
+            {
+                if (entity is MessageEntityMentionName entityMentionName && !_client.DatabaseManager.PeerDatabase.HavePeer(PeerId.AsUser(entityMentionName.UserId)))
+                {
+                    _logger.Information("Must fetch difference because we're missing data about mentioned user {UserId} in entity in FwdFrom", entityMentionName.UserId);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool ApplyUpdate(UpdateBase update, int? pts, in List<UpdateBase> updates)
+        {
+            if (MustFetchDifference(update))
+            {
+                return false;
+            }
+
+            if (pts is not null)
+            {
+                if (_applyAt.TryRemoveAll(pts.Value, out var postponedUpdates))
+                {
+                    foreach (var psUpdate in postponedUpdates)
+                    {
+                        _logger.Information("Applying postponed update {Upd}", psUpdate);
+                        if (MustFetchDifference(update))
+                        {
+                            return false;
+                        }
+                        updates.Add(psUpdate);
+                    }
+                }
+            }
+
+            return true;
         }
 
         public void AddUpdateToQueue(IObject update)

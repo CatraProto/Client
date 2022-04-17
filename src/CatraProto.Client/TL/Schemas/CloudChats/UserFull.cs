@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -55,18 +57,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("id")]
 		public sealed override long Id { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("about")]
 		public sealed override string About { get; set; }
 
 [Newtonsoft.Json.JsonProperty("settings")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.PeerSettingsBase Settings { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("profile_photo")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.PhotoBase ProfilePhoto { get; set; }
 
 [Newtonsoft.Json.JsonProperty("notify_settings")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase NotifySettings { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("bot_info")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase BotInfo { get; set; }
 
@@ -82,9 +87,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("ttl_period")]
 		public sealed override int? TtlPeriod { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("theme_emoticon")]
 		public sealed override string ThemeEmoticon { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("private_forward_name")]
 		public sealed override string PrivateForwardName { get; set; }
 
@@ -122,111 +129,182 @@ CommonChatsCount = commonChatsCount;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Id);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt64(Id);
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(About);
+
+				writer.WriteString(About);
 			}
 
-			writer.Write(Settings);
+var checksettings = 			writer.WriteObject(Settings);
+if(checksettings.IsError){
+ return checksettings; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(ProfilePhoto);
+var checkprofilePhoto = 				writer.WriteObject(ProfilePhoto);
+if(checkprofilePhoto.IsError){
+ return checkprofilePhoto; 
+}
 			}
 
-			writer.Write(NotifySettings);
+var checknotifySettings = 			writer.WriteObject(NotifySettings);
+if(checknotifySettings.IsError){
+ return checknotifySettings; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				writer.Write(BotInfo);
+var checkbotInfo = 				writer.WriteObject(BotInfo);
+if(checkbotInfo.IsError){
+ return checkbotInfo; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
-				writer.Write(PinnedMsgId.Value);
+writer.WriteInt32(PinnedMsgId.Value);
 			}
 
-			writer.Write(CommonChatsCount);
+writer.WriteInt32(CommonChatsCount);
 			if(FlagsHelper.IsFlagSet(Flags, 11))
 			{
-				writer.Write(FolderId.Value);
+writer.WriteInt32(FolderId.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 14))
 			{
-				writer.Write(TtlPeriod.Value);
+writer.WriteInt32(TtlPeriod.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 15))
 			{
-				writer.Write(ThemeEmoticon);
+
+				writer.WriteString(ThemeEmoticon);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 16))
 			{
-				writer.Write(PrivateForwardName);
+
+				writer.WriteString(PrivateForwardName);
 			}
 
 
+return new WriteResult();
+
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Blocked = FlagsHelper.IsFlagSet(Flags, 0);
 			PhoneCallsAvailable = FlagsHelper.IsFlagSet(Flags, 4);
 			PhoneCallsPrivate = FlagsHelper.IsFlagSet(Flags, 5);
 			CanPinMessage = FlagsHelper.IsFlagSet(Flags, 7);
 			HasScheduled = FlagsHelper.IsFlagSet(Flags, 12);
 			VideoCallsAvailable = FlagsHelper.IsFlagSet(Flags, 13);
-			Id = reader.Read<long>();
+			var tryid = reader.ReadInt64();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				About = reader.Read<string>();
+				var tryabout = reader.ReadString();
+if(tryabout.IsError){
+return ReadResult<IObject>.Move(tryabout);
+}
+About = tryabout.Value;
 			}
 
-			Settings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerSettingsBase>();
+			var trysettings = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PeerSettingsBase>();
+if(trysettings.IsError){
+return ReadResult<IObject>.Move(trysettings);
+}
+Settings = trysettings.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				ProfilePhoto = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
+				var tryprofilePhoto = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
+if(tryprofilePhoto.IsError){
+return ReadResult<IObject>.Move(tryprofilePhoto);
+}
+ProfilePhoto = tryprofilePhoto.Value;
 			}
 
-			NotifySettings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase>();
+			var trynotifySettings = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase>();
+if(trynotifySettings.IsError){
+return ReadResult<IObject>.Move(trynotifySettings);
+}
+NotifySettings = trynotifySettings.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				BotInfo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase>();
+				var trybotInfo = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase>();
+if(trybotInfo.IsError){
+return ReadResult<IObject>.Move(trybotInfo);
+}
+BotInfo = trybotInfo.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
-				PinnedMsgId = reader.Read<int>();
+				var trypinnedMsgId = reader.ReadInt32();
+if(trypinnedMsgId.IsError){
+return ReadResult<IObject>.Move(trypinnedMsgId);
+}
+PinnedMsgId = trypinnedMsgId.Value;
 			}
 
-			CommonChatsCount = reader.Read<int>();
+			var trycommonChatsCount = reader.ReadInt32();
+if(trycommonChatsCount.IsError){
+return ReadResult<IObject>.Move(trycommonChatsCount);
+}
+CommonChatsCount = trycommonChatsCount.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 11))
 			{
-				FolderId = reader.Read<int>();
+				var tryfolderId = reader.ReadInt32();
+if(tryfolderId.IsError){
+return ReadResult<IObject>.Move(tryfolderId);
+}
+FolderId = tryfolderId.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 14))
 			{
-				TtlPeriod = reader.Read<int>();
+				var tryttlPeriod = reader.ReadInt32();
+if(tryttlPeriod.IsError){
+return ReadResult<IObject>.Move(tryttlPeriod);
+}
+TtlPeriod = tryttlPeriod.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 15))
 			{
-				ThemeEmoticon = reader.Read<string>();
+				var trythemeEmoticon = reader.ReadString();
+if(trythemeEmoticon.IsError){
+return ReadResult<IObject>.Move(trythemeEmoticon);
+}
+ThemeEmoticon = trythemeEmoticon.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 16))
 			{
-				PrivateForwardName = reader.Read<string>();
+				var tryprivateForwardName = reader.ReadString();
+if(tryprivateForwardName.IsError){
+return ReadResult<IObject>.Move(tryprivateForwardName);
+}
+PrivateForwardName = tryprivateForwardName.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

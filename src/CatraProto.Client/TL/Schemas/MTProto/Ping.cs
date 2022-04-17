@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
         public static int ConstructorId { get => 2059302892; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.PongBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("ping_id")]
 		public long PingId { get; set; }
@@ -42,16 +42,23 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(PingId);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(PingId);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			PingId = reader.Read<long>();
+			var trypingId = reader.ReadInt64();
+if(trypingId.IsError){
+return ReadResult<IObject>.Move(trypingId);
+}
+PingId = trypingId.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

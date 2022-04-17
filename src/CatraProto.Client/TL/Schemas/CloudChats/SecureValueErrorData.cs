@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -46,22 +48,47 @@ Text = text;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Type);
-			writer.Write(DataHash);
-			writer.Write(Field);
-			writer.Write(Text);
+writer.WriteInt32(ConstructorId);
+var checktype = 			writer.WriteObject(Type);
+if(checktype.IsError){
+ return checktype; 
+}
+
+			writer.WriteBytes(DataHash);
+
+			writer.WriteString(Field);
+
+			writer.WriteString(Text);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Type = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase>();
-			DataHash = reader.Read<byte[]>();
-			Field = reader.Read<string>();
-			Text = reader.Read<string>();
+			var trytype = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase>();
+if(trytype.IsError){
+return ReadResult<IObject>.Move(trytype);
+}
+Type = trytype.Value;
+			var trydataHash = reader.ReadBytes();
+if(trydataHash.IsError){
+return ReadResult<IObject>.Move(trydataHash);
+}
+DataHash = trydataHash.Value;
+			var tryfield = reader.ReadString();
+if(tryfield.IsError){
+return ReadResult<IObject>.Move(tryfield);
+}
+Field = tryfield.Value;
+			var trytext = reader.ReadString();
+if(trytext.IsError){
+return ReadResult<IObject>.Move(trytext);
+}
+Text = trytext.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

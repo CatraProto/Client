@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -15,14 +17,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get => -1661470870; }
         
 [Newtonsoft.Json.JsonProperty("prev_value")]
-		public IList<string> PrevValue { get; set; }
+		public List<string> PrevValue { get; set; }
 
 [Newtonsoft.Json.JsonProperty("new_value")]
-		public IList<string> NewValue { get; set; }
+		public List<string> NewValue { get; set; }
 
 
         #nullable enable
- public ChannelAdminLogEventActionChangeAvailableReactions (IList<string> prevValue,IList<string> newValue)
+ public ChannelAdminLogEventActionChangeAvailableReactions (List<string> prevValue,List<string> newValue)
 {
  PrevValue = prevValue;
 NewValue = newValue;
@@ -38,18 +40,31 @@ NewValue = newValue;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(PrevValue);
-			writer.Write(NewValue);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteVector(PrevValue, false);
+
+			writer.WriteVector(NewValue, false);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			PrevValue = reader.ReadVector<string>();
-			NewValue = reader.ReadVector<string>();
+			var tryprevValue = reader.ReadVector<string>(ParserTypes.String, nakedVector: false, nakedObjects: false);
+if(tryprevValue.IsError){
+return ReadResult<IObject>.Move(tryprevValue);
+}
+PrevValue = tryprevValue.Value;
+			var trynewValue = reader.ReadVector<string>(ParserTypes.String, nakedVector: false, nakedObjects: false);
+if(trynewValue.IsError){
+return ReadResult<IObject>.Move(trynewValue);
+}
+NewValue = trynewValue.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

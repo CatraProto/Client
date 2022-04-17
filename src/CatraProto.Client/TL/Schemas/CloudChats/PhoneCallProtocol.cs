@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -35,11 +37,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public sealed override int MaxLayer { get; set; }
 
 [Newtonsoft.Json.JsonProperty("library_versions")]
-		public sealed override IList<string> LibraryVersions { get; set; }
+		public sealed override List<string> LibraryVersions { get; set; }
 
 
         #nullable enable
- public PhoneCallProtocol (int minLayer,int maxLayer,IList<string> libraryVersions)
+ public PhoneCallProtocol (int minLayer,int maxLayer,List<string> libraryVersions)
 {
  MinLayer = minLayer;
 MaxLayer = maxLayer;
@@ -58,25 +60,46 @@ LibraryVersions = libraryVersions;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(MinLayer);
-			writer.Write(MaxLayer);
-			writer.Write(LibraryVersions);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt32(MinLayer);
+writer.WriteInt32(MaxLayer);
+
+			writer.WriteVector(LibraryVersions, false);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			UdpP2p = FlagsHelper.IsFlagSet(Flags, 0);
 			UdpReflector = FlagsHelper.IsFlagSet(Flags, 1);
-			MinLayer = reader.Read<int>();
-			MaxLayer = reader.Read<int>();
-			LibraryVersions = reader.ReadVector<string>();
+			var tryminLayer = reader.ReadInt32();
+if(tryminLayer.IsError){
+return ReadResult<IObject>.Move(tryminLayer);
+}
+MinLayer = tryminLayer.Value;
+			var trymaxLayer = reader.ReadInt32();
+if(trymaxLayer.IsError){
+return ReadResult<IObject>.Move(trymaxLayer);
+}
+MaxLayer = trymaxLayer.Value;
+			var trylibraryVersions = reader.ReadVector<string>(ParserTypes.String, nakedVector: false, nakedObjects: false);
+if(trylibraryVersions.IsError){
+return ReadResult<IObject>.Move(trylibraryVersions);
+}
+LibraryVersions = trylibraryVersions.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

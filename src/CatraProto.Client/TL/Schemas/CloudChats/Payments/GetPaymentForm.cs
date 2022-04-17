@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -20,10 +23,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
         public static int ConstructorId { get => -1976353651; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentFormBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -34,6 +34,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 [Newtonsoft.Json.JsonProperty("msg_id")]
 		public int MsgId { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("theme_params")]
 		public CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase ThemeParams { get; set; }
 
@@ -57,31 +58,57 @@ MsgId = msgId;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Peer);
-			writer.Write(MsgId);
+
+			writer.WriteInt32(Flags);
+var checkpeer = 			writer.WriteObject(Peer);
+if(checkpeer.IsError){
+ return checkpeer; 
+}
+writer.WriteInt32(MsgId);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(ThemeParams);
+var checkthemeParams = 				writer.WriteObject(ThemeParams);
+if(checkthemeParams.IsError){
+ return checkthemeParams; 
+}
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
-			MsgId = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var trypeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+if(trypeer.IsError){
+return ReadResult<IObject>.Move(trypeer);
+}
+Peer = trypeer.Value;
+			var trymsgId = reader.ReadInt32();
+if(trymsgId.IsError){
+return ReadResult<IObject>.Move(trymsgId);
+}
+MsgId = trymsgId.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				ThemeParams = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
+				var trythemeParams = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
+if(trythemeParams.IsError){
+return ReadResult<IObject>.Move(trythemeParams);
+}
+ThemeParams = trythemeParams.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 

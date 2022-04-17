@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -42,20 +44,35 @@ Status = status;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(AnswerMsgId);
-			writer.Write(Bytes);
-			writer.Write(Status);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(AnswerMsgId);
+writer.WriteInt32(Bytes);
+writer.WriteInt32(Status);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			AnswerMsgId = reader.Read<long>();
-			Bytes = reader.Read<int>();
-			Status = reader.Read<int>();
+			var tryanswerMsgId = reader.ReadInt64();
+if(tryanswerMsgId.IsError){
+return ReadResult<IObject>.Move(tryanswerMsgId);
+}
+AnswerMsgId = tryanswerMsgId.Value;
+			var trybytes = reader.ReadInt32();
+if(trybytes.IsError){
+return ReadResult<IObject>.Move(trybytes);
+}
+Bytes = trybytes.Value;
+			var trystatus = reader.ReadInt32();
+if(trystatus.IsError){
+return ReadResult<IObject>.Move(trystatus);
+}
+Status = trystatus.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

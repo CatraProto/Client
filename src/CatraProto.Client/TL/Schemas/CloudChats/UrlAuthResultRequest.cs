@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -49,22 +51,42 @@ Domain = domain;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Bot);
-			writer.Write(Domain);
+
+			writer.WriteInt32(Flags);
+var checkbot = 			writer.WriteObject(Bot);
+if(checkbot.IsError){
+ return checkbot; 
+}
+
+			writer.WriteString(Domain);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			RequestWriteAccess = FlagsHelper.IsFlagSet(Flags, 0);
-			Bot = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
-			Domain = reader.Read<string>();
+			var trybot = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+if(trybot.IsError){
+return ReadResult<IObject>.Move(trybot);
+}
+Bot = trybot.Value;
+			var trydomain = reader.ReadString();
+if(trydomain.IsError){
+return ReadResult<IObject>.Move(trydomain);
+}
+Domain = trydomain.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

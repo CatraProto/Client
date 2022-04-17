@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -18,11 +20,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public long Hash { get; set; }
 
 [Newtonsoft.Json.JsonProperty("gifs")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase> Gifs { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase> Gifs { get; set; }
 
 
         #nullable enable
- public SavedGifs (long hash,IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase> gifs)
+ public SavedGifs (long hash,List<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase> gifs)
 {
  Hash = hash;
 Gifs = gifs;
@@ -38,18 +40,32 @@ Gifs = gifs;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Hash);
-			writer.Write(Gifs);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(Hash);
+var checkgifs = 			writer.WriteVector(Gifs, false);
+if(checkgifs.IsError){
+ return checkgifs; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Hash = reader.Read<long>();
-			Gifs = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
+			var tryhash = reader.ReadInt64();
+if(tryhash.IsError){
+return ReadResult<IObject>.Move(tryhash);
+}
+Hash = tryhash.Value;
+			var trygifs = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trygifs.IsError){
+return ReadResult<IObject>.Move(trygifs);
+}
+Gifs = trygifs.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -42,20 +44,35 @@ H = h;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(DocumentId);
-			writer.Write(W);
-			writer.Write(H);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(DocumentId);
+writer.WriteInt32(W);
+writer.WriteInt32(H);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			DocumentId = reader.Read<long>();
-			W = reader.Read<int>();
-			H = reader.Read<int>();
+			var trydocumentId = reader.ReadInt64();
+if(trydocumentId.IsError){
+return ReadResult<IObject>.Move(trydocumentId);
+}
+DocumentId = trydocumentId.Value;
+			var tryw = reader.ReadInt32();
+if(tryw.IsError){
+return ReadResult<IObject>.Move(tryw);
+}
+W = tryw.Value;
+			var tryh = reader.ReadInt32();
+if(tryh.IsError){
+return ReadResult<IObject>.Move(tryh);
+}
+H = tryh.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

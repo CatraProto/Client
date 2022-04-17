@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,20 +40,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public sealed override int? OffsetIdOffset { get; set; }
 
 [Newtonsoft.Json.JsonProperty("periods")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.SearchResultsCalendarPeriodBase> Periods { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.SearchResultsCalendarPeriodBase> Periods { get; set; }
 
 [Newtonsoft.Json.JsonProperty("messages")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.MessageBase> Messages { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.MessageBase> Messages { get; set; }
 
 [Newtonsoft.Json.JsonProperty("chats")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
 
 [Newtonsoft.Json.JsonProperty("users")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
 
         #nullable enable
- public SearchResultsCalendar (int count,int minDate,int minMsgId,IList<CatraProto.Client.TL.Schemas.CloudChats.SearchResultsCalendarPeriodBase> periods,IList<CatraProto.Client.TL.Schemas.CloudChats.MessageBase> messages,IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> chats,IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> users)
+ public SearchResultsCalendar (int count,int minDate,int minMsgId,List<CatraProto.Client.TL.Schemas.CloudChats.SearchResultsCalendarPeriodBase> periods,List<CatraProto.Client.TL.Schemas.CloudChats.MessageBase> messages,List<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> chats,List<CatraProto.Client.TL.Schemas.CloudChats.UserBase> users)
 {
  Count = count;
 MinDate = minDate;
@@ -74,42 +76,94 @@ Users = users;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Count);
-			writer.Write(MinDate);
-			writer.Write(MinMsgId);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt32(Count);
+writer.WriteInt32(MinDate);
+writer.WriteInt32(MinMsgId);
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(OffsetIdOffset.Value);
+writer.WriteInt32(OffsetIdOffset.Value);
 			}
 
-			writer.Write(Periods);
-			writer.Write(Messages);
-			writer.Write(Chats);
-			writer.Write(Users);
+var checkperiods = 			writer.WriteVector(Periods, false);
+if(checkperiods.IsError){
+ return checkperiods; 
+}
+var checkmessages = 			writer.WriteVector(Messages, false);
+if(checkmessages.IsError){
+ return checkmessages; 
+}
+var checkchats = 			writer.WriteVector(Chats, false);
+if(checkchats.IsError){
+ return checkchats; 
+}
+var checkusers = 			writer.WriteVector(Users, false);
+if(checkusers.IsError){
+ return checkusers; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Inexact = FlagsHelper.IsFlagSet(Flags, 0);
-			Count = reader.Read<int>();
-			MinDate = reader.Read<int>();
-			MinMsgId = reader.Read<int>();
+			var trycount = reader.ReadInt32();
+if(trycount.IsError){
+return ReadResult<IObject>.Move(trycount);
+}
+Count = trycount.Value;
+			var tryminDate = reader.ReadInt32();
+if(tryminDate.IsError){
+return ReadResult<IObject>.Move(tryminDate);
+}
+MinDate = tryminDate.Value;
+			var tryminMsgId = reader.ReadInt32();
+if(tryminMsgId.IsError){
+return ReadResult<IObject>.Move(tryminMsgId);
+}
+MinMsgId = tryminMsgId.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				OffsetIdOffset = reader.Read<int>();
+				var tryoffsetIdOffset = reader.ReadInt32();
+if(tryoffsetIdOffset.IsError){
+return ReadResult<IObject>.Move(tryoffsetIdOffset);
+}
+OffsetIdOffset = tryoffsetIdOffset.Value;
 			}
 
-			Periods = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SearchResultsCalendarPeriodBase>();
-			Messages = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageBase>();
-			Chats = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
-			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+			var tryperiods = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SearchResultsCalendarPeriodBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryperiods.IsError){
+return ReadResult<IObject>.Move(tryperiods);
+}
+Periods = tryperiods.Value;
+			var trymessages = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trymessages.IsError){
+return ReadResult<IObject>.Move(trymessages);
+}
+Messages = trymessages.Value;
+			var trychats = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trychats.IsError){
+return ReadResult<IObject>.Move(trychats);
+}
+Chats = trychats.Value;
+			var tryusers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryusers.IsError){
+return ReadResult<IObject>.Move(tryusers);
+}
+Users = tryusers.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -42,20 +44,38 @@ PtsCount = ptsCount;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Webpage);
-			writer.Write(Pts);
-			writer.Write(PtsCount);
+writer.WriteInt32(ConstructorId);
+var checkwebpage = 			writer.WriteObject(Webpage);
+if(checkwebpage.IsError){
+ return checkwebpage; 
+}
+writer.WriteInt32(Pts);
+writer.WriteInt32(PtsCount);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Webpage = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.WebPageBase>();
-			Pts = reader.Read<int>();
-			PtsCount = reader.Read<int>();
+			var trywebpage = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.WebPageBase>();
+if(trywebpage.IsError){
+return ReadResult<IObject>.Move(trywebpage);
+}
+Webpage = trywebpage.Value;
+			var trypts = reader.ReadInt32();
+if(trypts.IsError){
+return ReadResult<IObject>.Move(trypts);
+}
+Pts = trypts.Value;
+			var tryptsCount = reader.ReadInt32();
+if(tryptsCount.IsError){
+return ReadResult<IObject>.Move(tryptsCount);
+}
+PtsCount = tryptsCount.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

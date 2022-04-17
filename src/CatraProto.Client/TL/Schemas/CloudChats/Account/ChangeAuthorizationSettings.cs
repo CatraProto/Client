@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -21,10 +24,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public static int ConstructorId { get => 1089766498; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
 
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -58,31 +58,57 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Hash);
-			writer.Write(EncryptedRequestsDisabled.Value);
-			writer.Write(CallRequestsDisabled.Value);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt64(Hash);
+var checkencryptedRequestsDisabled = 			writer.WriteBool(EncryptedRequestsDisabled.Value);
+if(checkencryptedRequestsDisabled.IsError){
+ return checkencryptedRequestsDisabled; 
+}
+var checkcallRequestsDisabled = 			writer.WriteBool(CallRequestsDisabled.Value);
+if(checkcallRequestsDisabled.IsError){
+ return checkcallRequestsDisabled; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			Hash = reader.Read<long>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var tryhash = reader.ReadInt64();
+if(tryhash.IsError){
+return ReadResult<IObject>.Move(tryhash);
+}
+Hash = tryhash.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-			EncryptedRequestsDisabled = reader.Read<bool>();
+				var tryencryptedRequestsDisabled = reader.ReadBool();
+if(tryencryptedRequestsDisabled.IsError){
+return ReadResult<IObject>.Move(tryencryptedRequestsDisabled);
+}
+EncryptedRequestsDisabled = tryencryptedRequestsDisabled.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-			CallRequestsDisabled = reader.Read<bool>();
+				var trycallRequestsDisabled = reader.ReadBool();
+if(trycallRequestsDisabled.IsError){
+return ReadResult<IObject>.Move(trycallRequestsDisabled);
+}
+CallRequestsDisabled = trycallRequestsDisabled.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -40,21 +42,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("size")]
 		public int Size { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("thumbs")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase> Thumbs { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase> Thumbs { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("video_thumbs")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.VideoSizeBase> VideoThumbs { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.VideoSizeBase> VideoThumbs { get; set; }
 
 [Newtonsoft.Json.JsonProperty("dc_id")]
 		public int DcId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("attributes")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase> Attributes { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase> Attributes { get; set; }
 
 
         #nullable enable
- public Document (long id,long accessHash,byte[] fileReference,int date,string mimeType,int size,int dcId,IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase> attributes)
+ public Document (long id,long accessHash,byte[] fileReference,int date,string mimeType,int size,int dcId,List<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase> attributes)
 {
  Id = id;
 AccessHash = accessHash;
@@ -78,53 +82,112 @@ Attributes = attributes;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Id);
-			writer.Write(AccessHash);
-			writer.Write(FileReference);
-			writer.Write(Date);
-			writer.Write(MimeType);
-			writer.Write(Size);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt64(Id);
+writer.WriteInt64(AccessHash);
+
+			writer.WriteBytes(FileReference);
+writer.WriteInt32(Date);
+
+			writer.WriteString(MimeType);
+writer.WriteInt32(Size);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(Thumbs);
+var checkthumbs = 				writer.WriteVector(Thumbs, false);
+if(checkthumbs.IsError){
+ return checkthumbs; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(VideoThumbs);
+var checkvideoThumbs = 				writer.WriteVector(VideoThumbs, false);
+if(checkvideoThumbs.IsError){
+ return checkvideoThumbs; 
+}
 			}
 
-			writer.Write(DcId);
-			writer.Write(Attributes);
+writer.WriteInt32(DcId);
+var checkattributes = 			writer.WriteVector(Attributes, false);
+if(checkattributes.IsError){
+ return checkattributes; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			Id = reader.Read<long>();
-			AccessHash = reader.Read<long>();
-			FileReference = reader.Read<byte[]>();
-			Date = reader.Read<int>();
-			MimeType = reader.Read<string>();
-			Size = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var tryid = reader.ReadInt64();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var tryaccessHash = reader.ReadInt64();
+if(tryaccessHash.IsError){
+return ReadResult<IObject>.Move(tryaccessHash);
+}
+AccessHash = tryaccessHash.Value;
+			var tryfileReference = reader.ReadBytes();
+if(tryfileReference.IsError){
+return ReadResult<IObject>.Move(tryfileReference);
+}
+FileReference = tryfileReference.Value;
+			var trydate = reader.ReadInt32();
+if(trydate.IsError){
+return ReadResult<IObject>.Move(trydate);
+}
+Date = trydate.Value;
+			var trymimeType = reader.ReadString();
+if(trymimeType.IsError){
+return ReadResult<IObject>.Move(trymimeType);
+}
+MimeType = trymimeType.Value;
+			var trysize = reader.ReadInt32();
+if(trysize.IsError){
+return ReadResult<IObject>.Move(trysize);
+}
+Size = trysize.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Thumbs = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase>();
+				var trythumbs = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trythumbs.IsError){
+return ReadResult<IObject>.Move(trythumbs);
+}
+Thumbs = trythumbs.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				VideoThumbs = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.VideoSizeBase>();
+				var tryvideoThumbs = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.VideoSizeBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryvideoThumbs.IsError){
+return ReadResult<IObject>.Move(tryvideoThumbs);
+}
+VideoThumbs = tryvideoThumbs.Value;
 			}
 
-			DcId = reader.Read<int>();
-			Attributes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase>();
+			var trydcId = reader.ReadInt32();
+if(trydcId.IsError){
+return ReadResult<IObject>.Move(trydcId);
+}
+DcId = trydcId.Value;
+			var tryattributes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryattributes.IsError){
+return ReadResult<IObject>.Move(tryattributes);
+}
+Attributes = tryattributes.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

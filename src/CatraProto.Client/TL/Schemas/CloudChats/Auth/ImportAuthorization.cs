@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
         public static int ConstructorId { get => -1518699091; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("id")]
 		public long Id { get; set; }
@@ -46,18 +46,30 @@ Bytes = bytes;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Id);
-			writer.Write(Bytes);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(Id);
+
+			writer.WriteBytes(Bytes);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Id = reader.Read<long>();
-			Bytes = reader.Read<byte[]>();
+			var tryid = reader.ReadInt64();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var trybytes = reader.ReadBytes();
+if(trybytes.IsError){
+return ReadResult<IObject>.Move(trybytes);
+}
+Bytes = trybytes.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -31,15 +33,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("webpage_id")]
 		public sealed override long WebpageId { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("title")]
 		public sealed override string Title { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("description")]
 		public sealed override string Description { get; set; }
 
 [Newtonsoft.Json.JsonProperty("photo_id")]
 		public sealed override long? PhotoId { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("author")]
 		public sealed override string Author { get; set; }
 
@@ -69,71 +74,111 @@ WebpageId = webpageId;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Url);
-			writer.Write(WebpageId);
+
+			writer.WriteInt32(Flags);
+
+			writer.WriteString(Url);
+writer.WriteInt64(WebpageId);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(Title);
+
+				writer.WriteString(Title);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(Description);
+
+				writer.WriteString(Description);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(PhotoId.Value);
+writer.WriteInt64(PhotoId.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				writer.Write(Author);
+
+				writer.WriteString(Author);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				writer.Write(PublishedDate.Value);
+writer.WriteInt32(PublishedDate.Value);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			Url = reader.Read<string>();
-			WebpageId = reader.Read<long>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var tryurl = reader.ReadString();
+if(tryurl.IsError){
+return ReadResult<IObject>.Move(tryurl);
+}
+Url = tryurl.Value;
+			var trywebpageId = reader.ReadInt64();
+if(trywebpageId.IsError){
+return ReadResult<IObject>.Move(trywebpageId);
+}
+WebpageId = trywebpageId.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Title = reader.Read<string>();
+				var trytitle = reader.ReadString();
+if(trytitle.IsError){
+return ReadResult<IObject>.Move(trytitle);
+}
+Title = trytitle.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Description = reader.Read<string>();
+				var trydescription = reader.ReadString();
+if(trydescription.IsError){
+return ReadResult<IObject>.Move(trydescription);
+}
+Description = trydescription.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				PhotoId = reader.Read<long>();
+				var tryphotoId = reader.ReadInt64();
+if(tryphotoId.IsError){
+return ReadResult<IObject>.Move(tryphotoId);
+}
+PhotoId = tryphotoId.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				Author = reader.Read<string>();
+				var tryauthor = reader.ReadString();
+if(tryauthor.IsError){
+return ReadResult<IObject>.Move(tryauthor);
+}
+Author = tryauthor.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				PublishedDate = reader.Read<int>();
+				var trypublishedDate = reader.ReadInt32();
+if(trypublishedDate.IsError){
+return ReadResult<IObject>.Move(trypublishedDate);
+}
+PublishedDate = trypublishedDate.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,17 +19,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int ConstructorId { get => -2023787330; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.ChatsBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("except_ids")]
-		public IList<long> ExceptIds { get; set; }
+		public List<long> ExceptIds { get; set; }
 
         
         #nullable enable
- public GetAllChats (IList<long> exceptIds)
+ public GetAllChats (List<long> exceptIds)
 {
  ExceptIds = exceptIds;
  
@@ -42,16 +42,24 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(ExceptIds);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteVector(ExceptIds, false);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			ExceptIds = reader.ReadVector<long>();
+			var tryexceptIds = reader.ReadVector<long>(ParserTypes.Int64);
+if(tryexceptIds.IsError){
+return ReadResult<IObject>.Move(tryexceptIds);
+}
+ExceptIds = tryexceptIds.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -15,11 +17,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get => -146520221; }
         
 [Newtonsoft.Json.JsonProperty("value")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.JSONValueBase> Value { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.JSONValueBase> Value { get; set; }
 
 
         #nullable enable
- public JsonArray (IList<CatraProto.Client.TL.Schemas.CloudChats.JSONValueBase> value)
+ public JsonArray (List<CatraProto.Client.TL.Schemas.CloudChats.JSONValueBase> value)
 {
  Value = value;
  
@@ -34,16 +36,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Value);
+writer.WriteInt32(ConstructorId);
+var checkvalue = 			writer.WriteVector(Value, false);
+if(checkvalue.IsError){
+ return checkvalue; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Value = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.JSONValueBase>();
+			var tryvalue = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.JSONValueBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryvalue.IsError){
+return ReadResult<IObject>.Move(tryvalue);
+}
+Value = tryvalue.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

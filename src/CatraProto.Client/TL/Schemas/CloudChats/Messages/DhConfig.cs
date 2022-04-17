@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -46,22 +48,43 @@ Random = random;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(G);
-			writer.Write(P);
-			writer.Write(Version);
-			writer.Write(Random);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt32(G);
+
+			writer.WriteBytes(P);
+writer.WriteInt32(Version);
+
+			writer.WriteBytes(Random);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			G = reader.Read<int>();
-			P = reader.Read<byte[]>();
-			Version = reader.Read<int>();
-			Random = reader.Read<byte[]>();
+			var tryg = reader.ReadInt32();
+if(tryg.IsError){
+return ReadResult<IObject>.Move(tryg);
+}
+G = tryg.Value;
+			var tryp = reader.ReadBytes();
+if(tryp.IsError){
+return ReadResult<IObject>.Move(tryp);
+}
+P = tryp.Value;
+			var tryversion = reader.ReadInt32();
+if(tryversion.IsError){
+return ReadResult<IObject>.Move(tryversion);
+}
+Version = tryversion.Value;
+			var tryrandom = reader.ReadBytes();
+if(tryrandom.IsError){
+return ReadResult<IObject>.Move(tryrandom);
+}
+Random = tryrandom.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

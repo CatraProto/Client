@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -54,26 +56,57 @@ ServerTime = serverTime;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Nonce);
-			writer.Write(ServerNonce);
-			writer.Write(G);
-			writer.Write(DhPrime);
-			writer.Write(GA);
-			writer.Write(ServerTime);
+writer.WriteInt32(ConstructorId);
+var checkNonce = writer.WriteBigInteger(Nonce);
+if(checkNonce.IsError){ return checkNonce;}
+var checkServerNonce = writer.WriteBigInteger(ServerNonce);
+if(checkServerNonce.IsError){ return checkServerNonce;}
+writer.WriteInt32(G);
+
+			writer.WriteBytes(DhPrime);
+
+			writer.WriteBytes(GA);
+writer.WriteInt32(ServerTime);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Nonce = reader.Read<System.Numerics.BigInteger>(128);
-			ServerNonce = reader.Read<System.Numerics.BigInteger>(128);
-			G = reader.Read<int>();
-			DhPrime = reader.Read<byte[]>();
-			GA = reader.Read<byte[]>();
-			ServerTime = reader.Read<int>();
+			var trynonce = reader.ReadBigInteger(128);
+if(trynonce.IsError){
+return ReadResult<IObject>.Move(trynonce);
+}
+Nonce = trynonce.Value;
+			var tryserverNonce = reader.ReadBigInteger(128);
+if(tryserverNonce.IsError){
+return ReadResult<IObject>.Move(tryserverNonce);
+}
+ServerNonce = tryserverNonce.Value;
+			var tryg = reader.ReadInt32();
+if(tryg.IsError){
+return ReadResult<IObject>.Move(tryg);
+}
+G = tryg.Value;
+			var trydhPrime = reader.ReadBytes();
+if(trydhPrime.IsError){
+return ReadResult<IObject>.Move(trydhPrime);
+}
+DhPrime = trydhPrime.Value;
+			var trygA = reader.ReadBytes();
+if(trygA.IsError){
+return ReadResult<IObject>.Move(trygA);
+}
+GA = trygA.Value;
+			var tryserverTime = reader.ReadInt32();
+if(tryserverTime.IsError){
+return ReadResult<IObject>.Move(tryserverTime);
+}
+ServerTime = tryserverTime.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

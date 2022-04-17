@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -15,20 +17,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
         public static int ConstructorId { get => 2010127419; }
         
 [Newtonsoft.Json.JsonProperty("imported")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.ImportedContactBase> Imported { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.ImportedContactBase> Imported { get; set; }
 
 [Newtonsoft.Json.JsonProperty("popular_invites")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.PopularContactBase> PopularInvites { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.PopularContactBase> PopularInvites { get; set; }
 
 [Newtonsoft.Json.JsonProperty("retry_contacts")]
-		public sealed override IList<long> RetryContacts { get; set; }
+		public sealed override List<long> RetryContacts { get; set; }
 
 [Newtonsoft.Json.JsonProperty("users")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
 
         #nullable enable
- public ImportedContacts (IList<CatraProto.Client.TL.Schemas.CloudChats.ImportedContactBase> imported,IList<CatraProto.Client.TL.Schemas.CloudChats.PopularContactBase> popularInvites,IList<long> retryContacts,IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> users)
+ public ImportedContacts (List<CatraProto.Client.TL.Schemas.CloudChats.ImportedContactBase> imported,List<CatraProto.Client.TL.Schemas.CloudChats.PopularContactBase> popularInvites,List<long> retryContacts,List<CatraProto.Client.TL.Schemas.CloudChats.UserBase> users)
 {
  Imported = imported;
 PopularInvites = popularInvites;
@@ -46,22 +48,51 @@ Users = users;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Imported);
-			writer.Write(PopularInvites);
-			writer.Write(RetryContacts);
-			writer.Write(Users);
+writer.WriteInt32(ConstructorId);
+var checkimported = 			writer.WriteVector(Imported, false);
+if(checkimported.IsError){
+ return checkimported; 
+}
+var checkpopularInvites = 			writer.WriteVector(PopularInvites, false);
+if(checkpopularInvites.IsError){
+ return checkpopularInvites; 
+}
+
+			writer.WriteVector(RetryContacts, false);
+var checkusers = 			writer.WriteVector(Users, false);
+if(checkusers.IsError){
+ return checkusers; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Imported = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ImportedContactBase>();
-			PopularInvites = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PopularContactBase>();
-			RetryContacts = reader.ReadVector<long>();
-			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+			var tryimported = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ImportedContactBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryimported.IsError){
+return ReadResult<IObject>.Move(tryimported);
+}
+Imported = tryimported.Value;
+			var trypopularInvites = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PopularContactBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trypopularInvites.IsError){
+return ReadResult<IObject>.Move(trypopularInvites);
+}
+PopularInvites = trypopularInvites.Value;
+			var tryretryContacts = reader.ReadVector<long>(ParserTypes.Int64);
+if(tryretryContacts.IsError){
+return ReadResult<IObject>.Move(tryretryContacts);
+}
+RetryContacts = tryretryContacts.Value;
+			var tryusers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryusers.IsError){
+return ReadResult<IObject>.Move(tryusers);
+}
+Users = tryusers.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

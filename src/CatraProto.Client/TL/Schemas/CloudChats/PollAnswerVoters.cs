@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -54,23 +56,40 @@ Voters = voters;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Option);
-			writer.Write(Voters);
+
+			writer.WriteInt32(Flags);
+
+			writer.WriteBytes(Option);
+writer.WriteInt32(Voters);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Chosen = FlagsHelper.IsFlagSet(Flags, 0);
 			Correct = FlagsHelper.IsFlagSet(Flags, 1);
-			Option = reader.Read<byte[]>();
-			Voters = reader.Read<int>();
+			var tryoption = reader.ReadBytes();
+if(tryoption.IsError){
+return ReadResult<IObject>.Move(tryoption);
+}
+Option = tryoption.Value;
+			var tryvoters = reader.ReadInt32();
+if(tryvoters.IsError){
+return ReadResult<IObject>.Move(tryvoters);
+}
+Voters = tryvoters.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

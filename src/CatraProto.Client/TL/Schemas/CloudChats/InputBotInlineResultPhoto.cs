@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -46,22 +48,49 @@ SendMessage = sendMessage;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Id);
-			writer.Write(Type);
-			writer.Write(Photo);
-			writer.Write(SendMessage);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteString(Id);
+
+			writer.WriteString(Type);
+var checkphoto = 			writer.WriteObject(Photo);
+if(checkphoto.IsError){
+ return checkphoto; 
+}
+var checksendMessage = 			writer.WriteObject(SendMessage);
+if(checksendMessage.IsError){
+ return checksendMessage; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Id = reader.Read<string>();
-			Type = reader.Read<string>();
-			Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPhotoBase>();
-			SendMessage = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageBase>();
+			var tryid = reader.ReadString();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var trytype = reader.ReadString();
+if(trytype.IsError){
+return ReadResult<IObject>.Move(trytype);
+}
+Type = trytype.Value;
+			var tryphoto = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPhotoBase>();
+if(tryphoto.IsError){
+return ReadResult<IObject>.Move(tryphoto);
+}
+Photo = tryphoto.Value;
+			var trysendMessage = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageBase>();
+if(trysendMessage.IsError){
+return ReadResult<IObject>.Move(trysendMessage);
+}
+SendMessage = trysendMessage.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

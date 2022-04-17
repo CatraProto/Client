@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -50,12 +52,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("id")]
 		public sealed override int Id { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("from_id")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase FromId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("peer_id")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase PeerId { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("reply_to")]
 		public CatraProto.Client.TL.Schemas.CloudChats.MessageReplyHeaderBase ReplyTo { get; set; }
 
@@ -97,61 +101,109 @@ Action = action;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Id);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt32(Id);
 			if(FlagsHelper.IsFlagSet(Flags, 8))
 			{
-				writer.Write(FromId);
+var checkfromId = 				writer.WriteObject(FromId);
+if(checkfromId.IsError){
+ return checkfromId; 
+}
 			}
 
-			writer.Write(PeerId);
+var checkpeerId = 			writer.WriteObject(PeerId);
+if(checkpeerId.IsError){
+ return checkpeerId; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				writer.Write(ReplyTo);
+var checkreplyTo = 				writer.WriteObject(ReplyTo);
+if(checkreplyTo.IsError){
+ return checkreplyTo; 
+}
 			}
 
-			writer.Write(Date);
-			writer.Write(Action);
+writer.WriteInt32(Date);
+var checkaction = 			writer.WriteObject(Action);
+if(checkaction.IsError){
+ return checkaction; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 25))
 			{
-				writer.Write(TtlPeriod.Value);
+writer.WriteInt32(TtlPeriod.Value);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Out = FlagsHelper.IsFlagSet(Flags, 1);
 			Mentioned = FlagsHelper.IsFlagSet(Flags, 4);
 			MediaUnread = FlagsHelper.IsFlagSet(Flags, 5);
 			Silent = FlagsHelper.IsFlagSet(Flags, 13);
 			Post = FlagsHelper.IsFlagSet(Flags, 14);
 			Legacy = FlagsHelper.IsFlagSet(Flags, 19);
-			Id = reader.Read<int>();
+			var tryid = reader.ReadInt32();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 8))
 			{
-				FromId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+				var tryfromId = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+if(tryfromId.IsError){
+return ReadResult<IObject>.Move(tryfromId);
+}
+FromId = tryfromId.Value;
 			}
 
-			PeerId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+			var trypeerId = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+if(trypeerId.IsError){
+return ReadResult<IObject>.Move(trypeerId);
+}
+PeerId = trypeerId.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				ReplyTo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageReplyHeaderBase>();
+				var tryreplyTo = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.MessageReplyHeaderBase>();
+if(tryreplyTo.IsError){
+return ReadResult<IObject>.Move(tryreplyTo);
+}
+ReplyTo = tryreplyTo.Value;
 			}
 
-			Date = reader.Read<int>();
-			Action = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageActionBase>();
+			var trydate = reader.ReadInt32();
+if(trydate.IsError){
+return ReadResult<IObject>.Move(trydate);
+}
+Date = trydate.Value;
+			var tryaction = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.MessageActionBase>();
+if(tryaction.IsError){
+return ReadResult<IObject>.Move(tryaction);
+}
+Action = tryaction.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 25))
 			{
-				TtlPeriod = reader.Read<int>();
+				var tryttlPeriod = reader.ReadInt32();
+if(tryttlPeriod.IsError){
+return ReadResult<IObject>.Move(tryttlPeriod);
+}
+TtlPeriod = tryttlPeriod.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

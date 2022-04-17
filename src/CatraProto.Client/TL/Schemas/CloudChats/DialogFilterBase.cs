@@ -1,5 +1,7 @@
 using CatraProto.TL;
+using CatraProto.TL.Results;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL.Interfaces;
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -37,21 +39,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("title")]
 		public abstract string Title { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("emoticon")]
 		public abstract string Emoticon { get; set; }
 
 [Newtonsoft.Json.JsonProperty("pinned_peers")]
-		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> PinnedPeers { get; set; }
+		public abstract List<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> PinnedPeers { get; set; }
 
 [Newtonsoft.Json.JsonProperty("include_peers")]
-		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> IncludePeers { get; set; }
+		public abstract List<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> IncludePeers { get; set; }
 
 [Newtonsoft.Json.JsonProperty("exclude_peers")]
-		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> ExcludePeers { get; set; }
+		public abstract List<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> ExcludePeers { get; set; }
 
         public abstract void UpdateFlags();
-        public abstract void Deserialize(Reader reader);
-        public abstract void Serialize(Writer writer);
+        public abstract ReadResult<IObject> Deserialize(Reader reader);
+        public abstract WriteResult Serialize(Writer writer);
         public abstract int GetConstructorId();
     }
 }

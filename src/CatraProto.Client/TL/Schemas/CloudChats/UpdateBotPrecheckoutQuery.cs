@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -31,9 +33,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("payload")]
 		public byte[] Payload { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("info")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase Info { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("shipping_option_id")]
 		public string ShippingOptionId { get; set; }
 
@@ -66,47 +70,89 @@ TotalAmount = totalAmount;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(QueryId);
-			writer.Write(UserId);
-			writer.Write(Payload);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt64(QueryId);
+writer.WriteInt64(UserId);
+
+			writer.WriteBytes(Payload);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(Info);
+var checkinfo = 				writer.WriteObject(Info);
+if(checkinfo.IsError){
+ return checkinfo; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(ShippingOptionId);
+
+				writer.WriteString(ShippingOptionId);
 			}
 
-			writer.Write(Currency);
-			writer.Write(TotalAmount);
+
+			writer.WriteString(Currency);
+writer.WriteInt64(TotalAmount);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			QueryId = reader.Read<long>();
-			UserId = reader.Read<long>();
-			Payload = reader.Read<byte[]>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var tryqueryId = reader.ReadInt64();
+if(tryqueryId.IsError){
+return ReadResult<IObject>.Move(tryqueryId);
+}
+QueryId = tryqueryId.Value;
+			var tryuserId = reader.ReadInt64();
+if(tryuserId.IsError){
+return ReadResult<IObject>.Move(tryuserId);
+}
+UserId = tryuserId.Value;
+			var trypayload = reader.ReadBytes();
+if(trypayload.IsError){
+return ReadResult<IObject>.Move(trypayload);
+}
+Payload = trypayload.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Info = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase>();
+				var tryinfo = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase>();
+if(tryinfo.IsError){
+return ReadResult<IObject>.Move(tryinfo);
+}
+Info = tryinfo.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				ShippingOptionId = reader.Read<string>();
+				var tryshippingOptionId = reader.ReadString();
+if(tryshippingOptionId.IsError){
+return ReadResult<IObject>.Move(tryshippingOptionId);
+}
+ShippingOptionId = tryshippingOptionId.Value;
 			}
 
-			Currency = reader.Read<string>();
-			TotalAmount = reader.Read<long>();
+			var trycurrency = reader.ReadString();
+if(trycurrency.IsError){
+return ReadResult<IObject>.Move(trycurrency);
+}
+Currency = trycurrency.Value;
+			var trytotalAmount = reader.ReadInt64();
+if(trytotalAmount.IsError){
+return ReadResult<IObject>.Move(trytotalAmount);
+}
+TotalAmount = trytotalAmount.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

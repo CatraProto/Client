@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -66,6 +68,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("participants_count")]
 		public int ParticipantsCount { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("title")]
 		public string Title { get; set; }
 
@@ -121,47 +124,55 @@ Version = version;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Id);
-			writer.Write(AccessHash);
-			writer.Write(ParticipantsCount);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt64(Id);
+writer.WriteInt64(AccessHash);
+writer.WriteInt32(ParticipantsCount);
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				writer.Write(Title);
+
+				writer.WriteString(Title);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				writer.Write(StreamDcId.Value);
+writer.WriteInt32(StreamDcId.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				writer.Write(RecordStartDate.Value);
+writer.WriteInt32(RecordStartDate.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 7))
 			{
-				writer.Write(ScheduleDate.Value);
+writer.WriteInt32(ScheduleDate.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 10))
 			{
-				writer.Write(UnmutedVideoCount.Value);
+writer.WriteInt32(UnmutedVideoCount.Value);
 			}
 
-			writer.Write(UnmutedVideoLimit);
-			writer.Write(Version);
+writer.WriteInt32(UnmutedVideoLimit);
+writer.WriteInt32(Version);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			JoinMuted = FlagsHelper.IsFlagSet(Flags, 1);
 			CanChangeJoinMuted = FlagsHelper.IsFlagSet(Flags, 2);
 			JoinDateAsc = FlagsHelper.IsFlagSet(Flags, 6);
@@ -170,36 +181,77 @@ writer.Write(ConstructorId);
 			RecordVideoActive = FlagsHelper.IsFlagSet(Flags, 11);
 			RtmpStream = FlagsHelper.IsFlagSet(Flags, 12);
 			ListenersHidden = FlagsHelper.IsFlagSet(Flags, 13);
-			Id = reader.Read<long>();
-			AccessHash = reader.Read<long>();
-			ParticipantsCount = reader.Read<int>();
+			var tryid = reader.ReadInt64();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var tryaccessHash = reader.ReadInt64();
+if(tryaccessHash.IsError){
+return ReadResult<IObject>.Move(tryaccessHash);
+}
+AccessHash = tryaccessHash.Value;
+			var tryparticipantsCount = reader.ReadInt32();
+if(tryparticipantsCount.IsError){
+return ReadResult<IObject>.Move(tryparticipantsCount);
+}
+ParticipantsCount = tryparticipantsCount.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				Title = reader.Read<string>();
+				var trytitle = reader.ReadString();
+if(trytitle.IsError){
+return ReadResult<IObject>.Move(trytitle);
+}
+Title = trytitle.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				StreamDcId = reader.Read<int>();
+				var trystreamDcId = reader.ReadInt32();
+if(trystreamDcId.IsError){
+return ReadResult<IObject>.Move(trystreamDcId);
+}
+StreamDcId = trystreamDcId.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				RecordStartDate = reader.Read<int>();
+				var tryrecordStartDate = reader.ReadInt32();
+if(tryrecordStartDate.IsError){
+return ReadResult<IObject>.Move(tryrecordStartDate);
+}
+RecordStartDate = tryrecordStartDate.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 7))
 			{
-				ScheduleDate = reader.Read<int>();
+				var tryscheduleDate = reader.ReadInt32();
+if(tryscheduleDate.IsError){
+return ReadResult<IObject>.Move(tryscheduleDate);
+}
+ScheduleDate = tryscheduleDate.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 10))
 			{
-				UnmutedVideoCount = reader.Read<int>();
+				var tryunmutedVideoCount = reader.ReadInt32();
+if(tryunmutedVideoCount.IsError){
+return ReadResult<IObject>.Move(tryunmutedVideoCount);
+}
+UnmutedVideoCount = tryunmutedVideoCount.Value;
 			}
 
-			UnmutedVideoLimit = reader.Read<int>();
-			Version = reader.Read<int>();
+			var tryunmutedVideoLimit = reader.ReadInt32();
+if(tryunmutedVideoLimit.IsError){
+return ReadResult<IObject>.Move(tryunmutedVideoLimit);
+}
+UnmutedVideoLimit = tryunmutedVideoLimit.Value;
+			var tryversion = reader.ReadInt32();
+if(tryversion.IsError){
+return ReadResult<IObject>.Move(tryversion);
+}
+Version = tryversion.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

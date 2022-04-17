@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -15,7 +17,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get => 422972864; }
         
 [Newtonsoft.Json.JsonProperty("folder_peers")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.FolderPeerBase> FolderPeers { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.FolderPeerBase> FolderPeers { get; set; }
 
 [Newtonsoft.Json.JsonProperty("pts")]
 		public int Pts { get; set; }
@@ -25,7 +27,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
         #nullable enable
- public UpdateFolderPeers (IList<CatraProto.Client.TL.Schemas.CloudChats.FolderPeerBase> folderPeers,int pts,int ptsCount)
+ public UpdateFolderPeers (List<CatraProto.Client.TL.Schemas.CloudChats.FolderPeerBase> folderPeers,int pts,int ptsCount)
 {
  FolderPeers = folderPeers;
 Pts = pts;
@@ -42,20 +44,38 @@ PtsCount = ptsCount;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(FolderPeers);
-			writer.Write(Pts);
-			writer.Write(PtsCount);
+writer.WriteInt32(ConstructorId);
+var checkfolderPeers = 			writer.WriteVector(FolderPeers, false);
+if(checkfolderPeers.IsError){
+ return checkfolderPeers; 
+}
+writer.WriteInt32(Pts);
+writer.WriteInt32(PtsCount);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			FolderPeers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.FolderPeerBase>();
-			Pts = reader.Read<int>();
-			PtsCount = reader.Read<int>();
+			var tryfolderPeers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.FolderPeerBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryfolderPeers.IsError){
+return ReadResult<IObject>.Move(tryfolderPeers);
+}
+FolderPeers = tryfolderPeers.Value;
+			var trypts = reader.ReadInt32();
+if(trypts.IsError){
+return ReadResult<IObject>.Move(trypts);
+}
+Pts = trypts.Value;
+			var tryptsCount = reader.ReadInt32();
+if(tryptsCount.IsError){
+return ReadResult<IObject>.Move(tryptsCount);
+}
+PtsCount = tryptsCount.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

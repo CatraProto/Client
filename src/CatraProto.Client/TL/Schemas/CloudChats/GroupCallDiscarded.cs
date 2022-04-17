@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -42,20 +44,35 @@ Duration = duration;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Id);
-			writer.Write(AccessHash);
-			writer.Write(Duration);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(Id);
+writer.WriteInt64(AccessHash);
+writer.WriteInt32(Duration);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Id = reader.Read<long>();
-			AccessHash = reader.Read<long>();
-			Duration = reader.Read<int>();
+			var tryid = reader.ReadInt64();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var tryaccessHash = reader.ReadInt64();
+if(tryaccessHash.IsError){
+return ReadResult<IObject>.Move(tryaccessHash);
+}
+AccessHash = tryaccessHash.Value;
+			var tryduration = reader.ReadInt32();
+if(tryduration.IsError){
+return ReadResult<IObject>.Move(tryduration);
+}
+Duration = tryduration.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

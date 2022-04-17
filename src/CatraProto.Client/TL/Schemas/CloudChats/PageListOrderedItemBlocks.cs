@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -18,11 +20,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public sealed override string Num { get; set; }
 
 [Newtonsoft.Json.JsonProperty("blocks")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase> Blocks { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase> Blocks { get; set; }
 
 
         #nullable enable
- public PageListOrderedItemBlocks (string num,IList<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase> blocks)
+ public PageListOrderedItemBlocks (string num,List<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase> blocks)
 {
  Num = num;
 Blocks = blocks;
@@ -38,18 +40,33 @@ Blocks = blocks;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Num);
-			writer.Write(Blocks);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteString(Num);
+var checkblocks = 			writer.WriteVector(Blocks, false);
+if(checkblocks.IsError){
+ return checkblocks; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Num = reader.Read<string>();
-			Blocks = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase>();
+			var trynum = reader.ReadString();
+if(trynum.IsError){
+return ReadResult<IObject>.Move(trynum);
+}
+Num = trynum.Value;
+			var tryblocks = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryblocks.IsError){
+return ReadResult<IObject>.Move(tryblocks);
+}
+Blocks = tryblocks.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -31,9 +33,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("query")]
 		public string Query { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("geo")]
 		public CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase Geo { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("peer_type")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InlineQueryPeerTypeBase PeerType { get; set; }
 
@@ -62,45 +66,85 @@ Offset = offset;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(QueryId);
-			writer.Write(UserId);
-			writer.Write(Query);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt64(QueryId);
+writer.WriteInt64(UserId);
+
+			writer.WriteString(Query);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(Geo);
+var checkgeo = 				writer.WriteObject(Geo);
+if(checkgeo.IsError){
+ return checkgeo; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(PeerType);
+var checkpeerType = 				writer.WriteObject(PeerType);
+if(checkpeerType.IsError){
+ return checkpeerType; 
+}
 			}
 
-			writer.Write(Offset);
+
+			writer.WriteString(Offset);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			QueryId = reader.Read<long>();
-			UserId = reader.Read<long>();
-			Query = reader.Read<string>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var tryqueryId = reader.ReadInt64();
+if(tryqueryId.IsError){
+return ReadResult<IObject>.Move(tryqueryId);
+}
+QueryId = tryqueryId.Value;
+			var tryuserId = reader.ReadInt64();
+if(tryuserId.IsError){
+return ReadResult<IObject>.Move(tryuserId);
+}
+UserId = tryuserId.Value;
+			var tryquery = reader.ReadString();
+if(tryquery.IsError){
+return ReadResult<IObject>.Move(tryquery);
+}
+Query = tryquery.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Geo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase>();
+				var trygeo = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase>();
+if(trygeo.IsError){
+return ReadResult<IObject>.Move(trygeo);
+}
+Geo = trygeo.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				PeerType = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InlineQueryPeerTypeBase>();
+				var trypeerType = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InlineQueryPeerTypeBase>();
+if(trypeerType.IsError){
+return ReadResult<IObject>.Move(trypeerType);
+}
+PeerType = trypeerType.Value;
 			}
 
-			Offset = reader.Read<string>();
+			var tryoffset = reader.ReadString();
+if(tryoffset.IsError){
+return ReadResult<IObject>.Move(tryoffset);
+}
+Offset = tryoffset.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

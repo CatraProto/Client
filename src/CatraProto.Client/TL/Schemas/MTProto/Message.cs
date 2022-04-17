@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -46,21 +48,43 @@ Body = body;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-			writer.Write(MsgId);
-			writer.Write(Seqno);
-			writer.Write(Bytes);
-			writer.Write(Body);
+writer.WriteInt64(MsgId);
+writer.WriteInt32(Seqno);
+writer.WriteInt32(Bytes);
+var checkbody = 			writer.WriteObject(Body);
+if(checkbody.IsError){
+ return checkbody; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			MsgId = reader.Read<long>();
-			Seqno = reader.Read<int>();
-			Bytes = reader.Read<int>();
-			Body = reader.Read<IObject>();
+			var trymsgId = reader.ReadInt64();
+if(trymsgId.IsError){
+return ReadResult<IObject>.Move(trymsgId);
+}
+MsgId = trymsgId.Value;
+			var tryseqno = reader.ReadInt32();
+if(tryseqno.IsError){
+return ReadResult<IObject>.Move(tryseqno);
+}
+Seqno = tryseqno.Value;
+			var trybytes = reader.ReadInt32();
+if(trybytes.IsError){
+return ReadResult<IObject>.Move(trybytes);
+}
+Bytes = trybytes.Value;
+			var trybody = reader.ReadObject<IObject>();
+if(trybody.IsError){
+return ReadResult<IObject>.Move(trybody);
+}
+Body = trybody.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

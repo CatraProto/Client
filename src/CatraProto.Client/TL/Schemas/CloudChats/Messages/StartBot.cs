@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int ConstructorId { get => -421563528; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("bot")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase Bot { get; set; }
@@ -54,22 +54,48 @@ StartParam = startParam;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Bot);
-			writer.Write(Peer);
-			writer.Write(RandomId);
-			writer.Write(StartParam);
+writer.WriteInt32(ConstructorId);
+var checkbot = 			writer.WriteObject(Bot);
+if(checkbot.IsError){
+ return checkbot; 
+}
+var checkpeer = 			writer.WriteObject(Peer);
+if(checkpeer.IsError){
+ return checkpeer; 
+}
+writer.WriteInt64(RandomId);
+
+			writer.WriteString(StartParam);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Bot = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
-			RandomId = reader.Read<long>();
-			StartParam = reader.Read<string>();
+			var trybot = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
+if(trybot.IsError){
+return ReadResult<IObject>.Move(trybot);
+}
+Bot = trybot.Value;
+			var trypeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+if(trypeer.IsError){
+return ReadResult<IObject>.Move(trypeer);
+}
+Peer = trypeer.Value;
+			var tryrandomId = reader.ReadInt64();
+if(tryrandomId.IsError){
+return ReadResult<IObject>.Move(tryrandomId);
+}
+RandomId = tryrandomId.Value;
+			var trystartParam = reader.ReadString();
+if(trystartParam.IsError){
+return ReadResult<IObject>.Move(trystartParam);
+}
+StartParam = trystartParam.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

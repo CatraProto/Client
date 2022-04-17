@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Bots
         public static int ConstructorId { get => -1440257555; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("custom_method")]
 		public string CustomMethod { get; set; }
@@ -46,18 +46,33 @@ Params = pparams;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(CustomMethod);
-			writer.Write(Params);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteString(CustomMethod);
+var checkpparams = 			writer.WriteObject(Params);
+if(checkpparams.IsError){
+ return checkpparams; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			CustomMethod = reader.Read<string>();
-			Params = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
+			var trycustomMethod = reader.ReadString();
+if(trycustomMethod.IsError){
+return ReadResult<IObject>.Move(trycustomMethod);
+}
+CustomMethod = trycustomMethod.Value;
+			var trypparams = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
+if(trypparams.IsError){
+return ReadResult<IObject>.Move(trypparams);
+}
+Params = trypparams.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

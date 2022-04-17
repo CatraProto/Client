@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,32 @@ TermsOfService = termsOfService;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Expires);
-			writer.Write(TermsOfService);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt32(Expires);
+var checktermsOfService = 			writer.WriteObject(TermsOfService);
+if(checktermsOfService.IsError){
+ return checktermsOfService; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Expires = reader.Read<int>();
-			TermsOfService = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.Help.TermsOfServiceBase>();
+			var tryexpires = reader.ReadInt32();
+if(tryexpires.IsError){
+return ReadResult<IObject>.Move(tryexpires);
+}
+Expires = tryexpires.Value;
+			var trytermsOfService = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.Help.TermsOfServiceBase>();
+if(trytermsOfService.IsError){
+return ReadResult<IObject>.Move(trytermsOfService);
+}
+TermsOfService = trytermsOfService.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

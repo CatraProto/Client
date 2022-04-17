@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -21,11 +23,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public long BotId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("commands")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.BotCommandBase> Commands { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.BotCommandBase> Commands { get; set; }
 
 
         #nullable enable
- public UpdateBotCommands (CatraProto.Client.TL.Schemas.CloudChats.PeerBase peer,long botId,IList<CatraProto.Client.TL.Schemas.CloudChats.BotCommandBase> commands)
+ public UpdateBotCommands (CatraProto.Client.TL.Schemas.CloudChats.PeerBase peer,long botId,List<CatraProto.Client.TL.Schemas.CloudChats.BotCommandBase> commands)
 {
  Peer = peer;
 BotId = botId;
@@ -42,20 +44,41 @@ Commands = commands;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Peer);
-			writer.Write(BotId);
-			writer.Write(Commands);
+writer.WriteInt32(ConstructorId);
+var checkpeer = 			writer.WriteObject(Peer);
+if(checkpeer.IsError){
+ return checkpeer; 
+}
+writer.WriteInt64(BotId);
+var checkcommands = 			writer.WriteVector(Commands, false);
+if(checkcommands.IsError){
+ return checkcommands; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
-			BotId = reader.Read<long>();
-			Commands = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.BotCommandBase>();
+			var trypeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+if(trypeer.IsError){
+return ReadResult<IObject>.Move(trypeer);
+}
+Peer = trypeer.Value;
+			var trybotId = reader.ReadInt64();
+if(trybotId.IsError){
+return ReadResult<IObject>.Move(trybotId);
+}
+BotId = trybotId.Value;
+			var trycommands = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.BotCommandBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trycommands.IsError){
+return ReadResult<IObject>.Move(trycommands);
+}
+Commands = trycommands.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

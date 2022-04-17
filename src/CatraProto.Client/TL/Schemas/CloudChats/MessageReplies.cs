@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -34,8 +36,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("replies_pts")]
 		public sealed override int RepliesPts { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("recent_repliers")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.PeerBase> RecentRepliers { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.PeerBase> RecentRepliers { get; set; }
 
 [Newtonsoft.Json.JsonProperty("channel_id")]
 		public sealed override long? ChannelId { get; set; }
@@ -69,62 +72,97 @@ RepliesPts = repliesPts;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Replies);
-			writer.Write(RepliesPts);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt32(Replies);
+writer.WriteInt32(RepliesPts);
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(RecentRepliers);
+var checkrecentRepliers = 				writer.WriteVector(RecentRepliers, false);
+if(checkrecentRepliers.IsError){
+ return checkrecentRepliers; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(ChannelId.Value);
+writer.WriteInt64(ChannelId.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(MaxId.Value);
+writer.WriteInt32(MaxId.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				writer.Write(ReadMaxId.Value);
+writer.WriteInt32(ReadMaxId.Value);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Comments = FlagsHelper.IsFlagSet(Flags, 0);
-			Replies = reader.Read<int>();
-			RepliesPts = reader.Read<int>();
+			var tryreplies = reader.ReadInt32();
+if(tryreplies.IsError){
+return ReadResult<IObject>.Move(tryreplies);
+}
+Replies = tryreplies.Value;
+			var tryrepliesPts = reader.ReadInt32();
+if(tryrepliesPts.IsError){
+return ReadResult<IObject>.Move(tryrepliesPts);
+}
+RepliesPts = tryrepliesPts.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				RecentRepliers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+				var tryrecentRepliers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryrecentRepliers.IsError){
+return ReadResult<IObject>.Move(tryrecentRepliers);
+}
+RecentRepliers = tryrecentRepliers.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				ChannelId = reader.Read<long>();
+				var trychannelId = reader.ReadInt64();
+if(trychannelId.IsError){
+return ReadResult<IObject>.Move(trychannelId);
+}
+ChannelId = trychannelId.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				MaxId = reader.Read<int>();
+				var trymaxId = reader.ReadInt32();
+if(trymaxId.IsError){
+return ReadResult<IObject>.Move(trymaxId);
+}
+MaxId = trymaxId.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				ReadMaxId = reader.Read<int>();
+				var tryreadMaxId = reader.ReadInt32();
+if(tryreadMaxId.IsError){
+return ReadResult<IObject>.Move(tryreadMaxId);
+}
+ReadMaxId = tryreadMaxId.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

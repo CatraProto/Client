@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -28,6 +30,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("caption")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase Caption { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("url")]
 		public string Url { get; set; }
 
@@ -54,41 +57,69 @@ Caption = caption;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(PhotoId);
-			writer.Write(Caption);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt64(PhotoId);
+var checkcaption = 			writer.WriteObject(Caption);
+if(checkcaption.IsError){
+ return checkcaption; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(Url);
+
+				writer.WriteString(Url);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(WebpageId.Value);
+writer.WriteInt64(WebpageId.Value);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			PhotoId = reader.Read<long>();
-			Caption = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var tryphotoId = reader.ReadInt64();
+if(tryphotoId.IsError){
+return ReadResult<IObject>.Move(tryphotoId);
+}
+PhotoId = tryphotoId.Value;
+			var trycaption = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase>();
+if(trycaption.IsError){
+return ReadResult<IObject>.Move(trycaption);
+}
+Caption = trycaption.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Url = reader.Read<string>();
+				var tryurl = reader.ReadString();
+if(tryurl.IsError){
+return ReadResult<IObject>.Move(tryurl);
+}
+Url = tryurl.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				WebpageId = reader.Read<long>();
+				var trywebpageId = reader.ReadInt64();
+if(trywebpageId.IsError){
+return ReadResult<IObject>.Move(trywebpageId);
+}
+WebpageId = trywebpageId.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,35 @@ NewMessage = newMessage;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(PrevMessage);
-			writer.Write(NewMessage);
+writer.WriteInt32(ConstructorId);
+var checkprevMessage = 			writer.WriteObject(PrevMessage);
+if(checkprevMessage.IsError){
+ return checkprevMessage; 
+}
+var checknewMessage = 			writer.WriteObject(NewMessage);
+if(checknewMessage.IsError){
+ return checknewMessage; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			PrevMessage = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageBase>();
-			NewMessage = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageBase>();
+			var tryprevMessage = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.MessageBase>();
+if(tryprevMessage.IsError){
+return ReadResult<IObject>.Move(tryprevMessage);
+}
+PrevMessage = tryprevMessage.Value;
+			var trynewMessage = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.MessageBase>();
+if(trynewMessage.IsError){
+return ReadResult<IObject>.Move(trynewMessage);
+}
+NewMessage = trynewMessage.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

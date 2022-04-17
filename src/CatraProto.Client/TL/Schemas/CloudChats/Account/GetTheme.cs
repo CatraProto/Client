@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public static int ConstructorId { get => -1919060949; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.ThemeBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("format")]
 		public string Format { get; set; }
@@ -50,20 +50,39 @@ DocumentId = documentId;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Format);
-			writer.Write(Theme);
-			writer.Write(DocumentId);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteString(Format);
+var checktheme = 			writer.WriteObject(Theme);
+if(checktheme.IsError){
+ return checktheme; 
+}
+writer.WriteInt64(DocumentId);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Format = reader.Read<string>();
-			Theme = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputThemeBase>();
-			DocumentId = reader.Read<long>();
+			var tryformat = reader.ReadString();
+if(tryformat.IsError){
+return ReadResult<IObject>.Move(tryformat);
+}
+Format = tryformat.Value;
+			var trytheme = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputThemeBase>();
+if(trytheme.IsError){
+return ReadResult<IObject>.Move(trytheme);
+}
+Theme = trytheme.Value;
+			var trydocumentId = reader.ReadInt64();
+if(trydocumentId.IsError){
+return ReadResult<IObject>.Move(trydocumentId);
+}
+DocumentId = trydocumentId.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

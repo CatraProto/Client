@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -20,10 +23,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
         public static int ConstructorId { get => 923364464; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -31,6 +31,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 [Newtonsoft.Json.JsonProperty("code")]
 		public string Code { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("new_settings")]
 		public CatraProto.Client.TL.Schemas.CloudChats.Account.PasswordInputSettingsBase NewSettings { get; set; }
 
@@ -53,29 +54,49 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Code);
+
+			writer.WriteInt32(Flags);
+
+			writer.WriteString(Code);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(NewSettings);
+var checknewSettings = 				writer.WriteObject(NewSettings);
+if(checknewSettings.IsError){
+ return checknewSettings; 
+}
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			Code = reader.Read<string>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var trycode = reader.ReadString();
+if(trycode.IsError){
+return ReadResult<IObject>.Move(trycode);
+}
+Code = trycode.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				NewSettings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.Account.PasswordInputSettingsBase>();
+				var trynewSettings = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.Account.PasswordInputSettingsBase>();
+if(trynewSettings.IsError){
+return ReadResult<IObject>.Move(trynewSettings);
+}
+NewSettings = trynewSettings.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 

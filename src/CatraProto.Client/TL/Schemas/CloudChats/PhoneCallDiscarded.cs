@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -37,6 +39,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("id")]
 		public sealed override long Id { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("reason")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PhoneCallDiscardReasonBase Reason { get; set; }
 
@@ -65,42 +68,65 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Id);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt64(Id);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(Reason);
+var checkreason = 				writer.WriteObject(Reason);
+if(checkreason.IsError){
+ return checkreason; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(Duration.Value);
+writer.WriteInt32(Duration.Value);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			NeedRating = FlagsHelper.IsFlagSet(Flags, 2);
 			NeedDebug = FlagsHelper.IsFlagSet(Flags, 3);
 			Video = FlagsHelper.IsFlagSet(Flags, 6);
-			Id = reader.Read<long>();
+			var tryid = reader.ReadInt64();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Reason = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhoneCallDiscardReasonBase>();
+				var tryreason = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PhoneCallDiscardReasonBase>();
+if(tryreason.IsError){
+return ReadResult<IObject>.Move(tryreason);
+}
+Reason = tryreason.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Duration = reader.Read<int>();
+				var tryduration = reader.ReadInt32();
+if(tryduration.IsError){
+return ReadResult<IObject>.Move(tryduration);
+}
+Duration = tryduration.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

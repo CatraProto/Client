@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -30,9 +32,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("duration")]
 		public int Duration { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("title")]
 		public string Title { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("performer")]
 		public string Performer { get; set; }
 
@@ -60,50 +64,77 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Duration);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt32(Duration);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(Title);
+
+				writer.WriteString(Title);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(Performer);
+
+				writer.WriteString(Performer);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(Waveform);
+
+				writer.WriteBytes(Waveform);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Voice = FlagsHelper.IsFlagSet(Flags, 10);
-			Duration = reader.Read<int>();
+			var tryduration = reader.ReadInt32();
+if(tryduration.IsError){
+return ReadResult<IObject>.Move(tryduration);
+}
+Duration = tryduration.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Title = reader.Read<string>();
+				var trytitle = reader.ReadString();
+if(trytitle.IsError){
+return ReadResult<IObject>.Move(trytitle);
+}
+Title = trytitle.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Performer = reader.Read<string>();
+				var tryperformer = reader.ReadString();
+if(tryperformer.IsError){
+return ReadResult<IObject>.Move(tryperformer);
+}
+Performer = tryperformer.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				Waveform = reader.Read<byte[]>();
+				var trywaveform = reader.ReadBytes();
+if(trywaveform.IsError){
+return ReadResult<IObject>.Move(trywaveform);
+}
+Waveform = trywaveform.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

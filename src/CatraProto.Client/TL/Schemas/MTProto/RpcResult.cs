@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -18,11 +20,11 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 		public sealed override long ReqMsgId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("result")]
-		public sealed override IObject Result { get; set; }
+		public sealed override object Result { get; set; }
 
 
         #nullable enable
- public RpcResult (long reqMsgId,IObject result)
+ public RpcResult (long reqMsgId,object result)
 {
  ReqMsgId = reqMsgId;
 Result = result;
@@ -38,18 +40,32 @@ Result = result;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(ReqMsgId);
-			writer.Write(Result);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(ReqMsgId);
+var checkresult = writer.Write(Result);
+if(checkresult.IsError){
+ return checkresult; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			ReqMsgId = reader.Read<long>();
-			Result = reader.Read<IObject>();
+			var tryreqMsgId = reader.ReadInt64();
+if(tryreqMsgId.IsError){
+return ReadResult<IObject>.Move(tryreqMsgId);
+}
+ReqMsgId = tryreqMsgId.Value;
+var tryresult = reader.ReadObject();
+if(tryresult.IsError){
+return ReadResult<IObject>.Move(tryresult);
+}
+Result = tryresult.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

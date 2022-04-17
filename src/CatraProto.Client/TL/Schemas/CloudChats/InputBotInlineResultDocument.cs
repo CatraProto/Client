@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -28,9 +30,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("type")]
 		public string Type { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("title")]
 		public string Title { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("description")]
 		public string Description { get; set; }
 
@@ -62,45 +66,87 @@ SendMessage = sendMessage;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Id);
-			writer.Write(Type);
+
+			writer.WriteInt32(Flags);
+
+			writer.WriteString(Id);
+
+			writer.WriteString(Type);
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(Title);
+
+				writer.WriteString(Title);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(Description);
+
+				writer.WriteString(Description);
 			}
 
-			writer.Write(Document);
-			writer.Write(SendMessage);
+var checkdocument = 			writer.WriteObject(Document);
+if(checkdocument.IsError){
+ return checkdocument; 
+}
+var checksendMessage = 			writer.WriteObject(SendMessage);
+if(checksendMessage.IsError){
+ return checksendMessage; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			Id = reader.Read<string>();
-			Type = reader.Read<string>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var tryid = reader.ReadString();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var trytype = reader.ReadString();
+if(trytype.IsError){
+return ReadResult<IObject>.Move(trytype);
+}
+Type = trytype.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Title = reader.Read<string>();
+				var trytitle = reader.ReadString();
+if(trytitle.IsError){
+return ReadResult<IObject>.Move(trytitle);
+}
+Title = trytitle.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				Description = reader.Read<string>();
+				var trydescription = reader.ReadString();
+if(trydescription.IsError){
+return ReadResult<IObject>.Move(trydescription);
+}
+Description = trydescription.Value;
 			}
 
-			Document = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
-			SendMessage = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageBase>();
+			var trydocument = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
+if(trydocument.IsError){
+return ReadResult<IObject>.Move(trydocument);
+}
+Document = trydocument.Value;
+			var trysendMessage = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageBase>();
+if(trysendMessage.IsError){
+return ReadResult<IObject>.Move(trysendMessage);
+}
+SendMessage = trysendMessage.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

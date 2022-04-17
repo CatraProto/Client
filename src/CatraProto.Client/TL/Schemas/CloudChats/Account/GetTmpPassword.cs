@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public static int ConstructorId { get => 1151208273; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Account.TmpPasswordBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("password")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputCheckPasswordSRPBase Password { get; set; }
@@ -46,18 +46,32 @@ Period = period;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Password);
-			writer.Write(Period);
+writer.WriteInt32(ConstructorId);
+var checkpassword = 			writer.WriteObject(Password);
+if(checkpassword.IsError){
+ return checkpassword; 
+}
+writer.WriteInt32(Period);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Password = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputCheckPasswordSRPBase>();
-			Period = reader.Read<int>();
+			var trypassword = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputCheckPasswordSRPBase>();
+if(trypassword.IsError){
+return ReadResult<IObject>.Move(trypassword);
+}
+Password = trypassword.Value;
+			var tryperiod = reader.ReadInt32();
+if(tryperiod.IsError){
+return ReadResult<IObject>.Move(tryperiod);
+}
+Period = tryperiod.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
         public static int ConstructorId { get => -1835453025; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.HttpWaitBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("max_delay")]
 		public int MaxDelay { get; set; }
@@ -50,20 +50,35 @@ MaxWait = maxWait;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(MaxDelay);
-			writer.Write(WaitAfter);
-			writer.Write(MaxWait);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt32(MaxDelay);
+writer.WriteInt32(WaitAfter);
+writer.WriteInt32(MaxWait);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			MaxDelay = reader.Read<int>();
-			WaitAfter = reader.Read<int>();
-			MaxWait = reader.Read<int>();
+			var trymaxDelay = reader.ReadInt32();
+if(trymaxDelay.IsError){
+return ReadResult<IObject>.Move(trymaxDelay);
+}
+MaxDelay = trymaxDelay.Value;
+			var trywaitAfter = reader.ReadInt32();
+if(trywaitAfter.IsError){
+return ReadResult<IObject>.Move(trywaitAfter);
+}
+WaitAfter = trywaitAfter.Value;
+			var trymaxWait = reader.ReadInt32();
+if(trymaxWait.IsError){
+return ReadResult<IObject>.Move(trymaxWait);
+}
+MaxWait = trymaxWait.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

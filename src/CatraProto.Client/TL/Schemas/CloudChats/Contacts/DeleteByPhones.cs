@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,17 +19,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
         public static int ConstructorId { get => 269745566; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
 
 [Newtonsoft.Json.JsonProperty("phones")]
-		public IList<string> Phones { get; set; }
+		public List<string> Phones { get; set; }
 
         
         #nullable enable
- public DeleteByPhones (IList<string> phones)
+ public DeleteByPhones (List<string> phones)
 {
  Phones = phones;
  
@@ -42,16 +42,24 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Phones);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteVector(Phones, false);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Phones = reader.ReadVector<string>();
+			var tryphones = reader.ReadVector<string>(ParserTypes.String, nakedVector: false, nakedObjects: false);
+if(tryphones.IsError){
+return ReadResult<IObject>.Move(tryphones);
+}
+Phones = tryphones.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

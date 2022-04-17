@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,35 @@ NewParticipant = newParticipant;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(PrevParticipant);
-			writer.Write(NewParticipant);
+writer.WriteInt32(ConstructorId);
+var checkprevParticipant = 			writer.WriteObject(PrevParticipant);
+if(checkprevParticipant.IsError){
+ return checkprevParticipant; 
+}
+var checknewParticipant = 			writer.WriteObject(NewParticipant);
+if(checknewParticipant.IsError){
+ return checknewParticipant; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			PrevParticipant = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantBase>();
-			NewParticipant = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantBase>();
+			var tryprevParticipant = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantBase>();
+if(tryprevParticipant.IsError){
+return ReadResult<IObject>.Move(tryprevParticipant);
+}
+PrevParticipant = tryprevParticipant.Value;
+			var trynewParticipant = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantBase>();
+if(trynewParticipant.IsError){
+return ReadResult<IObject>.Move(trynewParticipant);
+}
+NewParticipant = trynewParticipant.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

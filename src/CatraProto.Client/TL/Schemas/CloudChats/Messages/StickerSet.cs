@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -18,14 +20,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public CatraProto.Client.TL.Schemas.CloudChats.StickerSetBase Set { get; set; }
 
 [Newtonsoft.Json.JsonProperty("packs")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.StickerPackBase> Packs { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.StickerPackBase> Packs { get; set; }
 
 [Newtonsoft.Json.JsonProperty("documents")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase> Documents { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase> Documents { get; set; }
 
 
         #nullable enable
- public StickerSet (CatraProto.Client.TL.Schemas.CloudChats.StickerSetBase set,IList<CatraProto.Client.TL.Schemas.CloudChats.StickerPackBase> packs,IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase> documents)
+ public StickerSet (CatraProto.Client.TL.Schemas.CloudChats.StickerSetBase set,List<CatraProto.Client.TL.Schemas.CloudChats.StickerPackBase> packs,List<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase> documents)
 {
  Set = set;
 Packs = packs;
@@ -42,20 +44,44 @@ Documents = documents;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Set);
-			writer.Write(Packs);
-			writer.Write(Documents);
+writer.WriteInt32(ConstructorId);
+var checkset = 			writer.WriteObject(Set);
+if(checkset.IsError){
+ return checkset; 
+}
+var checkpacks = 			writer.WriteVector(Packs, false);
+if(checkpacks.IsError){
+ return checkpacks; 
+}
+var checkdocuments = 			writer.WriteVector(Documents, false);
+if(checkdocuments.IsError){
+ return checkdocuments; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Set = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StickerSetBase>();
-			Packs = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.StickerPackBase>();
-			Documents = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
+			var tryset = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.StickerSetBase>();
+if(tryset.IsError){
+return ReadResult<IObject>.Move(tryset);
+}
+Set = tryset.Value;
+			var trypacks = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.StickerPackBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trypacks.IsError){
+return ReadResult<IObject>.Move(trypacks);
+}
+Packs = trypacks.Value;
+			var trydocuments = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trydocuments.IsError){
+return ReadResult<IObject>.Move(trydocuments);
+}
+Documents = trydocuments.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

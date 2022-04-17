@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,20 +19,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Users
         public static int ConstructorId { get => -1865902923; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
 
 [Newtonsoft.Json.JsonProperty("id")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase Id { get; set; }
 
 [Newtonsoft.Json.JsonProperty("errors")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase> Errors { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase> Errors { get; set; }
 
         
         #nullable enable
- public SetSecureValueErrors (CatraProto.Client.TL.Schemas.CloudChats.InputUserBase id,IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase> errors)
+ public SetSecureValueErrors (CatraProto.Client.TL.Schemas.CloudChats.InputUserBase id,List<CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase> errors)
 {
  Id = id;
 Errors = errors;
@@ -46,18 +46,35 @@ Errors = errors;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Id);
-			writer.Write(Errors);
+writer.WriteInt32(ConstructorId);
+var checkid = 			writer.WriteObject(Id);
+if(checkid.IsError){
+ return checkid; 
+}
+var checkerrors = 			writer.WriteVector(Errors, false);
+if(checkerrors.IsError){
+ return checkerrors; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Id = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
-			Errors = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase>();
+			var tryid = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var tryerrors = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryerrors.IsError){
+return ReadResult<IObject>.Move(tryerrors);
+}
+Errors = tryerrors.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

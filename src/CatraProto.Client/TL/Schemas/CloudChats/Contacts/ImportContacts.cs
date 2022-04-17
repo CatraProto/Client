@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,17 +19,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
         public static int ConstructorId { get => 746589157; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Contacts.ImportedContactsBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("contacts")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputContactBase> Contacts { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.InputContactBase> Contacts { get; set; }
 
         
         #nullable enable
- public ImportContacts (IList<CatraProto.Client.TL.Schemas.CloudChats.InputContactBase> contacts)
+ public ImportContacts (List<CatraProto.Client.TL.Schemas.CloudChats.InputContactBase> contacts)
 {
  Contacts = contacts;
  
@@ -42,16 +42,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Contacts);
+writer.WriteInt32(ConstructorId);
+var checkcontacts = 			writer.WriteVector(Contacts, false);
+if(checkcontacts.IsError){
+ return checkcontacts; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Contacts = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputContactBase>();
+			var trycontacts = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputContactBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trycontacts.IsError){
+return ReadResult<IObject>.Move(trycontacts);
+}
+Contacts = trycontacts.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

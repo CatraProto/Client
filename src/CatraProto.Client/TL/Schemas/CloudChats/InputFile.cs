@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -46,22 +48,43 @@ Md5Checksum = md5Checksum;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Id);
-			writer.Write(Parts);
-			writer.Write(Name);
-			writer.Write(Md5Checksum);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(Id);
+writer.WriteInt32(Parts);
+
+			writer.WriteString(Name);
+
+			writer.WriteString(Md5Checksum);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Id = reader.Read<long>();
-			Parts = reader.Read<int>();
-			Name = reader.Read<string>();
-			Md5Checksum = reader.Read<string>();
+			var tryid = reader.ReadInt64();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var tryparts = reader.ReadInt32();
+if(tryparts.IsError){
+return ReadResult<IObject>.Move(tryparts);
+}
+Parts = tryparts.Value;
+			var tryname = reader.ReadString();
+if(tryname.IsError){
+return ReadResult<IObject>.Move(tryname);
+}
+Name = tryname.Value;
+			var trymd5Checksum = reader.ReadString();
+if(trymd5Checksum.IsError){
+return ReadResult<IObject>.Move(trymd5Checksum);
+}
+Md5Checksum = trymd5Checksum.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

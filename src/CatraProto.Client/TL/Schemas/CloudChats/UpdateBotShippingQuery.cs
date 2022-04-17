@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -46,22 +48,45 @@ ShippingAddress = shippingAddress;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(QueryId);
-			writer.Write(UserId);
-			writer.Write(Payload);
-			writer.Write(ShippingAddress);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(QueryId);
+writer.WriteInt64(UserId);
+
+			writer.WriteBytes(Payload);
+var checkshippingAddress = 			writer.WriteObject(ShippingAddress);
+if(checkshippingAddress.IsError){
+ return checkshippingAddress; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			QueryId = reader.Read<long>();
-			UserId = reader.Read<long>();
-			Payload = reader.Read<byte[]>();
-			ShippingAddress = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PostAddressBase>();
+			var tryqueryId = reader.ReadInt64();
+if(tryqueryId.IsError){
+return ReadResult<IObject>.Move(tryqueryId);
+}
+QueryId = tryqueryId.Value;
+			var tryuserId = reader.ReadInt64();
+if(tryuserId.IsError){
+return ReadResult<IObject>.Move(tryuserId);
+}
+UserId = tryuserId.Value;
+			var trypayload = reader.ReadBytes();
+if(trypayload.IsError){
+return ReadResult<IObject>.Move(trypayload);
+}
+Payload = trypayload.Value;
+			var tryshippingAddress = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PostAddressBase>();
+if(tryshippingAddress.IsError){
+return ReadResult<IObject>.Move(tryshippingAddress);
+}
+ShippingAddress = tryshippingAddress.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

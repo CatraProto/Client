@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -60,50 +62,77 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(GeoPoint);
+
+			writer.WriteInt32(Flags);
+var checkgeoPoint = 			writer.WriteObject(GeoPoint);
+if(checkgeoPoint.IsError){
+ return checkgeoPoint; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(Heading.Value);
+writer.WriteInt32(Heading.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(Period.Value);
+writer.WriteInt32(Period.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				writer.Write(ProximityNotificationRadius.Value);
+writer.WriteInt32(ProximityNotificationRadius.Value);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Stopped = FlagsHelper.IsFlagSet(Flags, 0);
-			GeoPoint = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase>();
+			var trygeoPoint = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase>();
+if(trygeoPoint.IsError){
+return ReadResult<IObject>.Move(trygeoPoint);
+}
+GeoPoint = trygeoPoint.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				Heading = reader.Read<int>();
+				var tryheading = reader.ReadInt32();
+if(tryheading.IsError){
+return ReadResult<IObject>.Move(tryheading);
+}
+Heading = tryheading.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Period = reader.Read<int>();
+				var tryperiod = reader.ReadInt32();
+if(tryperiod.IsError){
+return ReadResult<IObject>.Move(tryperiod);
+}
+Period = tryperiod.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				ProximityNotificationRadius = reader.Read<int>();
+				var tryproximityNotificationRadius = reader.ReadInt32();
+if(tryproximityNotificationRadius.IsError){
+return ReadResult<IObject>.Move(tryproximityNotificationRadius);
+}
+ProximityNotificationRadius = tryproximityNotificationRadius.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

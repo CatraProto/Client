@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -30,24 +32,31 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("type")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase Type { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("data")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.SecureDataBase Data { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("front_side")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase FrontSide { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("reverse_side")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase ReverseSide { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("selfie")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase Selfie { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("translation")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase> Translation { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase> Translation { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("files")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase> Files { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase> Files { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("plain_data")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.SecurePlainDataBase PlainData { get; set; }
 
@@ -79,91 +88,160 @@ Hash = hash;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Type);
+
+			writer.WriteInt32(Flags);
+var checktype = 			writer.WriteObject(Type);
+if(checktype.IsError){
+ return checktype; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(Data);
+var checkdata = 				writer.WriteObject(Data);
+if(checkdata.IsError){
+ return checkdata; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(FrontSide);
+var checkfrontSide = 				writer.WriteObject(FrontSide);
+if(checkfrontSide.IsError){
+ return checkfrontSide; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(ReverseSide);
+var checkreverseSide = 				writer.WriteObject(ReverseSide);
+if(checkreverseSide.IsError){
+ return checkreverseSide; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				writer.Write(Selfie);
+var checkselfie = 				writer.WriteObject(Selfie);
+if(checkselfie.IsError){
+ return checkselfie; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
-				writer.Write(Translation);
+var checktranslation = 				writer.WriteVector(Translation, false);
+if(checktranslation.IsError){
+ return checktranslation; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				writer.Write(Files);
+var checkfiles = 				writer.WriteVector(Files, false);
+if(checkfiles.IsError){
+ return checkfiles; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				writer.Write(PlainData);
+var checkplainData = 				writer.WriteObject(PlainData);
+if(checkplainData.IsError){
+ return checkplainData; 
+}
 			}
 
-			writer.Write(Hash);
+
+			writer.WriteBytes(Hash);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			Type = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var trytype = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase>();
+if(trytype.IsError){
+return ReadResult<IObject>.Move(trytype);
+}
+Type = trytype.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Data = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SecureDataBase>();
+				var trydata = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.SecureDataBase>();
+if(trydata.IsError){
+return ReadResult<IObject>.Move(trydata);
+}
+Data = trydata.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				FrontSide = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase>();
+				var tryfrontSide = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase>();
+if(tryfrontSide.IsError){
+return ReadResult<IObject>.Move(tryfrontSide);
+}
+FrontSide = tryfrontSide.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				ReverseSide = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase>();
+				var tryreverseSide = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase>();
+if(tryreverseSide.IsError){
+return ReadResult<IObject>.Move(tryreverseSide);
+}
+ReverseSide = tryreverseSide.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				Selfie = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase>();
+				var tryselfie = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase>();
+if(tryselfie.IsError){
+return ReadResult<IObject>.Move(tryselfie);
+}
+Selfie = tryselfie.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
-				Translation = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase>();
+				var trytranslation = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trytranslation.IsError){
+return ReadResult<IObject>.Move(trytranslation);
+}
+Translation = trytranslation.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				Files = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase>();
+				var tryfiles = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryfiles.IsError){
+return ReadResult<IObject>.Move(tryfiles);
+}
+Files = tryfiles.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				PlainData = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SecurePlainDataBase>();
+				var tryplainData = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.SecurePlainDataBase>();
+if(tryplainData.IsError){
+return ReadResult<IObject>.Move(tryplainData);
+}
+PlainData = tryplainData.Value;
 			}
 
-			Hash = reader.Read<byte[]>();
+			var tryhash = reader.ReadBytes();
+if(tryhash.IsError){
+return ReadResult<IObject>.Move(tryhash);
+}
+Hash = tryhash.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

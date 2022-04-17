@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -33,20 +35,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 		public CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
 
 [Newtonsoft.Json.JsonProperty("chats")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> Chats { get; set; }
 
 [Newtonsoft.Json.JsonProperty("users")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("psa_type")]
 		public string PsaType { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("psa_message")]
 		public string PsaMessage { get; set; }
 
 
         #nullable enable
- public PromoData (int expires,CatraProto.Client.TL.Schemas.CloudChats.PeerBase peer,IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> chats,IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> users)
+ public PromoData (int expires,CatraProto.Client.TL.Schemas.CloudChats.PeerBase peer,List<CatraProto.Client.TL.Schemas.CloudChats.ChatBase> chats,List<CatraProto.Client.TL.Schemas.CloudChats.UserBase> users)
 {
  Expires = expires;
 Peer = peer;
@@ -67,46 +71,89 @@ Users = users;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Expires);
-			writer.Write(Peer);
-			writer.Write(Chats);
-			writer.Write(Users);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt32(Expires);
+var checkpeer = 			writer.WriteObject(Peer);
+if(checkpeer.IsError){
+ return checkpeer; 
+}
+var checkchats = 			writer.WriteVector(Chats, false);
+if(checkchats.IsError){
+ return checkchats; 
+}
+var checkusers = 			writer.WriteVector(Users, false);
+if(checkusers.IsError){
+ return checkusers; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(PsaType);
+
+				writer.WriteString(PsaType);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(PsaMessage);
+
+				writer.WriteString(PsaMessage);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Proxy = FlagsHelper.IsFlagSet(Flags, 0);
-			Expires = reader.Read<int>();
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
-			Chats = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
-			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+			var tryexpires = reader.ReadInt32();
+if(tryexpires.IsError){
+return ReadResult<IObject>.Move(tryexpires);
+}
+Expires = tryexpires.Value;
+			var trypeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+if(trypeer.IsError){
+return ReadResult<IObject>.Move(trypeer);
+}
+Peer = trypeer.Value;
+			var trychats = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trychats.IsError){
+return ReadResult<IObject>.Move(trychats);
+}
+Chats = trychats.Value;
+			var tryusers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryusers.IsError){
+return ReadResult<IObject>.Move(tryusers);
+}
+Users = tryusers.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				PsaType = reader.Read<string>();
+				var trypsaType = reader.ReadString();
+if(trypsaType.IsError){
+return ReadResult<IObject>.Move(trypsaType);
+}
+PsaType = trypsaType.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				PsaMessage = reader.Read<string>();
+				var trypsaMessage = reader.ReadString();
+if(trypsaMessage.IsError){
+return ReadResult<IObject>.Move(trypsaMessage);
+}
+PsaMessage = trypsaMessage.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -34,16 +36,23 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(SessionId);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(SessionId);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			SessionId = reader.Read<long>();
+			var trysessionId = reader.ReadInt64();
+if(trysessionId.IsError){
+return ReadResult<IObject>.Move(trysessionId);
+}
+SessionId = trysessionId.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

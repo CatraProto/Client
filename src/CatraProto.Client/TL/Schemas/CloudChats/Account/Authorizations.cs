@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -18,11 +20,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		public sealed override int AuthorizationTtlDays { get; set; }
 
 [Newtonsoft.Json.JsonProperty("authorizations")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.AuthorizationBase> AuthorizationsField { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.AuthorizationBase> AuthorizationsField { get; set; }
 
 
         #nullable enable
- public Authorizations (int authorizationTtlDays,IList<CatraProto.Client.TL.Schemas.CloudChats.AuthorizationBase> authorizationsField)
+ public Authorizations (int authorizationTtlDays,List<CatraProto.Client.TL.Schemas.CloudChats.AuthorizationBase> authorizationsField)
 {
  AuthorizationTtlDays = authorizationTtlDays;
 AuthorizationsField = authorizationsField;
@@ -38,18 +40,32 @@ AuthorizationsField = authorizationsField;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(AuthorizationTtlDays);
-			writer.Write(AuthorizationsField);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt32(AuthorizationTtlDays);
+var checkauthorizationsField = 			writer.WriteVector(AuthorizationsField, false);
+if(checkauthorizationsField.IsError){
+ return checkauthorizationsField; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			AuthorizationTtlDays = reader.Read<int>();
-			AuthorizationsField = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.AuthorizationBase>();
+			var tryauthorizationTtlDays = reader.ReadInt32();
+if(tryauthorizationTtlDays.IsError){
+return ReadResult<IObject>.Move(tryauthorizationTtlDays);
+}
+AuthorizationTtlDays = tryauthorizationTtlDays.Value;
+			var tryauthorizationsField = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.AuthorizationBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryauthorizationsField.IsError){
+return ReadResult<IObject>.Move(tryauthorizationsField);
+}
+AuthorizationsField = tryauthorizationsField.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

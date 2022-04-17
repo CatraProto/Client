@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -15,11 +17,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get => 41187252; }
         
 [Newtonsoft.Json.JsonProperty("types")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.SecureRequiredTypeBase> Types { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.SecureRequiredTypeBase> Types { get; set; }
 
 
         #nullable enable
- public SecureRequiredTypeOneOf (IList<CatraProto.Client.TL.Schemas.CloudChats.SecureRequiredTypeBase> types)
+ public SecureRequiredTypeOneOf (List<CatraProto.Client.TL.Schemas.CloudChats.SecureRequiredTypeBase> types)
 {
  Types = types;
  
@@ -34,16 +36,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Types);
+writer.WriteInt32(ConstructorId);
+var checktypes = 			writer.WriteVector(Types, false);
+if(checktypes.IsError){
+ return checktypes; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Types = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SecureRequiredTypeBase>();
+			var trytypes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SecureRequiredTypeBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trytypes.IsError){
+return ReadResult<IObject>.Move(trytypes);
+}
+Types = trytypes.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -72,29 +74,53 @@ VideoUploadMaxbitrate = videoUploadMaxbitrate;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(PhotoSizeMax);
-			writer.Write(VideoSizeMax);
-			writer.Write(FileSizeMax);
-			writer.Write(VideoUploadMaxbitrate);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt32(PhotoSizeMax);
+writer.WriteInt32(VideoSizeMax);
+writer.WriteInt32(FileSizeMax);
+writer.WriteInt32(VideoUploadMaxbitrate);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Disabled = FlagsHelper.IsFlagSet(Flags, 0);
 			VideoPreloadLarge = FlagsHelper.IsFlagSet(Flags, 1);
 			AudioPreloadNext = FlagsHelper.IsFlagSet(Flags, 2);
 			PhonecallsLessData = FlagsHelper.IsFlagSet(Flags, 3);
-			PhotoSizeMax = reader.Read<int>();
-			VideoSizeMax = reader.Read<int>();
-			FileSizeMax = reader.Read<int>();
-			VideoUploadMaxbitrate = reader.Read<int>();
+			var tryphotoSizeMax = reader.ReadInt32();
+if(tryphotoSizeMax.IsError){
+return ReadResult<IObject>.Move(tryphotoSizeMax);
+}
+PhotoSizeMax = tryphotoSizeMax.Value;
+			var tryvideoSizeMax = reader.ReadInt32();
+if(tryvideoSizeMax.IsError){
+return ReadResult<IObject>.Move(tryvideoSizeMax);
+}
+VideoSizeMax = tryvideoSizeMax.Value;
+			var tryfileSizeMax = reader.ReadInt32();
+if(tryfileSizeMax.IsError){
+return ReadResult<IObject>.Move(tryfileSizeMax);
+}
+FileSizeMax = tryfileSizeMax.Value;
+			var tryvideoUploadMaxbitrate = reader.ReadInt32();
+if(tryvideoUploadMaxbitrate.IsError){
+return ReadResult<IObject>.Move(tryvideoUploadMaxbitrate);
+}
+VideoUploadMaxbitrate = tryvideoUploadMaxbitrate.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

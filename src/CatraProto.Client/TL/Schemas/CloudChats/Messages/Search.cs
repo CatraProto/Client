@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -21,10 +24,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int ConstructorId { get => -1593989278; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -35,6 +35,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [Newtonsoft.Json.JsonProperty("q")]
 		public string Q { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("from_id")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase FromId { get; set; }
 
@@ -98,59 +99,129 @@ Hash = hash;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Peer);
-			writer.Write(Q);
+
+			writer.WriteInt32(Flags);
+var checkpeer = 			writer.WriteObject(Peer);
+if(checkpeer.IsError){
+ return checkpeer; 
+}
+
+			writer.WriteString(Q);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(FromId);
+var checkfromId = 				writer.WriteObject(FromId);
+if(checkfromId.IsError){
+ return checkfromId; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(TopMsgId.Value);
+writer.WriteInt32(TopMsgId.Value);
 			}
 
-			writer.Write(Filter);
-			writer.Write(MinDate);
-			writer.Write(MaxDate);
-			writer.Write(OffsetId);
-			writer.Write(AddOffset);
-			writer.Write(Limit);
-			writer.Write(MaxId);
-			writer.Write(MinId);
-			writer.Write(Hash);
+var checkfilter = 			writer.WriteObject(Filter);
+if(checkfilter.IsError){
+ return checkfilter; 
+}
+writer.WriteInt32(MinDate);
+writer.WriteInt32(MaxDate);
+writer.WriteInt32(OffsetId);
+writer.WriteInt32(AddOffset);
+writer.WriteInt32(Limit);
+writer.WriteInt32(MaxId);
+writer.WriteInt32(MinId);
+writer.WriteInt64(Hash);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
-			Q = reader.Read<string>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var trypeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+if(trypeer.IsError){
+return ReadResult<IObject>.Move(trypeer);
+}
+Peer = trypeer.Value;
+			var tryq = reader.ReadString();
+if(tryq.IsError){
+return ReadResult<IObject>.Move(tryq);
+}
+Q = tryq.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				FromId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+				var tryfromId = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+if(tryfromId.IsError){
+return ReadResult<IObject>.Move(tryfromId);
+}
+FromId = tryfromId.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				TopMsgId = reader.Read<int>();
+				var trytopMsgId = reader.ReadInt32();
+if(trytopMsgId.IsError){
+return ReadResult<IObject>.Move(trytopMsgId);
+}
+TopMsgId = trytopMsgId.Value;
 			}
 
-			Filter = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase>();
-			MinDate = reader.Read<int>();
-			MaxDate = reader.Read<int>();
-			OffsetId = reader.Read<int>();
-			AddOffset = reader.Read<int>();
-			Limit = reader.Read<int>();
-			MaxId = reader.Read<int>();
-			MinId = reader.Read<int>();
-			Hash = reader.Read<long>();
+			var tryfilter = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase>();
+if(tryfilter.IsError){
+return ReadResult<IObject>.Move(tryfilter);
+}
+Filter = tryfilter.Value;
+			var tryminDate = reader.ReadInt32();
+if(tryminDate.IsError){
+return ReadResult<IObject>.Move(tryminDate);
+}
+MinDate = tryminDate.Value;
+			var trymaxDate = reader.ReadInt32();
+if(trymaxDate.IsError){
+return ReadResult<IObject>.Move(trymaxDate);
+}
+MaxDate = trymaxDate.Value;
+			var tryoffsetId = reader.ReadInt32();
+if(tryoffsetId.IsError){
+return ReadResult<IObject>.Move(tryoffsetId);
+}
+OffsetId = tryoffsetId.Value;
+			var tryaddOffset = reader.ReadInt32();
+if(tryaddOffset.IsError){
+return ReadResult<IObject>.Move(tryaddOffset);
+}
+AddOffset = tryaddOffset.Value;
+			var trylimit = reader.ReadInt32();
+if(trylimit.IsError){
+return ReadResult<IObject>.Move(trylimit);
+}
+Limit = trylimit.Value;
+			var trymaxId = reader.ReadInt32();
+if(trymaxId.IsError){
+return ReadResult<IObject>.Move(trymaxId);
+}
+MaxId = trymaxId.Value;
+			var tryminId = reader.ReadInt32();
+if(tryminId.IsError){
+return ReadResult<IObject>.Move(tryminId);
+}
+MinId = tryminId.Value;
+			var tryhash = reader.ReadInt64();
+if(tryhash.IsError){
+return ReadResult<IObject>.Move(tryhash);
+}
+Hash = tryhash.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

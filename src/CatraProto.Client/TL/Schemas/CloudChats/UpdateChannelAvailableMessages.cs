@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,29 @@ AvailableMinId = availableMinId;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(ChannelId);
-			writer.Write(AvailableMinId);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(ChannelId);
+writer.WriteInt32(AvailableMinId);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			ChannelId = reader.Read<long>();
-			AvailableMinId = reader.Read<int>();
+			var trychannelId = reader.ReadInt64();
+if(trychannelId.IsError){
+return ReadResult<IObject>.Move(trychannelId);
+}
+ChannelId = trychannelId.Value;
+			var tryavailableMinId = reader.ReadInt32();
+if(tryavailableMinId.IsError){
+return ReadResult<IObject>.Move(tryavailableMinId);
+}
+AvailableMinId = tryavailableMinId.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

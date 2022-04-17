@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -28,12 +30,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("query")]
 		public string Query { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("geo")]
 		public CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase Geo { get; set; }
 
 [Newtonsoft.Json.JsonProperty("id")]
 		public string Id { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("msg_id")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageIDBase MsgId { get; set; }
 
@@ -58,43 +62,79 @@ Id = id;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(UserId);
-			writer.Write(Query);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt64(UserId);
+
+			writer.WriteString(Query);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(Geo);
+var checkgeo = 				writer.WriteObject(Geo);
+if(checkgeo.IsError){
+ return checkgeo; 
+}
 			}
 
-			writer.Write(Id);
+
+			writer.WriteString(Id);
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(MsgId);
+var checkmsgId = 				writer.WriteObject(MsgId);
+if(checkmsgId.IsError){
+ return checkmsgId; 
+}
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			UserId = reader.Read<long>();
-			Query = reader.Read<string>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var tryuserId = reader.ReadInt64();
+if(tryuserId.IsError){
+return ReadResult<IObject>.Move(tryuserId);
+}
+UserId = tryuserId.Value;
+			var tryquery = reader.ReadString();
+if(tryquery.IsError){
+return ReadResult<IObject>.Move(tryquery);
+}
+Query = tryquery.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Geo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase>();
+				var trygeo = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase>();
+if(trygeo.IsError){
+return ReadResult<IObject>.Move(trygeo);
+}
+Geo = trygeo.Value;
 			}
 
-			Id = reader.Read<string>();
+			var tryid = reader.ReadString();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				MsgId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageIDBase>();
+				var trymsgId = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageIDBase>();
+if(trymsgId.IsError){
+return ReadResult<IObject>.Move(trymsgId);
+}
+MsgId = trymsgId.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,23 +19,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int ConstructorId { get => 1468322785; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.MessageViewsBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("peer")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
 
 [Newtonsoft.Json.JsonProperty("id")]
-		public IList<int> Id { get; set; }
+		public List<int> Id { get; set; }
 
 [Newtonsoft.Json.JsonProperty("increment")]
 		public bool Increment { get; set; }
 
         
         #nullable enable
- public GetMessagesViews (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer,IList<int> id,bool increment)
+ public GetMessagesViews (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer,List<int> id,bool increment)
 {
  Peer = peer;
 Id = id;
@@ -50,20 +50,42 @@ Increment = increment;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Peer);
-			writer.Write(Id);
-			writer.Write(Increment);
+writer.WriteInt32(ConstructorId);
+var checkpeer = 			writer.WriteObject(Peer);
+if(checkpeer.IsError){
+ return checkpeer; 
+}
+
+			writer.WriteVector(Id, false);
+var checkincrement = 			writer.WriteBool(Increment);
+if(checkincrement.IsError){
+ return checkincrement; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
-			Id = reader.ReadVector<int>();
-			Increment = reader.Read<bool>();
+			var trypeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+if(trypeer.IsError){
+return ReadResult<IObject>.Move(trypeer);
+}
+Peer = trypeer.Value;
+			var tryid = reader.ReadVector<int>(ParserTypes.Int);
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var tryincrement = reader.ReadBool();
+if(tryincrement.IsError){
+return ReadResult<IObject>.Move(tryincrement);
+}
+Increment = tryincrement.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

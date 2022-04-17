@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,20 +19,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get => 1036301552; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(IObject);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("msg_ids")]
-		public IList<long> MsgIds { get; set; }
+		public List<long> MsgIds { get; set; }
 
 [Newtonsoft.Json.JsonProperty("query")]
 		public IObject Query { get; set; }
 
         
         #nullable enable
- public InvokeAfterMsgs (IList<long> msgIds,IObject query)
+ public InvokeAfterMsgs (List<long> msgIds,IObject query)
 {
  MsgIds = msgIds;
 Query = query;
@@ -46,18 +46,33 @@ Query = query;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(MsgIds);
-			writer.Write(Query);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteVector(MsgIds, false);
+var checkquery = 			writer.WriteObject(Query);
+if(checkquery.IsError){
+ return checkquery; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			MsgIds = reader.ReadVector<long>();
-			Query = reader.Read<IObject>();
+			var trymsgIds = reader.ReadVector<long>(ParserTypes.Int64);
+if(trymsgIds.IsError){
+return ReadResult<IObject>.Move(trymsgIds);
+}
+MsgIds = trymsgIds.Value;
+			var tryquery = reader.ReadObject<IObject>();
+if(tryquery.IsError){
+return ReadResult<IObject>.Move(tryquery);
+}
+Query = tryquery.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

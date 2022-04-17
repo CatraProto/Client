@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -24,6 +26,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("text")]
 		public sealed override string Text { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("fwd_text")]
 		public string FwdText { get; set; }
 
@@ -53,33 +56,60 @@ ButtonId = buttonId;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Text);
+
+			writer.WriteInt32(Flags);
+
+			writer.WriteString(Text);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(FwdText);
+
+				writer.WriteString(FwdText);
 			}
 
-			writer.Write(Url);
-			writer.Write(ButtonId);
+
+			writer.WriteString(Url);
+writer.WriteInt32(ButtonId);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			Text = reader.Read<string>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var trytext = reader.ReadString();
+if(trytext.IsError){
+return ReadResult<IObject>.Move(trytext);
+}
+Text = trytext.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				FwdText = reader.Read<string>();
+				var tryfwdText = reader.ReadString();
+if(tryfwdText.IsError){
+return ReadResult<IObject>.Move(tryfwdText);
+}
+FwdText = tryfwdText.Value;
 			}
 
-			Url = reader.Read<string>();
-			ButtonId = reader.Read<int>();
+			var tryurl = reader.ReadString();
+if(tryurl.IsError){
+return ReadResult<IObject>.Move(tryurl);
+}
+Url = tryurl.Value;
+			var trybuttonId = reader.ReadInt32();
+if(trybuttonId.IsError){
+return ReadResult<IObject>.Move(trybuttonId);
+}
+ButtonId = trybuttonId.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

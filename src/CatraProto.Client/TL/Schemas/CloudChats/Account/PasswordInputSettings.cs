@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -25,18 +27,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("new_algo")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase NewAlgo { get; set; }
 
 [Newtonsoft.Json.JsonProperty("new_password_hash")]
 		public sealed override byte[] NewPasswordHash { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("hint")]
 		public sealed override string Hint { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("email")]
 		public sealed override string Email { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("new_secure_settings")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.SecureSecretSettingsBase NewSecureSettings { get; set; }
 
@@ -56,67 +62,104 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
+
+			writer.WriteInt32(Flags);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(NewAlgo);
+var checknewAlgo = 				writer.WriteObject(NewAlgo);
+if(checknewAlgo.IsError){
+ return checknewAlgo; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(NewPasswordHash);
+
+				writer.WriteBytes(NewPasswordHash);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(Hint);
+
+				writer.WriteString(Hint);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(Email);
+
+				writer.WriteString(Email);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(NewSecureSettings);
+var checknewSecureSettings = 				writer.WriteObject(NewSecureSettings);
+if(checknewSecureSettings.IsError){
+ return checknewSecureSettings; 
+}
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				NewAlgo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase>();
+				var trynewAlgo = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase>();
+if(trynewAlgo.IsError){
+return ReadResult<IObject>.Move(trynewAlgo);
+}
+NewAlgo = trynewAlgo.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				NewPasswordHash = reader.Read<byte[]>();
+				var trynewPasswordHash = reader.ReadBytes();
+if(trynewPasswordHash.IsError){
+return ReadResult<IObject>.Move(trynewPasswordHash);
+}
+NewPasswordHash = trynewPasswordHash.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Hint = reader.Read<string>();
+				var tryhint = reader.ReadString();
+if(tryhint.IsError){
+return ReadResult<IObject>.Move(tryhint);
+}
+Hint = tryhint.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Email = reader.Read<string>();
+				var tryemail = reader.ReadString();
+if(tryemail.IsError){
+return ReadResult<IObject>.Move(tryemail);
+}
+Email = tryemail.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				NewSecureSettings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SecureSecretSettingsBase>();
+				var trynewSecureSettings = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.SecureSecretSettingsBase>();
+if(trynewSecureSettings.IsError){
+return ReadResult<IObject>.Move(trynewSecureSettings);
+}
+NewSecureSettings = trynewSecureSettings.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

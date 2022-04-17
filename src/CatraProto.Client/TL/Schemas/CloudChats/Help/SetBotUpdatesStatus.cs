@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
         public static int ConstructorId { get => -333262899; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
 
 [Newtonsoft.Json.JsonProperty("pending_updates_count")]
 		public int PendingUpdatesCount { get; set; }
@@ -46,18 +46,30 @@ Message = message;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(PendingUpdatesCount);
-			writer.Write(Message);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt32(PendingUpdatesCount);
+
+			writer.WriteString(Message);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			PendingUpdatesCount = reader.Read<int>();
-			Message = reader.Read<string>();
+			var trypendingUpdatesCount = reader.ReadInt32();
+if(trypendingUpdatesCount.IsError){
+return ReadResult<IObject>.Move(trypendingUpdatesCount);
+}
+PendingUpdatesCount = trypendingUpdatesCount.Value;
+			var trymessage = reader.ReadString();
+if(trymessage.IsError){
+return ReadResult<IObject>.Move(trymessage);
+}
+Message = trymessage.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,35 @@ NewPhoto = newPhoto;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(PrevPhoto);
-			writer.Write(NewPhoto);
+writer.WriteInt32(ConstructorId);
+var checkprevPhoto = 			writer.WriteObject(PrevPhoto);
+if(checkprevPhoto.IsError){
+ return checkprevPhoto; 
+}
+var checknewPhoto = 			writer.WriteObject(NewPhoto);
+if(checknewPhoto.IsError){
+ return checknewPhoto; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			PrevPhoto = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
-			NewPhoto = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
+			var tryprevPhoto = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
+if(tryprevPhoto.IsError){
+return ReadResult<IObject>.Move(tryprevPhoto);
+}
+PrevPhoto = tryprevPhoto.Value;
+			var trynewPhoto = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
+if(trynewPhoto.IsError){
+return ReadResult<IObject>.Move(trynewPhoto);
+}
+NewPhoto = trynewPhoto.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

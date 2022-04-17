@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,29 @@ Importers = importers;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(ClientId);
-			writer.Write(Importers);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(ClientId);
+writer.WriteInt32(Importers);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			ClientId = reader.Read<long>();
-			Importers = reader.Read<int>();
+			var tryclientId = reader.ReadInt64();
+if(tryclientId.IsError){
+return ReadResult<IObject>.Move(tryclientId);
+}
+ClientId = tryclientId.Value;
+			var tryimporters = reader.ReadInt32();
+if(tryimporters.IsError){
+return ReadResult<IObject>.Move(tryimporters);
+}
+Importers = tryimporters.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

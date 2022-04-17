@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,11 +40,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public sealed override int? OutboxAccentColor { get; set; }
 
 [Newtonsoft.Json.JsonProperty("message_colors")]
-		public sealed override IList<int> MessageColors { get; set; }
+		public sealed override List<int> MessageColors { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("wallpaper")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase Wallpaper { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("wallpaper_settings")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase WallpaperSettings { get; set; }
 
@@ -69,62 +73,104 @@ AccentColor = accentColor;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(BaseTheme);
-			writer.Write(AccentColor);
+
+			writer.WriteInt32(Flags);
+var checkbaseTheme = 			writer.WriteObject(BaseTheme);
+if(checkbaseTheme.IsError){
+ return checkbaseTheme; 
+}
+writer.WriteInt32(AccentColor);
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				writer.Write(OutboxAccentColor.Value);
+writer.WriteInt32(OutboxAccentColor.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(MessageColors);
+
+				writer.WriteVector(MessageColors, false);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(Wallpaper);
+var checkwallpaper = 				writer.WriteObject(Wallpaper);
+if(checkwallpaper.IsError){
+ return checkwallpaper; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(WallpaperSettings);
+var checkwallpaperSettings = 				writer.WriteObject(WallpaperSettings);
+if(checkwallpaperSettings.IsError){
+ return checkwallpaperSettings; 
+}
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			MessageColorsAnimated = FlagsHelper.IsFlagSet(Flags, 2);
-			BaseTheme = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.BaseThemeBase>();
-			AccentColor = reader.Read<int>();
+			var trybaseTheme = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.BaseThemeBase>();
+if(trybaseTheme.IsError){
+return ReadResult<IObject>.Move(trybaseTheme);
+}
+BaseTheme = trybaseTheme.Value;
+			var tryaccentColor = reader.ReadInt32();
+if(tryaccentColor.IsError){
+return ReadResult<IObject>.Move(tryaccentColor);
+}
+AccentColor = tryaccentColor.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				OutboxAccentColor = reader.Read<int>();
+				var tryoutboxAccentColor = reader.ReadInt32();
+if(tryoutboxAccentColor.IsError){
+return ReadResult<IObject>.Move(tryoutboxAccentColor);
+}
+OutboxAccentColor = tryoutboxAccentColor.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				MessageColors = reader.ReadVector<int>();
+				var trymessageColors = reader.ReadVector<int>(ParserTypes.Int);
+if(trymessageColors.IsError){
+return ReadResult<IObject>.Move(trymessageColors);
+}
+MessageColors = trymessageColors.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Wallpaper = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase>();
+				var trywallpaper = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase>();
+if(trywallpaper.IsError){
+return ReadResult<IObject>.Move(trywallpaper);
+}
+Wallpaper = trywallpaper.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				WallpaperSettings = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase>();
+				var trywallpaperSettings = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase>();
+if(trywallpaperSettings.IsError){
+return ReadResult<IObject>.Move(trywallpaperSettings);
+}
+WallpaperSettings = trywallpaperSettings.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

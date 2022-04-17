@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -18,14 +20,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase Call { get; set; }
 
 [Newtonsoft.Json.JsonProperty("participants")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.GroupCallParticipantBase> Participants { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.GroupCallParticipantBase> Participants { get; set; }
 
 [Newtonsoft.Json.JsonProperty("version")]
 		public int Version { get; set; }
 
 
         #nullable enable
- public UpdateGroupCallParticipants (CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase call,IList<CatraProto.Client.TL.Schemas.CloudChats.GroupCallParticipantBase> participants,int version)
+ public UpdateGroupCallParticipants (CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase call,List<CatraProto.Client.TL.Schemas.CloudChats.GroupCallParticipantBase> participants,int version)
 {
  Call = call;
 Participants = participants;
@@ -42,20 +44,41 @@ Version = version;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Call);
-			writer.Write(Participants);
-			writer.Write(Version);
+writer.WriteInt32(ConstructorId);
+var checkcall = 			writer.WriteObject(Call);
+if(checkcall.IsError){
+ return checkcall; 
+}
+var checkparticipants = 			writer.WriteVector(Participants, false);
+if(checkparticipants.IsError){
+ return checkparticipants; 
+}
+writer.WriteInt32(Version);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Call = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase>();
-			Participants = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.GroupCallParticipantBase>();
-			Version = reader.Read<int>();
+			var trycall = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase>();
+if(trycall.IsError){
+return ReadResult<IObject>.Move(trycall);
+}
+Call = trycall.Value;
+			var tryparticipants = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.GroupCallParticipantBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryparticipants.IsError){
+return ReadResult<IObject>.Move(tryparticipants);
+}
+Participants = tryparticipants.Value;
+			var tryversion = reader.ReadInt32();
+if(tryversion.IsError){
+return ReadResult<IObject>.Move(tryversion);
+}
+Version = tryversion.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

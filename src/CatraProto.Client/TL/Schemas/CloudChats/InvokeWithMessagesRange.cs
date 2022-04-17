@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get => 911373810; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(IObject);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("range")]
 		public CatraProto.Client.TL.Schemas.CloudChats.MessageRangeBase Range { get; set; }
@@ -46,18 +46,35 @@ Query = query;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Range);
-			writer.Write(Query);
+writer.WriteInt32(ConstructorId);
+var checkrange = 			writer.WriteObject(Range);
+if(checkrange.IsError){
+ return checkrange; 
+}
+var checkquery = 			writer.WriteObject(Query);
+if(checkquery.IsError){
+ return checkquery; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Range = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.MessageRangeBase>();
-			Query = reader.Read<IObject>();
+			var tryrange = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.MessageRangeBase>();
+if(tryrange.IsError){
+return ReadResult<IObject>.Move(tryrange);
+}
+Range = tryrange.Value;
+			var tryquery = reader.ReadObject<IObject>();
+if(tryquery.IsError){
+return ReadResult<IObject>.Move(tryquery);
+}
+Query = tryquery.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,17 +19,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
         public static int ConstructorId { get => -1907842680; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
 
 [Newtonsoft.Json.JsonProperty("except_auth_keys")]
-		public IList<long> ExceptAuthKeys { get; set; }
+		public List<long> ExceptAuthKeys { get; set; }
 
         
         #nullable enable
- public DropTempAuthKeys (IList<long> exceptAuthKeys)
+ public DropTempAuthKeys (List<long> exceptAuthKeys)
 {
  ExceptAuthKeys = exceptAuthKeys;
  
@@ -42,16 +42,24 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(ExceptAuthKeys);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteVector(ExceptAuthKeys, false);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			ExceptAuthKeys = reader.ReadVector<long>();
+			var tryexceptAuthKeys = reader.ReadVector<long>(ParserTypes.Int64);
+if(tryexceptAuthKeys.IsError){
+return ReadResult<IObject>.Move(tryexceptAuthKeys);
+}
+ExceptAuthKeys = tryexceptAuthKeys.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

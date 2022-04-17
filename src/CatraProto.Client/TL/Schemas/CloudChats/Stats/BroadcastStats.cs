@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -57,11 +59,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase LanguagesGraph { get; set; }
 
 [Newtonsoft.Json.JsonProperty("recent_message_interactions")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.MessageInteractionCountersBase> RecentMessageInteractions { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.MessageInteractionCountersBase> RecentMessageInteractions { get; set; }
 
 
         #nullable enable
- public BroadcastStats (CatraProto.Client.TL.Schemas.CloudChats.StatsDateRangeDaysBase period,CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase followers,CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase viewsPerPost,CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase sharesPerPost,CatraProto.Client.TL.Schemas.CloudChats.StatsPercentValueBase enabledNotifications,CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase growthGraph,CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase followersGraph,CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase muteGraph,CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase topHoursGraph,CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase interactionsGraph,CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase ivInteractionsGraph,CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase viewsBySourceGraph,CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase newFollowersBySourceGraph,CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase languagesGraph,IList<CatraProto.Client.TL.Schemas.CloudChats.MessageInteractionCountersBase> recentMessageInteractions)
+ public BroadcastStats (CatraProto.Client.TL.Schemas.CloudChats.StatsDateRangeDaysBase period,CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase followers,CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase viewsPerPost,CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase sharesPerPost,CatraProto.Client.TL.Schemas.CloudChats.StatsPercentValueBase enabledNotifications,CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase growthGraph,CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase followersGraph,CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase muteGraph,CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase topHoursGraph,CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase interactionsGraph,CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase ivInteractionsGraph,CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase viewsBySourceGraph,CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase newFollowersBySourceGraph,CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase languagesGraph,List<CatraProto.Client.TL.Schemas.CloudChats.MessageInteractionCountersBase> recentMessageInteractions)
 {
  Period = period;
 Followers = followers;
@@ -90,44 +92,152 @@ RecentMessageInteractions = recentMessageInteractions;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Period);
-			writer.Write(Followers);
-			writer.Write(ViewsPerPost);
-			writer.Write(SharesPerPost);
-			writer.Write(EnabledNotifications);
-			writer.Write(GrowthGraph);
-			writer.Write(FollowersGraph);
-			writer.Write(MuteGraph);
-			writer.Write(TopHoursGraph);
-			writer.Write(InteractionsGraph);
-			writer.Write(IvInteractionsGraph);
-			writer.Write(ViewsBySourceGraph);
-			writer.Write(NewFollowersBySourceGraph);
-			writer.Write(LanguagesGraph);
-			writer.Write(RecentMessageInteractions);
+writer.WriteInt32(ConstructorId);
+var checkperiod = 			writer.WriteObject(Period);
+if(checkperiod.IsError){
+ return checkperiod; 
+}
+var checkfollowers = 			writer.WriteObject(Followers);
+if(checkfollowers.IsError){
+ return checkfollowers; 
+}
+var checkviewsPerPost = 			writer.WriteObject(ViewsPerPost);
+if(checkviewsPerPost.IsError){
+ return checkviewsPerPost; 
+}
+var checksharesPerPost = 			writer.WriteObject(SharesPerPost);
+if(checksharesPerPost.IsError){
+ return checksharesPerPost; 
+}
+var checkenabledNotifications = 			writer.WriteObject(EnabledNotifications);
+if(checkenabledNotifications.IsError){
+ return checkenabledNotifications; 
+}
+var checkgrowthGraph = 			writer.WriteObject(GrowthGraph);
+if(checkgrowthGraph.IsError){
+ return checkgrowthGraph; 
+}
+var checkfollowersGraph = 			writer.WriteObject(FollowersGraph);
+if(checkfollowersGraph.IsError){
+ return checkfollowersGraph; 
+}
+var checkmuteGraph = 			writer.WriteObject(MuteGraph);
+if(checkmuteGraph.IsError){
+ return checkmuteGraph; 
+}
+var checktopHoursGraph = 			writer.WriteObject(TopHoursGraph);
+if(checktopHoursGraph.IsError){
+ return checktopHoursGraph; 
+}
+var checkinteractionsGraph = 			writer.WriteObject(InteractionsGraph);
+if(checkinteractionsGraph.IsError){
+ return checkinteractionsGraph; 
+}
+var checkivInteractionsGraph = 			writer.WriteObject(IvInteractionsGraph);
+if(checkivInteractionsGraph.IsError){
+ return checkivInteractionsGraph; 
+}
+var checkviewsBySourceGraph = 			writer.WriteObject(ViewsBySourceGraph);
+if(checkviewsBySourceGraph.IsError){
+ return checkviewsBySourceGraph; 
+}
+var checknewFollowersBySourceGraph = 			writer.WriteObject(NewFollowersBySourceGraph);
+if(checknewFollowersBySourceGraph.IsError){
+ return checknewFollowersBySourceGraph; 
+}
+var checklanguagesGraph = 			writer.WriteObject(LanguagesGraph);
+if(checklanguagesGraph.IsError){
+ return checklanguagesGraph; 
+}
+var checkrecentMessageInteractions = 			writer.WriteVector(RecentMessageInteractions, false);
+if(checkrecentMessageInteractions.IsError){
+ return checkrecentMessageInteractions; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Period = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsDateRangeDaysBase>();
-			Followers = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase>();
-			ViewsPerPost = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase>();
-			SharesPerPost = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase>();
-			EnabledNotifications = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsPercentValueBase>();
-			GrowthGraph = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
-			FollowersGraph = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
-			MuteGraph = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
-			TopHoursGraph = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
-			InteractionsGraph = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
-			IvInteractionsGraph = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
-			ViewsBySourceGraph = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
-			NewFollowersBySourceGraph = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
-			LanguagesGraph = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
-			RecentMessageInteractions = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageInteractionCountersBase>();
+			var tryperiod = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.StatsDateRangeDaysBase>();
+if(tryperiod.IsError){
+return ReadResult<IObject>.Move(tryperiod);
+}
+Period = tryperiod.Value;
+			var tryfollowers = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase>();
+if(tryfollowers.IsError){
+return ReadResult<IObject>.Move(tryfollowers);
+}
+Followers = tryfollowers.Value;
+			var tryviewsPerPost = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase>();
+if(tryviewsPerPost.IsError){
+return ReadResult<IObject>.Move(tryviewsPerPost);
+}
+ViewsPerPost = tryviewsPerPost.Value;
+			var trysharesPerPost = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase>();
+if(trysharesPerPost.IsError){
+return ReadResult<IObject>.Move(trysharesPerPost);
+}
+SharesPerPost = trysharesPerPost.Value;
+			var tryenabledNotifications = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.StatsPercentValueBase>();
+if(tryenabledNotifications.IsError){
+return ReadResult<IObject>.Move(tryenabledNotifications);
+}
+EnabledNotifications = tryenabledNotifications.Value;
+			var trygrowthGraph = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
+if(trygrowthGraph.IsError){
+return ReadResult<IObject>.Move(trygrowthGraph);
+}
+GrowthGraph = trygrowthGraph.Value;
+			var tryfollowersGraph = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
+if(tryfollowersGraph.IsError){
+return ReadResult<IObject>.Move(tryfollowersGraph);
+}
+FollowersGraph = tryfollowersGraph.Value;
+			var trymuteGraph = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
+if(trymuteGraph.IsError){
+return ReadResult<IObject>.Move(trymuteGraph);
+}
+MuteGraph = trymuteGraph.Value;
+			var trytopHoursGraph = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
+if(trytopHoursGraph.IsError){
+return ReadResult<IObject>.Move(trytopHoursGraph);
+}
+TopHoursGraph = trytopHoursGraph.Value;
+			var tryinteractionsGraph = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
+if(tryinteractionsGraph.IsError){
+return ReadResult<IObject>.Move(tryinteractionsGraph);
+}
+InteractionsGraph = tryinteractionsGraph.Value;
+			var tryivInteractionsGraph = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
+if(tryivInteractionsGraph.IsError){
+return ReadResult<IObject>.Move(tryivInteractionsGraph);
+}
+IvInteractionsGraph = tryivInteractionsGraph.Value;
+			var tryviewsBySourceGraph = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
+if(tryviewsBySourceGraph.IsError){
+return ReadResult<IObject>.Move(tryviewsBySourceGraph);
+}
+ViewsBySourceGraph = tryviewsBySourceGraph.Value;
+			var trynewFollowersBySourceGraph = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
+if(trynewFollowersBySourceGraph.IsError){
+return ReadResult<IObject>.Move(trynewFollowersBySourceGraph);
+}
+NewFollowersBySourceGraph = trynewFollowersBySourceGraph.Value;
+			var trylanguagesGraph = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
+if(trylanguagesGraph.IsError){
+return ReadResult<IObject>.Move(trylanguagesGraph);
+}
+LanguagesGraph = trylanguagesGraph.Value;
+			var tryrecentMessageInteractions = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageInteractionCountersBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryrecentMessageInteractions.IsError){
+return ReadResult<IObject>.Move(tryrecentMessageInteractions);
+}
+RecentMessageInteractions = tryrecentMessageInteractions.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

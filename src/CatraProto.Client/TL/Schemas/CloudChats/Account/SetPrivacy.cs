@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,20 +19,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public static int ConstructorId { get => -906486552; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Account.PrivacyRulesBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("key")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputPrivacyKeyBase Key { get; set; }
 
 [Newtonsoft.Json.JsonProperty("rules")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputPrivacyRuleBase> Rules { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.InputPrivacyRuleBase> Rules { get; set; }
 
         
         #nullable enable
- public SetPrivacy (CatraProto.Client.TL.Schemas.CloudChats.InputPrivacyKeyBase key,IList<CatraProto.Client.TL.Schemas.CloudChats.InputPrivacyRuleBase> rules)
+ public SetPrivacy (CatraProto.Client.TL.Schemas.CloudChats.InputPrivacyKeyBase key,List<CatraProto.Client.TL.Schemas.CloudChats.InputPrivacyRuleBase> rules)
 {
  Key = key;
 Rules = rules;
@@ -46,18 +46,35 @@ Rules = rules;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Key);
-			writer.Write(Rules);
+writer.WriteInt32(ConstructorId);
+var checkkey = 			writer.WriteObject(Key);
+if(checkkey.IsError){
+ return checkkey; 
+}
+var checkrules = 			writer.WriteVector(Rules, false);
+if(checkrules.IsError){
+ return checkrules; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Key = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPrivacyKeyBase>();
-			Rules = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputPrivacyRuleBase>();
+			var trykey = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPrivacyKeyBase>();
+if(trykey.IsError){
+return ReadResult<IObject>.Move(trykey);
+}
+Key = trykey.Value;
+			var tryrules = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputPrivacyRuleBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryrules.IsError){
+return ReadResult<IObject>.Move(tryrules);
+}
+Rules = tryrules.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

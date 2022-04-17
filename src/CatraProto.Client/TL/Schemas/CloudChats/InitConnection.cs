@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -21,10 +24,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get => -1043505495; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(IObject);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -50,9 +50,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("lang_code")]
 		public string LangCode { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("proxy")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputClientProxyBase Proxy { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("params")]
 		public CatraProto.Client.TL.Schemas.CloudChats.JSONValueBase Params { get; set; }
 
@@ -86,53 +88,116 @@ Query = query;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(ApiId);
-			writer.Write(DeviceModel);
-			writer.Write(SystemVersion);
-			writer.Write(AppVersion);
-			writer.Write(SystemLangCode);
-			writer.Write(LangPack);
-			writer.Write(LangCode);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt32(ApiId);
+
+			writer.WriteString(DeviceModel);
+
+			writer.WriteString(SystemVersion);
+
+			writer.WriteString(AppVersion);
+
+			writer.WriteString(SystemLangCode);
+
+			writer.WriteString(LangPack);
+
+			writer.WriteString(LangCode);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(Proxy);
+var checkproxy = 				writer.WriteObject(Proxy);
+if(checkproxy.IsError){
+ return checkproxy; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(Params);
+var checkpparams = 				writer.WriteObject(Params);
+if(checkpparams.IsError){
+ return checkpparams; 
+}
 			}
 
-			writer.Write(Query);
+var checkquery = 			writer.WriteObject(Query);
+if(checkquery.IsError){
+ return checkquery; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			ApiId = reader.Read<int>();
-			DeviceModel = reader.Read<string>();
-			SystemVersion = reader.Read<string>();
-			AppVersion = reader.Read<string>();
-			SystemLangCode = reader.Read<string>();
-			LangPack = reader.Read<string>();
-			LangCode = reader.Read<string>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var tryapiId = reader.ReadInt32();
+if(tryapiId.IsError){
+return ReadResult<IObject>.Move(tryapiId);
+}
+ApiId = tryapiId.Value;
+			var trydeviceModel = reader.ReadString();
+if(trydeviceModel.IsError){
+return ReadResult<IObject>.Move(trydeviceModel);
+}
+DeviceModel = trydeviceModel.Value;
+			var trysystemVersion = reader.ReadString();
+if(trysystemVersion.IsError){
+return ReadResult<IObject>.Move(trysystemVersion);
+}
+SystemVersion = trysystemVersion.Value;
+			var tryappVersion = reader.ReadString();
+if(tryappVersion.IsError){
+return ReadResult<IObject>.Move(tryappVersion);
+}
+AppVersion = tryappVersion.Value;
+			var trysystemLangCode = reader.ReadString();
+if(trysystemLangCode.IsError){
+return ReadResult<IObject>.Move(trysystemLangCode);
+}
+SystemLangCode = trysystemLangCode.Value;
+			var trylangPack = reader.ReadString();
+if(trylangPack.IsError){
+return ReadResult<IObject>.Move(trylangPack);
+}
+LangPack = trylangPack.Value;
+			var trylangCode = reader.ReadString();
+if(trylangCode.IsError){
+return ReadResult<IObject>.Move(trylangCode);
+}
+LangCode = trylangCode.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Proxy = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputClientProxyBase>();
+				var tryproxy = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputClientProxyBase>();
+if(tryproxy.IsError){
+return ReadResult<IObject>.Move(tryproxy);
+}
+Proxy = tryproxy.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Params = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.JSONValueBase>();
+				var trypparams = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.JSONValueBase>();
+if(trypparams.IsError){
+return ReadResult<IObject>.Move(trypparams);
+}
+Params = trypparams.Value;
 			}
 
-			Query = reader.Read<IObject>();
+			var tryquery = reader.ReadObject<IObject>();
+if(tryquery.IsError){
+return ReadResult<IObject>.Move(tryquery);
+}
+Query = tryquery.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

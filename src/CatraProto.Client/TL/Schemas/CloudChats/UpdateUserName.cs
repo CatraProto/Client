@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -46,22 +48,44 @@ Username = username;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(UserId);
-			writer.Write(FirstName);
-			writer.Write(LastName);
-			writer.Write(Username);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(UserId);
+
+			writer.WriteString(FirstName);
+
+			writer.WriteString(LastName);
+
+			writer.WriteString(Username);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			UserId = reader.Read<long>();
-			FirstName = reader.Read<string>();
-			LastName = reader.Read<string>();
-			Username = reader.Read<string>();
+			var tryuserId = reader.ReadInt64();
+if(tryuserId.IsError){
+return ReadResult<IObject>.Move(tryuserId);
+}
+UserId = tryuserId.Value;
+			var tryfirstName = reader.ReadString();
+if(tryfirstName.IsError){
+return ReadResult<IObject>.Move(tryfirstName);
+}
+FirstName = tryfirstName.Value;
+			var trylastName = reader.ReadString();
+if(trylastName.IsError){
+return ReadResult<IObject>.Move(trylastName);
+}
+LastName = trylastName.Value;
+			var tryusername = reader.ReadString();
+if(tryusername.IsError){
+return ReadResult<IObject>.Move(tryusername);
+}
+Username = tryusername.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

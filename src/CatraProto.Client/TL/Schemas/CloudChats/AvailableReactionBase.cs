@@ -1,5 +1,7 @@
 using CatraProto.TL;
+using CatraProto.TL.Results;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL.Interfaces;
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -31,15 +33,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("effect_animation")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.DocumentBase EffectAnimation { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("around_animation")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.DocumentBase AroundAnimation { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("center_icon")]
 		public abstract CatraProto.Client.TL.Schemas.CloudChats.DocumentBase CenterIcon { get; set; }
 
         public abstract void UpdateFlags();
-        public abstract void Deserialize(Reader reader);
-        public abstract void Serialize(Writer writer);
+        public abstract ReadResult<IObject> Deserialize(Reader reader);
+        public abstract WriteResult Serialize(Writer writer);
         public abstract int GetConstructorId();
     }
 }

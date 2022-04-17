@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -24,15 +26,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("name")]
 		public sealed override string Name { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("phone")]
 		public sealed override string Phone { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("email")]
 		public sealed override string Email { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("shipping_address")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.PostAddressBase ShippingAddress { get; set; }
 
@@ -51,57 +57,87 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
+
+			writer.WriteInt32(Flags);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(Name);
+
+				writer.WriteString(Name);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(Phone);
+
+				writer.WriteString(Phone);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(Email);
+
+				writer.WriteString(Email);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				writer.Write(ShippingAddress);
+var checkshippingAddress = 				writer.WriteObject(ShippingAddress);
+if(checkshippingAddress.IsError){
+ return checkshippingAddress; 
+}
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Name = reader.Read<string>();
+				var tryname = reader.ReadString();
+if(tryname.IsError){
+return ReadResult<IObject>.Move(tryname);
+}
+Name = tryname.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Phone = reader.Read<string>();
+				var tryphone = reader.ReadString();
+if(tryphone.IsError){
+return ReadResult<IObject>.Move(tryphone);
+}
+Phone = tryphone.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				Email = reader.Read<string>();
+				var tryemail = reader.ReadString();
+if(tryemail.IsError){
+return ReadResult<IObject>.Move(tryemail);
+}
+Email = tryemail.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				ShippingAddress = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PostAddressBase>();
+				var tryshippingAddress = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PostAddressBase>();
+if(tryshippingAddress.IsError){
+return ReadResult<IObject>.Move(tryshippingAddress);
+}
+ShippingAddress = tryshippingAddress.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

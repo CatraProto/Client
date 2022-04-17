@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -18,11 +20,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.PhoneCallBase PhoneCallField { get; set; }
 
 [Newtonsoft.Json.JsonProperty("users")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.UserBase> Users { get; set; }
 
 
         #nullable enable
- public PhoneCall (CatraProto.Client.TL.Schemas.CloudChats.PhoneCallBase phoneCallField,IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase> users)
+ public PhoneCall (CatraProto.Client.TL.Schemas.CloudChats.PhoneCallBase phoneCallField,List<CatraProto.Client.TL.Schemas.CloudChats.UserBase> users)
 {
  PhoneCallField = phoneCallField;
 Users = users;
@@ -38,18 +40,35 @@ Users = users;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(PhoneCallField);
-			writer.Write(Users);
+writer.WriteInt32(ConstructorId);
+var checkphoneCallField = 			writer.WriteObject(PhoneCallField);
+if(checkphoneCallField.IsError){
+ return checkphoneCallField; 
+}
+var checkusers = 			writer.WriteVector(Users, false);
+if(checkusers.IsError){
+ return checkusers; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			PhoneCallField = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhoneCallBase>();
-			Users = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
+			var tryphoneCallField = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PhoneCallBase>();
+if(tryphoneCallField.IsError){
+return ReadResult<IObject>.Move(tryphoneCallField);
+}
+PhoneCallField = tryphoneCallField.Value;
+			var tryusers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryusers.IsError){
+return ReadResult<IObject>.Move(tryusers);
+}
+Users = tryusers.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

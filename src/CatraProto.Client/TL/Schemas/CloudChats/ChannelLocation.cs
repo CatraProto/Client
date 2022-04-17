@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,33 @@ Address = address;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(GeoPoint);
-			writer.Write(Address);
+writer.WriteInt32(ConstructorId);
+var checkgeoPoint = 			writer.WriteObject(GeoPoint);
+if(checkgeoPoint.IsError){
+ return checkgeoPoint; 
+}
+
+			writer.WriteString(Address);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			GeoPoint = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase>();
-			Address = reader.Read<string>();
+			var trygeoPoint = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase>();
+if(trygeoPoint.IsError){
+return ReadResult<IObject>.Move(trygeoPoint);
+}
+GeoPoint = trygeoPoint.Value;
+			var tryaddress = reader.ReadString();
+if(tryaddress.IsError){
+return ReadResult<IObject>.Move(tryaddress);
+}
+Address = tryaddress.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

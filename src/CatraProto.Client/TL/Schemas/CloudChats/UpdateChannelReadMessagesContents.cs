@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -18,11 +20,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public long ChannelId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("messages")]
-		public IList<int> Messages { get; set; }
+		public List<int> Messages { get; set; }
 
 
         #nullable enable
- public UpdateChannelReadMessagesContents (long channelId,IList<int> messages)
+ public UpdateChannelReadMessagesContents (long channelId,List<int> messages)
 {
  ChannelId = channelId;
 Messages = messages;
@@ -38,18 +40,30 @@ Messages = messages;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(ChannelId);
-			writer.Write(Messages);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(ChannelId);
+
+			writer.WriteVector(Messages, false);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			ChannelId = reader.Read<long>();
-			Messages = reader.ReadVector<int>();
+			var trychannelId = reader.ReadInt64();
+if(trychannelId.IsError){
+return ReadResult<IObject>.Move(trychannelId);
+}
+ChannelId = trychannelId.Value;
+			var trymessages = reader.ReadVector<int>(ParserTypes.Int);
+if(trymessages.IsError){
+return ReadResult<IObject>.Move(trymessages);
+}
+Messages = trymessages.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

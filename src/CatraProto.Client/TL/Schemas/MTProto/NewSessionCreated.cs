@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -42,20 +44,35 @@ ServerSalt = serverSalt;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(FirstMsgId);
-			writer.Write(UniqueId);
-			writer.Write(ServerSalt);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(FirstMsgId);
+writer.WriteInt64(UniqueId);
+writer.WriteInt64(ServerSalt);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			FirstMsgId = reader.Read<long>();
-			UniqueId = reader.Read<long>();
-			ServerSalt = reader.Read<long>();
+			var tryfirstMsgId = reader.ReadInt64();
+if(tryfirstMsgId.IsError){
+return ReadResult<IObject>.Move(tryfirstMsgId);
+}
+FirstMsgId = tryfirstMsgId.Value;
+			var tryuniqueId = reader.ReadInt64();
+if(tryuniqueId.IsError){
+return ReadResult<IObject>.Move(tryuniqueId);
+}
+UniqueId = tryuniqueId.Value;
+			var tryserverSalt = reader.ReadInt64();
+if(tryserverSalt.IsError){
+return ReadResult<IObject>.Move(tryserverSalt);
+}
+ServerSalt = tryserverSalt.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

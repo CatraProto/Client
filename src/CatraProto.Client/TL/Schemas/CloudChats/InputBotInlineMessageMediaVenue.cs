@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -39,6 +41,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("venue_type")]
 		public string VenueType { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("reply_markup")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase ReplyMarkup { get; set; }
 
@@ -65,39 +68,86 @@ VenueType = venueType;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(GeoPoint);
-			writer.Write(Title);
-			writer.Write(Address);
-			writer.Write(Provider);
-			writer.Write(VenueId);
-			writer.Write(VenueType);
+
+			writer.WriteInt32(Flags);
+var checkgeoPoint = 			writer.WriteObject(GeoPoint);
+if(checkgeoPoint.IsError){
+ return checkgeoPoint; 
+}
+
+			writer.WriteString(Title);
+
+			writer.WriteString(Address);
+
+			writer.WriteString(Provider);
+
+			writer.WriteString(VenueId);
+
+			writer.WriteString(VenueType);
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(ReplyMarkup);
+var checkreplyMarkup = 				writer.WriteObject(ReplyMarkup);
+if(checkreplyMarkup.IsError){
+ return checkreplyMarkup; 
+}
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			GeoPoint = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase>();
-			Title = reader.Read<string>();
-			Address = reader.Read<string>();
-			Provider = reader.Read<string>();
-			VenueId = reader.Read<string>();
-			VenueType = reader.Read<string>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var trygeoPoint = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase>();
+if(trygeoPoint.IsError){
+return ReadResult<IObject>.Move(trygeoPoint);
+}
+GeoPoint = trygeoPoint.Value;
+			var trytitle = reader.ReadString();
+if(trytitle.IsError){
+return ReadResult<IObject>.Move(trytitle);
+}
+Title = trytitle.Value;
+			var tryaddress = reader.ReadString();
+if(tryaddress.IsError){
+return ReadResult<IObject>.Move(tryaddress);
+}
+Address = tryaddress.Value;
+			var tryprovider = reader.ReadString();
+if(tryprovider.IsError){
+return ReadResult<IObject>.Move(tryprovider);
+}
+Provider = tryprovider.Value;
+			var tryvenueId = reader.ReadString();
+if(tryvenueId.IsError){
+return ReadResult<IObject>.Move(tryvenueId);
+}
+VenueId = tryvenueId.Value;
+			var tryvenueType = reader.ReadString();
+if(tryvenueType.IsError){
+return ReadResult<IObject>.Move(tryvenueType);
+}
+VenueType = tryvenueType.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				ReplyMarkup = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase>();
+				var tryreplyMarkup = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase>();
+if(tryreplyMarkup.IsError){
+return ReadResult<IObject>.Move(tryreplyMarkup);
+}
+ReplyMarkup = tryreplyMarkup.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

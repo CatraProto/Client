@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -27,10 +30,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int ConstructorId { get => -869258997; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -57,10 +57,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase FromPeer { get; set; }
 
 [Newtonsoft.Json.JsonProperty("id")]
-		public IList<int> Id { get; set; }
+		public List<int> Id { get; set; }
 
 [Newtonsoft.Json.JsonProperty("random_id")]
-		public IList<long> RandomId { get; set; }
+		public List<long> RandomId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("to_peer")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase ToPeer { get; set; }
@@ -68,12 +68,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 [Newtonsoft.Json.JsonProperty("schedule_date")]
 		public int? ScheduleDate { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("send_as")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase SendAs { get; set; }
 
         
         #nullable enable
- public ForwardMessages (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase fromPeer,IList<int> id,IList<long> randomId,CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase toPeer)
+ public ForwardMessages (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase fromPeer,List<int> id,List<long> randomId,CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase toPeer)
 {
  FromPeer = fromPeer;
 Id = id;
@@ -100,51 +101,94 @@ ToPeer = toPeer;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(FromPeer);
-			writer.Write(Id);
-			writer.Write(RandomId);
-			writer.Write(ToPeer);
+
+			writer.WriteInt32(Flags);
+var checkfromPeer = 			writer.WriteObject(FromPeer);
+if(checkfromPeer.IsError){
+ return checkfromPeer; 
+}
+
+			writer.WriteVector(Id, false);
+
+			writer.WriteVector(RandomId, false);
+var checktoPeer = 			writer.WriteObject(ToPeer);
+if(checktoPeer.IsError){
+ return checktoPeer; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 10))
 			{
-				writer.Write(ScheduleDate.Value);
+writer.WriteInt32(ScheduleDate.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 13))
 			{
-				writer.Write(SendAs);
+var checksendAs = 				writer.WriteObject(SendAs);
+if(checksendAs.IsError){
+ return checksendAs; 
+}
 			}
 
 
+return new WriteResult();
+
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Silent = FlagsHelper.IsFlagSet(Flags, 5);
 			Background = FlagsHelper.IsFlagSet(Flags, 6);
 			WithMyScore = FlagsHelper.IsFlagSet(Flags, 8);
 			DropAuthor = FlagsHelper.IsFlagSet(Flags, 11);
 			DropMediaCaptions = FlagsHelper.IsFlagSet(Flags, 12);
 			Noforwards = FlagsHelper.IsFlagSet(Flags, 14);
-			FromPeer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
-			Id = reader.ReadVector<int>();
-			RandomId = reader.ReadVector<long>();
-			ToPeer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+			var tryfromPeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+if(tryfromPeer.IsError){
+return ReadResult<IObject>.Move(tryfromPeer);
+}
+FromPeer = tryfromPeer.Value;
+			var tryid = reader.ReadVector<int>(ParserTypes.Int);
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var tryrandomId = reader.ReadVector<long>(ParserTypes.Int64);
+if(tryrandomId.IsError){
+return ReadResult<IObject>.Move(tryrandomId);
+}
+RandomId = tryrandomId.Value;
+			var trytoPeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+if(trytoPeer.IsError){
+return ReadResult<IObject>.Move(trytoPeer);
+}
+ToPeer = trytoPeer.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 10))
 			{
-				ScheduleDate = reader.Read<int>();
+				var tryscheduleDate = reader.ReadInt32();
+if(tryscheduleDate.IsError){
+return ReadResult<IObject>.Move(tryscheduleDate);
+}
+ScheduleDate = tryscheduleDate.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 13))
 			{
-				SendAs = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+				var trysendAs = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+if(trysendAs.IsError){
+return ReadResult<IObject>.Move(trysendAs);
+}
+SendAs = trysendAs.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 

@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public static int ConstructorId { get => 608323678; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
 
 [Newtonsoft.Json.JsonProperty("ttl")]
 		public CatraProto.Client.TL.Schemas.CloudChats.AccountDaysTTLBase Ttl { get; set; }
@@ -42,16 +42,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Ttl);
+writer.WriteInt32(ConstructorId);
+var checkttl = 			writer.WriteObject(Ttl);
+if(checkttl.IsError){
+ return checkttl; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Ttl = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.AccountDaysTTLBase>();
+			var tryttl = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.AccountDaysTTLBase>();
+if(tryttl.IsError){
+return ReadResult<IObject>.Move(tryttl);
+}
+Ttl = tryttl.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

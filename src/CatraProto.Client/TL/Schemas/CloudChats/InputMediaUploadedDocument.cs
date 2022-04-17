@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -34,6 +36,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("file")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase File { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("thumb")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase Thumb { get; set; }
 
@@ -41,17 +44,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public string MimeType { get; set; }
 
 [Newtonsoft.Json.JsonProperty("attributes")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase> Attributes { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase> Attributes { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("stickers")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase> Stickers { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase> Stickers { get; set; }
 
 [Newtonsoft.Json.JsonProperty("ttl_seconds")]
 		public int? TtlSeconds { get; set; }
 
 
         #nullable enable
- public InputMediaUploadedDocument (CatraProto.Client.TL.Schemas.CloudChats.InputFileBase file,string mimeType,IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase> attributes)
+ public InputMediaUploadedDocument (CatraProto.Client.TL.Schemas.CloudChats.InputFileBase file,string mimeType,List<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase> attributes)
 {
  File = file;
 MimeType = mimeType;
@@ -73,55 +77,100 @@ Attributes = attributes;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(File);
+
+			writer.WriteInt32(Flags);
+var checkfile = 			writer.WriteObject(File);
+if(checkfile.IsError){
+ return checkfile; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(Thumb);
+var checkthumb = 				writer.WriteObject(Thumb);
+if(checkthumb.IsError){
+ return checkthumb; 
+}
 			}
 
-			writer.Write(MimeType);
-			writer.Write(Attributes);
+
+			writer.WriteString(MimeType);
+var checkattributes = 			writer.WriteVector(Attributes, false);
+if(checkattributes.IsError){
+ return checkattributes; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(Stickers);
+var checkstickers = 				writer.WriteVector(Stickers, false);
+if(checkstickers.IsError){
+ return checkstickers; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(TtlSeconds.Value);
+writer.WriteInt32(TtlSeconds.Value);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			NosoundVideo = FlagsHelper.IsFlagSet(Flags, 3);
 			ForceFile = FlagsHelper.IsFlagSet(Flags, 4);
-			File = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
+			var tryfile = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
+if(tryfile.IsError){
+return ReadResult<IObject>.Move(tryfile);
+}
+File = tryfile.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				Thumb = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
+				var trythumb = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
+if(trythumb.IsError){
+return ReadResult<IObject>.Move(trythumb);
+}
+Thumb = trythumb.Value;
 			}
 
-			MimeType = reader.Read<string>();
-			Attributes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase>();
+			var trymimeType = reader.ReadString();
+if(trymimeType.IsError){
+return ReadResult<IObject>.Move(trymimeType);
+}
+MimeType = trymimeType.Value;
+			var tryattributes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryattributes.IsError){
+return ReadResult<IObject>.Move(tryattributes);
+}
+Attributes = tryattributes.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Stickers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
+				var trystickers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trystickers.IsError){
+return ReadResult<IObject>.Move(trystickers);
+}
+Stickers = trystickers.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				TtlSeconds = reader.Read<int>();
+				var tryttlSeconds = reader.ReadInt32();
+if(tryttlSeconds.IsError){
+return ReadResult<IObject>.Move(tryttlSeconds);
+}
+TtlSeconds = tryttlSeconds.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

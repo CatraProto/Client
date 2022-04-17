@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -31,15 +33,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 [Newtonsoft.Json.JsonProperty("default_name")]
 		public sealed override string DefaultName { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("name")]
 		public sealed override string Name { get; set; }
 
 [Newtonsoft.Json.JsonProperty("country_codes")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.Help.CountryCodeBase> CountryCodes { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.Help.CountryCodeBase> CountryCodes { get; set; }
 
 
         #nullable enable
- public Country (string iso2,string defaultName,IList<CatraProto.Client.TL.Schemas.CloudChats.Help.CountryCodeBase> countryCodes)
+ public Country (string iso2,string defaultName,List<CatraProto.Client.TL.Schemas.CloudChats.Help.CountryCodeBase> countryCodes)
 {
  Iso2 = iso2;
 DefaultName = defaultName;
@@ -58,34 +61,64 @@ CountryCodes = countryCodes;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Iso2);
-			writer.Write(DefaultName);
+
+			writer.WriteInt32(Flags);
+
+			writer.WriteString(Iso2);
+
+			writer.WriteString(DefaultName);
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(Name);
+
+				writer.WriteString(Name);
 			}
 
-			writer.Write(CountryCodes);
+var checkcountryCodes = 			writer.WriteVector(CountryCodes, false);
+if(checkcountryCodes.IsError){
+ return checkcountryCodes; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Hidden = FlagsHelper.IsFlagSet(Flags, 0);
-			Iso2 = reader.Read<string>();
-			DefaultName = reader.Read<string>();
+			var tryiso2 = reader.ReadString();
+if(tryiso2.IsError){
+return ReadResult<IObject>.Move(tryiso2);
+}
+Iso2 = tryiso2.Value;
+			var trydefaultName = reader.ReadString();
+if(trydefaultName.IsError){
+return ReadResult<IObject>.Move(trydefaultName);
+}
+DefaultName = trydefaultName.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Name = reader.Read<string>();
+				var tryname = reader.ReadString();
+if(tryname.IsError){
+return ReadResult<IObject>.Move(tryname);
+}
+Name = tryname.Value;
 			}
 
-			CountryCodes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.Help.CountryCodeBase>();
+			var trycountryCodes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.Help.CountryCodeBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trycountryCodes.IsError){
+return ReadResult<IObject>.Move(trycountryCodes);
+}
+CountryCodes = trycountryCodes.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

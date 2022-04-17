@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -28,6 +30,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 [Newtonsoft.Json.JsonProperty("phone_code_hash")]
 		public sealed override string PhoneCodeHash { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("next_type")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.Auth.CodeTypeBase NextType { get; set; }
 
@@ -54,41 +57,72 @@ PhoneCodeHash = phoneCodeHash;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Type);
-			writer.Write(PhoneCodeHash);
+
+			writer.WriteInt32(Flags);
+var checktype = 			writer.WriteObject(Type);
+if(checktype.IsError){
+ return checktype; 
+}
+
+			writer.WriteString(PhoneCodeHash);
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(NextType);
+var checknextType = 				writer.WriteObject(NextType);
+if(checknextType.IsError){
+ return checknextType; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(Timeout.Value);
+writer.WriteInt32(Timeout.Value);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			Type = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeTypeBase>();
-			PhoneCodeHash = reader.Read<string>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var trytype = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeTypeBase>();
+if(trytype.IsError){
+return ReadResult<IObject>.Move(trytype);
+}
+Type = trytype.Value;
+			var tryphoneCodeHash = reader.ReadString();
+if(tryphoneCodeHash.IsError){
+return ReadResult<IObject>.Move(tryphoneCodeHash);
+}
+PhoneCodeHash = tryphoneCodeHash.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				NextType = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.Auth.CodeTypeBase>();
+				var trynextType = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.Auth.CodeTypeBase>();
+if(trynextType.IsError){
+return ReadResult<IObject>.Move(trynextType);
+}
+NextType = trynextType.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				Timeout = reader.Read<int>();
+				var trytimeout = reader.ReadInt32();
+if(trytimeout.IsError){
+return ReadResult<IObject>.Move(trytimeout);
+}
+Timeout = trytimeout.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -69,32 +71,74 @@ UnreadUnmutedMessagesCount = unreadUnmutedMessagesCount;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Folder);
-			writer.Write(Peer);
-			writer.Write(TopMessage);
-			writer.Write(UnreadMutedPeersCount);
-			writer.Write(UnreadUnmutedPeersCount);
-			writer.Write(UnreadMutedMessagesCount);
-			writer.Write(UnreadUnmutedMessagesCount);
+
+			writer.WriteInt32(Flags);
+var checkfolder = 			writer.WriteObject(Folder);
+if(checkfolder.IsError){
+ return checkfolder; 
+}
+var checkpeer = 			writer.WriteObject(Peer);
+if(checkpeer.IsError){
+ return checkpeer; 
+}
+writer.WriteInt32(TopMessage);
+writer.WriteInt32(UnreadMutedPeersCount);
+writer.WriteInt32(UnreadUnmutedPeersCount);
+writer.WriteInt32(UnreadMutedMessagesCount);
+writer.WriteInt32(UnreadUnmutedMessagesCount);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Pinned = FlagsHelper.IsFlagSet(Flags, 2);
-			Folder = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.FolderBase>();
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
-			TopMessage = reader.Read<int>();
-			UnreadMutedPeersCount = reader.Read<int>();
-			UnreadUnmutedPeersCount = reader.Read<int>();
-			UnreadMutedMessagesCount = reader.Read<int>();
-			UnreadUnmutedMessagesCount = reader.Read<int>();
+			var tryfolder = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.FolderBase>();
+if(tryfolder.IsError){
+return ReadResult<IObject>.Move(tryfolder);
+}
+Folder = tryfolder.Value;
+			var trypeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+if(trypeer.IsError){
+return ReadResult<IObject>.Move(trypeer);
+}
+Peer = trypeer.Value;
+			var trytopMessage = reader.ReadInt32();
+if(trytopMessage.IsError){
+return ReadResult<IObject>.Move(trytopMessage);
+}
+TopMessage = trytopMessage.Value;
+			var tryunreadMutedPeersCount = reader.ReadInt32();
+if(tryunreadMutedPeersCount.IsError){
+return ReadResult<IObject>.Move(tryunreadMutedPeersCount);
+}
+UnreadMutedPeersCount = tryunreadMutedPeersCount.Value;
+			var tryunreadUnmutedPeersCount = reader.ReadInt32();
+if(tryunreadUnmutedPeersCount.IsError){
+return ReadResult<IObject>.Move(tryunreadUnmutedPeersCount);
+}
+UnreadUnmutedPeersCount = tryunreadUnmutedPeersCount.Value;
+			var tryunreadMutedMessagesCount = reader.ReadInt32();
+if(tryunreadMutedMessagesCount.IsError){
+return ReadResult<IObject>.Move(tryunreadMutedMessagesCount);
+}
+UnreadMutedMessagesCount = tryunreadMutedMessagesCount.Value;
+			var tryunreadUnmutedMessagesCount = reader.ReadInt32();
+if(tryunreadUnmutedMessagesCount.IsError){
+return ReadResult<IObject>.Move(tryunreadUnmutedMessagesCount);
+}
+UnreadUnmutedMessagesCount = tryunreadUnmutedMessagesCount.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

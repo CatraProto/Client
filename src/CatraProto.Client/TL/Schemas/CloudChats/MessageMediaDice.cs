@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,30 @@ Emoticon = emoticon;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Value);
-			writer.Write(Emoticon);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt32(Value);
+
+			writer.WriteString(Emoticon);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Value = reader.Read<int>();
-			Emoticon = reader.Read<string>();
+			var tryvalue = reader.ReadInt32();
+if(tryvalue.IsError){
+return ReadResult<IObject>.Move(tryvalue);
+}
+Value = tryvalue.Value;
+			var tryemoticon = reader.ReadString();
+if(tryemoticon.IsError){
+return ReadResult<IObject>.Move(tryemoticon);
+}
+Emoticon = tryemoticon.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

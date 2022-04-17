@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -81,15 +83,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("volume")]
 		public sealed override int? Volume { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("about")]
 		public sealed override string About { get; set; }
 
 [Newtonsoft.Json.JsonProperty("raise_hand_rating")]
 		public sealed override long? RaiseHandRating { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("video")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.GroupCallParticipantVideoBase Video { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("presentation")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.GroupCallParticipantVideoBase Presentation { get; set; }
 
@@ -128,50 +133,67 @@ Source = source;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Peer);
-			writer.Write(Date);
+
+			writer.WriteInt32(Flags);
+var checkpeer = 			writer.WriteObject(Peer);
+if(checkpeer.IsError){
+ return checkpeer; 
+}
+writer.WriteInt32(Date);
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				writer.Write(ActiveDate.Value);
+writer.WriteInt32(ActiveDate.Value);
 			}
 
-			writer.Write(Source);
+writer.WriteInt32(Source);
 			if(FlagsHelper.IsFlagSet(Flags, 7))
 			{
-				writer.Write(Volume.Value);
+writer.WriteInt32(Volume.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 11))
 			{
-				writer.Write(About);
+
+				writer.WriteString(About);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 13))
 			{
-				writer.Write(RaiseHandRating.Value);
+writer.WriteInt64(RaiseHandRating.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
-				writer.Write(Video);
+var checkvideo = 				writer.WriteObject(Video);
+if(checkvideo.IsError){
+ return checkvideo; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 14))
 			{
-				writer.Write(Presentation);
+var checkpresentation = 				writer.WriteObject(Presentation);
+if(checkpresentation.IsError){
+ return checkpresentation; 
+}
 			}
 
 
+return new WriteResult();
+
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Muted = FlagsHelper.IsFlagSet(Flags, 0);
 			Left = FlagsHelper.IsFlagSet(Flags, 1);
 			CanSelfUnmute = FlagsHelper.IsFlagSet(Flags, 2);
@@ -182,39 +204,76 @@ writer.Write(ConstructorId);
 			VolumeByAdmin = FlagsHelper.IsFlagSet(Flags, 10);
 			Self = FlagsHelper.IsFlagSet(Flags, 12);
 			VideoJoined = FlagsHelper.IsFlagSet(Flags, 15);
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
-			Date = reader.Read<int>();
+			var trypeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+if(trypeer.IsError){
+return ReadResult<IObject>.Move(trypeer);
+}
+Peer = trypeer.Value;
+			var trydate = reader.ReadInt32();
+if(trydate.IsError){
+return ReadResult<IObject>.Move(trydate);
+}
+Date = trydate.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				ActiveDate = reader.Read<int>();
+				var tryactiveDate = reader.ReadInt32();
+if(tryactiveDate.IsError){
+return ReadResult<IObject>.Move(tryactiveDate);
+}
+ActiveDate = tryactiveDate.Value;
 			}
 
-			Source = reader.Read<int>();
+			var trysource = reader.ReadInt32();
+if(trysource.IsError){
+return ReadResult<IObject>.Move(trysource);
+}
+Source = trysource.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 7))
 			{
-				Volume = reader.Read<int>();
+				var tryvolume = reader.ReadInt32();
+if(tryvolume.IsError){
+return ReadResult<IObject>.Move(tryvolume);
+}
+Volume = tryvolume.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 11))
 			{
-				About = reader.Read<string>();
+				var tryabout = reader.ReadString();
+if(tryabout.IsError){
+return ReadResult<IObject>.Move(tryabout);
+}
+About = tryabout.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 13))
 			{
-				RaiseHandRating = reader.Read<long>();
+				var tryraiseHandRating = reader.ReadInt64();
+if(tryraiseHandRating.IsError){
+return ReadResult<IObject>.Move(tryraiseHandRating);
+}
+RaiseHandRating = tryraiseHandRating.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
-				Video = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.GroupCallParticipantVideoBase>();
+				var tryvideo = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.GroupCallParticipantVideoBase>();
+if(tryvideo.IsError){
+return ReadResult<IObject>.Move(tryvideo);
+}
+Video = tryvideo.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 14))
 			{
-				Presentation = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.GroupCallParticipantVideoBase>();
+				var trypresentation = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.GroupCallParticipantVideoBase>();
+if(trypresentation.IsError){
+return ReadResult<IObject>.Move(trypresentation);
+}
+Presentation = trypresentation.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

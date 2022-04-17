@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -54,32 +56,53 @@ DcId = dcId;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(PhotoId);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt64(PhotoId);
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(StrippedThumb);
+
+				writer.WriteBytes(StrippedThumb);
 			}
 
-			writer.Write(DcId);
+writer.WriteInt32(DcId);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			HasVideo = FlagsHelper.IsFlagSet(Flags, 0);
-			PhotoId = reader.Read<long>();
+			var tryphotoId = reader.ReadInt64();
+if(tryphotoId.IsError){
+return ReadResult<IObject>.Move(tryphotoId);
+}
+PhotoId = tryphotoId.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				StrippedThumb = reader.Read<byte[]>();
+				var trystrippedThumb = reader.ReadBytes();
+if(trystrippedThumb.IsError){
+return ReadResult<IObject>.Move(trystrippedThumb);
+}
+StrippedThumb = trystrippedThumb.Value;
 			}
 
-			DcId = reader.Read<int>();
+			var trydcId = reader.ReadInt32();
+if(trydcId.IsError){
+return ReadResult<IObject>.Move(trydcId);
+}
+DcId = trydcId.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

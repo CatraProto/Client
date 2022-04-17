@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -32,14 +34,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 		public sealed override string Text { get; set; }
 
 [Newtonsoft.Json.JsonProperty("entities")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
 
 [Newtonsoft.Json.JsonProperty("min_age_confirm")]
 		public sealed override int? MinAgeConfirm { get; set; }
 
 
         #nullable enable
- public TermsOfService (CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase id,string text,IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> entities)
+ public TermsOfService (CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase id,string text,List<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> entities)
 {
  Id = id;
 Text = text;
@@ -58,34 +60,65 @@ Entities = entities;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Id);
-			writer.Write(Text);
-			writer.Write(Entities);
+
+			writer.WriteInt32(Flags);
+var checkid = 			writer.WriteObject(Id);
+if(checkid.IsError){
+ return checkid; 
+}
+
+			writer.WriteString(Text);
+var checkentities = 			writer.WriteVector(Entities, false);
+if(checkentities.IsError){
+ return checkentities; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(MinAgeConfirm.Value);
+writer.WriteInt32(MinAgeConfirm.Value);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Popup = FlagsHelper.IsFlagSet(Flags, 0);
-			Id = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
-			Text = reader.Read<string>();
-			Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
+			var tryid = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var trytext = reader.ReadString();
+if(trytext.IsError){
+return ReadResult<IObject>.Move(trytext);
+}
+Text = trytext.Value;
+			var tryentities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryentities.IsError){
+return ReadResult<IObject>.Move(tryentities);
+}
+Entities = tryentities.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				MinAgeConfirm = reader.Read<int>();
+				var tryminAgeConfirm = reader.ReadInt32();
+if(tryminAgeConfirm.IsError){
+return ReadResult<IObject>.Move(tryminAgeConfirm);
+}
+MinAgeConfirm = tryminAgeConfirm.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

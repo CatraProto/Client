@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -58,43 +60,71 @@ ReadMaxId = readMaxId;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(ChannelId);
-			writer.Write(TopMsgId);
-			writer.Write(ReadMaxId);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt64(ChannelId);
+writer.WriteInt32(TopMsgId);
+writer.WriteInt32(ReadMaxId);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(BroadcastId.Value);
+writer.WriteInt64(BroadcastId.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(BroadcastPost.Value);
+writer.WriteInt32(BroadcastPost.Value);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			ChannelId = reader.Read<long>();
-			TopMsgId = reader.Read<int>();
-			ReadMaxId = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var trychannelId = reader.ReadInt64();
+if(trychannelId.IsError){
+return ReadResult<IObject>.Move(trychannelId);
+}
+ChannelId = trychannelId.Value;
+			var trytopMsgId = reader.ReadInt32();
+if(trytopMsgId.IsError){
+return ReadResult<IObject>.Move(trytopMsgId);
+}
+TopMsgId = trytopMsgId.Value;
+			var tryreadMaxId = reader.ReadInt32();
+if(tryreadMaxId.IsError){
+return ReadResult<IObject>.Move(tryreadMaxId);
+}
+ReadMaxId = tryreadMaxId.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				BroadcastId = reader.Read<long>();
+				var trybroadcastId = reader.ReadInt64();
+if(trybroadcastId.IsError){
+return ReadResult<IObject>.Move(trybroadcastId);
+}
+BroadcastId = trybroadcastId.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				BroadcastPost = reader.Read<int>();
+				var trybroadcastPost = reader.ReadInt32();
+if(trybroadcastPost.IsError){
+return ReadResult<IObject>.Move(trybroadcastPost);
+}
+BroadcastPost = trybroadcastPost.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

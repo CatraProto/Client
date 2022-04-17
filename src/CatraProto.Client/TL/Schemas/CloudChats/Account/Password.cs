@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,6 +40,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 [Newtonsoft.Json.JsonProperty("has_password")]
 		public sealed override bool HasPassword { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("current_algo")]
 		public sealed override CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase CurrentAlgo { get; set; }
 
@@ -47,9 +50,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 [Newtonsoft.Json.JsonProperty("srp_id")]
 		public sealed override long? SrpId { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("hint")]
 		public sealed override string Hint { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("email_unconfirmed_pattern")]
 		public sealed override string EmailUnconfirmedPattern { get; set; }
 
@@ -93,86 +98,143 @@ SecureRandom = secureRandom;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
+
+			writer.WriteInt32(Flags);
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(CurrentAlgo);
+var checkcurrentAlgo = 				writer.WriteObject(CurrentAlgo);
+if(checkcurrentAlgo.IsError){
+ return checkcurrentAlgo; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(SrpB);
+
+				writer.WriteBytes(SrpB);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(SrpId.Value);
+writer.WriteInt64(SrpId.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				writer.Write(Hint);
+
+				writer.WriteString(Hint);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				writer.Write(EmailUnconfirmedPattern);
+
+				writer.WriteString(EmailUnconfirmedPattern);
 			}
 
-			writer.Write(NewAlgo);
-			writer.Write(NewSecureAlgo);
-			writer.Write(SecureRandom);
+var checknewAlgo = 			writer.WriteObject(NewAlgo);
+if(checknewAlgo.IsError){
+ return checknewAlgo; 
+}
+var checknewSecureAlgo = 			writer.WriteObject(NewSecureAlgo);
+if(checknewSecureAlgo.IsError){
+ return checknewSecureAlgo; 
+}
+
+			writer.WriteBytes(SecureRandom);
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				writer.Write(PendingResetDate.Value);
+writer.WriteInt32(PendingResetDate.Value);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			HasRecovery = FlagsHelper.IsFlagSet(Flags, 0);
 			HasSecureValues = FlagsHelper.IsFlagSet(Flags, 1);
 			HasPassword = FlagsHelper.IsFlagSet(Flags, 2);
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				CurrentAlgo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase>();
+				var trycurrentAlgo = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase>();
+if(trycurrentAlgo.IsError){
+return ReadResult<IObject>.Move(trycurrentAlgo);
+}
+CurrentAlgo = trycurrentAlgo.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				SrpB = reader.Read<byte[]>();
+				var trysrpB = reader.ReadBytes();
+if(trysrpB.IsError){
+return ReadResult<IObject>.Move(trysrpB);
+}
+SrpB = trysrpB.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				SrpId = reader.Read<long>();
+				var trysrpId = reader.ReadInt64();
+if(trysrpId.IsError){
+return ReadResult<IObject>.Move(trysrpId);
+}
+SrpId = trysrpId.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				Hint = reader.Read<string>();
+				var tryhint = reader.ReadString();
+if(tryhint.IsError){
+return ReadResult<IObject>.Move(tryhint);
+}
+Hint = tryhint.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				EmailUnconfirmedPattern = reader.Read<string>();
+				var tryemailUnconfirmedPattern = reader.ReadString();
+if(tryemailUnconfirmedPattern.IsError){
+return ReadResult<IObject>.Move(tryemailUnconfirmedPattern);
+}
+EmailUnconfirmedPattern = tryemailUnconfirmedPattern.Value;
 			}
 
-			NewAlgo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase>();
-			NewSecureAlgo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SecurePasswordKdfAlgoBase>();
-			SecureRandom = reader.Read<byte[]>();
+			var trynewAlgo = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase>();
+if(trynewAlgo.IsError){
+return ReadResult<IObject>.Move(trynewAlgo);
+}
+NewAlgo = trynewAlgo.Value;
+			var trynewSecureAlgo = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.SecurePasswordKdfAlgoBase>();
+if(trynewSecureAlgo.IsError){
+return ReadResult<IObject>.Move(trynewSecureAlgo);
+}
+NewSecureAlgo = trynewSecureAlgo.Value;
+			var trysecureRandom = reader.ReadBytes();
+if(trysecureRandom.IsError){
+return ReadResult<IObject>.Move(trysecureRandom);
+}
+SecureRandom = trysecureRandom.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				PendingResetDate = reader.Read<int>();
+				var trypendingResetDate = reader.ReadInt32();
+if(trypendingResetDate.IsError){
+return ReadResult<IObject>.Move(trypendingResetDate);
+}
+PendingResetDate = trypendingResetDate.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

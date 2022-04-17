@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -42,20 +44,35 @@ Score = score;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Pos);
-			writer.Write(UserId);
-			writer.Write(Score);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt32(Pos);
+writer.WriteInt64(UserId);
+writer.WriteInt32(Score);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Pos = reader.Read<int>();
-			UserId = reader.Read<long>();
-			Score = reader.Read<int>();
+			var trypos = reader.ReadInt32();
+if(trypos.IsError){
+return ReadResult<IObject>.Move(trypos);
+}
+Pos = trypos.Value;
+			var tryuserId = reader.ReadInt64();
+if(tryuserId.IsError){
+return ReadResult<IObject>.Move(tryuserId);
+}
+UserId = tryuserId.Value;
+			var tryscore = reader.ReadInt32();
+if(tryscore.IsError){
+return ReadResult<IObject>.Move(tryscore);
+}
+Score = tryscore.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

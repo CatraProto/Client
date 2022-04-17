@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -20,10 +23,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int ConstructorId { get => 991616823; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
 
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -35,11 +35,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public int FolderId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("order")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputDialogPeerBase> Order { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.InputDialogPeerBase> Order { get; set; }
 
         
         #nullable enable
- public ReorderPinnedDialogs (int folderId,IList<CatraProto.Client.TL.Schemas.CloudChats.InputDialogPeerBase> order)
+ public ReorderPinnedDialogs (int folderId,List<CatraProto.Client.TL.Schemas.CloudChats.InputDialogPeerBase> order)
 {
  FolderId = folderId;
 Order = order;
@@ -57,22 +57,41 @@ Order = order;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(FolderId);
-			writer.Write(Order);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt32(FolderId);
+var checkorder = 			writer.WriteVector(Order, false);
+if(checkorder.IsError){
+ return checkorder; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Force = FlagsHelper.IsFlagSet(Flags, 0);
-			FolderId = reader.Read<int>();
-			Order = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputDialogPeerBase>();
+			var tryfolderId = reader.ReadInt32();
+if(tryfolderId.IsError){
+return ReadResult<IObject>.Move(tryfolderId);
+}
+FolderId = tryfolderId.Value;
+			var tryorder = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputDialogPeerBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryorder.IsError){
+return ReadResult<IObject>.Move(tryorder);
+}
+Order = tryorder.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

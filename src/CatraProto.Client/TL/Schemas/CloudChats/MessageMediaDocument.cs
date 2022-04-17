@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -22,6 +24,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("document")]
 		public CatraProto.Client.TL.Schemas.CloudChats.DocumentBase Document { get; set; }
 
@@ -41,37 +44,56 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
+
+			writer.WriteInt32(Flags);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(Document);
+var checkdocument = 				writer.WriteObject(Document);
+if(checkdocument.IsError){
+ return checkdocument; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(TtlSeconds.Value);
+writer.WriteInt32(TtlSeconds.Value);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Document = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
+				var trydocument = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
+if(trydocument.IsError){
+return ReadResult<IObject>.Move(trydocument);
+}
+Document = trydocument.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				TtlSeconds = reader.Read<int>();
+				var tryttlSeconds = reader.ReadInt32();
+if(tryttlSeconds.IsError){
+return ReadResult<IObject>.Move(tryttlSeconds);
+}
+TtlSeconds = tryttlSeconds.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -15,14 +17,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get => 455635795; }
         
 [Newtonsoft.Json.JsonProperty("values")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase> Values { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase> Values { get; set; }
 
 [Newtonsoft.Json.JsonProperty("credentials")]
 		public CatraProto.Client.TL.Schemas.CloudChats.SecureCredentialsEncryptedBase Credentials { get; set; }
 
 
         #nullable enable
- public MessageActionSecureValuesSentMe (IList<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase> values,CatraProto.Client.TL.Schemas.CloudChats.SecureCredentialsEncryptedBase credentials)
+ public MessageActionSecureValuesSentMe (List<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase> values,CatraProto.Client.TL.Schemas.CloudChats.SecureCredentialsEncryptedBase credentials)
 {
  Values = values;
 Credentials = credentials;
@@ -38,18 +40,35 @@ Credentials = credentials;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Values);
-			writer.Write(Credentials);
+writer.WriteInt32(ConstructorId);
+var checkvalues = 			writer.WriteVector(Values, false);
+if(checkvalues.IsError){
+ return checkvalues; 
+}
+var checkcredentials = 			writer.WriteObject(Credentials);
+if(checkcredentials.IsError){
+ return checkcredentials; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Values = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase>();
-			Credentials = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SecureCredentialsEncryptedBase>();
+			var tryvalues = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryvalues.IsError){
+return ReadResult<IObject>.Move(tryvalues);
+}
+Values = tryvalues.Value;
+			var trycredentials = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.SecureCredentialsEncryptedBase>();
+if(trycredentials.IsError){
+return ReadResult<IObject>.Move(trycredentials);
+}
+Credentials = trycredentials.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -46,22 +48,44 @@ GB = gB;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Nonce);
-			writer.Write(ServerNonce);
-			writer.Write(RetryId);
-			writer.Write(GB);
+writer.WriteInt32(ConstructorId);
+var checkNonce = writer.WriteBigInteger(Nonce);
+if(checkNonce.IsError){ return checkNonce;}
+var checkServerNonce = writer.WriteBigInteger(ServerNonce);
+if(checkServerNonce.IsError){ return checkServerNonce;}
+writer.WriteInt64(RetryId);
+
+			writer.WriteBytes(GB);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Nonce = reader.Read<System.Numerics.BigInteger>(128);
-			ServerNonce = reader.Read<System.Numerics.BigInteger>(128);
-			RetryId = reader.Read<long>();
-			GB = reader.Read<byte[]>();
+			var trynonce = reader.ReadBigInteger(128);
+if(trynonce.IsError){
+return ReadResult<IObject>.Move(trynonce);
+}
+Nonce = trynonce.Value;
+			var tryserverNonce = reader.ReadBigInteger(128);
+if(tryserverNonce.IsError){
+return ReadResult<IObject>.Move(tryserverNonce);
+}
+ServerNonce = tryserverNonce.Value;
+			var tryretryId = reader.ReadInt64();
+if(tryretryId.IsError){
+return ReadResult<IObject>.Move(tryretryId);
+}
+RetryId = tryretryId.Value;
+			var trygB = reader.ReadBytes();
+if(trygB.IsError){
+return ReadResult<IObject>.Move(trygB);
+}
+GB = trygB.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -10,10 +10,10 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
     {
         public CancellationTokenRegistration? CancellationTokenRegistration { get; set; }
         public TaskCompletionSource? TaskCompletionSource { get; }
-        public IRpcMessage? RpcMessage { get; }
+        public IRpcResponse? RpcResponse { get; }
         public IMethod? Method { get; }
 
-        public MessageCompletion(TaskCompletionSource? taskCompletionSource, IRpcMessage? rpcMessage, IMethod? method)
+        public MessageCompletion(TaskCompletionSource? taskCompletionSource, IRpcResponse? rpcMessage, IMethod? method)
         {
             if (rpcMessage is null && taskCompletionSource is not null)
             {
@@ -21,7 +21,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
             }
 
             Method = method;
-            RpcMessage = rpcMessage;
+            RpcResponse = rpcMessage;
             TaskCompletionSource = taskCompletionSource;
         }
     }

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -29,20 +31,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("min")]
 		public sealed override bool Min { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("results")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.PollAnswerVotersBase> Results { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.PollAnswerVotersBase> Results { get; set; }
 
 [Newtonsoft.Json.JsonProperty("total_voters")]
 		public sealed override int? TotalVoters { get; set; }
 
 [Newtonsoft.Json.JsonProperty("recent_voters")]
-		public sealed override IList<long> RecentVoters { get; set; }
+		public sealed override List<long> RecentVoters { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("solution")]
 		public sealed override string Solution { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("solution_entities")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> SolutionEntities { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> SolutionEntities { get; set; }
 
 
         
@@ -61,68 +66,104 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
+
+			writer.WriteInt32(Flags);
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(Results);
+var checkresults = 				writer.WriteVector(Results, false);
+if(checkresults.IsError){
+ return checkresults; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(TotalVoters.Value);
+writer.WriteInt32(TotalVoters.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				writer.Write(RecentVoters);
+
+				writer.WriteVector(RecentVoters, false);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				writer.Write(Solution);
+
+				writer.WriteString(Solution);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				writer.Write(SolutionEntities);
+var checksolutionEntities = 				writer.WriteVector(SolutionEntities, false);
+if(checksolutionEntities.IsError){
+ return checksolutionEntities; 
+}
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Min = FlagsHelper.IsFlagSet(Flags, 0);
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Results = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PollAnswerVotersBase>();
+				var tryresults = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PollAnswerVotersBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryresults.IsError){
+return ReadResult<IObject>.Move(tryresults);
+}
+Results = tryresults.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				TotalVoters = reader.Read<int>();
+				var trytotalVoters = reader.ReadInt32();
+if(trytotalVoters.IsError){
+return ReadResult<IObject>.Move(trytotalVoters);
+}
+TotalVoters = trytotalVoters.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				RecentVoters = reader.ReadVector<long>();
+				var tryrecentVoters = reader.ReadVector<long>(ParserTypes.Int64);
+if(tryrecentVoters.IsError){
+return ReadResult<IObject>.Move(tryrecentVoters);
+}
+RecentVoters = tryrecentVoters.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				Solution = reader.Read<string>();
+				var trysolution = reader.ReadString();
+if(trysolution.IsError){
+return ReadResult<IObject>.Move(trysolution);
+}
+Solution = trysolution.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				SolutionEntities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
+				var trysolutionEntities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trysolutionEntities.IsError){
+return ReadResult<IObject>.Move(trysolutionEntities);
+}
+SolutionEntities = trysolutionEntities.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

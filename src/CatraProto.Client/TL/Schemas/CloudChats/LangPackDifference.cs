@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -24,11 +26,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public sealed override int Version { get; set; }
 
 [Newtonsoft.Json.JsonProperty("strings")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.LangPackStringBase> Strings { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.LangPackStringBase> Strings { get; set; }
 
 
         #nullable enable
- public LangPackDifference (string langCode,int fromVersion,int version,IList<CatraProto.Client.TL.Schemas.CloudChats.LangPackStringBase> strings)
+ public LangPackDifference (string langCode,int fromVersion,int version,List<CatraProto.Client.TL.Schemas.CloudChats.LangPackStringBase> strings)
 {
  LangCode = langCode;
 FromVersion = fromVersion;
@@ -46,22 +48,45 @@ Strings = strings;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(LangCode);
-			writer.Write(FromVersion);
-			writer.Write(Version);
-			writer.Write(Strings);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteString(LangCode);
+writer.WriteInt32(FromVersion);
+writer.WriteInt32(Version);
+var checkstrings = 			writer.WriteVector(Strings, false);
+if(checkstrings.IsError){
+ return checkstrings; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			LangCode = reader.Read<string>();
-			FromVersion = reader.Read<int>();
-			Version = reader.Read<int>();
-			Strings = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.LangPackStringBase>();
+			var trylangCode = reader.ReadString();
+if(trylangCode.IsError){
+return ReadResult<IObject>.Move(trylangCode);
+}
+LangCode = trylangCode.Value;
+			var tryfromVersion = reader.ReadInt32();
+if(tryfromVersion.IsError){
+return ReadResult<IObject>.Move(tryfromVersion);
+}
+FromVersion = tryfromVersion.Value;
+			var tryversion = reader.ReadInt32();
+if(tryversion.IsError){
+return ReadResult<IObject>.Move(tryversion);
+}
+Version = tryversion.Value;
+			var trystrings = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.LangPackStringBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trystrings.IsError){
+return ReadResult<IObject>.Move(trystrings);
+}
+Strings = trystrings.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

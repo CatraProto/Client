@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
         public static int ConstructorId { get => -414113498; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.MTProto.DestroySessionResBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("session_id")]
 		public long SessionId { get; set; }
@@ -42,16 +42,23 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(SessionId);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(SessionId);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			SessionId = reader.Read<long>();
+			var trysessionId = reader.ReadInt64();
+if(trysessionId.IsError){
+return ReadResult<IObject>.Move(trysessionId);
+}
+SessionId = trysessionId.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

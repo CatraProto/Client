@@ -95,7 +95,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
         private void HandleNewSessionCreation(NewSessionCreated newSessionCreated, long sessionId)
         {
             _mtProtoState.SessionIdHandler.SetSessionId(sessionId);
-            _mtProtoState.SaltHandler.SetSalt(newSessionCreated.ServerSalt, true);
+            _mtProtoState.SaltHandler.SetSalt(newSessionCreated.ServerSalt);
             _mtProtoState.SeqnoHandler.ContentRelatedReceived = 0;
             _logger.Information("New session created, new server salt {Salt}, new SessionId {SessionId}", newSessionCreated.ServerSalt, sessionId);
             
@@ -118,7 +118,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
                     return;
                 }
 
-                _mtProtoState.SaltHandler.SetSalt(serverSalt.NewServerSalt, false);
+                _mtProtoState.SaltHandler.SetSalt(serverSalt.NewServerSalt);
                 var count = messageItems.Count;
                 for (var i = 0; i < count; i++)
                 {

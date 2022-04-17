@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -58,43 +60,74 @@ Scale = scale;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Call);
-			writer.Write(TimeMs);
-			writer.Write(Scale);
+
+			writer.WriteInt32(Flags);
+var checkcall = 			writer.WriteObject(Call);
+if(checkcall.IsError){
+ return checkcall; 
+}
+writer.WriteInt64(TimeMs);
+writer.WriteInt32(Scale);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(VideoChannel.Value);
+writer.WriteInt32(VideoChannel.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(VideoQuality.Value);
+writer.WriteInt32(VideoQuality.Value);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			Call = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase>();
-			TimeMs = reader.Read<long>();
-			Scale = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var trycall = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase>();
+if(trycall.IsError){
+return ReadResult<IObject>.Move(trycall);
+}
+Call = trycall.Value;
+			var trytimeMs = reader.ReadInt64();
+if(trytimeMs.IsError){
+return ReadResult<IObject>.Move(trytimeMs);
+}
+TimeMs = trytimeMs.Value;
+			var tryscale = reader.ReadInt32();
+if(tryscale.IsError){
+return ReadResult<IObject>.Move(tryscale);
+}
+Scale = tryscale.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				VideoChannel = reader.Read<int>();
+				var tryvideoChannel = reader.ReadInt32();
+if(tryvideoChannel.IsError){
+return ReadResult<IObject>.Move(tryvideoChannel);
+}
+VideoChannel = tryvideoChannel.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				VideoQuality = reader.Read<int>();
+				var tryvideoQuality = reader.ReadInt32();
+if(tryvideoQuality.IsError){
+return ReadResult<IObject>.Move(tryvideoQuality);
+}
+VideoQuality = tryvideoQuality.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

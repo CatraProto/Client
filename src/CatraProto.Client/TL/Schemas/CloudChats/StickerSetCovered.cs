@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,35 @@ Cover = cover;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Set);
-			writer.Write(Cover);
+writer.WriteInt32(ConstructorId);
+var checkset = 			writer.WriteObject(Set);
+if(checkset.IsError){
+ return checkset; 
+}
+var checkcover = 			writer.WriteObject(Cover);
+if(checkcover.IsError){
+ return checkcover; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Set = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.StickerSetBase>();
-			Cover = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
+			var tryset = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.StickerSetBase>();
+if(tryset.IsError){
+return ReadResult<IObject>.Move(tryset);
+}
+Set = tryset.Value;
+			var trycover = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
+if(trycover.IsError){
+return ReadResult<IObject>.Move(trycover);
+}
+Cover = trycover.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

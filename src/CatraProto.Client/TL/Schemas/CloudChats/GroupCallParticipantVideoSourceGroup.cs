@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -18,11 +20,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public sealed override string Semantics { get; set; }
 
 [Newtonsoft.Json.JsonProperty("sources")]
-		public sealed override IList<int> Sources { get; set; }
+		public sealed override List<int> Sources { get; set; }
 
 
         #nullable enable
- public GroupCallParticipantVideoSourceGroup (string semantics,IList<int> sources)
+ public GroupCallParticipantVideoSourceGroup (string semantics,List<int> sources)
 {
  Semantics = semantics;
 Sources = sources;
@@ -38,18 +40,31 @@ Sources = sources;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Semantics);
-			writer.Write(Sources);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteString(Semantics);
+
+			writer.WriteVector(Sources, false);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Semantics = reader.Read<string>();
-			Sources = reader.ReadVector<int>();
+			var trysemantics = reader.ReadString();
+if(trysemantics.IsError){
+return ReadResult<IObject>.Move(trysemantics);
+}
+Semantics = trysemantics.Value;
+			var trysources = reader.ReadVector<int>(ParserTypes.Int);
+if(trysources.IsError){
+return ReadResult<IObject>.Move(trysources);
+}
+Sources = trysources.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

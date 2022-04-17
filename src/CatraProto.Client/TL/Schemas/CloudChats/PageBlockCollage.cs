@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -15,14 +17,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get => 1705048653; }
         
 [Newtonsoft.Json.JsonProperty("items")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase> Items { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase> Items { get; set; }
 
 [Newtonsoft.Json.JsonProperty("caption")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase Caption { get; set; }
 
 
         #nullable enable
- public PageBlockCollage (IList<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase> items,CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase caption)
+ public PageBlockCollage (List<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase> items,CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase caption)
 {
  Items = items;
 Caption = caption;
@@ -38,18 +40,35 @@ Caption = caption;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Items);
-			writer.Write(Caption);
+writer.WriteInt32(ConstructorId);
+var checkitems = 			writer.WriteVector(Items, false);
+if(checkitems.IsError){
+ return checkitems; 
+}
+var checkcaption = 			writer.WriteObject(Caption);
+if(checkcaption.IsError){
+ return checkcaption; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Items = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase>();
-			Caption = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase>();
+			var tryitems = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryitems.IsError){
+return ReadResult<IObject>.Move(tryitems);
+}
+Items = tryitems.Value;
+			var trycaption = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase>();
+if(trycaption.IsError){
+return ReadResult<IObject>.Move(trycaption);
+}
+Caption = trycaption.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -23,10 +26,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public static int ConstructorId { get => 737414348; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.ThemeBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -37,17 +37,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 [Newtonsoft.Json.JsonProperty("theme")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputThemeBase Theme { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("slug")]
 		public string Slug { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("title")]
 		public string Title { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("document")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase Document { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("settings")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputThemeSettingsBase> Settings { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.InputThemeSettingsBase> Settings { get; set; }
 
         
         #nullable enable
@@ -72,61 +76,105 @@ Theme = theme;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Format);
-			writer.Write(Theme);
+
+			writer.WriteInt32(Flags);
+
+			writer.WriteString(Format);
+var checktheme = 			writer.WriteObject(Theme);
+if(checktheme.IsError){
+ return checktheme; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(Slug);
+
+				writer.WriteString(Slug);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(Title);
+
+				writer.WriteString(Title);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(Document);
+var checkdocument = 				writer.WriteObject(Document);
+if(checkdocument.IsError){
+ return checkdocument; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				writer.Write(Settings);
+var checksettings = 				writer.WriteVector(Settings, false);
+if(checksettings.IsError){
+ return checksettings; 
+}
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			Format = reader.Read<string>();
-			Theme = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputThemeBase>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var tryformat = reader.ReadString();
+if(tryformat.IsError){
+return ReadResult<IObject>.Move(tryformat);
+}
+Format = tryformat.Value;
+			var trytheme = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputThemeBase>();
+if(trytheme.IsError){
+return ReadResult<IObject>.Move(trytheme);
+}
+Theme = trytheme.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Slug = reader.Read<string>();
+				var tryslug = reader.ReadString();
+if(tryslug.IsError){
+return ReadResult<IObject>.Move(tryslug);
+}
+Slug = tryslug.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Title = reader.Read<string>();
+				var trytitle = reader.ReadString();
+if(trytitle.IsError){
+return ReadResult<IObject>.Move(trytitle);
+}
+Title = trytitle.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				Document = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
+				var trydocument = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
+if(trydocument.IsError){
+return ReadResult<IObject>.Move(trydocument);
+}
+Document = trydocument.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				Settings = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputThemeSettingsBase>();
+				var trysettings = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputThemeSettingsBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trysettings.IsError){
+return ReadResult<IObject>.Move(trysettings);
+}
+Settings = trysettings.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 

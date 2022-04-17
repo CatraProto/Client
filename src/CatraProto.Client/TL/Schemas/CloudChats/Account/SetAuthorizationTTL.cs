@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public static int ConstructorId { get => -1081501024; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
 
 [Newtonsoft.Json.JsonProperty("authorization_ttl_days")]
 		public int AuthorizationTtlDays { get; set; }
@@ -42,16 +42,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(AuthorizationTtlDays);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt32(AuthorizationTtlDays);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			AuthorizationTtlDays = reader.Read<int>();
+			var tryauthorizationTtlDays = reader.ReadInt32();
+if(tryauthorizationTtlDays.IsError){
+return ReadResult<IObject>.Move(tryauthorizationTtlDays);
+}
+AuthorizationTtlDays = tryauthorizationTtlDays.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

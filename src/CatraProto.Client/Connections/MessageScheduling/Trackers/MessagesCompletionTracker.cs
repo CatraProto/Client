@@ -6,6 +6,7 @@ using System.Linq;
 using CatraProto.Client.Connections.MessageScheduling.Enums;
 using CatraProto.Client.Connections.MessageScheduling.Items;
 using CatraProto.Client.MTProto.Rpc;
+using CatraProto.Client.MTProto.Rpc.RpcErrors;
 using CatraProto.Client.TL.Schemas.CloudChats.Auth;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL.Interfaces;
@@ -87,7 +88,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
                                 return true;
                             }
 
-                            if (responseType.IsSubclassOf(method.Type) || responseType == method.Type)
+                            if (x.CanCastResponse(response))
                             {
                                 return true;
                             }
@@ -120,11 +121,15 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
             return true;
         }
 
-        public bool GetRpcMethod(long messageId, out IMethod? method)
+        public bool GetRpcMethod(long messageId, [MaybeNullWhen(false)] out IMethod method)
         {
             if (GetMessageCompletion(messageId, out var encryptedMessageCompletion, false))
             {
                 method = encryptedMessageCompletion.GetMessageMethod();
+                if (method is null)
+                {
+                    return false;
+                }
                 return true;
             }
 
@@ -181,7 +186,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
 
         public bool OnNotFoundProtocolError(ExecutionInfo executionInfo)
         {
-            var error = new RpcError { ErrorCode = -404, ErrorMessage = "Incorrect server call" };
+            var error = new UnknownError("Incorrect server call", -404);
             var isSet = SetCompletion(0, error, executionInfo);
             if (isSet)
             {
@@ -202,7 +207,6 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
 
         public bool MustInitConnection()
         {
-
             if (_stopInitAt == -1)
             {
                 return false;
@@ -213,21 +217,18 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
             }
             else
             {
-                if (DateTimeOffset.UtcNow.ToUnixTimeSeconds() - _stopInitAt < 0)
+                if (DateTimeOffset.UtcNow.ToUnixTimeSeconds() - _stopInitAt > 10)
                 {
                     _stopInitAt = -1;
                     return false;
                 }
                 return true;
             }
-
         }
 
         public void ResetInitConnection()
         {
-
             _stopInitAt = -2;
-
         }
     }
 }

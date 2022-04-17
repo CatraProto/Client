@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,17 +19,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Folders
         public static int ConstructorId { get => 1749536939; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("folder_peers")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputFolderPeerBase> FolderPeers { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.InputFolderPeerBase> FolderPeers { get; set; }
 
         
         #nullable enable
- public EditPeerFolders (IList<CatraProto.Client.TL.Schemas.CloudChats.InputFolderPeerBase> folderPeers)
+ public EditPeerFolders (List<CatraProto.Client.TL.Schemas.CloudChats.InputFolderPeerBase> folderPeers)
 {
  FolderPeers = folderPeers;
  
@@ -42,16 +42,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Folders
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(FolderPeers);
+writer.WriteInt32(ConstructorId);
+var checkfolderPeers = 			writer.WriteVector(FolderPeers, false);
+if(checkfolderPeers.IsError){
+ return checkfolderPeers; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			FolderPeers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputFolderPeerBase>();
+			var tryfolderPeers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputFolderPeerBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryfolderPeers.IsError){
+return ReadResult<IObject>.Move(tryfolderPeers);
+}
+FolderPeers = tryfolderPeers.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

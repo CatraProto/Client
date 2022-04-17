@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -42,20 +44,39 @@ Bytes = bytes;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Type);
-			writer.Write(Mtime);
-			writer.Write(Bytes);
+writer.WriteInt32(ConstructorId);
+var checktype = 			writer.WriteObject(Type);
+if(checktype.IsError){
+ return checktype; 
+}
+writer.WriteInt32(Mtime);
+
+			writer.WriteBytes(Bytes);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Type = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.Storage.FileTypeBase>();
-			Mtime = reader.Read<int>();
-			Bytes = reader.Read<byte[]>();
+			var trytype = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.Storage.FileTypeBase>();
+if(trytype.IsError){
+return ReadResult<IObject>.Move(trytype);
+}
+Type = trytype.Value;
+			var trymtime = reader.ReadInt32();
+if(trymtime.IsError){
+return ReadResult<IObject>.Move(trymtime);
+}
+Mtime = trymtime.Value;
+			var trybytes = reader.ReadBytes();
+if(trybytes.IsError){
+return ReadResult<IObject>.Move(trybytes);
+}
+Bytes = trybytes.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

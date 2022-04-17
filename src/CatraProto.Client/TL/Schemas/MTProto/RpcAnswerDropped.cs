@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -42,20 +44,35 @@ Bytes = bytes;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(MsgId);
-			writer.Write(SeqNo);
-			writer.Write(Bytes);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(MsgId);
+writer.WriteInt32(SeqNo);
+writer.WriteInt32(Bytes);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			MsgId = reader.Read<long>();
-			SeqNo = reader.Read<int>();
-			Bytes = reader.Read<int>();
+			var trymsgId = reader.ReadInt64();
+if(trymsgId.IsError){
+return ReadResult<IObject>.Move(trymsgId);
+}
+MsgId = trymsgId.Value;
+			var tryseqNo = reader.ReadInt32();
+if(tryseqNo.IsError){
+return ReadResult<IObject>.Move(tryseqNo);
+}
+SeqNo = tryseqNo.Value;
+			var trybytes = reader.ReadInt32();
+if(trybytes.IsError){
+return ReadResult<IObject>.Move(trybytes);
+}
+Bytes = trybytes.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -28,18 +30,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("key")]
 		public sealed override string Key { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("zero_value")]
 		public string ZeroValue { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("one_value")]
 		public string OneValue { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("two_value")]
 		public string TwoValue { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("few_value")]
 		public string FewValue { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("many_value")]
 		public string ManyValue { get; set; }
 
@@ -69,71 +76,114 @@ OtherValue = otherValue;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Key);
+
+			writer.WriteInt32(Flags);
+
+			writer.WriteString(Key);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(ZeroValue);
+
+				writer.WriteString(ZeroValue);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(OneValue);
+
+				writer.WriteString(OneValue);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(TwoValue);
+
+				writer.WriteString(TwoValue);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				writer.Write(FewValue);
+
+				writer.WriteString(FewValue);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				writer.Write(ManyValue);
+
+				writer.WriteString(ManyValue);
 			}
 
-			writer.Write(OtherValue);
+
+			writer.WriteString(OtherValue);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			Key = reader.Read<string>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var trykey = reader.ReadString();
+if(trykey.IsError){
+return ReadResult<IObject>.Move(trykey);
+}
+Key = trykey.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				ZeroValue = reader.Read<string>();
+				var tryzeroValue = reader.ReadString();
+if(tryzeroValue.IsError){
+return ReadResult<IObject>.Move(tryzeroValue);
+}
+ZeroValue = tryzeroValue.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				OneValue = reader.Read<string>();
+				var tryoneValue = reader.ReadString();
+if(tryoneValue.IsError){
+return ReadResult<IObject>.Move(tryoneValue);
+}
+OneValue = tryoneValue.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				TwoValue = reader.Read<string>();
+				var trytwoValue = reader.ReadString();
+if(trytwoValue.IsError){
+return ReadResult<IObject>.Move(trytwoValue);
+}
+TwoValue = trytwoValue.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				FewValue = reader.Read<string>();
+				var tryfewValue = reader.ReadString();
+if(tryfewValue.IsError){
+return ReadResult<IObject>.Move(tryfewValue);
+}
+FewValue = tryfewValue.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				ManyValue = reader.Read<string>();
+				var trymanyValue = reader.ReadString();
+if(trymanyValue.IsError){
+return ReadResult<IObject>.Move(trymanyValue);
+}
+ManyValue = trymanyValue.Value;
 			}
 
-			OtherValue = reader.Read<string>();
+			var tryotherValue = reader.ReadString();
+if(tryotherValue.IsError){
+return ReadResult<IObject>.Move(tryotherValue);
+}
+OtherValue = tryotherValue.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public static int ConstructorId { get => 1779249670; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
 
 [Newtonsoft.Json.JsonProperty("token_type")]
 		public int TokenType { get; set; }
@@ -28,11 +28,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 		public string Token { get; set; }
 
 [Newtonsoft.Json.JsonProperty("other_uids")]
-		public IList<long> OtherUids { get; set; }
+		public List<long> OtherUids { get; set; }
 
         
         #nullable enable
- public UnregisterDevice (int tokenType,string token,IList<long> otherUids)
+ public UnregisterDevice (int tokenType,string token,List<long> otherUids)
 {
  TokenType = tokenType;
 Token = token;
@@ -50,20 +50,37 @@ OtherUids = otherUids;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(TokenType);
-			writer.Write(Token);
-			writer.Write(OtherUids);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt32(TokenType);
+
+			writer.WriteString(Token);
+
+			writer.WriteVector(OtherUids, false);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			TokenType = reader.Read<int>();
-			Token = reader.Read<string>();
-			OtherUids = reader.ReadVector<long>();
+			var trytokenType = reader.ReadInt32();
+if(trytokenType.IsError){
+return ReadResult<IObject>.Move(trytokenType);
+}
+TokenType = trytokenType.Value;
+			var trytoken = reader.ReadString();
+if(trytoken.IsError){
+return ReadResult<IObject>.Move(trytoken);
+}
+Token = trytoken.Value;
+			var tryotherUids = reader.ReadVector<long>(ParserTypes.Int64);
+if(tryotherUids.IsError){
+return ReadResult<IObject>.Move(tryotherUids);
+}
+OtherUids = tryotherUids.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

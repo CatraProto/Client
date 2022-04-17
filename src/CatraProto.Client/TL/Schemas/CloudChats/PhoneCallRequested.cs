@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -69,32 +71,72 @@ Protocol = protocol;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Id);
-			writer.Write(AccessHash);
-			writer.Write(Date);
-			writer.Write(AdminId);
-			writer.Write(ParticipantId);
-			writer.Write(GAHash);
-			writer.Write(Protocol);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt64(Id);
+writer.WriteInt64(AccessHash);
+writer.WriteInt32(Date);
+writer.WriteInt64(AdminId);
+writer.WriteInt64(ParticipantId);
+
+			writer.WriteBytes(GAHash);
+var checkprotocol = 			writer.WriteObject(Protocol);
+if(checkprotocol.IsError){
+ return checkprotocol; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Video = FlagsHelper.IsFlagSet(Flags, 6);
-			Id = reader.Read<long>();
-			AccessHash = reader.Read<long>();
-			Date = reader.Read<int>();
-			AdminId = reader.Read<long>();
-			ParticipantId = reader.Read<long>();
-			GAHash = reader.Read<byte[]>();
-			Protocol = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase>();
+			var tryid = reader.ReadInt64();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var tryaccessHash = reader.ReadInt64();
+if(tryaccessHash.IsError){
+return ReadResult<IObject>.Move(tryaccessHash);
+}
+AccessHash = tryaccessHash.Value;
+			var trydate = reader.ReadInt32();
+if(trydate.IsError){
+return ReadResult<IObject>.Move(trydate);
+}
+Date = trydate.Value;
+			var tryadminId = reader.ReadInt64();
+if(tryadminId.IsError){
+return ReadResult<IObject>.Move(tryadminId);
+}
+AdminId = tryadminId.Value;
+			var tryparticipantId = reader.ReadInt64();
+if(tryparticipantId.IsError){
+return ReadResult<IObject>.Move(tryparticipantId);
+}
+ParticipantId = tryparticipantId.Value;
+			var trygAHash = reader.ReadBytes();
+if(trygAHash.IsError){
+return ReadResult<IObject>.Move(trygAHash);
+}
+GAHash = trygAHash.Value;
+			var tryprotocol = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase>();
+if(tryprotocol.IsError){
+return ReadResult<IObject>.Move(tryprotocol);
+}
+Protocol = tryprotocol.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

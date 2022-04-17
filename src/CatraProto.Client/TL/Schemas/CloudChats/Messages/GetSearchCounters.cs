@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,20 +19,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int ConstructorId { get => 1932455680; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchCounterBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = true;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonProperty("peer")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
 
 [Newtonsoft.Json.JsonProperty("filters")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase> Filters { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase> Filters { get; set; }
 
         
         #nullable enable
- public GetSearchCounters (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer,IList<CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase> filters)
+ public GetSearchCounters (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer,List<CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase> filters)
 {
  Peer = peer;
 Filters = filters;
@@ -46,18 +46,35 @@ Filters = filters;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Peer);
-			writer.Write(Filters);
+writer.WriteInt32(ConstructorId);
+var checkpeer = 			writer.WriteObject(Peer);
+if(checkpeer.IsError){
+ return checkpeer; 
+}
+var checkfilters = 			writer.WriteVector(Filters, false);
+if(checkfilters.IsError){
+ return checkfilters; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
-			Filters = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase>();
+			var trypeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+if(trypeer.IsError){
+return ReadResult<IObject>.Move(trypeer);
+}
+Peer = trypeer.Value;
+			var tryfilters = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryfilters.IsError){
+return ReadResult<IObject>.Move(tryfilters);
+}
+Filters = tryfilters.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

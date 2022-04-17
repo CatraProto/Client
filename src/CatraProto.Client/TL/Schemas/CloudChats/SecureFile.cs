@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -58,28 +60,61 @@ Secret = secret;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Id);
-			writer.Write(AccessHash);
-			writer.Write(Size);
-			writer.Write(DcId);
-			writer.Write(Date);
-			writer.Write(FileHash);
-			writer.Write(Secret);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(Id);
+writer.WriteInt64(AccessHash);
+writer.WriteInt32(Size);
+writer.WriteInt32(DcId);
+writer.WriteInt32(Date);
+
+			writer.WriteBytes(FileHash);
+
+			writer.WriteBytes(Secret);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Id = reader.Read<long>();
-			AccessHash = reader.Read<long>();
-			Size = reader.Read<int>();
-			DcId = reader.Read<int>();
-			Date = reader.Read<int>();
-			FileHash = reader.Read<byte[]>();
-			Secret = reader.Read<byte[]>();
+			var tryid = reader.ReadInt64();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var tryaccessHash = reader.ReadInt64();
+if(tryaccessHash.IsError){
+return ReadResult<IObject>.Move(tryaccessHash);
+}
+AccessHash = tryaccessHash.Value;
+			var trysize = reader.ReadInt32();
+if(trysize.IsError){
+return ReadResult<IObject>.Move(trysize);
+}
+Size = trysize.Value;
+			var trydcId = reader.ReadInt32();
+if(trydcId.IsError){
+return ReadResult<IObject>.Move(trydcId);
+}
+DcId = trydcId.Value;
+			var trydate = reader.ReadInt32();
+if(trydate.IsError){
+return ReadResult<IObject>.Move(trydate);
+}
+Date = trydate.Value;
+			var tryfileHash = reader.ReadBytes();
+if(tryfileHash.IsError){
+return ReadResult<IObject>.Move(tryfileHash);
+}
+FileHash = tryfileHash.Value;
+			var trysecret = reader.ReadBytes();
+if(trysecret.IsError){
+return ReadResult<IObject>.Move(trysecret);
+}
+Secret = trysecret.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

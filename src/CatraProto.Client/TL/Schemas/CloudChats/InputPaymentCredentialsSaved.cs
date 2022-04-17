@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,31 @@ TmpPassword = tmpPassword;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Id);
-			writer.Write(TmpPassword);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteString(Id);
+
+			writer.WriteBytes(TmpPassword);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Id = reader.Read<string>();
-			TmpPassword = reader.Read<byte[]>();
+			var tryid = reader.ReadString();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var trytmpPassword = reader.ReadBytes();
+if(trytmpPassword.IsError){
+return ReadResult<IObject>.Move(trytmpPassword);
+}
+TmpPassword = trytmpPassword.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

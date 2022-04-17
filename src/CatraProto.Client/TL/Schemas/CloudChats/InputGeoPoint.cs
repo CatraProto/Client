@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -49,31 +51,53 @@ Long = llong;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Lat);
-			writer.Write(Long);
+
+			writer.WriteInt32(Flags);
+
+			writer.WriteDouble(Lat);
+
+			writer.WriteDouble(Long);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(AccuracyRadius.Value);
+writer.WriteInt32(AccuracyRadius.Value);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			Lat = reader.Read<double>();
-			Long = reader.Read<double>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var trylat = reader.ReadDouble();
+if(trylat.IsError){
+return ReadResult<IObject>.Move(trylat);
+}
+Lat = trylat.Value;
+			var tryllong = reader.ReadDouble();
+if(tryllong.IsError){
+return ReadResult<IObject>.Move(tryllong);
+}
+Long = tryllong.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				AccuracyRadius = reader.Read<int>();
+				var tryaccuracyRadius = reader.ReadInt32();
+if(tryaccuracyRadius.IsError){
+return ReadResult<IObject>.Move(tryaccuracyRadius);
+}
+AccuracyRadius = tryaccuracyRadius.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

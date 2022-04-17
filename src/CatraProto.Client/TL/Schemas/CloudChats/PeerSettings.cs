@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -62,6 +64,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("geo_distance")]
 		public sealed override int? GeoDistance { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("request_chat_title")]
 		public sealed override string RequestChatTitle { get; set; }
 
@@ -91,32 +94,40 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
+
+			writer.WriteInt32(Flags);
 			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
-				writer.Write(GeoDistance.Value);
+writer.WriteInt32(GeoDistance.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 9))
 			{
-				writer.Write(RequestChatTitle);
+
+				writer.WriteString(RequestChatTitle);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 9))
 			{
-				writer.Write(RequestChatDate.Value);
+writer.WriteInt32(RequestChatDate.Value);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			ReportSpam = FlagsHelper.IsFlagSet(Flags, 0);
 			AddContact = FlagsHelper.IsFlagSet(Flags, 1);
 			BlockContact = FlagsHelper.IsFlagSet(Flags, 2);
@@ -128,19 +139,32 @@ writer.Write(ConstructorId);
 			RequestChatBroadcast = FlagsHelper.IsFlagSet(Flags, 10);
 			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
-				GeoDistance = reader.Read<int>();
+				var trygeoDistance = reader.ReadInt32();
+if(trygeoDistance.IsError){
+return ReadResult<IObject>.Move(trygeoDistance);
+}
+GeoDistance = trygeoDistance.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 9))
 			{
-				RequestChatTitle = reader.Read<string>();
+				var tryrequestChatTitle = reader.ReadString();
+if(tryrequestChatTitle.IsError){
+return ReadResult<IObject>.Move(tryrequestChatTitle);
+}
+RequestChatTitle = tryrequestChatTitle.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 9))
 			{
-				RequestChatDate = reader.Read<int>();
+				var tryrequestChatDate = reader.ReadInt32();
+if(tryrequestChatDate.IsError){
+return ReadResult<IObject>.Move(tryrequestChatDate);
+}
+RequestChatDate = tryrequestChatDate.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

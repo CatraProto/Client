@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public static int ConstructorId { get => 1436924774; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(long);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = true;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Int64;
 
 [Newtonsoft.Json.JsonProperty("max_qts")]
 		public int MaxQts { get; set; }
@@ -42,16 +42,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(MaxQts);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt32(MaxQts);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			MaxQts = reader.Read<int>();
+			var trymaxQts = reader.ReadInt32();
+if(trymaxQts.IsError){
+return ReadResult<IObject>.Move(trymaxQts);
+}
+MaxQts = trymaxQts.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

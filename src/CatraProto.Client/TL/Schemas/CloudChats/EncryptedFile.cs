@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -50,24 +52,47 @@ KeyFingerprint = keyFingerprint;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Id);
-			writer.Write(AccessHash);
-			writer.Write(Size);
-			writer.Write(DcId);
-			writer.Write(KeyFingerprint);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(Id);
+writer.WriteInt64(AccessHash);
+writer.WriteInt32(Size);
+writer.WriteInt32(DcId);
+writer.WriteInt32(KeyFingerprint);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Id = reader.Read<long>();
-			AccessHash = reader.Read<long>();
-			Size = reader.Read<int>();
-			DcId = reader.Read<int>();
-			KeyFingerprint = reader.Read<int>();
+			var tryid = reader.ReadInt64();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var tryaccessHash = reader.ReadInt64();
+if(tryaccessHash.IsError){
+return ReadResult<IObject>.Move(tryaccessHash);
+}
+AccessHash = tryaccessHash.Value;
+			var trysize = reader.ReadInt32();
+if(trysize.IsError){
+return ReadResult<IObject>.Move(trysize);
+}
+Size = trysize.Value;
+			var trydcId = reader.ReadInt32();
+if(trydcId.IsError){
+return ReadResult<IObject>.Move(trydcId);
+}
+DcId = trydcId.Value;
+			var trykeyFingerprint = reader.ReadInt32();
+if(trykeyFingerprint.IsError){
+return ReadResult<IObject>.Move(trykeyFingerprint);
+}
+KeyFingerprint = trykeyFingerprint.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

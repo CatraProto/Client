@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -30,14 +32,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public int Date { get; set; }
 
 [Newtonsoft.Json.JsonProperty("blocks")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase> Blocks { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase> Blocks { get; set; }
 
 [Newtonsoft.Json.JsonProperty("caption")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase Caption { get; set; }
 
 
         #nullable enable
- public PageBlockEmbedPost (string url,long webpageId,long authorPhotoId,string author,int date,IList<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase> blocks,CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase caption)
+ public PageBlockEmbedPost (string url,long webpageId,long authorPhotoId,string author,int date,List<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase> blocks,CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase caption)
 {
  Url = url;
 WebpageId = webpageId;
@@ -58,28 +60,67 @@ Caption = caption;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Url);
-			writer.Write(WebpageId);
-			writer.Write(AuthorPhotoId);
-			writer.Write(Author);
-			writer.Write(Date);
-			writer.Write(Blocks);
-			writer.Write(Caption);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteString(Url);
+writer.WriteInt64(WebpageId);
+writer.WriteInt64(AuthorPhotoId);
+
+			writer.WriteString(Author);
+writer.WriteInt32(Date);
+var checkblocks = 			writer.WriteVector(Blocks, false);
+if(checkblocks.IsError){
+ return checkblocks; 
+}
+var checkcaption = 			writer.WriteObject(Caption);
+if(checkcaption.IsError){
+ return checkcaption; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Url = reader.Read<string>();
-			WebpageId = reader.Read<long>();
-			AuthorPhotoId = reader.Read<long>();
-			Author = reader.Read<string>();
-			Date = reader.Read<int>();
-			Blocks = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase>();
-			Caption = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase>();
+			var tryurl = reader.ReadString();
+if(tryurl.IsError){
+return ReadResult<IObject>.Move(tryurl);
+}
+Url = tryurl.Value;
+			var trywebpageId = reader.ReadInt64();
+if(trywebpageId.IsError){
+return ReadResult<IObject>.Move(trywebpageId);
+}
+WebpageId = trywebpageId.Value;
+			var tryauthorPhotoId = reader.ReadInt64();
+if(tryauthorPhotoId.IsError){
+return ReadResult<IObject>.Move(tryauthorPhotoId);
+}
+AuthorPhotoId = tryauthorPhotoId.Value;
+			var tryauthor = reader.ReadString();
+if(tryauthor.IsError){
+return ReadResult<IObject>.Move(tryauthor);
+}
+Author = tryauthor.Value;
+			var trydate = reader.ReadInt32();
+if(trydate.IsError){
+return ReadResult<IObject>.Move(trydate);
+}
+Date = trydate.Value;
+			var tryblocks = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryblocks.IsError){
+return ReadResult<IObject>.Move(tryblocks);
+}
+Blocks = tryblocks.Value;
+			var trycaption = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase>();
+if(trycaption.IsError){
+return ReadResult<IObject>.Move(trycaption);
+}
+Caption = trycaption.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

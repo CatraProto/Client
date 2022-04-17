@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -15,11 +17,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public static int ConstructorId { get => -1906403213; }
         
 [Newtonsoft.Json.JsonProperty("dc_options")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase> DcOptions { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase> DcOptions { get; set; }
 
 
         #nullable enable
- public UpdateDcOptions (IList<CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase> dcOptions)
+ public UpdateDcOptions (List<CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase> dcOptions)
 {
  DcOptions = dcOptions;
  
@@ -34,16 +36,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(DcOptions);
+writer.WriteInt32(ConstructorId);
+var checkdcOptions = 			writer.WriteVector(DcOptions, false);
+if(checkdcOptions.IsError){
+ return checkdcOptions; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			DcOptions = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase>();
+			var trydcOptions = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trydcOptions.IsError){
+return ReadResult<IObject>.Move(trydcOptions);
+}
+DcOptions = trydcOptions.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

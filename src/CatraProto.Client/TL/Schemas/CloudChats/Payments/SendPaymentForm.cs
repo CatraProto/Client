@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -22,10 +25,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
         public static int ConstructorId { get => 818134173; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentResultBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -39,9 +39,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 [Newtonsoft.Json.JsonProperty("msg_id")]
 		public int MsgId { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("requested_info_id")]
 		public string RequestedInfoId { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("shipping_option_id")]
 		public string ShippingOptionId { get; set; }
 
@@ -75,55 +77,99 @@ Credentials = credentials;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(FormId);
-			writer.Write(Peer);
-			writer.Write(MsgId);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt64(FormId);
+var checkpeer = 			writer.WriteObject(Peer);
+if(checkpeer.IsError){
+ return checkpeer; 
+}
+writer.WriteInt32(MsgId);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(RequestedInfoId);
+
+				writer.WriteString(RequestedInfoId);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(ShippingOptionId);
+
+				writer.WriteString(ShippingOptionId);
 			}
 
-			writer.Write(Credentials);
+var checkcredentials = 			writer.WriteObject(Credentials);
+if(checkcredentials.IsError){
+ return checkcredentials; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(TipAmount.Value);
+writer.WriteInt64(TipAmount.Value);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			FormId = reader.Read<long>();
-			Peer = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
-			MsgId = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var tryformId = reader.ReadInt64();
+if(tryformId.IsError){
+return ReadResult<IObject>.Move(tryformId);
+}
+FormId = tryformId.Value;
+			var trypeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+if(trypeer.IsError){
+return ReadResult<IObject>.Move(trypeer);
+}
+Peer = trypeer.Value;
+			var trymsgId = reader.ReadInt32();
+if(trymsgId.IsError){
+return ReadResult<IObject>.Move(trymsgId);
+}
+MsgId = trymsgId.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				RequestedInfoId = reader.Read<string>();
+				var tryrequestedInfoId = reader.ReadString();
+if(tryrequestedInfoId.IsError){
+return ReadResult<IObject>.Move(tryrequestedInfoId);
+}
+RequestedInfoId = tryrequestedInfoId.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				ShippingOptionId = reader.Read<string>();
+				var tryshippingOptionId = reader.ReadString();
+if(tryshippingOptionId.IsError){
+return ReadResult<IObject>.Move(tryshippingOptionId);
+}
+ShippingOptionId = tryshippingOptionId.Value;
 			}
 
-			Credentials = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputPaymentCredentialsBase>();
+			var trycredentials = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPaymentCredentialsBase>();
+if(trycredentials.IsError){
+return ReadResult<IObject>.Move(trycredentials);
+}
+Credentials = trycredentials.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				TipAmount = reader.Read<long>();
+				var trytipAmount = reader.ReadInt64();
+if(trytipAmount.IsError){
+return ReadResult<IObject>.Move(trytipAmount);
+}
+TipAmount = trytipAmount.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -45,20 +47,35 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Params);
+
+			writer.WriteInt32(Flags);
+var checkpparams = 			writer.WriteObject(Params);
+if(checkpparams.IsError){
+ return checkpparams; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Presentation = FlagsHelper.IsFlagSet(Flags, 0);
-			Params = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
+			var trypparams = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
+if(trypparams.IsError){
+return ReadResult<IObject>.Move(trypparams);
+}
+Params = trypparams.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

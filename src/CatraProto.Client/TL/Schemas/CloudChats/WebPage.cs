@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -46,24 +48,31 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("hash")]
 		public int Hash { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("type")]
 		public string Type { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("site_name")]
 		public string SiteName { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("title")]
 		public string Title { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("description")]
 		public string Description { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("photo")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PhotoBase Photo { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("embed_url")]
 		public string EmbedUrl { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("embed_type")]
 		public string EmbedType { get; set; }
 
@@ -76,17 +85,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("duration")]
 		public int? Duration { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("author")]
 		public string Author { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("document")]
 		public CatraProto.Client.TL.Schemas.CloudChats.DocumentBase Document { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("cached_page")]
 		public CatraProto.Client.TL.Schemas.CloudChats.PageBase CachedPage { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("attributes")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.WebPageAttributeBase> Attributes { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.WebPageAttributeBase> Attributes { get; set; }
 
 
         #nullable enable
@@ -122,165 +135,266 @@ Hash = hash;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Id);
-			writer.Write(Url);
-			writer.Write(DisplayUrl);
-			writer.Write(Hash);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt64(Id);
+
+			writer.WriteString(Url);
+
+			writer.WriteString(DisplayUrl);
+writer.WriteInt32(Hash);
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(Type);
+
+				writer.WriteString(Type);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(SiteName);
+
+				writer.WriteString(SiteName);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(Title);
+
+				writer.WriteString(Title);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				writer.Write(Description);
+
+				writer.WriteString(Description);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				writer.Write(Photo);
+var checkphoto = 				writer.WriteObject(Photo);
+if(checkphoto.IsError){
+ return checkphoto; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				writer.Write(EmbedUrl);
+
+				writer.WriteString(EmbedUrl);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				writer.Write(EmbedType);
+
+				writer.WriteString(EmbedType);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
-				writer.Write(EmbedWidth.Value);
+writer.WriteInt32(EmbedWidth.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
-				writer.Write(EmbedHeight.Value);
+writer.WriteInt32(EmbedHeight.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 7))
 			{
-				writer.Write(Duration.Value);
+writer.WriteInt32(Duration.Value);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 8))
 			{
-				writer.Write(Author);
+
+				writer.WriteString(Author);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 9))
 			{
-				writer.Write(Document);
+var checkdocument = 				writer.WriteObject(Document);
+if(checkdocument.IsError){
+ return checkdocument; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 10))
 			{
-				writer.Write(CachedPage);
+var checkcachedPage = 				writer.WriteObject(CachedPage);
+if(checkcachedPage.IsError){
+ return checkcachedPage; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 12))
 			{
-				writer.Write(Attributes);
+var checkattributes = 				writer.WriteVector(Attributes, false);
+if(checkattributes.IsError){
+ return checkattributes; 
+}
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			Id = reader.Read<long>();
-			Url = reader.Read<string>();
-			DisplayUrl = reader.Read<string>();
-			Hash = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var tryid = reader.ReadInt64();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var tryurl = reader.ReadString();
+if(tryurl.IsError){
+return ReadResult<IObject>.Move(tryurl);
+}
+Url = tryurl.Value;
+			var trydisplayUrl = reader.ReadString();
+if(trydisplayUrl.IsError){
+return ReadResult<IObject>.Move(trydisplayUrl);
+}
+DisplayUrl = trydisplayUrl.Value;
+			var tryhash = reader.ReadInt32();
+if(tryhash.IsError){
+return ReadResult<IObject>.Move(tryhash);
+}
+Hash = tryhash.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Type = reader.Read<string>();
+				var trytype = reader.ReadString();
+if(trytype.IsError){
+return ReadResult<IObject>.Move(trytype);
+}
+Type = trytype.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				SiteName = reader.Read<string>();
+				var trysiteName = reader.ReadString();
+if(trysiteName.IsError){
+return ReadResult<IObject>.Move(trysiteName);
+}
+SiteName = trysiteName.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				Title = reader.Read<string>();
+				var trytitle = reader.ReadString();
+if(trytitle.IsError){
+return ReadResult<IObject>.Move(trytitle);
+}
+Title = trytitle.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				Description = reader.Read<string>();
+				var trydescription = reader.ReadString();
+if(trydescription.IsError){
+return ReadResult<IObject>.Move(trydescription);
+}
+Description = trydescription.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 4))
 			{
-				Photo = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
+				var tryphoto = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
+if(tryphoto.IsError){
+return ReadResult<IObject>.Move(tryphoto);
+}
+Photo = tryphoto.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				EmbedUrl = reader.Read<string>();
+				var tryembedUrl = reader.ReadString();
+if(tryembedUrl.IsError){
+return ReadResult<IObject>.Move(tryembedUrl);
+}
+EmbedUrl = tryembedUrl.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 5))
 			{
-				EmbedType = reader.Read<string>();
+				var tryembedType = reader.ReadString();
+if(tryembedType.IsError){
+return ReadResult<IObject>.Move(tryembedType);
+}
+EmbedType = tryembedType.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
-				EmbedWidth = reader.Read<int>();
+				var tryembedWidth = reader.ReadInt32();
+if(tryembedWidth.IsError){
+return ReadResult<IObject>.Move(tryembedWidth);
+}
+EmbedWidth = tryembedWidth.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 6))
 			{
-				EmbedHeight = reader.Read<int>();
+				var tryembedHeight = reader.ReadInt32();
+if(tryembedHeight.IsError){
+return ReadResult<IObject>.Move(tryembedHeight);
+}
+EmbedHeight = tryembedHeight.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 7))
 			{
-				Duration = reader.Read<int>();
+				var tryduration = reader.ReadInt32();
+if(tryduration.IsError){
+return ReadResult<IObject>.Move(tryduration);
+}
+Duration = tryduration.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 8))
 			{
-				Author = reader.Read<string>();
+				var tryauthor = reader.ReadString();
+if(tryauthor.IsError){
+return ReadResult<IObject>.Move(tryauthor);
+}
+Author = tryauthor.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 9))
 			{
-				Document = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
+				var trydocument = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
+if(trydocument.IsError){
+return ReadResult<IObject>.Move(trydocument);
+}
+Document = trydocument.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 10))
 			{
-				CachedPage = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PageBase>();
+				var trycachedPage = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PageBase>();
+if(trycachedPage.IsError){
+return ReadResult<IObject>.Move(trycachedPage);
+}
+CachedPage = trycachedPage.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 12))
 			{
-				Attributes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.WebPageAttributeBase>();
+				var tryattributes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.WebPageAttributeBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryattributes.IsError){
+return ReadResult<IObject>.Move(tryattributes);
+}
+Attributes = tryattributes.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -34,14 +36,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public bool Selective { get; set; }
 
 [Newtonsoft.Json.JsonProperty("rows")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonRowBase> Rows { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonRowBase> Rows { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("placeholder")]
 		public string Placeholder { get; set; }
 
 
         #nullable enable
- public ReplyKeyboardMarkup (IList<CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonRowBase> rows)
+ public ReplyKeyboardMarkup (List<CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonRowBase> rows)
 {
  Rows = rows;
  
@@ -60,32 +63,52 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Rows);
+
+			writer.WriteInt32(Flags);
+var checkrows = 			writer.WriteVector(Rows, false);
+if(checkrows.IsError){
+ return checkrows; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				writer.Write(Placeholder);
+
+				writer.WriteString(Placeholder);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Resize = FlagsHelper.IsFlagSet(Flags, 0);
 			SingleUse = FlagsHelper.IsFlagSet(Flags, 1);
 			Selective = FlagsHelper.IsFlagSet(Flags, 2);
-			Rows = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonRowBase>();
+			var tryrows = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonRowBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryrows.IsError){
+return ReadResult<IObject>.Move(tryrows);
+}
+Rows = tryrows.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				Placeholder = reader.Read<string>();
+				var tryplaceholder = reader.ReadString();
+if(tryplaceholder.IsError){
+return ReadResult<IObject>.Move(tryplaceholder);
+}
+Placeholder = tryplaceholder.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

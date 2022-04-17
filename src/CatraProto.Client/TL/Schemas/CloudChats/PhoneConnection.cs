@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -50,24 +52,50 @@ PeerTag = peerTag;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Id);
-			writer.Write(Ip);
-			writer.Write(Ipv6);
-			writer.Write(Port);
-			writer.Write(PeerTag);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(Id);
+
+			writer.WriteString(Ip);
+
+			writer.WriteString(Ipv6);
+writer.WriteInt32(Port);
+
+			writer.WriteBytes(PeerTag);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Id = reader.Read<long>();
-			Ip = reader.Read<string>();
-			Ipv6 = reader.Read<string>();
-			Port = reader.Read<int>();
-			PeerTag = reader.Read<byte[]>();
+			var tryid = reader.ReadInt64();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var tryip = reader.ReadString();
+if(tryip.IsError){
+return ReadResult<IObject>.Move(tryip);
+}
+Ip = tryip.Value;
+			var tryipv6 = reader.ReadString();
+if(tryipv6.IsError){
+return ReadResult<IObject>.Move(tryipv6);
+}
+Ipv6 = tryipv6.Value;
+			var tryport = reader.ReadInt32();
+if(tryport.IsError){
+return ReadResult<IObject>.Move(tryport);
+}
+Port = tryport.Value;
+			var trypeerTag = reader.ReadBytes();
+if(trypeerTag.IsError){
+return ReadResult<IObject>.Move(trypeerTag);
+}
+PeerTag = trypeerTag.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

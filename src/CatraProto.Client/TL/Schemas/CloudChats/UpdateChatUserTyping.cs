@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -42,20 +44,41 @@ Action = action;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(ChatId);
-			writer.Write(FromId);
-			writer.Write(Action);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(ChatId);
+var checkfromId = 			writer.WriteObject(FromId);
+if(checkfromId.IsError){
+ return checkfromId; 
+}
+var checkaction = 			writer.WriteObject(Action);
+if(checkaction.IsError){
+ return checkaction; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			ChatId = reader.Read<long>();
-			FromId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
-			Action = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.SendMessageActionBase>();
+			var trychatId = reader.ReadInt64();
+if(trychatId.IsError){
+return ReadResult<IObject>.Move(trychatId);
+}
+ChatId = trychatId.Value;
+			var tryfromId = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
+if(tryfromId.IsError){
+return ReadResult<IObject>.Move(tryfromId);
+}
+FromId = tryfromId.Value;
+			var tryaction = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.SendMessageActionBase>();
+if(tryaction.IsError){
+return ReadResult<IObject>.Move(tryaction);
+}
+Action = tryaction.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

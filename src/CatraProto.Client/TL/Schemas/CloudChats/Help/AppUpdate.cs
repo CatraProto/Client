@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -37,20 +39,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 		public string Text { get; set; }
 
 [Newtonsoft.Json.JsonProperty("entities")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> Entities { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("document")]
 		public CatraProto.Client.TL.Schemas.CloudChats.DocumentBase Document { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("url")]
 		public string Url { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("sticker")]
 		public CatraProto.Client.TL.Schemas.CloudChats.DocumentBase Sticker { get; set; }
 
 
         #nullable enable
- public AppUpdate (int id,string version,string text,IList<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> entities)
+ public AppUpdate (int id,string version,string text,List<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase> entities)
 {
  Id = id;
 Version = version;
@@ -72,56 +77,104 @@ Entities = entities;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Id);
-			writer.Write(Version);
-			writer.Write(Text);
-			writer.Write(Entities);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt32(Id);
+
+			writer.WriteString(Version);
+
+			writer.WriteString(Text);
+var checkentities = 			writer.WriteVector(Entities, false);
+if(checkentities.IsError){
+ return checkentities; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(Document);
+var checkdocument = 				writer.WriteObject(Document);
+if(checkdocument.IsError){
+ return checkdocument; 
+}
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(Url);
+
+				writer.WriteString(Url);
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				writer.Write(Sticker);
+var checksticker = 				writer.WriteObject(Sticker);
+if(checksticker.IsError){
+ return checksticker; 
+}
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			CanNotSkip = FlagsHelper.IsFlagSet(Flags, 0);
-			Id = reader.Read<int>();
-			Version = reader.Read<string>();
-			Text = reader.Read<string>();
-			Entities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
+			var tryid = reader.ReadInt32();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var tryversion = reader.ReadString();
+if(tryversion.IsError){
+return ReadResult<IObject>.Move(tryversion);
+}
+Version = tryversion.Value;
+			var trytext = reader.ReadString();
+if(trytext.IsError){
+return ReadResult<IObject>.Move(trytext);
+}
+Text = trytext.Value;
+			var tryentities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryentities.IsError){
+return ReadResult<IObject>.Move(tryentities);
+}
+Entities = tryentities.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				Document = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
+				var trydocument = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
+if(trydocument.IsError){
+return ReadResult<IObject>.Move(trydocument);
+}
+Document = trydocument.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				Url = reader.Read<string>();
+				var tryurl = reader.ReadString();
+if(tryurl.IsError){
+return ReadResult<IObject>.Move(tryurl);
+}
+Url = tryurl.Value;
 			}
 
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				Sticker = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
+				var trysticker = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
+if(trysticker.IsError){
+return ReadResult<IObject>.Move(trysticker);
+}
+Sticker = trysticker.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

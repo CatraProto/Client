@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -46,22 +48,42 @@ FileReference = fileReference;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(VolumeId);
-			writer.Write(LocalId);
-			writer.Write(Secret);
-			writer.Write(FileReference);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(VolumeId);
+writer.WriteInt32(LocalId);
+writer.WriteInt64(Secret);
+
+			writer.WriteBytes(FileReference);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			VolumeId = reader.Read<long>();
-			LocalId = reader.Read<int>();
-			Secret = reader.Read<long>();
-			FileReference = reader.Read<byte[]>();
+			var tryvolumeId = reader.ReadInt64();
+if(tryvolumeId.IsError){
+return ReadResult<IObject>.Move(tryvolumeId);
+}
+VolumeId = tryvolumeId.Value;
+			var trylocalId = reader.ReadInt32();
+if(trylocalId.IsError){
+return ReadResult<IObject>.Move(trylocalId);
+}
+LocalId = trylocalId.Value;
+			var trysecret = reader.ReadInt64();
+if(trysecret.IsError){
+return ReadResult<IObject>.Move(trysecret);
+}
+Secret = trysecret.Value;
+			var tryfileReference = reader.ReadBytes();
+if(tryfileReference.IsError){
+return ReadResult<IObject>.Move(tryfileReference);
+}
+FileReference = tryfileReference.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

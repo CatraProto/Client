@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -29,14 +31,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public sealed override string Endpoint { get; set; }
 
 [Newtonsoft.Json.JsonProperty("source_groups")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.GroupCallParticipantVideoSourceGroupBase> SourceGroups { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.GroupCallParticipantVideoSourceGroupBase> SourceGroups { get; set; }
 
 [Newtonsoft.Json.JsonProperty("audio_source")]
 		public sealed override int? AudioSource { get; set; }
 
 
         #nullable enable
- public GroupCallParticipantVideo (string endpoint,IList<CatraProto.Client.TL.Schemas.CloudChats.GroupCallParticipantVideoSourceGroupBase> sourceGroups)
+ public GroupCallParticipantVideo (string endpoint,List<CatraProto.Client.TL.Schemas.CloudChats.GroupCallParticipantVideoSourceGroupBase> sourceGroups)
 {
  Endpoint = endpoint;
 SourceGroups = sourceGroups;
@@ -54,32 +56,56 @@ SourceGroups = sourceGroups;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Endpoint);
-			writer.Write(SourceGroups);
+
+			writer.WriteInt32(Flags);
+
+			writer.WriteString(Endpoint);
+var checksourceGroups = 			writer.WriteVector(SourceGroups, false);
+if(checksourceGroups.IsError){
+ return checksourceGroups; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				writer.Write(AudioSource.Value);
+writer.WriteInt32(AudioSource.Value);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Paused = FlagsHelper.IsFlagSet(Flags, 0);
-			Endpoint = reader.Read<string>();
-			SourceGroups = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.GroupCallParticipantVideoSourceGroupBase>();
+			var tryendpoint = reader.ReadString();
+if(tryendpoint.IsError){
+return ReadResult<IObject>.Move(tryendpoint);
+}
+Endpoint = tryendpoint.Value;
+			var trysourceGroups = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.GroupCallParticipantVideoSourceGroupBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trysourceGroups.IsError){
+return ReadResult<IObject>.Move(trysourceGroups);
+}
+SourceGroups = trysourceGroups.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 1))
 			{
-				AudioSource = reader.Read<int>();
+				var tryaudioSource = reader.ReadInt32();
+if(tryaudioSource.IsError){
+return ReadResult<IObject>.Move(tryaudioSource);
+}
+AudioSource = tryaudioSource.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

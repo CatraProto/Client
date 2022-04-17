@@ -1,5 +1,7 @@
 using CatraProto.TL;
+using CatraProto.TL.Results;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL.Interfaces;
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -14,14 +16,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public abstract bool CanSeeList { get; set; }
 
 [Newtonsoft.Json.JsonProperty("results")]
-		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.ReactionCountBase> Results { get; set; }
+		public abstract List<CatraProto.Client.TL.Schemas.CloudChats.ReactionCountBase> Results { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("recent_reactions")]
-		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.MessagePeerReactionBase> RecentReactions { get; set; }
+		public abstract List<CatraProto.Client.TL.Schemas.CloudChats.MessagePeerReactionBase> RecentReactions { get; set; }
 
         public abstract void UpdateFlags();
-        public abstract void Deserialize(Reader reader);
-        public abstract void Serialize(Writer writer);
+        public abstract ReadResult<IObject> Deserialize(Reader reader);
+        public abstract WriteResult Serialize(Writer writer);
         public abstract int GetConstructorId();
     }
 }

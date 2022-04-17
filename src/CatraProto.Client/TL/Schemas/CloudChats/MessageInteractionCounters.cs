@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -42,20 +44,35 @@ Forwards = forwards;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(MsgId);
-			writer.Write(Views);
-			writer.Write(Forwards);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt32(MsgId);
+writer.WriteInt32(Views);
+writer.WriteInt32(Forwards);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			MsgId = reader.Read<int>();
-			Views = reader.Read<int>();
-			Forwards = reader.Read<int>();
+			var trymsgId = reader.ReadInt32();
+if(trymsgId.IsError){
+return ReadResult<IObject>.Move(trymsgId);
+}
+MsgId = trymsgId.Value;
+			var tryviews = reader.ReadInt32();
+if(tryviews.IsError){
+return ReadResult<IObject>.Move(tryviews);
+}
+Views = tryviews.Value;
+			var tryforwards = reader.ReadInt32();
+if(tryforwards.IsError){
+return ReadResult<IObject>.Move(tryforwards);
+}
+Forwards = tryforwards.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -27,6 +29,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("admin_rights")]
 		public CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase AdminRights { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("rank")]
 		public string Rank { get; set; }
 
@@ -49,31 +52,55 @@ AdminRights = adminRights;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(UserId);
-			writer.Write(AdminRights);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt64(UserId);
+var checkadminRights = 			writer.WriteObject(AdminRights);
+if(checkadminRights.IsError){
+ return checkadminRights; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(Rank);
+
+				writer.WriteString(Rank);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			UserId = reader.Read<long>();
-			AdminRights = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var tryuserId = reader.ReadInt64();
+if(tryuserId.IsError){
+return ReadResult<IObject>.Move(tryuserId);
+}
+UserId = tryuserId.Value;
+			var tryadminRights = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase>();
+if(tryadminRights.IsError){
+return ReadResult<IObject>.Move(tryadminRights);
+}
+AdminRights = tryadminRights.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				Rank = reader.Read<string>();
+				var tryrank = reader.ReadString();
+if(tryrank.IsError){
+return ReadResult<IObject>.Move(tryrank);
+}
+Rank = tryrank.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -24,6 +26,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("json")]
 		public CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase Json { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("zoom_token")]
 		public string ZoomToken { get; set; }
 
@@ -45,29 +48,49 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Json);
+
+			writer.WriteInt32(Flags);
+var checkjson = 			writer.WriteObject(Json);
+if(checkjson.IsError){
+ return checkjson; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				writer.Write(ZoomToken);
+
+				writer.WriteString(ZoomToken);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
-			Json = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
+			var tryjson = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>();
+if(tryjson.IsError){
+return ReadResult<IObject>.Move(tryjson);
+}
+Json = tryjson.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 0))
 			{
-				ZoomToken = reader.Read<string>();
+				var tryzoomToken = reader.ReadString();
+if(tryzoomToken.IsError){
+return ReadResult<IObject>.Move(tryzoomToken);
+}
+ZoomToken = tryzoomToken.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

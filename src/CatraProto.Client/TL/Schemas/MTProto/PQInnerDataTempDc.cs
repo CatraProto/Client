@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -62,30 +64,71 @@ ExpiresIn = expiresIn;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Pq);
-			writer.Write(P);
-			writer.Write(Q);
-			writer.Write(Nonce);
-			writer.Write(ServerNonce);
-			writer.Write(NewNonce);
-			writer.Write(Dc);
-			writer.Write(ExpiresIn);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteBytes(Pq);
+
+			writer.WriteBytes(P);
+
+			writer.WriteBytes(Q);
+var checkNonce = writer.WriteBigInteger(Nonce);
+if(checkNonce.IsError){ return checkNonce;}
+var checkServerNonce = writer.WriteBigInteger(ServerNonce);
+if(checkServerNonce.IsError){ return checkServerNonce;}
+var checkNewNonce = writer.WriteBigInteger(NewNonce);
+if(checkNewNonce.IsError){ return checkNewNonce;}
+writer.WriteInt32(Dc);
+writer.WriteInt32(ExpiresIn);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Pq = reader.Read<byte[]>();
-			P = reader.Read<byte[]>();
-			Q = reader.Read<byte[]>();
-			Nonce = reader.Read<System.Numerics.BigInteger>(128);
-			ServerNonce = reader.Read<System.Numerics.BigInteger>(128);
-			NewNonce = reader.Read<System.Numerics.BigInteger>(256);
-			Dc = reader.Read<int>();
-			ExpiresIn = reader.Read<int>();
+			var trypq = reader.ReadBytes();
+if(trypq.IsError){
+return ReadResult<IObject>.Move(trypq);
+}
+Pq = trypq.Value;
+			var tryp = reader.ReadBytes();
+if(tryp.IsError){
+return ReadResult<IObject>.Move(tryp);
+}
+P = tryp.Value;
+			var tryq = reader.ReadBytes();
+if(tryq.IsError){
+return ReadResult<IObject>.Move(tryq);
+}
+Q = tryq.Value;
+			var trynonce = reader.ReadBigInteger(128);
+if(trynonce.IsError){
+return ReadResult<IObject>.Move(trynonce);
+}
+Nonce = trynonce.Value;
+			var tryserverNonce = reader.ReadBigInteger(128);
+if(tryserverNonce.IsError){
+return ReadResult<IObject>.Move(tryserverNonce);
+}
+ServerNonce = tryserverNonce.Value;
+			var trynewNonce = reader.ReadBigInteger(256);
+if(trynewNonce.IsError){
+return ReadResult<IObject>.Move(trynewNonce);
+}
+NewNonce = trynewNonce.Value;
+			var trydc = reader.ReadInt32();
+if(trydc.IsError){
+return ReadResult<IObject>.Move(trydc);
+}
+Dc = trydc.Value;
+			var tryexpiresIn = reader.ReadInt32();
+if(tryexpiresIn.IsError){
+return ReadResult<IObject>.Move(tryexpiresIn);
+}
+ExpiresIn = tryexpiresIn.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

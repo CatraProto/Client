@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -38,18 +40,32 @@ ApprovedBy = approvedBy;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Invite);
-			writer.Write(ApprovedBy);
+writer.WriteInt32(ConstructorId);
+var checkinvite = 			writer.WriteObject(Invite);
+if(checkinvite.IsError){
+ return checkinvite; 
+}
+writer.WriteInt64(ApprovedBy);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Invite = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.ExportedChatInviteBase>();
-			ApprovedBy = reader.Read<long>();
+			var tryinvite = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ExportedChatInviteBase>();
+if(tryinvite.IsError){
+return ReadResult<IObject>.Move(tryinvite);
+}
+Invite = tryinvite.Value;
+			var tryapprovedBy = reader.ReadInt64();
+if(tryapprovedBy.IsError){
+return ReadResult<IObject>.Move(tryapprovedBy);
+}
+ApprovedBy = tryapprovedBy.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

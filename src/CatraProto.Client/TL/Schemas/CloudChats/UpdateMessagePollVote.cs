@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -21,14 +23,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public long UserId { get; set; }
 
 [Newtonsoft.Json.JsonProperty("options")]
-		public IList<byte[]> Options { get; set; }
+		public List<byte[]> Options { get; set; }
 
 [Newtonsoft.Json.JsonProperty("qts")]
 		public int Qts { get; set; }
 
 
         #nullable enable
- public UpdateMessagePollVote (long pollId,long userId,IList<byte[]> options,int qts)
+ public UpdateMessagePollVote (long pollId,long userId,List<byte[]> options,int qts)
 {
  PollId = pollId;
 UserId = userId;
@@ -46,22 +48,42 @@ Qts = qts;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(PollId);
-			writer.Write(UserId);
-			writer.Write(Options);
-			writer.Write(Qts);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(PollId);
+writer.WriteInt64(UserId);
+
+			writer.WriteVector(Options, false);
+writer.WriteInt32(Qts);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			PollId = reader.Read<long>();
-			UserId = reader.Read<long>();
-			Options = reader.ReadVector<byte[]>();
-			Qts = reader.Read<int>();
+			var trypollId = reader.ReadInt64();
+if(trypollId.IsError){
+return ReadResult<IObject>.Move(trypollId);
+}
+PollId = trypollId.Value;
+			var tryuserId = reader.ReadInt64();
+if(tryuserId.IsError){
+return ReadResult<IObject>.Move(tryuserId);
+}
+UserId = tryuserId.Value;
+			var tryoptions = reader.ReadVector<byte[]>(ParserTypes.Bytes, nakedVector: false, nakedObjects: false);
+if(tryoptions.IsError){
+return ReadResult<IObject>.Move(tryoptions);
+}
+Options = tryoptions.Value;
+			var tryqts = reader.ReadInt32();
+if(tryqts.IsError){
+return ReadResult<IObject>.Move(tryqts);
+}
+Qts = tryqts.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

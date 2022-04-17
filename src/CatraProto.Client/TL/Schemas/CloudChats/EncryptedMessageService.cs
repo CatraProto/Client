@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -46,22 +48,42 @@ Bytes = bytes;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(RandomId);
-			writer.Write(ChatId);
-			writer.Write(Date);
-			writer.Write(Bytes);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(RandomId);
+writer.WriteInt32(ChatId);
+writer.WriteInt32(Date);
+
+			writer.WriteBytes(Bytes);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			RandomId = reader.Read<long>();
-			ChatId = reader.Read<int>();
-			Date = reader.Read<int>();
-			Bytes = reader.Read<byte[]>();
+			var tryrandomId = reader.ReadInt64();
+if(tryrandomId.IsError){
+return ReadResult<IObject>.Move(tryrandomId);
+}
+RandomId = tryrandomId.Value;
+			var trychatId = reader.ReadInt32();
+if(trychatId.IsError){
+return ReadResult<IObject>.Move(trychatId);
+}
+ChatId = trychatId.Value;
+			var trydate = reader.ReadInt32();
+if(trydate.IsError){
+return ReadResult<IObject>.Move(trydate);
+}
+Date = trydate.Value;
+			var trybytes = reader.ReadBytes();
+if(trybytes.IsError){
+return ReadResult<IObject>.Move(trybytes);
+}
+Bytes = trybytes.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

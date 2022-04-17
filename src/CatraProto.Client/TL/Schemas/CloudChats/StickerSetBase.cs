@@ -1,5 +1,7 @@
 using CatraProto.TL;
+using CatraProto.TL.Results;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL.Interfaces;
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -37,8 +39,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("short_name")]
 		public abstract string ShortName { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("thumbs")]
-		public abstract IList<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase> Thumbs { get; set; }
+		public abstract List<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase> Thumbs { get; set; }
 
 [Newtonsoft.Json.JsonProperty("thumb_dc_id")]
 		public abstract int? ThumbDcId { get; set; }
@@ -53,8 +56,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public abstract int Hash { get; set; }
 
         public abstract void UpdateFlags();
-        public abstract void Deserialize(Reader reader);
-        public abstract void Serialize(Writer writer);
+        public abstract ReadResult<IObject> Deserialize(Reader reader);
+        public abstract WriteResult Serialize(Writer writer);
         public abstract int GetConstructorId();
     }
 }

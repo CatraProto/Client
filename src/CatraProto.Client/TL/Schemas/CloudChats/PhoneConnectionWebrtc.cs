@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -70,31 +72,67 @@ Password = password;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Id);
-			writer.Write(Ip);
-			writer.Write(Ipv6);
-			writer.Write(Port);
-			writer.Write(Username);
-			writer.Write(Password);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt64(Id);
+
+			writer.WriteString(Ip);
+
+			writer.WriteString(Ipv6);
+writer.WriteInt32(Port);
+
+			writer.WriteString(Username);
+
+			writer.WriteString(Password);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Turn = FlagsHelper.IsFlagSet(Flags, 0);
 			Stun = FlagsHelper.IsFlagSet(Flags, 1);
-			Id = reader.Read<long>();
-			Ip = reader.Read<string>();
-			Ipv6 = reader.Read<string>();
-			Port = reader.Read<int>();
-			Username = reader.Read<string>();
-			Password = reader.Read<string>();
+			var tryid = reader.ReadInt64();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var tryip = reader.ReadString();
+if(tryip.IsError){
+return ReadResult<IObject>.Move(tryip);
+}
+Ip = tryip.Value;
+			var tryipv6 = reader.ReadString();
+if(tryipv6.IsError){
+return ReadResult<IObject>.Move(tryipv6);
+}
+Ipv6 = tryipv6.Value;
+			var tryport = reader.ReadInt32();
+if(tryport.IsError){
+return ReadResult<IObject>.Move(tryport);
+}
+Port = tryport.Value;
+			var tryusername = reader.ReadString();
+if(tryusername.IsError){
+return ReadResult<IObject>.Move(tryusername);
+}
+Username = tryusername.Value;
+			var trypassword = reader.ReadString();
+if(trypassword.IsError){
+return ReadResult<IObject>.Move(trypassword);
+}
+Password = trypassword.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

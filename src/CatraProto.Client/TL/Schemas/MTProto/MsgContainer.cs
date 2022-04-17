@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -15,11 +17,11 @@ namespace CatraProto.Client.TL.Schemas.MTProto
         public static int ConstructorId { get => 1945237724; }
         
 [Newtonsoft.Json.JsonProperty("messages")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.MTProto.MessageBase> Messages { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.MTProto.Message> Messages { get; set; }
 
 
         #nullable enable
- public MsgContainer (IList<CatraProto.Client.TL.Schemas.MTProto.MessageBase> messages)
+ public MsgContainer (List<CatraProto.Client.TL.Schemas.MTProto.Message> messages)
 {
  Messages = messages;
  
@@ -34,16 +36,26 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Messages);
+writer.WriteInt32(ConstructorId);
+var checkmessages = 			writer.WriteVector(Messages, true);
+if(checkmessages.IsError){
+ return checkmessages; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Messages = reader.ReadVector(new CatraProto.TL.ObjectDeserializers.NakedObjectVectorDeserializer<CatraProto.Client.MTProto.Deserializers.MsgContainerDeserializer>(CatraProto.Client.TL.Schemas.MergedProvider.Singleton), true).Cast<CatraProto.Client.TL.Schemas.MTProto.MessageBase>().ToList();
+			var trymessages = reader.ReadVector<CatraProto.Client.TL.Schemas.MTProto.Message>(ParserTypes.Object, nakedVector: true, nakedObjects: true);
+if(trymessages.IsError){
+return ReadResult<IObject>.Move(trymessages);
+}
+Messages = trymessages.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

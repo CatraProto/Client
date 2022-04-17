@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,10 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
         public static int ConstructorId { get => -1291540959; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
 
 [Newtonsoft.Json.JsonProperty("file_id")]
 		public long FileId { get; set; }
@@ -50,20 +50,36 @@ Bytes = bytes;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(FileId);
-			writer.Write(FilePart);
-			writer.Write(Bytes);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(FileId);
+writer.WriteInt32(FilePart);
+
+			writer.WriteBytes(Bytes);
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			FileId = reader.Read<long>();
-			FilePart = reader.Read<int>();
-			Bytes = reader.Read<byte[]>();
+			var tryfileId = reader.ReadInt64();
+if(tryfileId.IsError){
+return ReadResult<IObject>.Move(tryfileId);
+}
+FileId = tryfileId.Value;
+			var tryfilePart = reader.ReadInt32();
+if(tryfilePart.IsError){
+return ReadResult<IObject>.Move(tryfilePart);
+}
+FilePart = tryfilePart.Value;
+			var trybytes = reader.ReadBytes();
+if(trybytes.IsError){
+return ReadResult<IObject>.Move(trybytes);
+}
+Bytes = trybytes.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

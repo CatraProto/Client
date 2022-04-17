@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -50,24 +52,47 @@ ExpiresAt = expiresAt;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Nonce);
-			writer.Write(TempAuthKeyId);
-			writer.Write(PermAuthKeyId);
-			writer.Write(TempSessionId);
-			writer.Write(ExpiresAt);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(Nonce);
+writer.WriteInt64(TempAuthKeyId);
+writer.WriteInt64(PermAuthKeyId);
+writer.WriteInt64(TempSessionId);
+writer.WriteInt32(ExpiresAt);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Nonce = reader.Read<long>();
-			TempAuthKeyId = reader.Read<long>();
-			PermAuthKeyId = reader.Read<long>();
-			TempSessionId = reader.Read<long>();
-			ExpiresAt = reader.Read<int>();
+			var trynonce = reader.ReadInt64();
+if(trynonce.IsError){
+return ReadResult<IObject>.Move(trynonce);
+}
+Nonce = trynonce.Value;
+			var trytempAuthKeyId = reader.ReadInt64();
+if(trytempAuthKeyId.IsError){
+return ReadResult<IObject>.Move(trytempAuthKeyId);
+}
+TempAuthKeyId = trytempAuthKeyId.Value;
+			var trypermAuthKeyId = reader.ReadInt64();
+if(trypermAuthKeyId.IsError){
+return ReadResult<IObject>.Move(trypermAuthKeyId);
+}
+PermAuthKeyId = trypermAuthKeyId.Value;
+			var trytempSessionId = reader.ReadInt64();
+if(trytempSessionId.IsError){
+return ReadResult<IObject>.Move(trytempSessionId);
+}
+TempSessionId = trytempSessionId.Value;
+			var tryexpiresAt = reader.ReadInt32();
+if(tryexpiresAt.IsError){
+return ReadResult<IObject>.Move(tryexpiresAt);
+}
+ExpiresAt = tryexpiresAt.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

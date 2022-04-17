@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -18,11 +20,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public sealed override string Keyword { get; set; }
 
 [Newtonsoft.Json.JsonProperty("emoticons")]
-		public sealed override IList<string> Emoticons { get; set; }
+		public sealed override List<string> Emoticons { get; set; }
 
 
         #nullable enable
- public EmojiKeyword (string keyword,IList<string> emoticons)
+ public EmojiKeyword (string keyword,List<string> emoticons)
 {
  Keyword = keyword;
 Emoticons = emoticons;
@@ -38,18 +40,31 @@ Emoticons = emoticons;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Keyword);
-			writer.Write(Emoticons);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteString(Keyword);
+
+			writer.WriteVector(Emoticons, false);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Keyword = reader.Read<string>();
-			Emoticons = reader.ReadVector<string>();
+			var trykeyword = reader.ReadString();
+if(trykeyword.IsError){
+return ReadResult<IObject>.Move(trykeyword);
+}
+Keyword = trykeyword.Value;
+			var tryemoticons = reader.ReadVector<string>(ParserTypes.String, nakedVector: false, nakedObjects: false);
+if(tryemoticons.IsError){
+return ReadResult<IObject>.Move(tryemoticons);
+}
+Emoticons = tryemoticons.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

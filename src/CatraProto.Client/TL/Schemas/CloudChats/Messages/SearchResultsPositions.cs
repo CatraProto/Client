@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -18,11 +20,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public sealed override int Count { get; set; }
 
 [Newtonsoft.Json.JsonProperty("positions")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.SearchResultsPositionBase> Positions { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.SearchResultsPositionBase> Positions { get; set; }
 
 
         #nullable enable
- public SearchResultsPositions (int count,IList<CatraProto.Client.TL.Schemas.CloudChats.SearchResultsPositionBase> positions)
+ public SearchResultsPositions (int count,List<CatraProto.Client.TL.Schemas.CloudChats.SearchResultsPositionBase> positions)
 {
  Count = count;
 Positions = positions;
@@ -38,18 +40,32 @@ Positions = positions;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Count);
-			writer.Write(Positions);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt32(Count);
+var checkpositions = 			writer.WriteVector(Positions, false);
+if(checkpositions.IsError){
+ return checkpositions; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Count = reader.Read<int>();
-			Positions = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SearchResultsPositionBase>();
+			var trycount = reader.ReadInt32();
+if(trycount.IsError){
+return ReadResult<IObject>.Move(trycount);
+}
+Count = trycount.Value;
+			var trypositions = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SearchResultsPositionBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trypositions.IsError){
+return ReadResult<IObject>.Move(trypositions);
+}
+Positions = trypositions.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

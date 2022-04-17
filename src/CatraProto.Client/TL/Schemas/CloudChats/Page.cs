@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -37,20 +39,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public sealed override string Url { get; set; }
 
 [Newtonsoft.Json.JsonProperty("blocks")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase> Blocks { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase> Blocks { get; set; }
 
 [Newtonsoft.Json.JsonProperty("photos")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase> Photos { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase> Photos { get; set; }
 
 [Newtonsoft.Json.JsonProperty("documents")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase> Documents { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase> Documents { get; set; }
 
 [Newtonsoft.Json.JsonProperty("views")]
 		public sealed override int? Views { get; set; }
 
 
         #nullable enable
- public Page (string url,IList<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase> blocks,IList<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase> photos,IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase> documents)
+ public Page (string url,List<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase> blocks,List<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase> photos,List<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase> documents)
 {
  Url = url;
 Blocks = blocks;
@@ -72,38 +74,76 @@ Documents = documents;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Url);
-			writer.Write(Blocks);
-			writer.Write(Photos);
-			writer.Write(Documents);
+
+			writer.WriteInt32(Flags);
+
+			writer.WriteString(Url);
+var checkblocks = 			writer.WriteVector(Blocks, false);
+if(checkblocks.IsError){
+ return checkblocks; 
+}
+var checkphotos = 			writer.WriteVector(Photos, false);
+if(checkphotos.IsError){
+ return checkphotos; 
+}
+var checkdocuments = 			writer.WriteVector(Documents, false);
+if(checkdocuments.IsError){
+ return checkdocuments; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				writer.Write(Views.Value);
+writer.WriteInt32(Views.Value);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Part = FlagsHelper.IsFlagSet(Flags, 0);
 			Rtl = FlagsHelper.IsFlagSet(Flags, 1);
 			V2 = FlagsHelper.IsFlagSet(Flags, 2);
-			Url = reader.Read<string>();
-			Blocks = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase>();
-			Photos = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
-			Documents = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
+			var tryurl = reader.ReadString();
+if(tryurl.IsError){
+return ReadResult<IObject>.Move(tryurl);
+}
+Url = tryurl.Value;
+			var tryblocks = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryblocks.IsError){
+return ReadResult<IObject>.Move(tryblocks);
+}
+Blocks = tryblocks.Value;
+			var tryphotos = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryphotos.IsError){
+return ReadResult<IObject>.Move(tryphotos);
+}
+Photos = tryphotos.Value;
+			var trydocuments = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trydocuments.IsError){
+return ReadResult<IObject>.Move(trydocuments);
+}
+Documents = trydocuments.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				Views = reader.Read<int>();
+				var tryviews = reader.ReadInt32();
+if(tryviews.IsError){
+return ReadResult<IObject>.Move(tryviews);
+}
+Views = tryviews.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 		

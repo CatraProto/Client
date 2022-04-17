@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -18,14 +20,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 		public long Hash { get; set; }
 
 [Newtonsoft.Json.JsonProperty("packs")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.StickerPackBase> Packs { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.StickerPackBase> Packs { get; set; }
 
 [Newtonsoft.Json.JsonProperty("stickers")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase> Stickers { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase> Stickers { get; set; }
 
 
         #nullable enable
- public FavedStickers (long hash,IList<CatraProto.Client.TL.Schemas.CloudChats.StickerPackBase> packs,IList<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase> stickers)
+ public FavedStickers (long hash,List<CatraProto.Client.TL.Schemas.CloudChats.StickerPackBase> packs,List<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase> stickers)
 {
  Hash = hash;
 Packs = packs;
@@ -42,20 +44,41 @@ Stickers = stickers;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Hash);
-			writer.Write(Packs);
-			writer.Write(Stickers);
+writer.WriteInt32(ConstructorId);
+writer.WriteInt64(Hash);
+var checkpacks = 			writer.WriteVector(Packs, false);
+if(checkpacks.IsError){
+ return checkpacks; 
+}
+var checkstickers = 			writer.WriteVector(Stickers, false);
+if(checkstickers.IsError){
+ return checkstickers; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Hash = reader.Read<long>();
-			Packs = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.StickerPackBase>();
-			Stickers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
+			var tryhash = reader.ReadInt64();
+if(tryhash.IsError){
+return ReadResult<IObject>.Move(tryhash);
+}
+Hash = tryhash.Value;
+			var trypacks = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.StickerPackBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trypacks.IsError){
+return ReadResult<IObject>.Move(trypacks);
+}
+Packs = trypacks.Value;
+			var trystickers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trystickers.IsError){
+return ReadResult<IObject>.Move(trystickers);
+}
+Stickers = trystickers.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

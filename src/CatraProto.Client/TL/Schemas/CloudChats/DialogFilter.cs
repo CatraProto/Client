@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -59,21 +61,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 [Newtonsoft.Json.JsonProperty("title")]
 		public sealed override string Title { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("emoticon")]
 		public sealed override string Emoticon { get; set; }
 
 [Newtonsoft.Json.JsonProperty("pinned_peers")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> PinnedPeers { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> PinnedPeers { get; set; }
 
 [Newtonsoft.Json.JsonProperty("include_peers")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> IncludePeers { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> IncludePeers { get; set; }
 
 [Newtonsoft.Json.JsonProperty("exclude_peers")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> ExcludePeers { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> ExcludePeers { get; set; }
 
 
         #nullable enable
- public DialogFilter (int id,string title,IList<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> pinnedPeers,IList<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> includePeers,IList<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> excludePeers)
+ public DialogFilter (int id,string title,List<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> pinnedPeers,List<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> includePeers,List<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> excludePeers)
 {
  Id = id;
 Title = title;
@@ -101,27 +104,45 @@ ExcludePeers = excludePeers;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(Id);
-			writer.Write(Title);
+
+			writer.WriteInt32(Flags);
+writer.WriteInt32(Id);
+
+			writer.WriteString(Title);
 			if(FlagsHelper.IsFlagSet(Flags, 25))
 			{
-				writer.Write(Emoticon);
+
+				writer.WriteString(Emoticon);
 			}
 
-			writer.Write(PinnedPeers);
-			writer.Write(IncludePeers);
-			writer.Write(ExcludePeers);
+var checkpinnedPeers = 			writer.WriteVector(PinnedPeers, false);
+if(checkpinnedPeers.IsError){
+ return checkpinnedPeers; 
+}
+var checkincludePeers = 			writer.WriteVector(IncludePeers, false);
+if(checkincludePeers.IsError){
+ return checkincludePeers; 
+}
+var checkexcludePeers = 			writer.WriteVector(ExcludePeers, false);
+if(checkexcludePeers.IsError){
+ return checkexcludePeers; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Contacts = FlagsHelper.IsFlagSet(Flags, 0);
 			NonContacts = FlagsHelper.IsFlagSet(Flags, 1);
 			Groups = FlagsHelper.IsFlagSet(Flags, 2);
@@ -130,16 +151,41 @@ writer.Write(ConstructorId);
 			ExcludeMuted = FlagsHelper.IsFlagSet(Flags, 11);
 			ExcludeRead = FlagsHelper.IsFlagSet(Flags, 12);
 			ExcludeArchived = FlagsHelper.IsFlagSet(Flags, 13);
-			Id = reader.Read<int>();
-			Title = reader.Read<string>();
+			var tryid = reader.ReadInt32();
+if(tryid.IsError){
+return ReadResult<IObject>.Move(tryid);
+}
+Id = tryid.Value;
+			var trytitle = reader.ReadString();
+if(trytitle.IsError){
+return ReadResult<IObject>.Move(trytitle);
+}
+Title = trytitle.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 25))
 			{
-				Emoticon = reader.Read<string>();
+				var tryemoticon = reader.ReadString();
+if(tryemoticon.IsError){
+return ReadResult<IObject>.Move(tryemoticon);
+}
+Emoticon = tryemoticon.Value;
 			}
 
-			PinnedPeers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
-			IncludePeers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
-			ExcludePeers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+			var trypinnedPeers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trypinnedPeers.IsError){
+return ReadResult<IObject>.Move(trypinnedPeers);
+}
+PinnedPeers = trypinnedPeers.Value;
+			var tryincludePeers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryincludePeers.IsError){
+return ReadResult<IObject>.Move(tryincludePeers);
+}
+IncludePeers = tryincludePeers.Value;
+			var tryexcludePeers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryexcludePeers.IsError){
+return ReadResult<IObject>.Move(tryexcludePeers);
+}
+ExcludePeers = tryexcludePeers.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

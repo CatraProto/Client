@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -16,17 +19,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
         public static int ConstructorId { get => 1862465352; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(bool);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
 
 [Newtonsoft.Json.JsonProperty("events")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputAppEventBase> Events { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.InputAppEventBase> Events { get; set; }
 
         
         #nullable enable
- public SaveAppLog (IList<CatraProto.Client.TL.Schemas.CloudChats.InputAppEventBase> events)
+ public SaveAppLog (List<CatraProto.Client.TL.Schemas.CloudChats.InputAppEventBase> events)
 {
  Events = events;
  
@@ -42,16 +42,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Events);
+writer.WriteInt32(ConstructorId);
+var checkevents = 			writer.WriteVector(Events, false);
+if(checkevents.IsError){
+ return checkevents; 
+}
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Events = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputAppEventBase>();
+			var tryevents = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputAppEventBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(tryevents.IsError){
+return ReadResult<IObject>.Move(tryevents);
+}
+Events = tryevents.Value;
+return new ReadResult<IObject>(this);
 
 		}
 

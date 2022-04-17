@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 
 #nullable disable
@@ -24,10 +27,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
         public static int ConstructorId { get => -1876841625; }
         
 [Newtonsoft.Json.JsonIgnore]
-		System.Type IMethod.Type { get; init; } = typeof(CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetBase);
-
-[Newtonsoft.Json.JsonIgnore]
-		bool IMethod.IsVector { get; init; } = false;
+		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
 [Newtonsoft.Json.JsonIgnore]
 		public int Flags { get; set; }
@@ -50,18 +50,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 [Newtonsoft.Json.JsonProperty("short_name")]
 		public string ShortName { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("thumb")]
 		public CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase Thumb { get; set; }
 
 [Newtonsoft.Json.JsonProperty("stickers")]
-		public IList<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetItemBase> Stickers { get; set; }
+		public List<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetItemBase> Stickers { get; set; }
 
+[MaybeNull]
 [Newtonsoft.Json.JsonProperty("software")]
 		public string Software { get; set; }
 
         
         #nullable enable
- public CreateStickerSet (CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId,string title,string shortName,IList<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetItemBase> stickers)
+ public CreateStickerSet (CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId,string title,string shortName,List<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetItemBase> stickers)
 {
  UserId = userId;
 Title = title;
@@ -85,48 +87,92 @@ Stickers = stickers;
 
 		}
 
-		public void Serialize(Writer writer)
+		public WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
+writer.WriteInt32(ConstructorId);
 			UpdateFlags();
-			writer.Write(Flags);
-			writer.Write(UserId);
-			writer.Write(Title);
-			writer.Write(ShortName);
+
+			writer.WriteInt32(Flags);
+var checkuserId = 			writer.WriteObject(UserId);
+if(checkuserId.IsError){
+ return checkuserId; 
+}
+
+			writer.WriteString(Title);
+
+			writer.WriteString(ShortName);
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				writer.Write(Thumb);
+var checkthumb = 				writer.WriteObject(Thumb);
+if(checkthumb.IsError){
+ return checkthumb; 
+}
 			}
 
-			writer.Write(Stickers);
+var checkstickers = 			writer.WriteVector(Stickers, false);
+if(checkstickers.IsError){
+ return checkstickers; 
+}
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				writer.Write(Software);
+
+				writer.WriteString(Software);
 			}
 
+
+return new WriteResult();
 
 		}
 
-		public void Deserialize(Reader reader)
+		public ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Flags = reader.Read<int>();
+			var tryflags = reader.ReadInt32();
+if(tryflags.IsError){
+return ReadResult<IObject>.Move(tryflags);
+}
+Flags = tryflags.Value;
 			Masks = FlagsHelper.IsFlagSet(Flags, 0);
 			Animated = FlagsHelper.IsFlagSet(Flags, 1);
 			Videos = FlagsHelper.IsFlagSet(Flags, 4);
-			UserId = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
-			Title = reader.Read<string>();
-			ShortName = reader.Read<string>();
+			var tryuserId = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
+if(tryuserId.IsError){
+return ReadResult<IObject>.Move(tryuserId);
+}
+UserId = tryuserId.Value;
+			var trytitle = reader.ReadString();
+if(trytitle.IsError){
+return ReadResult<IObject>.Move(trytitle);
+}
+Title = trytitle.Value;
+			var tryshortName = reader.ReadString();
+if(tryshortName.IsError){
+return ReadResult<IObject>.Move(tryshortName);
+}
+ShortName = tryshortName.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 2))
 			{
-				Thumb = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
+				var trythumb = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
+if(trythumb.IsError){
+return ReadResult<IObject>.Move(trythumb);
+}
+Thumb = trythumb.Value;
 			}
 
-			Stickers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetItemBase>();
+			var trystickers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetItemBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trystickers.IsError){
+return ReadResult<IObject>.Move(trystickers);
+}
+Stickers = trystickers.Value;
 			if(FlagsHelper.IsFlagSet(Flags, 3))
 			{
-				Software = reader.Read<string>();
+				var trysoftware = reader.ReadString();
+if(trysoftware.IsError){
+return ReadResult<IObject>.Move(trysoftware);
+}
+Software = trysoftware.Value;
 			}
 
+return new ReadResult<IObject>(this);
 
 		}
 

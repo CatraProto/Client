@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -21,11 +23,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 		public sealed override int Count { get; set; }
 
 [Newtonsoft.Json.JsonProperty("peers")]
-		public sealed override IList<CatraProto.Client.TL.Schemas.CloudChats.TopPeerBase> Peers { get; set; }
+		public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.TopPeerBase> Peers { get; set; }
 
 
         #nullable enable
- public TopPeerCategoryPeers (CatraProto.Client.TL.Schemas.CloudChats.TopPeerCategoryBase category,int count,IList<CatraProto.Client.TL.Schemas.CloudChats.TopPeerBase> peers)
+ public TopPeerCategoryPeers (CatraProto.Client.TL.Schemas.CloudChats.TopPeerCategoryBase category,int count,List<CatraProto.Client.TL.Schemas.CloudChats.TopPeerBase> peers)
 {
  Category = category;
 Count = count;
@@ -42,20 +44,41 @@ Peers = peers;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(Category);
-			writer.Write(Count);
-			writer.Write(Peers);
+writer.WriteInt32(ConstructorId);
+var checkcategory = 			writer.WriteObject(Category);
+if(checkcategory.IsError){
+ return checkcategory; 
+}
+writer.WriteInt32(Count);
+var checkpeers = 			writer.WriteVector(Peers, false);
+if(checkpeers.IsError){
+ return checkpeers; 
+}
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			Category = reader.Read<CatraProto.Client.TL.Schemas.CloudChats.TopPeerCategoryBase>();
-			Count = reader.Read<int>();
-			Peers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.TopPeerBase>();
+			var trycategory = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.TopPeerCategoryBase>();
+if(trycategory.IsError){
+return ReadResult<IObject>.Move(trycategory);
+}
+Category = trycategory.Value;
+			var trycount = reader.ReadInt32();
+if(trycount.IsError){
+return ReadResult<IObject>.Move(trycount);
+}
+Count = trycount.Value;
+			var trypeers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.TopPeerBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+if(trypeers.IsError){
+return ReadResult<IObject>.Move(trypeers);
+}
+Peers = trypeers.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		

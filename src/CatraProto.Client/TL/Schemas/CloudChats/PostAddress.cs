@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #nullable disable
@@ -54,26 +56,59 @@ PostCode = postCode;
 
 		}
 
-		public override void Serialize(Writer writer)
+		public override WriteResult Serialize(Writer writer)
 		{
-writer.Write(ConstructorId);
-			writer.Write(StreetLine1);
-			writer.Write(StreetLine2);
-			writer.Write(City);
-			writer.Write(State);
-			writer.Write(CountryIso2);
-			writer.Write(PostCode);
+writer.WriteInt32(ConstructorId);
+
+			writer.WriteString(StreetLine1);
+
+			writer.WriteString(StreetLine2);
+
+			writer.WriteString(City);
+
+			writer.WriteString(State);
+
+			writer.WriteString(CountryIso2);
+
+			writer.WriteString(PostCode);
+
+return new WriteResult();
 
 		}
 
-		public override void Deserialize(Reader reader)
+		public override ReadResult<IObject> Deserialize(Reader reader)
 		{
-			StreetLine1 = reader.Read<string>();
-			StreetLine2 = reader.Read<string>();
-			City = reader.Read<string>();
-			State = reader.Read<string>();
-			CountryIso2 = reader.Read<string>();
-			PostCode = reader.Read<string>();
+			var trystreetLine1 = reader.ReadString();
+if(trystreetLine1.IsError){
+return ReadResult<IObject>.Move(trystreetLine1);
+}
+StreetLine1 = trystreetLine1.Value;
+			var trystreetLine2 = reader.ReadString();
+if(trystreetLine2.IsError){
+return ReadResult<IObject>.Move(trystreetLine2);
+}
+StreetLine2 = trystreetLine2.Value;
+			var trycity = reader.ReadString();
+if(trycity.IsError){
+return ReadResult<IObject>.Move(trycity);
+}
+City = trycity.Value;
+			var trystate = reader.ReadString();
+if(trystate.IsError){
+return ReadResult<IObject>.Move(trystate);
+}
+State = trystate.Value;
+			var trycountryIso2 = reader.ReadString();
+if(trycountryIso2.IsError){
+return ReadResult<IObject>.Move(trycountryIso2);
+}
+CountryIso2 = trycountryIso2.Value;
+			var trypostCode = reader.ReadString();
+if(trypostCode.IsError){
+return ReadResult<IObject>.Move(trypostCode);
+}
+PostCode = trypostCode.Value;
+return new ReadResult<IObject>(this);
 
 		}
 		
