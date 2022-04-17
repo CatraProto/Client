@@ -9,9 +9,9 @@ namespace CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors
 {
     public class MissingRequestError : RpcError
     {
-        public override string ErrorDescription { get; }
+        public override string ErrorDescription { get; } = "";
 
-        public MissingRequestError() : base("The request was not found", -10404)
+        public MissingRequestError() : base("REQUEST_NOT_FOUND", -10404)
         {
         }
     }

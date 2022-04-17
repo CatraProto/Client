@@ -11,7 +11,7 @@ namespace CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors
     {
         public override string ErrorDescription { get; }
 
-        public SerializationFailed(string parserError) : base("An error occured while TL-serializing the request", -10400)
+        public SerializationFailed(string parserError) : base("SERIALIZATION_FAILED", -10400)
         {
             ErrorDescription = parserError;
         }
