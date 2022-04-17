@@ -3,7 +3,7 @@ using CatraProto.Client.MTProto.Rpc.RpcErrors;
 
 namespace CatraProto.Client.MTProto.Rpc.Parsers
 {
-    class BotMethodInvalidParser : RpcErrorParser
+    internal class BotMethodInvalidParser : RpcErrorParser
     {
         public BotMethodInvalidParser() : base(18)
         {

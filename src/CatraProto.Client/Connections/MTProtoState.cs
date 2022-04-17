@@ -1,15 +1,14 @@
-using System;
 using System.Threading.Tasks;
 using CatraProto.Client.Async.Loops;
+using CatraProto.Client.Async.Loops.Enums.Generic;
+using CatraProto.Client.Async.Loops.Extensions;
 using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.Crypto;
 using CatraProto.Client.MTProto.Auth;
-using CatraProto.Client.Async.Loops.Enums.Generic;
-using CatraProto.Client.Async.Loops.Extensions;
 
 namespace CatraProto.Client.Connections
 {
-    class MTProtoState
+    internal class MTProtoState
     {
         public TelegramClient Client { get; }
         public KeysHandler KeysHandler { get; }

@@ -5,7 +5,7 @@ using CatraProto.TL.Results;
 
 namespace CatraProto.Client.Updates.CustomTypes
 {
-    class UpdateRedirect : UpdatesBase
+    internal class UpdateRedirect : UpdatesBase
     {
         public UpdateBase Update { get; }
 

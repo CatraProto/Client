@@ -8,7 +8,7 @@ using Serilog;
 
 namespace CatraProto.Client.Connections.Loop
 {
-    class KeyGeneratorLoop : LoopImplementation<ResumableLoopState, ResumableSignalState>
+    internal class KeyGeneratorLoop : LoopImplementation<ResumableLoopState, ResumableSignalState>
     {
         private readonly TemporaryAuthKey _temporaryAuthKey;
         private readonly Connection _connection;

@@ -1,5 +1,4 @@
 using CatraProto.Client.MTProto.Rpc.Interfaces;
-using TlRpcError = CatraProto.Client.TL.Schemas.MTProto.RpcError;
 
 namespace CatraProto.Client.MTProto.Rpc.RpcErrors
 {

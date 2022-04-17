@@ -8,7 +8,7 @@ using Serilog;
 
 namespace CatraProto.Client.Connections.MessageScheduling.Items
 {
-    class MessageItem
+    internal class MessageItem
     {
         public MessageSendingOptions MessageSendingOptions { get; }
         public CancellationToken CancellationToken { get; }
@@ -219,11 +219,11 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
                 }
                 else
                 {
-                    if(MessageSendingOptions.SendWithMessageId is not null)
+                    if (MessageSendingOptions.SendWithMessageId is not null)
                     {
                         _messageStatus.MessageProtocolInfo.MessageId = MessageSendingOptions.SendWithMessageId.Value;
                     }
-                    else if(messageId is not null)
+                    else if (messageId is not null)
                     {
                         _messageStatus.MessageProtocolInfo.MessageId = messageId.Value;
                     }
@@ -246,7 +246,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
             lock (_mutex)
             {
                 var rpcResponse = _messageStatus.MessageCompletion.RpcResponse;
-                if(rpcResponse is null || !rpcResponse.CanCast(o))
+                if (rpcResponse is null || !rpcResponse.CanCast(o))
                 {
                     return false;
                 }

@@ -1,54 +1,50 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class PrivacyKeyForwards : CatraProto.Client.TL.Schemas.CloudChats.PrivacyKeyBase
-	{
+    public partial class PrivacyKeyForwards : CatraProto.Client.TL.Schemas.CloudChats.PrivacyKeyBase
+    {
 
 
         [Newtonsoft.Json.JsonIgnore]
         public static int ConstructorId { get => 1777096355; }
-        
 
-        
-        public PrivacyKeyForwards() 
+
+
+        public PrivacyKeyForwards()
         {
         }
-		
-		public override void UpdateFlags() 
-		{
 
-		}
+        public override void UpdateFlags()
+        {
 
-		public override WriteResult Serialize(Writer writer)
-		{
-writer.WriteInt32(ConstructorId);
+        }
 
-return new WriteResult();
+        public override WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
 
-		}
+            return new WriteResult();
 
-		public override ReadResult<IObject> Deserialize(Reader reader)
-		{
-return new ReadResult<IObject>(this);
+        }
 
-		}
-		
-		public override string ToString()
-		{
-		    return "privacyKeyForwards";
-		}
+        public override ReadResult<IObject> Deserialize(Reader reader)
+        {
+            return new ReadResult<IObject>(this);
 
-		public override int GetConstructorId()
-		{
-			return ConstructorId;
-		}
-	}
+        }
+
+        public override string ToString()
+        {
+            return "privacyKeyForwards";
+        }
+
+        public override int GetConstructorId()
+        {
+            return ConstructorId;
+        }
+    }
 }

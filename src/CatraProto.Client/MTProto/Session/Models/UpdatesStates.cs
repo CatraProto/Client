@@ -4,7 +4,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.MTProto.Session.Models
 {
-    class UpdatesStates : SessionModel
+    internal class UpdatesStates : SessionModel
     {
         private readonly Dictionary<long, UpdatesState> _updatesStates = new Dictionary<long, UpdatesState>();
         private readonly UpdatesState _commonUpdatesState;
@@ -42,7 +42,7 @@ namespace CatraProto.Client.MTProto.Session.Models
         {
             lock (Mutex)
             {
-                List<(long chatId, UpdatesState state)> result = new List<(long chatId, UpdatesState state)>();
+                var result = new List<(long chatId, UpdatesState state)>();
                 foreach (var keyValuePair in _updatesStates)
                 {
                     result.Add((keyValuePair.Key, keyValuePair.Value));

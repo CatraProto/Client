@@ -4,7 +4,7 @@ using Serilog;
 
 namespace CatraProto.Client
 {
-    class SessionEvents
+    internal class SessionEvents
     {
         private readonly TelegramClient _client;
         private readonly ILogger _logger;

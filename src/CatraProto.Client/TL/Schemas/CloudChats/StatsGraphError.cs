@@ -1,70 +1,67 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class StatsGraphError : CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase
-	{
+    public partial class StatsGraphError : CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase
+    {
 
 
         [Newtonsoft.Json.JsonIgnore]
         public static int ConstructorId { get => -1092839390; }
-        
-[Newtonsoft.Json.JsonProperty("error")]
-		public string Error { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("error")]
+        public string Error { get; set; }
 
 
-        #nullable enable
- public StatsGraphError (string error)
-{
- Error = error;
- 
-}
+#nullable enable
+        public StatsGraphError(string error)
+        {
+            Error = error;
+
+        }
 #nullable disable
-        internal StatsGraphError() 
+        internal StatsGraphError()
         {
         }
-		
-		public override void UpdateFlags() 
-		{
 
-		}
+        public override void UpdateFlags()
+        {
 
-		public override WriteResult Serialize(Writer writer)
-		{
-writer.WriteInt32(ConstructorId);
+        }
 
-			writer.WriteString(Error);
+        public override WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
 
-return new WriteResult();
+            writer.WriteString(Error);
 
-		}
+            return new WriteResult();
 
-		public override ReadResult<IObject> Deserialize(Reader reader)
-		{
-			var tryerror = reader.ReadString();
-if(tryerror.IsError){
-return ReadResult<IObject>.Move(tryerror);
-}
-Error = tryerror.Value;
-return new ReadResult<IObject>(this);
+        }
 
-		}
-		
-		public override string ToString()
-		{
-		    return "statsGraphError";
-		}
+        public override ReadResult<IObject> Deserialize(Reader reader)
+        {
+            var tryerror = reader.ReadString();
+            if (tryerror.IsError)
+            {
+                return ReadResult<IObject>.Move(tryerror);
+            }
+            Error = tryerror.Value;
+            return new ReadResult<IObject>(this);
 
-		public override int GetConstructorId()
-		{
-			return ConstructorId;
-		}
-	}
+        }
+
+        public override string ToString()
+        {
+            return "statsGraphError";
+        }
+
+        public override int GetConstructorId()
+        {
+            return ConstructorId;
+        }
+    }
 }

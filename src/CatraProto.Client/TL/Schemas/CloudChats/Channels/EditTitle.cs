@@ -1,89 +1,87 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System.Diagnostics.CodeAnalysis;
-
-using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 {
-	public partial class EditTitle : IMethod
-	{
+    public partial class EditTitle : IMethod
+    {
 
 
         [Newtonsoft.Json.JsonIgnore]
         public static int ConstructorId { get => 1450044624; }
-        
-[Newtonsoft.Json.JsonIgnore]
-		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-[Newtonsoft.Json.JsonProperty("channel")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase Channel { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+        ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-[Newtonsoft.Json.JsonProperty("title")]
-		public string Title { get; set; }
+        [Newtonsoft.Json.JsonProperty("channel")]
+        public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase Channel { get; set; }
 
-        
-        #nullable enable
- public EditTitle (CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase channel,string title)
-{
- Channel = channel;
-Title = title;
- 
-}
+        [Newtonsoft.Json.JsonProperty("title")]
+        public string Title { get; set; }
+
+
+#nullable enable
+        public EditTitle(CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase channel, string title)
+        {
+            Channel = channel;
+            Title = title;
+
+        }
 #nullable disable
-                
-        internal EditTitle() 
+
+        internal EditTitle()
         {
         }
-        
-		public void UpdateFlags() 
-		{
 
-		}
+        public void UpdateFlags()
+        {
 
-		public WriteResult Serialize(Writer writer)
-		{
-writer.WriteInt32(ConstructorId);
-var checkchannel = 			writer.WriteObject(Channel);
-if(checkchannel.IsError){
- return checkchannel; 
-}
+        }
 
-			writer.WriteString(Title);
+        public WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
+            var checkchannel = writer.WriteObject(Channel);
+            if (checkchannel.IsError)
+            {
+                return checkchannel;
+            }
 
-return new WriteResult();
+            writer.WriteString(Title);
 
-		}
+            return new WriteResult();
 
-		public ReadResult<IObject> Deserialize(Reader reader)
-		{
-			var trychannel = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
-if(trychannel.IsError){
-return ReadResult<IObject>.Move(trychannel);
-}
-Channel = trychannel.Value;
-			var trytitle = reader.ReadString();
-if(trytitle.IsError){
-return ReadResult<IObject>.Move(trytitle);
-}
-Title = trytitle.Value;
-return new ReadResult<IObject>(this);
+        }
 
-		}
+        public ReadResult<IObject> Deserialize(Reader reader)
+        {
+            var trychannel = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
+            if (trychannel.IsError)
+            {
+                return ReadResult<IObject>.Move(trychannel);
+            }
+            Channel = trychannel.Value;
+            var trytitle = reader.ReadString();
+            if (trytitle.IsError)
+            {
+                return ReadResult<IObject>.Move(trytitle);
+            }
+            Title = trytitle.Value;
+            return new ReadResult<IObject>(this);
 
-		public override string ToString()
-		{
-		    return "channels.editTitle";
-		}
+        }
 
-		public int GetConstructorId()
-		{
-			return ConstructorId;
-		}
-	}
+        public override string ToString()
+        {
+            return "channels.editTitle";
+        }
+
+        public int GetConstructorId()
+        {
+            return ConstructorId;
+        }
+    }
 }

@@ -1,8 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading;
 using System.Threading.Tasks;
-using CatraProto.Client.Async.Loops.Enums.Generic;
 
 namespace CatraProto.Client.Async.Loops.Interfaces
 {
@@ -12,6 +10,6 @@ namespace CatraProto.Client.Async.Loops.Interfaces
         public bool BindTo(LoopImplementation<TLoopState, TSignalState> loopImplementation);
         public TLoopState GetCurrentState();
         public Task GetShutdownTask();
-        
+
     }
 }

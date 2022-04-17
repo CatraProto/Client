@@ -1,7 +1,5 @@
 ﻿using Serilog;
 using Serilog.Core;
-using Serilog.Events;
-using System.Threading;
 
 namespace CatraProto.Client
 {

@@ -3,94 +3,93 @@ using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System.Diagnostics.CodeAnalysis;
-
-using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class DeleteMessages : IMethod
-	{
-		[Flags]
-		public enum FlagsEnum 
-		{
-			Revoke = 1 << 0
-		}
+    public partial class DeleteMessages : IMethod
+    {
+        [Flags]
+        public enum FlagsEnum
+        {
+            Revoke = 1 << 0
+        }
 
         [Newtonsoft.Json.JsonIgnore]
         public static int ConstructorId { get => -443640366; }
-        
-[Newtonsoft.Json.JsonIgnore]
-		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-[Newtonsoft.Json.JsonIgnore]
-		public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+        ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-[Newtonsoft.Json.JsonProperty("revoke")]
-		public bool Revoke { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int Flags { get; set; }
 
-[Newtonsoft.Json.JsonProperty("id")]
-		public List<int> Id { get; set; }
+        [Newtonsoft.Json.JsonProperty("revoke")]
+        public bool Revoke { get; set; }
 
-        
-        #nullable enable
- public DeleteMessages (List<int> id)
-{
- Id = id;
- 
-}
+        [Newtonsoft.Json.JsonProperty("id")]
+        public List<int> Id { get; set; }
+
+
+#nullable enable
+        public DeleteMessages(List<int> id)
+        {
+            Id = id;
+
+        }
 #nullable disable
-                
-        internal DeleteMessages() 
+
+        internal DeleteMessages()
         {
         }
-        
-		public void UpdateFlags() 
-		{
-			Flags = Revoke ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
 
-		}
+        public void UpdateFlags()
+        {
+            Flags = Revoke ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
 
-		public WriteResult Serialize(Writer writer)
-		{
-writer.WriteInt32(ConstructorId);
-			UpdateFlags();
+        }
 
-			writer.WriteInt32(Flags);
+        public WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
+            UpdateFlags();
 
-			writer.WriteVector(Id, false);
+            writer.WriteInt32(Flags);
 
-return new WriteResult();
+            writer.WriteVector(Id, false);
 
-		}
+            return new WriteResult();
 
-		public ReadResult<IObject> Deserialize(Reader reader)
-		{
-			var tryflags = reader.ReadInt32();
-if(tryflags.IsError){
-return ReadResult<IObject>.Move(tryflags);
-}
-Flags = tryflags.Value;
-			Revoke = FlagsHelper.IsFlagSet(Flags, 0);
-			var tryid = reader.ReadVector<int>(ParserTypes.Int);
-if(tryid.IsError){
-return ReadResult<IObject>.Move(tryid);
-}
-Id = tryid.Value;
-return new ReadResult<IObject>(this);
+        }
 
-		}
+        public ReadResult<IObject> Deserialize(Reader reader)
+        {
+            var tryflags = reader.ReadInt32();
+            if (tryflags.IsError)
+            {
+                return ReadResult<IObject>.Move(tryflags);
+            }
+            Flags = tryflags.Value;
+            Revoke = FlagsHelper.IsFlagSet(Flags, 0);
+            var tryid = reader.ReadVector<int>(ParserTypes.Int);
+            if (tryid.IsError)
+            {
+                return ReadResult<IObject>.Move(tryid);
+            }
+            Id = tryid.Value;
+            return new ReadResult<IObject>(this);
 
-		public override string ToString()
-		{
-		    return "messages.deleteMessages";
-		}
+        }
 
-		public int GetConstructorId()
-		{
-			return ConstructorId;
-		}
-	}
+        public override string ToString()
+        {
+            return "messages.deleteMessages";
+        }
+
+        public int GetConstructorId()
+        {
+            return ConstructorId;
+        }
+    }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -10,7 +9,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.Connections.MessageScheduling.ConnectionMessages
 {
-    sealed class EncryptedConnectionMessage : IConnectionMessage
+    internal sealed class EncryptedConnectionMessage : IConnectionMessage
     {
         public int Length
         {
@@ -49,7 +48,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.ConnectionMessages
         {
             Import(message, false);
         }
-        
+
         public void Import(byte[] message, bool fromClient)
         {
             using (var reader = new BinaryReader(message.ToMemoryStream()))
@@ -99,7 +98,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.ConnectionMessages
         public byte[] ComputeMsgKey(byte[] plainText, bool fromClient)
         {
             var x = fromClient ? 0 : 8;
-            return SHA256.HashData(AuthKey.KeyArray.Skip(88+x).Take(32).Concat(plainText).ToArray()).Skip(8).Take(16).ToArray();
+            return SHA256.HashData(AuthKey.KeyArray.Skip(88 + x).Take(32).Concat(plainText).ToArray()).Skip(8).Take(16).ToArray();
         }
 
         public byte[] Export()
@@ -114,7 +113,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.ConnectionMessages
                 writer.Write(AuthKeyId);
                 writer.Write(msgKey);
                 writer.Write(encryptor.Encrypt(toEncryptData));
-                
+
                 var array = ((MemoryStream)writer.BaseStream).ToArray();
                 return array;
             }

@@ -6,7 +6,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.MTProto.Session.Models
 {
-    class Authorization : SessionModel, IDisposable
+    internal class Authorization : SessionModel, IDisposable
     {
         private readonly AsyncSignaler _asyncSignaler = new AsyncSignaler(false);
         private long _userAccessHash;

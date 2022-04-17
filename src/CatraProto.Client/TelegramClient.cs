@@ -1,16 +1,11 @@
 using System;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using CatraProto.Client.Connections;
 using CatraProto.Client.Database;
 using CatraProto.Client.Flows.LoginFlow;
-using CatraProto.Client.MTProto;
 using CatraProto.Client.MTProto.Session;
 using CatraProto.Client.MTProto.Session.Models;
 using CatraProto.Client.MTProto.Settings;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using CatraProto.Client.TL.Schemas.CloudChats.Help;
 using CatraProto.Client.Updates;
 using CatraProto.Client.Updates.Interfaces;
 using Serilog;
@@ -67,7 +62,7 @@ namespace CatraProto.Client
             DatabaseManager.InitDb();
             var sessionData = ClientSession.SessionManager.SessionData;
             sessionData.RegisterOnUpdated(_sessionEvents.OnDataUpdate);
-            
+
             await ClientSession.ConnectionPool.InitMainConnectionAsync(token);
             _logger.Information("Requesting and storing current configuration");
 

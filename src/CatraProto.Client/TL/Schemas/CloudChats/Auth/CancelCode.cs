@@ -1,87 +1,84 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System.Diagnostics.CodeAnalysis;
-
-using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
-	public partial class CancelCode : IMethod
-	{
+    public partial class CancelCode : IMethod
+    {
 
 
         [Newtonsoft.Json.JsonIgnore]
         public static int ConstructorId { get => 520357240; }
-        
-[Newtonsoft.Json.JsonIgnore]
-		ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
 
-[Newtonsoft.Json.JsonProperty("phone_number")]
-		public string PhoneNumber { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+        ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
 
-[Newtonsoft.Json.JsonProperty("phone_code_hash")]
-		public string PhoneCodeHash { get; set; }
+        [Newtonsoft.Json.JsonProperty("phone_number")]
+        public string PhoneNumber { get; set; }
 
-        
-        #nullable enable
- public CancelCode (string phoneNumber,string phoneCodeHash)
-{
- PhoneNumber = phoneNumber;
-PhoneCodeHash = phoneCodeHash;
- 
-}
+        [Newtonsoft.Json.JsonProperty("phone_code_hash")]
+        public string PhoneCodeHash { get; set; }
+
+
+#nullable enable
+        public CancelCode(string phoneNumber, string phoneCodeHash)
+        {
+            PhoneNumber = phoneNumber;
+            PhoneCodeHash = phoneCodeHash;
+
+        }
 #nullable disable
-                
-        internal CancelCode() 
+
+        internal CancelCode()
         {
         }
-        
-		public void UpdateFlags() 
-		{
 
-		}
+        public void UpdateFlags()
+        {
 
-		public WriteResult Serialize(Writer writer)
-		{
-writer.WriteInt32(ConstructorId);
+        }
 
-			writer.WriteString(PhoneNumber);
+        public WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
 
-			writer.WriteString(PhoneCodeHash);
+            writer.WriteString(PhoneNumber);
 
-return new WriteResult();
+            writer.WriteString(PhoneCodeHash);
 
-		}
+            return new WriteResult();
 
-		public ReadResult<IObject> Deserialize(Reader reader)
-		{
-			var tryphoneNumber = reader.ReadString();
-if(tryphoneNumber.IsError){
-return ReadResult<IObject>.Move(tryphoneNumber);
-}
-PhoneNumber = tryphoneNumber.Value;
-			var tryphoneCodeHash = reader.ReadString();
-if(tryphoneCodeHash.IsError){
-return ReadResult<IObject>.Move(tryphoneCodeHash);
-}
-PhoneCodeHash = tryphoneCodeHash.Value;
-return new ReadResult<IObject>(this);
+        }
 
-		}
+        public ReadResult<IObject> Deserialize(Reader reader)
+        {
+            var tryphoneNumber = reader.ReadString();
+            if (tryphoneNumber.IsError)
+            {
+                return ReadResult<IObject>.Move(tryphoneNumber);
+            }
+            PhoneNumber = tryphoneNumber.Value;
+            var tryphoneCodeHash = reader.ReadString();
+            if (tryphoneCodeHash.IsError)
+            {
+                return ReadResult<IObject>.Move(tryphoneCodeHash);
+            }
+            PhoneCodeHash = tryphoneCodeHash.Value;
+            return new ReadResult<IObject>(this);
 
-		public override string ToString()
-		{
-		    return "auth.cancelCode";
-		}
+        }
 
-		public int GetConstructorId()
-		{
-			return ConstructorId;
-		}
-	}
+        public override string ToString()
+        {
+            return "auth.cancelCode";
+        }
+
+        public int GetConstructorId()
+        {
+            return ConstructorId;
+        }
+    }
 }

@@ -3,7 +3,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.MTProto.Session.Models
 {
-    class UpdatesState : SessionModel
+    internal class UpdatesState : SessionModel
     {
         private int _pts = 1;
         private int _qts = 0;

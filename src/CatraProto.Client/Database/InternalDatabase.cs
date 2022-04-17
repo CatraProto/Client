@@ -1,6 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
 using Serilog;
-using System.Threading;
 
 namespace CatraProto.Client.Database
 {
@@ -10,7 +9,7 @@ namespace CatraProto.Client.Database
         private readonly SqliteConnection _sqliteConnection;
         private readonly ILogger _logger;
         private readonly object _mutex;
-        
+
         public InternalDatabase(SqliteConnection sqliteConnection, object commonMutex, ILogger logger)
         {
             _sqliteConnection = sqliteConnection;
@@ -32,7 +31,7 @@ namespace CatraProto.Client.Database
             lock (_mutex)
             {
                 var res = _sqliteConnection.ExecuteReaderSingle("SELECT * FROM InternalDatabase");
-                if(res is not null)
+                if (res is not null)
                 {
                     return (int)res[0];
                 }
@@ -46,7 +45,7 @@ namespace CatraProto.Client.Database
             lock (_mutex)
             {
                 _sqliteConnection.ExecuteNonQuery("DELETE FROM InternalDatabase");
-                _sqliteConnection.ExecuteNonQuery("INSERT INTO InternalDatabase (dbVersion, data) VALUES (@p0, @p1)", new object[] {CurrentDbVersion, new byte[] { } });
+                _sqliteConnection.ExecuteNonQuery("INSERT INTO InternalDatabase (dbVersion, data) VALUES (@p0, @p1)", new object[] { CurrentDbVersion, new byte[] { } });
             }
         }
     }

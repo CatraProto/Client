@@ -1,83 +1,82 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class TextAnchor : CatraProto.Client.TL.Schemas.CloudChats.RichTextBase
-	{
+    public partial class TextAnchor : CatraProto.Client.TL.Schemas.CloudChats.RichTextBase
+    {
 
 
         [Newtonsoft.Json.JsonIgnore]
         public static int ConstructorId { get => 894777186; }
-        
-[Newtonsoft.Json.JsonProperty("text")]
-		public CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Text { get; set; }
 
-[Newtonsoft.Json.JsonProperty("name")]
-		public string Name { get; set; }
+        [Newtonsoft.Json.JsonProperty("text")]
+        public CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Text { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("name")]
+        public string Name { get; set; }
 
 
-        #nullable enable
- public TextAnchor (CatraProto.Client.TL.Schemas.CloudChats.RichTextBase text,string name)
-{
- Text = text;
-Name = name;
- 
-}
+#nullable enable
+        public TextAnchor(CatraProto.Client.TL.Schemas.CloudChats.RichTextBase text, string name)
+        {
+            Text = text;
+            Name = name;
+
+        }
 #nullable disable
-        internal TextAnchor() 
+        internal TextAnchor()
         {
         }
-		
-		public override void UpdateFlags() 
-		{
 
-		}
+        public override void UpdateFlags()
+        {
 
-		public override WriteResult Serialize(Writer writer)
-		{
-writer.WriteInt32(ConstructorId);
-var checktext = 			writer.WriteObject(Text);
-if(checktext.IsError){
- return checktext; 
-}
+        }
 
-			writer.WriteString(Name);
+        public override WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
+            var checktext = writer.WriteObject(Text);
+            if (checktext.IsError)
+            {
+                return checktext;
+            }
 
-return new WriteResult();
+            writer.WriteString(Name);
 
-		}
+            return new WriteResult();
 
-		public override ReadResult<IObject> Deserialize(Reader reader)
-		{
-			var trytext = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
-if(trytext.IsError){
-return ReadResult<IObject>.Move(trytext);
-}
-Text = trytext.Value;
-			var tryname = reader.ReadString();
-if(tryname.IsError){
-return ReadResult<IObject>.Move(tryname);
-}
-Name = tryname.Value;
-return new ReadResult<IObject>(this);
+        }
 
-		}
-		
-		public override string ToString()
-		{
-		    return "textAnchor";
-		}
+        public override ReadResult<IObject> Deserialize(Reader reader)
+        {
+            var trytext = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
+            if (trytext.IsError)
+            {
+                return ReadResult<IObject>.Move(trytext);
+            }
+            Text = trytext.Value;
+            var tryname = reader.ReadString();
+            if (tryname.IsError)
+            {
+                return ReadResult<IObject>.Move(tryname);
+            }
+            Name = tryname.Value;
+            return new ReadResult<IObject>(this);
 
-		public override int GetConstructorId()
-		{
-			return ConstructorId;
-		}
-	}
+        }
+
+        public override string ToString()
+        {
+            return "textAnchor";
+        }
+
+        public override int GetConstructorId()
+        {
+            return ConstructorId;
+        }
+    }
 }

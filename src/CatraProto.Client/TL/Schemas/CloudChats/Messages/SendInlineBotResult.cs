@@ -1,208 +1,215 @@
 using System;
-using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System.Diagnostics.CodeAnalysis;
-
-using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class SendInlineBotResult : IMethod
-	{
-		[Flags]
-		public enum FlagsEnum 
-		{
-			Silent = 1 << 5,
-			Background = 1 << 6,
-			ClearDraft = 1 << 7,
-			HideVia = 1 << 11,
-			ReplyToMsgId = 1 << 0,
-			ScheduleDate = 1 << 10,
-			SendAs = 1 << 13
-		}
+    public partial class SendInlineBotResult : IMethod
+    {
+        [Flags]
+        public enum FlagsEnum
+        {
+            Silent = 1 << 5,
+            Background = 1 << 6,
+            ClearDraft = 1 << 7,
+            HideVia = 1 << 11,
+            ReplyToMsgId = 1 << 0,
+            ScheduleDate = 1 << 10,
+            SendAs = 1 << 13
+        }
 
         [Newtonsoft.Json.JsonIgnore]
         public static int ConstructorId { get => 2057376407; }
-        
-[Newtonsoft.Json.JsonIgnore]
-		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-[Newtonsoft.Json.JsonIgnore]
-		public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+        ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-[Newtonsoft.Json.JsonProperty("silent")]
-		public bool Silent { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int Flags { get; set; }
 
-[Newtonsoft.Json.JsonProperty("background")]
-		public bool Background { get; set; }
+        [Newtonsoft.Json.JsonProperty("silent")]
+        public bool Silent { get; set; }
 
-[Newtonsoft.Json.JsonProperty("clear_draft")]
-		public bool ClearDraft { get; set; }
+        [Newtonsoft.Json.JsonProperty("background")]
+        public bool Background { get; set; }
 
-[Newtonsoft.Json.JsonProperty("hide_via")]
-		public bool HideVia { get; set; }
+        [Newtonsoft.Json.JsonProperty("clear_draft")]
+        public bool ClearDraft { get; set; }
 
-[Newtonsoft.Json.JsonProperty("peer")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
+        [Newtonsoft.Json.JsonProperty("hide_via")]
+        public bool HideVia { get; set; }
 
-[Newtonsoft.Json.JsonProperty("reply_to_msg_id")]
-		public int? ReplyToMsgId { get; set; }
+        [Newtonsoft.Json.JsonProperty("peer")]
+        public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
 
-[Newtonsoft.Json.JsonProperty("random_id")]
-		public long RandomId { get; set; }
+        [Newtonsoft.Json.JsonProperty("reply_to_msg_id")]
+        public int? ReplyToMsgId { get; set; }
 
-[Newtonsoft.Json.JsonProperty("query_id")]
-		public long QueryId { get; set; }
+        [Newtonsoft.Json.JsonProperty("random_id")]
+        public long RandomId { get; set; }
 
-[Newtonsoft.Json.JsonProperty("id")]
-		public string Id { get; set; }
+        [Newtonsoft.Json.JsonProperty("query_id")]
+        public long QueryId { get; set; }
 
-[Newtonsoft.Json.JsonProperty("schedule_date")]
-		public int? ScheduleDate { get; set; }
+        [Newtonsoft.Json.JsonProperty("id")]
+        public string Id { get; set; }
 
-[MaybeNull]
-[Newtonsoft.Json.JsonProperty("send_as")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase SendAs { get; set; }
+        [Newtonsoft.Json.JsonProperty("schedule_date")]
+        public int? ScheduleDate { get; set; }
 
-        
-        #nullable enable
- public SendInlineBotResult (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer,long randomId,long queryId,string id)
-{
- Peer = peer;
-RandomId = randomId;
-QueryId = queryId;
-Id = id;
- 
-}
+        [MaybeNull]
+        [Newtonsoft.Json.JsonProperty("send_as")]
+        public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase SendAs { get; set; }
+
+
+#nullable enable
+        public SendInlineBotResult(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, long randomId, long queryId, string id)
+        {
+            Peer = peer;
+            RandomId = randomId;
+            QueryId = queryId;
+            Id = id;
+
+        }
 #nullable disable
-                
-        internal SendInlineBotResult() 
+
+        internal SendInlineBotResult()
         {
         }
-        
-		public void UpdateFlags() 
-		{
-			Flags = Silent ? FlagsHelper.SetFlag(Flags, 5) : FlagsHelper.UnsetFlag(Flags, 5);
-			Flags = Background ? FlagsHelper.SetFlag(Flags, 6) : FlagsHelper.UnsetFlag(Flags, 6);
-			Flags = ClearDraft ? FlagsHelper.SetFlag(Flags, 7) : FlagsHelper.UnsetFlag(Flags, 7);
-			Flags = HideVia ? FlagsHelper.SetFlag(Flags, 11) : FlagsHelper.UnsetFlag(Flags, 11);
-			Flags = ReplyToMsgId == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
-			Flags = ScheduleDate == null ? FlagsHelper.UnsetFlag(Flags, 10) : FlagsHelper.SetFlag(Flags, 10);
-			Flags = SendAs == null ? FlagsHelper.UnsetFlag(Flags, 13) : FlagsHelper.SetFlag(Flags, 13);
 
-		}
+        public void UpdateFlags()
+        {
+            Flags = Silent ? FlagsHelper.SetFlag(Flags, 5) : FlagsHelper.UnsetFlag(Flags, 5);
+            Flags = Background ? FlagsHelper.SetFlag(Flags, 6) : FlagsHelper.UnsetFlag(Flags, 6);
+            Flags = ClearDraft ? FlagsHelper.SetFlag(Flags, 7) : FlagsHelper.UnsetFlag(Flags, 7);
+            Flags = HideVia ? FlagsHelper.SetFlag(Flags, 11) : FlagsHelper.UnsetFlag(Flags, 11);
+            Flags = ReplyToMsgId == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
+            Flags = ScheduleDate == null ? FlagsHelper.UnsetFlag(Flags, 10) : FlagsHelper.SetFlag(Flags, 10);
+            Flags = SendAs == null ? FlagsHelper.UnsetFlag(Flags, 13) : FlagsHelper.SetFlag(Flags, 13);
 
-		public WriteResult Serialize(Writer writer)
-		{
-writer.WriteInt32(ConstructorId);
-			UpdateFlags();
+        }
 
-			writer.WriteInt32(Flags);
-var checkpeer = 			writer.WriteObject(Peer);
-if(checkpeer.IsError){
- return checkpeer; 
-}
-			if(FlagsHelper.IsFlagSet(Flags, 0))
-			{
-writer.WriteInt32(ReplyToMsgId.Value);
-			}
+        public WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
+            UpdateFlags();
 
-writer.WriteInt64(RandomId);
-writer.WriteInt64(QueryId);
+            writer.WriteInt32(Flags);
+            var checkpeer = writer.WriteObject(Peer);
+            if (checkpeer.IsError)
+            {
+                return checkpeer;
+            }
+            if (FlagsHelper.IsFlagSet(Flags, 0))
+            {
+                writer.WriteInt32(ReplyToMsgId.Value);
+            }
 
-			writer.WriteString(Id);
-			if(FlagsHelper.IsFlagSet(Flags, 10))
-			{
-writer.WriteInt32(ScheduleDate.Value);
-			}
+            writer.WriteInt64(RandomId);
+            writer.WriteInt64(QueryId);
 
-			if(FlagsHelper.IsFlagSet(Flags, 13))
-			{
-var checksendAs = 				writer.WriteObject(SendAs);
-if(checksendAs.IsError){
- return checksendAs; 
-}
-			}
+            writer.WriteString(Id);
+            if (FlagsHelper.IsFlagSet(Flags, 10))
+            {
+                writer.WriteInt32(ScheduleDate.Value);
+            }
+
+            if (FlagsHelper.IsFlagSet(Flags, 13))
+            {
+                var checksendAs = writer.WriteObject(SendAs);
+                if (checksendAs.IsError)
+                {
+                    return checksendAs;
+                }
+            }
 
 
-return new WriteResult();
+            return new WriteResult();
 
-		}
+        }
 
-		public ReadResult<IObject> Deserialize(Reader reader)
-		{
-			var tryflags = reader.ReadInt32();
-if(tryflags.IsError){
-return ReadResult<IObject>.Move(tryflags);
-}
-Flags = tryflags.Value;
-			Silent = FlagsHelper.IsFlagSet(Flags, 5);
-			Background = FlagsHelper.IsFlagSet(Flags, 6);
-			ClearDraft = FlagsHelper.IsFlagSet(Flags, 7);
-			HideVia = FlagsHelper.IsFlagSet(Flags, 11);
-			var trypeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
-if(trypeer.IsError){
-return ReadResult<IObject>.Move(trypeer);
-}
-Peer = trypeer.Value;
-			if(FlagsHelper.IsFlagSet(Flags, 0))
-			{
-				var tryreplyToMsgId = reader.ReadInt32();
-if(tryreplyToMsgId.IsError){
-return ReadResult<IObject>.Move(tryreplyToMsgId);
-}
-ReplyToMsgId = tryreplyToMsgId.Value;
-			}
+        public ReadResult<IObject> Deserialize(Reader reader)
+        {
+            var tryflags = reader.ReadInt32();
+            if (tryflags.IsError)
+            {
+                return ReadResult<IObject>.Move(tryflags);
+            }
+            Flags = tryflags.Value;
+            Silent = FlagsHelper.IsFlagSet(Flags, 5);
+            Background = FlagsHelper.IsFlagSet(Flags, 6);
+            ClearDraft = FlagsHelper.IsFlagSet(Flags, 7);
+            HideVia = FlagsHelper.IsFlagSet(Flags, 11);
+            var trypeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+            if (trypeer.IsError)
+            {
+                return ReadResult<IObject>.Move(trypeer);
+            }
+            Peer = trypeer.Value;
+            if (FlagsHelper.IsFlagSet(Flags, 0))
+            {
+                var tryreplyToMsgId = reader.ReadInt32();
+                if (tryreplyToMsgId.IsError)
+                {
+                    return ReadResult<IObject>.Move(tryreplyToMsgId);
+                }
+                ReplyToMsgId = tryreplyToMsgId.Value;
+            }
 
-			var tryrandomId = reader.ReadInt64();
-if(tryrandomId.IsError){
-return ReadResult<IObject>.Move(tryrandomId);
-}
-RandomId = tryrandomId.Value;
-			var tryqueryId = reader.ReadInt64();
-if(tryqueryId.IsError){
-return ReadResult<IObject>.Move(tryqueryId);
-}
-QueryId = tryqueryId.Value;
-			var tryid = reader.ReadString();
-if(tryid.IsError){
-return ReadResult<IObject>.Move(tryid);
-}
-Id = tryid.Value;
-			if(FlagsHelper.IsFlagSet(Flags, 10))
-			{
-				var tryscheduleDate = reader.ReadInt32();
-if(tryscheduleDate.IsError){
-return ReadResult<IObject>.Move(tryscheduleDate);
-}
-ScheduleDate = tryscheduleDate.Value;
-			}
+            var tryrandomId = reader.ReadInt64();
+            if (tryrandomId.IsError)
+            {
+                return ReadResult<IObject>.Move(tryrandomId);
+            }
+            RandomId = tryrandomId.Value;
+            var tryqueryId = reader.ReadInt64();
+            if (tryqueryId.IsError)
+            {
+                return ReadResult<IObject>.Move(tryqueryId);
+            }
+            QueryId = tryqueryId.Value;
+            var tryid = reader.ReadString();
+            if (tryid.IsError)
+            {
+                return ReadResult<IObject>.Move(tryid);
+            }
+            Id = tryid.Value;
+            if (FlagsHelper.IsFlagSet(Flags, 10))
+            {
+                var tryscheduleDate = reader.ReadInt32();
+                if (tryscheduleDate.IsError)
+                {
+                    return ReadResult<IObject>.Move(tryscheduleDate);
+                }
+                ScheduleDate = tryscheduleDate.Value;
+            }
 
-			if(FlagsHelper.IsFlagSet(Flags, 13))
-			{
-				var trysendAs = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
-if(trysendAs.IsError){
-return ReadResult<IObject>.Move(trysendAs);
-}
-SendAs = trysendAs.Value;
-			}
+            if (FlagsHelper.IsFlagSet(Flags, 13))
+            {
+                var trysendAs = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+                if (trysendAs.IsError)
+                {
+                    return ReadResult<IObject>.Move(trysendAs);
+                }
+                SendAs = trysendAs.Value;
+            }
 
-return new ReadResult<IObject>(this);
+            return new ReadResult<IObject>(this);
 
-		}
+        }
 
-		public override string ToString()
-		{
-		    return "messages.sendInlineBotResult";
-		}
+        public override string ToString()
+        {
+            return "messages.sendInlineBotResult";
+        }
 
-		public int GetConstructorId()
-		{
-			return ConstructorId;
-		}
-	}
+        public int GetConstructorId()
+        {
+            return ConstructorId;
+        }
+    }
 }

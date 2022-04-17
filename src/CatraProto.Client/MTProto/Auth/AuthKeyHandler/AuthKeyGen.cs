@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using System.Numerics;
-using System.Security;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,11 +12,10 @@ using CatraProto.Client.TL.Schemas;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL;
 using Serilog;
-using SQLitePCL;
 
 namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
 {
-    class AuthKeyGen
+    internal class AuthKeyGen
     {
         private readonly ILogger _logger;
         public AuthKeyGen(ILogger logger)

@@ -3,7 +3,7 @@ using Serilog;
 
 namespace CatraProto.Client.MTProto.Auth
 {
-    class SeqnoHandler
+    internal class SeqnoHandler
     {
         public int ContentRelatedReceived { get; set; }
         public int ContentRelatedSent { get; set; }

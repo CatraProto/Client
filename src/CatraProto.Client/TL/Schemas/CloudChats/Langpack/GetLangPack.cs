@@ -1,87 +1,84 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System.Diagnostics.CodeAnalysis;
-
-using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Langpack
 {
-	public partial class GetLangPack : IMethod
-	{
+    public partial class GetLangPack : IMethod
+    {
 
 
         [Newtonsoft.Json.JsonIgnore]
         public static int ConstructorId { get => -219008246; }
-        
-[Newtonsoft.Json.JsonIgnore]
-		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-[Newtonsoft.Json.JsonProperty("lang_pack")]
-		public string LangPack { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+        ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-[Newtonsoft.Json.JsonProperty("lang_code")]
-		public string LangCode { get; set; }
+        [Newtonsoft.Json.JsonProperty("lang_pack")]
+        public string LangPack { get; set; }
 
-        
-        #nullable enable
- public GetLangPack (string langPack,string langCode)
-{
- LangPack = langPack;
-LangCode = langCode;
- 
-}
+        [Newtonsoft.Json.JsonProperty("lang_code")]
+        public string LangCode { get; set; }
+
+
+#nullable enable
+        public GetLangPack(string langPack, string langCode)
+        {
+            LangPack = langPack;
+            LangCode = langCode;
+
+        }
 #nullable disable
-                
-        internal GetLangPack() 
+
+        internal GetLangPack()
         {
         }
-        
-		public void UpdateFlags() 
-		{
 
-		}
+        public void UpdateFlags()
+        {
 
-		public WriteResult Serialize(Writer writer)
-		{
-writer.WriteInt32(ConstructorId);
+        }
 
-			writer.WriteString(LangPack);
+        public WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
 
-			writer.WriteString(LangCode);
+            writer.WriteString(LangPack);
 
-return new WriteResult();
+            writer.WriteString(LangCode);
 
-		}
+            return new WriteResult();
 
-		public ReadResult<IObject> Deserialize(Reader reader)
-		{
-			var trylangPack = reader.ReadString();
-if(trylangPack.IsError){
-return ReadResult<IObject>.Move(trylangPack);
-}
-LangPack = trylangPack.Value;
-			var trylangCode = reader.ReadString();
-if(trylangCode.IsError){
-return ReadResult<IObject>.Move(trylangCode);
-}
-LangCode = trylangCode.Value;
-return new ReadResult<IObject>(this);
+        }
 
-		}
+        public ReadResult<IObject> Deserialize(Reader reader)
+        {
+            var trylangPack = reader.ReadString();
+            if (trylangPack.IsError)
+            {
+                return ReadResult<IObject>.Move(trylangPack);
+            }
+            LangPack = trylangPack.Value;
+            var trylangCode = reader.ReadString();
+            if (trylangCode.IsError)
+            {
+                return ReadResult<IObject>.Move(trylangCode);
+            }
+            LangCode = trylangCode.Value;
+            return new ReadResult<IObject>(this);
 
-		public override string ToString()
-		{
-		    return "langpack.getLangPack";
-		}
+        }
 
-		public int GetConstructorId()
-		{
-			return ConstructorId;
-		}
-	}
+        public override string ToString()
+        {
+            return "langpack.getLangPack";
+        }
+
+        public int GetConstructorId()
+        {
+            return ConstructorId;
+        }
+    }
 }

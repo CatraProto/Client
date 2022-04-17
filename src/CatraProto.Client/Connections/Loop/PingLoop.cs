@@ -1,16 +1,14 @@
 using System;
-using System.Net.Mail;
 using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Async.Loops.Enums.Resumable;
 using CatraProto.Client.Async.Loops.Interfaces;
 using CatraProto.Client.Crypto;
-using CatraProto.Client.TL.Schemas.MTProto;
 using Serilog;
 
 namespace CatraProto.Client.Connections.Loop
 {
-    class PingLoop : LoopImplementation<ResumableLoopState, ResumableSignalState>
+    internal class PingLoop : LoopImplementation<ResumableLoopState, ResumableSignalState>
     {
         private readonly TimeSpan _timeout;
         private readonly Connection _connection;
@@ -59,7 +57,7 @@ namespace CatraProto.Client.Connections.Loop
 
                 using var timeout = new CancellationTokenSource(_timeout);
                 using var linked = CancellationTokenSource.CreateLinkedTokenSource(timeout.Token, stoppingToken);
-                
+
                 try
                 {
                     if (_connection.MtProtoState.KeysHandler.TemporaryAuthKey.CanBeUsed())

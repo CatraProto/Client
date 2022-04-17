@@ -15,8 +15,10 @@ namespace CatraProto.Client.Async.Loops
 
         public PeriodicLoopController(TimeSpan period, ILogger logger, bool waitTick = true) : base(logger)
         {
-            _timer = new Timer();
-            _timer.Interval = period.TotalMilliseconds;
+            _timer = new Timer
+            {
+                Interval = period.TotalMilliseconds
+            };
             _autoReset = !waitTick;
             _timer.AutoReset = !waitTick;
             _timer.Elapsed += (_, _) => OnTick();

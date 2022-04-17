@@ -4,7 +4,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.MTProto.Session.Models
 {
-    class RandomId : SessionModel
+    internal class RandomId : SessionModel
     {
         private readonly object _mutex;
         private long _lastId = CryptoTools.CreateRandomInt();

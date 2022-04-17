@@ -4,7 +4,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.MTProto.Session.Models
 {
-    class AuthorizationKeys : SessionModel
+    internal class AuthorizationKeys : SessionModel
     {
         private readonly Dictionary<int, (AuthKeyCache PermanentAuthKey, AuthKeyCache TemporaryAuthKey)> _authKeys = new Dictionary<int, (AuthKeyCache PermanentAuthKey, AuthKeyCache TemporaryAuthKey)>();
 

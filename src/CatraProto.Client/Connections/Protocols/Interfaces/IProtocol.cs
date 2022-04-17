@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace CatraProto.Client.Connections.Protocols.Interfaces
 {
-    interface IProtocol
+    internal interface IProtocol
     {
         public ConnectionInfo ConnectionInfo { get; }
         public IProtocolWriter Writer { get; }

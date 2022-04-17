@@ -1,72 +1,70 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelAdminLogEventActionUpdatePinned : CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionBase
-	{
+    public partial class ChannelAdminLogEventActionUpdatePinned : CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionBase
+    {
 
 
         [Newtonsoft.Json.JsonIgnore]
         public static int ConstructorId { get => -370660328; }
-        
-[Newtonsoft.Json.JsonProperty("message")]
-		public CatraProto.Client.TL.Schemas.CloudChats.MessageBase Message { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("message")]
+        public CatraProto.Client.TL.Schemas.CloudChats.MessageBase Message { get; set; }
 
 
-        #nullable enable
- public ChannelAdminLogEventActionUpdatePinned (CatraProto.Client.TL.Schemas.CloudChats.MessageBase message)
-{
- Message = message;
- 
-}
+#nullable enable
+        public ChannelAdminLogEventActionUpdatePinned(CatraProto.Client.TL.Schemas.CloudChats.MessageBase message)
+        {
+            Message = message;
+
+        }
 #nullable disable
-        internal ChannelAdminLogEventActionUpdatePinned() 
+        internal ChannelAdminLogEventActionUpdatePinned()
         {
         }
-		
-		public override void UpdateFlags() 
-		{
 
-		}
+        public override void UpdateFlags()
+        {
 
-		public override WriteResult Serialize(Writer writer)
-		{
-writer.WriteInt32(ConstructorId);
-var checkmessage = 			writer.WriteObject(Message);
-if(checkmessage.IsError){
- return checkmessage; 
-}
+        }
 
-return new WriteResult();
+        public override WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
+            var checkmessage = writer.WriteObject(Message);
+            if (checkmessage.IsError)
+            {
+                return checkmessage;
+            }
 
-		}
+            return new WriteResult();
 
-		public override ReadResult<IObject> Deserialize(Reader reader)
-		{
-			var trymessage = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.MessageBase>();
-if(trymessage.IsError){
-return ReadResult<IObject>.Move(trymessage);
-}
-Message = trymessage.Value;
-return new ReadResult<IObject>(this);
+        }
 
-		}
-		
-		public override string ToString()
-		{
-		    return "channelAdminLogEventActionUpdatePinned";
-		}
+        public override ReadResult<IObject> Deserialize(Reader reader)
+        {
+            var trymessage = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.MessageBase>();
+            if (trymessage.IsError)
+            {
+                return ReadResult<IObject>.Move(trymessage);
+            }
+            Message = trymessage.Value;
+            return new ReadResult<IObject>(this);
 
-		public override int GetConstructorId()
-		{
-			return ConstructorId;
-		}
-	}
+        }
+
+        public override string ToString()
+        {
+            return "channelAdminLogEventActionUpdatePinned";
+        }
+
+        public override int GetConstructorId()
+        {
+            return ConstructorId;
+        }
+    }
 }

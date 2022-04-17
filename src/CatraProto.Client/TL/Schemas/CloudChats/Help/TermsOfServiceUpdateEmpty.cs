@@ -1,69 +1,66 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-	public partial class TermsOfServiceUpdateEmpty : CatraProto.Client.TL.Schemas.CloudChats.Help.TermsOfServiceUpdateBase
-	{
+    public partial class TermsOfServiceUpdateEmpty : CatraProto.Client.TL.Schemas.CloudChats.Help.TermsOfServiceUpdateBase
+    {
 
 
         [Newtonsoft.Json.JsonIgnore]
         public static int ConstructorId { get => -483352705; }
-        
-[Newtonsoft.Json.JsonProperty("expires")]
-		public sealed override int Expires { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("expires")]
+        public sealed override int Expires { get; set; }
 
 
-        #nullable enable
- public TermsOfServiceUpdateEmpty (int expires)
-{
- Expires = expires;
- 
-}
+#nullable enable
+        public TermsOfServiceUpdateEmpty(int expires)
+        {
+            Expires = expires;
+
+        }
 #nullable disable
-        internal TermsOfServiceUpdateEmpty() 
+        internal TermsOfServiceUpdateEmpty()
         {
         }
-		
-		public override void UpdateFlags() 
-		{
 
-		}
+        public override void UpdateFlags()
+        {
 
-		public override WriteResult Serialize(Writer writer)
-		{
-writer.WriteInt32(ConstructorId);
-writer.WriteInt32(Expires);
+        }
 
-return new WriteResult();
+        public override WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
+            writer.WriteInt32(Expires);
 
-		}
+            return new WriteResult();
 
-		public override ReadResult<IObject> Deserialize(Reader reader)
-		{
-			var tryexpires = reader.ReadInt32();
-if(tryexpires.IsError){
-return ReadResult<IObject>.Move(tryexpires);
-}
-Expires = tryexpires.Value;
-return new ReadResult<IObject>(this);
+        }
 
-		}
-		
-		public override string ToString()
-		{
-		    return "help.termsOfServiceUpdateEmpty";
-		}
+        public override ReadResult<IObject> Deserialize(Reader reader)
+        {
+            var tryexpires = reader.ReadInt32();
+            if (tryexpires.IsError)
+            {
+                return ReadResult<IObject>.Move(tryexpires);
+            }
+            Expires = tryexpires.Value;
+            return new ReadResult<IObject>(this);
 
-		public override int GetConstructorId()
-		{
-			return ConstructorId;
-		}
-	}
+        }
+
+        public override string ToString()
+        {
+            return "help.termsOfServiceUpdateEmpty";
+        }
+
+        public override int GetConstructorId()
+        {
+            return ConstructorId;
+        }
+    }
 }

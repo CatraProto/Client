@@ -1,72 +1,70 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelAdminLogEventActionToggleNoForwards : CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionBase
-	{
+    public partial class ChannelAdminLogEventActionToggleNoForwards : CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionBase
+    {
 
 
         [Newtonsoft.Json.JsonIgnore]
         public static int ConstructorId { get => -886388890; }
-        
-[Newtonsoft.Json.JsonProperty("new_value")]
-		public bool NewValue { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("new_value")]
+        public bool NewValue { get; set; }
 
 
-        #nullable enable
- public ChannelAdminLogEventActionToggleNoForwards (bool newValue)
-{
- NewValue = newValue;
- 
-}
+#nullable enable
+        public ChannelAdminLogEventActionToggleNoForwards(bool newValue)
+        {
+            NewValue = newValue;
+
+        }
 #nullable disable
-        internal ChannelAdminLogEventActionToggleNoForwards() 
+        internal ChannelAdminLogEventActionToggleNoForwards()
         {
         }
-		
-		public override void UpdateFlags() 
-		{
 
-		}
+        public override void UpdateFlags()
+        {
 
-		public override WriteResult Serialize(Writer writer)
-		{
-writer.WriteInt32(ConstructorId);
-var checknewValue = 			writer.WriteBool(NewValue);
-if(checknewValue.IsError){
- return checknewValue; 
-}
+        }
 
-return new WriteResult();
+        public override WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
+            var checknewValue = writer.WriteBool(NewValue);
+            if (checknewValue.IsError)
+            {
+                return checknewValue;
+            }
 
-		}
+            return new WriteResult();
 
-		public override ReadResult<IObject> Deserialize(Reader reader)
-		{
-			var trynewValue = reader.ReadBool();
-if(trynewValue.IsError){
-return ReadResult<IObject>.Move(trynewValue);
-}
-NewValue = trynewValue.Value;
-return new ReadResult<IObject>(this);
+        }
 
-		}
-		
-		public override string ToString()
-		{
-		    return "channelAdminLogEventActionToggleNoForwards";
-		}
+        public override ReadResult<IObject> Deserialize(Reader reader)
+        {
+            var trynewValue = reader.ReadBool();
+            if (trynewValue.IsError)
+            {
+                return ReadResult<IObject>.Move(trynewValue);
+            }
+            NewValue = trynewValue.Value;
+            return new ReadResult<IObject>(this);
 
-		public override int GetConstructorId()
-		{
-			return ConstructorId;
-		}
-	}
+        }
+
+        public override string ToString()
+        {
+            return "channelAdminLogEventActionToggleNoForwards";
+        }
+
+        public override int GetConstructorId()
+        {
+            return ConstructorId;
+        }
+    }
 }

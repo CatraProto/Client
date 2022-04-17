@@ -1,7 +1,5 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
-using CatraProto.Client.MTProto.Deserializers;
-using CatraProto.Client.MTProto.Rpc;
 using CatraProto.Client.TL.Schemas.Database;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL.Interfaces;
@@ -9,7 +7,7 @@ using CatraProto.TL.Results;
 
 namespace CatraProto.Client.TL.Schemas
 {
-    partial class MergedProvider : ObjectProvider
+    internal partial class MergedProvider : ObjectProvider
     {
         public const int LayerId = 138;
         public override int VectorId

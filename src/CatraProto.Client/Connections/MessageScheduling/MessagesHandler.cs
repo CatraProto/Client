@@ -2,7 +2,7 @@ using Serilog;
 
 namespace CatraProto.Client.Connections.MessageScheduling
 {
-    class MessagesHandler
+    internal class MessagesHandler
     {
         public MessagesTrackers MessagesTrackers { get; }
         public MessagesQueue MessagesQueue { get; }

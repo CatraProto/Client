@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CatraProto.Client.TL.Schemas.CloudChats;
+﻿using CatraProto.Client.TL.Schemas.CloudChats;
 using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.MTProto

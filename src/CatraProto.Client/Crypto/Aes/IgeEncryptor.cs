@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 
 namespace CatraProto.Client.Crypto.Aes
 {
-    class IgeEncryptor : IDisposable
+    internal class IgeEncryptor : IDisposable
     {
         private readonly AesManaged _aesManaged;
         private readonly ICryptoTransform _decryptor;

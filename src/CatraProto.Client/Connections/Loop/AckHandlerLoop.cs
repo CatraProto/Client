@@ -14,7 +14,7 @@ using Serilog;
 
 namespace CatraProto.Client.Connections.Loop
 {
-    class AckHandlerLoop : LoopImplementation<ResumableLoopState, ResumableSignalState>
+    internal class AckHandlerLoop : LoopImplementation<ResumableLoopState, ResumableSignalState>
     {
         private readonly Connection _connection;
         private readonly ILogger _logger;

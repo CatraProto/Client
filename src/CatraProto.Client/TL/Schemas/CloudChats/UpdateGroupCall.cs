@@ -1,82 +1,81 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdateGroupCall : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
-	{
+    public partial class UpdateGroupCall : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
+    {
 
 
         [Newtonsoft.Json.JsonIgnore]
         public static int ConstructorId { get => 347227392; }
-        
-[Newtonsoft.Json.JsonProperty("chat_id")]
-		public long ChatId { get; set; }
 
-[Newtonsoft.Json.JsonProperty("call")]
-		public CatraProto.Client.TL.Schemas.CloudChats.GroupCallBase Call { get; set; }
+        [Newtonsoft.Json.JsonProperty("chat_id")]
+        public long ChatId { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("call")]
+        public CatraProto.Client.TL.Schemas.CloudChats.GroupCallBase Call { get; set; }
 
 
-        #nullable enable
- public UpdateGroupCall (long chatId,CatraProto.Client.TL.Schemas.CloudChats.GroupCallBase call)
-{
- ChatId = chatId;
-Call = call;
- 
-}
+#nullable enable
+        public UpdateGroupCall(long chatId, CatraProto.Client.TL.Schemas.CloudChats.GroupCallBase call)
+        {
+            ChatId = chatId;
+            Call = call;
+
+        }
 #nullable disable
-        internal UpdateGroupCall() 
+        internal UpdateGroupCall()
         {
         }
-		
-		public override void UpdateFlags() 
-		{
 
-		}
+        public override void UpdateFlags()
+        {
 
-		public override WriteResult Serialize(Writer writer)
-		{
-writer.WriteInt32(ConstructorId);
-writer.WriteInt64(ChatId);
-var checkcall = 			writer.WriteObject(Call);
-if(checkcall.IsError){
- return checkcall; 
-}
+        }
 
-return new WriteResult();
+        public override WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
+            writer.WriteInt64(ChatId);
+            var checkcall = writer.WriteObject(Call);
+            if (checkcall.IsError)
+            {
+                return checkcall;
+            }
 
-		}
+            return new WriteResult();
 
-		public override ReadResult<IObject> Deserialize(Reader reader)
-		{
-			var trychatId = reader.ReadInt64();
-if(trychatId.IsError){
-return ReadResult<IObject>.Move(trychatId);
-}
-ChatId = trychatId.Value;
-			var trycall = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.GroupCallBase>();
-if(trycall.IsError){
-return ReadResult<IObject>.Move(trycall);
-}
-Call = trycall.Value;
-return new ReadResult<IObject>(this);
+        }
 
-		}
-		
-		public override string ToString()
-		{
-		    return "updateGroupCall";
-		}
+        public override ReadResult<IObject> Deserialize(Reader reader)
+        {
+            var trychatId = reader.ReadInt64();
+            if (trychatId.IsError)
+            {
+                return ReadResult<IObject>.Move(trychatId);
+            }
+            ChatId = trychatId.Value;
+            var trycall = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.GroupCallBase>();
+            if (trycall.IsError)
+            {
+                return ReadResult<IObject>.Move(trycall);
+            }
+            Call = trycall.Value;
+            return new ReadResult<IObject>(this);
 
-		public override int GetConstructorId()
-		{
-			return ConstructorId;
-		}
-	}
+        }
+
+        public override string ToString()
+        {
+            return "updateGroupCall";
+        }
+
+        public override int GetConstructorId()
+        {
+            return ConstructorId;
+        }
+    }
 }

@@ -2,11 +2,10 @@ using System;
 using System.Text.RegularExpressions;
 using CatraProto.Client.MTProto.Rpc.Interfaces;
 using CatraProto.Client.MTProto.Rpc.RpcErrors;
-using CatraProto.Client.MTProto.Rpc.RpcErrors.Migrations;
 
 namespace CatraProto.Client.MTProto.Rpc.Parsers
 {
-    class FloodWaitParser : RpcErrorParser
+    internal class FloodWaitParser : RpcErrorParser
     {
         private static readonly Regex CompiledRegex = new Regex("^FLOOD_WAIT_([0-9]+)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         public FloodWaitParser() : base(12)

@@ -14,9 +14,11 @@ namespace CatraProto.Client.Async.Signalers
 
         public AsyncAutoSignaler(TimeSpan timeSpan)
         {
-            _timer = new Timer();
-            _timer.Interval = timeSpan.TotalMilliseconds;
-            _timer.AutoReset = true;
+            _timer = new Timer
+            {
+                Interval = timeSpan.TotalMilliseconds,
+                AutoReset = true
+            };
             _timer.Elapsed += (_, _) => Signal();
         }
 
@@ -44,7 +46,7 @@ namespace CatraProto.Client.Async.Signalers
                 _timer.Start();
             }
         }
-        
+
         public void Dispose()
         {
             lock (_mutex)

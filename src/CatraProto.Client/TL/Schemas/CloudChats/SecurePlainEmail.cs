@@ -1,70 +1,67 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class SecurePlainEmail : CatraProto.Client.TL.Schemas.CloudChats.SecurePlainDataBase
-	{
+    public partial class SecurePlainEmail : CatraProto.Client.TL.Schemas.CloudChats.SecurePlainDataBase
+    {
 
 
         [Newtonsoft.Json.JsonIgnore]
         public static int ConstructorId { get => 569137759; }
-        
-[Newtonsoft.Json.JsonProperty("email")]
-		public string Email { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("email")]
+        public string Email { get; set; }
 
 
-        #nullable enable
- public SecurePlainEmail (string email)
-{
- Email = email;
- 
-}
+#nullable enable
+        public SecurePlainEmail(string email)
+        {
+            Email = email;
+
+        }
 #nullable disable
-        internal SecurePlainEmail() 
+        internal SecurePlainEmail()
         {
         }
-		
-		public override void UpdateFlags() 
-		{
 
-		}
+        public override void UpdateFlags()
+        {
 
-		public override WriteResult Serialize(Writer writer)
-		{
-writer.WriteInt32(ConstructorId);
+        }
 
-			writer.WriteString(Email);
+        public override WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
 
-return new WriteResult();
+            writer.WriteString(Email);
 
-		}
+            return new WriteResult();
 
-		public override ReadResult<IObject> Deserialize(Reader reader)
-		{
-			var tryemail = reader.ReadString();
-if(tryemail.IsError){
-return ReadResult<IObject>.Move(tryemail);
-}
-Email = tryemail.Value;
-return new ReadResult<IObject>(this);
+        }
 
-		}
-		
-		public override string ToString()
-		{
-		    return "securePlainEmail";
-		}
+        public override ReadResult<IObject> Deserialize(Reader reader)
+        {
+            var tryemail = reader.ReadString();
+            if (tryemail.IsError)
+            {
+                return ReadResult<IObject>.Move(tryemail);
+            }
+            Email = tryemail.Value;
+            return new ReadResult<IObject>(this);
 
-		public override int GetConstructorId()
-		{
-			return ConstructorId;
-		}
-	}
+        }
+
+        public override string ToString()
+        {
+            return "securePlainEmail";
+        }
+
+        public override int GetConstructorId()
+        {
+            return ConstructorId;
+        }
+    }
 }

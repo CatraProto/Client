@@ -19,7 +19,7 @@ using Serilog;
 
 namespace CatraProto.Client.Updates
 {
-    class UpdateProcessor : LoopImplementation<ResumableLoopState, ResumableSignalState>
+    internal class UpdateProcessor : LoopImplementation<ResumableLoopState, ResumableSignalState>
     {
         private static readonly MultiValueDictionary<int, UpdateBase> _applyAt = new MultiValueDictionary<int, UpdateBase>();
         private readonly BrowsableQueue<IObject> _updatesQueue = new BrowsableQueue<IObject>();
@@ -148,7 +148,6 @@ namespace CatraProto.Client.Updates
 
                 UpdateCheckResult updateCheckResult;
                 SearchType? searchType = null;
-                int? newPts;
                 int? newQts = null;
                 if (UpdatesTools.GetApplyOnPts(update.Item, out var at))
                 {
@@ -163,7 +162,7 @@ namespace CatraProto.Client.Updates
                     continue;
                 }
 
-                if (UpdatesTools.TryExtractPts(update.Item, out newPts, out var ptsCount))
+                if (UpdatesTools.TryExtractPts(update.Item, out var newPts, out var ptsCount))
                 {
                     searchType = SearchType.Pts;
                     updateCheckResult = CheckPts(newPts!.Value, ptsCount!.Value);
@@ -194,7 +193,7 @@ namespace CatraProto.Client.Updates
                             if (findGapFillingUpdate is not null)
                             {
                                 _logger.Information("Update gap filled after waiting without fetching difference");
-                                if(!ApplyUpdate((UpdateBase)findGapFillingUpdate, newPts, toBeApplied))
+                                if (!ApplyUpdate((UpdateBase)findGapFillingUpdate, newPts, toBeApplied))
                                 {
                                     fetchDifference = true;
                                     break;

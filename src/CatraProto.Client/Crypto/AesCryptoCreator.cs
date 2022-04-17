@@ -4,7 +4,7 @@ using CatraProto.Client.Crypto.Aes;
 
 namespace CatraProto.Client.Crypto
 {
-    static class AesCryptoCreator
+    internal static class AesCryptoCreator
     {
         public static IgeEncryptor CreateEncryptorV2(byte[] authKey, byte[] msgKey, bool fromClient)
         {

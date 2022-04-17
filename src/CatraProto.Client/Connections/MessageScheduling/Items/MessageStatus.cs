@@ -2,7 +2,7 @@ using CatraProto.Client.Connections.MessageScheduling.Enums;
 
 namespace CatraProto.Client.Connections.MessageScheduling.Items
 {
-    class MessageStatus
+    internal class MessageStatus
     {
         public MessageCompletion MessageCompletion { get; }
         public MessageState MessageState { get; set; }

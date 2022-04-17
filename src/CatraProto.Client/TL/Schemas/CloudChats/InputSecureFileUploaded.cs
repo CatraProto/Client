@@ -1,112 +1,113 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputSecureFileUploaded : CatraProto.Client.TL.Schemas.CloudChats.InputSecureFileBase
-	{
+    public partial class InputSecureFileUploaded : CatraProto.Client.TL.Schemas.CloudChats.InputSecureFileBase
+    {
 
 
         [Newtonsoft.Json.JsonIgnore]
         public static int ConstructorId { get => 859091184; }
-        
-[Newtonsoft.Json.JsonProperty("id")]
-		public sealed override long Id { get; set; }
 
-[Newtonsoft.Json.JsonProperty("parts")]
-		public int Parts { get; set; }
+        [Newtonsoft.Json.JsonProperty("id")]
+        public sealed override long Id { get; set; }
 
-[Newtonsoft.Json.JsonProperty("md5_checksum")]
-		public string Md5Checksum { get; set; }
+        [Newtonsoft.Json.JsonProperty("parts")]
+        public int Parts { get; set; }
 
-[Newtonsoft.Json.JsonProperty("file_hash")]
-		public byte[] FileHash { get; set; }
+        [Newtonsoft.Json.JsonProperty("md5_checksum")]
+        public string Md5Checksum { get; set; }
 
-[Newtonsoft.Json.JsonProperty("secret")]
-		public byte[] Secret { get; set; }
+        [Newtonsoft.Json.JsonProperty("file_hash")]
+        public byte[] FileHash { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("secret")]
+        public byte[] Secret { get; set; }
 
 
-        #nullable enable
- public InputSecureFileUploaded (long id,int parts,string md5Checksum,byte[] fileHash,byte[] secret)
-{
- Id = id;
-Parts = parts;
-Md5Checksum = md5Checksum;
-FileHash = fileHash;
-Secret = secret;
- 
-}
+#nullable enable
+        public InputSecureFileUploaded(long id, int parts, string md5Checksum, byte[] fileHash, byte[] secret)
+        {
+            Id = id;
+            Parts = parts;
+            Md5Checksum = md5Checksum;
+            FileHash = fileHash;
+            Secret = secret;
+
+        }
 #nullable disable
-        internal InputSecureFileUploaded() 
+        internal InputSecureFileUploaded()
         {
         }
-		
-		public override void UpdateFlags() 
-		{
 
-		}
+        public override void UpdateFlags()
+        {
 
-		public override WriteResult Serialize(Writer writer)
-		{
-writer.WriteInt32(ConstructorId);
-writer.WriteInt64(Id);
-writer.WriteInt32(Parts);
+        }
 
-			writer.WriteString(Md5Checksum);
+        public override WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
+            writer.WriteInt64(Id);
+            writer.WriteInt32(Parts);
 
-			writer.WriteBytes(FileHash);
+            writer.WriteString(Md5Checksum);
 
-			writer.WriteBytes(Secret);
+            writer.WriteBytes(FileHash);
 
-return new WriteResult();
+            writer.WriteBytes(Secret);
 
-		}
+            return new WriteResult();
 
-		public override ReadResult<IObject> Deserialize(Reader reader)
-		{
-			var tryid = reader.ReadInt64();
-if(tryid.IsError){
-return ReadResult<IObject>.Move(tryid);
-}
-Id = tryid.Value;
-			var tryparts = reader.ReadInt32();
-if(tryparts.IsError){
-return ReadResult<IObject>.Move(tryparts);
-}
-Parts = tryparts.Value;
-			var trymd5Checksum = reader.ReadString();
-if(trymd5Checksum.IsError){
-return ReadResult<IObject>.Move(trymd5Checksum);
-}
-Md5Checksum = trymd5Checksum.Value;
-			var tryfileHash = reader.ReadBytes();
-if(tryfileHash.IsError){
-return ReadResult<IObject>.Move(tryfileHash);
-}
-FileHash = tryfileHash.Value;
-			var trysecret = reader.ReadBytes();
-if(trysecret.IsError){
-return ReadResult<IObject>.Move(trysecret);
-}
-Secret = trysecret.Value;
-return new ReadResult<IObject>(this);
+        }
 
-		}
-		
-		public override string ToString()
-		{
-		    return "inputSecureFileUploaded";
-		}
+        public override ReadResult<IObject> Deserialize(Reader reader)
+        {
+            var tryid = reader.ReadInt64();
+            if (tryid.IsError)
+            {
+                return ReadResult<IObject>.Move(tryid);
+            }
+            Id = tryid.Value;
+            var tryparts = reader.ReadInt32();
+            if (tryparts.IsError)
+            {
+                return ReadResult<IObject>.Move(tryparts);
+            }
+            Parts = tryparts.Value;
+            var trymd5Checksum = reader.ReadString();
+            if (trymd5Checksum.IsError)
+            {
+                return ReadResult<IObject>.Move(trymd5Checksum);
+            }
+            Md5Checksum = trymd5Checksum.Value;
+            var tryfileHash = reader.ReadBytes();
+            if (tryfileHash.IsError)
+            {
+                return ReadResult<IObject>.Move(tryfileHash);
+            }
+            FileHash = tryfileHash.Value;
+            var trysecret = reader.ReadBytes();
+            if (trysecret.IsError)
+            {
+                return ReadResult<IObject>.Move(trysecret);
+            }
+            Secret = trysecret.Value;
+            return new ReadResult<IObject>(this);
 
-		public override int GetConstructorId()
-		{
-			return ConstructorId;
-		}
-	}
+        }
+
+        public override string ToString()
+        {
+            return "inputSecureFileUploaded";
+        }
+
+        public override int GetConstructorId()
+        {
+            return ConstructorId;
+        }
+    }
 }

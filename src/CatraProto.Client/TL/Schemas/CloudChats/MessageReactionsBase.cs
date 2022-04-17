@@ -1,26 +1,26 @@
-using CatraProto.TL;
-using CatraProto.TL.Results;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public abstract class MessageReactionsBase : IObject
     {
 
-[Newtonsoft.Json.JsonProperty("min")]
-		public abstract bool Min { get; set; }
+        [Newtonsoft.Json.JsonProperty("min")]
+        public abstract bool Min { get; set; }
 
-[Newtonsoft.Json.JsonProperty("can_see_list")]
-		public abstract bool CanSeeList { get; set; }
+        [Newtonsoft.Json.JsonProperty("can_see_list")]
+        public abstract bool CanSeeList { get; set; }
 
-[Newtonsoft.Json.JsonProperty("results")]
-		public abstract List<CatraProto.Client.TL.Schemas.CloudChats.ReactionCountBase> Results { get; set; }
+        [Newtonsoft.Json.JsonProperty("results")]
+        public abstract List<CatraProto.Client.TL.Schemas.CloudChats.ReactionCountBase> Results { get; set; }
 
-[MaybeNull]
-[Newtonsoft.Json.JsonProperty("recent_reactions")]
-		public abstract List<CatraProto.Client.TL.Schemas.CloudChats.MessagePeerReactionBase> RecentReactions { get; set; }
+        [MaybeNull]
+        [Newtonsoft.Json.JsonProperty("recent_reactions")]
+        public abstract List<CatraProto.Client.TL.Schemas.CloudChats.MessagePeerReactionBase> RecentReactions { get; set; }
 
         public abstract void UpdateFlags();
         public abstract ReadResult<IObject> Deserialize(Reader reader);

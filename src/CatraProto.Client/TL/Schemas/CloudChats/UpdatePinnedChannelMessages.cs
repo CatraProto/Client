@@ -3,118 +3,121 @@ using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class UpdatePinnedChannelMessages : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
-	{
-		[Flags]
-		public enum FlagsEnum 
-		{
-			Pinned = 1 << 0
-		}
+    public partial class UpdatePinnedChannelMessages : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
+    {
+        [Flags]
+        public enum FlagsEnum
+        {
+            Pinned = 1 << 0
+        }
 
         [Newtonsoft.Json.JsonIgnore]
         public static int ConstructorId { get => 1538885128; }
-        
-[Newtonsoft.Json.JsonIgnore]
-		public int Flags { get; set; }
 
-[Newtonsoft.Json.JsonProperty("pinned")]
-		public bool Pinned { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int Flags { get; set; }
 
-[Newtonsoft.Json.JsonProperty("channel_id")]
-		public long ChannelId { get; set; }
+        [Newtonsoft.Json.JsonProperty("pinned")]
+        public bool Pinned { get; set; }
 
-[Newtonsoft.Json.JsonProperty("messages")]
-		public List<int> Messages { get; set; }
+        [Newtonsoft.Json.JsonProperty("channel_id")]
+        public long ChannelId { get; set; }
 
-[Newtonsoft.Json.JsonProperty("pts")]
-		public int Pts { get; set; }
+        [Newtonsoft.Json.JsonProperty("messages")]
+        public List<int> Messages { get; set; }
 
-[Newtonsoft.Json.JsonProperty("pts_count")]
-		public int PtsCount { get; set; }
+        [Newtonsoft.Json.JsonProperty("pts")]
+        public int Pts { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("pts_count")]
+        public int PtsCount { get; set; }
 
 
-        #nullable enable
- public UpdatePinnedChannelMessages (long channelId,List<int> messages,int pts,int ptsCount)
-{
- ChannelId = channelId;
-Messages = messages;
-Pts = pts;
-PtsCount = ptsCount;
- 
-}
+#nullable enable
+        public UpdatePinnedChannelMessages(long channelId, List<int> messages, int pts, int ptsCount)
+        {
+            ChannelId = channelId;
+            Messages = messages;
+            Pts = pts;
+            PtsCount = ptsCount;
+
+        }
 #nullable disable
-        internal UpdatePinnedChannelMessages() 
+        internal UpdatePinnedChannelMessages()
         {
         }
-		
-		public override void UpdateFlags() 
-		{
-			Flags = Pinned ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
 
-		}
+        public override void UpdateFlags()
+        {
+            Flags = Pinned ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
 
-		public override WriteResult Serialize(Writer writer)
-		{
-writer.WriteInt32(ConstructorId);
-			UpdateFlags();
+        }
 
-			writer.WriteInt32(Flags);
-writer.WriteInt64(ChannelId);
+        public override WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
+            UpdateFlags();
 
-			writer.WriteVector(Messages, false);
-writer.WriteInt32(Pts);
-writer.WriteInt32(PtsCount);
+            writer.WriteInt32(Flags);
+            writer.WriteInt64(ChannelId);
 
-return new WriteResult();
+            writer.WriteVector(Messages, false);
+            writer.WriteInt32(Pts);
+            writer.WriteInt32(PtsCount);
 
-		}
+            return new WriteResult();
 
-		public override ReadResult<IObject> Deserialize(Reader reader)
-		{
-			var tryflags = reader.ReadInt32();
-if(tryflags.IsError){
-return ReadResult<IObject>.Move(tryflags);
-}
-Flags = tryflags.Value;
-			Pinned = FlagsHelper.IsFlagSet(Flags, 0);
-			var trychannelId = reader.ReadInt64();
-if(trychannelId.IsError){
-return ReadResult<IObject>.Move(trychannelId);
-}
-ChannelId = trychannelId.Value;
-			var trymessages = reader.ReadVector<int>(ParserTypes.Int);
-if(trymessages.IsError){
-return ReadResult<IObject>.Move(trymessages);
-}
-Messages = trymessages.Value;
-			var trypts = reader.ReadInt32();
-if(trypts.IsError){
-return ReadResult<IObject>.Move(trypts);
-}
-Pts = trypts.Value;
-			var tryptsCount = reader.ReadInt32();
-if(tryptsCount.IsError){
-return ReadResult<IObject>.Move(tryptsCount);
-}
-PtsCount = tryptsCount.Value;
-return new ReadResult<IObject>(this);
+        }
 
-		}
-		
-		public override string ToString()
-		{
-		    return "updatePinnedChannelMessages";
-		}
+        public override ReadResult<IObject> Deserialize(Reader reader)
+        {
+            var tryflags = reader.ReadInt32();
+            if (tryflags.IsError)
+            {
+                return ReadResult<IObject>.Move(tryflags);
+            }
+            Flags = tryflags.Value;
+            Pinned = FlagsHelper.IsFlagSet(Flags, 0);
+            var trychannelId = reader.ReadInt64();
+            if (trychannelId.IsError)
+            {
+                return ReadResult<IObject>.Move(trychannelId);
+            }
+            ChannelId = trychannelId.Value;
+            var trymessages = reader.ReadVector<int>(ParserTypes.Int);
+            if (trymessages.IsError)
+            {
+                return ReadResult<IObject>.Move(trymessages);
+            }
+            Messages = trymessages.Value;
+            var trypts = reader.ReadInt32();
+            if (trypts.IsError)
+            {
+                return ReadResult<IObject>.Move(trypts);
+            }
+            Pts = trypts.Value;
+            var tryptsCount = reader.ReadInt32();
+            if (tryptsCount.IsError)
+            {
+                return ReadResult<IObject>.Move(tryptsCount);
+            }
+            PtsCount = tryptsCount.Value;
+            return new ReadResult<IObject>(this);
 
-		public override int GetConstructorId()
-		{
-			return ConstructorId;
-		}
-	}
+        }
+
+        public override string ToString()
+        {
+            return "updatePinnedChannelMessages";
+        }
+
+        public override int GetConstructorId()
+        {
+            return ConstructorId;
+        }
+    }
 }

@@ -10,10 +10,10 @@ using Serilog;
 
 namespace CatraProto.Client.Connections.Protocols.TcpAbridged
 {
-    class AbridgedWriter : IProtocolWriter
+    internal class AbridgedWriter : IProtocolWriter
     {
         private readonly NetworkStream _stream;
-        private ILogger _logger;
+        private readonly ILogger _logger;
 
         public AbridgedWriter(NetworkStream stream, ILogger logger)
         {

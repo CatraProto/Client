@@ -3,7 +3,7 @@ using Serilog;
 
 namespace CatraProto.Client.Connections.MessageScheduling
 {
-    class MessageIdsHandler
+    internal class MessageIdsHandler
     {
         private long _lastGeneratedId;
         private readonly ILogger _logger;
@@ -41,17 +41,17 @@ namespace CatraProto.Client.Connections.MessageScheduling
         {
             return IsNewerThan(messageId, -30);
         }
-        
+
         public static bool IsOlderThan(long messageId, int seconds)
         {
             return DateTimeOffset.UtcNow.ToUnixTimeSeconds() - GetSeconds(messageId) >= seconds;
         }
-        
+
         public static bool IsNewerThan(long messageId, int seconds)
         {
             return DateTimeOffset.UtcNow.ToUnixTimeSeconds() - GetSeconds(messageId) <= seconds;
         }
-        
+
         public static int GetSeconds(long messageId)
         {
             return (int)(messageId / 4294967296);

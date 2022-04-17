@@ -8,7 +8,7 @@ using Serilog;
 
 namespace CatraProto.Client.Connections.Protocols.TcpAbridged
 {
-    class Abridged : IProtocol
+    internal class Abridged : IProtocol
     {
         public IProtocolWriter Writer
         {

@@ -1,32 +1,31 @@
-using CatraProto.TL;
-using CatraProto.TL.Results;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
     public abstract class PasswordInputSettingsBase : IObject
     {
 
-[MaybeNull]
-[Newtonsoft.Json.JsonProperty("new_algo")]
-		public abstract CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase NewAlgo { get; set; }
+        [MaybeNull]
+        [Newtonsoft.Json.JsonProperty("new_algo")]
+        public abstract CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase NewAlgo { get; set; }
 
-[Newtonsoft.Json.JsonProperty("new_password_hash")]
-		public abstract byte[] NewPasswordHash { get; set; }
+        [Newtonsoft.Json.JsonProperty("new_password_hash")]
+        public abstract byte[] NewPasswordHash { get; set; }
 
-[MaybeNull]
-[Newtonsoft.Json.JsonProperty("hint")]
-		public abstract string Hint { get; set; }
+        [MaybeNull]
+        [Newtonsoft.Json.JsonProperty("hint")]
+        public abstract string Hint { get; set; }
 
-[MaybeNull]
-[Newtonsoft.Json.JsonProperty("email")]
-		public abstract string Email { get; set; }
+        [MaybeNull]
+        [Newtonsoft.Json.JsonProperty("email")]
+        public abstract string Email { get; set; }
 
-[MaybeNull]
-[Newtonsoft.Json.JsonProperty("new_secure_settings")]
-		public abstract CatraProto.Client.TL.Schemas.CloudChats.SecureSecretSettingsBase NewSecureSettings { get; set; }
+        [MaybeNull]
+        [Newtonsoft.Json.JsonProperty("new_secure_settings")]
+        public abstract CatraProto.Client.TL.Schemas.CloudChats.SecureSecretSettingsBase NewSecureSettings { get; set; }
 
         public abstract void UpdateFlags();
         public abstract ReadResult<IObject> Deserialize(Reader reader);

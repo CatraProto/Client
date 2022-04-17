@@ -1,109 +1,110 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
-	public partial class BindAuthKeyInner : CatraProto.Client.TL.Schemas.MTProto.BindAuthKeyInnerBase
-	{
+    public partial class BindAuthKeyInner : CatraProto.Client.TL.Schemas.MTProto.BindAuthKeyInnerBase
+    {
 
 
         [Newtonsoft.Json.JsonIgnore]
         public static int ConstructorId { get => 1973679973; }
-        
-[Newtonsoft.Json.JsonProperty("nonce")]
-		public sealed override long Nonce { get; set; }
 
-[Newtonsoft.Json.JsonProperty("temp_auth_key_id")]
-		public sealed override long TempAuthKeyId { get; set; }
+        [Newtonsoft.Json.JsonProperty("nonce")]
+        public sealed override long Nonce { get; set; }
 
-[Newtonsoft.Json.JsonProperty("perm_auth_key_id")]
-		public sealed override long PermAuthKeyId { get; set; }
+        [Newtonsoft.Json.JsonProperty("temp_auth_key_id")]
+        public sealed override long TempAuthKeyId { get; set; }
 
-[Newtonsoft.Json.JsonProperty("temp_session_id")]
-		public sealed override long TempSessionId { get; set; }
+        [Newtonsoft.Json.JsonProperty("perm_auth_key_id")]
+        public sealed override long PermAuthKeyId { get; set; }
 
-[Newtonsoft.Json.JsonProperty("expires_at")]
-		public sealed override int ExpiresAt { get; set; }
+        [Newtonsoft.Json.JsonProperty("temp_session_id")]
+        public sealed override long TempSessionId { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("expires_at")]
+        public sealed override int ExpiresAt { get; set; }
 
 
-        #nullable enable
- public BindAuthKeyInner (long nonce,long tempAuthKeyId,long permAuthKeyId,long tempSessionId,int expiresAt)
-{
- Nonce = nonce;
-TempAuthKeyId = tempAuthKeyId;
-PermAuthKeyId = permAuthKeyId;
-TempSessionId = tempSessionId;
-ExpiresAt = expiresAt;
- 
-}
+#nullable enable
+        public BindAuthKeyInner(long nonce, long tempAuthKeyId, long permAuthKeyId, long tempSessionId, int expiresAt)
+        {
+            Nonce = nonce;
+            TempAuthKeyId = tempAuthKeyId;
+            PermAuthKeyId = permAuthKeyId;
+            TempSessionId = tempSessionId;
+            ExpiresAt = expiresAt;
+
+        }
 #nullable disable
-        internal BindAuthKeyInner() 
+        internal BindAuthKeyInner()
         {
         }
-		
-		public override void UpdateFlags() 
-		{
 
-		}
+        public override void UpdateFlags()
+        {
 
-		public override WriteResult Serialize(Writer writer)
-		{
-writer.WriteInt32(ConstructorId);
-writer.WriteInt64(Nonce);
-writer.WriteInt64(TempAuthKeyId);
-writer.WriteInt64(PermAuthKeyId);
-writer.WriteInt64(TempSessionId);
-writer.WriteInt32(ExpiresAt);
+        }
 
-return new WriteResult();
+        public override WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
+            writer.WriteInt64(Nonce);
+            writer.WriteInt64(TempAuthKeyId);
+            writer.WriteInt64(PermAuthKeyId);
+            writer.WriteInt64(TempSessionId);
+            writer.WriteInt32(ExpiresAt);
 
-		}
+            return new WriteResult();
 
-		public override ReadResult<IObject> Deserialize(Reader reader)
-		{
-			var trynonce = reader.ReadInt64();
-if(trynonce.IsError){
-return ReadResult<IObject>.Move(trynonce);
-}
-Nonce = trynonce.Value;
-			var trytempAuthKeyId = reader.ReadInt64();
-if(trytempAuthKeyId.IsError){
-return ReadResult<IObject>.Move(trytempAuthKeyId);
-}
-TempAuthKeyId = trytempAuthKeyId.Value;
-			var trypermAuthKeyId = reader.ReadInt64();
-if(trypermAuthKeyId.IsError){
-return ReadResult<IObject>.Move(trypermAuthKeyId);
-}
-PermAuthKeyId = trypermAuthKeyId.Value;
-			var trytempSessionId = reader.ReadInt64();
-if(trytempSessionId.IsError){
-return ReadResult<IObject>.Move(trytempSessionId);
-}
-TempSessionId = trytempSessionId.Value;
-			var tryexpiresAt = reader.ReadInt32();
-if(tryexpiresAt.IsError){
-return ReadResult<IObject>.Move(tryexpiresAt);
-}
-ExpiresAt = tryexpiresAt.Value;
-return new ReadResult<IObject>(this);
+        }
 
-		}
-		
-		public override string ToString()
-		{
-		    return "bind_auth_key_inner";
-		}
+        public override ReadResult<IObject> Deserialize(Reader reader)
+        {
+            var trynonce = reader.ReadInt64();
+            if (trynonce.IsError)
+            {
+                return ReadResult<IObject>.Move(trynonce);
+            }
+            Nonce = trynonce.Value;
+            var trytempAuthKeyId = reader.ReadInt64();
+            if (trytempAuthKeyId.IsError)
+            {
+                return ReadResult<IObject>.Move(trytempAuthKeyId);
+            }
+            TempAuthKeyId = trytempAuthKeyId.Value;
+            var trypermAuthKeyId = reader.ReadInt64();
+            if (trypermAuthKeyId.IsError)
+            {
+                return ReadResult<IObject>.Move(trypermAuthKeyId);
+            }
+            PermAuthKeyId = trypermAuthKeyId.Value;
+            var trytempSessionId = reader.ReadInt64();
+            if (trytempSessionId.IsError)
+            {
+                return ReadResult<IObject>.Move(trytempSessionId);
+            }
+            TempSessionId = trytempSessionId.Value;
+            var tryexpiresAt = reader.ReadInt32();
+            if (tryexpiresAt.IsError)
+            {
+                return ReadResult<IObject>.Move(tryexpiresAt);
+            }
+            ExpiresAt = tryexpiresAt.Value;
+            return new ReadResult<IObject>(this);
 
-		public override int GetConstructorId()
-		{
-			return ConstructorId;
-		}
-	}
+        }
+
+        public override string ToString()
+        {
+            return "bind_auth_key_inner";
+        }
+
+        public override int GetConstructorId()
+        {
+            return ConstructorId;
+        }
+    }
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.Connections.MessageScheduling.Enums;
@@ -9,7 +8,7 @@ using Serilog;
 
 namespace CatraProto.Client.MTProto.Auth
 {
-    class AcknowledgementHandler
+    internal class AcknowledgementHandler
     {
         private readonly List<long> _ackIds = new List<long>();
         private readonly object _mutex = new object();

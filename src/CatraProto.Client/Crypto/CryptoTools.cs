@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 
 namespace CatraProto.Client.Crypto
 {
-    static class CryptoTools
+    internal static class CryptoTools
     {
         private static readonly RandomNumberGenerator CryptoRandom = new RNGCryptoServiceProvider();
 

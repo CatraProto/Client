@@ -6,7 +6,7 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.Connections.MessageScheduling.Items
 {
-    class MessageCompletion
+    internal class MessageCompletion
     {
         public CancellationTokenRegistration? CancellationTokenRegistration { get; set; }
         public TaskCompletionSource? TaskCompletionSource { get; }

@@ -3,7 +3,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.MTProto.Session.Models
 {
-    class AuthKeyCache : SessionModel
+    internal class AuthKeyCache : SessionModel
     {
         private byte[]? _authKey;
         private long? _firstSalt;

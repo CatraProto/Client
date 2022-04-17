@@ -6,7 +6,7 @@ using Serilog;
 
 namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
 {
-    class PermanentAuthKey
+    internal class PermanentAuthKey
     {
         private readonly AuthKeyCache _authKeyCache;
         private readonly MTProtoState _state;

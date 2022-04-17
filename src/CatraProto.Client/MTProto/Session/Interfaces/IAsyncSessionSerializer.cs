@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using CatraProto.TL;
 using Serilog;
 
 namespace CatraProto.Client.MTProto.Session.Interfaces

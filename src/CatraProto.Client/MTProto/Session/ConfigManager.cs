@@ -37,7 +37,7 @@ namespace CatraProto.Client.MTProto.Session
                     }
                 }
 
-                if(_lastConfig is null)
+                if (_lastConfig is null)
                 {
                     throw new InvalidOperationException("Config is null.");
                 }

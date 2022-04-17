@@ -1,15 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
-using System.Transactions;
 using CatraProto.Client.TL.Schemas.CloudChats;
 using Microsoft.Data.Sqlite;
 using Serilog;
 
 namespace CatraProto.Client.Database
 {
-    class DatabaseManager : IDisposable
+    internal class DatabaseManager : IDisposable
     {
         public PeerDatabase PeerDatabase { get; }
         public InternalDatabase InternalDatabase { get; }
@@ -77,7 +75,7 @@ namespace CatraProto.Client.Database
             }
 
             transaction.Commit();
-            
+
         }
 
         public void Dispose()

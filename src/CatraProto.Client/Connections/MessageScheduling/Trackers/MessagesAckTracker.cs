@@ -1,17 +1,12 @@
-using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using CatraProto.Client.Connections.MessageScheduling.Items;
 using CatraProto.Client.MTProto.Auth;
-using CatraProto.Client.MTProto.Rpc;
-using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL.Interfaces;
 using Serilog;
 
 namespace CatraProto.Client.Connections.MessageScheduling.Trackers
 {
-    class MessagesAckTracker
+    internal class MessagesAckTracker
     {
         private readonly AcknowledgementHandler _toServerAcksHandler;
         private readonly AcknowledgementHandler _fromClientAcksHandler;

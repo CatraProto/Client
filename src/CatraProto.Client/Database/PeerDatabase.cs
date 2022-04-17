@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using CatraProto.Client.Collections;
 using CatraProto.Client.MTProto;
 using CatraProto.Client.TL;
@@ -50,7 +48,7 @@ namespace CatraProto.Client.Database
         {
             lock (_commonMutex)
             {
-                Cache<long, IObject>? cache = fetchFull ? _peerFullCache : _peerCache;
+                var cache = fetchFull ? _peerFullCache : _peerCache;
                 var toId = IdTools.FromApiToTd(peerId.Id, peerId.Type);
                 if (cache.TryGetValue(toId, out var cacheObject))
                 {
@@ -82,7 +80,7 @@ namespace CatraProto.Client.Database
         {
             lock (_commonMutex)
             {
-                bool full = false;
+                var full = false;
                 long peerId;
                 IObject toSerialize;
                 switch (obj)
@@ -546,7 +544,7 @@ namespace CatraProto.Client.Database
         {
             if (newReasons.Count == oldReasons.Count)
             {
-                for (int i = 0; i < newReasons.Count; i++)
+                for (var i = 0; i < newReasons.Count; i++)
                 {
                     var newReason = newReasons[i];
                     var oldReason = oldReasons[i];

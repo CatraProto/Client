@@ -1,78 +1,75 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System.Diagnostics.CodeAnalysis;
-
-using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
-	public partial class GetWallPaper : IMethod
-	{
+    public partial class GetWallPaper : IMethod
+    {
 
 
         [Newtonsoft.Json.JsonIgnore]
         public static int ConstructorId { get => -57811990; }
-        
-[Newtonsoft.Json.JsonIgnore]
-		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-[Newtonsoft.Json.JsonProperty("wallpaper")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase Wallpaper { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+        ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-        
-        #nullable enable
- public GetWallPaper (CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase wallpaper)
-{
- Wallpaper = wallpaper;
- 
-}
+        [Newtonsoft.Json.JsonProperty("wallpaper")]
+        public CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase Wallpaper { get; set; }
+
+
+#nullable enable
+        public GetWallPaper(CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase wallpaper)
+        {
+            Wallpaper = wallpaper;
+
+        }
 #nullable disable
-                
-        internal GetWallPaper() 
+
+        internal GetWallPaper()
         {
         }
-        
-		public void UpdateFlags() 
-		{
 
-		}
+        public void UpdateFlags()
+        {
 
-		public WriteResult Serialize(Writer writer)
-		{
-writer.WriteInt32(ConstructorId);
-var checkwallpaper = 			writer.WriteObject(Wallpaper);
-if(checkwallpaper.IsError){
- return checkwallpaper; 
-}
+        }
 
-return new WriteResult();
+        public WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
+            var checkwallpaper = writer.WriteObject(Wallpaper);
+            if (checkwallpaper.IsError)
+            {
+                return checkwallpaper;
+            }
 
-		}
+            return new WriteResult();
 
-		public ReadResult<IObject> Deserialize(Reader reader)
-		{
-			var trywallpaper = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase>();
-if(trywallpaper.IsError){
-return ReadResult<IObject>.Move(trywallpaper);
-}
-Wallpaper = trywallpaper.Value;
-return new ReadResult<IObject>(this);
+        }
 
-		}
+        public ReadResult<IObject> Deserialize(Reader reader)
+        {
+            var trywallpaper = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase>();
+            if (trywallpaper.IsError)
+            {
+                return ReadResult<IObject>.Move(trywallpaper);
+            }
+            Wallpaper = trywallpaper.Value;
+            return new ReadResult<IObject>(this);
 
-		public override string ToString()
-		{
-		    return "account.getWallPaper";
-		}
+        }
 
-		public int GetConstructorId()
-		{
-			return ConstructorId;
-		}
-	}
+        public override string ToString()
+        {
+            return "account.getWallPaper";
+        }
+
+        public int GetConstructorId()
+        {
+            return ConstructorId;
+        }
+    }
 }

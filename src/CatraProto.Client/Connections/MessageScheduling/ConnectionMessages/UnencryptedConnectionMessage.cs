@@ -4,7 +4,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.Connections.MessageScheduling.ConnectionMessages
 {
-    sealed class UnencryptedConnectionMessage : IConnectionMessage
+    internal sealed class UnencryptedConnectionMessage : IConnectionMessage
     {
         public long AuthKeyId
         {

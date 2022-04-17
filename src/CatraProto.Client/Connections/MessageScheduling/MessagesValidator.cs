@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 using CatraProto.Client.Connections.MessageScheduling.ConnectionMessages;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL.Interfaces;
@@ -8,7 +7,7 @@ using Serilog;
 
 namespace CatraProto.Client.Connections.MessageScheduling
 {
-    class MessagesValidator
+    internal class MessagesValidator
     {
         private readonly MessagesHandler _messagesHandler;
         private readonly MTProtoState _mtProtoState;
@@ -98,7 +97,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
             _mtProtoState.SaltHandler.SetSalt(newSessionCreated.ServerSalt);
             _mtProtoState.SeqnoHandler.ContentRelatedReceived = 0;
             _logger.Information("New session created, new server salt {Salt}, new SessionId {SessionId}", newSessionCreated.ServerSalt, sessionId);
-            
+
             if (_mtProtoState.ConnectionInfo.Main)
             {
                 //Not awaiting is fine here. 

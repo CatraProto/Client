@@ -6,7 +6,7 @@ namespace CatraProto.Client.Async.Loops.Exceptions
     {
         public LoopUngracefullyExited() : base("Loop exited without setting state")
         {
-            
+
         }
     }
 }

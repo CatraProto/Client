@@ -54,10 +54,10 @@ namespace CatraProto.Client.Async.Signalers
             lock (_mutex)
             {
                 _asyncQueue.TryGetLastEnqueued(out var item);
-                return item;   
+                return item;
             }
         }
-        
+
         public T? GetCurrentState(bool setAsRead)
         {
             lock (_mutex)

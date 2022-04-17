@@ -4,14 +4,14 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace CatraProto.Client.Collections
 {
-    public class MultiValueDictionary<TKey, TValue> : IEnumerable<KeyValuePair<TKey, List<TValue>>> where TKey : notnull 
+    public class MultiValueDictionary<TKey, TValue> : IEnumerable<KeyValuePair<TKey, List<TValue>>> where TKey : notnull
     {
         private readonly Dictionary<TKey, List<TValue>> _backingDictionary = new Dictionary<TKey, List<TValue>>();
         public int Count
         {
             get => _backingDictionary.Count;
         }
-        
+
         public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out List<TValue> value)
         {
             if (_backingDictionary.TryGetValue(key, out var list))
@@ -32,7 +32,7 @@ namespace CatraProto.Client.Collections
                 {
                     return false;
                 }
-                
+
                 list.Add(value);
                 return true;
             }
@@ -43,7 +43,7 @@ namespace CatraProto.Client.Collections
                 return true;
             }
         }
-        
+
         public void Insert(TKey key, TValue value)
         {
             if (_backingDictionary.TryGetValue(key, out var list))

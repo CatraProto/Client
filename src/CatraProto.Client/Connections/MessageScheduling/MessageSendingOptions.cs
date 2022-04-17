@@ -1,5 +1,4 @@
 using CatraProto.Client.Connections.MessageScheduling.Enums;
-using CatraProto.Client.MTProto.Auth.AuthKeyHandler;
 
 namespace CatraProto.Client.Connections.MessageScheduling
 {

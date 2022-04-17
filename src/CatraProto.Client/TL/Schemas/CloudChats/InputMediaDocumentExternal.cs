@@ -1,103 +1,103 @@
 using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputMediaDocumentExternal : CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase
-	{
-		[Flags]
-		public enum FlagsEnum 
-		{
-			TtlSeconds = 1 << 0
-		}
+    public partial class InputMediaDocumentExternal : CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase
+    {
+        [Flags]
+        public enum FlagsEnum
+        {
+            TtlSeconds = 1 << 0
+        }
 
         [Newtonsoft.Json.JsonIgnore]
         public static int ConstructorId { get => -78455655; }
-        
-[Newtonsoft.Json.JsonIgnore]
-		public int Flags { get; set; }
 
-[Newtonsoft.Json.JsonProperty("url")]
-		public string Url { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int Flags { get; set; }
 
-[Newtonsoft.Json.JsonProperty("ttl_seconds")]
-		public int? TtlSeconds { get; set; }
+        [Newtonsoft.Json.JsonProperty("url")]
+        public string Url { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("ttl_seconds")]
+        public int? TtlSeconds { get; set; }
 
 
-        #nullable enable
- public InputMediaDocumentExternal (string url)
-{
- Url = url;
- 
-}
+#nullable enable
+        public InputMediaDocumentExternal(string url)
+        {
+            Url = url;
+
+        }
 #nullable disable
-        internal InputMediaDocumentExternal() 
+        internal InputMediaDocumentExternal()
         {
         }
-		
-		public override void UpdateFlags() 
-		{
-			Flags = TtlSeconds == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
 
-		}
+        public override void UpdateFlags()
+        {
+            Flags = TtlSeconds == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
 
-		public override WriteResult Serialize(Writer writer)
-		{
-writer.WriteInt32(ConstructorId);
-			UpdateFlags();
+        }
 
-			writer.WriteInt32(Flags);
+        public override WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
+            UpdateFlags();
 
-			writer.WriteString(Url);
-			if(FlagsHelper.IsFlagSet(Flags, 0))
-			{
-writer.WriteInt32(TtlSeconds.Value);
-			}
+            writer.WriteInt32(Flags);
+
+            writer.WriteString(Url);
+            if (FlagsHelper.IsFlagSet(Flags, 0))
+            {
+                writer.WriteInt32(TtlSeconds.Value);
+            }
 
 
-return new WriteResult();
+            return new WriteResult();
 
-		}
+        }
 
-		public override ReadResult<IObject> Deserialize(Reader reader)
-		{
-			var tryflags = reader.ReadInt32();
-if(tryflags.IsError){
-return ReadResult<IObject>.Move(tryflags);
-}
-Flags = tryflags.Value;
-			var tryurl = reader.ReadString();
-if(tryurl.IsError){
-return ReadResult<IObject>.Move(tryurl);
-}
-Url = tryurl.Value;
-			if(FlagsHelper.IsFlagSet(Flags, 0))
-			{
-				var tryttlSeconds = reader.ReadInt32();
-if(tryttlSeconds.IsError){
-return ReadResult<IObject>.Move(tryttlSeconds);
-}
-TtlSeconds = tryttlSeconds.Value;
-			}
+        public override ReadResult<IObject> Deserialize(Reader reader)
+        {
+            var tryflags = reader.ReadInt32();
+            if (tryflags.IsError)
+            {
+                return ReadResult<IObject>.Move(tryflags);
+            }
+            Flags = tryflags.Value;
+            var tryurl = reader.ReadString();
+            if (tryurl.IsError)
+            {
+                return ReadResult<IObject>.Move(tryurl);
+            }
+            Url = tryurl.Value;
+            if (FlagsHelper.IsFlagSet(Flags, 0))
+            {
+                var tryttlSeconds = reader.ReadInt32();
+                if (tryttlSeconds.IsError)
+                {
+                    return ReadResult<IObject>.Move(tryttlSeconds);
+                }
+                TtlSeconds = tryttlSeconds.Value;
+            }
 
-return new ReadResult<IObject>(this);
+            return new ReadResult<IObject>(this);
 
-		}
-		
-		public override string ToString()
-		{
-		    return "inputMediaDocumentExternal";
-		}
+        }
 
-		public override int GetConstructorId()
-		{
-			return ConstructorId;
-		}
-	}
+        public override string ToString()
+        {
+            return "inputMediaDocumentExternal";
+        }
+
+        public override int GetConstructorId()
+        {
+            return ConstructorId;
+        }
+    }
 }

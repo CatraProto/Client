@@ -1,90 +1,89 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputFileBig : CatraProto.Client.TL.Schemas.CloudChats.InputFileBase
-	{
+    public partial class InputFileBig : CatraProto.Client.TL.Schemas.CloudChats.InputFileBase
+    {
 
 
         [Newtonsoft.Json.JsonIgnore]
         public static int ConstructorId { get => -95482955; }
-        
-[Newtonsoft.Json.JsonProperty("id")]
-		public sealed override long Id { get; set; }
 
-[Newtonsoft.Json.JsonProperty("parts")]
-		public sealed override int Parts { get; set; }
+        [Newtonsoft.Json.JsonProperty("id")]
+        public sealed override long Id { get; set; }
 
-[Newtonsoft.Json.JsonProperty("name")]
-		public sealed override string Name { get; set; }
+        [Newtonsoft.Json.JsonProperty("parts")]
+        public sealed override int Parts { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("name")]
+        public sealed override string Name { get; set; }
 
 
-        #nullable enable
- public InputFileBig (long id,int parts,string name)
-{
- Id = id;
-Parts = parts;
-Name = name;
- 
-}
+#nullable enable
+        public InputFileBig(long id, int parts, string name)
+        {
+            Id = id;
+            Parts = parts;
+            Name = name;
+
+        }
 #nullable disable
-        internal InputFileBig() 
+        internal InputFileBig()
         {
         }
-		
-		public override void UpdateFlags() 
-		{
 
-		}
+        public override void UpdateFlags()
+        {
 
-		public override WriteResult Serialize(Writer writer)
-		{
-writer.WriteInt32(ConstructorId);
-writer.WriteInt64(Id);
-writer.WriteInt32(Parts);
+        }
 
-			writer.WriteString(Name);
+        public override WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
+            writer.WriteInt64(Id);
+            writer.WriteInt32(Parts);
 
-return new WriteResult();
+            writer.WriteString(Name);
 
-		}
+            return new WriteResult();
 
-		public override ReadResult<IObject> Deserialize(Reader reader)
-		{
-			var tryid = reader.ReadInt64();
-if(tryid.IsError){
-return ReadResult<IObject>.Move(tryid);
-}
-Id = tryid.Value;
-			var tryparts = reader.ReadInt32();
-if(tryparts.IsError){
-return ReadResult<IObject>.Move(tryparts);
-}
-Parts = tryparts.Value;
-			var tryname = reader.ReadString();
-if(tryname.IsError){
-return ReadResult<IObject>.Move(tryname);
-}
-Name = tryname.Value;
-return new ReadResult<IObject>(this);
+        }
 
-		}
-		
-		public override string ToString()
-		{
-		    return "inputFileBig";
-		}
+        public override ReadResult<IObject> Deserialize(Reader reader)
+        {
+            var tryid = reader.ReadInt64();
+            if (tryid.IsError)
+            {
+                return ReadResult<IObject>.Move(tryid);
+            }
+            Id = tryid.Value;
+            var tryparts = reader.ReadInt32();
+            if (tryparts.IsError)
+            {
+                return ReadResult<IObject>.Move(tryparts);
+            }
+            Parts = tryparts.Value;
+            var tryname = reader.ReadString();
+            if (tryname.IsError)
+            {
+                return ReadResult<IObject>.Move(tryname);
+            }
+            Name = tryname.Value;
+            return new ReadResult<IObject>(this);
 
-		public override int GetConstructorId()
-		{
-			return ConstructorId;
-		}
-	}
+        }
+
+        public override string ToString()
+        {
+            return "inputFileBig";
+        }
+
+        public override int GetConstructorId()
+        {
+            return ConstructorId;
+        }
+    }
 }

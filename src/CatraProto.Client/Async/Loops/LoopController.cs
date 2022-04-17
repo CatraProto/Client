@@ -3,7 +3,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Async.Loops.Bodies;
-using CatraProto.Client.Async.Loops.Enums.Resumable;
 using CatraProto.Client.Async.Loops.Exceptions;
 using CatraProto.Client.Async.Loops.Interfaces;
 using CatraProto.Client.Async.Signalers;
@@ -19,12 +18,12 @@ namespace CatraProto.Client.Async.Loops
         protected object SharedLock { get; } = new object();
         protected TLoopState LoopState { get; set; }
         protected ILogger Logger { get; }
-        
+
         protected readonly TaskCompletionSource ShutdownSource = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         public abstract bool SendSignal(TSignalState signal, [MaybeNullWhen(false)] out Task signalHandledTask);
         protected abstract void LoopFaulted(Exception e);
         protected abstract void SetLoopState(TLoopState state);
-        
+
         public delegate void LoopFaultedEvent(LoopController<TLoopState, TSignalState> loopController, Exception e);
         public event LoopFaultedEvent? OnFaulted;
 
@@ -43,14 +42,14 @@ namespace CatraProto.Client.Async.Loops
                 {
                     return false;
                 }
-                
+
                 loopImplementation.SetLoopHandler(StateSignaler, SetLoopState);
                 Logger.Verbose("Loop bound to Implementation {Impl}", loopImplementation);
                 LoopImplementation = loopImplementation;
                 return true;
             }
         }
-        
+
         protected virtual void OnStopped()
         {
             lock (SharedLock)
@@ -67,8 +66,8 @@ namespace CatraProto.Client.Async.Loops
             {
                 return;
             }
-            
-            Task.Run(async() =>
+
+            Task.Run(async () =>
             {
                 try
                 {
@@ -85,7 +84,7 @@ namespace CatraProto.Client.Async.Loops
                 }
             });
         }
-        
+
         public Task GetShutdownTask()
         {
             lock (SharedLock)
@@ -125,7 +124,7 @@ namespace CatraProto.Client.Async.Loops
                     {
                         return;
                     }
-                    
+
                     nowState.SetCanceled();
                     lastReadState = nowState;
                     firstRun = false;

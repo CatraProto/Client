@@ -3,7 +3,7 @@ using System.Numerics;
 
 namespace CatraProto.Client.Crypto
 {
-    static class BigIntegerTools
+    internal static class BigIntegerTools
     {
         public static BigInteger GenerateBigInt(int size, bool positive = false, bool isBigEndian = false)
         {

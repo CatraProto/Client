@@ -7,7 +7,7 @@ using Serilog;
 
 namespace CatraProto.Client.Updates
 {
-    class UpdatesDispatcher
+    internal class UpdatesDispatcher
     {
         private readonly Dictionary<PeerId, Queue<UpdateBase>> _updates = new Dictionary<PeerId, Queue<UpdateBase>>();
         private readonly Queue<UpdateBase> _commonUpdates = new Queue<UpdateBase>();
@@ -61,7 +61,7 @@ namespace CatraProto.Client.Updates
             {
                 if (peerId is not null)
                 {
-                    InvokeCallback(peerId);    
+                    InvokeCallback(peerId);
                 }
                 else
                 {

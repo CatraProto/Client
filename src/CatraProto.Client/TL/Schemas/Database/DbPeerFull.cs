@@ -1,12 +1,6 @@
-﻿using CatraProto.Client.TL.Schemas;
-using CatraProto.TL;
+﻿using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CatraProto.Client.TL.Schemas.Database
 {
@@ -57,7 +51,7 @@ namespace CatraProto.Client.TL.Schemas.Database
             writer.WriteInt32(ConstructorId);
             writer.WriteInt64(UpdatedAt);
             writer.WriteInt32(LayerVersion);
-            if(Object is null)
+            if (Object is null)
             {
                 return new WriteResult("Object is null", ParserErrors.NullValue);
             }

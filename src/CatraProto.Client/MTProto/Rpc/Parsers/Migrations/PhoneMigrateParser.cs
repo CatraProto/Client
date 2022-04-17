@@ -4,7 +4,7 @@ using CatraProto.Client.MTProto.Rpc.RpcErrors.Migrations;
 
 namespace CatraProto.Client.MTProto.Rpc.Parsers.Migrations
 {
-    class PhoneMigrateParser : RpcErrorParser
+    internal class PhoneMigrateParser : RpcErrorParser
     {
         private static readonly Regex CompiledRegex = new Regex("^PHONE_MIGRATE_([0-9]+)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         public PhoneMigrateParser() : base(15)

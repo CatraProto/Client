@@ -9,7 +9,7 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.Updates
 {
-    static partial class UpdatesTools
+    internal static partial class UpdatesTools
     {
         public static UpdateBase ConvertUpdate(UpdatesBase updatesBase, IMethod? query = null)
         {
@@ -108,65 +108,65 @@ namespace CatraProto.Client.Updates
             switch (messageBase)
             {
                 case Message { PeerId: PeerChat or PeerUser } message:
-                {
-                    updateBase = new UpdateNewMessage
                     {
-                        Pts = -1,
-                        PtsCount = -1,
-                        Message = message
-                    };
-                    break;
-                }
+                        updateBase = new UpdateNewMessage
+                        {
+                            Pts = -1,
+                            PtsCount = -1,
+                            Message = message
+                        };
+                        break;
+                    }
                 case Message message:
-                {
-                    updateBase = new UpdateNewChannelMessage
                     {
-                        Message = message,
-                        Pts = -1,
-                        PtsCount = -1
-                    };
-                    break;
-                }
+                        updateBase = new UpdateNewChannelMessage
+                        {
+                            Message = message,
+                            Pts = -1,
+                            PtsCount = -1
+                        };
+                        break;
+                    }
                 case MessageService { PeerId: PeerChat or PeerUser } messageService:
-                {
-                    updateBase = new UpdateNewMessage
                     {
-                        Pts = -1,
-                        PtsCount = -1,
-                        Message = messageService
-                    };
-                    break;
-                }
+                        updateBase = new UpdateNewMessage
+                        {
+                            Pts = -1,
+                            PtsCount = -1,
+                            Message = messageService
+                        };
+                        break;
+                    }
                 case MessageService messageService:
-                {
-                    updateBase = new UpdateNewChannelMessage
                     {
-                        Message = messageService,
-                        Pts = -1,
-                        PtsCount = -1
-                    };
-                    break;
-                }
+                        updateBase = new UpdateNewChannelMessage
+                        {
+                            Message = messageService,
+                            Pts = -1,
+                            PtsCount = -1
+                        };
+                        break;
+                    }
                 case MessageEmpty { PeerId: PeerChat or PeerUser } messageEmpty:
-                {
-                    updateBase = new UpdateNewMessage
                     {
-                        Pts = -1,
-                        PtsCount = -1,
-                        Message = messageEmpty
-                    };
-                    break;
-                }
+                        updateBase = new UpdateNewMessage
+                        {
+                            Pts = -1,
+                            PtsCount = -1,
+                            Message = messageEmpty
+                        };
+                        break;
+                    }
                 case MessageEmpty messageEmpty:
-                {
-                    updateBase = new UpdateNewChannelMessage
                     {
-                        Message = messageEmpty,
-                        Pts = -1,
-                        PtsCount = -1
-                    };
-                    break;
-                }
+                        updateBase = new UpdateNewChannelMessage
+                        {
+                            Message = messageEmpty,
+                            Pts = -1,
+                            PtsCount = -1
+                        };
+                        break;
+                    }
             }
 
             return updateBase!;

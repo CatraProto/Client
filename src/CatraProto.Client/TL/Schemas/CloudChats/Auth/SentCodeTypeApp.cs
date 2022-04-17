@@ -1,69 +1,66 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
-	public partial class SentCodeTypeApp : CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeTypeBase
-	{
+    public partial class SentCodeTypeApp : CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeTypeBase
+    {
 
 
         [Newtonsoft.Json.JsonIgnore]
         public static int ConstructorId { get => 1035688326; }
-        
-[Newtonsoft.Json.JsonProperty("length")]
-		public int Length { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("length")]
+        public int Length { get; set; }
 
 
-        #nullable enable
- public SentCodeTypeApp (int length)
-{
- Length = length;
- 
-}
+#nullable enable
+        public SentCodeTypeApp(int length)
+        {
+            Length = length;
+
+        }
 #nullable disable
-        internal SentCodeTypeApp() 
+        internal SentCodeTypeApp()
         {
         }
-		
-		public override void UpdateFlags() 
-		{
 
-		}
+        public override void UpdateFlags()
+        {
 
-		public override WriteResult Serialize(Writer writer)
-		{
-writer.WriteInt32(ConstructorId);
-writer.WriteInt32(Length);
+        }
 
-return new WriteResult();
+        public override WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
+            writer.WriteInt32(Length);
 
-		}
+            return new WriteResult();
 
-		public override ReadResult<IObject> Deserialize(Reader reader)
-		{
-			var trylength = reader.ReadInt32();
-if(trylength.IsError){
-return ReadResult<IObject>.Move(trylength);
-}
-Length = trylength.Value;
-return new ReadResult<IObject>(this);
+        }
 
-		}
-		
-		public override string ToString()
-		{
-		    return "auth.sentCodeTypeApp";
-		}
+        public override ReadResult<IObject> Deserialize(Reader reader)
+        {
+            var trylength = reader.ReadInt32();
+            if (trylength.IsError)
+            {
+                return ReadResult<IObject>.Move(trylength);
+            }
+            Length = trylength.Value;
+            return new ReadResult<IObject>(this);
 
-		public override int GetConstructorId()
-		{
-			return ConstructorId;
-		}
-	}
+        }
+
+        public override string ToString()
+        {
+            return "auth.sentCodeTypeApp";
+        }
+
+        public override int GetConstructorId()
+        {
+            return ConstructorId;
+        }
+    }
 }

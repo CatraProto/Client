@@ -6,7 +6,7 @@ using CatraProto.Client.MTProto.Rpc.RpcErrors;
 
 namespace CatraProto.Client.MTProto.Rpc.Parsers
 {
-    static class ParsersList
+    internal static class ParsersList
     {
         private static readonly ReadOnlyCollection<RpcErrorParser> _errorParsers;
 

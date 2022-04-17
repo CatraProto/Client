@@ -13,7 +13,7 @@ using Serilog;
 
 namespace CatraProto.Client.Connections.Loop
 {
-    class ReceiveLoop : LoopImplementation<GenericLoopState, GenericSignalState>
+    internal class ReceiveLoop : LoopImplementation<GenericLoopState, GenericSignalState>
     {
         private readonly MessagesDispatcher _messagesDispatcher;
         private readonly MTProtoState _mtProtoState;
@@ -58,7 +58,7 @@ namespace CatraProto.Client.Connections.Loop
                     var message = await _connection.Protocol.Reader.ReadMessageAsync(cancellationToken);
                     using var reader = new Reader(MergedProvider.Singleton, message.ToMemoryStream());
 
-                    if(message.Length < 4)
+                    if (message.Length < 4)
                     {
                         _logger.Warning("Ignoring payload {Payload} because length is less than 4", message);
                         continue;
@@ -120,6 +120,9 @@ namespace CatraProto.Client.Connections.Loop
             }
         }
 
-        public override string ToString() => $"Receive loop for connection {_connection}";
+        public override string ToString()
+        {
+            return $"Receive loop for connection {_connection}";
+        }
     }
 }

@@ -1,11 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CatraProto.Client.Async.Loops;
 using CatraProto.Client.Async.Loops.Enums.Resumable;
 using CatraProto.Client.Async.Loops.Extensions;
 using CatraProto.Client.Collections;
-using CatraProto.Client.MTProto;
 using CatraProto.Client.MTProto.Session.Models;
 using CatraProto.Client.TL.Schemas.CloudChats;
 using CatraProto.Client.Tools;
@@ -15,7 +13,7 @@ using Serilog;
 
 namespace CatraProto.Client.Updates
 {
-    class UpdatesReceiver
+    internal class UpdatesReceiver
     {
         private readonly Dictionary<long, (ResumableLoopController Controller, UpdateProcessor Processor)> _processors = new Dictionary<long, (ResumableLoopController, UpdateProcessor)>();
         private readonly (ResumableLoopController Controller, UpdateProcessor Processor) _commonLoop;
@@ -61,7 +59,7 @@ namespace CatraProto.Client.Updates
                                 }
                             }
 
-                            if(finalSeq > 0 && date > 0)
+                            if (finalSeq > 0 && date > 0)
                             {
                                 _commonSequence.SetData(seq: finalSeq, date: date);
                             }

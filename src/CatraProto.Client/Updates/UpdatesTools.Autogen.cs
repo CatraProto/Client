@@ -1,7 +1,7 @@
 //auto-generated
 namespace CatraProto.Client.Updates
 {
-    static partial class UpdatesTools
+    internal static partial class UpdatesTools
     {
         public static void ExtractChats(CatraProto.TL.Interfaces.IObject obj, out System.Collections.Generic.IList<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>? chatsVector, out System.Collections.Generic.IList<CatraProto.Client.TL.Schemas.CloudChats.UserBase>? usersVector)
         {

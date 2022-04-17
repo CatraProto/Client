@@ -1,91 +1,90 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System.Diagnostics.CodeAnalysis;
-
-using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 {
-	public partial class TogglePreHistoryHidden : IMethod
-	{
+    public partial class TogglePreHistoryHidden : IMethod
+    {
 
 
         [Newtonsoft.Json.JsonIgnore]
         public static int ConstructorId { get => -356796084; }
-        
-[Newtonsoft.Json.JsonIgnore]
-		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-[Newtonsoft.Json.JsonProperty("channel")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase Channel { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+        ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-[Newtonsoft.Json.JsonProperty("enabled")]
-		public bool Enabled { get; set; }
+        [Newtonsoft.Json.JsonProperty("channel")]
+        public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase Channel { get; set; }
 
-        
-        #nullable enable
- public TogglePreHistoryHidden (CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase channel,bool enabled)
-{
- Channel = channel;
-Enabled = enabled;
- 
-}
+        [Newtonsoft.Json.JsonProperty("enabled")]
+        public bool Enabled { get; set; }
+
+
+#nullable enable
+        public TogglePreHistoryHidden(CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase channel, bool enabled)
+        {
+            Channel = channel;
+            Enabled = enabled;
+
+        }
 #nullable disable
-                
-        internal TogglePreHistoryHidden() 
+
+        internal TogglePreHistoryHidden()
         {
         }
-        
-		public void UpdateFlags() 
-		{
 
-		}
+        public void UpdateFlags()
+        {
 
-		public WriteResult Serialize(Writer writer)
-		{
-writer.WriteInt32(ConstructorId);
-var checkchannel = 			writer.WriteObject(Channel);
-if(checkchannel.IsError){
- return checkchannel; 
-}
-var checkenabled = 			writer.WriteBool(Enabled);
-if(checkenabled.IsError){
- return checkenabled; 
-}
+        }
 
-return new WriteResult();
+        public WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
+            var checkchannel = writer.WriteObject(Channel);
+            if (checkchannel.IsError)
+            {
+                return checkchannel;
+            }
+            var checkenabled = writer.WriteBool(Enabled);
+            if (checkenabled.IsError)
+            {
+                return checkenabled;
+            }
 
-		}
+            return new WriteResult();
 
-		public ReadResult<IObject> Deserialize(Reader reader)
-		{
-			var trychannel = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
-if(trychannel.IsError){
-return ReadResult<IObject>.Move(trychannel);
-}
-Channel = trychannel.Value;
-			var tryenabled = reader.ReadBool();
-if(tryenabled.IsError){
-return ReadResult<IObject>.Move(tryenabled);
-}
-Enabled = tryenabled.Value;
-return new ReadResult<IObject>(this);
+        }
 
-		}
+        public ReadResult<IObject> Deserialize(Reader reader)
+        {
+            var trychannel = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
+            if (trychannel.IsError)
+            {
+                return ReadResult<IObject>.Move(trychannel);
+            }
+            Channel = trychannel.Value;
+            var tryenabled = reader.ReadBool();
+            if (tryenabled.IsError)
+            {
+                return ReadResult<IObject>.Move(tryenabled);
+            }
+            Enabled = tryenabled.Value;
+            return new ReadResult<IObject>(this);
 
-		public override string ToString()
-		{
-		    return "channels.togglePreHistoryHidden";
-		}
+        }
 
-		public int GetConstructorId()
-		{
-			return ConstructorId;
-		}
-	}
+        public override string ToString()
+        {
+            return "channels.togglePreHistoryHidden";
+        }
+
+        public int GetConstructorId()
+        {
+            return ConstructorId;
+        }
+    }
 }

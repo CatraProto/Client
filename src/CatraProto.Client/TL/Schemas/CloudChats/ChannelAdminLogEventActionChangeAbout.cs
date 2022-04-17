@@ -1,81 +1,79 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class ChannelAdminLogEventActionChangeAbout : CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionBase
-	{
+    public partial class ChannelAdminLogEventActionChangeAbout : CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionBase
+    {
 
 
         [Newtonsoft.Json.JsonIgnore]
         public static int ConstructorId { get => 1427671598; }
-        
-[Newtonsoft.Json.JsonProperty("prev_value")]
-		public string PrevValue { get; set; }
 
-[Newtonsoft.Json.JsonProperty("new_value")]
-		public string NewValue { get; set; }
+        [Newtonsoft.Json.JsonProperty("prev_value")]
+        public string PrevValue { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("new_value")]
+        public string NewValue { get; set; }
 
 
-        #nullable enable
- public ChannelAdminLogEventActionChangeAbout (string prevValue,string newValue)
-{
- PrevValue = prevValue;
-NewValue = newValue;
- 
-}
+#nullable enable
+        public ChannelAdminLogEventActionChangeAbout(string prevValue, string newValue)
+        {
+            PrevValue = prevValue;
+            NewValue = newValue;
+
+        }
 #nullable disable
-        internal ChannelAdminLogEventActionChangeAbout() 
+        internal ChannelAdminLogEventActionChangeAbout()
         {
         }
-		
-		public override void UpdateFlags() 
-		{
 
-		}
+        public override void UpdateFlags()
+        {
 
-		public override WriteResult Serialize(Writer writer)
-		{
-writer.WriteInt32(ConstructorId);
+        }
 
-			writer.WriteString(PrevValue);
+        public override WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
 
-			writer.WriteString(NewValue);
+            writer.WriteString(PrevValue);
 
-return new WriteResult();
+            writer.WriteString(NewValue);
 
-		}
+            return new WriteResult();
 
-		public override ReadResult<IObject> Deserialize(Reader reader)
-		{
-			var tryprevValue = reader.ReadString();
-if(tryprevValue.IsError){
-return ReadResult<IObject>.Move(tryprevValue);
-}
-PrevValue = tryprevValue.Value;
-			var trynewValue = reader.ReadString();
-if(trynewValue.IsError){
-return ReadResult<IObject>.Move(trynewValue);
-}
-NewValue = trynewValue.Value;
-return new ReadResult<IObject>(this);
+        }
 
-		}
-		
-		public override string ToString()
-		{
-		    return "channelAdminLogEventActionChangeAbout";
-		}
+        public override ReadResult<IObject> Deserialize(Reader reader)
+        {
+            var tryprevValue = reader.ReadString();
+            if (tryprevValue.IsError)
+            {
+                return ReadResult<IObject>.Move(tryprevValue);
+            }
+            PrevValue = tryprevValue.Value;
+            var trynewValue = reader.ReadString();
+            if (trynewValue.IsError)
+            {
+                return ReadResult<IObject>.Move(trynewValue);
+            }
+            NewValue = trynewValue.Value;
+            return new ReadResult<IObject>(this);
 
-		public override int GetConstructorId()
-		{
-			return ConstructorId;
-		}
-	}
+        }
+
+        public override string ToString()
+        {
+            return "channelAdminLogEventActionChangeAbout";
+        }
+
+        public override int GetConstructorId()
+        {
+            return ConstructorId;
+        }
+    }
 }

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CatraProto.Client.Connections
@@ -10,10 +7,7 @@ namespace CatraProto.Client.Connections
     {
         public Connection Connection
         {
-            get
-            {
-                return _connection ?? throw new InvalidOperationException("Cannot access connection because item disposed");
-            }
+            get => _connection ?? throw new InvalidOperationException("Cannot access connection because item disposed");
         }
 
         private Connection? _connection;

@@ -2,7 +2,7 @@ using System;
 
 namespace CatraProto.Client.MTProto.Session.Interfaces
 {
-    abstract class SessionModel
+    internal abstract class SessionModel
     {
         protected object Mutex { get; }
         protected Action<SessionModel>? OnUpdated;

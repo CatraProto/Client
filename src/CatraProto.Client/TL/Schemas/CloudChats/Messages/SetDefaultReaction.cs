@@ -1,76 +1,72 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System.Diagnostics.CodeAnalysis;
-
-using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class SetDefaultReaction : IMethod
-	{
+    public partial class SetDefaultReaction : IMethod
+    {
 
 
         [Newtonsoft.Json.JsonIgnore]
         public static int ConstructorId { get => -647969580; }
-        
-[Newtonsoft.Json.JsonIgnore]
-		ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
 
-[Newtonsoft.Json.JsonProperty("reaction")]
-		public string Reaction { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+        ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
 
-        
-        #nullable enable
- public SetDefaultReaction (string reaction)
-{
- Reaction = reaction;
- 
-}
+        [Newtonsoft.Json.JsonProperty("reaction")]
+        public string Reaction { get; set; }
+
+
+#nullable enable
+        public SetDefaultReaction(string reaction)
+        {
+            Reaction = reaction;
+
+        }
 #nullable disable
-                
-        internal SetDefaultReaction() 
+
+        internal SetDefaultReaction()
         {
         }
-        
-		public void UpdateFlags() 
-		{
 
-		}
+        public void UpdateFlags()
+        {
 
-		public WriteResult Serialize(Writer writer)
-		{
-writer.WriteInt32(ConstructorId);
+        }
 
-			writer.WriteString(Reaction);
+        public WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
 
-return new WriteResult();
+            writer.WriteString(Reaction);
 
-		}
+            return new WriteResult();
 
-		public ReadResult<IObject> Deserialize(Reader reader)
-		{
-			var tryreaction = reader.ReadString();
-if(tryreaction.IsError){
-return ReadResult<IObject>.Move(tryreaction);
-}
-Reaction = tryreaction.Value;
-return new ReadResult<IObject>(this);
+        }
 
-		}
+        public ReadResult<IObject> Deserialize(Reader reader)
+        {
+            var tryreaction = reader.ReadString();
+            if (tryreaction.IsError)
+            {
+                return ReadResult<IObject>.Move(tryreaction);
+            }
+            Reaction = tryreaction.Value;
+            return new ReadResult<IObject>(this);
 
-		public override string ToString()
-		{
-		    return "messages.setDefaultReaction";
-		}
+        }
 
-		public int GetConstructorId()
-		{
-			return ConstructorId;
-		}
-	}
+        public override string ToString()
+        {
+            return "messages.setDefaultReaction";
+        }
+
+        public int GetConstructorId()
+        {
+            return ConstructorId;
+        }
+    }
 }

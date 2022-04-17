@@ -1,20 +1,15 @@
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
-using CatraProto.Client.Async.Collections;
-using CatraProto.Client.Connections.Loop;
 using CatraProto.Client.Connections.MessageScheduling.Items;
 using CatraProto.Client.MTProto.Rpc.Interfaces;
-using CatraProto.Client.TL.Schemas.CloudChats.Messages;
 using CatraProto.TL.Interfaces;
 using Serilog;
 
 namespace CatraProto.Client.Connections.MessageScheduling
 {
-    class MessagesQueue
+    internal class MessagesQueue
     {
         private readonly ConcurrentQueue<MessageItem> _concurrentQueue = new ConcurrentQueue<MessageItem>();
         private readonly ConcurrentQueue<MessageItem> _unencryptedQueue = new ConcurrentQueue<MessageItem>();
@@ -37,7 +32,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
             messageItem.BindTo(_messagesHandler);
             messageItem.SetToSend();
         }
-        
+
         public void SendObject(IObject body, MessageSendingOptions messageSendingOptions, CancellationToken requestCancellationToken)
         {
             var messageCompletion = new MessageCompletion(null, null, null);
@@ -57,18 +52,18 @@ namespace CatraProto.Client.Connections.MessageScheduling
             {
                 _unencryptedQueue.Enqueue(item);
             }
-            
+
             if (wakeUpLoop)
             {
                 _messagesHandler.Connection.SignalNewMessage();
             }
         }
-        
-        public bool TryGetMessage(bool encrypted, [MaybeNullWhen(false)]out MessageItem messageItem)
+
+        public bool TryGetMessage(bool encrypted, [MaybeNullWhen(false)] out MessageItem messageItem)
         {
             return encrypted ? _concurrentQueue.TryDequeue(out messageItem) : _unencryptedQueue.TryDequeue(out messageItem);
         }
-        
+
         public int GetCount(bool encrypted)
         {
             return encrypted ? _concurrentQueue.Count : _unencryptedQueue.Count;

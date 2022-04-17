@@ -4,7 +4,7 @@ using Serilog;
 
 namespace CatraProto.Client.Connections.MessageScheduling
 {
-    class MessagesTrackers
+    internal class MessagesTrackers
     {
         public AcknowledgementHandler AcknowledgementHandler { get; }
         public MessageCompletionTracker MessageCompletionTracker { get; }

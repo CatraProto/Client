@@ -1,76 +1,72 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System.Diagnostics.CodeAnalysis;
-
-using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
-	public partial class ResolveUsername : IMethod
-	{
+    public partial class ResolveUsername : IMethod
+    {
 
 
         [Newtonsoft.Json.JsonIgnore]
         public static int ConstructorId { get => -113456221; }
-        
-[Newtonsoft.Json.JsonIgnore]
-		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-[Newtonsoft.Json.JsonProperty("username")]
-		public string Username { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+        ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-        
-        #nullable enable
- public ResolveUsername (string username)
-{
- Username = username;
- 
-}
+        [Newtonsoft.Json.JsonProperty("username")]
+        public string Username { get; set; }
+
+
+#nullable enable
+        public ResolveUsername(string username)
+        {
+            Username = username;
+
+        }
 #nullable disable
-                
-        internal ResolveUsername() 
+
+        internal ResolveUsername()
         {
         }
-        
-		public void UpdateFlags() 
-		{
 
-		}
+        public void UpdateFlags()
+        {
 
-		public WriteResult Serialize(Writer writer)
-		{
-writer.WriteInt32(ConstructorId);
+        }
 
-			writer.WriteString(Username);
+        public WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
 
-return new WriteResult();
+            writer.WriteString(Username);
 
-		}
+            return new WriteResult();
 
-		public ReadResult<IObject> Deserialize(Reader reader)
-		{
-			var tryusername = reader.ReadString();
-if(tryusername.IsError){
-return ReadResult<IObject>.Move(tryusername);
-}
-Username = tryusername.Value;
-return new ReadResult<IObject>(this);
+        }
 
-		}
+        public ReadResult<IObject> Deserialize(Reader reader)
+        {
+            var tryusername = reader.ReadString();
+            if (tryusername.IsError)
+            {
+                return ReadResult<IObject>.Move(tryusername);
+            }
+            Username = tryusername.Value;
+            return new ReadResult<IObject>(this);
 
-		public override string ToString()
-		{
-		    return "contacts.resolveUsername";
-		}
+        }
 
-		public int GetConstructorId()
-		{
-			return ConstructorId;
-		}
-	}
+        public override string ToString()
+        {
+            return "contacts.resolveUsername";
+        }
+
+        public int GetConstructorId()
+        {
+            return ConstructorId;
+        }
+    }
 }

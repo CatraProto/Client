@@ -1,6 +1,6 @@
 namespace CatraProto.Client.Connections.MessageScheduling.Items
 {
-    class MessageProtocolInfo
+    internal class MessageProtocolInfo
     {
         public int? UpperSeqno { get; set; }
         public long? UpperMessageId { get; set; }

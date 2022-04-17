@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Linq;
 using System.Numerics;
@@ -7,7 +6,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.Crypto.KeyExchange
 {
-    static class KeyExchangeTools
+    internal static class KeyExchangeTools
     {
         public static byte[] ComputeAesKey(BigInteger serverNonce, BigInteger newNonce)
         {

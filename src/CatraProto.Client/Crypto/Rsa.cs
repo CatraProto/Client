@@ -10,9 +10,9 @@ using RsaImplementation = System.Security.Cryptography.RSA;
 
 namespace CatraProto.Client.Crypto
 {
-    class Rsa : IDisposable
+    internal class Rsa : IDisposable
     {
-        private readonly static Dictionary<long, string> RsaKeys = new Dictionary<long, string>();
+        private static readonly Dictionary<long, string> RsaKeys = new Dictionary<long, string>();
         private readonly RsaImplementation _rsaKey = RsaImplementation.Create();
 
         static Rsa()
@@ -23,9 +23,9 @@ namespace CatraProto.Client.Crypto
                 @"-----BEGIN RSA PUBLIC KEY----- MIIBCgKCAQEA6LszBcC1LGzyr992NzE0ieY+BSaOW622Aa9Bd4ZHLl+TuFQ4lo4g5nKaMBwK/BIb9xUfg0Q29/2mgIR6Zr9krM7HjuIcCzFvDtr+L0GQjae9H0pRB2OO62cECs5HKhT5DZ98K33vmWiLowc621dQuwKWSQKjWf50XYFw42h21P2KXUGyp2y/+aEyZ+uVgLLQbRA1dEjSDZ2iGRy12Mk5gpYc397aYp438fsJoHIgJ2lgMv5h7WY9t6N/byY9Nw9p21Og3AoXSL2q/2IJ1WRUhebgAdGVMlV1fkuOQoEzR7EdpqtQD9Cs5+bfo3Nhmcyvk5ftB0WkJ9z6bNZ7yxrP8wIDAQAB -----END RSA PUBLIC KEY-----"
             };
 
-            foreach(var key in knownRsaKeys)
+            foreach (var key in knownRsaKeys)
             {
-                using(var rsa = new Rsa(key))
+                using (var rsa = new Rsa(key))
                 {
                     RsaKeys.TryAdd(rsa.ComputeFingerprint(), key);
                 }
@@ -114,7 +114,7 @@ namespace CatraProto.Client.Crypto
                 return byteArray.Skip(skip).ToArray();
             }
 
-            if(byteArray.Length < 256)
+            if (byteArray.Length < 256)
             {
                 return byteArray.Concat(Enumerable.Repeat((byte)0, 256 - byteArray.Length)).ToArray();
             }

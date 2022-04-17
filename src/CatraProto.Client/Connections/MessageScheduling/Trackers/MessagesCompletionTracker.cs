@@ -14,7 +14,7 @@ using Serilog;
 
 namespace CatraProto.Client.Connections.MessageScheduling.Trackers
 {
-    class MessageCompletionTracker
+    internal class MessageCompletionTracker
     {
         private const int InitConnTime = 10;
         private readonly ConcurrentDictionary<long, MessageItem> _messageCompletions = new ConcurrentDictionary<long, MessageItem>();

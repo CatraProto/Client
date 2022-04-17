@@ -1,76 +1,72 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System.Diagnostics.CodeAnalysis;
-
-using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
-	public partial class GetDeepLinkInfo : IMethod
-	{
+    public partial class GetDeepLinkInfo : IMethod
+    {
 
 
         [Newtonsoft.Json.JsonIgnore]
         public static int ConstructorId { get => 1072547679; }
-        
-[Newtonsoft.Json.JsonIgnore]
-		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-[Newtonsoft.Json.JsonProperty("path")]
-		public string Path { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+        ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-        
-        #nullable enable
- public GetDeepLinkInfo (string path)
-{
- Path = path;
- 
-}
+        [Newtonsoft.Json.JsonProperty("path")]
+        public string Path { get; set; }
+
+
+#nullable enable
+        public GetDeepLinkInfo(string path)
+        {
+            Path = path;
+
+        }
 #nullable disable
-                
-        internal GetDeepLinkInfo() 
+
+        internal GetDeepLinkInfo()
         {
         }
-        
-		public void UpdateFlags() 
-		{
 
-		}
+        public void UpdateFlags()
+        {
 
-		public WriteResult Serialize(Writer writer)
-		{
-writer.WriteInt32(ConstructorId);
+        }
 
-			writer.WriteString(Path);
+        public WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
 
-return new WriteResult();
+            writer.WriteString(Path);
 
-		}
+            return new WriteResult();
 
-		public ReadResult<IObject> Deserialize(Reader reader)
-		{
-			var trypath = reader.ReadString();
-if(trypath.IsError){
-return ReadResult<IObject>.Move(trypath);
-}
-Path = trypath.Value;
-return new ReadResult<IObject>(this);
+        }
 
-		}
+        public ReadResult<IObject> Deserialize(Reader reader)
+        {
+            var trypath = reader.ReadString();
+            if (trypath.IsError)
+            {
+                return ReadResult<IObject>.Move(trypath);
+            }
+            Path = trypath.Value;
+            return new ReadResult<IObject>(this);
 
-		public override string ToString()
-		{
-		    return "help.getDeepLinkInfo";
-		}
+        }
 
-		public int GetConstructorId()
-		{
-			return ConstructorId;
-		}
-	}
+        public override string ToString()
+        {
+            return "help.getDeepLinkInfo";
+        }
+
+        public int GetConstructorId()
+        {
+            return ConstructorId;
+        }
+    }
 }

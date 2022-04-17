@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Concurrent;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using CatraProto.Client.Async.Loops;
 using CatraProto.Client.Async.Loops.Enums.Generic;
-using CatraProto.Client.Async.Loops.Enums.Resumable;
 using CatraProto.Client.Async.Loops.Interfaces;
 using CatraProto.Client.Connections;
 using CatraProto.Client.MTProto.Auth.AuthKeyHandler;
@@ -15,7 +12,7 @@ using Serilog;
 
 namespace CatraProto.Client.MTProto.Auth
 {
-    class SaltHandler : LoopImplementation<GenericLoopState, GenericSignalState>
+    internal class SaltHandler : LoopImplementation<GenericLoopState, GenericSignalState>
     {
         private readonly ConcurrentDictionary<long, FutureSaltBase> _futureSalts = new ConcurrentDictionary<long, FutureSaltBase>();
         private readonly MTProtoState _mtProtoState;
@@ -81,7 +78,7 @@ namespace CatraProto.Client.MTProto.Auth
                     _logger.Information("Requesting new salts in {UnixTimeSeconds} seconds", unixTimeSeconds);
                     await Task.Delay(TimeSpan.FromSeconds(unixTimeSeconds), stoppingToken);
                 }
-                catch(OperationCanceledException e) when(e.CancellationToken == stoppingToken)
+                catch (OperationCanceledException e) when (e.CancellationToken == stoppingToken)
                 {
                     _logger.Information("Salt loop for connection {Connection} stopped from cancellation token", _mtProtoState.ConnectionInfo);
                 }

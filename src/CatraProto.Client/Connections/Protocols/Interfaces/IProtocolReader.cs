@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace CatraProto.Client.Connections.Protocols.Interfaces
 {
-    interface IProtocolReader
+    internal interface IProtocolReader
     {
         public Task<byte[]> ReadMessageAsync(CancellationToken token = default);
     }

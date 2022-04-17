@@ -1,6 +1,5 @@
 using System.Threading;
 using System.Threading.Tasks;
-using CatraProto.Client.Connections;
 using CatraProto.Client.Flows.LoginFlow.Interfaces;
 using CatraProto.Client.Flows.LoginFlow.Results;
 using CatraProto.Client.MTProto.Rpc.RpcErrors;

@@ -5,7 +5,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.MTProto.Session.Models
 {
-    class SessionData : SessionModel, IDisposable
+    internal class SessionData : SessionModel, IDisposable
     {
         private const int SupportedSessionVersion = 1;
         public Authorization Authorization { get; }

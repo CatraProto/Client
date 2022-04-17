@@ -1,140 +1,143 @@
 using System;
-using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System.Diagnostics.CodeAnalysis;
-
-using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 {
-	public partial class UploadProfilePhoto : IMethod
-	{
-		[Flags]
-		public enum FlagsEnum 
-		{
-			File = 1 << 0,
-			Video = 1 << 1,
-			VideoStartTs = 1 << 2
-		}
+    public partial class UploadProfilePhoto : IMethod
+    {
+        [Flags]
+        public enum FlagsEnum
+        {
+            File = 1 << 0,
+            Video = 1 << 1,
+            VideoStartTs = 1 << 2
+        }
 
         [Newtonsoft.Json.JsonIgnore]
         public static int ConstructorId { get => -1980559511; }
-        
-[Newtonsoft.Json.JsonIgnore]
-		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-[Newtonsoft.Json.JsonIgnore]
-		public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+        ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-[MaybeNull]
-[Newtonsoft.Json.JsonProperty("file")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase File { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int Flags { get; set; }
 
-[MaybeNull]
-[Newtonsoft.Json.JsonProperty("video")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase Video { get; set; }
+        [MaybeNull]
+        [Newtonsoft.Json.JsonProperty("file")]
+        public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase File { get; set; }
 
-[Newtonsoft.Json.JsonProperty("video_start_ts")]
-		public double? VideoStartTs { get; set; }
+        [MaybeNull]
+        [Newtonsoft.Json.JsonProperty("video")]
+        public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase Video { get; set; }
 
-        
-        
-                
-        public UploadProfilePhoto() 
+        [Newtonsoft.Json.JsonProperty("video_start_ts")]
+        public double? VideoStartTs { get; set; }
+
+
+
+
+        public UploadProfilePhoto()
         {
         }
-        
-		public void UpdateFlags() 
-		{
-			Flags = File == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
-			Flags = Video == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
-			Flags = VideoStartTs == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
 
-		}
+        public void UpdateFlags()
+        {
+            Flags = File == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
+            Flags = Video == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
+            Flags = VideoStartTs == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
 
-		public WriteResult Serialize(Writer writer)
-		{
-writer.WriteInt32(ConstructorId);
-			UpdateFlags();
+        }
 
-			writer.WriteInt32(Flags);
-			if(FlagsHelper.IsFlagSet(Flags, 0))
-			{
-var checkfile = 				writer.WriteObject(File);
-if(checkfile.IsError){
- return checkfile; 
-}
-			}
+        public WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
+            UpdateFlags();
 
-			if(FlagsHelper.IsFlagSet(Flags, 1))
-			{
-var checkvideo = 				writer.WriteObject(Video);
-if(checkvideo.IsError){
- return checkvideo; 
-}
-			}
+            writer.WriteInt32(Flags);
+            if (FlagsHelper.IsFlagSet(Flags, 0))
+            {
+                var checkfile = writer.WriteObject(File);
+                if (checkfile.IsError)
+                {
+                    return checkfile;
+                }
+            }
 
-			if(FlagsHelper.IsFlagSet(Flags, 2))
-			{
+            if (FlagsHelper.IsFlagSet(Flags, 1))
+            {
+                var checkvideo = writer.WriteObject(Video);
+                if (checkvideo.IsError)
+                {
+                    return checkvideo;
+                }
+            }
 
-				writer.WriteDouble(VideoStartTs.Value);
-			}
+            if (FlagsHelper.IsFlagSet(Flags, 2))
+            {
+
+                writer.WriteDouble(VideoStartTs.Value);
+            }
 
 
-return new WriteResult();
+            return new WriteResult();
 
-		}
+        }
 
-		public ReadResult<IObject> Deserialize(Reader reader)
-		{
-			var tryflags = reader.ReadInt32();
-if(tryflags.IsError){
-return ReadResult<IObject>.Move(tryflags);
-}
-Flags = tryflags.Value;
-			if(FlagsHelper.IsFlagSet(Flags, 0))
-			{
-				var tryfile = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
-if(tryfile.IsError){
-return ReadResult<IObject>.Move(tryfile);
-}
-File = tryfile.Value;
-			}
+        public ReadResult<IObject> Deserialize(Reader reader)
+        {
+            var tryflags = reader.ReadInt32();
+            if (tryflags.IsError)
+            {
+                return ReadResult<IObject>.Move(tryflags);
+            }
+            Flags = tryflags.Value;
+            if (FlagsHelper.IsFlagSet(Flags, 0))
+            {
+                var tryfile = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
+                if (tryfile.IsError)
+                {
+                    return ReadResult<IObject>.Move(tryfile);
+                }
+                File = tryfile.Value;
+            }
 
-			if(FlagsHelper.IsFlagSet(Flags, 1))
-			{
-				var tryvideo = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
-if(tryvideo.IsError){
-return ReadResult<IObject>.Move(tryvideo);
-}
-Video = tryvideo.Value;
-			}
+            if (FlagsHelper.IsFlagSet(Flags, 1))
+            {
+                var tryvideo = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
+                if (tryvideo.IsError)
+                {
+                    return ReadResult<IObject>.Move(tryvideo);
+                }
+                Video = tryvideo.Value;
+            }
 
-			if(FlagsHelper.IsFlagSet(Flags, 2))
-			{
-				var tryvideoStartTs = reader.ReadDouble();
-if(tryvideoStartTs.IsError){
-return ReadResult<IObject>.Move(tryvideoStartTs);
-}
-VideoStartTs = tryvideoStartTs.Value;
-			}
+            if (FlagsHelper.IsFlagSet(Flags, 2))
+            {
+                var tryvideoStartTs = reader.ReadDouble();
+                if (tryvideoStartTs.IsError)
+                {
+                    return ReadResult<IObject>.Move(tryvideoStartTs);
+                }
+                VideoStartTs = tryvideoStartTs.Value;
+            }
 
-return new ReadResult<IObject>(this);
+            return new ReadResult<IObject>(this);
 
-		}
+        }
 
-		public override string ToString()
-		{
-		    return "photos.uploadProfilePhoto";
-		}
+        public override string ToString()
+        {
+            return "photos.uploadProfilePhoto";
+        }
 
-		public int GetConstructorId()
-		{
-			return ConstructorId;
-		}
-	}
+        public int GetConstructorId()
+        {
+            return ConstructorId;
+        }
+    }
 }

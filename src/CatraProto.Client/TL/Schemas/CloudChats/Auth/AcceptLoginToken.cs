@@ -1,76 +1,72 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System.Diagnostics.CodeAnalysis;
-
-using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
-	public partial class AcceptLoginToken : IMethod
-	{
+    public partial class AcceptLoginToken : IMethod
+    {
 
 
         [Newtonsoft.Json.JsonIgnore]
         public static int ConstructorId { get => -392909491; }
-        
-[Newtonsoft.Json.JsonIgnore]
-		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-[Newtonsoft.Json.JsonProperty("token")]
-		public byte[] Token { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+        ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-        
-        #nullable enable
- public AcceptLoginToken (byte[] token)
-{
- Token = token;
- 
-}
+        [Newtonsoft.Json.JsonProperty("token")]
+        public byte[] Token { get; set; }
+
+
+#nullable enable
+        public AcceptLoginToken(byte[] token)
+        {
+            Token = token;
+
+        }
 #nullable disable
-                
-        internal AcceptLoginToken() 
+
+        internal AcceptLoginToken()
         {
         }
-        
-		public void UpdateFlags() 
-		{
 
-		}
+        public void UpdateFlags()
+        {
 
-		public WriteResult Serialize(Writer writer)
-		{
-writer.WriteInt32(ConstructorId);
+        }
 
-			writer.WriteBytes(Token);
+        public WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
 
-return new WriteResult();
+            writer.WriteBytes(Token);
 
-		}
+            return new WriteResult();
 
-		public ReadResult<IObject> Deserialize(Reader reader)
-		{
-			var trytoken = reader.ReadBytes();
-if(trytoken.IsError){
-return ReadResult<IObject>.Move(trytoken);
-}
-Token = trytoken.Value;
-return new ReadResult<IObject>(this);
+        }
 
-		}
+        public ReadResult<IObject> Deserialize(Reader reader)
+        {
+            var trytoken = reader.ReadBytes();
+            if (trytoken.IsError)
+            {
+                return ReadResult<IObject>.Move(trytoken);
+            }
+            Token = trytoken.Value;
+            return new ReadResult<IObject>(this);
 
-		public override string ToString()
-		{
-		    return "auth.acceptLoginToken";
-		}
+        }
 
-		public int GetConstructorId()
-		{
-			return ConstructorId;
-		}
-	}
+        public override string ToString()
+        {
+            return "auth.acceptLoginToken";
+        }
+
+        public int GetConstructorId()
+        {
+            return ConstructorId;
+        }
+    }
 }

@@ -1,28 +1,27 @@
-using CatraProto.TL;
-using CatraProto.TL.Results;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public abstract class PhoneCallProtocolBase : IObject
     {
 
-[Newtonsoft.Json.JsonProperty("udp_p2p")]
-		public abstract bool UdpP2p { get; set; }
+        [Newtonsoft.Json.JsonProperty("udp_p2p")]
+        public abstract bool UdpP2p { get; set; }
 
-[Newtonsoft.Json.JsonProperty("udp_reflector")]
-		public abstract bool UdpReflector { get; set; }
+        [Newtonsoft.Json.JsonProperty("udp_reflector")]
+        public abstract bool UdpReflector { get; set; }
 
-[Newtonsoft.Json.JsonProperty("min_layer")]
-		public abstract int MinLayer { get; set; }
+        [Newtonsoft.Json.JsonProperty("min_layer")]
+        public abstract int MinLayer { get; set; }
 
-[Newtonsoft.Json.JsonProperty("max_layer")]
-		public abstract int MaxLayer { get; set; }
+        [Newtonsoft.Json.JsonProperty("max_layer")]
+        public abstract int MaxLayer { get; set; }
 
-[Newtonsoft.Json.JsonProperty("library_versions")]
-		public abstract List<string> LibraryVersions { get; set; }
+        [Newtonsoft.Json.JsonProperty("library_versions")]
+        public abstract List<string> LibraryVersions { get; set; }
 
         public abstract void UpdateFlags();
         public abstract ReadResult<IObject> Deserialize(Reader reader);

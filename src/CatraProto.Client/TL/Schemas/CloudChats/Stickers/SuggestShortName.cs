@@ -1,76 +1,72 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System.Diagnostics.CodeAnalysis;
-
-using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 {
-	public partial class SuggestShortName : IMethod
-	{
+    public partial class SuggestShortName : IMethod
+    {
 
 
         [Newtonsoft.Json.JsonIgnore]
         public static int ConstructorId { get => 1303364867; }
-        
-[Newtonsoft.Json.JsonIgnore]
-		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-[Newtonsoft.Json.JsonProperty("title")]
-		public string Title { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+        ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-        
-        #nullable enable
- public SuggestShortName (string title)
-{
- Title = title;
- 
-}
+        [Newtonsoft.Json.JsonProperty("title")]
+        public string Title { get; set; }
+
+
+#nullable enable
+        public SuggestShortName(string title)
+        {
+            Title = title;
+
+        }
 #nullable disable
-                
-        internal SuggestShortName() 
+
+        internal SuggestShortName()
         {
         }
-        
-		public void UpdateFlags() 
-		{
 
-		}
+        public void UpdateFlags()
+        {
 
-		public WriteResult Serialize(Writer writer)
-		{
-writer.WriteInt32(ConstructorId);
+        }
 
-			writer.WriteString(Title);
+        public WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
 
-return new WriteResult();
+            writer.WriteString(Title);
 
-		}
+            return new WriteResult();
 
-		public ReadResult<IObject> Deserialize(Reader reader)
-		{
-			var trytitle = reader.ReadString();
-if(trytitle.IsError){
-return ReadResult<IObject>.Move(trytitle);
-}
-Title = trytitle.Value;
-return new ReadResult<IObject>(this);
+        }
 
-		}
+        public ReadResult<IObject> Deserialize(Reader reader)
+        {
+            var trytitle = reader.ReadString();
+            if (trytitle.IsError)
+            {
+                return ReadResult<IObject>.Move(trytitle);
+            }
+            Title = trytitle.Value;
+            return new ReadResult<IObject>(this);
 
-		public override string ToString()
-		{
-		    return "stickers.suggestShortName";
-		}
+        }
 
-		public int GetConstructorId()
-		{
-			return ConstructorId;
-		}
-	}
+        public override string ToString()
+        {
+            return "stickers.suggestShortName";
+        }
+
+        public int GetConstructorId()
+        {
+            return ConstructorId;
+        }
+    }
 }

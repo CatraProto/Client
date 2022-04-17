@@ -1,88 +1,86 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System.Diagnostics.CodeAnalysis;
-
-using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 {
-	public partial class ToggleSlowMode : IMethod
-	{
+    public partial class ToggleSlowMode : IMethod
+    {
 
 
         [Newtonsoft.Json.JsonIgnore]
         public static int ConstructorId { get => -304832784; }
-        
-[Newtonsoft.Json.JsonIgnore]
-		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-[Newtonsoft.Json.JsonProperty("channel")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase Channel { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+        ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-[Newtonsoft.Json.JsonProperty("seconds")]
-		public int Seconds { get; set; }
+        [Newtonsoft.Json.JsonProperty("channel")]
+        public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase Channel { get; set; }
 
-        
-        #nullable enable
- public ToggleSlowMode (CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase channel,int seconds)
-{
- Channel = channel;
-Seconds = seconds;
- 
-}
+        [Newtonsoft.Json.JsonProperty("seconds")]
+        public int Seconds { get; set; }
+
+
+#nullable enable
+        public ToggleSlowMode(CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase channel, int seconds)
+        {
+            Channel = channel;
+            Seconds = seconds;
+
+        }
 #nullable disable
-                
-        internal ToggleSlowMode() 
+
+        internal ToggleSlowMode()
         {
         }
-        
-		public void UpdateFlags() 
-		{
 
-		}
+        public void UpdateFlags()
+        {
 
-		public WriteResult Serialize(Writer writer)
-		{
-writer.WriteInt32(ConstructorId);
-var checkchannel = 			writer.WriteObject(Channel);
-if(checkchannel.IsError){
- return checkchannel; 
-}
-writer.WriteInt32(Seconds);
+        }
 
-return new WriteResult();
+        public WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
+            var checkchannel = writer.WriteObject(Channel);
+            if (checkchannel.IsError)
+            {
+                return checkchannel;
+            }
+            writer.WriteInt32(Seconds);
 
-		}
+            return new WriteResult();
 
-		public ReadResult<IObject> Deserialize(Reader reader)
-		{
-			var trychannel = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
-if(trychannel.IsError){
-return ReadResult<IObject>.Move(trychannel);
-}
-Channel = trychannel.Value;
-			var tryseconds = reader.ReadInt32();
-if(tryseconds.IsError){
-return ReadResult<IObject>.Move(tryseconds);
-}
-Seconds = tryseconds.Value;
-return new ReadResult<IObject>(this);
+        }
 
-		}
+        public ReadResult<IObject> Deserialize(Reader reader)
+        {
+            var trychannel = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
+            if (trychannel.IsError)
+            {
+                return ReadResult<IObject>.Move(trychannel);
+            }
+            Channel = trychannel.Value;
+            var tryseconds = reader.ReadInt32();
+            if (tryseconds.IsError)
+            {
+                return ReadResult<IObject>.Move(tryseconds);
+            }
+            Seconds = tryseconds.Value;
+            return new ReadResult<IObject>(this);
 
-		public override string ToString()
-		{
-		    return "channels.toggleSlowMode";
-		}
+        }
 
-		public int GetConstructorId()
-		{
-			return ConstructorId;
-		}
-	}
+        public override string ToString()
+        {
+            return "channels.toggleSlowMode";
+        }
+
+        public int GetConstructorId()
+        {
+            return ConstructorId;
+        }
+    }
 }

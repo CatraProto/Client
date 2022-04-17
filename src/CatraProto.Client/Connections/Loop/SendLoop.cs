@@ -23,7 +23,7 @@ using Serilog;
 
 namespace CatraProto.Client.Connections.Loop
 {
-    class SendLoop : LoopImplementation<ResumableLoopState, ResumableSignalState>
+    internal class SendLoop : LoopImplementation<ResumableLoopState, ResumableSignalState>
     {
 
         public const int ContainerMessagesLimit = 1020;
@@ -100,9 +100,9 @@ namespace CatraProto.Client.Connections.Loop
             var totalSent = 0;
             if (count > 0)
             {
-                bool mustWrap = false;
+                var mustWrap = false;
                 _logger.Verbose("Pulling {Count} encrypted messages out of queue to send to {Connection}...", count, _connection.ConnectionInfo);
-                for (int i = 0; i < count; i++)
+                for (var i = 0; i < count; i++)
                 {
                     if (!_messagesHandler.MessagesQueue.TryGetMessage(true, out var messageItem))
                     {
@@ -217,7 +217,7 @@ namespace CatraProto.Client.Connections.Loop
             if (count > 0)
             {
                 _logger.Verbose("Pulling {Count} unencrypted messages out of queue to send to {Connection}...", count, _connection.ConnectionInfo);
-                for (int i = 0; i < count; i++)
+                for (var i = 0; i < count; i++)
                 {
                     if (!_messagesHandler.MessagesQueue.TryGetMessage(false, out var messageItem))
                     {
@@ -360,11 +360,14 @@ namespace CatraProto.Client.Connections.Loop
                 writer.WriteInt32(item.Item2.Length);
                 writer.Stream.Write(item.Item2);
             }
-            
+
             container = ((MemoryStream)writer.Stream).ToArray();
             return true;
         }
 
-        public override string ToString() => $"Send loop for connection {_connection.ConnectionInfo}";
+        public override string ToString()
+        {
+            return $"Send loop for connection {_connection.ConnectionInfo}";
+        }
     }
 }

@@ -10,7 +10,7 @@ using Serilog;
 
 namespace CatraProto.Client.Connections
 {
-    class LoopsHandler
+    internal class LoopsHandler
     {
         private (ReceiveLoop? Loop, GenericLoopController? Controller) _receiveLoop;
         private (SendLoop? Loop, ResumableLoopController? Controller) _writeLoop;

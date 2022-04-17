@@ -4,7 +4,7 @@ using CatraProto.Client.MTProto.Rpc.RpcErrors.Migrations;
 
 namespace CatraProto.Client.MTProto.Rpc.Parsers.Migrations
 {
-    class NetworkMigrateParser : RpcErrorParser
+    internal class NetworkMigrateParser : RpcErrorParser
     {
         private static readonly Regex CompiledRegex = new Regex("^NETWORK_MIGRATE_([0-9]+)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         public NetworkMigrateParser() : base(17)

@@ -7,7 +7,7 @@ using Serilog;
 
 namespace CatraProto.Client.MTProto.Session
 {
-    class ClientSession : IAsyncDisposable
+    internal class ClientSession : IAsyncDisposable
     {
         public string Name
         {
@@ -18,7 +18,7 @@ namespace CatraProto.Client.MTProto.Session
         public ClientSettings Settings { get; }
         public SessionManager SessionManager { get; }
         internal ConnectionPool ConnectionPool { get; }
-        
+
         public ClientSession(TelegramClient client, ClientSettings settings, ILogger logger)
         {
             Settings = settings;

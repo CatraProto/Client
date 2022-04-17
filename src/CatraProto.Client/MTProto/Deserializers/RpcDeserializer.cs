@@ -1,11 +1,8 @@
 using System.IO;
-using System.Linq;
 using CatraProto.Client.Connections.MessageScheduling.Trackers;
-using CatraProto.Client.MTProto.Rpc;
 using CatraProto.Client.MTProto.Rpc.Parsers;
 using CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors;
 using CatraProto.Client.TL.Schemas;
-using CatraProto.Client.TL.Schemas.CloudChats.Messages;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
@@ -15,7 +12,7 @@ using Serilog;
 
 namespace CatraProto.Client.MTProto.Deserializers
 {
-    class RpcDeserializer : IObjectParser
+    internal class RpcDeserializer : IObjectParser
     {
         private static readonly MissingRequestError MissingRequestError = new MissingRequestError();
         private readonly MessageCompletionTracker _messageCompletionTracker;
@@ -59,7 +56,7 @@ namespace CatraProto.Client.MTProto.Deserializers
                 }
                 else
                 {
-                    if(constructorId == MergedProvider.Singleton.VectorId)
+                    if (constructorId == MergedProvider.Singleton.VectorId)
                     {
                         var getVector = reader.ReadVector<object>(method.Type);
                         if (getVector.IsError)

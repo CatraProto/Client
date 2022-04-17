@@ -1,6 +1,3 @@
-using CatraProto.Client.MTProto.Rpc.RpcErrors;
-using CatraProto.Client.MTProto.Rpc.RpcErrors.Migrations;
-
 namespace CatraProto.Client.MTProto.Rpc.Interfaces
 {
     public abstract class RpcError

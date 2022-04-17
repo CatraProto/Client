@@ -1,106 +1,105 @@
 using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System.Diagnostics.CodeAnalysis;
-
-using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-	public partial class SearchStickerSets : IMethod
-	{
-		[Flags]
-		public enum FlagsEnum 
-		{
-			ExcludeFeatured = 1 << 0
-		}
+    public partial class SearchStickerSets : IMethod
+    {
+        [Flags]
+        public enum FlagsEnum
+        {
+            ExcludeFeatured = 1 << 0
+        }
 
         [Newtonsoft.Json.JsonIgnore]
         public static int ConstructorId { get => 896555914; }
-        
-[Newtonsoft.Json.JsonIgnore]
-		ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-[Newtonsoft.Json.JsonIgnore]
-		public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+        ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-[Newtonsoft.Json.JsonProperty("exclude_featured")]
-		public bool ExcludeFeatured { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int Flags { get; set; }
 
-[Newtonsoft.Json.JsonProperty("q")]
-		public string Q { get; set; }
+        [Newtonsoft.Json.JsonProperty("exclude_featured")]
+        public bool ExcludeFeatured { get; set; }
 
-[Newtonsoft.Json.JsonProperty("hash")]
-		public long Hash { get; set; }
+        [Newtonsoft.Json.JsonProperty("q")]
+        public string Q { get; set; }
 
-        
-        #nullable enable
- public SearchStickerSets (string q,long hash)
-{
- Q = q;
-Hash = hash;
- 
-}
+        [Newtonsoft.Json.JsonProperty("hash")]
+        public long Hash { get; set; }
+
+
+#nullable enable
+        public SearchStickerSets(string q, long hash)
+        {
+            Q = q;
+            Hash = hash;
+
+        }
 #nullable disable
-                
-        internal SearchStickerSets() 
+
+        internal SearchStickerSets()
         {
         }
-        
-		public void UpdateFlags() 
-		{
-			Flags = ExcludeFeatured ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
 
-		}
+        public void UpdateFlags()
+        {
+            Flags = ExcludeFeatured ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
 
-		public WriteResult Serialize(Writer writer)
-		{
-writer.WriteInt32(ConstructorId);
-			UpdateFlags();
+        }
 
-			writer.WriteInt32(Flags);
+        public WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
+            UpdateFlags();
 
-			writer.WriteString(Q);
-writer.WriteInt64(Hash);
+            writer.WriteInt32(Flags);
 
-return new WriteResult();
+            writer.WriteString(Q);
+            writer.WriteInt64(Hash);
 
-		}
+            return new WriteResult();
 
-		public ReadResult<IObject> Deserialize(Reader reader)
-		{
-			var tryflags = reader.ReadInt32();
-if(tryflags.IsError){
-return ReadResult<IObject>.Move(tryflags);
-}
-Flags = tryflags.Value;
-			ExcludeFeatured = FlagsHelper.IsFlagSet(Flags, 0);
-			var tryq = reader.ReadString();
-if(tryq.IsError){
-return ReadResult<IObject>.Move(tryq);
-}
-Q = tryq.Value;
-			var tryhash = reader.ReadInt64();
-if(tryhash.IsError){
-return ReadResult<IObject>.Move(tryhash);
-}
-Hash = tryhash.Value;
-return new ReadResult<IObject>(this);
+        }
 
-		}
+        public ReadResult<IObject> Deserialize(Reader reader)
+        {
+            var tryflags = reader.ReadInt32();
+            if (tryflags.IsError)
+            {
+                return ReadResult<IObject>.Move(tryflags);
+            }
+            Flags = tryflags.Value;
+            ExcludeFeatured = FlagsHelper.IsFlagSet(Flags, 0);
+            var tryq = reader.ReadString();
+            if (tryq.IsError)
+            {
+                return ReadResult<IObject>.Move(tryq);
+            }
+            Q = tryq.Value;
+            var tryhash = reader.ReadInt64();
+            if (tryhash.IsError)
+            {
+                return ReadResult<IObject>.Move(tryhash);
+            }
+            Hash = tryhash.Value;
+            return new ReadResult<IObject>(this);
 
-		public override string ToString()
-		{
-		    return "messages.searchStickerSets";
-		}
+        }
 
-		public int GetConstructorId()
-		{
-			return ConstructorId;
-		}
-	}
+        public override string ToString()
+        {
+            return "messages.searchStickerSets";
+        }
+
+        public int GetConstructorId()
+        {
+            return ConstructorId;
+        }
+    }
 }

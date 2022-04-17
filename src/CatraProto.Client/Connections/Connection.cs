@@ -6,16 +6,12 @@ using CatraProto.Client.Async.Locks;
 using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.Connections.Protocols.Interfaces;
 using CatraProto.Client.Connections.Protocols.TcpAbridged;
-using CatraProto.Client.MTProto.Auth;
 using CatraProto.Client.MTProto.Settings;
-using CatraProto.Client.TL.Schemas;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using CatraProto.Client.TL.Schemas.CloudChats.Help;
 using Serilog;
 
 namespace CatraProto.Client.Connections
 {
-    class Connection : IAsyncDisposable
+    internal class Connection : IAsyncDisposable
     {
         public MTProtoState MtProtoState { get; }
         public MessagesHandler MessagesHandler { get; }
@@ -30,7 +26,7 @@ namespace CatraProto.Client.Connections
         private readonly ConnectionProtocol _protocolType;
         private readonly LoopsHandler _loopsHandler;
         private readonly ILogger _logger;
-        private bool _isInited;
+        private readonly bool _isInited;
 
         public Connection(ConnectionInfo connectionInfo, TelegramClient client)
         {
@@ -59,7 +55,7 @@ namespace CatraProto.Client.Connections
             {
                 return;
             }
-            
+
             await DisconnectAsync();
             Protocol = CreateProtocol();
             token = CancellationTokenSource.CreateLinkedTokenSource(token, _fullShutdownSource.Token).Token;

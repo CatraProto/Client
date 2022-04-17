@@ -9,7 +9,7 @@ using Serilog;
 
 namespace CatraProto.Client.Connections.Protocols.TcpAbridged
 {
-    class AbridgedReader : IProtocolReader
+    internal class AbridgedReader : IProtocolReader
     {
         private readonly NetworkStream _networkStream;
         private readonly ILogger _logger;
@@ -27,7 +27,7 @@ namespace CatraProto.Client.Connections.Protocols.TcpAbridged
             {
                 length = await _networkStream.ReadByteAsync(token) | await _networkStream.ReadByteAsync(token) << 8 | await _networkStream.ReadByteAsync(token) << 16;
             }
-            
+
             length *= 4;
             _logger.Verbose("Transport received a message of {Length} ({Byte})", length, firstByte);
             return length;

@@ -28,7 +28,7 @@ namespace CatraProto.Client.Async.Loops
                 {
                     return false;
                 }
-                
+
                 var lastState = StateSignaler.GetLastSignaled();
                 switch (genericSignal)
                 {
@@ -66,7 +66,7 @@ namespace CatraProto.Client.Async.Loops
                 {
                     Logger.Error(e, "Exception thrown while running on loop {Impl}", LoopImplementation!);
                 }
-                
+
                 LoopState = GenericLoopState.Faulted;
                 ClearSignals();
                 OnStopped();

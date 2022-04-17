@@ -3,7 +3,7 @@ using Microsoft.Data.Sqlite;
 
 namespace CatraProto.Client.Database
 {
-    static class QueryHelpers
+    internal static class QueryHelpers
     {
         public static object[][]? ExecuteReaderMulti(this SqliteConnection connection, string command, object[]? values = null, SqliteTransaction? transaction = null)
         {
@@ -15,7 +15,7 @@ namespace CatraProto.Client.Database
             while (reader.Read())
             {
                 var result = new object[fieldCount];
-                for (int i = 0; i < fieldCount; i++)
+                for (var i = 0; i < fieldCount; i++)
                 {
                     result[i] = reader.GetValue(i);
                 }
@@ -35,7 +35,7 @@ namespace CatraProto.Client.Database
             {
                 var fieldCount = reader.FieldCount;
                 var result = new object[fieldCount];
-                for (int i = 0; i < fieldCount; i++)
+                for (var i = 0; i < fieldCount; i++)
                 {
                     result[i] = reader.GetValue(i);
                 }

@@ -1,16 +1,14 @@
 using CatraProto.TL;
-using CatraProto.TL.Results;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
     public abstract class DestroySessionResBase : IObject
     {
 
-[Newtonsoft.Json.JsonProperty("session_id")]
-		public abstract long SessionId { get; set; }
+        [Newtonsoft.Json.JsonProperty("session_id")]
+        public abstract long SessionId { get; set; }
 
         public abstract void UpdateFlags();
         public abstract ReadResult<IObject> Deserialize(Reader reader);

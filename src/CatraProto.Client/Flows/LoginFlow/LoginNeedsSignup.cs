@@ -1,6 +1,5 @@
 using System.Threading;
 using System.Threading.Tasks;
-using CatraProto.Client.Connections;
 using CatraProto.Client.Flows.LoginFlow.Interfaces;
 using CatraProto.Client.Flows.LoginFlow.Results;
 using CatraProto.Client.MTProto.Session.Models;
@@ -30,7 +29,7 @@ namespace CatraProto.Client.Flows.LoginFlow
 
         public async Task<ILoginResult> WithProfileData(string firstName, string lastName, CancellationToken cancellationToken = default)
         {
-            if(TermsOfService is not null)
+            if (TermsOfService is not null)
             {
                 await _client.Api.CloudChatsApi.Help.AcceptTermsOfServiceAsync(TermsOfService.Id);
             }

@@ -1,13 +1,6 @@
-﻿using CatraProto.Client.TL.Schemas;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using CatraProto.TL;
+﻿using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CatraProto.Client.TL.Schemas.Database
 {

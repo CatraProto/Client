@@ -1,25 +1,24 @@
-using CatraProto.TL;
-using CatraProto.TL.Results;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public abstract class GroupCallParticipantVideoBase : IObject
     {
 
-[Newtonsoft.Json.JsonProperty("paused")]
-		public abstract bool Paused { get; set; }
+        [Newtonsoft.Json.JsonProperty("paused")]
+        public abstract bool Paused { get; set; }
 
-[Newtonsoft.Json.JsonProperty("endpoint")]
-		public abstract string Endpoint { get; set; }
+        [Newtonsoft.Json.JsonProperty("endpoint")]
+        public abstract string Endpoint { get; set; }
 
-[Newtonsoft.Json.JsonProperty("source_groups")]
-		public abstract List<CatraProto.Client.TL.Schemas.CloudChats.GroupCallParticipantVideoSourceGroupBase> SourceGroups { get; set; }
+        [Newtonsoft.Json.JsonProperty("source_groups")]
+        public abstract List<CatraProto.Client.TL.Schemas.CloudChats.GroupCallParticipantVideoSourceGroupBase> SourceGroups { get; set; }
 
-[Newtonsoft.Json.JsonProperty("audio_source")]
-		public abstract int? AudioSource { get; set; }
+        [Newtonsoft.Json.JsonProperty("audio_source")]
+        public abstract int? AudioSource { get; set; }
 
         public abstract void UpdateFlags();
         public abstract ReadResult<IObject> Deserialize(Reader reader);

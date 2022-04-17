@@ -1,70 +1,67 @@
-using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputStickerSetShortName : CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase
-	{
+    public partial class InputStickerSetShortName : CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase
+    {
 
 
         [Newtonsoft.Json.JsonIgnore]
         public static int ConstructorId { get => -2044933984; }
-        
-[Newtonsoft.Json.JsonProperty("short_name")]
-		public string ShortName { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("short_name")]
+        public string ShortName { get; set; }
 
 
-        #nullable enable
- public InputStickerSetShortName (string shortName)
-{
- ShortName = shortName;
- 
-}
+#nullable enable
+        public InputStickerSetShortName(string shortName)
+        {
+            ShortName = shortName;
+
+        }
 #nullable disable
-        internal InputStickerSetShortName() 
+        internal InputStickerSetShortName()
         {
         }
-		
-		public override void UpdateFlags() 
-		{
 
-		}
+        public override void UpdateFlags()
+        {
 
-		public override WriteResult Serialize(Writer writer)
-		{
-writer.WriteInt32(ConstructorId);
+        }
 
-			writer.WriteString(ShortName);
+        public override WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
 
-return new WriteResult();
+            writer.WriteString(ShortName);
 
-		}
+            return new WriteResult();
 
-		public override ReadResult<IObject> Deserialize(Reader reader)
-		{
-			var tryshortName = reader.ReadString();
-if(tryshortName.IsError){
-return ReadResult<IObject>.Move(tryshortName);
-}
-ShortName = tryshortName.Value;
-return new ReadResult<IObject>(this);
+        }
 
-		}
-		
-		public override string ToString()
-		{
-		    return "inputStickerSetShortName";
-		}
+        public override ReadResult<IObject> Deserialize(Reader reader)
+        {
+            var tryshortName = reader.ReadString();
+            if (tryshortName.IsError)
+            {
+                return ReadResult<IObject>.Move(tryshortName);
+            }
+            ShortName = tryshortName.Value;
+            return new ReadResult<IObject>(this);
 
-		public override int GetConstructorId()
-		{
-			return ConstructorId;
-		}
-	}
+        }
+
+        public override string ToString()
+        {
+            return "inputStickerSetShortName";
+        }
+
+        public override int GetConstructorId()
+        {
+            return ConstructorId;
+        }
+    }
 }

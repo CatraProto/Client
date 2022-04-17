@@ -16,7 +16,7 @@ namespace CatraProto.Client.Async.Loops.Interfaces
                 return _stateSignaler!;
             }
         }
-        
+
         private AsyncStateSignaler<SignalBody<TSignalState>>? _stateSignaler;
         private Action<TLoopState>? _loopStateAction;
         public abstract Task LoopAsync(CancellationToken stoppingToken);
@@ -26,7 +26,7 @@ namespace CatraProto.Client.Async.Loops.Interfaces
             _loopStateAction = loopStateAction;
             _stateSignaler = stateSignaler;
         }
-        
+
         private void CheckIfBound()
         {
             if (_stateSignaler is null)

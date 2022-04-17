@@ -1,76 +1,73 @@
-using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System.Diagnostics.CodeAnalysis;
-
-using System.Linq;
 
 #nullable disable
 
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
-	public partial class DeleteByPhones : IMethod
-	{
+    public partial class DeleteByPhones : IMethod
+    {
 
 
         [Newtonsoft.Json.JsonIgnore]
         public static int ConstructorId { get => 269745566; }
-        
-[Newtonsoft.Json.JsonIgnore]
-		ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
 
-[Newtonsoft.Json.JsonProperty("phones")]
-		public List<string> Phones { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+        ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
 
-        
-        #nullable enable
- public DeleteByPhones (List<string> phones)
-{
- Phones = phones;
- 
-}
+        [Newtonsoft.Json.JsonProperty("phones")]
+        public List<string> Phones { get; set; }
+
+
+#nullable enable
+        public DeleteByPhones(List<string> phones)
+        {
+            Phones = phones;
+
+        }
 #nullable disable
-                
-        internal DeleteByPhones() 
+
+        internal DeleteByPhones()
         {
         }
-        
-		public void UpdateFlags() 
-		{
 
-		}
+        public void UpdateFlags()
+        {
 
-		public WriteResult Serialize(Writer writer)
-		{
-writer.WriteInt32(ConstructorId);
+        }
 
-			writer.WriteVector(Phones, false);
+        public WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
 
-return new WriteResult();
+            writer.WriteVector(Phones, false);
 
-		}
+            return new WriteResult();
 
-		public ReadResult<IObject> Deserialize(Reader reader)
-		{
-			var tryphones = reader.ReadVector<string>(ParserTypes.String, nakedVector: false, nakedObjects: false);
-if(tryphones.IsError){
-return ReadResult<IObject>.Move(tryphones);
-}
-Phones = tryphones.Value;
-return new ReadResult<IObject>(this);
+        }
 
-		}
+        public ReadResult<IObject> Deserialize(Reader reader)
+        {
+            var tryphones = reader.ReadVector<string>(ParserTypes.String, nakedVector: false, nakedObjects: false);
+            if (tryphones.IsError)
+            {
+                return ReadResult<IObject>.Move(tryphones);
+            }
+            Phones = tryphones.Value;
+            return new ReadResult<IObject>(this);
 
-		public override string ToString()
-		{
-		    return "contacts.deleteByPhones";
-		}
+        }
 
-		public int GetConstructorId()
-		{
-			return ConstructorId;
-		}
-	}
+        public override string ToString()
+        {
+            return "contacts.deleteByPhones";
+        }
+
+        public int GetConstructorId()
+        {
+            return ConstructorId;
+        }
+    }
 }

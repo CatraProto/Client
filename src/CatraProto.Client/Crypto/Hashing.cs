@@ -2,12 +2,10 @@ using System;
 using System.IO;
 using System.Numerics;
 using System.Security.Cryptography;
-using CatraProto.TL;
-using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.Crypto
 {
-    static class Hashing
+    internal static class Hashing
     {
         public static byte[] ComputeDataHashedPadding(byte[] array, int padding = 16)
         {

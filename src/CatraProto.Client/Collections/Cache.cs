@@ -69,16 +69,16 @@ namespace CatraProto.Client.Collections
 
         private TKey ScanForOldest()
         {
-            if(_backingDictionary.Count == 0)
+            if (_backingDictionary.Count == 0)
             {
                 throw new InvalidOperationException("Count must not be 0");
             }
 
             TKey? oldestKey = default;
             uint? tinierCount = null;
-            foreach(var (key, (item, count)) in _backingDictionary)
+            foreach (var (key, (item, count)) in _backingDictionary)
             {
-                if(tinierCount == null || tinierCount > count)
+                if (tinierCount == null || tinierCount > count)
                 {
                     tinierCount = count;
                     oldestKey = key;
@@ -91,7 +91,7 @@ namespace CatraProto.Client.Collections
         private uint IncrementChecked(uint value, int add)
         {
             var r = value + (uint)add;
-            if(r < value)
+            if (r < value)
             {
                 return value;
             }

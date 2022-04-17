@@ -5,13 +5,12 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using CatraProto.Client.TL.Schemas.CloudChats;
 using CatraProto.Client.Updates;
 using Serilog;
 
 namespace CatraProto.Client.Connections
 {
-    class ConnectionPool : IAsyncDisposable
+    internal class ConnectionPool : IAsyncDisposable
     {
         private readonly Dictionary<Connection, int> _referenceCounts = new Dictionary<Connection, int>();
         private readonly TelegramClient _client;
@@ -111,7 +110,7 @@ namespace CatraProto.Client.Connections
         {
             lock (_mutex)
             {
-                if(_mainConnection is not null)
+                if (_mainConnection is not null)
                 {
                     _mainConnection.ConnectionInfo.Main = true;
                 }
@@ -120,10 +119,10 @@ namespace CatraProto.Client.Connections
 
         public async Task SetAccountConnectionAsync(Connection connection, bool isConfirmedMain)
         {
-            ValueTask disposeTask = ValueTask.CompletedTask;
+            var disposeTask = ValueTask.CompletedTask;
             lock (_mutex)
             {
-                if(_mainConnection is not null)
+                if (_mainConnection is not null)
                 {
                     _mainConnection!.MessagesDispatcher.UpdatesHandler = null;
                     _mainConnection!.ConnectionInfo.Main = false;
@@ -168,9 +167,9 @@ namespace CatraProto.Client.Connections
             {
                 toWait = new ValueTask[_referenceCounts.Count + 1];
                 var i = 0;
-                foreach(var (conn, _) in _referenceCounts)
+                foreach (var (conn, _) in _referenceCounts)
                 {
-                    if(_mainConnection == conn)
+                    if (_mainConnection == conn)
                     {
                         continue;
                     }
@@ -192,22 +191,22 @@ namespace CatraProto.Client.Connections
         private bool Matches(ConnectionInfo connectionInfo, int dcId, bool isMediaPreferred)
         {
             //TODO: Proper ipv6 support
-            if(connectionInfo.DcId != dcId)
+            if (connectionInfo.DcId != dcId)
             {
                 return false;
             }
 
-            if(connectionInfo.Ipv6 && !_client.ClientSession.Settings.ConnectionSettings.Ipv6Allowed)
+            if (connectionInfo.Ipv6 && !_client.ClientSession.Settings.ConnectionSettings.Ipv6Allowed)
             {
                 return false;
             }
 
-            if(!connectionInfo.Ipv6 && _client.ClientSession.Settings.ConnectionSettings.Ipv6Only)
+            if (!connectionInfo.Ipv6 && _client.ClientSession.Settings.ConnectionSettings.Ipv6Only)
             {
                 return false;
             }
 
-            if(connectionInfo.MediaOnly && !isMediaPreferred)
+            if (connectionInfo.MediaOnly && !isMediaPreferred)
             {
                 return false;
             }

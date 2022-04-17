@@ -16,7 +16,7 @@ using Serilog;
 
 namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
 {
-    class TemporaryAuthKey
+    internal class TemporaryAuthKey
     {
         public delegate void AuthKeyChanged(AuthKeyObject authKey, bool bindCompleted);
 
@@ -72,7 +72,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
 
             var messageId = _mtProtoState.MessageIdsHandler.ComputeMessageId();
             var encryptedInnerData = EncryptPfsPayload(permanentKey, innerData, messageId);
-            if(encryptedInnerData is null)
+            if (encryptedInnerData is null)
             {
                 return false;
             }

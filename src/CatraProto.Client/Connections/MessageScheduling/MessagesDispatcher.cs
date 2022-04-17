@@ -4,7 +4,6 @@ using CatraProto.Client.Connections.MessageScheduling.ConnectionMessages;
 using CatraProto.Client.Connections.MessageScheduling.ConnectionMessages.Interfaces;
 using CatraProto.Client.MTProto.Deserializers;
 using CatraProto.Client.MTProto.Rpc;
-using CatraProto.Client.MTProto.Rpc.Interfaces;
 using CatraProto.Client.MTProto.Rpc.RpcErrors.Migrations.Interfaces;
 using CatraProto.Client.MTProto.Session;
 using CatraProto.Client.TL;
@@ -19,7 +18,7 @@ using Serilog;
 
 namespace CatraProto.Client.Connections.MessageScheduling
 {
-    class MessagesDispatcher
+    internal class MessagesDispatcher
     {
         public UpdatesReceiver? UpdatesHandler { get; set; }
         private readonly MessagesValidator _messagesValidator;

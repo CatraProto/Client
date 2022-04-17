@@ -1,6 +1,6 @@
 namespace CatraProto.Client.Updates.Enums
 {
-    enum SearchType
+    internal enum SearchType
     {
         Pts,
         Qts

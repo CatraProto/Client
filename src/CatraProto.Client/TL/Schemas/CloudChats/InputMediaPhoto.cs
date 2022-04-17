@@ -1,105 +1,106 @@
 using System;
-using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-	public partial class InputMediaPhoto : CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase
-	{
-		[Flags]
-		public enum FlagsEnum 
-		{
-			TtlSeconds = 1 << 0
-		}
+    public partial class InputMediaPhoto : CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase
+    {
+        [Flags]
+        public enum FlagsEnum
+        {
+            TtlSeconds = 1 << 0
+        }
 
         [Newtonsoft.Json.JsonIgnore]
         public static int ConstructorId { get => -1279654347; }
-        
-[Newtonsoft.Json.JsonIgnore]
-		public int Flags { get; set; }
 
-[Newtonsoft.Json.JsonProperty("id")]
-		public CatraProto.Client.TL.Schemas.CloudChats.InputPhotoBase Id { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+        public int Flags { get; set; }
 
-[Newtonsoft.Json.JsonProperty("ttl_seconds")]
-		public int? TtlSeconds { get; set; }
+        [Newtonsoft.Json.JsonProperty("id")]
+        public CatraProto.Client.TL.Schemas.CloudChats.InputPhotoBase Id { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("ttl_seconds")]
+        public int? TtlSeconds { get; set; }
 
 
-        #nullable enable
- public InputMediaPhoto (CatraProto.Client.TL.Schemas.CloudChats.InputPhotoBase id)
-{
- Id = id;
- 
-}
+#nullable enable
+        public InputMediaPhoto(CatraProto.Client.TL.Schemas.CloudChats.InputPhotoBase id)
+        {
+            Id = id;
+
+        }
 #nullable disable
-        internal InputMediaPhoto() 
+        internal InputMediaPhoto()
         {
         }
-		
-		public override void UpdateFlags() 
-		{
-			Flags = TtlSeconds == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
 
-		}
+        public override void UpdateFlags()
+        {
+            Flags = TtlSeconds == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
 
-		public override WriteResult Serialize(Writer writer)
-		{
-writer.WriteInt32(ConstructorId);
-			UpdateFlags();
+        }
 
-			writer.WriteInt32(Flags);
-var checkid = 			writer.WriteObject(Id);
-if(checkid.IsError){
- return checkid; 
-}
-			if(FlagsHelper.IsFlagSet(Flags, 0))
-			{
-writer.WriteInt32(TtlSeconds.Value);
-			}
+        public override WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
+            UpdateFlags();
+
+            writer.WriteInt32(Flags);
+            var checkid = writer.WriteObject(Id);
+            if (checkid.IsError)
+            {
+                return checkid;
+            }
+            if (FlagsHelper.IsFlagSet(Flags, 0))
+            {
+                writer.WriteInt32(TtlSeconds.Value);
+            }
 
 
-return new WriteResult();
+            return new WriteResult();
 
-		}
+        }
 
-		public override ReadResult<IObject> Deserialize(Reader reader)
-		{
-			var tryflags = reader.ReadInt32();
-if(tryflags.IsError){
-return ReadResult<IObject>.Move(tryflags);
-}
-Flags = tryflags.Value;
-			var tryid = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPhotoBase>();
-if(tryid.IsError){
-return ReadResult<IObject>.Move(tryid);
-}
-Id = tryid.Value;
-			if(FlagsHelper.IsFlagSet(Flags, 0))
-			{
-				var tryttlSeconds = reader.ReadInt32();
-if(tryttlSeconds.IsError){
-return ReadResult<IObject>.Move(tryttlSeconds);
-}
-TtlSeconds = tryttlSeconds.Value;
-			}
+        public override ReadResult<IObject> Deserialize(Reader reader)
+        {
+            var tryflags = reader.ReadInt32();
+            if (tryflags.IsError)
+            {
+                return ReadResult<IObject>.Move(tryflags);
+            }
+            Flags = tryflags.Value;
+            var tryid = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPhotoBase>();
+            if (tryid.IsError)
+            {
+                return ReadResult<IObject>.Move(tryid);
+            }
+            Id = tryid.Value;
+            if (FlagsHelper.IsFlagSet(Flags, 0))
+            {
+                var tryttlSeconds = reader.ReadInt32();
+                if (tryttlSeconds.IsError)
+                {
+                    return ReadResult<IObject>.Move(tryttlSeconds);
+                }
+                TtlSeconds = tryttlSeconds.Value;
+            }
 
-return new ReadResult<IObject>(this);
+            return new ReadResult<IObject>(this);
 
-		}
-		
-		public override string ToString()
-		{
-		    return "inputMediaPhoto";
-		}
+        }
 
-		public override int GetConstructorId()
-		{
-			return ConstructorId;
-		}
-	}
+        public override string ToString()
+        {
+            return "inputMediaPhoto";
+        }
+
+        public override int GetConstructorId()
+        {
+            return ConstructorId;
+        }
+    }
 }

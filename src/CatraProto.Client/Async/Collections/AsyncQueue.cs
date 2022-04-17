@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
@@ -41,7 +40,7 @@ namespace CatraProto.Client.Async.Collections
                 return true;
             }
         }
-        
+
         public T Dequeue()
         {
             lock (_mutex)
@@ -66,7 +65,7 @@ namespace CatraProto.Client.Async.Collections
                     _lastReadElement = temp;
                     _releaseCount--;
                     ReleaseIfNecessary();
-                    
+
                     item = temp;
                     return true;
                 }
@@ -107,7 +106,7 @@ namespace CatraProto.Client.Async.Collections
                 }
             }
         }
-        
+
         public bool TryGetLastEnqueued([MaybeNullWhen(false)] out T item)
         {
             lock (_mutex)
@@ -122,7 +121,7 @@ namespace CatraProto.Client.Async.Collections
                 return true;
             }
         }
-        
+
         public bool TryGetLastDequeued([MaybeNullWhen(false)] out T item)
         {
             lock (_mutex)
@@ -167,7 +166,7 @@ namespace CatraProto.Client.Async.Collections
                 return true;
             }
         }
-        
+
         public void Dispose()
         {
             _semaphoreSlim.Dispose();

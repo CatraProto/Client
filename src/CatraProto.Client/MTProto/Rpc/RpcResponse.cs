@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using CatraProto.Client.MTProto.Rpc.Interfaces;
-using CatraProto.Client.MTProto.Rpc.Parsers;
 
 namespace CatraProto.Client.MTProto.Rpc
 {
