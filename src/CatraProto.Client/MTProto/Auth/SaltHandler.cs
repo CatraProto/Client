@@ -17,7 +17,7 @@ namespace CatraProto.Client.MTProto.Auth
 {
     class SaltHandler : LoopImplementation<GenericLoopState, GenericSignalState>
     {
-        private readonly ConcurrentDictionary<long, FutureSalt> _futureSalts = new ConcurrentDictionary<long, FutureSalt>();
+        private readonly ConcurrentDictionary<long, FutureSaltBase> _futureSalts = new ConcurrentDictionary<long, FutureSaltBase>();
         private readonly MTProtoState _mtProtoState;
         private readonly ILogger _logger;
         public SaltHandler(MTProtoState mtProtoState, ILogger logger)
@@ -131,7 +131,7 @@ namespace CatraProto.Client.MTProto.Auth
             return false;
         }
 
-        public void SetSalt(long salt, bool clear)
+        public void SetSalt(long salt, bool clear = false)
         {
             if (clear)
             {
@@ -144,13 +144,6 @@ namespace CatraProto.Client.MTProto.Auth
                 ValidSince = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
                 ValidUntil = (int)(DateTimeOffset.UtcNow.ToUnixTimeSeconds() + 30000)
             });
-
-            if (clear)
-            {
-                //Since we cleared the salts, we must wakeup the loop and fetch some again
-                //Todo: fix
-                //Resume();
-            }
         }
 
         private void OnAuthKeyChanged(AuthKeyObject authKeyGen, bool bindCompleted)
