@@ -13,13 +13,13 @@ namespace CatraProto.Client.Flows.LoginFlow
 {
     public class LoginNeedsSignup : ILoginResult
     {
-        public TermsOfServiceBase TermsOfService { get; }
+        public TermsOfServiceBase? TermsOfService { get; }
         private readonly TelegramClient _client;
         private readonly SentCodeBase _sentCode;
         private readonly string _phoneNumber;
         private readonly SessionData _sessionData;
 
-        internal LoginNeedsSignup(TelegramClient client, SentCodeBase sentCode, string phoneNumber, TermsOfServiceBase termsOfService, SessionData sessionData)
+        internal LoginNeedsSignup(TelegramClient client, SentCodeBase sentCode, string phoneNumber, TermsOfServiceBase? termsOfService, SessionData sessionData)
         {
             TermsOfService = termsOfService;
             _client = client;
@@ -30,7 +30,11 @@ namespace CatraProto.Client.Flows.LoginFlow
 
         public async Task<ILoginResult> WithProfileData(string firstName, string lastName, CancellationToken cancellationToken = default)
         {
-            await _client.Api.CloudChatsApi.Help.AcceptTermsOfServiceAsync(TermsOfService.Id);
+            if(TermsOfService is not null)
+            {
+                await _client.Api.CloudChatsApi.Help.AcceptTermsOfServiceAsync(TermsOfService.Id);
+            }
+
             var rpcQuery = await _client.Api.CloudChatsApi.Auth.SignUpAsync(_phoneNumber, _sentCode.PhoneCodeHash, firstName, lastName, cancellationToken: cancellationToken);
             if (rpcQuery.RpcCallFailed)
             {
