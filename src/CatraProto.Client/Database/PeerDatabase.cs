@@ -16,6 +16,7 @@ namespace CatraProto.Client.Database
 {
     internal class PeerDatabase
     {
+        public const int MaxUserFullCache = 60;
         private readonly Cache<long, IObject> _peerFullCache;
         private readonly Cache<long, IObject> _peerCache;
         private readonly SqliteConnection _sqliteConnection;
@@ -304,7 +305,7 @@ namespace CatraProto.Client.Database
                                 if (storedChat.Version + 1 != receivedChat.Version)
                                 {
                                     _logger.Information("Requesting chat full of chat {ChatId} because of version mismatch", storedChat.Id);
-                                    _ = _client.Api.CloudChatsApi.Messages.GetFullChatAsync(receivedChat.Id);
+                                    _ = _client.Api.CloudChatsApi.Messages.InternalGetFullChatAsync(receivedChat.Id);
                                     pushToDb = false;
                                 }
                                 else
@@ -517,7 +518,7 @@ namespace CatraProto.Client.Database
             }
         }
 
-        public InputUserBase? ResolveUser(long id)
+        public InputUser? ResolveUser(long id)
         {
             lock (_commonMutex)
             {
@@ -537,7 +538,8 @@ namespace CatraProto.Client.Database
 
         public bool HavePeer(PeerId peerId)
         {
-            return GetPeerObject(peerId, false) != null;
+            var getPeer = GetPeerObject(peerId, false);
+            return getPeer is not null && getPeer is DbPeer db && db.Object is not null;
         }
 
         private bool CompareRestrictionReason(IList<RestrictionReasonBase> oldReasons, IList<RestrictionReasonBase> newReasons)

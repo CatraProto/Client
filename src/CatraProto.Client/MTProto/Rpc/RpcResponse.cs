@@ -133,5 +133,14 @@ namespace CatraProto.Client.MTProto.Rpc
                 _rpcError = rpcError
             };
         }
+
+        internal static RpcResponse<T> FromResult(T result)
+        {
+            return new RpcResponse<T>
+            {
+                _isSuccessful = true,
+                _response = result
+            };
+        }
     }
 }

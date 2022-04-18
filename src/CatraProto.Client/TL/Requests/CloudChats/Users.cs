@@ -1,9 +1,14 @@
-using System.Collections.Generic;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
+using CatraProto.Client.Connections;
 using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.MTProto.Rpc;
+using CatraProto.TL.Interfaces;
+using CatraProto.Client;
 using CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors;
+using System.Collections.Generic;
+using System.Numerics;
 
 
 namespace CatraProto.Client.TL.Requests.CloudChats
@@ -21,7 +26,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 
         }
 
-        public async Task<RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>>> GetUsersAsync(List<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase> id, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>>> InternalGetUsersAsync(List<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase> id, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>>(
@@ -37,7 +42,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Users.UserFullBase>> GetFullUserAsync(CatraProto.Client.TL.Schemas.CloudChats.InputUserBase id, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Users.UserFullBase>> InternalGetFullUserAsync(CatraProto.Client.TL.Schemas.CloudChats.InputUserBase id, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Users.UserFullBase>(
@@ -68,7 +73,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>>> GetUsersAsync(List<long> id, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>>> InternalGetUsersAsync(List<long> id, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var idResolved = new List<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
@@ -95,7 +100,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Users.UserFullBase>> GetFullUserAsync(long id, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Users.UserFullBase>> InternalGetFullUserAsync(long id, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var idToResolve = _client.DatabaseManager.PeerDatabase.ResolveUser(id);

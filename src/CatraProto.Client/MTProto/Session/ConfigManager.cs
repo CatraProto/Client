@@ -22,24 +22,24 @@ namespace CatraProto.Client.MTProto.Session
 
         public async Task<Config> GetConfigAsync(CancellationToken token = default)
         {
-            using (_asyncLock.LockAsync(token))
+            using (await _asyncLock.LockAsync(token))
             {
                 if (_lastConfig is null || DateTimeOffset.UtcNow.ToUnixTimeSeconds() - _lastConfig.Expires > 0)
                 {
-                    var getConfig = await _client.Api.CloudChatsApi.Help.GetConfigAsync(cancellationToken: token);
-                    if (getConfig.RpcCallFailed)
+                    while (true)
                     {
-                        _logger.Error("Failed to fetch config. Error: {Error}", getConfig.Error);
+                        var getConfig = await _client.Api.CloudChatsApi.Help.InternalGetConfigAsync(cancellationToken: token);
+                        if (getConfig.RpcCallFailed)
+                        {
+                            _logger.Error("Failed to fetch config. Trying again in a minute. Error: {Error}", getConfig.Error);
+                            await Task.Delay(TimeSpan.FromMinutes(1), token);
+                        }
+                        else
+                        {
+                            _lastConfig = (Config)getConfig.Response;
+                            break;
+                        }
                     }
-                    else
-                    {
-                        _lastConfig = (Config)getConfig.Response;
-                    }
-                }
-
-                if (_lastConfig is null)
-                {
-                    throw new InvalidOperationException("Config is null.");
                 }
 
                 return _lastConfig;
@@ -48,9 +48,9 @@ namespace CatraProto.Client.MTProto.Session
 
         public async Task ForceRefreshConfig(CancellationToken token = default)
         {
-            using (_asyncLock.LockAsync(token))
+            using (await _asyncLock.LockAsync(token))
             {
-                var getConfig = await _client.Api.CloudChatsApi.Help.GetConfigAsync(cancellationToken: token);
+                var getConfig = await _client.Api.CloudChatsApi.Help.InternalGetConfigAsync(cancellationToken: token);
                 if (getConfig.RpcCallFailed)
                 {
                     _logger.Error("Failed to fetch config. Error: {Error}", getConfig.Error);
