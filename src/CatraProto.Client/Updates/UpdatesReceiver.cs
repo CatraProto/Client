@@ -5,7 +5,9 @@ using CatraProto.Client.Async.Loops.Enums.Resumable;
 using CatraProto.Client.Async.Loops.Extensions;
 using CatraProto.Client.Collections;
 using CatraProto.Client.MTProto.Session.Models;
+using CatraProto.Client.TL.Requests.CloudChats;
 using CatraProto.Client.TL.Schemas.CloudChats;
+using CatraProto.Client.TL.Schemas.CloudChats.Messages;
 using CatraProto.Client.Tools;
 using CatraProto.Client.Updates.CustomTypes;
 using CatraProto.TL.Interfaces;
@@ -33,11 +35,7 @@ namespace CatraProto.Client.Updates
 
         public void OnNewUpdates(IObject socketObject, IMethod? callingMethod = null)
         {
-            var channelUpdates = new MultiValueDictionary<long, IObject>();
-            var commonUpdates = new List<IObject>();
             var localSeq = _commonSequence.GetData().seq;
-            IObject? update = null;
-
             _logger.Information("Received new update {Update}", socketObject);
             if (socketObject is UpdatesBase updatesBase)
             {
@@ -49,14 +47,7 @@ namespace CatraProto.Client.Updates
                         {
                             foreach (var updateObj in updates)
                             {
-                                if (UpdatesTools.IsFromChannel(updateObj, out var channelId))
-                                {
-                                    channelUpdates.Insert(channelId!.Value, updateObj);
-                                }
-                                else
-                                {
-                                    commonUpdates.Add(updateObj);
-                                }
+                                PushUpdate(updateObj);
                             }
 
                             if (finalSeq > 0 && date > 0)
@@ -73,7 +64,7 @@ namespace CatraProto.Client.Updates
                     else if (localSeq + 1 < seqStart)
                     {
                         _logger.Information("Seq gap detected SEQ({LocalSeq} + 1 < {SeqStart}), Manually sending updates too long to fetch difference...", localSeq, seqStart);
-                        commonUpdates.Add(new UpdatesTooLong());
+                        PushUpdate(new UpdatesTooLong());
                     }
                 }
                 else
@@ -81,91 +72,59 @@ namespace CatraProto.Client.Updates
                     switch (socketObject)
                     {
                         case UpdateRedirect updateRedirect:
-                            update = updateRedirect.Update;
-                            break;
+                            PushUpdate(updateRedirect);
+                            return;
                         case UpdatesTooLong:
-                            update = socketObject;
-                            break;
+                            PushUpdate(socketObject);
+                            return;
                         case UpdateShort updateShort:
-                            update = updateShort.Update;
-                            _commonSequence.SetData(date: updateShort.Date);
-                            break;
+                            PushUpdate(updateShort.Update);
+                            return;
                         case UpdateShortChatMessage updateShortChatMessage:
-                            update = UpdatesTools.ConvertUpdate(updateShortChatMessage);
-                            break;
+                            PushUpdate(UpdatesTools.ConvertUpdate(updateShortChatMessage));
+                            return;
                         case UpdateShortMessage updateShortMessage:
-                            update = UpdatesTools.ConvertUpdate(updateShortMessage);
-                            break;
+                            PushUpdate(UpdatesTools.ConvertUpdate(updateShortMessage));
+                            return;
                         case UpdateShortSentMessage updateShortSentMessage:
-                            if (callingMethod != null)
+                            if (callingMethod is not null && callingMethod is SendMessage)
                             {
-                                var peer = PeerTools.ExtractPeerFromMethod(callingMethod);
-                                if (peer is PeerChannel channel)
-                                {
-                                    channelUpdates.Insert(channel.ChannelId, UpdatesTools.ConvertUpdate(updateShortSentMessage, callingMethod));
-                                }
-                                else
-                                {
-                                    commonUpdates.Add(UpdatesTools.ConvertUpdate(updateShortSentMessage, callingMethod));
-                                }
+                                PushUpdate(UpdatesTools.ConvertUpdate(updateShortSentMessage, callingMethod));
                             }
 
-                            break;
+                            return;
                         default:
                             return;
                     }
                 }
             }
-            else
-            {
-                update = socketObject;
-            }
+        }
 
-            if (update is not null)
+        private void PushUpdate(IObject update)
+        {
+            lock (_mutex)
             {
-                if (UpdatesTools.IsFromChannel(update, out var channelId))
+                if (!UpdatesTools.IsFromChannel(update, out var channelId))
                 {
-                    channelUpdates.Insert(channelId!.Value, update);
+                    if (_commonLoop.Processor.AddUpdateToQueue(update))
+                    {
+                        _commonLoop.Controller.ResumeAndSuspendAsync();
+                    }
                 }
                 else
                 {
-                    commonUpdates.Add(update);
-                }
-            }
-
-            lock (_mutex)
-            {
-                if (commonUpdates.Count > 0)
-                {
-                    foreach (var commonUpdate in commonUpdates)
+                    var getProcessor = GetProcessor(channelId!.Value);
+                    if (getProcessor != null)
                     {
-                        if (_commonLoop.Processor.AddUpdateToQueue(commonUpdate))
+                        var (controller, processor) = getProcessor.Value;
+                        if (processor.AddUpdateToQueue(update))
                         {
-                            _commonLoop.Controller.ResumeAndSuspendAsync();
-                        }
-                    }
-
-                }
-
-                if (channelUpdates.Count > 0)
-                {
-                    foreach (var channelUpdate in channelUpdates)
-                    {
-                        var getProcessor = GetProcessor(channelUpdate.Key);
-                        if (getProcessor != null)
-                        {
-                            var (controller, processor) = getProcessor.Value;
-                            foreach (var upd in channelUpdate.Value)
-                            {
-                                processor.AddUpdateToQueue(upd);
-                            }
-
                             controller.ResumeAndSuspendAsync();
                         }
-                        else
-                        {
-                            _logger.Information("Won't process updates for channel {Channel} because processor does not exist", channelUpdate.Key);
-                        }
+                    }
+                    else
+                    {
+                        _logger.Information("Won't process updates for channel {Channel} because processor does not exist", channelId);
                     }
                 }
             }
