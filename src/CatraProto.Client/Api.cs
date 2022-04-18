@@ -6,7 +6,7 @@ namespace CatraProto.Client
     public class Api
     {
         public CloudChatsApi CloudChatsApi { get; }
-        public MTProtoApi MtProtoApi { get; }
+        internal MTProtoApi MtProtoApi { get; }
 
         internal Api(TelegramClient client, MessagesQueue messagesQueue)
         {
