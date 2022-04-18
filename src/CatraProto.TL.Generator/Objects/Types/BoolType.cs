@@ -23,7 +23,7 @@ namespace CatraProto.TL.Generator.Objects.Types
 
 			if (InitialTypeName == "true")
 			{
-				after += " = true";
+				after += " = false";
 			}
 			else if (InitialTypeName != "true" && parameter.HasFlag)
 			{
