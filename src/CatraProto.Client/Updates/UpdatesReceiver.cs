@@ -133,18 +133,20 @@ namespace CatraProto.Client.Updates
                 }
             }
 
-            if (commonUpdates.Count > 0)
-            {
-                foreach (var commonUpdate in commonUpdates)
-                {
-                    _commonLoop.Processor.AddUpdateToQueue(commonUpdate);
-                }
-
-                _commonLoop.Controller.ResumeAndSuspendAsync();
-            }
-
             lock (_mutex)
             {
+                if (commonUpdates.Count > 0)
+                {
+                    foreach (var commonUpdate in commonUpdates)
+                    {
+                        if (_commonLoop.Processor.AddUpdateToQueue(commonUpdate))
+                        {
+                            _commonLoop.Controller.ResumeAndSuspendAsync();
+                        }
+                    }
+
+                }
+
                 if (channelUpdates.Count > 0)
                 {
                     foreach (var channelUpdate in channelUpdates)

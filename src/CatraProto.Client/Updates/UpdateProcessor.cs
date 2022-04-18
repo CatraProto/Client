@@ -124,12 +124,14 @@ namespace CatraProto.Client.Updates
         {
             var toBeApplied = new List<UpdateBase>();
             var fetchDifference = false;
-            while (!fetchDifference && _updatesQueue.TryPeek(out var update))
+            while (_updatesQueue.TryPeek(out var update))
             {
+                _logger.Information("Extracted {Update} from queue", update.Item);
                 if (update.Item is UpdateConfig)
                 {
                     await _client.ConfigManager.ForceRefreshConfig(stoppingToken);
                 }
+
                 if (update.Item is UpdatesTooLong or UpdateChannelTooLong)
                 {
                     update.DequeueItem();
@@ -176,6 +178,13 @@ namespace CatraProto.Client.Updates
                 {
                     _logger.Verbose("Adding update {Update} to list because it doesn't have PTS nor QTS", update.Item);
                     updateCheckResult = UpdateCheckResult.CanBeApplied;
+                }
+
+                if((newPts is not null || newQts is not null) && fetchDifference)
+                {
+                    _logger.Information("Skipping update because it contains pts/qts but difference was requested");
+                    update.DequeueItem();
+                    continue;
                 }
 
                 switch (updateCheckResult)
@@ -546,6 +555,7 @@ namespace CatraProto.Client.Updates
                 return false;
             }
 
+            updates.Add(update);
             if (pts is not null)
             {
                 if (_applyAt.TryRemoveAll(pts.Value, out var postponedUpdates))
@@ -565,15 +575,24 @@ namespace CatraProto.Client.Updates
             return true;
         }
 
-        public void AddUpdateToQueue(IObject update)
+        public bool AddUpdateToQueue(IObject update)
         {
             if (update is not UpdateBase && update is not UpdatesBase && update is not ChatBase)
             {
                 _logger.Warning("Received invalid update of type {Type}", update);
-                return;
+                return false;
             }
 
             _updatesQueue.Enqueue(update);
+            if (_updatesQueue.GetCount() - 1 == 0)
+            {
+                return true;
+            }
+            else
+            {
+                _logger.Verbose("Not waking up loop because a signal is still being processed");
+            }
+            return false;
         }
 
         private UpdateCheckResult CheckPts(int pts, int ptsCount)
