@@ -129,6 +129,7 @@ namespace CatraProto.TL.Generator.CodeGeneration.Optimization
                 if (matched)
                 {
                     optimizedMethod.NamingInfo = method.NamingInfo.OriginalName;
+                    optimizedMethod.NamingInfo.OriginalNamespacedName = method.NamingInfo.OriginalNamespacedName;
                     optimizedMethod.Type = method.Type;
                     optimizedMethod.ReturnsVector = method.ReturnsVector;
                     optimizedMethod.Id = method.Id;

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using CatraProto.TL.Generator.CodeGeneration;
 using CatraProto.TL.Generator.CodeGeneration.Parsing;
@@ -10,6 +11,17 @@ namespace CatraProto.TL.Generator.Objects
 {
     class Method : Object
     {
+        public static readonly List<string> HiddenMethods = new List<string>()
+        {
+            "help.getConfig",
+            "users.getUsers",
+            "users.getFullUser",
+            "messages.getChats",
+            "messages.getFullChat",
+            "channels.getChannels",
+            "channels.getFullChannel"
+        };
+
         public bool ReturnsVector { get; set; }
         public MethodCompletionType MethodCompletionType { get; }
         public bool IsOptimized { get; set; } = false;
@@ -49,7 +61,10 @@ namespace CatraProto.TL.Generator.Objects
             }
 
             var comma = args.Length == 0 ? "" : ",";
-            builder.AppendLine($"public async Task<RpcResponse<{returnType}>> {NamingInfo.PascalCaseName}Async({args}{comma} CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)\n{StringTools.TwoTabs}{{");
+            var isInternal = HiddenMethods.Contains(NamingInfo.OriginalNamespacedName);
+            var acc = isInternal ? "internal" : "public";
+            var name = isInternal ? "Internal" + NamingInfo.PascalCaseName : NamingInfo.PascalCaseName;
+            builder.AppendLine($"{acc} async Task<RpcResponse<{returnType}>> {name}Async({args}{comma} CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)\n{StringTools.TwoTabs}{{");
             builder.AppendLine(nullPolicies.ToString());
             foreach (var parameter in parametersOrdered)
             {
