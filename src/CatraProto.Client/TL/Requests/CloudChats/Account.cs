@@ -21,7 +21,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 
         }
 
-        public async Task<RpcResponse<bool>> RegisterDeviceAsync(int tokenType, string token, bool appSandbox, byte[] secret, List<long> otherUids, bool noMuted = true, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        public async Task<RpcResponse<bool>> RegisterDeviceAsync(int tokenType, string token, bool appSandbox, byte[] secret, List<long> otherUids, bool noMuted = false, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<bool>(
@@ -647,7 +647,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Account.TakeoutBase>> InitTakeoutSessionAsync(bool contacts = true, bool messageUsers = true, bool messageChats = true, bool messageMegagroups = true, bool messageChannels = true, bool files = true, int? fileMaxSize = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Account.TakeoutBase>> InitTakeoutSessionAsync(bool contacts = false, bool messageUsers = false, bool messageChats = false, bool messageMegagroups = false, bool messageChannels = false, bool files = false, int? fileMaxSize = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Account.TakeoutBase>(
@@ -668,7 +668,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<bool>> FinishTakeoutSessionAsync(bool success = true, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        public async Task<RpcResponse<bool>> FinishTakeoutSessionAsync(bool success = false, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<bool>(
@@ -755,7 +755,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> GetNotifyExceptionsAsync(bool compareSound = true, CatraProto.Client.TL.Schemas.CloudChats.InputNotifyPeerBase? peer = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> GetNotifyExceptionsAsync(bool compareSound = false, CatraProto.Client.TL.Schemas.CloudChats.InputNotifyPeerBase? peer = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
@@ -864,7 +864,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<bool>> SaveAutoDownloadSettingsAsync(CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase settings, bool low = true, bool high = true, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        public async Task<RpcResponse<bool>> SaveAutoDownloadSettingsAsync(CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase settings, bool low = false, bool high = false, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<bool>(
@@ -953,7 +953,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<bool>> InstallThemeAsync(bool dark = true, CatraProto.Client.TL.Schemas.CloudChats.InputThemeBase? theme = null, string? format = null, CatraProto.Client.TL.Schemas.CloudChats.BaseThemeBase? baseTheme = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        public async Task<RpcResponse<bool>> InstallThemeAsync(bool dark = false, CatraProto.Client.TL.Schemas.CloudChats.InputThemeBase? theme = null, string? format = null, CatraProto.Client.TL.Schemas.CloudChats.BaseThemeBase? baseTheme = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<bool>(
@@ -1004,7 +1004,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<bool>> SetContentSettingsAsync(bool sensitiveEnabled = true, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        public async Task<RpcResponse<bool>> SetContentSettingsAsync(bool sensitiveEnabled = false, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<bool>(
