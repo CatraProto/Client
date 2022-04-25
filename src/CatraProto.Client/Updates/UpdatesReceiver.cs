@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CatraProto.Client.Async.Loops;
@@ -76,25 +77,13 @@ namespace CatraProto.Client.Updates
                             return;
                         case UpdatesTooLong:
                             PushUpdate(socketObject);
-                            return;
+                            break;
                         case UpdateShort updateShort:
                             PushUpdate(updateShort.Update);
-                            return;
-                        case UpdateShortChatMessage updateShortChatMessage:
-                            PushUpdate(UpdatesTools.ConvertUpdate(updateShortChatMessage));
-                            return;
-                        case UpdateShortMessage updateShortMessage:
-                            PushUpdate(UpdatesTools.ConvertUpdate(updateShortMessage));
-                            return;
-                        case UpdateShortSentMessage updateShortSentMessage:
-                            if (callingMethod is not null && callingMethod is SendMessage)
-                            {
-                                PushUpdate(UpdatesTools.ConvertUpdate(updateShortSentMessage, callingMethod));
-                            }
-
-                            return;
+                            break;
                         default:
-                            return;
+                            PushUpdate((IObject?)ConvertUpdate(updatesBase) ?? new UpdatesTooLong());
+                            break;
                     }
                 }
             }
@@ -128,6 +117,141 @@ namespace CatraProto.Client.Updates
                     }
                 }
             }
+        }
+
+        private UpdateBase? ConvertUpdate(UpdatesBase updatesBase, IMethod? query = null)
+        {
+            UpdateBase converted;
+            switch (updatesBase)
+            {
+                case UpdateShortMessage updateShortMessage:
+                    var toNewMessage = new UpdateNewMessage();
+                    var message = new Message();
+
+                    toNewMessage.Pts = updateShortMessage.Pts;
+                    toNewMessage.PtsCount = updateShortMessage.PtsCount;
+                    toNewMessage.Message = message;
+
+                    //TODO FAST: Set from_id as the id of the destination user, unless outgoing is true.
+                    if (updateShortMessage.Out)
+                    {
+                        message.FromId = new PeerUser() { UserId = updateShortMessage.UserId };
+                    }
+                    else
+                    {
+                        _client.ClientSession.SessionManager.SessionData.Authorization.IsAuthorized(out _, out var currentId, out _);
+                        if (currentId is null)
+                        {
+                            return null;
+                        }
+
+                        message.FromId = new PeerUser() { UserId = currentId.Value };
+                    }
+
+                    message.Date = updateShortMessage.Date;
+                    message.Out = updateShortMessage.Out;
+                    message.Mentioned = updateShortMessage.Mentioned;
+                    message.MediaUnread = updateShortMessage.MediaUnread;
+                    message.Silent = updateShortMessage.Silent;
+                    message.Id = updateShortMessage.Id;
+                    message.PeerId = new PeerUser { UserId = updateShortMessage.UserId };
+                    message.MessageField = updateShortMessage.Message;
+                    message.FwdFrom = updateShortMessage.FwdFrom;
+                    message.ViaBotId = updateShortMessage.ViaBotId;
+                    message.ReplyTo = updateShortMessage.ReplyTo;
+                    message.Entities = updateShortMessage.Entities;
+                    message.TtlPeriod = updateShortMessage.TtlPeriod;
+                    message.UpdateFlags();
+                    converted = toNewMessage;
+                    break;
+                case UpdateShort updateShort:
+                    return updateShort.Update;
+                case UpdateShortSentMessage updateShortSentMessage:
+                    if (query is null)
+                    {
+                        _logger.Warning("Received updateShortSentMessage with null query");
+                        return null;
+                    }
+
+                    if (query is not SendMessage sendMessage)
+                    {
+                        _logger.Warning("Received updateShortSentMessage from method {Query}", query);
+                        return null;
+                    }
+
+                    PeerBase fromId;
+                    if(sendMessage.SendAs is null)
+                    {
+                        _client.ClientSession.SessionManager.SessionData.Authorization.IsAuthorized(out _, out var currentId, out _);
+                        if(currentId is null)
+                        {
+                            return null;
+                        }
+
+                        fromId = new PeerUser() { UserId = currentId.Value };
+                    }
+                    else
+                    {
+                        var peer = PeerTools.FromInputToPeer(sendMessage.SendAs);
+                        if(peer is null)
+                        {
+                            return null;
+                        }
+
+                        fromId = peer;
+                    }
+
+                    var messageObj = new Message()
+                    {
+                        FromId = fromId,
+                        PeerId = PeerTools.FromInputToPeer(sendMessage.Peer),
+                        Media = updateShortSentMessage.Media,
+                        Date = updateShortSentMessage.Date,
+                        TtlPeriod = updateShortSentMessage.TtlPeriod,
+                        Entities = updateShortSentMessage.Entities,
+                        Out = updateShortSentMessage.Out,
+                        Id = updateShortSentMessage.Id,
+                        MessageField = sendMessage.Message
+                    };
+
+                    converted = sendMessage.Peer switch
+                    {
+                        InputPeerChannel => new UpdateNewChannelMessage() { Message = messageObj, Pts = updateShortSentMessage.Pts, PtsCount = updateShortSentMessage.PtsCount },
+                        _ => new UpdateNewMessage { Message = messageObj, Pts = updateShortSentMessage.Pts, PtsCount = updateShortSentMessage.PtsCount }
+                    };
+                    messageObj.UpdateFlags();
+                    break;
+                case UpdateShortChatMessage updateShortChatMessage:
+                    var toChatMessage = new UpdateNewMessage();
+                    var originalMessage = new Message();
+                    toChatMessage.Pts = updateShortChatMessage.Pts;
+                    toChatMessage.PtsCount = updateShortChatMessage.PtsCount;
+
+                    originalMessage.FromId = new PeerUser() { UserId = updateShortChatMessage.FromId };
+                    originalMessage.Date = updateShortChatMessage.Date;
+                    originalMessage.Out = updateShortChatMessage.Out;
+                    originalMessage.Mentioned = updateShortChatMessage.Mentioned;
+                    originalMessage.MediaUnread = updateShortChatMessage.MediaUnread;
+                    originalMessage.Silent = updateShortChatMessage.Silent;
+                    originalMessage.Id = updateShortChatMessage.Id;
+                    originalMessage.PeerId = new PeerChat() { ChatId = updateShortChatMessage.ChatId };
+                    originalMessage.MessageField = updateShortChatMessage.Message;
+                    originalMessage.FwdFrom = updateShortChatMessage.FwdFrom;
+                    originalMessage.ViaBotId = updateShortChatMessage.ViaBotId;
+                    originalMessage.ReplyTo = updateShortChatMessage.ReplyTo;
+                    originalMessage.Entities = updateShortChatMessage.Entities;
+                    originalMessage.TtlPeriod = updateShortChatMessage.TtlPeriod;
+                    toChatMessage.Message = originalMessage;
+                    originalMessage.UpdateFlags();
+                    converted = toChatMessage;
+                    break;
+                default:
+                    _logger.Warning("Trying to convert object {Object}", updatesBase);
+                    return null;
+            }
+
+            converted.UpdateFlags();
+            return converted;
         }
 
         public void FillProcessors()

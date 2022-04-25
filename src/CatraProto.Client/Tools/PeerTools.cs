@@ -22,6 +22,10 @@ namespace CatraProto.Client.Tools
         {
             switch (peerBase)
             {
+                case InputPeerUserFromMessage inputPeerUserFromMessage:
+                    return new PeerUser() { UserId = inputPeerUserFromMessage.UserId };
+                case InputPeerChannelFromMessage inputPeerChannelFromMessage:
+                    return new PeerChannel() { ChannelId = inputPeerChannelFromMessage.ChannelId };
                 case InputPeerChannel inputPeerChannel:
                     return new PeerChannel() { ChannelId = inputPeerChannel.ChannelId };
                 case InputPeerChat inputPeerChat:
