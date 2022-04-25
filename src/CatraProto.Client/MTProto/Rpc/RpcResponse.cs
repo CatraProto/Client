@@ -21,7 +21,7 @@ namespace CatraProto.Client.MTProto.Rpc
             get => GetResponse();
         }
 
-        public ExecutionInfo ExecutionInfo
+        internal ExecutionInfo ExecutionInfo
         {
             get => GetExecutionInformation();
         }
