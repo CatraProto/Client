@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;

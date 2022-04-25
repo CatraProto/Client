@@ -1,8 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using CatraProto.Client.Collections;
 using CatraProto.Client.MTProto;
+using CatraProto.Client.MTProto.Rpc;
+using CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors;
+using CatraProto.Client.MTProto.Rpc.Vectors;
 using CatraProto.Client.TL;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.Client.TL.Schemas.CloudChats;
@@ -16,6 +21,8 @@ namespace CatraProto.Client.Database
 {
     internal class PeerDatabase
     {
+        public const int MaxChatFull = 60;
+        public const int MaxChannelFullCache = 60;
         public const int MaxUserFullCache = 60;
         private readonly Cache<long, IObject> _peerFullCache;
         private readonly Cache<long, IObject> _peerCache;
@@ -262,7 +269,7 @@ namespace CatraProto.Client.Database
         {
             lock (_commonMutex)
             {
-                if (chat is not Chat && chat is not ChatForbidden)
+                if (!(chat is Chat or ChatForbidden))
                 {
                     _logger.Warning("Expected chat but {Obj} received", chat);
                     return;
@@ -350,9 +357,9 @@ namespace CatraProto.Client.Database
         {
             lock (_commonMutex)
             {
-                if (chat is Channel && chat is ChannelForbidden)
+                if (!(chat is Channel or ChannelForbidden))
                 {
-                    _logger.Warning("Expected channel but {Obj} received", chat);
+                    _logger.Warning("Expected channel or channel_forbidden but {Obj} received", chat);
                     return;
                 }
 
@@ -456,6 +463,126 @@ namespace CatraProto.Client.Database
             }
         }
 
+        public async Task<RpcResponse<RpcVector<IObject>>> GetPeersAsync(List<PeerId> ids, CancellationToken cancellationToken)
+        {
+            var inputChannels = new Lazy<List<InputChannelBase>>(LazyThreadSafetyMode.None);
+            var inputChats = new Lazy<List<long>>(LazyThreadSafetyMode.None);
+            var inputUsers = new Lazy<List<InputUserBase>>(LazyThreadSafetyMode.None);
+            var result = new RpcVector<IObject>();
+            foreach(var id in ids)
+            {
+                if(!(id.Type is PeerType.User || id.Type is PeerType.Channel || id.Type is PeerType.Group))
+                {
+                    return RpcResponse<RpcVector<IObject>>.FromError(new InvalidTypeError());
+                }
+
+                var dbResult = _client.DatabaseManager.PeerDatabase.GetPeerObject(id, false);
+                if(dbResult is null || dbResult is not DbPeer dbPeer)
+                {
+                    continue;
+                }
+
+                if(dbPeer.Object is null || !PeerTypeMatches(dbPeer.Object, id.Type))
+                {
+                    switch (id.Type)
+                    {
+                        case PeerType.User:
+                            inputUsers.Value.Add(new InputUser(id.Id, dbPeer.AccessHash));
+                            break;
+                        case PeerType.Channel:
+                            inputChannels.Value.Add(new InputChannel(id.Id, dbPeer.AccessHash));
+                            break;
+                        case PeerType.Group:
+                            inputChats.Value.Add(id.Id);
+                            break;
+                    }
+                }
+                else
+                {
+                    result.Add(dbPeer.Object);
+                }
+            }
+
+            if (inputUsers.IsValueCreated)
+            {
+                var users = await _client.Api.CloudChatsApi.Users.InternalGetUsersAsync(inputUsers.Value);
+                if (users.RpcCallFailed)
+                {
+                    return RpcResponse<RpcVector<IObject>>.FromError(users.Error);
+                }
+
+                result.AddRange(users.Response.Where(x => x is not UserEmpty));
+            }
+
+            if (inputChats.IsValueCreated)
+            {
+                var chats = await _client.Api.CloudChatsApi.Messages.InternalGetChatsAsync(inputChats.Value, cancellationToken: cancellationToken);
+                if (chats.RpcCallFailed)
+                {
+                    return RpcResponse<RpcVector<IObject>>.FromError(chats.Error);
+                }
+
+                result.AddRange(chats.Response.ChatsField.Where(x => x is not ChatEmpty));
+            }
+
+            if (inputChannels.IsValueCreated)
+            {
+                var channels = await _client.Api.CloudChatsApi.Channels.InternalGetChannelsAsync(inputChannels.Value);
+                if (channels.RpcCallFailed)
+                {
+                    return RpcResponse<RpcVector<IObject>>.FromError(channels.Error);
+                }
+
+                result.AddRange(channels.Response.ChatsField.Where(x => x is not ChatEmpty));
+            }
+
+            return RpcResponse<RpcVector<IObject>>.FromResult(result);
+        }
+
+        public async Task<RpcResponse<T>> GetFullPeerAsync<T>(PeerId id, int maxCache, CancellationToken cancellationToken) where T : IObject
+        {
+            var result = _client.DatabaseManager.PeerDatabase.GetPeerObject(id, true);
+            if (result is null || result is not DbPeerFull peer || peer.Object is null || !FullTypeMatches(result, id.Type) || DateTimeOffset.UtcNow.ToUnixTimeSeconds() - peer.UpdatedAt > maxCache)
+            {
+                switch (id.Type)
+                {
+                    case PeerType.User:
+                        var getFullUser = await _client.Api.CloudChatsApi.Users.InternalGetFullUserAsync(id.Id, cancellationToken: cancellationToken);
+                        if (getFullUser.RpcCallFailed)
+                        {
+                            return RpcResponse<T>.FromError(getFullUser.Error);
+                        }
+                        result = getFullUser.Response;
+                        break;
+                    case PeerType.Channel:
+                        var getFullChannel = await _client.Api.CloudChatsApi.Channels.InternalGetFullChannelAsync(id.Id, cancellationToken: cancellationToken);
+                        if (getFullChannel.RpcCallFailed)
+                        {
+                            return RpcResponse<T>.FromError(getFullChannel.Error);
+                        }
+                        result = getFullChannel.Response;
+                        break;
+                    case PeerType.Group:
+                        var getFullChat = await _client.Api.CloudChatsApi.Messages.InternalGetFullChatAsync(id.Id, cancellationToken: cancellationToken);
+                        if (getFullChat.RpcCallFailed)
+                        {
+                            return RpcResponse<T>.FromError(getFullChat.Error);
+                        }
+                        result = getFullChat.Response;
+                        break;
+                    default:
+                        return RpcResponse<T>.FromError(new InvalidTypeError());
+                }
+            }
+
+            if (result is not T)
+            {
+                return RpcResponse<T>.FromError(new InvalidTypeError());
+            }
+
+            return RpcResponse<T>.FromResult((T)result);
+        }
+
         public long? GetPeerAccessHash(PeerId peer)
         {
             var obj = (DbPeer?)GetPeerObject(peer, false);
@@ -540,6 +667,17 @@ namespace CatraProto.Client.Database
         {
             var getPeer = GetPeerObject(peerId, false);
             return getPeer is not null && getPeer is DbPeer db && db.Object is not null;
+        }
+
+
+        private static bool PeerTypeMatches<T>(T instance, PeerType type)
+        {
+            return (instance is User && type is PeerType.User) || ((instance is Channel || instance is ChannelForbidden) && type is PeerType.Channel) || ((instance is Chat || instance is ChatForbidden) && type is PeerType.Group);
+        }
+
+        private bool FullTypeMatches<T>(T instance, PeerType type)
+        {
+            return (instance is UserFull && type is PeerType.User) || (instance is ChannelFull && type is PeerType.Channel) || (instance is ChatFull && type is PeerType.Group);
         }
 
         private bool CompareRestrictionReason(IList<RestrictionReasonBase> oldReasons, IList<RestrictionReasonBase> newReasons)
