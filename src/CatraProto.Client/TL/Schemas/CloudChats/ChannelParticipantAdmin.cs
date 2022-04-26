@@ -170,5 +170,30 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new ChannelParticipantAdmin
+            {
+                Flags = Flags,
+                CanEdit = CanEdit,
+                Self = Self,
+                UserId = UserId,
+                InviterId = InviterId,
+                PromotedBy = PromotedBy,
+                Date = Date
+            };
+            var cloneAdminRights = (CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase?)AdminRights.Clone();
+            if (cloneAdminRights is null)
+            {
+                return null;
+            }
+            newClonedObject.AdminRights = cloneAdminRights;
+            newClonedObject.Rank = Rank;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

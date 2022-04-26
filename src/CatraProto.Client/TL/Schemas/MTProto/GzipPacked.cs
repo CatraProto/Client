@@ -63,5 +63,17 @@ namespace CatraProto.Client.TL.Schemas.MTProto
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new GzipPacked
+            {
+                PackedData = PackedData
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

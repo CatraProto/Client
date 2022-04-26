@@ -101,5 +101,31 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new FeaturedStickers
+            {
+                Hash = Hash,
+                Count = Count
+            };
+            foreach (var sets in Sets)
+            {
+                var clonesets = (CatraProto.Client.TL.Schemas.CloudChats.StickerSetCoveredBase?)sets.Clone();
+                if (clonesets is null)
+                {
+                    return null;
+                }
+                newClonedObject.Sets.Add(clonesets);
+            }
+            foreach (var unread in Unread)
+            {
+                newClonedObject.Unread.Add(unread);
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

@@ -122,5 +122,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new GeoPoint
+            {
+                Flags = Flags,
+                Long = Long,
+                Lat = Lat,
+                AccessHash = AccessHash,
+                AccuracyRadius = AccuracyRadius
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

@@ -66,5 +66,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new MessageStats();
+            var cloneViewsGraph = (CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase?)ViewsGraph.Clone();
+            if (cloneViewsGraph is null)
+            {
+                return null;
+            }
+            newClonedObject.ViewsGraph = cloneViewsGraph;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

@@ -90,5 +90,24 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new InputBotInlineResultGame
+            {
+                Id = Id,
+                ShortName = ShortName
+            };
+            var cloneSendMessage = (CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageBase?)SendMessage.Clone();
+            if (cloneSendMessage is null)
+            {
+                return null;
+            }
+            newClonedObject.SendMessage = cloneSendMessage;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

@@ -62,5 +62,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new SentCodeTypeApp
+            {
+                Length = Length
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

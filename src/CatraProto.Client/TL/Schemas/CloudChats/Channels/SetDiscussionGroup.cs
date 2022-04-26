@@ -86,5 +86,25 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new SetDiscussionGroup();
+            var cloneBroadcast = (CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase?)Broadcast.Clone();
+            if (cloneBroadcast is null)
+            {
+                return null;
+            }
+            newClonedObject.Broadcast = cloneBroadcast;
+            var cloneGroup = (CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase?)Group.Clone();
+            if (cloneGroup is null)
+            {
+                return null;
+            }
+            newClonedObject.Group = cloneGroup;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

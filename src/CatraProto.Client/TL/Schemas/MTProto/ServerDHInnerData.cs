@@ -121,5 +121,22 @@ namespace CatraProto.Client.TL.Schemas.MTProto
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new ServerDHInnerData
+            {
+                Nonce = Nonce,
+                ServerNonce = ServerNonce,
+                G = G,
+                DhPrime = DhPrime,
+                GA = GA,
+                ServerTime = ServerTime
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

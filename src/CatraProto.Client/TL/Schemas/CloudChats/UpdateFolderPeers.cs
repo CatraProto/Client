@@ -89,5 +89,25 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new UpdateFolderPeers();
+            foreach (var folderPeers in FolderPeers)
+            {
+                var clonefolderPeers = (CatraProto.Client.TL.Schemas.CloudChats.FolderPeerBase?)folderPeers.Clone();
+                if (clonefolderPeers is null)
+                {
+                    return null;
+                }
+                newClonedObject.FolderPeers.Add(clonefolderPeers);
+            }
+            newClonedObject.Pts = Pts;
+            newClonedObject.PtsCount = PtsCount;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

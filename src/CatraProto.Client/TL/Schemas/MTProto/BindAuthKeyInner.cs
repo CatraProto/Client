@@ -106,5 +106,21 @@ namespace CatraProto.Client.TL.Schemas.MTProto
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new BindAuthKeyInner
+            {
+                Nonce = Nonce,
+                TempAuthKeyId = TempAuthKeyId,
+                PermAuthKeyId = PermAuthKeyId,
+                TempSessionId = TempSessionId,
+                ExpiresAt = ExpiresAt
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

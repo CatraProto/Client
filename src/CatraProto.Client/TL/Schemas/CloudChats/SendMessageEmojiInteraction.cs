@@ -89,5 +89,24 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new SendMessageEmojiInteraction
+            {
+                Emoticon = Emoticon,
+                MsgId = MsgId
+            };
+            var cloneInteraction = (CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase?)Interaction.Clone();
+            if (cloneInteraction is null)
+            {
+                return null;
+            }
+            newClonedObject.Interaction = cloneInteraction;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

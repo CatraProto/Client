@@ -256,5 +256,62 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new Chat
+            {
+                Flags = Flags,
+                Creator = Creator,
+                Kicked = Kicked,
+                Left = Left,
+                Deactivated = Deactivated,
+                CallActive = CallActive,
+                CallNotEmpty = CallNotEmpty,
+                Noforwards = Noforwards,
+                Id = Id,
+                Title = Title
+            };
+            var clonePhoto = (CatraProto.Client.TL.Schemas.CloudChats.ChatPhotoBase?)Photo.Clone();
+            if (clonePhoto is null)
+            {
+                return null;
+            }
+            newClonedObject.Photo = clonePhoto;
+            newClonedObject.ParticipantsCount = ParticipantsCount;
+            newClonedObject.Date = Date;
+            newClonedObject.Version = Version;
+            if (MigratedTo is not null)
+            {
+                var cloneMigratedTo = (CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase?)MigratedTo.Clone();
+                if (cloneMigratedTo is null)
+                {
+                    return null;
+                }
+                newClonedObject.MigratedTo = cloneMigratedTo;
+            }
+            if (AdminRights is not null)
+            {
+                var cloneAdminRights = (CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase?)AdminRights.Clone();
+                if (cloneAdminRights is null)
+                {
+                    return null;
+                }
+                newClonedObject.AdminRights = cloneAdminRights;
+            }
+            if (DefaultBannedRights is not null)
+            {
+                var cloneDefaultBannedRights = (CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase?)DefaultBannedRights.Clone();
+                if (cloneDefaultBannedRights is null)
+                {
+                    return null;
+                }
+                newClonedObject.DefaultBannedRights = cloneDefaultBannedRights;
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

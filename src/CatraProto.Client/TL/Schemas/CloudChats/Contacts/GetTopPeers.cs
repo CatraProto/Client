@@ -153,5 +153,27 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new GetTopPeers
+            {
+                Flags = Flags,
+                Correspondents = Correspondents,
+                BotsPm = BotsPm,
+                BotsInline = BotsInline,
+                PhoneCalls = PhoneCalls,
+                ForwardUsers = ForwardUsers,
+                ForwardChats = ForwardChats,
+                Groups = Groups,
+                Channels = Channels,
+                Offset = Offset,
+                Limit = Limit,
+                Hash = Hash
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

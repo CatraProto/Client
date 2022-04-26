@@ -78,5 +78,17 @@ namespace CatraProto.Client.TL.Schemas.MTProto
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new PingDelayDisconnect
+            {
+                PingId = PingId,
+                DisconnectDelay = DisconnectDelay
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

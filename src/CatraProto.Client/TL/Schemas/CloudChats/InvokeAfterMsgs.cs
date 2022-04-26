@@ -84,5 +84,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new InvokeAfterMsgs();
+            foreach (var msgIds in MsgIds)
+            {
+                newClonedObject.MsgIds.Add(msgIds);
+            }
+            newClonedObject.Query = Query;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

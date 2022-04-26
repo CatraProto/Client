@@ -114,5 +114,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new FileCdnRedirect
+            {
+                DcId = DcId,
+                FileToken = FileToken,
+                EncryptionKey = EncryptionKey,
+                EncryptionIv = EncryptionIv
+            };
+            foreach (var fileHashes in FileHashes)
+            {
+                var clonefileHashes = (CatraProto.Client.TL.Schemas.CloudChats.FileHashBase?)fileHashes.Clone();
+                if (clonefileHashes is null)
+                {
+                    return null;
+                }
+                newClonedObject.FileHashes.Add(clonefileHashes);
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

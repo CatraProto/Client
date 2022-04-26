@@ -126,5 +126,34 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new DocumentAttributeSticker
+            {
+                Flags = Flags,
+                Mask = Mask,
+                Alt = Alt
+            };
+            var cloneStickerset = (CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase?)Stickerset.Clone();
+            if (cloneStickerset is null)
+            {
+                return null;
+            }
+            newClonedObject.Stickerset = cloneStickerset;
+            if (MaskCoords is not null)
+            {
+                var cloneMaskCoords = (CatraProto.Client.TL.Schemas.CloudChats.MaskCoordsBase?)MaskCoords.Clone();
+                if (cloneMaskCoords is null)
+                {
+                    return null;
+                }
+                newClonedObject.MaskCoords = cloneMaskCoords;
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

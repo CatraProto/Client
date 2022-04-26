@@ -147,5 +147,46 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new MessageReactionsList
+            {
+                Flags = Flags,
+                Count = Count
+            };
+            foreach (var reactions in Reactions)
+            {
+                var clonereactions = (CatraProto.Client.TL.Schemas.CloudChats.MessagePeerReactionBase?)reactions.Clone();
+                if (clonereactions is null)
+                {
+                    return null;
+                }
+                newClonedObject.Reactions.Add(clonereactions);
+            }
+            foreach (var chats in Chats)
+            {
+                var clonechats = (CatraProto.Client.TL.Schemas.CloudChats.ChatBase?)chats.Clone();
+                if (clonechats is null)
+                {
+                    return null;
+                }
+                newClonedObject.Chats.Add(clonechats);
+            }
+            foreach (var users in Users)
+            {
+                var cloneusers = (CatraProto.Client.TL.Schemas.CloudChats.UserBase?)users.Clone();
+                if (cloneusers is null)
+                {
+                    return null;
+                }
+                newClonedObject.Users.Add(cloneusers);
+            }
+            newClonedObject.NextOffset = NextOffset;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

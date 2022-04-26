@@ -77,5 +77,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new MessageActionGroupCallScheduled();
+            var cloneCall = (CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase?)Call.Clone();
+            if (cloneCall is null)
+            {
+                return null;
+            }
+            newClonedObject.Call = cloneCall;
+            newClonedObject.ScheduleDate = ScheduleDate;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

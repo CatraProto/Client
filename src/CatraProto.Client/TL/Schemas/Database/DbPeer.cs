@@ -66,9 +66,23 @@ namespace CatraProto.Client.TL.Schemas.Database
             return ConstructorId;
         }
 
-
         public void UpdateFlags()
         {
+        }
+
+        public IObject? Clone()
+        {
+            var newObj = new DbPeer
+            {
+                AccessHash = AccessHash,
+                LayerVersion = LayerVersion
+            };
+            if (Object is not null)
+            {
+                newObj.Object = Object.Clone();
+            }
+
+            return newObj;
         }
     }
 }

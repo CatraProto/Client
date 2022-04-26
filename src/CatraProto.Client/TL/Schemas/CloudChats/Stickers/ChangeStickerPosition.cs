@@ -82,5 +82,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new ChangeStickerPosition();
+            var cloneSticker = (CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase?)Sticker.Clone();
+            if (cloneSticker is null)
+            {
+                return null;
+            }
+            newClonedObject.Sticker = cloneSticker;
+            newClonedObject.Position = Position;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

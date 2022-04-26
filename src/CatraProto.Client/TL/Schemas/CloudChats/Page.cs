@@ -163,5 +163,49 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new Page
+            {
+                Flags = Flags,
+                Part = Part,
+                Rtl = Rtl,
+                V2 = V2,
+                Url = Url
+            };
+            foreach (var blocks in Blocks)
+            {
+                var cloneblocks = (CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase?)blocks.Clone();
+                if (cloneblocks is null)
+                {
+                    return null;
+                }
+                newClonedObject.Blocks.Add(cloneblocks);
+            }
+            foreach (var photos in Photos)
+            {
+                var clonephotos = (CatraProto.Client.TL.Schemas.CloudChats.PhotoBase?)photos.Clone();
+                if (clonephotos is null)
+                {
+                    return null;
+                }
+                newClonedObject.Photos.Add(clonephotos);
+            }
+            foreach (var documents in Documents)
+            {
+                var clonedocuments = (CatraProto.Client.TL.Schemas.CloudChats.DocumentBase?)documents.Clone();
+                if (clonedocuments is null)
+                {
+                    return null;
+                }
+                newClonedObject.Documents.Add(clonedocuments);
+            }
+            newClonedObject.Views = Views;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

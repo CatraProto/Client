@@ -66,5 +66,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new MessageMediaWebPage();
+            var cloneWebpage = (CatraProto.Client.TL.Schemas.CloudChats.WebPageBase?)Webpage.Clone();
+            if (cloneWebpage is null)
+            {
+                return null;
+            }
+            newClonedObject.Webpage = cloneWebpage;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

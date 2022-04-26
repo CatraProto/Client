@@ -164,5 +164,34 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new ChannelAdminLogEventsFilter
+            {
+                Flags = Flags,
+                Join = Join,
+                Leave = Leave,
+                Invite = Invite,
+                Ban = Ban,
+                Unban = Unban,
+                Kick = Kick,
+                Unkick = Unkick,
+                Promote = Promote,
+                Demote = Demote,
+                Info = Info,
+                Settings = Settings,
+                Pinned = Pinned,
+                Edit = Edit,
+                Delete = Delete,
+                GroupCall = GroupCall,
+                Invites = Invites,
+                Send = Send
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

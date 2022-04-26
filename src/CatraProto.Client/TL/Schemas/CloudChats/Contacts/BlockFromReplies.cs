@@ -101,5 +101,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new BlockFromReplies
+            {
+                Flags = Flags,
+                DeleteMessage = DeleteMessage,
+                DeleteHistory = DeleteHistory,
+                ReportSpam = ReportSpam,
+                MsgId = MsgId
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

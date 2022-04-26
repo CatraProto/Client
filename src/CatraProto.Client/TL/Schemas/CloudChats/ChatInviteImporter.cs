@@ -138,5 +138,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new ChatInviteImporter
+            {
+                Flags = Flags,
+                Requested = Requested,
+                UserId = UserId,
+                Date = Date,
+                About = About,
+                ApprovedBy = ApprovedBy
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

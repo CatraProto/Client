@@ -332,5 +332,61 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new UserFull
+            {
+                Flags = Flags,
+                Blocked = Blocked,
+                PhoneCallsAvailable = PhoneCallsAvailable,
+                PhoneCallsPrivate = PhoneCallsPrivate,
+                CanPinMessage = CanPinMessage,
+                HasScheduled = HasScheduled,
+                VideoCallsAvailable = VideoCallsAvailable,
+                Id = Id,
+                About = About
+            };
+            var cloneSettings = (CatraProto.Client.TL.Schemas.CloudChats.PeerSettingsBase?)Settings.Clone();
+            if (cloneSettings is null)
+            {
+                return null;
+            }
+            newClonedObject.Settings = cloneSettings;
+            if (ProfilePhoto is not null)
+            {
+                var cloneProfilePhoto = (CatraProto.Client.TL.Schemas.CloudChats.PhotoBase?)ProfilePhoto.Clone();
+                if (cloneProfilePhoto is null)
+                {
+                    return null;
+                }
+                newClonedObject.ProfilePhoto = cloneProfilePhoto;
+            }
+            var cloneNotifySettings = (CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase?)NotifySettings.Clone();
+            if (cloneNotifySettings is null)
+            {
+                return null;
+            }
+            newClonedObject.NotifySettings = cloneNotifySettings;
+            if (BotInfo is not null)
+            {
+                var cloneBotInfo = (CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase?)BotInfo.Clone();
+                if (cloneBotInfo is null)
+                {
+                    return null;
+                }
+                newClonedObject.BotInfo = cloneBotInfo;
+            }
+            newClonedObject.PinnedMsgId = PinnedMsgId;
+            newClonedObject.CommonChatsCount = CommonChatsCount;
+            newClonedObject.FolderId = FolderId;
+            newClonedObject.TtlPeriod = TtlPeriod;
+            newClonedObject.ThemeEmoticon = ThemeEmoticon;
+            newClonedObject.PrivateForwardName = PrivateForwardName;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

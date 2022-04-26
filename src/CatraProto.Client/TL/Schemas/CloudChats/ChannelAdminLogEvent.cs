@@ -99,5 +99,25 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new ChannelAdminLogEvent
+            {
+                Id = Id,
+                Date = Date,
+                UserId = UserId
+            };
+            var cloneAction = (CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionBase?)Action.Clone();
+            if (cloneAction is null)
+            {
+                return null;
+            }
+            newClonedObject.Action = cloneAction;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

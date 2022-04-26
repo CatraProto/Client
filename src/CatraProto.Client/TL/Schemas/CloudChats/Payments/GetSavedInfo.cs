@@ -51,5 +51,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new GetSavedInfo();
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

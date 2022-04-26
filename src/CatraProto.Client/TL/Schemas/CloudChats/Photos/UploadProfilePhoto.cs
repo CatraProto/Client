@@ -139,5 +139,35 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new UploadProfilePhoto
+            {
+                Flags = Flags
+            };
+            if (File is not null)
+            {
+                var cloneFile = (CatraProto.Client.TL.Schemas.CloudChats.InputFileBase?)File.Clone();
+                if (cloneFile is null)
+                {
+                    return null;
+                }
+                newClonedObject.File = cloneFile;
+            }
+            if (Video is not null)
+            {
+                var cloneVideo = (CatraProto.Client.TL.Schemas.CloudChats.InputFileBase?)Video.Clone();
+                if (cloneVideo is null)
+                {
+                    return null;
+                }
+                newClonedObject.Video = cloneVideo;
+            }
+            newClonedObject.VideoStartTs = VideoStartTs;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

@@ -101,5 +101,28 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new EmojiKeywordsDifference
+            {
+                LangCode = LangCode,
+                FromVersion = FromVersion,
+                Version = Version
+            };
+            foreach (var keywords in Keywords)
+            {
+                var clonekeywords = (CatraProto.Client.TL.Schemas.CloudChats.EmojiKeywordBase?)keywords.Clone();
+                if (clonekeywords is null)
+                {
+                    return null;
+                }
+                newClonedObject.Keywords.Add(clonekeywords);
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

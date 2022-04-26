@@ -67,5 +67,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new GetPassportConfig
+            {
+                Hash = Hash
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

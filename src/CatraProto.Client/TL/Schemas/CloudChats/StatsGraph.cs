@@ -105,5 +105,24 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new StatsGraph
+            {
+                Flags = Flags
+            };
+            var cloneJson = (CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase?)Json.Clone();
+            if (cloneJson is null)
+            {
+                return null;
+            }
+            newClonedObject.Json = cloneJson;
+            newClonedObject.ZoomToken = ZoomToken;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

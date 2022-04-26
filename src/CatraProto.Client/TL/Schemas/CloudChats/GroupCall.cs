@@ -273,5 +273,35 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new GroupCall
+            {
+                Flags = Flags,
+                JoinMuted = JoinMuted,
+                CanChangeJoinMuted = CanChangeJoinMuted,
+                JoinDateAsc = JoinDateAsc,
+                ScheduleStartSubscribed = ScheduleStartSubscribed,
+                CanStartVideo = CanStartVideo,
+                RecordVideoActive = RecordVideoActive,
+                RtmpStream = RtmpStream,
+                ListenersHidden = ListenersHidden,
+                Id = Id,
+                AccessHash = AccessHash,
+                ParticipantsCount = ParticipantsCount,
+                Title = Title,
+                StreamDcId = StreamDcId,
+                RecordStartDate = RecordStartDate,
+                ScheduleDate = ScheduleDate,
+                UnmutedVideoCount = UnmutedVideoCount,
+                UnmutedVideoLimit = UnmutedVideoLimit,
+                Version = Version
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

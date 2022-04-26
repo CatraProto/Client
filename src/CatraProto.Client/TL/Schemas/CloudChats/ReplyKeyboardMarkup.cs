@@ -124,5 +124,30 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new ReplyKeyboardMarkup
+            {
+                Flags = Flags,
+                Resize = Resize,
+                SingleUse = SingleUse,
+                Selective = Selective
+            };
+            foreach (var rows in Rows)
+            {
+                var clonerows = (CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonRowBase?)rows.Clone();
+                if (clonerows is null)
+                {
+                    return null;
+                }
+                newClonedObject.Rows.Add(clonerows);
+            }
+            newClonedObject.Placeholder = Placeholder;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

@@ -91,5 +91,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new GetDocumentByHash
+            {
+                Sha256 = Sha256,
+                Size = Size,
+                MimeType = MimeType
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

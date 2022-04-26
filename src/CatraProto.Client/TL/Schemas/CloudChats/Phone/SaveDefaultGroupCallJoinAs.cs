@@ -86,5 +86,25 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new SaveDefaultGroupCallJoinAs();
+            var clonePeer = (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase?)Peer.Clone();
+            if (clonePeer is null)
+            {
+                return null;
+            }
+            newClonedObject.Peer = clonePeer;
+            var cloneJoinAs = (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase?)JoinAs.Clone();
+            if (cloneJoinAs is null)
+            {
+                return null;
+            }
+            newClonedObject.JoinAs = cloneJoinAs;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

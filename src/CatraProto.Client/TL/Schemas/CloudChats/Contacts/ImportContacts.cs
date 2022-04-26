@@ -72,5 +72,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new ImportContacts();
+            foreach (var contacts in Contacts)
+            {
+                var clonecontacts = (CatraProto.Client.TL.Schemas.CloudChats.InputContactBase?)contacts.Clone();
+                if (clonecontacts is null)
+                {
+                    return null;
+                }
+                newClonedObject.Contacts.Add(clonecontacts);
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

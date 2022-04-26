@@ -67,5 +67,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Folders
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new DeleteFolder
+            {
+                FolderId = FolderId
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

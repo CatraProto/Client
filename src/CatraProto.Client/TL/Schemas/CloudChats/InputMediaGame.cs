@@ -66,5 +66,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new InputMediaGame();
+            var cloneId = (CatraProto.Client.TL.Schemas.CloudChats.InputGameBase?)Id.Clone();
+            if (cloneId is null)
+            {
+                return null;
+            }
+            newClonedObject.Id = cloneId;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

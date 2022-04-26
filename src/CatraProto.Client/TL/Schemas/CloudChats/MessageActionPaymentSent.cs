@@ -74,5 +74,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new MessageActionPaymentSent
+            {
+                Currency = Currency,
+                TotalAmount = TotalAmount
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

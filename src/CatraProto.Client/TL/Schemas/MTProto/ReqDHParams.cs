@@ -127,5 +127,21 @@ namespace CatraProto.Client.TL.Schemas.MTProto
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new ReqDHParams
+            {
+                Nonce = Nonce,
+                ServerNonce = ServerNonce,
+                P = P,
+                Q = Q,
+                PublicKeyFingerprint = PublicKeyFingerprint,
+                EncryptedData = EncryptedData
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

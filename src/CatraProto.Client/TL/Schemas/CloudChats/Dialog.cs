@@ -241,5 +241,48 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new Dialog
+            {
+                Flags = Flags,
+                Pinned = Pinned,
+                UnreadMark = UnreadMark
+            };
+            var clonePeer = (CatraProto.Client.TL.Schemas.CloudChats.PeerBase?)Peer.Clone();
+            if (clonePeer is null)
+            {
+                return null;
+            }
+            newClonedObject.Peer = clonePeer;
+            newClonedObject.TopMessage = TopMessage;
+            newClonedObject.ReadInboxMaxId = ReadInboxMaxId;
+            newClonedObject.ReadOutboxMaxId = ReadOutboxMaxId;
+            newClonedObject.UnreadCount = UnreadCount;
+            newClonedObject.UnreadMentionsCount = UnreadMentionsCount;
+            newClonedObject.UnreadReactionsCount = UnreadReactionsCount;
+            var cloneNotifySettings = (CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase?)NotifySettings.Clone();
+            if (cloneNotifySettings is null)
+            {
+                return null;
+            }
+            newClonedObject.NotifySettings = cloneNotifySettings;
+            newClonedObject.Pts = Pts;
+            if (Draft is not null)
+            {
+                var cloneDraft = (CatraProto.Client.TL.Schemas.CloudChats.DraftMessageBase?)Draft.Clone();
+                if (cloneDraft is null)
+                {
+                    return null;
+                }
+                newClonedObject.Draft = cloneDraft;
+            }
+            newClonedObject.FolderId = FolderId;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

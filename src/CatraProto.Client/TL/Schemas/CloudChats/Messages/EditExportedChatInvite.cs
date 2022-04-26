@@ -98,11 +98,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 writer.WriteInt32(UsageLimit.Value);
             }
 
-            var checkrequestNeeded = writer.WriteBool(RequestNeeded.Value);
-            if (checkrequestNeeded.IsError)
+            if (FlagsHelper.IsFlagSet(Flags, 3))
             {
-                return checkrequestNeeded;
+                var checkrequestNeeded = writer.WriteBool(RequestNeeded.Value);
+                if (checkrequestNeeded.IsError)
+                {
+                    return checkrequestNeeded;
+                }
             }
+
             if (FlagsHelper.IsFlagSet(Flags, 4))
             {
 
@@ -188,5 +192,28 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new EditExportedChatInvite
+            {
+                Flags = Flags,
+                Revoked = Revoked
+            };
+            var clonePeer = (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase?)Peer.Clone();
+            if (clonePeer is null)
+            {
+                return null;
+            }
+            newClonedObject.Peer = clonePeer;
+            newClonedObject.Link = Link;
+            newClonedObject.ExpireDate = ExpireDate;
+            newClonedObject.UsageLimit = UsageLimit;
+            newClonedObject.RequestNeeded = RequestNeeded;
+            newClonedObject.Title = Title;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

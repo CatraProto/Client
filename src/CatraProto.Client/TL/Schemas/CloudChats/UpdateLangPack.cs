@@ -66,5 +66,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new UpdateLangPack();
+            var cloneDifference = (CatraProto.Client.TL.Schemas.CloudChats.LangPackDifferenceBase?)Difference.Clone();
+            if (cloneDifference is null)
+            {
+                return null;
+            }
+            newClonedObject.Difference = cloneDifference;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

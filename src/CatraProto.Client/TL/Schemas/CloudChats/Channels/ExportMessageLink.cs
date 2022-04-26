@@ -110,5 +110,25 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new ExportMessageLink
+            {
+                Flags = Flags,
+                Grouped = Grouped,
+                Thread = Thread
+            };
+            var cloneChannel = (CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase?)Channel.Clone();
+            if (cloneChannel is null)
+            {
+                return null;
+            }
+            newClonedObject.Channel = cloneChannel;
+            newClonedObject.Id = Id;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

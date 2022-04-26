@@ -286,5 +286,68 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new PaymentReceipt
+            {
+                Flags = Flags,
+                Date = Date,
+                BotId = BotId,
+                ProviderId = ProviderId,
+                Title = Title,
+                Description = Description
+            };
+            if (Photo is not null)
+            {
+                var clonePhoto = (CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase?)Photo.Clone();
+                if (clonePhoto is null)
+                {
+                    return null;
+                }
+                newClonedObject.Photo = clonePhoto;
+            }
+            var cloneInvoice = (CatraProto.Client.TL.Schemas.CloudChats.InvoiceBase?)Invoice.Clone();
+            if (cloneInvoice is null)
+            {
+                return null;
+            }
+            newClonedObject.Invoice = cloneInvoice;
+            if (Info is not null)
+            {
+                var cloneInfo = (CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase?)Info.Clone();
+                if (cloneInfo is null)
+                {
+                    return null;
+                }
+                newClonedObject.Info = cloneInfo;
+            }
+            if (Shipping is not null)
+            {
+                var cloneShipping = (CatraProto.Client.TL.Schemas.CloudChats.ShippingOptionBase?)Shipping.Clone();
+                if (cloneShipping is null)
+                {
+                    return null;
+                }
+                newClonedObject.Shipping = cloneShipping;
+            }
+            newClonedObject.TipAmount = TipAmount;
+            newClonedObject.Currency = Currency;
+            newClonedObject.TotalAmount = TotalAmount;
+            newClonedObject.CredentialsTitle = CredentialsTitle;
+            foreach (var users in Users)
+            {
+                var cloneusers = (CatraProto.Client.TL.Schemas.CloudChats.UserBase?)users.Clone();
+                if (cloneusers is null)
+                {
+                    return null;
+                }
+                newClonedObject.Users.Add(cloneusers);
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

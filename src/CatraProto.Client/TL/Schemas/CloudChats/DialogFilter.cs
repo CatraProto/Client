@@ -207,5 +207,55 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new DialogFilter
+            {
+                Flags = Flags,
+                Contacts = Contacts,
+                NonContacts = NonContacts,
+                Groups = Groups,
+                Broadcasts = Broadcasts,
+                Bots = Bots,
+                ExcludeMuted = ExcludeMuted,
+                ExcludeRead = ExcludeRead,
+                ExcludeArchived = ExcludeArchived,
+                Id = Id,
+                Title = Title,
+                Emoticon = Emoticon
+            };
+            foreach (var pinnedPeers in PinnedPeers)
+            {
+                var clonepinnedPeers = (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase?)pinnedPeers.Clone();
+                if (clonepinnedPeers is null)
+                {
+                    return null;
+                }
+                newClonedObject.PinnedPeers.Add(clonepinnedPeers);
+            }
+            foreach (var includePeers in IncludePeers)
+            {
+                var cloneincludePeers = (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase?)includePeers.Clone();
+                if (cloneincludePeers is null)
+                {
+                    return null;
+                }
+                newClonedObject.IncludePeers.Add(cloneincludePeers);
+            }
+            foreach (var excludePeers in ExcludePeers)
+            {
+                var cloneexcludePeers = (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase?)excludePeers.Clone();
+                if (cloneexcludePeers is null)
+                {
+                    return null;
+                }
+                newClonedObject.ExcludePeers.Add(cloneexcludePeers);
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

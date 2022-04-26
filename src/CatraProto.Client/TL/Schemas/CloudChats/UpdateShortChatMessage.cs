@@ -286,5 +286,60 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new UpdateShortChatMessage
+            {
+                Flags = Flags,
+                Out = Out,
+                Mentioned = Mentioned,
+                MediaUnread = MediaUnread,
+                Silent = Silent,
+                Id = Id,
+                FromId = FromId,
+                ChatId = ChatId,
+                Message = Message,
+                Pts = Pts,
+                PtsCount = PtsCount,
+                Date = Date
+            };
+            if (FwdFrom is not null)
+            {
+                var cloneFwdFrom = (CatraProto.Client.TL.Schemas.CloudChats.MessageFwdHeaderBase?)FwdFrom.Clone();
+                if (cloneFwdFrom is null)
+                {
+                    return null;
+                }
+                newClonedObject.FwdFrom = cloneFwdFrom;
+            }
+            newClonedObject.ViaBotId = ViaBotId;
+            if (ReplyTo is not null)
+            {
+                var cloneReplyTo = (CatraProto.Client.TL.Schemas.CloudChats.MessageReplyHeaderBase?)ReplyTo.Clone();
+                if (cloneReplyTo is null)
+                {
+                    return null;
+                }
+                newClonedObject.ReplyTo = cloneReplyTo;
+            }
+            if (Entities is not null)
+            {
+                foreach (var entities in Entities)
+                {
+                    var cloneentities = (CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase?)entities.Clone();
+                    if (cloneentities is null)
+                    {
+                        return null;
+                    }
+                    newClonedObject.Entities.Add(cloneentities);
+                }
+            }
+            newClonedObject.TtlPeriod = TtlPeriod;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

@@ -69,5 +69,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new DropTempAuthKeys();
+            foreach (var exceptAuthKeys in ExceptAuthKeys)
+            {
+                newClonedObject.ExceptAuthKeys.Add(exceptAuthKeys);
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

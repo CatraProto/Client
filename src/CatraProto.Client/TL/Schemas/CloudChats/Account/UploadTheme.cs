@@ -137,5 +137,33 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new UploadTheme
+            {
+                Flags = Flags
+            };
+            var cloneFile = (CatraProto.Client.TL.Schemas.CloudChats.InputFileBase?)File.Clone();
+            if (cloneFile is null)
+            {
+                return null;
+            }
+            newClonedObject.File = cloneFile;
+            if (Thumb is not null)
+            {
+                var cloneThumb = (CatraProto.Client.TL.Schemas.CloudChats.InputFileBase?)Thumb.Clone();
+                if (cloneThumb is null)
+                {
+                    return null;
+                }
+                newClonedObject.Thumb = cloneThumb;
+            }
+            newClonedObject.FileName = FileName;
+            newClonedObject.MimeType = MimeType;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

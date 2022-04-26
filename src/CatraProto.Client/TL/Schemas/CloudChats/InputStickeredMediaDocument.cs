@@ -66,5 +66,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new InputStickeredMediaDocument();
+            var cloneId = (CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase?)Id.Clone();
+            if (cloneId is null)
+            {
+                return null;
+            }
+            newClonedObject.Id = cloneId;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

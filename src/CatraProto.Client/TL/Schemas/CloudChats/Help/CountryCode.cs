@@ -125,5 +125,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new CountryCode
+            {
+                Flags = Flags,
+                CountryCodeField = CountryCodeField
+            };
+            foreach (var prefixes in Prefixes)
+            {
+                newClonedObject.Prefixes.Add(prefixes);
+            }
+            foreach (var patterns in Patterns)
+            {
+                newClonedObject.Patterns.Add(patterns);
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

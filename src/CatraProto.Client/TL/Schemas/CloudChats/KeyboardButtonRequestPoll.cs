@@ -50,11 +50,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             UpdateFlags();
 
             writer.WriteInt32(Flags);
-            var checkquiz = writer.WriteBool(Quiz.Value);
-            if (checkquiz.IsError)
+            if (FlagsHelper.IsFlagSet(Flags, 0))
             {
-                return checkquiz;
+                var checkquiz = writer.WriteBool(Quiz.Value);
+                if (checkquiz.IsError)
+                {
+                    return checkquiz;
+                }
             }
+
 
             writer.WriteString(Text);
 
@@ -99,5 +103,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new KeyboardButtonRequestPoll
+            {
+                Flags = Flags,
+                Quiz = Quiz,
+                Text = Text
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

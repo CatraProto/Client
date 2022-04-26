@@ -193,5 +193,57 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new InputMediaUploadedDocument
+            {
+                Flags = Flags,
+                NosoundVideo = NosoundVideo,
+                ForceFile = ForceFile
+            };
+            var cloneFile = (CatraProto.Client.TL.Schemas.CloudChats.InputFileBase?)File.Clone();
+            if (cloneFile is null)
+            {
+                return null;
+            }
+            newClonedObject.File = cloneFile;
+            if (Thumb is not null)
+            {
+                var cloneThumb = (CatraProto.Client.TL.Schemas.CloudChats.InputFileBase?)Thumb.Clone();
+                if (cloneThumb is null)
+                {
+                    return null;
+                }
+                newClonedObject.Thumb = cloneThumb;
+            }
+            newClonedObject.MimeType = MimeType;
+            foreach (var attributes in Attributes)
+            {
+                var cloneattributes = (CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase?)attributes.Clone();
+                if (cloneattributes is null)
+                {
+                    return null;
+                }
+                newClonedObject.Attributes.Add(cloneattributes);
+            }
+            if (Stickers is not null)
+            {
+                foreach (var stickers in Stickers)
+                {
+                    var clonestickers = (CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase?)stickers.Clone();
+                    if (clonestickers is null)
+                    {
+                        return null;
+                    }
+                    newClonedObject.Stickers.Add(clonestickers);
+                }
+            }
+            newClonedObject.TtlSeconds = TtlSeconds;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

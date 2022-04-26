@@ -189,5 +189,35 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new SearchGlobal
+            {
+                Flags = Flags,
+                FolderId = FolderId,
+                Q = Q
+            };
+            var cloneFilter = (CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase?)Filter.Clone();
+            if (cloneFilter is null)
+            {
+                return null;
+            }
+            newClonedObject.Filter = cloneFilter;
+            newClonedObject.MinDate = MinDate;
+            newClonedObject.MaxDate = MaxDate;
+            newClonedObject.OffsetRate = OffsetRate;
+            var cloneOffsetPeer = (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase?)OffsetPeer.Clone();
+            if (cloneOffsetPeer is null)
+            {
+                return null;
+            }
+            newClonedObject.OffsetPeer = cloneOffsetPeer;
+            newClonedObject.OffsetId = OffsetId;
+            newClonedObject.Limit = Limit;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

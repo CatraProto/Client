@@ -86,5 +86,25 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new GetInlineGameHighScores();
+            var cloneId = (CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageIDBase?)Id.Clone();
+            if (cloneId is null)
+            {
+                return null;
+            }
+            newClonedObject.Id = cloneId;
+            var cloneUserId = (CatraProto.Client.TL.Schemas.CloudChats.InputUserBase?)UserId.Clone();
+            if (cloneUserId is null)
+            {
+                return null;
+            }
+            newClonedObject.UserId = cloneUserId;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

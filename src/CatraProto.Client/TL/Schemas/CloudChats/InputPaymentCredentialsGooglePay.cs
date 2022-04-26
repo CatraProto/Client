@@ -66,5 +66,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new InputPaymentCredentialsGooglePay();
+            var clonePaymentToken = (CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase?)PaymentToken.Clone();
+            if (clonePaymentToken is null)
+            {
+                return null;
+            }
+            newClonedObject.PaymentToken = clonePaymentToken;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

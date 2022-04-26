@@ -99,5 +99,24 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new SaveAutoDownloadSettings
+            {
+                Flags = Flags,
+                Low = Low,
+                High = High
+            };
+            var cloneSettings = (CatraProto.Client.TL.Schemas.CloudChats.AutoDownloadSettingsBase?)Settings.Clone();
+            if (cloneSettings is null)
+            {
+                return null;
+            }
+            newClonedObject.Settings = cloneSettings;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

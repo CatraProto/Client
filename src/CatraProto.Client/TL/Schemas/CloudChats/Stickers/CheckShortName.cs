@@ -68,5 +68,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new CheckShortName
+            {
+                ShortName = ShortName
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

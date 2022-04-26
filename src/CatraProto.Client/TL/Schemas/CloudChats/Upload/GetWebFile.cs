@@ -93,5 +93,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new GetWebFile();
+            var cloneLocation = (CatraProto.Client.TL.Schemas.CloudChats.InputWebFileLocationBase?)Location.Clone();
+            if (cloneLocation is null)
+            {
+                return null;
+            }
+            newClonedObject.Location = cloneLocation;
+            newClonedObject.Offset = Offset;
+            newClonedObject.Limit = Limit;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

@@ -71,5 +71,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new GetAttachedStickers();
+            var cloneMedia = (CatraProto.Client.TL.Schemas.CloudChats.InputStickeredMediaBase?)Media.Clone();
+            if (cloneMedia is null)
+            {
+                return null;
+            }
+            newClonedObject.Media = cloneMedia;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

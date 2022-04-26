@@ -110,5 +110,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new MessageMediaContact
+            {
+                PhoneNumber = PhoneNumber,
+                FirstName = FirstName,
+                LastName = LastName,
+                Vcard = Vcard,
+                UserId = UserId
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

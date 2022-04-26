@@ -79,5 +79,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new SetBotUpdatesStatus
+            {
+                PendingUpdatesCount = PendingUpdatesCount,
+                Message = Message
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

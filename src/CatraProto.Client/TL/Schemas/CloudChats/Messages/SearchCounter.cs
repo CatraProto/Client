@@ -99,5 +99,25 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new SearchCounter
+            {
+                Flags = Flags,
+                Inexact = Inexact
+            };
+            var cloneFilter = (CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase?)Filter.Clone();
+            if (cloneFilter is null)
+            {
+                return null;
+            }
+            newClonedObject.Filter = cloneFilter;
+            newClonedObject.Count = Count;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

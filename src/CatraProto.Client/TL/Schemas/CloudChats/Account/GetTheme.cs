@@ -94,5 +94,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new GetTheme
+            {
+                Format = Format
+            };
+            var cloneTheme = (CatraProto.Client.TL.Schemas.CloudChats.InputThemeBase?)Theme.Clone();
+            if (cloneTheme is null)
+            {
+                return null;
+            }
+            newClonedObject.Theme = cloneTheme;
+            newClonedObject.DocumentId = DocumentId;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

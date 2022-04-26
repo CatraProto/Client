@@ -58,16 +58,24 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             UpdateFlags();
 
             writer.WriteInt32(Flags);
-            var checkshowPreviews = writer.WriteBool(ShowPreviews.Value);
-            if (checkshowPreviews.IsError)
+            if (FlagsHelper.IsFlagSet(Flags, 0))
             {
-                return checkshowPreviews;
+                var checkshowPreviews = writer.WriteBool(ShowPreviews.Value);
+                if (checkshowPreviews.IsError)
+                {
+                    return checkshowPreviews;
+                }
             }
-            var checksilent = writer.WriteBool(Silent.Value);
-            if (checksilent.IsError)
+
+            if (FlagsHelper.IsFlagSet(Flags, 1))
             {
-                return checksilent;
+                var checksilent = writer.WriteBool(Silent.Value);
+                if (checksilent.IsError)
+                {
+                    return checksilent;
+                }
             }
+
             if (FlagsHelper.IsFlagSet(Flags, 2))
             {
                 writer.WriteInt32(MuteUntil.Value);
@@ -145,5 +153,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new PeerNotifySettings
+            {
+                Flags = Flags,
+                ShowPreviews = ShowPreviews,
+                Silent = Silent,
+                MuteUntil = MuteUntil,
+                Sound = Sound
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

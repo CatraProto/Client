@@ -66,5 +66,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new MessageMediaGame();
+            var cloneGame = (CatraProto.Client.TL.Schemas.CloudChats.GameBase?)Game.Clone();
+            if (cloneGame is null)
+            {
+                return null;
+            }
+            newClonedObject.Game = cloneGame;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

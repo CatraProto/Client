@@ -88,5 +88,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new AuthorizationSignUpRequired
+            {
+                Flags = Flags
+            };
+            if (TermsOfService is not null)
+            {
+                var cloneTermsOfService = (CatraProto.Client.TL.Schemas.CloudChats.Help.TermsOfServiceBase?)TermsOfService.Clone();
+                if (cloneTermsOfService is null)
+                {
+                    return null;
+                }
+                newClonedObject.TermsOfService = cloneTermsOfService;
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

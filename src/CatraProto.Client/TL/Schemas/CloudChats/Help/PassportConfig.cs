@@ -77,5 +77,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new PassportConfig
+            {
+                Hash = Hash
+            };
+            var cloneCountriesLangs = (CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase?)CountriesLangs.Clone();
+            if (cloneCountriesLangs is null)
+            {
+                return null;
+            }
+            newClonedObject.CountriesLangs = cloneCountriesLangs;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

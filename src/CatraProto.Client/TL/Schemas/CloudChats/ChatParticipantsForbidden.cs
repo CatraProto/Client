@@ -104,5 +104,27 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new ChatParticipantsForbidden
+            {
+                Flags = Flags,
+                ChatId = ChatId
+            };
+            if (SelfParticipant is not null)
+            {
+                var cloneSelfParticipant = (CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantBase?)SelfParticipant.Clone();
+                if (cloneSelfParticipant is null)
+                {
+                    return null;
+                }
+                newClonedObject.SelfParticipant = cloneSelfParticipant;
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

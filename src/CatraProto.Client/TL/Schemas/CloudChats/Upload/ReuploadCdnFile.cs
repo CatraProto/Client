@@ -80,5 +80,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new ReuploadCdnFile
+            {
+                FileToken = FileToken,
+                RequestToken = RequestToken
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

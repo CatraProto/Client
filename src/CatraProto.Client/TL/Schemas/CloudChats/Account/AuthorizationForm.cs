@@ -151,5 +151,54 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new AuthorizationForm
+            {
+                Flags = Flags
+            };
+            foreach (var requiredTypes in RequiredTypes)
+            {
+                var clonerequiredTypes = (CatraProto.Client.TL.Schemas.CloudChats.SecureRequiredTypeBase?)requiredTypes.Clone();
+                if (clonerequiredTypes is null)
+                {
+                    return null;
+                }
+                newClonedObject.RequiredTypes.Add(clonerequiredTypes);
+            }
+            foreach (var values in Values)
+            {
+                var clonevalues = (CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase?)values.Clone();
+                if (clonevalues is null)
+                {
+                    return null;
+                }
+                newClonedObject.Values.Add(clonevalues);
+            }
+            foreach (var errors in Errors)
+            {
+                var cloneerrors = (CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase?)errors.Clone();
+                if (cloneerrors is null)
+                {
+                    return null;
+                }
+                newClonedObject.Errors.Add(cloneerrors);
+            }
+            foreach (var users in Users)
+            {
+                var cloneusers = (CatraProto.Client.TL.Schemas.CloudChats.UserBase?)users.Clone();
+                if (cloneusers is null)
+                {
+                    return null;
+                }
+                newClonedObject.Users.Add(cloneusers);
+            }
+            newClonedObject.PrivacyPolicyUrl = PrivacyPolicyUrl;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

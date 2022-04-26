@@ -63,5 +63,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new ExportedGroupCallInvite
+            {
+                Link = Link
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

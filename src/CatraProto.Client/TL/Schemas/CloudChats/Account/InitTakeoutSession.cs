@@ -123,5 +123,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new InitTakeoutSession
+            {
+                Flags = Flags,
+                Contacts = Contacts,
+                MessageUsers = MessageUsers,
+                MessageChats = MessageChats,
+                MessageMegagroups = MessageMegagroups,
+                MessageChannels = MessageChannels,
+                Files = Files,
+                FileMaxSize = FileMaxSize
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

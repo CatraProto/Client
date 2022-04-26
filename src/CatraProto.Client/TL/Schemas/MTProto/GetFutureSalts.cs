@@ -67,5 +67,16 @@ namespace CatraProto.Client.TL.Schemas.MTProto
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new GetFutureSalts
+            {
+                Num = Num
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

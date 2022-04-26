@@ -307,5 +307,128 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new MegagroupStats();
+            var clonePeriod = (CatraProto.Client.TL.Schemas.CloudChats.StatsDateRangeDaysBase?)Period.Clone();
+            if (clonePeriod is null)
+            {
+                return null;
+            }
+            newClonedObject.Period = clonePeriod;
+            var cloneMembers = (CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase?)Members.Clone();
+            if (cloneMembers is null)
+            {
+                return null;
+            }
+            newClonedObject.Members = cloneMembers;
+            var cloneMessages = (CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase?)Messages.Clone();
+            if (cloneMessages is null)
+            {
+                return null;
+            }
+            newClonedObject.Messages = cloneMessages;
+            var cloneViewers = (CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase?)Viewers.Clone();
+            if (cloneViewers is null)
+            {
+                return null;
+            }
+            newClonedObject.Viewers = cloneViewers;
+            var clonePosters = (CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase?)Posters.Clone();
+            if (clonePosters is null)
+            {
+                return null;
+            }
+            newClonedObject.Posters = clonePosters;
+            var cloneGrowthGraph = (CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase?)GrowthGraph.Clone();
+            if (cloneGrowthGraph is null)
+            {
+                return null;
+            }
+            newClonedObject.GrowthGraph = cloneGrowthGraph;
+            var cloneMembersGraph = (CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase?)MembersGraph.Clone();
+            if (cloneMembersGraph is null)
+            {
+                return null;
+            }
+            newClonedObject.MembersGraph = cloneMembersGraph;
+            var cloneNewMembersBySourceGraph = (CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase?)NewMembersBySourceGraph.Clone();
+            if (cloneNewMembersBySourceGraph is null)
+            {
+                return null;
+            }
+            newClonedObject.NewMembersBySourceGraph = cloneNewMembersBySourceGraph;
+            var cloneLanguagesGraph = (CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase?)LanguagesGraph.Clone();
+            if (cloneLanguagesGraph is null)
+            {
+                return null;
+            }
+            newClonedObject.LanguagesGraph = cloneLanguagesGraph;
+            var cloneMessagesGraph = (CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase?)MessagesGraph.Clone();
+            if (cloneMessagesGraph is null)
+            {
+                return null;
+            }
+            newClonedObject.MessagesGraph = cloneMessagesGraph;
+            var cloneActionsGraph = (CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase?)ActionsGraph.Clone();
+            if (cloneActionsGraph is null)
+            {
+                return null;
+            }
+            newClonedObject.ActionsGraph = cloneActionsGraph;
+            var cloneTopHoursGraph = (CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase?)TopHoursGraph.Clone();
+            if (cloneTopHoursGraph is null)
+            {
+                return null;
+            }
+            newClonedObject.TopHoursGraph = cloneTopHoursGraph;
+            var cloneWeekdaysGraph = (CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase?)WeekdaysGraph.Clone();
+            if (cloneWeekdaysGraph is null)
+            {
+                return null;
+            }
+            newClonedObject.WeekdaysGraph = cloneWeekdaysGraph;
+            foreach (var topPosters in TopPosters)
+            {
+                var clonetopPosters = (CatraProto.Client.TL.Schemas.CloudChats.StatsGroupTopPosterBase?)topPosters.Clone();
+                if (clonetopPosters is null)
+                {
+                    return null;
+                }
+                newClonedObject.TopPosters.Add(clonetopPosters);
+            }
+            foreach (var topAdmins in TopAdmins)
+            {
+                var clonetopAdmins = (CatraProto.Client.TL.Schemas.CloudChats.StatsGroupTopAdminBase?)topAdmins.Clone();
+                if (clonetopAdmins is null)
+                {
+                    return null;
+                }
+                newClonedObject.TopAdmins.Add(clonetopAdmins);
+            }
+            foreach (var topInviters in TopInviters)
+            {
+                var clonetopInviters = (CatraProto.Client.TL.Schemas.CloudChats.StatsGroupTopInviterBase?)topInviters.Clone();
+                if (clonetopInviters is null)
+                {
+                    return null;
+                }
+                newClonedObject.TopInviters.Add(clonetopInviters);
+            }
+            foreach (var users in Users)
+            {
+                var cloneusers = (CatraProto.Client.TL.Schemas.CloudChats.UserBase?)users.Clone();
+                if (cloneusers is null)
+                {
+                    return null;
+                }
+                newClonedObject.Users.Add(cloneusers);
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

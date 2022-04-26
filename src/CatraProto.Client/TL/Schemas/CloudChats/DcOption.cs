@@ -152,5 +152,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new DcOption
+            {
+                Flags = Flags,
+                Ipv6 = Ipv6,
+                MediaOnly = MediaOnly,
+                TcpoOnly = TcpoOnly,
+                Cdn = Cdn,
+                Static = Static,
+                Id = Id,
+                IpAddress = IpAddress,
+                Port = Port,
+                Secret = Secret
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

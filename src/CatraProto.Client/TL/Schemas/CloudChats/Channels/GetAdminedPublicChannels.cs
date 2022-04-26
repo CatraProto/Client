@@ -79,5 +79,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new GetAdminedPublicChannels
+            {
+                Flags = Flags,
+                ByLocation = ByLocation,
+                CheckLimit = CheckLimit
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

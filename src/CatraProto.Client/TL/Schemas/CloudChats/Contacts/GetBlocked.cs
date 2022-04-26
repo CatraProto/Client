@@ -78,5 +78,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new GetBlocked
+            {
+                Offset = Offset,
+                Limit = Limit
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

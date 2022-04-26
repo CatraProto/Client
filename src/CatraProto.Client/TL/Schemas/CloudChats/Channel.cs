@@ -382,5 +382,85 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new Channel
+            {
+                Flags = Flags,
+                Creator = Creator,
+                Left = Left,
+                Broadcast = Broadcast,
+                Verified = Verified,
+                Megagroup = Megagroup,
+                Restricted = Restricted,
+                Signatures = Signatures,
+                Min = Min,
+                Scam = Scam,
+                HasLink = HasLink,
+                HasGeo = HasGeo,
+                SlowmodeEnabled = SlowmodeEnabled,
+                CallActive = CallActive,
+                CallNotEmpty = CallNotEmpty,
+                Fake = Fake,
+                Gigagroup = Gigagroup,
+                Noforwards = Noforwards,
+                Id = Id,
+                AccessHash = AccessHash,
+                Title = Title,
+                Username = Username
+            };
+            var clonePhoto = (CatraProto.Client.TL.Schemas.CloudChats.ChatPhotoBase?)Photo.Clone();
+            if (clonePhoto is null)
+            {
+                return null;
+            }
+            newClonedObject.Photo = clonePhoto;
+            newClonedObject.Date = Date;
+            if (RestrictionReason is not null)
+            {
+                foreach (var restrictionReason in RestrictionReason)
+                {
+                    var clonerestrictionReason = (CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase?)restrictionReason.Clone();
+                    if (clonerestrictionReason is null)
+                    {
+                        return null;
+                    }
+                    newClonedObject.RestrictionReason.Add(clonerestrictionReason);
+                }
+            }
+            if (AdminRights is not null)
+            {
+                var cloneAdminRights = (CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase?)AdminRights.Clone();
+                if (cloneAdminRights is null)
+                {
+                    return null;
+                }
+                newClonedObject.AdminRights = cloneAdminRights;
+            }
+            if (BannedRights is not null)
+            {
+                var cloneBannedRights = (CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase?)BannedRights.Clone();
+                if (cloneBannedRights is null)
+                {
+                    return null;
+                }
+                newClonedObject.BannedRights = cloneBannedRights;
+            }
+            if (DefaultBannedRights is not null)
+            {
+                var cloneDefaultBannedRights = (CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase?)DefaultBannedRights.Clone();
+                if (cloneDefaultBannedRights is null)
+                {
+                    return null;
+                }
+                newClonedObject.DefaultBannedRights = cloneDefaultBannedRights;
+            }
+            newClonedObject.ParticipantsCount = ParticipantsCount;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

@@ -226,5 +226,56 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new MessageService
+            {
+                Flags = Flags,
+                Out = Out,
+                Mentioned = Mentioned,
+                MediaUnread = MediaUnread,
+                Silent = Silent,
+                Post = Post,
+                Legacy = Legacy,
+                Id = Id
+            };
+            if (FromId is not null)
+            {
+                var cloneFromId = (CatraProto.Client.TL.Schemas.CloudChats.PeerBase?)FromId.Clone();
+                if (cloneFromId is null)
+                {
+                    return null;
+                }
+                newClonedObject.FromId = cloneFromId;
+            }
+            var clonePeerId = (CatraProto.Client.TL.Schemas.CloudChats.PeerBase?)PeerId.Clone();
+            if (clonePeerId is null)
+            {
+                return null;
+            }
+            newClonedObject.PeerId = clonePeerId;
+            if (ReplyTo is not null)
+            {
+                var cloneReplyTo = (CatraProto.Client.TL.Schemas.CloudChats.MessageReplyHeaderBase?)ReplyTo.Clone();
+                if (cloneReplyTo is null)
+                {
+                    return null;
+                }
+                newClonedObject.ReplyTo = cloneReplyTo;
+            }
+            newClonedObject.Date = Date;
+            var cloneAction = (CatraProto.Client.TL.Schemas.CloudChats.MessageActionBase?)Action.Clone();
+            if (cloneAction is null)
+            {
+                return null;
+            }
+            newClonedObject.Action = cloneAction;
+            newClonedObject.TtlPeriod = TtlPeriod;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

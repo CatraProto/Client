@@ -83,11 +83,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
                 writer.WriteString(Title);
             }
 
-            var checkvideoPortrait = writer.WriteBool(VideoPortrait.Value);
-            if (checkvideoPortrait.IsError)
+            if (FlagsHelper.IsFlagSet(Flags, 2))
             {
-                return checkvideoPortrait;
+                var checkvideoPortrait = writer.WriteBool(VideoPortrait.Value);
+                if (checkvideoPortrait.IsError)
+                {
+                    return checkvideoPortrait;
+                }
             }
+
 
             return new WriteResult();
 
@@ -142,5 +146,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new ToggleGroupCallRecord
+            {
+                Flags = Flags,
+                Start = Start,
+                Video = Video
+            };
+            var cloneCall = (CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase?)Call.Clone();
+            if (cloneCall is null)
+            {
+                return null;
+            }
+            newClonedObject.Call = cloneCall;
+            newClonedObject.Title = Title;
+            newClonedObject.VideoPortrait = VideoPortrait;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

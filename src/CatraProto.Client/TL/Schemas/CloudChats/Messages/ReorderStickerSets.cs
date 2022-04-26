@@ -91,5 +91,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new ReorderStickerSets
+            {
+                Flags = Flags,
+                Masks = Masks
+            };
+            foreach (var order in Order)
+            {
+                newClonedObject.Order.Add(order);
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

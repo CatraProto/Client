@@ -132,5 +132,30 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new SetBotShippingResults
+            {
+                Flags = Flags,
+                QueryId = QueryId,
+                Error = Error
+            };
+            if (ShippingOptions is not null)
+            {
+                foreach (var shippingOptions in ShippingOptions)
+                {
+                    var cloneshippingOptions = (CatraProto.Client.TL.Schemas.CloudChats.ShippingOptionBase?)shippingOptions.Clone();
+                    if (cloneshippingOptions is null)
+                    {
+                        return null;
+                    }
+                    newClonedObject.ShippingOptions.Add(cloneshippingOptions);
+                }
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

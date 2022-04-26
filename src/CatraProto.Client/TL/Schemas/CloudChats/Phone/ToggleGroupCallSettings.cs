@@ -65,11 +65,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
             {
                 return checkcall;
             }
-            var checkjoinMuted = writer.WriteBool(JoinMuted.Value);
-            if (checkjoinMuted.IsError)
+            if (FlagsHelper.IsFlagSet(Flags, 0))
             {
-                return checkjoinMuted;
+                var checkjoinMuted = writer.WriteBool(JoinMuted.Value);
+                if (checkjoinMuted.IsError)
+                {
+                    return checkjoinMuted;
+                }
             }
+
 
             return new WriteResult();
 
@@ -113,5 +117,24 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new ToggleGroupCallSettings
+            {
+                Flags = Flags,
+                ResetInviteHash = ResetInviteHash
+            };
+            var cloneCall = (CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase?)Call.Clone();
+            if (cloneCall is null)
+            {
+                return null;
+            }
+            newClonedObject.Call = cloneCall;
+            newClonedObject.JoinMuted = JoinMuted;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

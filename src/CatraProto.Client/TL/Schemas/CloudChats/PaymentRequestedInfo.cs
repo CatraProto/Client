@@ -154,5 +154,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new PaymentRequestedInfo
+            {
+                Flags = Flags,
+                Name = Name,
+                Phone = Phone,
+                Email = Email
+            };
+            if (ShippingAddress is not null)
+            {
+                var cloneShippingAddress = (CatraProto.Client.TL.Schemas.CloudChats.PostAddressBase?)ShippingAddress.Clone();
+                if (cloneShippingAddress is null)
+                {
+                    return null;
+                }
+                newClonedObject.ShippingAddress = cloneShippingAddress;
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

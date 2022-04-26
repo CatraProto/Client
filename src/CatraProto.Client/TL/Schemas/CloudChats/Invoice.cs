@@ -184,5 +184,40 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new Invoice
+            {
+                Flags = Flags,
+                Test = Test,
+                NameRequested = NameRequested,
+                PhoneRequested = PhoneRequested,
+                EmailRequested = EmailRequested,
+                ShippingAddressRequested = ShippingAddressRequested,
+                Flexible = Flexible,
+                PhoneToProvider = PhoneToProvider,
+                EmailToProvider = EmailToProvider,
+                Currency = Currency
+            };
+            foreach (var prices in Prices)
+            {
+                var cloneprices = (CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase?)prices.Clone();
+                if (cloneprices is null)
+                {
+                    return null;
+                }
+                newClonedObject.Prices.Add(cloneprices);
+            }
+            newClonedObject.MaxTipAmount = MaxTipAmount;
+            foreach (var suggestedTipAmounts in SuggestedTipAmounts)
+            {
+                newClonedObject.SuggestedTipAmounts.Add(suggestedTipAmounts);
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

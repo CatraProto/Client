@@ -211,5 +211,40 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new SendInlineBotResult
+            {
+                Flags = Flags,
+                Silent = Silent,
+                Background = Background,
+                ClearDraft = ClearDraft,
+                HideVia = HideVia
+            };
+            var clonePeer = (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase?)Peer.Clone();
+            if (clonePeer is null)
+            {
+                return null;
+            }
+            newClonedObject.Peer = clonePeer;
+            newClonedObject.ReplyToMsgId = ReplyToMsgId;
+            newClonedObject.RandomId = RandomId;
+            newClonedObject.QueryId = QueryId;
+            newClonedObject.Id = Id;
+            newClonedObject.ScheduleDate = ScheduleDate;
+            if (SendAs is not null)
+            {
+                var cloneSendAs = (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase?)SendAs.Clone();
+                if (cloneSendAs is null)
+                {
+                    return null;
+                }
+                newClonedObject.SendAs = cloneSendAs;
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

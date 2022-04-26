@@ -111,5 +111,30 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new ValidatedRequestedInfo
+            {
+                Flags = Flags,
+                Id = Id
+            };
+            if (ShippingOptions is not null)
+            {
+                foreach (var shippingOptions in ShippingOptions)
+                {
+                    var cloneshippingOptions = (CatraProto.Client.TL.Schemas.CloudChats.ShippingOptionBase?)shippingOptions.Clone();
+                    if (cloneshippingOptions is null)
+                    {
+                        return null;
+                    }
+                    newClonedObject.ShippingOptions.Add(cloneshippingOptions);
+                }
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

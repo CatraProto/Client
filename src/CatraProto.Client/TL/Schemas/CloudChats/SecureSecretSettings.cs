@@ -89,5 +89,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new SecureSecretSettings();
+            var cloneSecureAlgo = (CatraProto.Client.TL.Schemas.CloudChats.SecurePasswordKdfAlgoBase?)SecureAlgo.Clone();
+            if (cloneSecureAlgo is null)
+            {
+                return null;
+            }
+            newClonedObject.SecureAlgo = cloneSecureAlgo;
+            newClonedObject.SecureSecret = SecureSecret;
+            newClonedObject.SecureSecretId = SecureSecretId;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

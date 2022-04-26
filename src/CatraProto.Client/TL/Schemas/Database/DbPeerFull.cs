@@ -68,5 +68,16 @@ namespace CatraProto.Client.TL.Schemas.Database
         public void UpdateFlags()
         {
         }
+
+        public IObject? Clone()
+        {
+            var newObj = new DbPeerFull
+            {
+                LayerVersion = LayerVersion,
+                UpdatedAt = UpdatedAt,
+                Object = Object.Clone()
+            };
+            return newObj;
+        }
     }
 }

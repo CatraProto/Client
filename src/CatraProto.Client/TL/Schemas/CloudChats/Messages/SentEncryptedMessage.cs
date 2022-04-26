@@ -62,5 +62,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new SentEncryptedMessage
+            {
+                Date = Date
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

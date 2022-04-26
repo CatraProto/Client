@@ -68,5 +68,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Langpack
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new GetLanguages
+            {
+                LangPack = LangPack
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

@@ -78,5 +78,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new SavedGifs
+            {
+                Hash = Hash
+            };
+            foreach (var gifs in Gifs)
+            {
+                var clonegifs = (CatraProto.Client.TL.Schemas.CloudChats.DocumentBase?)gifs.Clone();
+                if (clonegifs is null)
+                {
+                    return null;
+                }
+                newClonedObject.Gifs.Add(clonegifs);
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

@@ -417,5 +417,71 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new User
+            {
+                Flags = Flags,
+                Self = Self,
+                Contact = Contact,
+                MutualContact = MutualContact,
+                Deleted = Deleted,
+                Bot = Bot,
+                BotChatHistory = BotChatHistory,
+                BotNochats = BotNochats,
+                Verified = Verified,
+                Restricted = Restricted,
+                Min = Min,
+                BotInlineGeo = BotInlineGeo,
+                Support = Support,
+                Scam = Scam,
+                ApplyMinPhoto = ApplyMinPhoto,
+                Fake = Fake,
+                Id = Id,
+                AccessHash = AccessHash,
+                FirstName = FirstName,
+                LastName = LastName,
+                Username = Username,
+                Phone = Phone
+            };
+            if (Photo is not null)
+            {
+                var clonePhoto = (CatraProto.Client.TL.Schemas.CloudChats.UserProfilePhotoBase?)Photo.Clone();
+                if (clonePhoto is null)
+                {
+                    return null;
+                }
+                newClonedObject.Photo = clonePhoto;
+            }
+            if (Status is not null)
+            {
+                var cloneStatus = (CatraProto.Client.TL.Schemas.CloudChats.UserStatusBase?)Status.Clone();
+                if (cloneStatus is null)
+                {
+                    return null;
+                }
+                newClonedObject.Status = cloneStatus;
+            }
+            newClonedObject.BotInfoVersion = BotInfoVersion;
+            if (RestrictionReason is not null)
+            {
+                foreach (var restrictionReason in RestrictionReason)
+                {
+                    var clonerestrictionReason = (CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase?)restrictionReason.Clone();
+                    if (clonerestrictionReason is null)
+                    {
+                        return null;
+                    }
+                    newClonedObject.RestrictionReason.Add(clonerestrictionReason);
+                }
+            }
+            newClonedObject.BotInlinePlaceholder = BotInlinePlaceholder;
+            newClonedObject.LangCode = LangCode;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

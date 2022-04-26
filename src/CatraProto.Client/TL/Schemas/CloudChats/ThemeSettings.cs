@@ -167,5 +167,39 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new ThemeSettings
+            {
+                Flags = Flags,
+                MessageColorsAnimated = MessageColorsAnimated
+            };
+            var cloneBaseTheme = (CatraProto.Client.TL.Schemas.CloudChats.BaseThemeBase?)BaseTheme.Clone();
+            if (cloneBaseTheme is null)
+            {
+                return null;
+            }
+            newClonedObject.BaseTheme = cloneBaseTheme;
+            newClonedObject.AccentColor = AccentColor;
+            newClonedObject.OutboxAccentColor = OutboxAccentColor;
+            foreach (var messageColors in MessageColors)
+            {
+                newClonedObject.MessageColors.Add(messageColors);
+            }
+            if (Wallpaper is not null)
+            {
+                var cloneWallpaper = (CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase?)Wallpaper.Clone();
+                if (cloneWallpaper is null)
+                {
+                    return null;
+                }
+                newClonedObject.Wallpaper = cloneWallpaper;
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

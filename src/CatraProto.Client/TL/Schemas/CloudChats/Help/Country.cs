@@ -136,5 +136,30 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new Country
+            {
+                Flags = Flags,
+                Hidden = Hidden,
+                Iso2 = Iso2,
+                DefaultName = DefaultName,
+                Name = Name
+            };
+            foreach (var countryCodes in CountryCodes)
+            {
+                var clonecountryCodes = (CatraProto.Client.TL.Schemas.CloudChats.Help.CountryCodeBase?)countryCodes.Clone();
+                if (clonecountryCodes is null)
+                {
+                    return null;
+                }
+                newClonedObject.CountryCodes.Add(clonecountryCodes);
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

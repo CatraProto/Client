@@ -79,5 +79,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new BankCardData
+            {
+                Title = Title
+            };
+            foreach (var openUrls in OpenUrls)
+            {
+                var cloneopenUrls = (CatraProto.Client.TL.Schemas.CloudChats.BankCardOpenUrlBase?)openUrls.Clone();
+                if (cloneopenUrls is null)
+                {
+                    return null;
+                }
+                newClonedObject.OpenUrls.Add(cloneopenUrls);
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

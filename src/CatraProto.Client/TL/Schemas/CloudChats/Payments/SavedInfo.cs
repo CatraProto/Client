@@ -94,5 +94,27 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new SavedInfo
+            {
+                Flags = Flags,
+                HasSavedCredentials = HasSavedCredentials
+            };
+            if (SavedInfoField is not null)
+            {
+                var cloneSavedInfoField = (CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase?)SavedInfoField.Clone();
+                if (cloneSavedInfoField is null)
+                {
+                    return null;
+                }
+                newClonedObject.SavedInfoField = cloneSavedInfoField;
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

@@ -193,5 +193,46 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new CreateStickerSet
+            {
+                Flags = Flags,
+                Masks = Masks,
+                Animated = Animated,
+                Videos = Videos
+            };
+            var cloneUserId = (CatraProto.Client.TL.Schemas.CloudChats.InputUserBase?)UserId.Clone();
+            if (cloneUserId is null)
+            {
+                return null;
+            }
+            newClonedObject.UserId = cloneUserId;
+            newClonedObject.Title = Title;
+            newClonedObject.ShortName = ShortName;
+            if (Thumb is not null)
+            {
+                var cloneThumb = (CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase?)Thumb.Clone();
+                if (cloneThumb is null)
+                {
+                    return null;
+                }
+                newClonedObject.Thumb = cloneThumb;
+            }
+            foreach (var stickers in Stickers)
+            {
+                var clonestickers = (CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetItemBase?)stickers.Clone();
+                if (clonestickers is null)
+                {
+                    return null;
+                }
+                newClonedObject.Stickers.Add(clonestickers);
+            }
+            newClonedObject.Software = Software;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

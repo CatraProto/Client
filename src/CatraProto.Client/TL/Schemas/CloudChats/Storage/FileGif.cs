@@ -46,5 +46,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Storage
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new FileGif();
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

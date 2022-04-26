@@ -404,5 +404,94 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new ChatFull
+            {
+                Flags = Flags,
+                CanSetUsername = CanSetUsername,
+                HasScheduled = HasScheduled,
+                Id = Id,
+                About = About
+            };
+            var cloneParticipants = (CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantsBase?)Participants.Clone();
+            if (cloneParticipants is null)
+            {
+                return null;
+            }
+            newClonedObject.Participants = cloneParticipants;
+            if (ChatPhoto is not null)
+            {
+                var cloneChatPhoto = (CatraProto.Client.TL.Schemas.CloudChats.PhotoBase?)ChatPhoto.Clone();
+                if (cloneChatPhoto is null)
+                {
+                    return null;
+                }
+                newClonedObject.ChatPhoto = cloneChatPhoto;
+            }
+            var cloneNotifySettings = (CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase?)NotifySettings.Clone();
+            if (cloneNotifySettings is null)
+            {
+                return null;
+            }
+            newClonedObject.NotifySettings = cloneNotifySettings;
+            if (ExportedInvite is not null)
+            {
+                var cloneExportedInvite = (CatraProto.Client.TL.Schemas.CloudChats.ExportedChatInviteBase?)ExportedInvite.Clone();
+                if (cloneExportedInvite is null)
+                {
+                    return null;
+                }
+                newClonedObject.ExportedInvite = cloneExportedInvite;
+            }
+            if (BotInfo is not null)
+            {
+                foreach (var botInfo in BotInfo)
+                {
+                    var clonebotInfo = (CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase?)botInfo.Clone();
+                    if (clonebotInfo is null)
+                    {
+                        return null;
+                    }
+                    newClonedObject.BotInfo.Add(clonebotInfo);
+                }
+            }
+            newClonedObject.PinnedMsgId = PinnedMsgId;
+            newClonedObject.FolderId = FolderId;
+            if (Call is not null)
+            {
+                var cloneCall = (CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase?)Call.Clone();
+                if (cloneCall is null)
+                {
+                    return null;
+                }
+                newClonedObject.Call = cloneCall;
+            }
+            newClonedObject.TtlPeriod = TtlPeriod;
+            if (GroupcallDefaultJoinAs is not null)
+            {
+                var cloneGroupcallDefaultJoinAs = (CatraProto.Client.TL.Schemas.CloudChats.PeerBase?)GroupcallDefaultJoinAs.Clone();
+                if (cloneGroupcallDefaultJoinAs is null)
+                {
+                    return null;
+                }
+                newClonedObject.GroupcallDefaultJoinAs = cloneGroupcallDefaultJoinAs;
+            }
+            newClonedObject.ThemeEmoticon = ThemeEmoticon;
+            newClonedObject.RequestsPending = RequestsPending;
+            foreach (var recentRequesters in RecentRequesters)
+            {
+                newClonedObject.RecentRequesters.Add(recentRequesters);
+            }
+            foreach (var availableReactions in AvailableReactions)
+            {
+                newClonedObject.AvailableReactions.Add(availableReactions);
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

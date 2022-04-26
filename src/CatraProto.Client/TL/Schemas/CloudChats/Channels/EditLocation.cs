@@ -98,5 +98,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new EditLocation();
+            var cloneChannel = (CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase?)Channel.Clone();
+            if (cloneChannel is null)
+            {
+                return null;
+            }
+            newClonedObject.Channel = cloneChannel;
+            var cloneGeoPoint = (CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase?)GeoPoint.Clone();
+            if (cloneGeoPoint is null)
+            {
+                return null;
+            }
+            newClonedObject.GeoPoint = cloneGeoPoint;
+            newClonedObject.Address = Address;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

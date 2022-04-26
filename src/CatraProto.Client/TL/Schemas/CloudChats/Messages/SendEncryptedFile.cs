@@ -131,5 +131,31 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new SendEncryptedFile
+            {
+                Flags = Flags,
+                Silent = Silent
+            };
+            var clonePeer = (CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedChatBase?)Peer.Clone();
+            if (clonePeer is null)
+            {
+                return null;
+            }
+            newClonedObject.Peer = clonePeer;
+            newClonedObject.RandomId = RandomId;
+            newClonedObject.Data = Data;
+            var cloneFile = (CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedFileBase?)File.Clone();
+            if (cloneFile is null)
+            {
+                return null;
+            }
+            newClonedObject.File = cloneFile;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

@@ -63,5 +63,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new PaymentVerificationNeeded
+            {
+                Url = Url
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

@@ -69,5 +69,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new GetEmojiKeywordsLanguages();
+            foreach (var langCodes in LangCodes)
+            {
+                newClonedObject.LangCodes.Add(langCodes);
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

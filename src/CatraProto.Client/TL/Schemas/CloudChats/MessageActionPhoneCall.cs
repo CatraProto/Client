@@ -130,5 +130,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new MessageActionPhoneCall
+            {
+                Flags = Flags,
+                Video = Video,
+                CallId = CallId
+            };
+            if (Reason is not null)
+            {
+                var cloneReason = (CatraProto.Client.TL.Schemas.CloudChats.PhoneCallDiscardReasonBase?)Reason.Clone();
+                if (cloneReason is null)
+                {
+                    return null;
+                }
+                newClonedObject.Reason = cloneReason;
+            }
+            newClonedObject.Duration = Duration;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

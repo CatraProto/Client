@@ -33,5 +33,16 @@ namespace CatraProto.Client.Updates.CustomTypes
         {
             throw new System.NotImplementedException();
         }
+
+        public override IObject? Clone()
+        {
+            var cloneUpdate = Update.Clone();
+            if (cloneUpdate is null)
+            {
+                return null;
+            }
+
+            return new UpdateRedirect((UpdateBase)cloneUpdate);
+        }
     }
 }

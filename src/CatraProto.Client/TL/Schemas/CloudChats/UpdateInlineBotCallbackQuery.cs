@@ -159,5 +159,28 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new UpdateInlineBotCallbackQuery
+            {
+                Flags = Flags,
+                QueryId = QueryId,
+                UserId = UserId
+            };
+            var cloneMsgId = (CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageIDBase?)MsgId.Clone();
+            if (cloneMsgId is null)
+            {
+                return null;
+            }
+            newClonedObject.MsgId = cloneMsgId;
+            newClonedObject.ChatInstance = ChatInstance;
+            newClonedObject.Data = Data;
+            newClonedObject.GameShortName = GameShortName;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

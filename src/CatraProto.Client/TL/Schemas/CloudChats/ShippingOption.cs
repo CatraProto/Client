@@ -91,5 +91,27 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new ShippingOption
+            {
+                Id = Id,
+                Title = Title
+            };
+            foreach (var prices in Prices)
+            {
+                var cloneprices = (CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase?)prices.Clone();
+                if (cloneprices is null)
+                {
+                    return null;
+                }
+                newClonedObject.Prices.Add(cloneprices);
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

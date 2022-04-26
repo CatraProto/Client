@@ -101,5 +101,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new BindTempAuthKey
+            {
+                PermAuthKeyId = PermAuthKeyId,
+                Nonce = Nonce,
+                ExpiresAt = ExpiresAt,
+                EncryptedMessage = EncryptedMessage
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

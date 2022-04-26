@@ -32,5 +32,8 @@ namespace CatraProto.Client.TL.Schemas.MTProto
         public abstract ReadResult<IObject> Deserialize(Reader reader);
         public abstract WriteResult Serialize(Writer writer);
         public abstract int GetConstructorId();
+#nullable enable
+        public abstract IObject? Clone();
+#nullable disable
     }
 }

@@ -94,36 +94,56 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
             {
                 return checkparticipant;
             }
-            var checkmuted = writer.WriteBool(Muted.Value);
-            if (checkmuted.IsError)
+            if (FlagsHelper.IsFlagSet(Flags, 0))
             {
-                return checkmuted;
+                var checkmuted = writer.WriteBool(Muted.Value);
+                if (checkmuted.IsError)
+                {
+                    return checkmuted;
+                }
             }
+
             if (FlagsHelper.IsFlagSet(Flags, 1))
             {
                 writer.WriteInt32(Volume.Value);
             }
 
-            var checkraiseHand = writer.WriteBool(RaiseHand.Value);
-            if (checkraiseHand.IsError)
+            if (FlagsHelper.IsFlagSet(Flags, 2))
             {
-                return checkraiseHand;
+                var checkraiseHand = writer.WriteBool(RaiseHand.Value);
+                if (checkraiseHand.IsError)
+                {
+                    return checkraiseHand;
+                }
             }
-            var checkvideoStopped = writer.WriteBool(VideoStopped.Value);
-            if (checkvideoStopped.IsError)
+
+            if (FlagsHelper.IsFlagSet(Flags, 3))
             {
-                return checkvideoStopped;
+                var checkvideoStopped = writer.WriteBool(VideoStopped.Value);
+                if (checkvideoStopped.IsError)
+                {
+                    return checkvideoStopped;
+                }
             }
-            var checkvideoPaused = writer.WriteBool(VideoPaused.Value);
-            if (checkvideoPaused.IsError)
+
+            if (FlagsHelper.IsFlagSet(Flags, 4))
             {
-                return checkvideoPaused;
+                var checkvideoPaused = writer.WriteBool(VideoPaused.Value);
+                if (checkvideoPaused.IsError)
+                {
+                    return checkvideoPaused;
+                }
             }
-            var checkpresentationPaused = writer.WriteBool(PresentationPaused.Value);
-            if (checkpresentationPaused.IsError)
+
+            if (FlagsHelper.IsFlagSet(Flags, 5))
             {
-                return checkpresentationPaused;
+                var checkpresentationPaused = writer.WriteBool(PresentationPaused.Value);
+                if (checkpresentationPaused.IsError)
+                {
+                    return checkpresentationPaused;
+                }
             }
+
 
             return new WriteResult();
 
@@ -222,5 +242,34 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new EditGroupCallParticipant
+            {
+                Flags = Flags
+            };
+            var cloneCall = (CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase?)Call.Clone();
+            if (cloneCall is null)
+            {
+                return null;
+            }
+            newClonedObject.Call = cloneCall;
+            var cloneParticipant = (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase?)Participant.Clone();
+            if (cloneParticipant is null)
+            {
+                return null;
+            }
+            newClonedObject.Participant = cloneParticipant;
+            newClonedObject.Muted = Muted;
+            newClonedObject.Volume = Volume;
+            newClonedObject.RaiseHand = RaiseHand;
+            newClonedObject.VideoStopped = VideoStopped;
+            newClonedObject.VideoPaused = VideoPaused;
+            newClonedObject.PresentationPaused = PresentationPaused;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

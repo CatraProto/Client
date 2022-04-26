@@ -105,5 +105,27 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new ReorderPinnedDialogs
+            {
+                Flags = Flags,
+                Force = Force,
+                FolderId = FolderId
+            };
+            foreach (var order in Order)
+            {
+                var cloneorder = (CatraProto.Client.TL.Schemas.CloudChats.InputDialogPeerBase?)order.Clone();
+                if (cloneorder is null)
+                {
+                    return null;
+                }
+                newClonedObject.Order.Add(cloneorder);
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

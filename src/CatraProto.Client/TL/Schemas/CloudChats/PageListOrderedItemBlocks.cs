@@ -79,5 +79,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new PageListOrderedItemBlocks
+            {
+                Num = Num
+            };
+            foreach (var blocks in Blocks)
+            {
+                var cloneblocks = (CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase?)blocks.Clone();
+                if (cloneblocks is null)
+                {
+                    return null;
+                }
+                newClonedObject.Blocks.Add(cloneblocks);
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

@@ -258,5 +258,47 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new Password
+            {
+                Flags = Flags,
+                HasRecovery = HasRecovery,
+                HasSecureValues = HasSecureValues,
+                HasPassword = HasPassword
+            };
+            if (CurrentAlgo is not null)
+            {
+                var cloneCurrentAlgo = (CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase?)CurrentAlgo.Clone();
+                if (cloneCurrentAlgo is null)
+                {
+                    return null;
+                }
+                newClonedObject.CurrentAlgo = cloneCurrentAlgo;
+            }
+            newClonedObject.SrpB = SrpB;
+            newClonedObject.SrpId = SrpId;
+            newClonedObject.Hint = Hint;
+            newClonedObject.EmailUnconfirmedPattern = EmailUnconfirmedPattern;
+            var cloneNewAlgo = (CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase?)NewAlgo.Clone();
+            if (cloneNewAlgo is null)
+            {
+                return null;
+            }
+            newClonedObject.NewAlgo = cloneNewAlgo;
+            var cloneNewSecureAlgo = (CatraProto.Client.TL.Schemas.CloudChats.SecurePasswordKdfAlgoBase?)NewSecureAlgo.Clone();
+            if (cloneNewSecureAlgo is null)
+            {
+                return null;
+            }
+            newClonedObject.NewSecureAlgo = cloneNewSecureAlgo;
+            newClonedObject.SecureRandom = SecureRandom;
+            newClonedObject.PendingResetDate = PendingResetDate;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

@@ -277,5 +277,107 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new BroadcastStats();
+            var clonePeriod = (CatraProto.Client.TL.Schemas.CloudChats.StatsDateRangeDaysBase?)Period.Clone();
+            if (clonePeriod is null)
+            {
+                return null;
+            }
+            newClonedObject.Period = clonePeriod;
+            var cloneFollowers = (CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase?)Followers.Clone();
+            if (cloneFollowers is null)
+            {
+                return null;
+            }
+            newClonedObject.Followers = cloneFollowers;
+            var cloneViewsPerPost = (CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase?)ViewsPerPost.Clone();
+            if (cloneViewsPerPost is null)
+            {
+                return null;
+            }
+            newClonedObject.ViewsPerPost = cloneViewsPerPost;
+            var cloneSharesPerPost = (CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase?)SharesPerPost.Clone();
+            if (cloneSharesPerPost is null)
+            {
+                return null;
+            }
+            newClonedObject.SharesPerPost = cloneSharesPerPost;
+            var cloneEnabledNotifications = (CatraProto.Client.TL.Schemas.CloudChats.StatsPercentValueBase?)EnabledNotifications.Clone();
+            if (cloneEnabledNotifications is null)
+            {
+                return null;
+            }
+            newClonedObject.EnabledNotifications = cloneEnabledNotifications;
+            var cloneGrowthGraph = (CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase?)GrowthGraph.Clone();
+            if (cloneGrowthGraph is null)
+            {
+                return null;
+            }
+            newClonedObject.GrowthGraph = cloneGrowthGraph;
+            var cloneFollowersGraph = (CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase?)FollowersGraph.Clone();
+            if (cloneFollowersGraph is null)
+            {
+                return null;
+            }
+            newClonedObject.FollowersGraph = cloneFollowersGraph;
+            var cloneMuteGraph = (CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase?)MuteGraph.Clone();
+            if (cloneMuteGraph is null)
+            {
+                return null;
+            }
+            newClonedObject.MuteGraph = cloneMuteGraph;
+            var cloneTopHoursGraph = (CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase?)TopHoursGraph.Clone();
+            if (cloneTopHoursGraph is null)
+            {
+                return null;
+            }
+            newClonedObject.TopHoursGraph = cloneTopHoursGraph;
+            var cloneInteractionsGraph = (CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase?)InteractionsGraph.Clone();
+            if (cloneInteractionsGraph is null)
+            {
+                return null;
+            }
+            newClonedObject.InteractionsGraph = cloneInteractionsGraph;
+            var cloneIvInteractionsGraph = (CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase?)IvInteractionsGraph.Clone();
+            if (cloneIvInteractionsGraph is null)
+            {
+                return null;
+            }
+            newClonedObject.IvInteractionsGraph = cloneIvInteractionsGraph;
+            var cloneViewsBySourceGraph = (CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase?)ViewsBySourceGraph.Clone();
+            if (cloneViewsBySourceGraph is null)
+            {
+                return null;
+            }
+            newClonedObject.ViewsBySourceGraph = cloneViewsBySourceGraph;
+            var cloneNewFollowersBySourceGraph = (CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase?)NewFollowersBySourceGraph.Clone();
+            if (cloneNewFollowersBySourceGraph is null)
+            {
+                return null;
+            }
+            newClonedObject.NewFollowersBySourceGraph = cloneNewFollowersBySourceGraph;
+            var cloneLanguagesGraph = (CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase?)LanguagesGraph.Clone();
+            if (cloneLanguagesGraph is null)
+            {
+                return null;
+            }
+            newClonedObject.LanguagesGraph = cloneLanguagesGraph;
+            foreach (var recentMessageInteractions in RecentMessageInteractions)
+            {
+                var clonerecentMessageInteractions = (CatraProto.Client.TL.Schemas.CloudChats.MessageInteractionCountersBase?)recentMessageInteractions.Clone();
+                if (clonerecentMessageInteractions is null)
+                {
+                    return null;
+                }
+                newClonedObject.RecentMessageInteractions.Add(clonerecentMessageInteractions);
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

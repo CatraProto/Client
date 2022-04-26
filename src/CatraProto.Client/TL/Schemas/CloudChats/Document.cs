@@ -213,5 +213,57 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new Document
+            {
+                Flags = Flags,
+                Id = Id,
+                AccessHash = AccessHash,
+                FileReference = FileReference,
+                Date = Date,
+                MimeType = MimeType,
+                Size = Size
+            };
+            if (Thumbs is not null)
+            {
+                foreach (var thumbs in Thumbs)
+                {
+                    var clonethumbs = (CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase?)thumbs.Clone();
+                    if (clonethumbs is null)
+                    {
+                        return null;
+                    }
+                    newClonedObject.Thumbs.Add(clonethumbs);
+                }
+            }
+            if (VideoThumbs is not null)
+            {
+                foreach (var videoThumbs in VideoThumbs)
+                {
+                    var clonevideoThumbs = (CatraProto.Client.TL.Schemas.CloudChats.VideoSizeBase?)videoThumbs.Clone();
+                    if (clonevideoThumbs is null)
+                    {
+                        return null;
+                    }
+                    newClonedObject.VideoThumbs.Add(clonevideoThumbs);
+                }
+            }
+            newClonedObject.DcId = DcId;
+            foreach (var attributes in Attributes)
+            {
+                var cloneattributes = (CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase?)attributes.Clone();
+                if (cloneattributes is null)
+                {
+                    return null;
+                }
+                newClonedObject.Attributes.Add(cloneattributes);
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

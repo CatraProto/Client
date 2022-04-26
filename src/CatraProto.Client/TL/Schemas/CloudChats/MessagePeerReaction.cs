@@ -106,5 +106,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new MessagePeerReaction
+            {
+                Flags = Flags,
+                Big = Big,
+                Unread = Unread
+            };
+            var clonePeerId = (CatraProto.Client.TL.Schemas.CloudChats.PeerBase?)PeerId.Clone();
+            if (clonePeerId is null)
+            {
+                return null;
+            }
+            newClonedObject.PeerId = clonePeerId;
+            newClonedObject.Reaction = Reaction;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

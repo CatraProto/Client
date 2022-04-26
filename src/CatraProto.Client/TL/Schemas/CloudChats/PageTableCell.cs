@@ -158,5 +158,33 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new PageTableCell
+            {
+                Flags = Flags,
+                Header = Header,
+                AlignCenter = AlignCenter,
+                AlignRight = AlignRight,
+                ValignMiddle = ValignMiddle,
+                ValignBottom = ValignBottom
+            };
+            if (Text is not null)
+            {
+                var cloneText = (CatraProto.Client.TL.Schemas.CloudChats.RichTextBase?)Text.Clone();
+                if (cloneText is null)
+                {
+                    return null;
+                }
+                newClonedObject.Text = cloneText;
+            }
+            newClonedObject.Colspan = Colspan;
+            newClonedObject.Rowspan = Rowspan;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

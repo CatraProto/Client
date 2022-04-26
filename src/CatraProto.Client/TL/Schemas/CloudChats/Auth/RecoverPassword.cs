@@ -110,5 +110,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new RecoverPassword
+            {
+                Flags = Flags,
+                Code = Code
+            };
+            if (NewSettings is not null)
+            {
+                var cloneNewSettings = (CatraProto.Client.TL.Schemas.CloudChats.Account.PasswordInputSettingsBase?)NewSettings.Clone();
+                if (cloneNewSettings is null)
+                {
+                    return null;
+                }
+                newClonedObject.NewSettings = cloneNewSettings;
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

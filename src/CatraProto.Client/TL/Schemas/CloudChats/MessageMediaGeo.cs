@@ -66,5 +66,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new MessageMediaGeo();
+            var cloneGeo = (CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase?)Geo.Clone();
+            if (cloneGeo is null)
+            {
+                return null;
+            }
+            newClonedObject.Geo = cloneGeo;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

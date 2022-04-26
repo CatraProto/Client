@@ -429,5 +429,70 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new WebPage
+            {
+                Flags = Flags,
+                Id = Id,
+                Url = Url,
+                DisplayUrl = DisplayUrl,
+                Hash = Hash,
+                Type = Type,
+                SiteName = SiteName,
+                Title = Title,
+                Description = Description
+            };
+            if (Photo is not null)
+            {
+                var clonePhoto = (CatraProto.Client.TL.Schemas.CloudChats.PhotoBase?)Photo.Clone();
+                if (clonePhoto is null)
+                {
+                    return null;
+                }
+                newClonedObject.Photo = clonePhoto;
+            }
+            newClonedObject.EmbedUrl = EmbedUrl;
+            newClonedObject.EmbedType = EmbedType;
+            newClonedObject.EmbedWidth = EmbedWidth;
+            newClonedObject.EmbedHeight = EmbedHeight;
+            newClonedObject.Duration = Duration;
+            newClonedObject.Author = Author;
+            if (Document is not null)
+            {
+                var cloneDocument = (CatraProto.Client.TL.Schemas.CloudChats.DocumentBase?)Document.Clone();
+                if (cloneDocument is null)
+                {
+                    return null;
+                }
+                newClonedObject.Document = cloneDocument;
+            }
+            if (CachedPage is not null)
+            {
+                var cloneCachedPage = (CatraProto.Client.TL.Schemas.CloudChats.PageBase?)CachedPage.Clone();
+                if (cloneCachedPage is null)
+                {
+                    return null;
+                }
+                newClonedObject.CachedPage = cloneCachedPage;
+            }
+            if (Attributes is not null)
+            {
+                foreach (var attributes in Attributes)
+                {
+                    var cloneattributes = (CatraProto.Client.TL.Schemas.CloudChats.WebPageAttributeBase?)attributes.Clone();
+                    if (cloneattributes is null)
+                    {
+                        return null;
+                    }
+                    newClonedObject.Attributes.Add(cloneattributes);
+                }
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

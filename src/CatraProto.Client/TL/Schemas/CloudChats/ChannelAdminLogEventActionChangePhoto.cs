@@ -81,5 +81,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new ChannelAdminLogEventActionChangePhoto();
+            var clonePrevPhoto = (CatraProto.Client.TL.Schemas.CloudChats.PhotoBase?)PrevPhoto.Clone();
+            if (clonePrevPhoto is null)
+            {
+                return null;
+            }
+            newClonedObject.PrevPhoto = clonePrevPhoto;
+            var cloneNewPhoto = (CatraProto.Client.TL.Schemas.CloudChats.PhotoBase?)NewPhoto.Clone();
+            if (cloneNewPhoto is null)
+            {
+                return null;
+            }
+            newClonedObject.NewPhoto = cloneNewPhoto;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

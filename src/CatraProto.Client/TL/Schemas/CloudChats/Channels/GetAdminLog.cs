@@ -184,5 +184,47 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new GetAdminLog
+            {
+                Flags = Flags
+            };
+            var cloneChannel = (CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase?)Channel.Clone();
+            if (cloneChannel is null)
+            {
+                return null;
+            }
+            newClonedObject.Channel = cloneChannel;
+            newClonedObject.Q = Q;
+            if (EventsFilter is not null)
+            {
+                var cloneEventsFilter = (CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventsFilterBase?)EventsFilter.Clone();
+                if (cloneEventsFilter is null)
+                {
+                    return null;
+                }
+                newClonedObject.EventsFilter = cloneEventsFilter;
+            }
+            if (Admins is not null)
+            {
+                foreach (var admins in Admins)
+                {
+                    var cloneadmins = (CatraProto.Client.TL.Schemas.CloudChats.InputUserBase?)admins.Clone();
+                    if (cloneadmins is null)
+                    {
+                        return null;
+                    }
+                    newClonedObject.Admins.Add(cloneadmins);
+                }
+            }
+            newClonedObject.MaxId = MaxId;
+            newClonedObject.MinId = MinId;
+            newClonedObject.Limit = Limit;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

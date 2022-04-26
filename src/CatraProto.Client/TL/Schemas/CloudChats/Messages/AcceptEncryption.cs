@@ -94,5 +94,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new AcceptEncryption();
+            var clonePeer = (CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedChatBase?)Peer.Clone();
+            if (clonePeer is null)
+            {
+                return null;
+            }
+            newClonedObject.Peer = clonePeer;
+            newClonedObject.GB = GB;
+            newClonedObject.KeyFingerprint = KeyFingerprint;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

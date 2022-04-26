@@ -194,5 +194,25 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new WallPaperSettings
+            {
+                Flags = Flags,
+                Blur = Blur,
+                Motion = Motion,
+                BackgroundColor = BackgroundColor,
+                SecondBackgroundColor = SecondBackgroundColor,
+                ThirdBackgroundColor = ThirdBackgroundColor,
+                FourthBackgroundColor = FourthBackgroundColor,
+                Intensity = Intensity,
+                Rotation = Rotation
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

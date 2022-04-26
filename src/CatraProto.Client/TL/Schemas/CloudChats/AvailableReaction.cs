@@ -223,5 +223,68 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new AvailableReaction
+            {
+                Flags = Flags,
+                Inactive = Inactive,
+                Reaction = Reaction,
+                Title = Title
+            };
+            var cloneStaticIcon = (CatraProto.Client.TL.Schemas.CloudChats.DocumentBase?)StaticIcon.Clone();
+            if (cloneStaticIcon is null)
+            {
+                return null;
+            }
+            newClonedObject.StaticIcon = cloneStaticIcon;
+            var cloneAppearAnimation = (CatraProto.Client.TL.Schemas.CloudChats.DocumentBase?)AppearAnimation.Clone();
+            if (cloneAppearAnimation is null)
+            {
+                return null;
+            }
+            newClonedObject.AppearAnimation = cloneAppearAnimation;
+            var cloneSelectAnimation = (CatraProto.Client.TL.Schemas.CloudChats.DocumentBase?)SelectAnimation.Clone();
+            if (cloneSelectAnimation is null)
+            {
+                return null;
+            }
+            newClonedObject.SelectAnimation = cloneSelectAnimation;
+            var cloneActivateAnimation = (CatraProto.Client.TL.Schemas.CloudChats.DocumentBase?)ActivateAnimation.Clone();
+            if (cloneActivateAnimation is null)
+            {
+                return null;
+            }
+            newClonedObject.ActivateAnimation = cloneActivateAnimation;
+            var cloneEffectAnimation = (CatraProto.Client.TL.Schemas.CloudChats.DocumentBase?)EffectAnimation.Clone();
+            if (cloneEffectAnimation is null)
+            {
+                return null;
+            }
+            newClonedObject.EffectAnimation = cloneEffectAnimation;
+            if (AroundAnimation is not null)
+            {
+                var cloneAroundAnimation = (CatraProto.Client.TL.Schemas.CloudChats.DocumentBase?)AroundAnimation.Clone();
+                if (cloneAroundAnimation is null)
+                {
+                    return null;
+                }
+                newClonedObject.AroundAnimation = cloneAroundAnimation;
+            }
+            if (CenterIcon is not null)
+            {
+                var cloneCenterIcon = (CatraProto.Client.TL.Schemas.CloudChats.DocumentBase?)CenterIcon.Clone();
+                if (cloneCenterIcon is null)
+                {
+                    return null;
+                }
+                newClonedObject.CenterIcon = cloneCenterIcon;
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

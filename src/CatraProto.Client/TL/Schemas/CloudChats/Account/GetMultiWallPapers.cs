@@ -72,5 +72,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new GetMultiWallPapers();
+            foreach (var wallpapers in Wallpapers)
+            {
+                var clonewallpapers = (CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase?)wallpapers.Clone();
+                if (clonewallpapers is null)
+                {
+                    return null;
+                }
+                newClonedObject.Wallpapers.Add(clonewallpapers);
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

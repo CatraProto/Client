@@ -66,5 +66,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new ChannelAdminLogEventActionToggleGroupCallSetting
+            {
+                JoinMuted = JoinMuted
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

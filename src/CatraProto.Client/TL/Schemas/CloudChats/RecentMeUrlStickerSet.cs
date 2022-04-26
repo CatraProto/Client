@@ -78,5 +78,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new RecentMeUrlStickerSet
+            {
+                Url = Url
+            };
+            var cloneSet = (CatraProto.Client.TL.Schemas.CloudChats.StickerSetCoveredBase?)Set.Clone();
+            if (cloneSet is null)
+            {
+                return null;
+            }
+            newClonedObject.Set = cloneSet;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

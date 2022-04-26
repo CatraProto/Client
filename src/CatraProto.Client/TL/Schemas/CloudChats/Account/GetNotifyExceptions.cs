@@ -99,5 +99,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new GetNotifyExceptions
+            {
+                Flags = Flags,
+                CompareSound = CompareSound
+            };
+            if (Peer is not null)
+            {
+                var clonePeer = (CatraProto.Client.TL.Schemas.CloudChats.InputNotifyPeerBase?)Peer.Clone();
+                if (clonePeer is null)
+                {
+                    return null;
+                }
+                newClonedObject.Peer = clonePeer;
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

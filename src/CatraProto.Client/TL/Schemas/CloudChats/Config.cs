@@ -698,5 +698,76 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new Config
+            {
+                Flags = Flags,
+                PhonecallsEnabled = PhonecallsEnabled,
+                DefaultP2pContacts = DefaultP2pContacts,
+                PreloadFeaturedStickers = PreloadFeaturedStickers,
+                IgnorePhoneEntities = IgnorePhoneEntities,
+                RevokePmInbox = RevokePmInbox,
+                BlockedMode = BlockedMode,
+                PfsEnabled = PfsEnabled,
+                Date = Date,
+                Expires = Expires,
+                TestMode = TestMode,
+                ThisDc = ThisDc
+            };
+            foreach (var dcOptions in DcOptions)
+            {
+                var clonedcOptions = (CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase?)dcOptions.Clone();
+                if (clonedcOptions is null)
+                {
+                    return null;
+                }
+                newClonedObject.DcOptions.Add(clonedcOptions);
+            }
+            newClonedObject.DcTxtDomainName = DcTxtDomainName;
+            newClonedObject.ChatSizeMax = ChatSizeMax;
+            newClonedObject.MegagroupSizeMax = MegagroupSizeMax;
+            newClonedObject.ForwardedCountMax = ForwardedCountMax;
+            newClonedObject.OnlineUpdatePeriodMs = OnlineUpdatePeriodMs;
+            newClonedObject.OfflineBlurTimeoutMs = OfflineBlurTimeoutMs;
+            newClonedObject.OfflineIdleTimeoutMs = OfflineIdleTimeoutMs;
+            newClonedObject.OnlineCloudTimeoutMs = OnlineCloudTimeoutMs;
+            newClonedObject.NotifyCloudDelayMs = NotifyCloudDelayMs;
+            newClonedObject.NotifyDefaultDelayMs = NotifyDefaultDelayMs;
+            newClonedObject.PushChatPeriodMs = PushChatPeriodMs;
+            newClonedObject.PushChatLimit = PushChatLimit;
+            newClonedObject.SavedGifsLimit = SavedGifsLimit;
+            newClonedObject.EditTimeLimit = EditTimeLimit;
+            newClonedObject.RevokeTimeLimit = RevokeTimeLimit;
+            newClonedObject.RevokePmTimeLimit = RevokePmTimeLimit;
+            newClonedObject.RatingEDecay = RatingEDecay;
+            newClonedObject.StickersRecentLimit = StickersRecentLimit;
+            newClonedObject.StickersFavedLimit = StickersFavedLimit;
+            newClonedObject.ChannelsReadMediaPeriod = ChannelsReadMediaPeriod;
+            newClonedObject.TmpSessions = TmpSessions;
+            newClonedObject.PinnedDialogsCountMax = PinnedDialogsCountMax;
+            newClonedObject.PinnedInfolderCountMax = PinnedInfolderCountMax;
+            newClonedObject.CallReceiveTimeoutMs = CallReceiveTimeoutMs;
+            newClonedObject.CallRingTimeoutMs = CallRingTimeoutMs;
+            newClonedObject.CallConnectTimeoutMs = CallConnectTimeoutMs;
+            newClonedObject.CallPacketTimeoutMs = CallPacketTimeoutMs;
+            newClonedObject.MeUrlPrefix = MeUrlPrefix;
+            newClonedObject.AutoupdateUrlPrefix = AutoupdateUrlPrefix;
+            newClonedObject.GifSearchUsername = GifSearchUsername;
+            newClonedObject.VenueSearchUsername = VenueSearchUsername;
+            newClonedObject.ImgSearchUsername = ImgSearchUsername;
+            newClonedObject.StaticMapsProvider = StaticMapsProvider;
+            newClonedObject.CaptionLengthMax = CaptionLengthMax;
+            newClonedObject.MessageLengthMax = MessageLengthMax;
+            newClonedObject.WebfileDcId = WebfileDcId;
+            newClonedObject.SuggestedLangCode = SuggestedLangCode;
+            newClonedObject.LangPackVersion = LangPackVersion;
+            newClonedObject.BaseLangPackVersion = BaseLangPackVersion;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

@@ -271,5 +271,93 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new SecureValue
+            {
+                Flags = Flags
+            };
+            var cloneType = (CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase?)Type.Clone();
+            if (cloneType is null)
+            {
+                return null;
+            }
+            newClonedObject.Type = cloneType;
+            if (Data is not null)
+            {
+                var cloneData = (CatraProto.Client.TL.Schemas.CloudChats.SecureDataBase?)Data.Clone();
+                if (cloneData is null)
+                {
+                    return null;
+                }
+                newClonedObject.Data = cloneData;
+            }
+            if (FrontSide is not null)
+            {
+                var cloneFrontSide = (CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase?)FrontSide.Clone();
+                if (cloneFrontSide is null)
+                {
+                    return null;
+                }
+                newClonedObject.FrontSide = cloneFrontSide;
+            }
+            if (ReverseSide is not null)
+            {
+                var cloneReverseSide = (CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase?)ReverseSide.Clone();
+                if (cloneReverseSide is null)
+                {
+                    return null;
+                }
+                newClonedObject.ReverseSide = cloneReverseSide;
+            }
+            if (Selfie is not null)
+            {
+                var cloneSelfie = (CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase?)Selfie.Clone();
+                if (cloneSelfie is null)
+                {
+                    return null;
+                }
+                newClonedObject.Selfie = cloneSelfie;
+            }
+            if (Translation is not null)
+            {
+                foreach (var translation in Translation)
+                {
+                    var clonetranslation = (CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase?)translation.Clone();
+                    if (clonetranslation is null)
+                    {
+                        return null;
+                    }
+                    newClonedObject.Translation.Add(clonetranslation);
+                }
+            }
+            if (Files is not null)
+            {
+                foreach (var files in Files)
+                {
+                    var clonefiles = (CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase?)files.Clone();
+                    if (clonefiles is null)
+                    {
+                        return null;
+                    }
+                    newClonedObject.Files.Add(clonefiles);
+                }
+            }
+            if (PlainData is not null)
+            {
+                var clonePlainData = (CatraProto.Client.TL.Schemas.CloudChats.SecurePlainDataBase?)PlainData.Clone();
+                if (clonePlainData is null)
+                {
+                    return null;
+                }
+                newClonedObject.PlainData = clonePlainData;
+            }
+            newClonedObject.Hash = Hash;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

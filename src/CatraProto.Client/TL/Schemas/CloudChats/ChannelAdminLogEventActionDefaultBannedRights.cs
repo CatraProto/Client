@@ -81,5 +81,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new ChannelAdminLogEventActionDefaultBannedRights();
+            var clonePrevBannedRights = (CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase?)PrevBannedRights.Clone();
+            if (clonePrevBannedRights is null)
+            {
+                return null;
+            }
+            newClonedObject.PrevBannedRights = clonePrevBannedRights;
+            var cloneNewBannedRights = (CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase?)NewBannedRights.Clone();
+            if (cloneNewBannedRights is null)
+            {
+                return null;
+            }
+            newClonedObject.NewBannedRights = cloneNewBannedRights;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

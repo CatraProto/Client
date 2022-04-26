@@ -66,5 +66,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new PaymentResult();
+            var cloneUpdates = (CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase?)Updates.Clone();
+            if (cloneUpdates is null)
+            {
+                return null;
+            }
+            newClonedObject.Updates = cloneUpdates;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

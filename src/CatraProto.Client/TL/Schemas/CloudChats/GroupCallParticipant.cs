@@ -297,5 +297,57 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new GroupCallParticipant
+            {
+                Flags = Flags,
+                Muted = Muted,
+                Left = Left,
+                CanSelfUnmute = CanSelfUnmute,
+                JustJoined = JustJoined,
+                Versioned = Versioned,
+                Min = Min,
+                MutedByYou = MutedByYou,
+                VolumeByAdmin = VolumeByAdmin,
+                Self = Self,
+                VideoJoined = VideoJoined
+            };
+            var clonePeer = (CatraProto.Client.TL.Schemas.CloudChats.PeerBase?)Peer.Clone();
+            if (clonePeer is null)
+            {
+                return null;
+            }
+            newClonedObject.Peer = clonePeer;
+            newClonedObject.Date = Date;
+            newClonedObject.ActiveDate = ActiveDate;
+            newClonedObject.Source = Source;
+            newClonedObject.Volume = Volume;
+            newClonedObject.About = About;
+            newClonedObject.RaiseHandRating = RaiseHandRating;
+            if (Video is not null)
+            {
+                var cloneVideo = (CatraProto.Client.TL.Schemas.CloudChats.GroupCallParticipantVideoBase?)Video.Clone();
+                if (cloneVideo is null)
+                {
+                    return null;
+                }
+                newClonedObject.Video = cloneVideo;
+            }
+            if (Presentation is not null)
+            {
+                var clonePresentation = (CatraProto.Client.TL.Schemas.CloudChats.GroupCallParticipantVideoBase?)Presentation.Clone();
+                if (clonePresentation is null)
+                {
+                    return null;
+                }
+                newClonedObject.Presentation = clonePresentation;
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

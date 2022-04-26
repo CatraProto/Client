@@ -100,5 +100,23 @@ namespace CatraProto.Client.TL.Schemas.MTProto
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new ResPQ
+            {
+                Nonce = Nonce,
+                ServerNonce = ServerNonce,
+                Pq = Pq
+            };
+            foreach (var serverPublicKeyFingerprints in ServerPublicKeyFingerprints)
+            {
+                newClonedObject.ServerPublicKeyFingerprints.Add(serverPublicKeyFingerprints);
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

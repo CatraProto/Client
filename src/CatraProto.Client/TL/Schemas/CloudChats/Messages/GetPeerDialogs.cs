@@ -72,5 +72,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new GetPeerDialogs();
+            foreach (var peers in Peers)
+            {
+                var clonepeers = (CatraProto.Client.TL.Schemas.CloudChats.InputDialogPeerBase?)peers.Clone();
+                if (clonepeers is null)
+                {
+                    return null;
+                }
+                newClonedObject.Peers.Add(clonepeers);
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

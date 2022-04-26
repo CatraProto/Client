@@ -89,5 +89,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new File();
+            var cloneType = (CatraProto.Client.TL.Schemas.CloudChats.Storage.FileTypeBase?)Type.Clone();
+            if (cloneType is null)
+            {
+                return null;
+            }
+            newClonedObject.Type = cloneType;
+            newClonedObject.Mtime = Mtime;
+            newClonedObject.Bytes = Bytes;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

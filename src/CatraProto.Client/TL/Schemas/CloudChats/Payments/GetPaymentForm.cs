@@ -124,5 +124,32 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new GetPaymentForm
+            {
+                Flags = Flags
+            };
+            var clonePeer = (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase?)Peer.Clone();
+            if (clonePeer is null)
+            {
+                return null;
+            }
+            newClonedObject.Peer = clonePeer;
+            newClonedObject.MsgId = MsgId;
+            if (ThemeParams is not null)
+            {
+                var cloneThemeParams = (CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase?)ThemeParams.Clone();
+                if (cloneThemeParams is null)
+                {
+                    return null;
+                }
+                newClonedObject.ThemeParams = cloneThemeParams;
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

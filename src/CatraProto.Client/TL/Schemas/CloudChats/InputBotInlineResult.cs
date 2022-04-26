@@ -223,5 +223,46 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new InputBotInlineResult
+            {
+                Flags = Flags,
+                Id = Id,
+                Type = Type,
+                Title = Title,
+                Description = Description,
+                Url = Url
+            };
+            if (Thumb is not null)
+            {
+                var cloneThumb = (CatraProto.Client.TL.Schemas.CloudChats.InputWebDocumentBase?)Thumb.Clone();
+                if (cloneThumb is null)
+                {
+                    return null;
+                }
+                newClonedObject.Thumb = cloneThumb;
+            }
+            if (Content is not null)
+            {
+                var cloneContent = (CatraProto.Client.TL.Schemas.CloudChats.InputWebDocumentBase?)Content.Clone();
+                if (cloneContent is null)
+                {
+                    return null;
+                }
+                newClonedObject.Content = cloneContent;
+            }
+            var cloneSendMessage = (CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageBase?)SendMessage.Clone();
+            if (cloneSendMessage is null)
+            {
+                return null;
+            }
+            newClonedObject.SendMessage = cloneSendMessage;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

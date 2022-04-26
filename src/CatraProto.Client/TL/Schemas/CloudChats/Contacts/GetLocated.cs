@@ -113,5 +113,24 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new GetLocated
+            {
+                Flags = Flags,
+                Background = Background
+            };
+            var cloneGeoPoint = (CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase?)GeoPoint.Clone();
+            if (cloneGeoPoint is null)
+            {
+                return null;
+            }
+            newClonedObject.GeoPoint = cloneGeoPoint;
+            newClonedObject.SelfExpires = SelfExpires;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

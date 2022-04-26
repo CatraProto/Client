@@ -104,5 +104,27 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new UpdateDialogFilter
+            {
+                Flags = Flags,
+                Id = Id
+            };
+            if (Filter is not null)
+            {
+                var cloneFilter = (CatraProto.Client.TL.Schemas.CloudChats.DialogFilterBase?)Filter.Clone();
+                if (cloneFilter is null)
+                {
+                    return null;
+                }
+                newClonedObject.Filter = cloneFilter;
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

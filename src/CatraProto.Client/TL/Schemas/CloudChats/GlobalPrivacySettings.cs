@@ -41,11 +41,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             UpdateFlags();
 
             writer.WriteInt32(Flags);
-            var checkarchiveAndMuteNewNoncontactPeers = writer.WriteBool(ArchiveAndMuteNewNoncontactPeers.Value);
-            if (checkarchiveAndMuteNewNoncontactPeers.IsError)
+            if (FlagsHelper.IsFlagSet(Flags, 0))
             {
-                return checkarchiveAndMuteNewNoncontactPeers;
+                var checkarchiveAndMuteNewNoncontactPeers = writer.WriteBool(ArchiveAndMuteNewNoncontactPeers.Value);
+                if (checkarchiveAndMuteNewNoncontactPeers.IsError)
+                {
+                    return checkarchiveAndMuteNewNoncontactPeers;
+                }
             }
+
 
             return new WriteResult();
 
@@ -82,5 +86,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new GlobalPrivacySettings
+            {
+                Flags = Flags,
+                ArchiveAndMuteNewNoncontactPeers = ArchiveAndMuteNewNoncontactPeers
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

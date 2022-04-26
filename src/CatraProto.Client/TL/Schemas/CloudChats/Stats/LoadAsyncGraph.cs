@@ -104,5 +104,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new LoadAsyncGraph
+            {
+                Flags = Flags,
+                Token = Token,
+                X = X
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

@@ -114,5 +114,25 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new PhoneCallProtocol
+            {
+                Flags = Flags,
+                UdpP2p = UdpP2p,
+                UdpReflector = UdpReflector,
+                MinLayer = MinLayer,
+                MaxLayer = MaxLayer
+            };
+            foreach (var libraryVersions in LibraryVersions)
+            {
+                newClonedObject.LibraryVersions.Add(libraryVersions);
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

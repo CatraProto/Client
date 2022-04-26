@@ -62,5 +62,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new ResetPasswordFailedWait
+            {
+                RetryDate = RetryDate
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

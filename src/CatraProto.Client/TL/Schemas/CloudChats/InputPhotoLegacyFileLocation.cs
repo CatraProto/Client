@@ -118,5 +118,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new InputPhotoLegacyFileLocation
+            {
+                Id = Id,
+                AccessHash = AccessHash,
+                FileReference = FileReference,
+                VolumeId = VolumeId,
+                LocalId = LocalId,
+                Secret = Secret
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

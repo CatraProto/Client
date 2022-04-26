@@ -66,5 +66,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new InputPaymentCredentialsApplePay();
+            var clonePaymentData = (CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase?)PaymentData.Clone();
+            if (clonePaymentData is null)
+            {
+                return null;
+            }
+            newClonedObject.PaymentData = clonePaymentData;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

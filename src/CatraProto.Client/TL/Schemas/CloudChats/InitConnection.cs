@@ -221,5 +221,42 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new InitConnection
+            {
+                Flags = Flags,
+                ApiId = ApiId,
+                DeviceModel = DeviceModel,
+                SystemVersion = SystemVersion,
+                AppVersion = AppVersion,
+                SystemLangCode = SystemLangCode,
+                LangPack = LangPack,
+                LangCode = LangCode
+            };
+            if (Proxy is not null)
+            {
+                var cloneProxy = (CatraProto.Client.TL.Schemas.CloudChats.InputClientProxyBase?)Proxy.Clone();
+                if (cloneProxy is null)
+                {
+                    return null;
+                }
+                newClonedObject.Proxy = cloneProxy;
+            }
+            if (Params is not null)
+            {
+                var cloneParams = (CatraProto.Client.TL.Schemas.CloudChats.JSONValueBase?)Params.Clone();
+                if (cloneParams is null)
+                {
+                    return null;
+                }
+                newClonedObject.Params = cloneParams;
+            }
+            newClonedObject.Query = Query;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

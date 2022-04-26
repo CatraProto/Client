@@ -100,5 +100,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new SecureRequiredType
+            {
+                Flags = Flags,
+                NativeNames = NativeNames,
+                SelfieRequired = SelfieRequired,
+                TranslationRequired = TranslationRequired
+            };
+            var cloneType = (CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase?)Type.Clone();
+            if (cloneType is null)
+            {
+                return null;
+            }
+            newClonedObject.Type = cloneType;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

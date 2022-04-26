@@ -109,5 +109,45 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new ImportedContacts();
+            foreach (var imported in Imported)
+            {
+                var cloneimported = (CatraProto.Client.TL.Schemas.CloudChats.ImportedContactBase?)imported.Clone();
+                if (cloneimported is null)
+                {
+                    return null;
+                }
+                newClonedObject.Imported.Add(cloneimported);
+            }
+            foreach (var popularInvites in PopularInvites)
+            {
+                var clonepopularInvites = (CatraProto.Client.TL.Schemas.CloudChats.PopularContactBase?)popularInvites.Clone();
+                if (clonepopularInvites is null)
+                {
+                    return null;
+                }
+                newClonedObject.PopularInvites.Add(clonepopularInvites);
+            }
+            foreach (var retryContacts in RetryContacts)
+            {
+                newClonedObject.RetryContacts.Add(retryContacts);
+            }
+            foreach (var users in Users)
+            {
+                var cloneusers = (CatraProto.Client.TL.Schemas.CloudChats.UserBase?)users.Clone();
+                if (cloneusers is null)
+                {
+                    return null;
+                }
+                newClonedObject.Users.Add(cloneusers);
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

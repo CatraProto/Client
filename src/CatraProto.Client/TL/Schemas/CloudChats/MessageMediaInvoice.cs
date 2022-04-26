@@ -184,5 +184,34 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new MessageMediaInvoice
+            {
+                Flags = Flags,
+                ShippingAddressRequested = ShippingAddressRequested,
+                Test = Test,
+                Title = Title,
+                Description = Description
+            };
+            if (Photo is not null)
+            {
+                var clonePhoto = (CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase?)Photo.Clone();
+                if (clonePhoto is null)
+                {
+                    return null;
+                }
+                newClonedObject.Photo = clonePhoto;
+            }
+            newClonedObject.ReceiptMsgId = ReceiptMsgId;
+            newClonedObject.Currency = Currency;
+            newClonedObject.TotalAmount = TotalAmount;
+            newClonedObject.StartParam = StartParam;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

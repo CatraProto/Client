@@ -61,16 +61,24 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
             writer.WriteInt32(Flags);
             writer.WriteInt64(Hash);
-            var checkencryptedRequestsDisabled = writer.WriteBool(EncryptedRequestsDisabled.Value);
-            if (checkencryptedRequestsDisabled.IsError)
+            if (FlagsHelper.IsFlagSet(Flags, 0))
             {
-                return checkencryptedRequestsDisabled;
+                var checkencryptedRequestsDisabled = writer.WriteBool(EncryptedRequestsDisabled.Value);
+                if (checkencryptedRequestsDisabled.IsError)
+                {
+                    return checkencryptedRequestsDisabled;
+                }
             }
-            var checkcallRequestsDisabled = writer.WriteBool(CallRequestsDisabled.Value);
-            if (checkcallRequestsDisabled.IsError)
+
+            if (FlagsHelper.IsFlagSet(Flags, 1))
             {
-                return checkcallRequestsDisabled;
+                var checkcallRequestsDisabled = writer.WriteBool(CallRequestsDisabled.Value);
+                if (checkcallRequestsDisabled.IsError)
+                {
+                    return checkcallRequestsDisabled;
+                }
             }
+
 
             return new WriteResult();
 
@@ -123,5 +131,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new ChangeAuthorizationSettings
+            {
+                Flags = Flags,
+                Hash = Hash,
+                EncryptedRequestsDisabled = EncryptedRequestsDisabled,
+                CallRequestsDisabled = CallRequestsDisabled
+            };
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

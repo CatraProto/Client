@@ -77,5 +77,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new PageBlockAuthorDate();
+            var cloneAuthor = (CatraProto.Client.TL.Schemas.CloudChats.RichTextBase?)Author.Clone();
+            if (cloneAuthor is null)
+            {
+                return null;
+            }
+            newClonedObject.Author = cloneAuthor;
+            newClonedObject.PublishedDate = PublishedDate;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

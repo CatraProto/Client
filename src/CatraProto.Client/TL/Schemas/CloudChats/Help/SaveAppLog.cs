@@ -72,5 +72,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new SaveAppLog();
+            foreach (var events in Events)
+            {
+                var cloneevents = (CatraProto.Client.TL.Schemas.CloudChats.InputAppEventBase?)events.Clone();
+                if (cloneevents is null)
+                {
+                    return null;
+                }
+                newClonedObject.Events.Add(cloneevents);
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

@@ -66,5 +66,20 @@ namespace CatraProto.Client.TL.Schemas.MTProto
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new MsgCopy();
+            var cloneOrigMessage = (CatraProto.Client.TL.Schemas.MTProto.MessageBase?)OrigMessage.Clone();
+            if (cloneOrigMessage is null)
+            {
+                return null;
+            }
+            newClonedObject.OrigMessage = cloneOrigMessage;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

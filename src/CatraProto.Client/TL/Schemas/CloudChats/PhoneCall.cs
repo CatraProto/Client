@@ -199,5 +199,42 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new PhoneCall
+            {
+                Flags = Flags,
+                P2pAllowed = P2pAllowed,
+                Video = Video,
+                Id = Id,
+                AccessHash = AccessHash,
+                Date = Date,
+                AdminId = AdminId,
+                ParticipantId = ParticipantId,
+                GAOrB = GAOrB,
+                KeyFingerprint = KeyFingerprint
+            };
+            var cloneProtocol = (CatraProto.Client.TL.Schemas.CloudChats.PhoneCallProtocolBase?)Protocol.Clone();
+            if (cloneProtocol is null)
+            {
+                return null;
+            }
+            newClonedObject.Protocol = cloneProtocol;
+            foreach (var connections in Connections)
+            {
+                var cloneconnections = (CatraProto.Client.TL.Schemas.CloudChats.PhoneConnectionBase?)connections.Clone();
+                if (cloneconnections is null)
+                {
+                    return null;
+                }
+                newClonedObject.Connections.Add(cloneconnections);
+            }
+            newClonedObject.StartDate = StartDate;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

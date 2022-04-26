@@ -122,5 +122,33 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         {
             return ConstructorId;
         }
+#nullable enable
+        public IObject? Clone()
+        {
+            var newClonedObject = new AcceptAuthorization
+            {
+                BotId = BotId,
+                Scope = Scope,
+                PublicKey = PublicKey
+            };
+            foreach (var valueHashes in ValueHashes)
+            {
+                var clonevalueHashes = (CatraProto.Client.TL.Schemas.CloudChats.SecureValueHashBase?)valueHashes.Clone();
+                if (clonevalueHashes is null)
+                {
+                    return null;
+                }
+                newClonedObject.ValueHashes.Add(clonevalueHashes);
+            }
+            var cloneCredentials = (CatraProto.Client.TL.Schemas.CloudChats.SecureCredentialsEncryptedBase?)Credentials.Clone();
+            if (cloneCredentials is null)
+            {
+                return null;
+            }
+            newClonedObject.Credentials = cloneCredentials;
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

@@ -90,5 +90,25 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new UpdatePendingJoinRequests();
+            var clonePeer = (CatraProto.Client.TL.Schemas.CloudChats.PeerBase?)Peer.Clone();
+            if (clonePeer is null)
+            {
+                return null;
+            }
+            newClonedObject.Peer = clonePeer;
+            newClonedObject.RequestsPending = RequestsPending;
+            foreach (var recentRequesters in RecentRequesters)
+            {
+                newClonedObject.RecentRequesters.Add(recentRequesters);
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }

@@ -178,5 +178,38 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         {
             return ConstructorId;
         }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new PasswordInputSettings
+            {
+                Flags = Flags
+            };
+            if (NewAlgo is not null)
+            {
+                var cloneNewAlgo = (CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase?)NewAlgo.Clone();
+                if (cloneNewAlgo is null)
+                {
+                    return null;
+                }
+                newClonedObject.NewAlgo = cloneNewAlgo;
+            }
+            newClonedObject.NewPasswordHash = NewPasswordHash;
+            newClonedObject.Hint = Hint;
+            newClonedObject.Email = Email;
+            if (NewSecureSettings is not null)
+            {
+                var cloneNewSecureSettings = (CatraProto.Client.TL.Schemas.CloudChats.SecureSecretSettingsBase?)NewSecureSettings.Clone();
+                if (cloneNewSecureSettings is null)
+                {
+                    return null;
+                }
+                newClonedObject.NewSecureSettings = cloneNewSecureSettings;
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
     }
 }
