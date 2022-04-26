@@ -469,20 +469,20 @@ namespace CatraProto.Client.Database
             var inputChats = new Lazy<List<long>>(LazyThreadSafetyMode.None);
             var inputUsers = new Lazy<List<InputUserBase>>(LazyThreadSafetyMode.None);
             var result = new RpcVector<IObject>();
-            foreach(var id in ids)
+            foreach (var id in ids)
             {
-                if(!(id.Type is PeerType.User || id.Type is PeerType.Channel || id.Type is PeerType.Group))
+                if (!(id.Type is PeerType.User || id.Type is PeerType.Channel || id.Type is PeerType.Group))
                 {
                     return RpcResponse<RpcVector<IObject>>.FromError(new InvalidTypeError());
                 }
 
                 var dbResult = _client.DatabaseManager.PeerDatabase.GetPeerObject(id, false);
-                if(dbResult is null || dbResult is not DbPeer dbPeer)
+                if (dbResult is null || dbResult is not DbPeer dbPeer)
                 {
                     continue;
                 }
 
-                if(dbPeer.Object is null || !PeerTypeMatches(dbPeer.Object, id.Type))
+                if (dbPeer.Object is null || !PeerTypeMatches(dbPeer.Object, id.Type))
                 {
                     switch (id.Type)
                     {
@@ -536,6 +536,11 @@ namespace CatraProto.Client.Database
                 result.AddRange(channels.Response.ChatsField.Where(x => x is not ChatEmpty));
             }
 
+            for (var i = 0; i < result.Count; i++)
+            {
+                result[i] = result[i].Clone()!;
+            }
+
             return RpcResponse<RpcVector<IObject>>.FromResult(result);
         }
 
@@ -580,7 +585,7 @@ namespace CatraProto.Client.Database
                 return RpcResponse<T>.FromError(new InvalidTypeError());
             }
 
-            return RpcResponse<T>.FromResult((T)result);
+            return RpcResponse<T>.FromResult((T)result.Clone()!);
         }
 
         public long? GetPeerAccessHash(PeerId peer)
