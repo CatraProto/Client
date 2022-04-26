@@ -8,5 +8,6 @@ namespace CatraProto.TL.Interfaces
         public WriteResult Serialize(Writer writer);
         public void UpdateFlags();
         public int GetConstructorId();
+        public IObject? Clone();
     }
 }
