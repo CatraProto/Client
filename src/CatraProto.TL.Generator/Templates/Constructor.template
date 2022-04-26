@@ -46,5 +46,12 @@ namespace ^Namespace^
 		{
 			return ConstructorId;
 		}
+
+		#nullable enable
+		^MethodAccessibility^ IObject? Clone()
+		{
+			^Clone^
+		}
+		#nullable disable
 	}
 }

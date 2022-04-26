@@ -65,8 +65,10 @@ namespace CatraProto.TL.Generator.Objects.Types
 				return;
 			}
 
+            WriteFlagStart(stringBuilder, out var spacing, parameter);
 			stringBuilder.AppendLine($"var check{parameter.NamingInfo.CamelCaseName} = {StringTools.ThreeTabs}writer.WriteBool({parameter.NamingInfo.PascalCaseName}{(parameter.HasFlag ? ".Value" : "")});");
             stringBuilder.AppendLine($"if(check{parameter.NamingInfo.CamelCaseName}.IsError){{\n return check{parameter.NamingInfo.CamelCaseName}; \n}}");
+            WriteFlagEnd(stringBuilder, spacing, parameter);
         }
 
         public override void WriteFlagUpdate(StringBuilder stringBuilder, Parameter parameter)

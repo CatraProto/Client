@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
@@ -160,6 +161,60 @@ namespace CatraProto.TL.Generator.Objects.Interfaces
             }
 
             return "INVALID NAME";
+        }
+
+        public void WriteCloner(StringBuilder cloner)
+        {
+            cloner.AppendLine($"var newClonedObject = new {NamingInfo.PascalCaseName}();");
+            foreach(var parameter in Parameters)
+            {
+                if(!parameter.Type.TypeInfo.IsBare && parameter.HasFlag)
+                {
+                    cloner.AppendLine($"if ({parameter.NamingInfo.PascalCaseName} is not null){{");
+                }
+
+                void GetClonedObj(Parameter parameter, string name)
+                {
+                    cloner.AppendLine($"var clone{name} = ({parameter.Type.GetTypeName(NamingType.FullNamespace, parameter, false)}?){name}.Clone();");
+                    cloner.AppendLine($"if(clone{name} is null){{");
+                    cloner.AppendLine("return null;");
+                    cloner.AppendLine("}");
+                }
+
+                if (parameter.VectorInfo.IsVector)
+                {
+                    cloner.AppendLine($"foreach(var {parameter.NamingInfo.CamelCaseName} in {parameter.NamingInfo.PascalCaseName}){{");
+                    if (parameter.Type.TypeInfo.IsBare)
+                    {                    
+                        cloner.AppendLine($"newClonedObject.{parameter.NamingInfo.PascalCaseName}.Add({parameter.NamingInfo.CamelCaseName});");
+                    }
+                    else
+                    {
+                        GetClonedObj(parameter, parameter.NamingInfo.CamelCaseName);
+                        cloner.AppendLine($"newClonedObject.{parameter.NamingInfo.PascalCaseName}.Add(clone{parameter.NamingInfo.CamelCaseName});");
+                    }
+                    cloner.AppendLine("}");
+                }
+                else
+                {
+                    if (parameter.Type.TypeInfo.IsBare)
+                    {
+                        cloner.AppendLine($"newClonedObject.{parameter.NamingInfo.PascalCaseName} = {parameter.NamingInfo.PascalCaseName};");
+                    }
+                    else
+                    {
+                        GetClonedObj(parameter, parameter.NamingInfo.PascalCaseName);
+                        cloner.AppendLine($"newClonedObject.{parameter.NamingInfo.PascalCaseName} = clone{parameter.NamingInfo.PascalCaseName};");
+                    }
+                }
+
+                if (!parameter.Type.TypeInfo.IsBare && parameter.HasFlag)
+                {
+                    cloner.AppendLine("}");
+                }
+            }
+            cloner.AppendLine("return newClonedObject;");
+
         }
     }
 }

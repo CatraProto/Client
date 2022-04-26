@@ -129,11 +129,13 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
             var serializer = new StringBuilder();
             var deserializer = new StringBuilder();
             var flagsUpdating = new StringBuilder();
+            var cloner = new StringBuilder();
             obj.WriteFlagsUpdating(flagsUpdating);
             obj.WriteFlagsEnums(flagsEnum);
             obj.WriteParameters(parameters);
             obj.WriteSerializer(serializer);
             obj.WriteDeserializer(deserializer);
+            obj.WriteCloner(cloner);
             var emptyConstructoAccess = "";
             var publicContru = "";
             var hasNotNullParams = obj.HasNotNullParameters();
@@ -152,7 +154,21 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
             }
 
             var template = obj is Method ? _methodTemplate : _constructorTemplate;
-            var copy = template.Replace("^Class^", obj.NamingInfo.PascalCaseName).Replace("^Namespace^", obj.Namespace.PartialNamespace).Replace("^Properties^", parameters.ToString()).Replace("^Deserialization^", deserializer.ToString()).Replace("^Serialization^", serializer.ToString()).Replace("^Type^", obj.Type.GetTypeName(NamingType.FullNamespace, null, false, false, NameContext.TypeExtends)).Replace("^FlagsEnums^", flagsEnum.ToString()).Replace("^FlagsUpdate^", flagsUpdating.ToString()).Replace("^ConstructorId^", obj.Id.ToString()).Replace("^MethodAccessibility^", obj.GetMethodsAccessibility()).Replace("^ObjectRawName^", obj.NamingInfo.OriginalNamespacedName).Replace("^PublicConstructor^", publicContru).Replace("^EmptyConstructorAccessibility^", emptyConstructoAccess);
+            var copy = template.Replace("^Class^", obj.NamingInfo.PascalCaseName)
+                .Replace("^Namespace^", obj.Namespace.PartialNamespace)
+                .Replace("^Properties^", parameters.ToString())
+                .Replace("^Deserialization^", deserializer.ToString())
+                .Replace("^Serialization^", serializer.ToString())
+                .Replace("^Type^", obj.Type.GetTypeName(NamingType.FullNamespace, null, false, false, NameContext.TypeExtends))
+                .Replace("^FlagsEnums^", flagsEnum.ToString())
+                .Replace("^FlagsUpdate^", flagsUpdating.ToString())
+                .Replace("^ConstructorId^", obj.Id.ToString())
+                .Replace("^MethodAccessibility^", obj.GetMethodsAccessibility())
+                .Replace("^ObjectRawName^", obj.NamingInfo.OriginalNamespacedName)
+                .Replace("^PublicConstructor^", publicContru)
+                .Replace("^EmptyConstructorAccessibility^", emptyConstructoAccess)
+                .Replace("^Clone^", cloner.ToString());
+
             Directory.CreateDirectory(StringTools.NamespaceToDirectory(obj.Namespace.PartialNamespace));
             if (obj is Method method)
             {
