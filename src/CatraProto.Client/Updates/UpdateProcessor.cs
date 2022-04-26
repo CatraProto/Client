@@ -180,7 +180,7 @@ namespace CatraProto.Client.Updates
                     updateCheckResult = UpdateCheckResult.CanBeApplied;
                 }
 
-                if((newPts is not null || newQts is not null) && fetchDifference)
+                if ((newPts is not null || newQts is not null) && fetchDifference)
                 {
                     _logger.Information("Skipping update because it contains pts/qts but difference was requested");
                     update.DequeueItem();

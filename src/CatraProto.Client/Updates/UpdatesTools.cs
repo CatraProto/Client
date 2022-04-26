@@ -1,10 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using CatraProto.Client.MTProto;
 using CatraProto.Client.TL.Schemas.CloudChats;
-using CatraProto.Client.TL.Schemas.CloudChats.Messages;
-using CatraProto.Client.Tools;
 using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.Updates
