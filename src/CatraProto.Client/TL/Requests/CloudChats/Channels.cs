@@ -1,9 +1,9 @@
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.MTProto.Rpc;
 using CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors;
-using System.Collections.Generic;
 
 
 namespace CatraProto.Client.TL.Requests.CloudChats
