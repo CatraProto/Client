@@ -1,12 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CatraProto.Client.Async.Loops;
 using CatraProto.Client.Async.Loops.Enums.Resumable;
 using CatraProto.Client.Async.Loops.Extensions;
-using CatraProto.Client.Collections;
 using CatraProto.Client.MTProto.Session.Models;
-using CatraProto.Client.TL.Requests.CloudChats;
 using CatraProto.Client.TL.Schemas.CloudChats;
 using CatraProto.Client.TL.Schemas.CloudChats.Messages;
 using CatraProto.Client.Tools;
@@ -82,7 +79,7 @@ namespace CatraProto.Client.Updates
                             PushUpdate(updateShort.Update);
                             break;
                         default:
-                            PushUpdate((IObject?)ConvertUpdate(updatesBase) ?? new UpdatesTooLong());
+                            PushUpdate((IObject?)ConvertUpdate(updatesBase, callingMethod) ?? new UpdatesTooLong());
                             break;
                     }
                 }
@@ -180,10 +177,10 @@ namespace CatraProto.Client.Updates
                     }
 
                     PeerBase fromId;
-                    if(sendMessage.SendAs is null)
+                    if (sendMessage.SendAs is null)
                     {
                         _client.ClientSession.SessionManager.SessionData.Authorization.IsAuthorized(out _, out var currentId, out _);
-                        if(currentId is null)
+                        if (currentId is null)
                         {
                             return null;
                         }
@@ -193,7 +190,7 @@ namespace CatraProto.Client.Updates
                     else
                     {
                         var peer = PeerTools.FromInputToPeer(sendMessage.SendAs);
-                        if(peer is null)
+                        if (peer is null)
                         {
                             return null;
                         }
@@ -246,7 +243,6 @@ namespace CatraProto.Client.Updates
                     converted = toChatMessage;
                     break;
                 default:
-                    _logger.Warning("Trying to convert object {Object}", updatesBase);
                     return null;
             }
 
