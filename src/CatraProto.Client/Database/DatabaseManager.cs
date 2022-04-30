@@ -40,8 +40,8 @@ namespace CatraProto.Client.Database
             _client = client;
             _logger = logger.ForContext<DatabaseManager>();
             var settings = client.ClientSession.Settings.SessionSettings.DatabaseSettings;
-            Directory.CreateDirectory(settings.Path);
-            _sqliteConnection = new SqliteConnection($"Data Source={settings.Path}{client.ClientSession.Name}.db");
+            Directory.CreateDirectory(Path.GetDirectoryName(settings.Path) ?? "");
+            _sqliteConnection = new SqliteConnection($"Data Source={settings.Path}");
             PeerDatabase = new PeerDatabase(client, _sqliteConnection, _mutex, logger);
             InternalDatabase = new InternalDatabase(_sqliteConnection, _mutex, logger);
         }

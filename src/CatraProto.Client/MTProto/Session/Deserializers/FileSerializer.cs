@@ -30,6 +30,11 @@ namespace CatraProto.Client.MTProto.Session.Deserializers
         private readonly string _filePath;
         public FileSerializer(string filePath)
         {
+            var fileName = Path.GetFileName(filePath) + Path.GetExtension(filePath);
+            if (fileName == string.Empty)
+            {
+                throw new InvalidOperationException("Invalid file name specified");
+            }
             _filePath = filePath;
         }
 
