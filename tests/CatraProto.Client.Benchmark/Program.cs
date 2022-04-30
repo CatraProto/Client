@@ -1,4 +1,5 @@
 ﻿using BenchmarkDotNet.Running;
+using CatraProto.Client.Benchmark.Crypto;
 
 namespace CatraProto.Client.Benchmark
 {
@@ -6,7 +7,7 @@ namespace CatraProto.Client.Benchmark
     {
         static void Main(string[] args)
         {
-            BenchmarkRunner.Run<Program>();
+            BenchmarkRunner.Run<IgeEncryptorTest>();
         }
     }
 }
