@@ -18,10 +18,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using System;
 using System.IO;
+using System.Runtime.InteropServices;
 using CatraProto.Client.MTProto.Session.Exceptions;
 using CatraProto.Client.MTProto.Session.Models;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.TL;
+using Serilog;
 
 namespace CatraProto.Client.MTProto.Session
 {
@@ -29,11 +31,13 @@ namespace CatraProto.Client.MTProto.Session
     {
         internal SessionData SessionData { get; }
         private readonly object _mutex = new object();
+        private readonly ILogger _logger;
         private bool _hasRead;
 
-        public SessionManager()
+        public SessionManager(ILogger logger)
         {
             SessionData = new SessionData(_mutex);
+            _logger = logger.ForContext<SessionManager>();
         }
 
         public byte[] Save()
@@ -45,7 +49,7 @@ namespace CatraProto.Client.MTProto.Session
             }
         }
 
-        public void Read(byte[] serializedData)
+        public bool Read(byte[] serializedData)
         {
             lock (_mutex)
             {
@@ -57,15 +61,18 @@ namespace CatraProto.Client.MTProto.Session
                         {
                             SessionData.Read(reader);
                         }
-                        catch (IOException)
+                        catch(Exception e)
                         {
-                            throw new SessionDeserializationException("Session corrupted");
+                            _logger.Error(e, "Failed to deserialize session");
+                            return false;
                         }
                     }
                 }
 
                 _hasRead = true;
             }
+
+            return true;
         }
 
         internal bool GetHasRead()

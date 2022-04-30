@@ -75,7 +75,11 @@ namespace CatraProto.Client
 
         public async Task<ClientState> InitClientAsync(CancellationToken token = default)
         {
-            await ClientSession.ReadSessionAsync(token);
+            if(!await ClientSession.ReadSessionAsync(token))
+            {
+                return ClientState.Corrupted;
+            }
+
             _randomIdHandler = ClientSession.SessionManager.SessionData.RandomId;
             DatabaseManager.InitDb();
             var sessionData = ClientSession.SessionManager.SessionData;

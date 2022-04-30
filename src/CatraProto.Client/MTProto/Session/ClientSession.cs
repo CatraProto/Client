@@ -40,16 +40,16 @@ namespace CatraProto.Client.MTProto.Session
         public ClientSession(TelegramClient client, ClientSettings settings, ILogger logger)
         {
             Settings = settings;
-            SessionManager = new SessionManager();
+            SessionManager = new SessionManager(logger);
             Logger = logger.ForContext<ClientSession>().ForContext("Session", Name);
             ConnectionPool = new ConnectionPool(client, Logger);
         }
 
-        public async Task ReadSessionAsync(CancellationToken token = default)
+        public async Task<bool> ReadSessionAsync(CancellationToken token = default)
         {
             var sessionSerializer = Settings.SessionSettings.SessionSerializer;
             var sessionData = await sessionSerializer.ReadAsync(Logger.ForContext(sessionSerializer.GetType()), token);
-            SessionManager.Read(sessionData);
+            return SessionManager.Read(sessionData);
         }
 
         public Task SaveSessionAsync(CancellationToken token)

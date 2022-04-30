@@ -24,7 +24,6 @@ namespace CatraProto.Client.MTProto.Session.Exceptions
     {
         public SessionDeserializationException(string message) : base(message)
         {
-
         }
     }
 }
