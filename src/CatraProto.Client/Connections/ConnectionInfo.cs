@@ -37,7 +37,7 @@ namespace CatraProto.Client.Connections
         public bool Ipv6 { get; }
         public bool Test { get; }
 
-        public ConnectionInfo(IPAddress ipAddress, bool test, int port, int dcId) : this(ConnectionProtocol.TcpAbridged, ipAddress, test, false, port, dcId, false, false, null, false, false)
+        public ConnectionInfo(IPAddress ipAddress, int port, int dcId, bool test) : this(ConnectionProtocol.TcpAbridged, ipAddress, test, false, port, dcId, false, false, null, false, false)
         {
 
         }

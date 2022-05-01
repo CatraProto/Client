@@ -29,7 +29,7 @@ namespace CatraProto.Client.MTProto.Settings
         public bool Ipv6Allowed { get; }
         public bool Ipv6Only { get; }
 
-        public ConnectionSettings(ConnectionInfo defaultDatacenter, int pfsKeyDuration = 1500, int connectionTimeout = 60, int connectionRetry = 10, bool ipv6Allowed = false, bool ipv6Only = false)
+        public ConnectionSettings(ConnectionInfo defaultDatacenter, int pfsKeyDuration = 86400, int connectionTimeout = 30, int connectionRetry = 10, bool ipv6Allowed = false, bool ipv6Only = false)
         {
             DefaultDatacenter = defaultDatacenter;
             ConnectionRetry = connectionRetry;
