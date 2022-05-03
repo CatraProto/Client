@@ -68,7 +68,7 @@ namespace CatraProto.Client.Connections
                 }
 
                 var datacenter = matches[0];
-                var connectionInfo = new ConnectionInfo(IPAddress.Parse(datacenter.IpAddress), isTestDc, datacenter.Port, dcId);
+                var connectionInfo = new ConnectionInfo(IPAddress.Parse(datacenter.IpAddress), datacenter.Port, dcId, isTestDc);
                 connectionItem = CreateConnectionItem(new Connection(connectionInfo, _client));
             }
 
