@@ -17,6 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Security.Cryptography;
@@ -35,6 +36,10 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
 {
     internal class AuthKeyGen
     {
+        private static readonly List<BigInteger> _knownPrimes = new List<BigInteger>()
+        {
+            BigInteger.Parse("25135566567101483196994790440833279750474660393232382279277736257066266618532493517139001963526957179514521981877335815379755618191324858392834843718048308951653115284529736874534289456833723962912807104017411854314007953484461899139734367756070456068592886771130491355511301923675421649355211882120329692353507392677087555292357140606251171702417804959957862991259464749806480821163999054978911727901705780417863120490095024926067731615229486812312187386108568833026386220686253160504779704721744600638258183939573405528962511242337923530869616215532193967628076922234051908977996352800560160181197923404454023908443")
+        };
         private readonly ILogger _logger;
         public AuthKeyGen(ILogger logger)
         {
@@ -121,8 +126,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
 
                 var serverDhInnerData = deserializeServerDhInnerData.Value;
                 _logger.Verbose("Message decrypted, checking serverDhInnerData integrity");
-                CheckHashData(sha, serverDhInnerData);
-                if (!CheckNonce(nonce, serverDhInnerData.Nonce) || !CheckNonce(serverNonce, serverDhInnerData.ServerNonce))
+                if (!CheckNonce(nonce, serverDhInnerData.Nonce) || !CheckNonce(serverNonce, serverDhInnerData.ServerNonce) || !CheckHashData(sha, serverDhInnerData))
                 {
                     return null;
                 }
@@ -130,13 +134,36 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
                 var zeroByte = new byte[] { 0x00 };
                 var b = BigIntegerTools.GenerateBigInt(2048, true, true);
                 var dhPrime = new BigInteger(zeroByte.Concat(serverDhInnerData.DhPrime).ToArray(), isBigEndian: true);
-                var gbMod = BigInteger.ModPow(serverDhInnerData.G, b, dhPrime).ToByteArray(isBigEndian: true);
+
+                if(!CheckCyclicSubgroup(dhPrime, serverDhInnerData.G))
+                {
+                    _logger.Error("Cyclic subgroup failed. DhPrime: {DhPrime}, G: {G}", dhPrime, serverDhInnerData.G);
+                    return null;
+                }
+
+                if (!CheckRangeDhPrime(dhPrime) || !_knownPrimes.Contains(dhPrime) && (!CheckPrimeness(dhPrime) || !CheckPrimeness(dhPrime - 1 / 2)))
+                {
+                    return null;
+                }
+
+                var gb = BigInteger.ModPow(serverDhInnerData.G, b, dhPrime);
+                var gbArray = gb.ToByteArray(isBigEndian: true);
+                var ga = new BigInteger(serverDhInnerData.GA, isBigEndian: true, isUnsigned: true);
+                if (!CheckGLength(serverDhInnerData.G, dhPrime, "g") || !CheckGLength(ga, dhPrime, "g_a") || !CheckGLength(gb, dhPrime, "g_b"))
+                {
+                    return null;
+                }
+
+                if(!CheckGABLength(ga, dhPrime, "g_a") || !CheckGABLength(gb, dhPrime, "g_b"))
+                {
+                    return null;
+                }
 
                 var clientDhInnerData = new ClientDHInnerData
                 {
                     Nonce = nonce,
                     ServerNonce = serverNonce,
-                    GB = gbMod
+                    GB = gbArray
                 };
 
                 var tryGetDh = clientDhInnerData.ToArray(MergedProvider.Singleton, out var clientDhBytes);
@@ -208,6 +235,130 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
                 return false;
             }
 
+            return true;
+        }
+
+        private bool CheckCyclicSubgroup(BigInteger number, int g)
+        {
+            switch (g)
+            {
+                case 2:
+                    return number % 8 == 7;
+                case 3:
+                    return number % 3 == 2;
+                case 4:
+                    return true;
+                case 5:
+                    var mod5 = number % 5;
+                    return mod5 == 1 || mod5 == 4;
+                case 6:
+                    var mod6 = number % 24;
+                    return mod6 == 19 || mod6 == 23;
+                case 7:
+                    var mod7 = number % 7;
+                    return mod7 == 3 || mod7 == 5 || mod7 == 6;
+                default:
+                    _logger.Error("Invalid G {G}", g);
+                    return false;
+            }
+        }
+
+        // Adapted from https://rosettacode.org/wiki/Miller%E2%80%93Rabin_primality_test#C.23
+        private bool CheckPrimeness(BigInteger number, int certainty = 60)
+        {
+            _logger.Information("Verifying primeness of {Number}", number);
+            if (number == 2 || number == 3)
+            {
+                return true;
+            }
+
+            if (number < 2 || number % 2 == 0)
+            {
+                return false;
+            }
+
+            BigInteger d = number - 1;
+            int s = 0;
+
+            while (d % 2 == 0)
+            {
+                d /= 2;
+                s += 1;
+            }
+
+            BigInteger a;
+            for (int i = 0; i < certainty; i++)
+            {
+                do
+                {
+                    a = BigIntegerTools.GenerateBigInt(2048);
+                }
+                while (a < 2 || a >= number - 2);
+
+                BigInteger x = BigInteger.ModPow(a, d, number);
+                if (x == 1 || x == number - 1)
+                {
+                    continue;
+                }
+
+                for (int r = 1; r < s; r++)
+                {
+                    x = BigInteger.ModPow(x, 2, number);
+                    if (x == 1)
+                    {
+                        return false;
+                    }
+
+                    if (x == number - 1)
+                    {
+                        break;
+                    }
+                }
+
+                if (x != number - 1)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    
+
+        private bool CheckRangeDhPrime(BigInteger number)
+        {
+            if (!(BigInteger.Pow(2, 2047) < number && number < BigInteger.Pow(2, 2048)))
+            {
+                _logger.Error("{Number} is NOT between 2^2047 and 2^2048", number);
+                return false;
+            }
+
+            _logger.Verbose("{Number} is between 2^2047 and 2^2048", number);
+            return true;
+        }
+
+        private bool CheckGLength(BigInteger g, BigInteger dhPrime, string which)
+        {
+            if (g <= 1 || g > dhPrime - 1)
+            {
+                _logger.Error("{Which} {G} is not a valid number. Checked against prime {Prime}", which, g, dhPrime);
+                return false;
+            }
+
+            _logger.Verbose("{Which} {G} is a valid number. Checked against prime {Prime}", which, g, dhPrime);
+            return true;
+        }
+
+        private bool CheckGABLength(BigInteger g, BigInteger dhPrime, string which)
+        {
+            var power = BigInteger.Pow(2, 2048 - 64);
+            if (g > dhPrime - power && g < power)
+            {
+                _logger.Error("{Which} {G} does not fall between valid range. Checked against prime {Prime}", which, g, dhPrime);
+                return false;
+            }
+
+            _logger.Verbose("{Which} {G} falls between valid range. Checked against prime {Prime}", which, g, dhPrime);
             return true;
         }
     }
