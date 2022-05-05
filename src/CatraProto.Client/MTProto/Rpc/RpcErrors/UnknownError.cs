@@ -30,10 +30,5 @@ namespace CatraProto.Client.MTProto.Rpc.RpcErrors
         public UnknownError(string errorMessage, int errorCode) : base(errorMessage, errorCode)
         {
         }
-
-        public override string ToString()
-        {
-            return $"[{ErrorCode}][{ErrorMessage}][{ErrorDescription}]";
-        }
     }
 }
