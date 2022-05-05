@@ -26,7 +26,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
         public long? SendWithMessageId { get; }
         public bool IsEncrypted { get; }
 
-        public MessageSendingOptions(bool isEncrypted, long? sendWithMessageId = null, AwaiterType awaiterType = AwaiterType.OnResponse)
+        internal MessageSendingOptions(bool isEncrypted, long? sendWithMessageId = null, AwaiterType awaiterType = AwaiterType.OnResponse)
         {
             IsEncrypted = isEncrypted;
             SendWithMessageId = sendWithMessageId;
