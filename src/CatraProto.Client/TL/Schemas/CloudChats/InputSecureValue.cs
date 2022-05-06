@@ -281,10 +281,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new InputSecureValue
-            {
-                Flags = Flags
-            };
+            var newClonedObject = new InputSecureValue();
+            newClonedObject.Flags = Flags;
             var cloneType = (CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase?)Type.Clone();
             if (cloneType is null)
             {
@@ -329,6 +327,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             }
             if (Translation is not null)
             {
+                newClonedObject.Translation = new List<CatraProto.Client.TL.Schemas.CloudChats.InputSecureFileBase>();
                 foreach (var translation in Translation)
                 {
                     var clonetranslation = (CatraProto.Client.TL.Schemas.CloudChats.InputSecureFileBase?)translation.Clone();
@@ -341,6 +340,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             }
             if (Files is not null)
             {
+                newClonedObject.Files = new List<CatraProto.Client.TL.Schemas.CloudChats.InputSecureFileBase>();
                 foreach (var files in Files)
                 {
                     var clonefiles = (CatraProto.Client.TL.Schemas.CloudChats.InputSecureFileBase?)files.Clone();

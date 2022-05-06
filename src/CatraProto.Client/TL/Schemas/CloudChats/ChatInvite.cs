@@ -206,17 +206,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new ChatInvite
-            {
-                Flags = Flags,
-                Channel = Channel,
-                Broadcast = Broadcast,
-                Public = Public,
-                Megagroup = Megagroup,
-                RequestNeeded = RequestNeeded,
-                Title = Title,
-                About = About
-            };
+            var newClonedObject = new ChatInvite();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Channel = Channel;
+            newClonedObject.Broadcast = Broadcast;
+            newClonedObject.Public = Public;
+            newClonedObject.Megagroup = Megagroup;
+            newClonedObject.RequestNeeded = RequestNeeded;
+            newClonedObject.Title = Title;
+            newClonedObject.About = About;
             var clonePhoto = (CatraProto.Client.TL.Schemas.CloudChats.PhotoBase?)Photo.Clone();
             if (clonePhoto is null)
             {
@@ -226,6 +224,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             newClonedObject.ParticipantsCount = ParticipantsCount;
             if (Participants is not null)
             {
+                newClonedObject.Participants = new List<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
                 foreach (var participants in Participants)
                 {
                     var cloneparticipants = (CatraProto.Client.TL.Schemas.CloudChats.UserBase?)participants.Clone();

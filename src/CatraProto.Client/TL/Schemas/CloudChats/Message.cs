@@ -567,21 +567,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new Message
-            {
-                Flags = Flags,
-                Out = Out,
-                Mentioned = Mentioned,
-                MediaUnread = MediaUnread,
-                Silent = Silent,
-                Post = Post,
-                FromScheduled = FromScheduled,
-                Legacy = Legacy,
-                EditHide = EditHide,
-                Pinned = Pinned,
-                Noforwards = Noforwards,
-                Id = Id
-            };
+            var newClonedObject = new Message();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Out = Out;
+            newClonedObject.Mentioned = Mentioned;
+            newClonedObject.MediaUnread = MediaUnread;
+            newClonedObject.Silent = Silent;
+            newClonedObject.Post = Post;
+            newClonedObject.FromScheduled = FromScheduled;
+            newClonedObject.Legacy = Legacy;
+            newClonedObject.EditHide = EditHide;
+            newClonedObject.Pinned = Pinned;
+            newClonedObject.Noforwards = Noforwards;
+            newClonedObject.Id = Id;
             if (FromId is not null)
             {
                 var cloneFromId = (CatraProto.Client.TL.Schemas.CloudChats.PeerBase?)FromId.Clone();
@@ -638,6 +636,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             }
             if (Entities is not null)
             {
+                newClonedObject.Entities = new List<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
                 foreach (var entities in Entities)
                 {
                     var cloneentities = (CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase?)entities.Clone();
@@ -673,6 +672,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             }
             if (RestrictionReason is not null)
             {
+                newClonedObject.RestrictionReason = new List<CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase>();
                 foreach (var restrictionReason in RestrictionReason)
                 {
                     var clonerestrictionReason = (CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase?)restrictionReason.Clone();

@@ -808,28 +808,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new ChannelFull
-            {
-                Flags = Flags,
-                CanViewParticipants = CanViewParticipants,
-                CanSetUsername = CanSetUsername,
-                CanSetStickers = CanSetStickers,
-                HiddenPrehistory = HiddenPrehistory,
-                CanSetLocation = CanSetLocation,
-                HasScheduled = HasScheduled,
-                CanViewStats = CanViewStats,
-                Blocked = Blocked,
-                Id = Id,
-                About = About,
-                ParticipantsCount = ParticipantsCount,
-                AdminsCount = AdminsCount,
-                KickedCount = KickedCount,
-                BannedCount = BannedCount,
-                OnlineCount = OnlineCount,
-                ReadInboxMaxId = ReadInboxMaxId,
-                ReadOutboxMaxId = ReadOutboxMaxId,
-                UnreadCount = UnreadCount
-            };
+            var newClonedObject = new ChannelFull();
+            newClonedObject.Flags = Flags;
+            newClonedObject.CanViewParticipants = CanViewParticipants;
+            newClonedObject.CanSetUsername = CanSetUsername;
+            newClonedObject.CanSetStickers = CanSetStickers;
+            newClonedObject.HiddenPrehistory = HiddenPrehistory;
+            newClonedObject.CanSetLocation = CanSetLocation;
+            newClonedObject.HasScheduled = HasScheduled;
+            newClonedObject.CanViewStats = CanViewStats;
+            newClonedObject.Blocked = Blocked;
+            newClonedObject.Id = Id;
+            newClonedObject.About = About;
+            newClonedObject.ParticipantsCount = ParticipantsCount;
+            newClonedObject.AdminsCount = AdminsCount;
+            newClonedObject.KickedCount = KickedCount;
+            newClonedObject.BannedCount = BannedCount;
+            newClonedObject.OnlineCount = OnlineCount;
+            newClonedObject.ReadInboxMaxId = ReadInboxMaxId;
+            newClonedObject.ReadOutboxMaxId = ReadOutboxMaxId;
+            newClonedObject.UnreadCount = UnreadCount;
             var cloneChatPhoto = (CatraProto.Client.TL.Schemas.CloudChats.PhotoBase?)ChatPhoto.Clone();
             if (cloneChatPhoto is null)
             {
@@ -851,6 +849,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 }
                 newClonedObject.ExportedInvite = cloneExportedInvite;
             }
+            newClonedObject.BotInfo = new List<CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase>();
             foreach (var botInfo in BotInfo)
             {
                 var clonebotInfo = (CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase?)botInfo.Clone();
@@ -898,9 +897,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 newClonedObject.Call = cloneCall;
             }
             newClonedObject.TtlPeriod = TtlPeriod;
-            foreach (var pendingSuggestions in PendingSuggestions)
+            if (PendingSuggestions is not null)
             {
-                newClonedObject.PendingSuggestions.Add(pendingSuggestions);
+                newClonedObject.PendingSuggestions = new List<string>();
+                foreach (var pendingSuggestions in PendingSuggestions)
+                {
+                    newClonedObject.PendingSuggestions.Add(pendingSuggestions);
+                }
             }
             if (GroupcallDefaultJoinAs is not null)
             {
@@ -913,9 +916,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             }
             newClonedObject.ThemeEmoticon = ThemeEmoticon;
             newClonedObject.RequestsPending = RequestsPending;
-            foreach (var recentRequesters in RecentRequesters)
+            if (RecentRequesters is not null)
             {
-                newClonedObject.RecentRequesters.Add(recentRequesters);
+                newClonedObject.RecentRequesters = new List<long>();
+                foreach (var recentRequesters in RecentRequesters)
+                {
+                    newClonedObject.RecentRequesters.Add(recentRequesters);
+                }
             }
             if (DefaultSendAs is not null)
             {
@@ -926,9 +933,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 }
                 newClonedObject.DefaultSendAs = cloneDefaultSendAs;
             }
-            foreach (var availableReactions in AvailableReactions)
+            if (AvailableReactions is not null)
             {
-                newClonedObject.AvailableReactions.Add(availableReactions);
+                newClonedObject.AvailableReactions = new List<string>();
+                foreach (var availableReactions in AvailableReactions)
+                {
+                    newClonedObject.AvailableReactions.Add(availableReactions);
+                }
             }
             return newClonedObject;
 

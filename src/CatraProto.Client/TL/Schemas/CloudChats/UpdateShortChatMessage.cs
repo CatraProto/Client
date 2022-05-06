@@ -308,21 +308,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new UpdateShortChatMessage
-            {
-                Flags = Flags,
-                Out = Out,
-                Mentioned = Mentioned,
-                MediaUnread = MediaUnread,
-                Silent = Silent,
-                Id = Id,
-                FromId = FromId,
-                ChatId = ChatId,
-                Message = Message,
-                Pts = Pts,
-                PtsCount = PtsCount,
-                Date = Date
-            };
+            var newClonedObject = new UpdateShortChatMessage();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Out = Out;
+            newClonedObject.Mentioned = Mentioned;
+            newClonedObject.MediaUnread = MediaUnread;
+            newClonedObject.Silent = Silent;
+            newClonedObject.Id = Id;
+            newClonedObject.FromId = FromId;
+            newClonedObject.ChatId = ChatId;
+            newClonedObject.Message = Message;
+            newClonedObject.Pts = Pts;
+            newClonedObject.PtsCount = PtsCount;
+            newClonedObject.Date = Date;
             if (FwdFrom is not null)
             {
                 var cloneFwdFrom = (CatraProto.Client.TL.Schemas.CloudChats.MessageFwdHeaderBase?)FwdFrom.Clone();
@@ -344,6 +342,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             }
             if (Entities is not null)
             {
+                newClonedObject.Entities = new List<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
                 foreach (var entities in Entities)
                 {
                     var cloneentities = (CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase?)entities.Clone();

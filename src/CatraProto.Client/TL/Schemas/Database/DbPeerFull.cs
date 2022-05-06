@@ -93,8 +93,13 @@ namespace CatraProto.Client.TL.Schemas.Database
             {
                 LayerVersion = LayerVersion,
                 UpdatedAt = UpdatedAt,
-                Object = Object.Clone()
             };
+
+            if (Object is not null)
+            {
+                newObj.Object = Object.Clone();
+            }
+            
             return newObj;
         }
     }

@@ -16,6 +16,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -174,16 +175,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new InputMediaPoll
-            {
-                Flags = Flags
-            };
+            var newClonedObject = new InputMediaPoll();
+            newClonedObject.Flags = Flags;
             var clonePoll = (CatraProto.Client.TL.Schemas.CloudChats.PollBase?)Poll.Clone();
             if (clonePoll is null)
             {
                 return null;
             }
             newClonedObject.Poll = clonePoll;
+            newClonedObject.CorrectAnswers = new List<byte[]>();
             foreach (var correctAnswers in CorrectAnswers)
             {
                 newClonedObject.CorrectAnswers.Add(correctAnswers);
@@ -191,6 +191,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             newClonedObject.Solution = Solution;
             if (SolutionEntities is not null)
             {
+                newClonedObject.SolutionEntities = new List<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
                 foreach (var solutionEntities in SolutionEntities)
                 {
                     var clonesolutionEntities = (CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase?)solutionEntities.Clone();

@@ -151,10 +151,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new InputMediaUploadedPhoto
-            {
-                Flags = Flags
-            };
+            var newClonedObject = new InputMediaUploadedPhoto();
+            newClonedObject.Flags = Flags;
             var cloneFile = (CatraProto.Client.TL.Schemas.CloudChats.InputFileBase?)File.Clone();
             if (cloneFile is null)
             {
@@ -163,6 +161,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             newClonedObject.File = cloneFile;
             if (Stickers is not null)
             {
+                newClonedObject.Stickers = new List<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
                 foreach (var stickers in Stickers)
                 {
                     var clonestickers = (CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase?)stickers.Clone();

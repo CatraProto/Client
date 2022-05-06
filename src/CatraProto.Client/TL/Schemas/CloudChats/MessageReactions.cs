@@ -143,12 +143,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new MessageReactions
-            {
-                Flags = Flags,
-                Min = Min,
-                CanSeeList = CanSeeList
-            };
+            var newClonedObject = new MessageReactions();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Min = Min;
+            newClonedObject.CanSeeList = CanSeeList;
+            newClonedObject.Results = new List<CatraProto.Client.TL.Schemas.CloudChats.ReactionCountBase>();
             foreach (var results in Results)
             {
                 var cloneresults = (CatraProto.Client.TL.Schemas.CloudChats.ReactionCountBase?)results.Clone();
@@ -160,6 +159,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             }
             if (RecentReactions is not null)
             {
+                newClonedObject.RecentReactions = new List<CatraProto.Client.TL.Schemas.CloudChats.MessagePeerReactionBase>();
                 foreach (var recentReactions in RecentReactions)
                 {
                     var clonerecentReactions = (CatraProto.Client.TL.Schemas.CloudChats.MessagePeerReactionBase?)recentReactions.Clone();

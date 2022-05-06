@@ -278,15 +278,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new SendMessage
-            {
-                Flags = Flags,
-                NoWebpage = NoWebpage,
-                Silent = Silent,
-                Background = Background,
-                ClearDraft = ClearDraft,
-                Noforwards = Noforwards
-            };
+            var newClonedObject = new SendMessage();
+            newClonedObject.Flags = Flags;
+            newClonedObject.NoWebpage = NoWebpage;
+            newClonedObject.Silent = Silent;
+            newClonedObject.Background = Background;
+            newClonedObject.ClearDraft = ClearDraft;
+            newClonedObject.Noforwards = Noforwards;
             var clonePeer = (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase?)Peer.Clone();
             if (clonePeer is null)
             {
@@ -307,6 +305,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             }
             if (Entities is not null)
             {
+                newClonedObject.Entities = new List<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
                 foreach (var entities in Entities)
                 {
                     var cloneentities = (CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase?)entities.Clone();

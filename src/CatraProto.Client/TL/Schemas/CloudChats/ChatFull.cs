@@ -426,14 +426,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new ChatFull
-            {
-                Flags = Flags,
-                CanSetUsername = CanSetUsername,
-                HasScheduled = HasScheduled,
-                Id = Id,
-                About = About
-            };
+            var newClonedObject = new ChatFull();
+            newClonedObject.Flags = Flags;
+            newClonedObject.CanSetUsername = CanSetUsername;
+            newClonedObject.HasScheduled = HasScheduled;
+            newClonedObject.Id = Id;
+            newClonedObject.About = About;
             var cloneParticipants = (CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantsBase?)Participants.Clone();
             if (cloneParticipants is null)
             {
@@ -466,6 +464,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             }
             if (BotInfo is not null)
             {
+                newClonedObject.BotInfo = new List<CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase>();
                 foreach (var botInfo in BotInfo)
                 {
                     var clonebotInfo = (CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase?)botInfo.Clone();
@@ -499,13 +498,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             }
             newClonedObject.ThemeEmoticon = ThemeEmoticon;
             newClonedObject.RequestsPending = RequestsPending;
-            foreach (var recentRequesters in RecentRequesters)
+            if (RecentRequesters is not null)
             {
-                newClonedObject.RecentRequesters.Add(recentRequesters);
+                newClonedObject.RecentRequesters = new List<long>();
+                foreach (var recentRequesters in RecentRequesters)
+                {
+                    newClonedObject.RecentRequesters.Add(recentRequesters);
+                }
             }
-            foreach (var availableReactions in AvailableReactions)
+            if (AvailableReactions is not null)
             {
-                newClonedObject.AvailableReactions.Add(availableReactions);
+                newClonedObject.AvailableReactions = new List<string>();
+                foreach (var availableReactions in AvailableReactions)
+                {
+                    newClonedObject.AvailableReactions.Add(availableReactions);
+                }
             }
             return newClonedObject;
 

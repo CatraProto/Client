@@ -216,11 +216,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new UpdateTheme
-            {
-                Flags = Flags,
-                Format = Format
-            };
+            var newClonedObject = new UpdateTheme();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Format = Format;
             var cloneTheme = (CatraProto.Client.TL.Schemas.CloudChats.InputThemeBase?)Theme.Clone();
             if (cloneTheme is null)
             {
@@ -240,6 +238,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             }
             if (Settings is not null)
             {
+                newClonedObject.Settings = new List<CatraProto.Client.TL.Schemas.CloudChats.InputThemeSettingsBase>();
                 foreach (var settings in Settings)
                 {
                     var clonesettings = (CatraProto.Client.TL.Schemas.CloudChats.InputThemeSettingsBase?)settings.Clone();

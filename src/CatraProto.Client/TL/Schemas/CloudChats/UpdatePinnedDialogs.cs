@@ -131,13 +131,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new UpdatePinnedDialogs
-            {
-                Flags = Flags,
-                FolderId = FolderId
-            };
+            var newClonedObject = new UpdatePinnedDialogs();
+            newClonedObject.Flags = Flags;
+            newClonedObject.FolderId = FolderId;
             if (Order is not null)
             {
+                newClonedObject.Order = new List<CatraProto.Client.TL.Schemas.CloudChats.DialogPeerBase>();
                 foreach (var order in Order)
                 {
                     var cloneorder = (CatraProto.Client.TL.Schemas.CloudChats.DialogPeerBase?)order.Clone();

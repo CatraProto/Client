@@ -193,15 +193,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new Photo
-            {
-                Flags = Flags,
-                HasStickers = HasStickers,
-                Id = Id,
-                AccessHash = AccessHash,
-                FileReference = FileReference,
-                Date = Date
-            };
+            var newClonedObject = new Photo();
+            newClonedObject.Flags = Flags;
+            newClonedObject.HasStickers = HasStickers;
+            newClonedObject.Id = Id;
+            newClonedObject.AccessHash = AccessHash;
+            newClonedObject.FileReference = FileReference;
+            newClonedObject.Date = Date;
+            newClonedObject.Sizes = new List<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase>();
             foreach (var sizes in Sizes)
             {
                 var clonesizes = (CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase?)sizes.Clone();
@@ -213,6 +212,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             }
             if (VideoSizes is not null)
             {
+                newClonedObject.VideoSizes = new List<CatraProto.Client.TL.Schemas.CloudChats.VideoSizeBase>();
                 foreach (var videoSizes in VideoSizes)
                 {
                     var clonevideoSizes = (CatraProto.Client.TL.Schemas.CloudChats.VideoSizeBase?)videoSizes.Clone();

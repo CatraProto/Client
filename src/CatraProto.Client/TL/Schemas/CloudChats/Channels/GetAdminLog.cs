@@ -205,10 +205,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new GetAdminLog
-            {
-                Flags = Flags
-            };
+            var newClonedObject = new GetAdminLog();
+            newClonedObject.Flags = Flags;
             var cloneChannel = (CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase?)Channel.Clone();
             if (cloneChannel is null)
             {
@@ -227,6 +225,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
             }
             if (Admins is not null)
             {
+                newClonedObject.Admins = new List<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
                 foreach (var admins in Admins)
                 {
                     var cloneadmins = (CatraProto.Client.TL.Schemas.CloudChats.InputUserBase?)admins.Clone();

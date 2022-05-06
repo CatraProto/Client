@@ -439,31 +439,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new User
-            {
-                Flags = Flags,
-                Self = Self,
-                Contact = Contact,
-                MutualContact = MutualContact,
-                Deleted = Deleted,
-                Bot = Bot,
-                BotChatHistory = BotChatHistory,
-                BotNochats = BotNochats,
-                Verified = Verified,
-                Restricted = Restricted,
-                Min = Min,
-                BotInlineGeo = BotInlineGeo,
-                Support = Support,
-                Scam = Scam,
-                ApplyMinPhoto = ApplyMinPhoto,
-                Fake = Fake,
-                Id = Id,
-                AccessHash = AccessHash,
-                FirstName = FirstName,
-                LastName = LastName,
-                Username = Username,
-                Phone = Phone
-            };
+            var newClonedObject = new User();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Self = Self;
+            newClonedObject.Contact = Contact;
+            newClonedObject.MutualContact = MutualContact;
+            newClonedObject.Deleted = Deleted;
+            newClonedObject.Bot = Bot;
+            newClonedObject.BotChatHistory = BotChatHistory;
+            newClonedObject.BotNochats = BotNochats;
+            newClonedObject.Verified = Verified;
+            newClonedObject.Restricted = Restricted;
+            newClonedObject.Min = Min;
+            newClonedObject.BotInlineGeo = BotInlineGeo;
+            newClonedObject.Support = Support;
+            newClonedObject.Scam = Scam;
+            newClonedObject.ApplyMinPhoto = ApplyMinPhoto;
+            newClonedObject.Fake = Fake;
+            newClonedObject.Id = Id;
+            newClonedObject.AccessHash = AccessHash;
+            newClonedObject.FirstName = FirstName;
+            newClonedObject.LastName = LastName;
+            newClonedObject.Username = Username;
+            newClonedObject.Phone = Phone;
             if (Photo is not null)
             {
                 var clonePhoto = (CatraProto.Client.TL.Schemas.CloudChats.UserProfilePhotoBase?)Photo.Clone();
@@ -485,6 +483,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             newClonedObject.BotInfoVersion = BotInfoVersion;
             if (RestrictionReason is not null)
             {
+                newClonedObject.RestrictionReason = new List<CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase>();
                 foreach (var restrictionReason in RestrictionReason)
                 {
                     var clonerestrictionReason = (CatraProto.Client.TL.Schemas.CloudChats.RestrictionReasonBase?)restrictionReason.Clone();

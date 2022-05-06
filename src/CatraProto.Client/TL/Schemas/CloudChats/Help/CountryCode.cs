@@ -147,18 +147,24 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new CountryCode
+            var newClonedObject = new CountryCode();
+            newClonedObject.Flags = Flags;
+            newClonedObject.CountryCodeField = CountryCodeField;
+            if (Prefixes is not null)
             {
-                Flags = Flags,
-                CountryCodeField = CountryCodeField
-            };
-            foreach (var prefixes in Prefixes)
-            {
-                newClonedObject.Prefixes.Add(prefixes);
+                newClonedObject.Prefixes = new List<string>();
+                foreach (var prefixes in Prefixes)
+                {
+                    newClonedObject.Prefixes.Add(prefixes);
+                }
             }
-            foreach (var patterns in Patterns)
+            if (Patterns is not null)
             {
-                newClonedObject.Patterns.Add(patterns);
+                newClonedObject.Patterns = new List<string>();
+                foreach (var patterns in Patterns)
+                {
+                    newClonedObject.Patterns.Add(patterns);
+                }
             }
             return newClonedObject;
 

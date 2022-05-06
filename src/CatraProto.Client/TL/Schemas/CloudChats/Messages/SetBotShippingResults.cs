@@ -153,14 +153,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new SetBotShippingResults
-            {
-                Flags = Flags,
-                QueryId = QueryId,
-                Error = Error
-            };
+            var newClonedObject = new SetBotShippingResults();
+            newClonedObject.Flags = Flags;
+            newClonedObject.QueryId = QueryId;
+            newClonedObject.Error = Error;
             if (ShippingOptions is not null)
             {
+                newClonedObject.ShippingOptions = new List<CatraProto.Client.TL.Schemas.CloudChats.ShippingOptionBase>();
                 foreach (var shippingOptions in ShippingOptions)
                 {
                     var cloneshippingOptions = (CatraProto.Client.TL.Schemas.CloudChats.ShippingOptionBase?)shippingOptions.Clone();

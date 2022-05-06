@@ -451,18 +451,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new WebPage
-            {
-                Flags = Flags,
-                Id = Id,
-                Url = Url,
-                DisplayUrl = DisplayUrl,
-                Hash = Hash,
-                Type = Type,
-                SiteName = SiteName,
-                Title = Title,
-                Description = Description
-            };
+            var newClonedObject = new WebPage();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Id = Id;
+            newClonedObject.Url = Url;
+            newClonedObject.DisplayUrl = DisplayUrl;
+            newClonedObject.Hash = Hash;
+            newClonedObject.Type = Type;
+            newClonedObject.SiteName = SiteName;
+            newClonedObject.Title = Title;
+            newClonedObject.Description = Description;
             if (Photo is not null)
             {
                 var clonePhoto = (CatraProto.Client.TL.Schemas.CloudChats.PhotoBase?)Photo.Clone();
@@ -498,6 +496,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             }
             if (Attributes is not null)
             {
+                newClonedObject.Attributes = new List<CatraProto.Client.TL.Schemas.CloudChats.WebPageAttributeBase>();
                 foreach (var attributes in Attributes)
                 {
                     var cloneattributes = (CatraProto.Client.TL.Schemas.CloudChats.WebPageAttributeBase?)attributes.Clone();

@@ -213,11 +213,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new EditInlineBotMessage
-            {
-                Flags = Flags,
-                NoWebpage = NoWebpage
-            };
+            var newClonedObject = new EditInlineBotMessage();
+            newClonedObject.Flags = Flags;
+            newClonedObject.NoWebpage = NoWebpage;
             var cloneId = (CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageIDBase?)Id.Clone();
             if (cloneId is null)
             {
@@ -245,6 +243,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             }
             if (Entities is not null)
             {
+                newClonedObject.Entities = new List<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
                 foreach (var entities in Entities)
                 {
                     var cloneentities = (CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase?)entities.Clone();

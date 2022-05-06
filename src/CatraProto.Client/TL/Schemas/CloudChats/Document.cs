@@ -235,18 +235,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new Document
-            {
-                Flags = Flags,
-                Id = Id,
-                AccessHash = AccessHash,
-                FileReference = FileReference,
-                Date = Date,
-                MimeType = MimeType,
-                Size = Size
-            };
+            var newClonedObject = new Document();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Id = Id;
+            newClonedObject.AccessHash = AccessHash;
+            newClonedObject.FileReference = FileReference;
+            newClonedObject.Date = Date;
+            newClonedObject.MimeType = MimeType;
+            newClonedObject.Size = Size;
             if (Thumbs is not null)
             {
+                newClonedObject.Thumbs = new List<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase>();
                 foreach (var thumbs in Thumbs)
                 {
                     var clonethumbs = (CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase?)thumbs.Clone();
@@ -259,6 +258,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             }
             if (VideoThumbs is not null)
             {
+                newClonedObject.VideoThumbs = new List<CatraProto.Client.TL.Schemas.CloudChats.VideoSizeBase>();
                 foreach (var videoThumbs in VideoThumbs)
                 {
                     var clonevideoThumbs = (CatraProto.Client.TL.Schemas.CloudChats.VideoSizeBase?)videoThumbs.Clone();
@@ -270,6 +270,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 }
             }
             newClonedObject.DcId = DcId;
+            newClonedObject.Attributes = new List<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase>();
             foreach (var attributes in Attributes)
             {
                 var cloneattributes = (CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase?)attributes.Clone();
