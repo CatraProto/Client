@@ -3,8 +3,24 @@
         <LangVersion>9</LangVersion>
         <Nullable>enable</Nullable>
         <TargetFramework>net5.0</TargetFramework>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
 
+	<PropertyGroup>
+		<PackageId>CatraProto.Client</PackageId>
+		<Version>1.0</Version>
+		<Authors>Aquathing</Authors>
+		<Company>CatraProto</Company>
+		<Title>CatraProto Client</Title>
+		<Description>
+			CatraProto is a C# library that implements the MTProto protocol and the Telegram API.
+		</Description>
+		<PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
+		<PackageProjectUrl>https://catraproto.github.io/docs</PackageProjectUrl>
+		<PackageTags>telegram, async, mtproto, bot, telegram client, client, userbot</PackageTags>
+	</PropertyGroup>
+	
     <ItemGroup>
         <PackageReference Include="Microsoft.Data.Sqlite" Version="6.0.1" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
@@ -13,7 +29,6 @@
     </ItemGroup>
 
     <ItemGroup>
-
         <InternalsVisibleTo Include="CatraProto.Client.UnitTests" />
         <InternalsVisibleTo Include="CatraProto.Client.Benchmark" />
         <ProjectReference Include="..\CatraProto.TL\CatraProto.TL.csproj" />

@@ -3,5 +3,20 @@
         <LangVersion>9</LangVersion>
         <Nullable>enable</Nullable>
         <TargetFramework>net5.0</TargetFramework>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
+
+	<PropertyGroup>
+		<PackageId>CatraProto.TL</PackageId>
+		<Version>1.0</Version>
+		<Authors>Aquathing</Authors>
+		<Company>CatraProto</Company>
+		<Title>CatraProto TL</Title>
+		<Description>
+			CatraProto.TL is a library used by CatraProto.Client to read and write TL packages
+		</Description>
+		<PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
+		<PackageTags>tl, telegram, mtproto</PackageTags>
+	</PropertyGroup>
 </Project>
