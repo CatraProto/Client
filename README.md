@@ -8,7 +8,7 @@ This means you can interact with the Telegram API (**as a regular user** as well
 In order to interact with the API, we will need a combination of api_id and api_hash which can be retrieved by logging-in to my.telegram.org.
 **Never share these credentials with anyone.**
 
-More information can be found [here](app_configuration.md)
+More information can be found [here](https://catraproto.github.io/docs/app_configuration.html")
 ## Adding CatraProto to your project
 After retrieving our API credentials we must add CatraProto to your project. You can do this by referencing CatraProto.Client from NuGet or by downloading the nupkg package from GitHub's Releases page.
 ## Receiving messages
