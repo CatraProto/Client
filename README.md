@@ -12,7 +12,7 @@ More information can be found [here](app_configuration.md)
 ## Adding CatraProto to your project
 After retrieving our API credentials we must add CatraProto to your project. You can do this by referencing CatraProto.Client from NuGet or by downloading the nupkg package from GitHub's Releases page.
 ## Receiving messages
-To receiving incoming updates, we start off by creating an EventHandler class which extends the [IEventHandler](https://github.com/CatraProto/Client/blob/master/src/CatraProto.Client/Updates/Interfaces/IEventHandler.cs) interface.
+To start receiving incoming updates, we start off by creating an EventHandler class which extends the [IEventHandler](https://github.com/CatraProto/Client/blob/master/src/CatraProto.Client/Updates/Interfaces/IEventHandler.cs) interface.
 ```cs
 public class EventHandler : IEventHandler
 {
