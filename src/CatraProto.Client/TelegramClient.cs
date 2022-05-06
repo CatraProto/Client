@@ -85,6 +85,7 @@ namespace CatraProto.Client
             var sessionData = ClientSession.SessionManager.SessionData;
             sessionData.RegisterOnUpdated(_sessionEvents.OnDataUpdate);
 
+            ClientSession.ConnectionPool.SetUpdatesHandler(UpdatesReceiver);
             await ClientSession.ConnectionPool.InitMainConnectionAsync(token);
             _logger.Information("Requesting and storing current configuration");
 
@@ -113,7 +114,6 @@ namespace CatraProto.Client
             if (EventHandler is null)
             {
                 EventHandler = eventHandler;
-                ClientSession.ConnectionPool.SetUpdatesHandler(UpdatesReceiver);
             }
             else
             {
