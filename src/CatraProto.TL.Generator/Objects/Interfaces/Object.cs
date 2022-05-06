@@ -16,10 +16,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using CatraProto.TL.Generator.DeclarationInfo;
 using CatraProto.TL.Generator.Objects.Types;
@@ -186,7 +184,8 @@ namespace CatraProto.TL.Generator.Objects.Interfaces
             cloner.AppendLine($"var newClonedObject = new {NamingInfo.PascalCaseName}();");
             foreach(var parameter in Parameters)
             {
-                if(!parameter.Type.TypeInfo.IsBare && parameter.HasFlag)
+                var writeNull = (!parameter.Type.TypeInfo.IsBare || parameter.VectorInfo.IsVector) && parameter.HasFlag;
+                if (writeNull)
                 {
                     cloner.AppendLine($"if ({parameter.NamingInfo.PascalCaseName} is not null){{");
                 }
@@ -201,6 +200,7 @@ namespace CatraProto.TL.Generator.Objects.Interfaces
 
                 if (parameter.VectorInfo.IsVector)
                 {
+                    cloner.AppendLine($"newClonedObject.{parameter.NamingInfo.PascalCaseName} = new List<{parameter.Type.GetTypeName(NamingType.FullNamespace, parameter, false)}>();");
                     cloner.AppendLine($"foreach(var {parameter.NamingInfo.CamelCaseName} in {parameter.NamingInfo.PascalCaseName}){{");
                     if (parameter.Type.TypeInfo.IsBare)
                     {                    
@@ -226,7 +226,7 @@ namespace CatraProto.TL.Generator.Objects.Interfaces
                     }
                 }
 
-                if (!parameter.Type.TypeInfo.IsBare && parameter.HasFlag)
+                if (writeNull)
                 {
                     cloner.AppendLine("}");
                 }
