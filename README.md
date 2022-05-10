@@ -3,14 +3,10 @@
 CatraProto is a fully-asynchronous library that implements the MTProto protocol and the Telegram API. 
 This means you can interact with the Telegram API (**as a regular user** as well) **without having any knowledge of the encryption and communication protocol**, it also implements the API so **you won't have to take care of any database implementation or updates handling.**
 
-# Getting started
-## Retrieving API credentials
-In order to interact with the API, we will need a combination of api_id and api_hash which can be retrieved by logging-in to my.telegram.org.
-**Never share these credentials with anyone.**
+# Full documentation
+Full documentation is available at https://catraproto.github.io/docs
 
-More information can be found [here](https://catraproto.github.io/docs/app_configuration.html)
-## Adding CatraProto to your project
-After retrieving our API credentials we must add CatraProto to your project. You can do this by referencing CatraProto.Client from NuGet or by downloading the nupkg package from GitHub's Releases page.
+# Getting started
 ## Receiving messages
 To start receiving incoming updates, we start off by creating an EventHandler class which extends the [IEventHandler](https://github.com/CatraProto/Client/blob/master/src/CatraProto.Client/Updates/Interfaces/IEventHandler.cs) interface.
 ```cs
@@ -101,11 +97,6 @@ logger.Information("Press any key to kill the client");
 Console.ReadLine();
 await client.ForceSaveAsync();
 ```
-
-Upon exiting, you must **always** save the session by calling `client.ForceSaveAsync()` and dispose the `TelegramClient` object (in this example, it is done by declaring the _client_ variable with `await using`).
-
- # Full documentation
- Full documentation is available at https://catraproto.github.io/docs
  
  # License
  Licensed under LGPL 3.0. See [COPYING](COPYING) and [COPYING.LESSER](COPYING.LESSER)
