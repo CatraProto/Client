@@ -18,7 +18,7 @@
 		</Description>
 		<PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
 		<PackageProjectUrl>https://catraproto.github.io/docs</PackageProjectUrl>
-		<PackageTags>telegram, async, mtproto, bot, telegram client, client, userbot</PackageTags>
+		<PackageTags>telegram, async, mtproto, bot, telegram client, client, userbot, telegram bot, telegram api</PackageTags>
 	</PropertyGroup>
 	
     <ItemGroup>

@@ -14,7 +14,7 @@
 		<Company>CatraProto</Company>
 		<Title>CatraProto TL</Title>
 		<Description>
-			CatraProto.TL is a library used by CatraProto.Client to read and write TL packages
+			CatraProto.TL is a library used by CatraProto.Client to read and write TL-serialized packets
 		</Description>
 		<PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
 		<PackageTags>tl, telegram, mtproto</PackageTags>
