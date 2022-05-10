@@ -46,31 +46,16 @@ Now that we have written the EventHandler and implemented our own logic, we init
 ```cs
 // Create the SeriLog logger to use.
 var logger = Logger.CreateDefaultLogger();
-
-// We define the parameters used to connect to Telegram. You can change anything you want here (as long as you use an existing lang pack and **don't use official api credentials**)
 var apiSettings = new ApiSettings(YOUR_API_ID, YOUR_API_HASH, "CatraProto", "1.0", "en", "android", "en", "1.0");
-
-// Now, we need to tell CatraProto where to store the session and the data it needs to work with.
 var sessionSettings = new SessionSettings(new FileSerializer($"data/MySession.catra"), new DatabaseSettings("data/MySession.db", 50), sessionName);
-
-// In your my.telegram.org page you can also see there is an addresses for production DCs, and an address for test DCs.
-// You can choose whichever you like based on your needs but keep in mind that test DCs is a completely different environment.
 var connectionInfo = new ConnectionInfo(IPAddress.Parse(DC_IP), IS_TEST, 443, ID);
-
 var connectionSettings = new ConnectionSettings(connectionInfo, 86400, 30);
-
-// We put everything together
 var settings = new ClientSettings(sessionSettings, apiSettings, connectionSettings);
 
-// Instanciate the client
 await using var client = new TelegramClient(settings, logger);
-
-// Set the event handler
 client.SetEventHandler(new EventHandler(client, logger));
 
-// Initialize the client
 var clientState = await client.InitClientAsync();
-
 if(clientState is ClientState.Corrupted)
 {
     //The session is corrupted, you need to delete it and login again.
@@ -79,7 +64,6 @@ if(clientState is ClientState.Corrupted)
 
 if(clientState is ClientState.Unauthenticated)
 {
-    // We need to login, either as a bot or as a user.
     var login = client.GetLoginFlow();
     // You can obviously also use Console.ReadLine() to get the phone number for the console
     var authentication = await login.AsUser(PHONE_NUMBER_HERE, new CodeSettings());
