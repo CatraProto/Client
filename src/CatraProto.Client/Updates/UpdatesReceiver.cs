@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using CatraProto.Client.Async.Loops;
 using CatraProto.Client.Async.Loops.Enums.Resumable;
 using CatraProto.Client.Async.Loops.Extensions;
+using CatraProto.Client.Connections.MessageScheduling.Enums;
 using CatraProto.Client.MTProto.Session.Models;
 using CatraProto.Client.TL.Schemas.CloudChats;
 using CatraProto.Client.TL.Schemas.CloudChats.Messages;
@@ -52,6 +53,11 @@ namespace CatraProto.Client.Updates
         public void OnNewUpdates(IObject socketObject, IMethod? callingMethod = null)
         {
             var localSeq = _commonSequence.GetData().seq;
+            if(socketObject is UpdateRedirect redirect)
+            {
+                socketObject = redirect.Update;
+            }
+            
             _logger.Information("Received new update {Update}", socketObject);
             if (socketObject is UpdatesBase updatesBase)
             {
@@ -87,9 +93,6 @@ namespace CatraProto.Client.Updates
                 {
                     switch (socketObject)
                     {
-                        case UpdateRedirect updateRedirect:
-                            PushUpdate(updateRedirect);
-                            return;
                         case UpdatesTooLong:
                             PushUpdate(socketObject);
                             break;
@@ -101,6 +104,10 @@ namespace CatraProto.Client.Updates
                             break;
                     }
                 }
+            }
+            else if (socketObject is UpdateBase)
+            {
+                PushUpdate(socketObject);
             }
         }
 
@@ -317,14 +324,15 @@ namespace CatraProto.Client.Updates
                     tuple.Controller.BindTo(tuple.Processor);
                     state.SetData(isActive: true);
 
+                    tuple.Controller.SendSignal(ResumableSignalState.Start, out _);
+                    tuple.Controller.SendSignal(ResumableSignalState.Suspend, out _);
+                    
                     if (forceFetchOnCreate)
                     {
                         _logger.Information("Forcing get difference on channel {Id}", channelId);
                         tuple.Processor.AddUpdateToQueue(new UpdateChannelTooLong());
+                        tuple.Controller.ResumeAndSuspendAsync();
                     }
-
-                    tuple.Controller.SendSignal(ResumableSignalState.Start, out _);
-                    tuple.Controller.SendSignal(ResumableSignalState.Suspend, out _);
                     _processors.TryAdd(channelId, tuple);
                 }
 
@@ -347,7 +355,6 @@ namespace CatraProto.Client.Updates
 
         public Task ForceGetDifferenceAllAsync(bool waitCompletion)
         {
-            Task waitTask;
             lock (_mutex)
             {
                 if (!_client.ClientSession.SessionManager.SessionData.Authorization.IsAuthorized(out _, out _, out _))
@@ -359,23 +366,9 @@ namespace CatraProto.Client.Updates
                 _logger.Information("Forcefully fetching difference in all states by sending UpdatesTooLong");
                 _commonLoop.Processor.AddUpdateToQueue(new UpdatesTooLong());
                 var commonTask = _commonLoop.Controller.ResumeAndSuspendAsync();
-
-                var tasksToWait = new Task[_processors.Count + 1];
-
-                var i = 0;
-                foreach (var (chatId, (controller, processor)) in _processors)
-                {
-                    _logger.Information("Sending updateChannelTooLong to processor {Id} to fetch updates", chatId);
-                    processor.AddUpdateToQueue(new UpdateChannelTooLong());
-                    tasksToWait[i++] = controller.ResumeAndSuspendAsync();
-                }
-
-                tasksToWait[_processors.Count] = commonTask;
-
-                waitTask = waitCompletion ? Task.WhenAll(tasksToWait) : Task.CompletedTask;
+                return waitCompletion ? commonTask : Task.CompletedTask;
+              
             }
-
-            return waitTask;
         }
 
         public Task CloseAllAsync()

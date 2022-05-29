@@ -630,7 +630,7 @@ namespace CatraProto.Client.Updates
 
             if (localPts + ptsCount < pts)
             {
-                _logger.Information("Update gap detected: Local pts {Local} + pts count {Count} is smaller than received pts {Received})", localPts, ptsCount, pts);
+                _logger.Information("Update gap detected: Local pts {Local} + pts count {Count} is smaller than received pts {Received}", localPts, ptsCount, pts);
                 return UpdateCheckResult.GapDetected;
             }
 
