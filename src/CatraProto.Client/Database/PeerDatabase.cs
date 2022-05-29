@@ -86,7 +86,7 @@ namespace CatraProto.Client.Database
                 var result = _sqliteConnection.ExecuteReaderSingle(query, new object[] { toId }, sqliteTransaction);
                 if (result is null)
                 {
-                    _logger.Warning(messageTemplate: "Couldn't find peer {Peer} inside database, fetch full: {Full}", peerId, fetchFull);
+                    _logger.Information(messageTemplate: "Couldn't find peer {Peer} inside database, fetch full: {Full}", peerId, fetchFull);
                     return null;
                 }
 
