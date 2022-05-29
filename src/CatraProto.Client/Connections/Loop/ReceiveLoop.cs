@@ -140,7 +140,7 @@ namespace CatraProto.Client.Connections.Loop
 
         public override string ToString()
         {
-            return $"Receive loop for connection {_connection}";
+            return $"Receive loop for connection {_connection.ConnectionInfo}";
         }
     }
 }
