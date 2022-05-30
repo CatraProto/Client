@@ -25,6 +25,7 @@ using CatraProto.Client.Connections.MessageScheduling.Enums;
 using CatraProto.Client.Connections.MessageScheduling.Items;
 using CatraProto.Client.MTProto.Rpc;
 using CatraProto.Client.MTProto.Rpc.RpcErrors;
+using CatraProto.Client.TL.Schemas.CloudChats;
 using CatraProto.Client.TL.Schemas.CloudChats.Auth;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL.Interfaces;
@@ -77,7 +78,10 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
 
         public bool RemoveCompletions(long upperMessageId, [MaybeNullWhen(false)] out List<MessageItem> messageItems)
         {
-            var query = _messageCompletions.Where(x => x.Value.GetMessageState() is MessageState.MessageSent && x.Value.GetProtocolInfo().upperMsgId == upperMessageId).Select(x => x.Value).ToList();
+            var query = _messageCompletions
+                .Where(x => x.Value.GetMessageState() is MessageState.MessageSent && x.Value.GetProtocolInfo().upperMsgId == upperMessageId)
+                .Select(x => x.Value)
+                .ToList();
 
             if (query.Count == 0)
             {
@@ -153,6 +157,22 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
 
             method = null;
             return false;
+        }
+
+        public void ResendAll()
+        {
+            var getUnanswered = _messageCompletions
+                .Where(x => x.Value.GetMessageState() is MessageState.MessageSent or MessageState.Acknowledged)
+                .Select(x => x.Value);
+
+            var messagesCount = getUnanswered.Count();
+            var iteratedOver = 0;
+            foreach(var message in getUnanswered)
+            {
+                _logger.Information("Resending message {Message}", message.Body);
+                iteratedOver++;
+                message.SetToSend(true, iteratedOver == messagesCount, true);
+            }
         }
 
         private bool GetMessageCompletion(long messageId, [MaybeNullWhen(false)] out MessageItem messageItem, bool remove = true)

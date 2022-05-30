@@ -54,5 +54,10 @@ namespace CatraProto.Client.TL
         {
             return new ContainerMessageFailed();
         }
+
+        public override string ToString()
+        {
+            return "container_message_failed";
+        }
     }
 }

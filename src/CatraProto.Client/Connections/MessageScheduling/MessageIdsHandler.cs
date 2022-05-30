@@ -17,12 +17,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Serilog;
-
 namespace CatraProto.Client.Connections.MessageScheduling
 {
     internal class MessageIdsHandler
     {
+        public MessageDuplicateChecker MessageDuplicateChecker { get; } = new MessageDuplicateChecker();
+        private int _timeDifference;
         private long _lastGeneratedId;
         private readonly ILogger _logger;
         private readonly object _mutex = new object();
@@ -36,7 +39,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
         {
             lock (_mutex)
             {
-                var currentSecond = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                var currentSecond = DateTimeOffset.UtcNow.ToUnixTimeSeconds() + _timeDifference;
                 if (_lastGeneratedId != 0)
                 {
                     var lastSecond = _lastGeneratedId / 4294967296;
@@ -50,42 +53,17 @@ namespace CatraProto.Client.Connections.MessageScheduling
             }
         }
 
-        public static bool IsMessageIdTooOld(long messageId)
-        {
-            return IsOlderThan(messageId, 300);
-        }
-
-        public static bool IsMessageIdTooNew(long messageId)
-        {
-            return IsNewerThan(messageId, -30);
-        }
-
-        public static bool IsOlderThan(long messageId, int seconds)
-        {
-            return DateTimeOffset.UtcNow.ToUnixTimeSeconds() - GetSeconds(messageId) >= seconds;
-        }
-
-        public static bool IsNewerThan(long messageId, int seconds)
-        {
-            return DateTimeOffset.UtcNow.ToUnixTimeSeconds() - GetSeconds(messageId) <= seconds;
-        }
-
-        public static int GetSeconds(long messageId)
-        {
-            return (int)(messageId / 4294967296);
-        }
-
-        public bool CheckMessageId(long messageId, bool fromServer = true)
+        public bool CheckMessageIdAge(long messageId, bool fromServer = true)
         {
             if (IsMessageIdTooOld(messageId))
             {
-                _logger.Warning("Message id {Id} is too old", messageId);
+                _logger.Warning("Received message id {Id} is too old", messageId);
                 return false;
             }
 
             if (IsMessageIdTooNew(messageId))
             {
-                _logger.Warning("Message id {Id} is too new", messageId);
+                _logger.Warning("Received message id {Id} is too new", messageId);
                 return false;
             }
 
@@ -96,6 +74,50 @@ namespace CatraProto.Client.Connections.MessageScheduling
             }
 
             return true;
+        }
+
+        public bool SetTimeDifference(int serverTime)
+        {
+            var oldDifference = _timeDifference;
+            var newDifference = serverTime - (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            if(oldDifference != newDifference)
+            {
+                _timeDifference = newDifference;
+                _logger.Information("Time difference with server is now {Seconds} seconds", _timeDifference);
+                return true;
+            }
+
+            return false;
+        }
+
+        public int FillWithDifference(int givenTime, bool toStoreLocal)
+        {
+            return toStoreLocal ? givenTime - _timeDifference : givenTime + _timeDifference;
+        }
+
+        public bool IsMessageIdTooOld(long messageId)
+        {
+            return IsOlderThan(messageId, 300);
+        }
+
+        public bool IsMessageIdTooNew(long messageId)
+        {
+            return IsNewerThan(messageId, -30);
+        }
+
+        public bool IsOlderThan(long messageId, int seconds)
+        {
+            return DateTimeOffset.UtcNow.ToUnixTimeSeconds() - GetSeconds(messageId) + _timeDifference >= seconds;
+        }
+
+        public bool IsNewerThan(long messageId, int seconds)
+        {
+            return DateTimeOffset.UtcNow.ToUnixTimeSeconds() - GetSeconds(messageId) + _timeDifference <= seconds;
+        }
+
+        public static int GetSeconds(long messageId)
+        {
+            return (int)(messageId / 4294967296);
         }
     }
 }

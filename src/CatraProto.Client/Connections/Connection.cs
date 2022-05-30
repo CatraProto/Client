@@ -37,15 +37,15 @@ namespace CatraProto.Client.Connections
         public ConnectionInfo ConnectionInfo { get; }
         public IProtocol Protocol { get; private set; }
 
-        private readonly CancellationTokenSource _fullShutdownSource = new CancellationTokenSource();
+        private CancellationTokenSource _fullShutdownSource = new CancellationTokenSource();
         private readonly SingleCallAsync<CancellationToken> _singleCallAsync;
-        private readonly TelegramClient _client;
-        private readonly ClientSettings _clientSettings;
+        private readonly AsyncLock _lock = new AsyncLock();
         private readonly ConnectionProtocol _protocolType;
+        private readonly ClientSettings _clientSettings;
         private readonly LoopsHandler _loopsHandler;
+        private readonly TelegramClient _client;
         private readonly ILogger _logger;
-        private readonly bool _isInited;
-
+        private bool _isDisposed = false;
         public Connection(ConnectionInfo connectionInfo, TelegramClient client)
         {
             _client = client;
@@ -74,6 +74,7 @@ namespace CatraProto.Client.Connections
                 return;
             }
 
+            using var lk = await _lock.LockAsync(token);
             await DisconnectAsync();
             Protocol = CreateProtocol();
             token = CancellationTokenSource.CreateLinkedTokenSource(token, _fullShutdownSource.Token).Token;
@@ -83,7 +84,6 @@ namespace CatraProto.Client.Connections
                 {
                     _logger.Information("Connecting to {Connection}", ConnectionInfo);
                     await Protocol.ConnectAsync(token);
-
                     _logger.Information("Successfully connected to {Connection}", ConnectionInfo);
 
                     await MtProtoState.StartSaltHandlerAsync();
@@ -152,16 +152,38 @@ namespace CatraProto.Client.Connections
             }
         }
 
-        public async ValueTask DisposeAsync()
+        public async Task<IDisposable> DisconnectAndLockAsync()
         {
+            _logger.Information("Forcefully disconnecting from {ConnectionInfo}", ConnectionInfo);
             _fullShutdownSource.Cancel();
-            //Make sure we are returning only after Task.Delay returned by calling ConnectAsync
-            //This call will wait for the previous one (if exists) to return, this call may have not created a connection yet or it may have already destroyed the previous one 
-            await ConnectAsync();
-            //Since we can't be sure, we call DisconnectAsync manually.
+
+            //Connect async has already exited after acquiring lock
+            var lk = await _lock.LockAsync();
+
+            //At this point, any call to ConnectAsync will have to wait for the lock to be released
+            //So we can safely replace the cancellation token as it will not be used
+            _fullShutdownSource.Dispose();
+            _fullShutdownSource = new CancellationTokenSource();
+
+            //Make sure the connection is actually closed
             await DisconnectAsync();
             await MtProtoState.StopSaltHandlerAsync();
+            _logger.Information("Disconnected from {ConnectionInfo}", ConnectionInfo);
+            return lk;
+        }
+
+        public async ValueTask DisposeAsync()
+        {
+            if (_isDisposed)
+            {
+                return;
+            }
+
+            (await DisconnectAndLockAsync()).Dispose();
+            _lock.Dispose();
             _fullShutdownSource.Dispose();
+
+            _isDisposed = true;
             _logger.Information("Connection for {Connection} successfully disposed", ConnectionInfo);
         }
     }

@@ -91,9 +91,9 @@ namespace CatraProto.Client.MTProto.Auth
             }
         }
 
-        public void SendAcknowledgment(long messageId, IObject messageBody)
+        public void SendAcknowledgment(long messageId, IObject? messageBody)
         {
-            if (!IsContentRelated(messageBody))
+            if (messageBody is not null && !IsContentRelated(messageBody))
             {
                 _logger.Verbose("Not acknowledging message {Message} because it's not content related", messageBody);
                 return;
@@ -107,6 +107,14 @@ namespace CatraProto.Client.MTProto.Auth
             lock (_mutex)
             {
                 return _ackIds.Remove(messageId);
+            }
+        }
+
+        public void Reset()
+        {
+            lock (_mutex)
+            {
+                _ackIds.Clear();
             }
         }
 

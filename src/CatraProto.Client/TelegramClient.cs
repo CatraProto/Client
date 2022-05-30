@@ -24,6 +24,7 @@ using CatraProto.Client.Flows.LoginFlow;
 using CatraProto.Client.MTProto.Session;
 using CatraProto.Client.MTProto.Session.Models;
 using CatraProto.Client.MTProto.Settings;
+using CatraProto.Client.TL.Schemas;
 using CatraProto.Client.Updates;
 using CatraProto.Client.Updates.Interfaces;
 using Serilog;
@@ -75,7 +76,7 @@ namespace CatraProto.Client
 
         public async Task<ClientState> InitClientAsync(CancellationToken token = default)
         {
-            if(!await ClientSession.ReadSessionAsync(token))
+            if (!await ClientSession.ReadSessionAsync(token))
             {
                 return ClientState.Corrupted;
             }

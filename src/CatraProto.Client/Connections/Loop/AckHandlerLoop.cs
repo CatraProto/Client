@@ -102,7 +102,7 @@ namespace CatraProto.Client.Connections.Loop
                     foreach (var message in messages)
                     {
                         var messageId = message.GetProtocolInfo().MessageId!.Value;
-                        if (isStart || MessageIdsHandler.IsOlderThan(messageId, 30))
+                        if (isStart || _connection.MtProtoState.MessageIdsHandler.IsOlderThan(messageId, 30))
                         {
                             _logger.Information("Going to send state request for message {Message}", messageId);
                             listOfIds.Add(new Tuple<long, MessageItem>(messageId, message));

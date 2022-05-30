@@ -72,7 +72,7 @@ namespace CatraProto.Client.MTProto.Auth
                     _logger.Information("Cleaning up salts");
                     foreach (var (key, value) in _futureSalts)
                     {
-                        var expiredSince = DateTimeOffset.UtcNow.ToUnixTimeSeconds() - value.ValidUntil;
+                        var expiredSince = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds() - value.ValidUntil;
                         if (expiredSince >= 1800)
                         {
                             _logger.Verbose(messageTemplate: "Removed salt {Salt} because it expired {Seconds} seconds ago", key, expiredSince);
@@ -87,12 +87,13 @@ namespace CatraProto.Client.MTProto.Auth
                     _logger.Information("Received {Count} new salts from the server", receivedSalts.Count);
                     foreach (var responseSalt in futureSalts.Response.Salts)
                     {
+                        responseSalt.ValidSince = _mtProtoState.MessageIdsHandler.FillWithDifference(responseSalt.ValidSince, true);
+                        responseSalt.ValidUntil = _mtProtoState.MessageIdsHandler.FillWithDifference(responseSalt.ValidUntil, true);
                         _logger.Verbose("Adding new salt {Salt} which is valid since {Since} and expires at {Until}", responseSalt.Salt, responseSalt.ValidSince, responseSalt.ValidUntil);
                         _futureSalts.TryAdd(responseSalt.Salt, responseSalt);
                     }
 
-                    var oldestSalt = receivedSalts.Aggregate((first, second) => first.ValidSince > second.ValidSince ? first : second);
-                    var unixTimeSeconds = oldestSalt.ValidSince - DateTimeOffset.UtcNow.ToUnixTimeSeconds() - 30;
+                    var unixTimeSeconds = _futureSalts.Count * 1800;
                     _logger.Information("Requesting new salts in {UnixTimeSeconds} seconds", unixTimeSeconds);
                     await Task.Delay(TimeSpan.FromSeconds(unixTimeSeconds), stoppingToken);
                 }
@@ -108,18 +109,18 @@ namespace CatraProto.Client.MTProto.Auth
             var chosenSalt = 0L;
             foreach (var (key, value) in _futureSalts)
             {
-                if (DateTimeOffset.UtcNow.ToUnixTimeSeconds() - value.ValidSince < 0)
+                var currentTime = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                if (currentTime - value.ValidSince < 0)
                 {
                     continue;
                 }
 
-                var expiration = DateTimeOffset.UtcNow.ToUnixTimeSeconds() - value.ValidUntil;
+                var expiration = currentTime - value.ValidUntil;
                 if (expiration > 1800)
                 {
                     _logger.Information("Removed salt {Salt} because it expired {Seconds} seconds ago", key, expiration);
                     continue;
                 }
-
 
                 chosenSalt = key;
                 break;
@@ -133,7 +134,7 @@ namespace CatraProto.Client.MTProto.Auth
         {
             if (_futureSalts.TryGetValue(saltId, out var salt))
             {
-                var expiration = DateTimeOffset.UtcNow.ToUnixTimeSeconds() - salt.ValidUntil;
+                var expiration = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds() - salt.ValidUntil;
                 if (expiration > 1800)
                 {
                     _logger.Information("Salt {Salt} is not valid because it expired {Seconds} seconds ago", saltId, expiration);
@@ -146,18 +147,14 @@ namespace CatraProto.Client.MTProto.Auth
             return false;
         }
 
-        public void SetSalt(long salt, bool clear = false)
+        public void SetSalt(long salt)
         {
-            if (clear)
-            {
-                _futureSalts.Clear();
-            }
-
+            _futureSalts.Clear();
             _futureSalts.TryAdd(salt, new FutureSalt
             {
                 Salt = salt,
                 ValidSince = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
-                ValidUntil = (int)(DateTimeOffset.UtcNow.ToUnixTimeSeconds() + 30000)
+                ValidUntil = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds() + 1800,
             });
         }
 
@@ -169,7 +166,7 @@ namespace CatraProto.Client.MTProto.Auth
                 return;
             }
 
-            SetSalt(authKeyGen.ServerSalt, false);
+            SetSalt(authKeyGen.ServerSalt);
         }
 
         public override string ToString()

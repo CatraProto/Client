@@ -125,6 +125,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
                 }
 
                 var serverDhInnerData = deserializeServerDhInnerData.Value;
+                state.MessageIdsHandler.SetTimeDifference(serverDhInnerData.ServerTime);
                 _logger.Verbose("Message decrypted, checking serverDhInnerData integrity");
                 if (!CheckNonce(nonce, serverDhInnerData.Nonce) || !CheckNonce(serverNonce, serverDhInnerData.ServerNonce) || !CheckHashData(sha, serverDhInnerData))
                 {

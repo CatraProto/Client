@@ -69,6 +69,11 @@ namespace CatraProto.Client.Connections
                     }
                 }
 
+                if(pfsSeconds.TotalSeconds > _clientSettings.ConnectionSettings.PfsKeyDuration)
+                {
+                    pfsSeconds = TimeSpan.FromSeconds(_clientSettings.ConnectionSettings.PfsKeyDuration);
+                }
+
                 _keyLoop.Controller = new PeriodicLoopController(pfsSeconds, _logger);
                 _keyLoop.Controller.BindTo(_keyLoop.Loop);
                 kStart = _keyLoop.Controller.SignalAsync(ResumableSignalState.Start);

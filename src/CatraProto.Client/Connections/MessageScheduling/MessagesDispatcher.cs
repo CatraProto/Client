@@ -16,10 +16,13 @@ You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections.MessageScheduling.ConnectionMessages;
 using CatraProto.Client.Connections.MessageScheduling.ConnectionMessages.Interfaces;
+using CatraProto.Client.Crypto;
 using CatraProto.Client.MTProto.Deserializers;
 using CatraProto.Client.MTProto.Rpc;
 using CatraProto.Client.MTProto.Rpc.RpcErrors.Migrations.Interfaces;
@@ -33,24 +36,36 @@ using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Interfaces.Deserializers;
 using Serilog;
-
+using System.IO;
 namespace CatraProto.Client.Connections.MessageScheduling
 {
     internal class MessagesDispatcher
     {
+        internal enum ErrorCodes
+        {
+            MsgIdTooLow = 16,
+            MsgIdTooHigh = 17,
+            MsgIdMod4 = 18,
+            MsgIdCollision = 19,
+            MsgIdTooOld = 20,
+            SeqNoTooLow = 32,
+            SeqNoTooHigh = 33,
+            SeqNoNotEven = 34,
+            SeqNoNotOdd = 35,
+            InvalidContainer = 64
+        };
+
         public UpdatesReceiver? UpdatesHandler { get; set; }
-        private readonly MessagesValidator _messagesValidator;
         private readonly Connection _connection;
         private readonly MessagesHandler _messagesHandler;
         private readonly ClientSession _clientSession;
         private readonly MTProtoState _mtProtoState;
         private readonly List<IObjectParser> _parsers;
         private readonly ILogger _logger;
-
+        private bool _startIgnoring;
         public MessagesDispatcher(Connection connection, MessagesHandler messagesHandler, MTProtoState mtProtoState, ClientSession clientSession)
         {
-            _messagesValidator = new MessagesValidator(messagesHandler, mtProtoState, clientSession.Logger);
-            _parsers = new List<IObjectParser>(1) { new RpcDeserializer(messagesHandler.MessagesTrackers.MessageCompletionTracker, clientSession.Logger) };
+            _parsers = new List<IObjectParser>(2) { new RpcDeserializer(messagesHandler.MessagesTrackers.MessageCompletionTracker, clientSession.Logger), new MsgContainerDeserializer(clientSession.Logger) };
             _logger = clientSession.Logger.ForContext<MessagesDispatcher>();
             _connection = connection;
             _messagesHandler = messagesHandler;
@@ -60,6 +75,12 @@ namespace CatraProto.Client.Connections.MessageScheduling
 
         public void DispatchMessage(IConnectionMessage connectionMessage)
         {
+            if (_startIgnoring)
+            {
+                _logger.Information("Ignoring received message because connection is getting closed");
+                return;
+            }
+
             using var reader = new Reader(MergedProvider.Singleton, connectionMessage.Body.ToMemoryStream(), false, _parsers);
             if (connectionMessage.Body.Length == 4)
             {
@@ -81,7 +102,8 @@ namespace CatraProto.Client.Connections.MessageScheduling
             var tryRead = reader.ReadObject();
             if (tryRead.IsError)
             {
-                _logger.Error("Could not deserialized received payload. Error {Error}", tryRead.GetError().Error);
+                _messagesHandler.MessagesTrackers.AcknowledgementHandler.SendAcknowledgment(connectionMessage.MessageId, null);
+                _logger.Error("Could not deserialize received payload. Error {Error}", tryRead.GetError().Error);
                 return;
             }
 
@@ -89,7 +111,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
             _logger.Information("Handling message of type {T}", deserialized);
             if (connectionMessage.AuthKeyId != 0)
             {
-                if (_messagesValidator.IsMessageValid((EncryptedConnectionMessage)connectionMessage, deserialized))
+                if (IsMessageValid((EncryptedConnectionMessage)connectionMessage, deserialized))
                 {
                     HandleObject(connectionMessage, deserialized, reader);
                 }
@@ -97,6 +119,195 @@ namespace CatraProto.Client.Connections.MessageScheduling
             else
             {
                 HandleObject(connectionMessage, deserialized, reader);
+            }
+        }
+
+        private bool IsMessageValid(EncryptedConnectionMessage connectionMessage, IObject deserialization)
+        {
+            using var stream = connectionMessage.GetPlainTextStream(connectionMessage.Padding);
+            var msgComputed = connectionMessage.ComputeMsgKey(stream.ToArray(), false);
+
+            if (!msgComputed.SequenceEqual(connectionMessage.MsgKey!))
+            {
+                _logger.Warning("DISCARDING MESSAGE DUE TO MSG_KEY MISMATCH {ComputeKey} != {ReceivedKey}", msgComputed, connectionMessage.MsgKey);
+                return false;
+            }
+
+            if (deserialization is not MsgContainer container)
+            {
+                return InternalCheckMessageValidity(connectionMessage, deserialization);
+            }
+
+            foreach (var cMessage in container.Messages)
+            {
+                var newMessage = new EncryptedConnectionMessage(connectionMessage.AuthKey, cMessage.MsgId, connectionMessage.Salt, connectionMessage.SessionId, cMessage.Seqno, Array.Empty<byte>());
+                if (!InternalCheckMessageValidity(newMessage, cMessage.Body))
+                {
+                    return false;
+                }
+            }
+
+            return InternalCheckMessageValidity(connectionMessage, deserialization);
+        }
+
+        private bool InternalCheckMessageValidity(EncryptedConnectionMessage connectionMessage, IObject deserialized)
+        {
+            _logger.Information("Received message with id: {MessageId}, seqno: {Seqno}, session: {SessionId}, salt: {Salt}, body: {Body}", connectionMessage.MessageId, connectionMessage.SeqNo, connectionMessage.SessionId, connectionMessage.Salt, deserialized);
+            if (deserialized is BadServerSalt badServerSalt)
+            {
+                HandleBadServerSalt(badServerSalt, connectionMessage.MessageId);
+            }
+
+            if (deserialized is NewSessionCreated newSessionCreated)
+            {
+                HandleNewSessionCreation(newSessionCreated, connectionMessage.SessionId);
+            }
+
+            if (deserialized is BadMsgNotification badMsgNotification)
+            {
+                HandleBadMsgNotification(badMsgNotification, connectionMessage.MessageId);
+            }
+
+            if (_startIgnoring)
+            {
+                return false;
+            }
+
+            var sessionId = _mtProtoState.SessionIdHandler.GetSessionId(out _);
+            if (sessionId != connectionMessage.SessionId)
+            {
+                _logger.Error("Local session {LSession} does not equal to the remote session {RSession}", sessionId, connectionMessage.SessionId);
+                return false;
+            }
+
+            if (!_mtProtoState.MessageIdsHandler.CheckMessageIdAge(connectionMessage.MessageId))
+            {
+                _logger.Information("Resetting session for connection {Connection} because message id {MessageId} age check failed", _mtProtoState.ConnectionInfo, connectionMessage.MessageId);
+                ResetSession();
+                return false;
+            }
+
+            var messageValidity = _mtProtoState.MessageIdsHandler.MessageDuplicateChecker.IsValid(connectionMessage.MessageId);
+            if (messageValidity is MessageValidity.Duplicate)
+            {
+                _logger.Information("Discarding message {MessageId} for connection {Connection} because it's a duplicate", connectionMessage.MessageId, _mtProtoState.ConnectionInfo);
+                return false;
+            }
+            else if(messageValidity is MessageValidity.TooOld)
+            {
+                _logger.Information("Resetting session for connection {Connection} because message id {MessageId} is too old", _mtProtoState.ConnectionInfo);
+                ResetSession();
+                return false;
+            }
+
+            if (!_mtProtoState.SaltHandler.IsSaltValid(connectionMessage.Salt))
+            {
+                _logger.Information("Skipping message {MessageId} on {Connection} because it was sent using an invalid salt", connectionMessage.MessageId, _mtProtoState.ConnectionInfo);
+                return false;
+            }
+
+            //No need to worry about ContainerMessageFailed
+            var shouldSeqno = _mtProtoState.SeqnoHandler.ComputeSeqno(deserialized, true);
+            if (shouldSeqno != connectionMessage.SeqNo)
+            {
+                _logger.Error("Received seqno {RSeqno} does not equal computed seqno {CSeqno} ({Obj})", connectionMessage.SeqNo, shouldSeqno, deserialized);
+                return false;
+            }
+
+            _messagesHandler.MessagesTrackers.AcknowledgementHandler.SendAcknowledgment(connectionMessage.MessageId, deserialized);
+            return true;
+        }
+
+        private void ResetSession()
+        {
+            _startIgnoring = true;
+            Task.Run(async () =>
+            {
+                _logger.Information("Resetting session for connection {Connection}", _connection.ConnectionInfo);
+                var releaser = await _connection.DisconnectAndLockAsync();
+
+                _mtProtoState.SessionIdHandler.SetSessionId(CryptoTools.CreateRandomLong());
+                _messagesHandler.MessagesTrackers.MessageCompletionTracker.ResendAll();
+                _messagesHandler.MessagesTrackers.AcknowledgementHandler.Reset();
+                _mtProtoState.SeqnoHandler.ContentRelatedReceived = 0;
+                _mtProtoState.SeqnoHandler.ContentRelatedSent = 0;
+                _mtProtoState.MessageIdsHandler.MessageDuplicateChecker.Clear();
+                _startIgnoring = false;
+
+                releaser.Dispose();
+                _logger.Information("Session resetted for connection {Connection}. Reconnecting", _connection.ConnectionInfo);
+                await _connection.ConnectAsync();
+            });
+        }
+
+        private void HandleBadMsgNotification(BadMsgNotification badMsgNotification, long messageId)
+        {
+            _logger.Information("Received bad_msg_notification with error code {Error} for message {Message}", badMsgNotification.ErrorCode, badMsgNotification.BadMsgId);
+            switch (badMsgNotification.ErrorCode)
+            {
+                case (int)ErrorCodes.MsgIdTooLow:
+                case (int)ErrorCodes.MsgIdTooHigh:
+                case (int)ErrorCodes.MsgIdTooOld:
+                    if (_messagesHandler.MessagesTrackers.MessageCompletionTracker.RemoveCompletions(badMsgNotification.BadMsgId, out var messageItems) &&
+                        messageItems[0].GetProtocolInfo().upperSeqno!.Value == badMsgNotification.BadMsgSeqno)
+                    {
+                        _mtProtoState.MessageIdsHandler.SetTimeDifference(MessageIdsHandler.GetSeconds(messageId));
+                        ResetSession();
+                    }
+                    break;
+            }
+        }
+
+        private void HandleNewSessionCreation(NewSessionCreated newSessionCreated, long sessionId)
+        {
+            if(sessionId == _mtProtoState.SessionIdHandler.GetSessionId(out bool isConfirmed) && isConfirmed)
+            {
+                return;
+            }
+
+            _mtProtoState.SessionIdHandler.SetSessionId(sessionId, true);
+            _mtProtoState.SaltHandler.SetSalt(newSessionCreated.ServerSalt);
+            _mtProtoState.SeqnoHandler.ContentRelatedReceived = 0;
+            _logger.Information("New session created, new server salt {Salt}, new SessionId {SessionId}", newSessionCreated.ServerSalt, sessionId);
+
+            if (_mtProtoState.ConnectionInfo.Main)
+            {
+                //Not awaiting is fine here. 
+                _mtProtoState.Client.UpdatesReceiver.ForceGetDifferenceAllAsync(false);
+            }
+        }
+
+        private void HandleBadServerSalt(BadServerSalt serverSalt, long messageId)
+        {
+            _logger.Information("Some messages were sent using the wrong salt, now using the new one ({Salt}) and resending messages", serverSalt.NewServerSalt);
+            if (_messagesHandler.MessagesTrackers.MessageCompletionTracker.RemoveCompletions(serverSalt.BadMsgId, out var messageItems))
+            {
+                var seqno = messageItems[0].GetProtocolInfo().upperSeqno!.Value;
+                if (seqno != serverSalt.BadMsgSeqno)
+                {
+                    _logger.Warning("Not applying salt received from BadServerSalt because messageId's ({Id}) seqno is {Actual} not {Received}", serverSalt.BadMsgId, seqno, serverSalt.BadMsgSeqno);
+                    return;
+                }
+
+                if (_mtProtoState.MessageIdsHandler.SetTimeDifference(MessageIdsHandler.GetSeconds(messageId)))
+                {
+                    _logger.Information("Resetting session after time changed on bad_server_salt for connection {Connection}", _connection.ConnectionInfo);
+                    ResetSession();
+                    return;
+                }
+
+                _mtProtoState.SaltHandler.SetSalt(serverSalt.NewServerSalt);
+                var count = messageItems.Count;
+                for (var i = 0; i < count; i++)
+                {
+                    var item = messageItems[i];
+                    _logger.Information("Resending message {Body} because it was sent using an expired salt", item.Body);
+                    item.SetToSend(true, i == count - 1, true);
+                }
+            }
+            else
+            {
+                _logger.Warning("Not applying salt received from BadServerSalt because messageId {Id} was not found", serverSalt.BadMsgId);
             }
         }
 
@@ -145,6 +356,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
                     case UpdateBase updateBase:
                         UpdatesHandler?.OnNewUpdates(updateBase);
                         break;
+                    case BadMsgNotification:
                     case NewSessionCreated:
                     case BadServerSalt:
                         break;

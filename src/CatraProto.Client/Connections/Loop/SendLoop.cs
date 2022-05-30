@@ -263,7 +263,7 @@ namespace CatraProto.Client.Connections.Loop
         public async Task SendEncryptedAsync(IObject upperMost, IList<MessageItem> messages, byte[] payload)
         {
             var authKey = _mtProtoState.KeysHandler.TemporaryAuthKey.GetCachedKey();
-            var sessionId = _mtProtoState.SessionIdHandler.GetSessionId();
+            var sessionId = _mtProtoState.SessionIdHandler.GetSessionId(out _);
             var getSalt = _mtProtoState.SaltHandler.GetSalt();
             var messageId = _mtProtoState.MessageIdsHandler.ComputeMessageId();
 

@@ -84,7 +84,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
                 Nonce = CryptoTools.CreateRandomLong(),
                 TempAuthKeyId = keyObject.AuthKeyId,
                 PermAuthKeyId = permanentKey.AuthKeyId,
-                TempSessionId = _mtProtoState.SessionIdHandler.GetSessionId(),
+                TempSessionId = _mtProtoState.SessionIdHandler.GetSessionId(out _),
                 ExpiresAt = expiresAt
             };
 
@@ -96,7 +96,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
             }
 
             var messageOptions = new MessageSendingOptions(true, messageId);
-            _mtProtoState.SaltHandler.SetSalt(keyObject.ServerSalt, true);
+            _mtProtoState.SaltHandler.SetSalt(keyObject.ServerSalt);
             var res = await _mtProtoState.Api.CloudChatsApi.Auth.BindTempAuthKeyAsync(permanentKey.AuthKeyId, innerData.Nonce, expiresAt, encryptedInnerData, messageOptions, token);
             if (res.RpcCallFailed)
             {
