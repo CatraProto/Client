@@ -16,16 +16,43 @@ You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-using CatraProto.Client.MTProto.Rpc.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
 
-namespace CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors
+namespace CatraProto.Client.TL
 {
-    public class MissingRequestError : RpcError
+    internal class ContainerMessageFailed : IObject
     {
-        public override string ErrorDescription { get; } = "";
-
-        public MissingRequestError() : base("REQUEST_NOT_FOUND", -10404)
+        public ReadResult<IObject> Deserialize(Reader reader)
         {
+            return new ReadResult<IObject>(this);
+        }
+
+        public WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(GetConstructorId());
+            return new WriteResult();
+        }
+
+        public void UpdateFlags()
+        {
+            return;
+        }
+
+        public int GetConstructorId()
+        {
+            return 0x69696969;
+        }
+
+        public IObject? Clone()
+        {
+            return new ContainerMessageFailed();
         }
     }
 }

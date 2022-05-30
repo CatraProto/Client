@@ -32,7 +32,6 @@ namespace CatraProto.Client.MTProto.Deserializers
 {
     internal class RpcDeserializer : IObjectParser
     {
-        private static readonly MissingRequestError MissingRequestError = new MissingRequestError();
         private readonly MessageCompletionTracker _messageCompletionTracker;
         private readonly ILogger _logger;
 
@@ -97,7 +96,7 @@ namespace CatraProto.Client.MTProto.Deserializers
             else
             {
                 _logger.Information("Could not find {MessageId} in the list of outgoing rpc requests", rpcObject.ReqMsgId);
-                rpcObject.Result = MissingRequestError;
+                return new ReadResult<IObject>("Failed to parse rpc message because the message id could not be found", ParserErrors.ExternalError);
             }
 
             return new ReadResult<IObject>(obj);
