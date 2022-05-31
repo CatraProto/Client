@@ -55,11 +55,11 @@ namespace CatraProto.Client.Connections.Protocols.TcpAbridged
         {
             if (_protocolWriter != null || _protocolReader != null)
             {
-                _logger.Error("Connection to {Connection} already established", ConnectionInfo);
-                throw new InvalidOperationException("Connection already established");
+                _logger.Error("Connection already established", ConnectionInfo);
+                return;
             }
 
-            _logger.Information("Establishing connection using Tcp Abridged. IpAddress: {Address}", ConnectionInfo);
+            _logger.Information("Establishing connection using Tcp Abridged");
             await _client.ConnectAsync(ConnectionInfo.IpAddress, ConnectionInfo.Port, token);
 
             var stream = _client.GetStream();

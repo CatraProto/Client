@@ -60,19 +60,19 @@ namespace CatraProto.Client.Connections.Loop
                     {
                         case ResumableSignalState.Start:
                             SetSignalHandled(ResumableLoopState.Running, currentState);
-                            _logger.Information("Acknowledgment handler loop started for connection {Connection}", _connection.ConnectionInfo);
+                            _logger.Information("Acknowledgment handler loop started");
                             break;
                         case ResumableSignalState.Stop:
-                            _logger.Information("Acknowledgment handler loop stopped for connection {Connection}", _connection.ConnectionInfo);
+                            _logger.Information("Acknowledgment handler loop stopped}");
                             SetSignalHandled(ResumableLoopState.Stopped, currentState);
                             return;
                         case ResumableSignalState.Resume:
                             SetSignalHandled(ResumableLoopState.Running, currentState);
-                            _logger.Verbose("Acknowledgment handler loop for connection {Connection} woken up", _connection.ConnectionInfo);
+                            _logger.Verbose("Acknowledgment handler loop woken up");
                             break;
                         case ResumableSignalState.Suspend:
                             SetSignalHandled(ResumableLoopState.Suspended, currentState);
-                            _logger.Verbose("Acknowledgment handler loop for connection {Connection} paused. Waiting for signal...", _connection.ConnectionInfo);
+                            _logger.Verbose("Acknowledgment handler loop paused. Waiting for signal...");
                             currentState = await StateSignaler.WaitAsync(stoppingToken);
                             isStart = false;
                             break;
@@ -84,10 +84,10 @@ namespace CatraProto.Client.Connections.Loop
                 var count = acknowledgements.Count;
                 if (count > 0)
                 {
-                    _logger.Information("Sending {Count} acknowledgments to {Connection}", count, _connection.ConnectionInfo);
+                    _logger.Information("Sending {Count} acknowledgments", count);
                     foreach (var acknowledgement in acknowledgements)
                     {
-                        _logger.Information("Sending acknowledgments of {Count} messages to {Connection}", ((MsgsAck)acknowledgement.Body).MsgIds.Count, _connection.ConnectionInfo);
+                        _logger.Information("Sending acknowledgments of {Count} messages", ((MsgsAck)acknowledgement.Body).MsgIds.Count);
                         acknowledgement.BindTo(_connection.MessagesHandler);
                         acknowledgement.SetToSend();
                     }
@@ -109,7 +109,7 @@ namespace CatraProto.Client.Connections.Loop
                         }
                     }
 
-                    _logger.Information("Sending state request for {Count} messages to {Connection}", listOfIds.Count, _connection.ConnectionInfo);
+                    _logger.Information("Sending state request for {Count} messages", listOfIds.Count);
                     if (listOfIds.Count > 0)
                     {
                         try
@@ -140,7 +140,7 @@ namespace CatraProto.Client.Connections.Loop
                         }
                         catch (OperationCanceledException e) when (e.CancellationToken == stoppingToken)
                         {
-                            _logger.Information("Operation canceled because loop stopped on connection {Connection}", _connection.ConnectionInfo);
+                            _logger.Information("Operation canceled because loop was stopped");
                             SetLoopState(ResumableLoopState.Stopped);
                             return;
                         }
@@ -151,7 +151,7 @@ namespace CatraProto.Client.Connections.Loop
 
         public override string ToString()
         {
-            return $"Ack handler loop for {_connection.ConnectionInfo}";
+            return $"Ack handler loop";
         }
     }
 }

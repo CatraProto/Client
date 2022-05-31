@@ -55,19 +55,19 @@ namespace CatraProto.Client.Connections.Loop
                     {
                         case ResumableSignalState.Start:
                             SetSignalHandled(ResumableLoopState.Running, currentState);
-                            _logger.Information("Ping loop started for connection {Connection}", _connection.ConnectionInfo);
+                            _logger.Information("Ping loop started");
                             break;
                         case ResumableSignalState.Stop:
-                            _logger.Information("Ping loop stopped for connection {Connection}", _connection.ConnectionInfo);
+                            _logger.Information("Ping loop stopped");
                             SetSignalHandled(ResumableLoopState.Stopped, currentState);
                             return;
                         case ResumableSignalState.Resume:
                             SetSignalHandled(ResumableLoopState.Running, currentState);
-                            _logger.Verbose("Ping loop for connection {Connection} woken up", _connection.ConnectionInfo);
+                            _logger.Verbose("Ping loop woken up");
                             break;
                         case ResumableSignalState.Suspend:
                             SetSignalHandled(ResumableLoopState.Suspended, currentState);
-                            _logger.Verbose("Ping loop for connection {Connection} paused. Waiting for signal...", _connection.ConnectionInfo);
+                            _logger.Verbose("Ping loop paused. Waiting for signal...");
                             currentState = await StateSignaler.WaitAsync(stoppingToken);
                             break;
                     }
@@ -80,21 +80,21 @@ namespace CatraProto.Client.Connections.Loop
                 {
                     if (_connection.MtProtoState.KeysHandler.TemporaryAuthKey.CanBeUsed())
                     {
-                        _logger.Information("Sending ping to server {Connection} with timeout of {Time} seconds", _connection.ConnectionInfo, _timeout.TotalSeconds);
+                        _logger.Information("Sending ping to server with timeout of {Time} seconds", _timeout.TotalSeconds);
                         await _connection.MtProtoState.Api.MtProtoApi.PingAsync(CryptoTools.CreateRandomLong(), cancellationToken: linked.Token);
-                        _logger.Information("Received pong from server {Connection}", _connection.ConnectionInfo);
+                        _logger.Information("Received pong from server");
                     }
                 }
                 catch (OperationCanceledException) when (timeout.Token.IsCancellationRequested)
                 {
-                    _logger.Warning("Didn't receive reply to ping in {Timeout} seconds, reconnecting to {Connection}", _timeout.TotalSeconds, _connection.ConnectionInfo);
+                    _logger.Warning("Didn't receive reply to ping in {Timeout} seconds, reconnecting...", _timeout.TotalSeconds);
                     _ = _connection.ConnectAsync(CancellationToken.None);
                     SetLoopState(ResumableLoopState.Stopped);
                     return;
                 }
                 catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
                 {
-                    _logger.Information("Ping not completed because loop received stop signal on {Connection}", _connection.ConnectionInfo);
+                    _logger.Information("Ping not completed because loop received stop signal");
                     SetLoopState(ResumableLoopState.Stopped);
                     return;
                 }
@@ -103,7 +103,7 @@ namespace CatraProto.Client.Connections.Loop
 
         public override string ToString()
         {
-            return $"Ping loop for {_connection.ConnectionInfo}";
+            return $"Ping loop";
         }
     }
 }

@@ -58,10 +58,10 @@ namespace CatraProto.Client.MTProto.Auth
                     {
                         case GenericSignalState.Start:
                             SetSignalHandled(GenericLoopState.Running, currentState);
-                            _logger.Information("Salt loop started for connection {Connection}", _mtProtoState.ConnectionInfo);
+                            _logger.Information("Salt loop started");
                             break;
                         case GenericSignalState.Stop:
-                            _logger.Information("Salt loop stopped for connection {Connection}", _mtProtoState.ConnectionInfo);
+                            _logger.Information("Salt loop stopped");
                             SetSignalHandled(GenericLoopState.Stopped, currentState);
                             return;
                     }
@@ -99,7 +99,7 @@ namespace CatraProto.Client.MTProto.Auth
                 }
                 catch (OperationCanceledException e) when (e.CancellationToken == stoppingToken)
                 {
-                    _logger.Information("Salt loop for connection {Connection} stopped from cancellation token", _mtProtoState.ConnectionInfo);
+                    _logger.Information("Salt loop stopped from cancellation token");
                 }
             }
         }

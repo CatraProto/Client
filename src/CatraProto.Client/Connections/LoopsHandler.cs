@@ -49,7 +49,7 @@ namespace CatraProto.Client.Connections
 
         public async Task StartLoopsAsync()
         {
-            _logger.Information("Starting loops for {Connection}", _connection.ConnectionInfo);
+            _logger.Information("Starting all loops");
             Task wStart, wSus, rStart, kStart, pStart, aStart;
             lock (_mutex)
             {
@@ -97,12 +97,12 @@ namespace CatraProto.Client.Connections
             }
 
             await Task.WhenAll(wStart, wSus, rStart, kStart, pStart, aStart);
-            _logger.Information("All loops for {Connection} started", _connection.ConnectionInfo);
+            _logger.Information("All loops started");
         }
 
         public async Task StopLoopsAsync()
         {
-            _logger.Information("Stopping loops for {Connection}", _connection.ConnectionInfo);
+            _logger.Information("Stopping loops");
             Task wStop, rStop, kStop, pStop, aStop;
             lock (_mutex)
             {
@@ -129,7 +129,7 @@ namespace CatraProto.Client.Connections
             }
 
             await Task.WhenAll(wStop, rStop, kStop, pStop, aStop);
-            _logger.Information("All loops for {Connection} stopped", _connection.ConnectionInfo);
+            _logger.Information("All loops stopped");
         }
 
         internal void ResetKeyLoop()

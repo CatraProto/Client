@@ -62,10 +62,10 @@ namespace CatraProto.Client.Connections.Loop
                     {
                         case GenericSignalState.Start:
                             SetSignalHandled(GenericLoopState.Running, currentState);
-                            _logger.Information("Receive loop started for connection {Connection}", _connection.ConnectionInfo);
+                            _logger.Information("Receive loop started");
                             break;
                         case GenericSignalState.Stop:
-                            _logger.Information("Receive loop stopped for connection {Connection}", _connection.ConnectionInfo);
+                            _logger.Information("Receive loop stopped");
                             SetSignalHandled(GenericLoopState.Stopped, currentState);
                             return;
                     }
@@ -133,14 +133,14 @@ namespace CatraProto.Client.Connections.Loop
                 }
                 catch (Exception e)
                 {
-                    _logger.Error(e, "Exception thrown on ReceiveLoop for {Info}", _connection.ConnectionInfo);
+                    _logger.Error(e, "Exception thrown on ReceiveLoop");
                 }
             }
         }
 
         public override string ToString()
         {
-            return $"Receive loop for connection {_connection.ConnectionInfo}";
+            return $"Receive loop";
         }
     }
 }

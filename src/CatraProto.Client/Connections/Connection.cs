@@ -49,7 +49,7 @@ namespace CatraProto.Client.Connections
         public Connection(ConnectionInfo connectionInfo, TelegramClient client)
         {
             _client = client;
-            _logger = client.ClientSession.Logger.ForContext<Connection>();
+            _logger = client.ClientSession.Logger.ForContext<Connection>().ForContext("Connection", connectionInfo);
             _clientSettings = client.ClientSession.Settings;
             _singleCallAsync = new SingleCallAsync<CancellationToken>(InternalConnectAsync);
             _protocolType = connectionInfo.ConnectionProtocol;
@@ -82,9 +82,9 @@ namespace CatraProto.Client.Connections
             {
                 try
                 {
-                    _logger.Information("Connecting to {Connection}", ConnectionInfo);
+                    _logger.Information("Connecting...");
                     await Protocol.ConnectAsync(token);
-                    _logger.Information("Successfully connected to {Connection}", ConnectionInfo);
+                    _logger.Information("Successfully connected");
 
                     await MtProtoState.StartSaltHandlerAsync();
                     await _loopsHandler.StartLoopsAsync();
@@ -93,20 +93,20 @@ namespace CatraProto.Client.Connections
                 catch (SocketException e)
                 {
                     var seconds = _clientSettings.ConnectionSettings.ConnectionRetry;
-                    _logger.Error("Couldn't connect to {Connection} due to {Message}, trying again in {Seconds} seconds", ConnectionInfo, e.Message, seconds);
+                    _logger.Error("Couldn't connect due to {Message}, trying again in {Seconds} seconds", e.Message, seconds);
                     try
                     {
                         await Task.Delay(TimeSpan.FromSeconds(seconds), token);
                     }
                     catch (OperationCanceledException oe) when (oe.CancellationToken == token)
                     {
-                        _logger.Information("Connection to {Connection} aborted", ConnectionInfo);
+                        _logger.Information("Connection aborted");
                         return;
                     }
                 }
                 catch (OperationCanceledException e) when (e.CancellationToken == token)
                 {
-                    _logger.Information("Connection to {Connection} aborted", ConnectionInfo);
+                    _logger.Information("Connection aborted");
                     return;
                 }
             }
@@ -114,7 +114,7 @@ namespace CatraProto.Client.Connections
 
         private async Task DisconnectAsync()
         {
-            _logger.Information("Disconnecting from {Connection} and stopping existing loops", ConnectionInfo);
+            _logger.Information("Disconnecting and stopping existing loops");
             await _loopsHandler.StopLoopsAsync();
             await Protocol.CloseAsync();
         }
@@ -154,7 +154,7 @@ namespace CatraProto.Client.Connections
 
         public async Task<IDisposable> DisconnectAndLockAsync()
         {
-            _logger.Information("Forcefully disconnecting from {ConnectionInfo}", ConnectionInfo);
+            _logger.Information("Forcefully disconnecting");
             _fullShutdownSource.Cancel();
 
             //Connect async has already exited after acquiring lock
@@ -168,7 +168,7 @@ namespace CatraProto.Client.Connections
             //Make sure the connection is actually closed
             await DisconnectAsync();
             await MtProtoState.StopSaltHandlerAsync();
-            _logger.Information("Disconnected from {ConnectionInfo}", ConnectionInfo);
+            _logger.Information("Disconnected");
             return lk;
         }
 
@@ -184,7 +184,7 @@ namespace CatraProto.Client.Connections
             _fullShutdownSource.Dispose();
 
             _isDisposed = true;
-            _logger.Information("Connection for {Connection} successfully disposed", ConnectionInfo);
+            _logger.Information("Connection successfully disposed");
         }
     }
 }

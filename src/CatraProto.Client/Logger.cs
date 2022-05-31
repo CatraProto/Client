@@ -18,6 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using Serilog;
 using Serilog.Core;
+using Serilog.Templates;
 
 namespace CatraProto.Client
 {
@@ -25,9 +26,19 @@ namespace CatraProto.Client
     {
         public static ILogger CreateDefaultLogger(LoggingLevelSwitch? levelSwitch = null)
         {
+            var addContext = "[{Substring(SourceContext, LastIndexOf(SourceContext, '.') + 1)}]";
+            var addConnection = "{#if Connection is not null}[{Connection}]{#end}";
+            var aa = new ExpressionTemplate(
+                "[{@t:HH:mm:ss} {@l:u3}][{Session}]"
+                + addContext
+                + addConnection
+                + " {@m}\n{@x}",
+
+                theme: Serilog.Templates.Themes.TemplateTheme.Literate
+            );
             levelSwitch ??= new LoggingLevelSwitch();
             return new LoggerConfiguration().WriteTo
-                .Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}][{Session}][{SourceContext}] {Message:lj} {NewLine}{Exception}").MinimumLevel
+                .Console(aa).MinimumLevel
                 .ControlledBy(levelSwitch).CreateLogger();
         }
     }

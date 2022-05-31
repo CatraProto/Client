@@ -182,7 +182,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
 
             if (!_mtProtoState.MessageIdsHandler.CheckMessageIdAge(connectionMessage.MessageId))
             {
-                _logger.Information("Resetting session for connection {Connection} because message id {MessageId} age check failed", _mtProtoState.ConnectionInfo, connectionMessage.MessageId);
+                _logger.Information("Resetting session because message id {MessageId} age check failed", connectionMessage.MessageId);
                 ResetSession();
                 return false;
             }
@@ -190,19 +190,19 @@ namespace CatraProto.Client.Connections.MessageScheduling
             var messageValidity = _mtProtoState.MessageIdsHandler.MessageDuplicateChecker.IsValid(connectionMessage.MessageId);
             if (messageValidity is MessageValidity.Duplicate)
             {
-                _logger.Information("Discarding message {MessageId} for connection {Connection} because it's a duplicate", connectionMessage.MessageId, _mtProtoState.ConnectionInfo);
+                _logger.Information("Discarding message {Message} because it's a duplicate", connectionMessage.MessageId);
                 return false;
             }
             else if(messageValidity is MessageValidity.TooOld)
             {
-                _logger.Information("Resetting session for connection {Connection} because message id {MessageId} is too old", _mtProtoState.ConnectionInfo);
+                _logger.Information("Resetting session because message id {MessageId} is too old");
                 ResetSession();
                 return false;
             }
 
             if (!_mtProtoState.SaltHandler.IsSaltValid(connectionMessage.Salt))
             {
-                _logger.Information("Skipping message {MessageId} on {Connection} because it was sent using an invalid salt", connectionMessage.MessageId, _mtProtoState.ConnectionInfo);
+                _logger.Information("Skipping message {MessageId} because it was sent using an invalid salt", connectionMessage.MessageId);
                 return false;
             }
 
@@ -223,7 +223,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
             _startIgnoring = true;
             Task.Run(async () =>
             {
-                _logger.Information("Resetting session for connection {Connection}", _connection.ConnectionInfo);
+                _logger.Information("Resetting session");
                 var releaser = await _connection.DisconnectAndLockAsync();
 
                 _mtProtoState.SessionIdHandler.SetSessionId(CryptoTools.CreateRandomLong());
@@ -235,7 +235,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
                 _startIgnoring = false;
 
                 releaser.Dispose();
-                _logger.Information("Session resetted for connection {Connection}. Reconnecting", _connection.ConnectionInfo);
+                _logger.Information("Session resetted. Reconnecting...");
                 await _connection.ConnectAsync();
             });
         }
@@ -291,7 +291,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
 
                 if (_mtProtoState.MessageIdsHandler.SetTimeDifference(MessageIdsHandler.GetSeconds(messageId)))
                 {
-                    _logger.Information("Resetting session after time changed on bad_server_salt for connection {Connection}", _connection.ConnectionInfo);
+                    _logger.Information("Resetting session after time changed on bad_server_salt");
                     ResetSession();
                     return;
                 }

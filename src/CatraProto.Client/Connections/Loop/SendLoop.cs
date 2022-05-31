@@ -75,19 +75,19 @@ namespace CatraProto.Client.Connections.Loop
                         case ResumableSignalState.Start:
                             _messagesHandler.MessagesTrackers.MessageCompletionTracker.ResetInitConnection();
                             SetSignalHandled(ResumableLoopState.Running, currentState);
-                            _logger.Information("Send loop started for connection {Connection}", _connection.ConnectionInfo);
+                            _logger.Information("Send loop started");
                             break;
                         case ResumableSignalState.Stop:
-                            _logger.Information("Send loop stopped for connection {Connection}", _connection.ConnectionInfo);
+                            _logger.Information("Send loop stopped");
                             SetSignalHandled(ResumableLoopState.Stopped, currentState);
                             return;
                         case ResumableSignalState.Resume:
                             SetSignalHandled(ResumableLoopState.Running, currentState);
-                            _logger.Verbose("Send loop for connection {Connection} woken up", _connection.ConnectionInfo);
+                            _logger.Verbose("Send loop for woken up");
                             break;
                         case ResumableSignalState.Suspend:
                             SetSignalHandled(ResumableLoopState.Suspended, currentState);
-                            _logger.Verbose("Send loop for connection {Connection} paused. Waiting for signal...", _connection.ConnectionInfo);
+                            _logger.Verbose("Send loop paused. Waiting for signal...");
                             currentState = await StateSignaler.WaitAsync(stoppingToken);
                             break;
                     }
@@ -119,7 +119,7 @@ namespace CatraProto.Client.Connections.Loop
             if (count > 0)
             {
                 var mustWrap = false;
-                _logger.Verbose("Pulling {Count} encrypted messages out of queue to send to {Connection}...", count, _connection.ConnectionInfo);
+                _logger.Verbose("Pulling {Count} encrypted messages out of queue to send...", count);
                 for (var i = 0; i < count; i++)
                 {
                     if (!_messagesHandler.MessagesQueue.TryGetMessage(true, out var messageItem))
@@ -224,7 +224,7 @@ namespace CatraProto.Client.Connections.Loop
                     await SendEncryptedAsync(upperMost, finalItems, msgSerialization);
                 }
 
-                _logger.Information("Sent {Count} messages to {Connection}", totalSent, _connection.ConnectionInfo);
+                _logger.Information("Sent {Count} messages", totalSent);
             }
         }
 
@@ -234,7 +234,7 @@ namespace CatraProto.Client.Connections.Loop
             var totalSent = 0;
             if (count > 0)
             {
-                _logger.Verbose("Pulling {Count} unencrypted messages out of queue to send to {Connection}...", count, _connection.ConnectionInfo);
+                _logger.Verbose("Pulling {Count} unencrypted messages out of queue to send...", count);
                 for (var i = 0; i < count; i++)
                 {
                     if (!_messagesHandler.MessagesQueue.TryGetMessage(false, out var messageItem))
@@ -289,7 +289,7 @@ namespace CatraProto.Client.Connections.Loop
                 messageItem.SetSent(_connection.MessagesDispatcher.GetExecInfo());
                 var unencryptedBody = unencryptedMessage.Export();
                 await _connection.Protocol.Writer.SendAsync(unencryptedBody, token);
-                _logger.Verbose("Sent unencrypted message to {Connection}", _connection.ConnectionInfo);
+                _logger.Verbose("Sent unencrypted message");
             }
         }
 
@@ -385,7 +385,7 @@ namespace CatraProto.Client.Connections.Loop
 
         public override string ToString()
         {
-            return $"Send loop for connection {_connection.ConnectionInfo}";
+            return $"Send loop";
         }
     }
 }

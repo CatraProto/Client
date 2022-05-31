@@ -69,14 +69,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
                     throw new InvalidOperationException("Can't set as sent when message id is null");
                 }
 
-                var connInfo = "Unknown connection";
-                if (_messagesHandler is not null)
-                {
-                    connInfo = _messagesHandler.Connection.ConnectionInfo.ToString();
-                }
-
-                _logger.Information("Message {Body} sent with id {MessageId} to {Connection}", Body, messageId, connInfo);
-
+                _logger.Information("Message {Body} sent with id {MessageId}", Body, messageId);
 
                 if (upperId != null)
                 {
