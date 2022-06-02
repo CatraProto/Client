@@ -87,9 +87,9 @@ namespace CatraProto.Client
             sessionData.RegisterOnUpdated(_sessionEvents.OnDataUpdate);
 
             ClientSession.ConnectionPool.SetUpdatesHandler(UpdatesReceiver);
-            await ClientSession.ConnectionPool.InitMainConnectionAsync(token);
-            _logger.Information("Requesting and storing current configuration");
 
+            _logger.Information("Initializing connection pool. Using test DCs: {IsTest}", ClientSession.Settings.ConnectionSettings.DefaultDatacenter.Test);
+            await ClientSession.ConnectionPool.InitMainConnectionAsync(token);
             if (!sessionData.Authorization.IsAuthorized(out var dcId, out _, out _))
             {
                 return ClientState.Unauthenticated;
