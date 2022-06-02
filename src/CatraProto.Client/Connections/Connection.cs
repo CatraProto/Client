@@ -85,8 +85,6 @@ namespace CatraProto.Client.Connections
                     _logger.Information("Connecting...");
                     await Protocol.ConnectAsync(token);
                     _logger.Information("Successfully connected");
-
-                    await MtProtoState.StartSaltHandlerAsync();
                     await _loopsHandler.StartLoopsAsync();
                     break;
                 }
@@ -167,7 +165,6 @@ namespace CatraProto.Client.Connections
 
             //Make sure the connection is actually closed
             await DisconnectAsync();
-            await MtProtoState.StopSaltHandlerAsync();
             _logger.Information("Disconnected");
             return lk;
         }

@@ -38,7 +38,6 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
     {
         public delegate void AuthKeyChanged(AuthKeyObject authKey, bool bindCompleted);
 
-        public event AuthKeyChanged? OnAuthKeyChanged;
         private readonly PermanentAuthKey _permanentAuthKey;
         private readonly AuthKeyCache _keyCacheCache;
         private readonly ConnectionSettings _connectionSettings;
@@ -77,8 +76,6 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
             }
 
             _logger.Information("Generated temporary authentication key {AuthId} which expires at {Time}", keyObject.AuthKeyId, expiresAt);
-            OnAuthKeyChanged?.Invoke(keyObject, false);
-
             var innerData = new BindAuthKeyInner
             {
                 Nonce = CryptoTools.CreateRandomLong(),
@@ -107,7 +104,6 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
 
             lock (_mutex)
             {
-                OnAuthKeyChanged?.Invoke(keyObject, true);
                 _keyCacheCache.SetData(keyObject.KeyArray, keyObject.AuthKeyId, keyObject.ServerSalt, expiresAt, true);
             }
 

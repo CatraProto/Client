@@ -338,7 +338,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
 
                         break;
                     case FutureSalts futureSalts:
-                        _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(futureSalts.ReqMsgId, futureSalts, GetExecInfo());
+                        _mtProtoState.SaltHandler.AddReceivedSalts(futureSalts);
                         break;
                     case RpcResult rpcResult:
                         HandleRpcResult(connectionMessage, obj, reader, rpcResult);

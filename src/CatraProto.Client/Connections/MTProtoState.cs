@@ -42,7 +42,7 @@ namespace CatraProto.Client.Connections
         {
             get => Connection.ConnectionInfo;
         }
-        private readonly GenericLoopController _saltController;
+
         public MTProtoState(Connection connection, Api api, TelegramClient client, ILogger logger)
         {
             Api = api;
@@ -55,24 +55,6 @@ namespace CatraProto.Client.Connections
             SessionIdHandler.SetSessionId(CryptoTools.CreateRandomLong());
             KeysHandler = new KeysHandler(this, api, client.ClientSession, logger);
             SaltHandler = new SaltHandler(this, logger);
-            _saltController = new GenericLoopController(logger);
-            _saltController.BindTo(SaltHandler);
-        }
-
-        public async ValueTask StartSaltHandlerAsync()
-        {
-            if (_saltController.GetCurrentState() is GenericLoopState.NotYetStarted)
-            {
-                await _saltController.SignalAsync(GenericSignalState.Start);
-            }
-        }
-
-        public async Task StopSaltHandlerAsync()
-        {
-            if (_saltController.GetCurrentState() is GenericLoopState.Running)
-            {
-                await _saltController.SignalAsync(GenericSignalState.Stop);
-            }
         }
     }
 }
