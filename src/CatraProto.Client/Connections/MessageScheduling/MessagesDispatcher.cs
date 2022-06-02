@@ -63,9 +63,9 @@ namespace CatraProto.Client.Connections.MessageScheduling
         private readonly List<IObjectParser> _parsers;
         private readonly ILogger _logger;
         private bool _startIgnoring;
-        public MessagesDispatcher(Connection connection, MessagesHandler messagesHandler, MTProtoState mtProtoState, ClientSession clientSession)
+        public MessagesDispatcher(Connection connection, MessagesHandler messagesHandler, MTProtoState mtProtoState, ClientSession clientSession, ILogger logger)
         {
-            _parsers = new List<IObjectParser>(2) { new RpcDeserializer(messagesHandler.MessagesTrackers.MessageCompletionTracker, clientSession.Logger), new MsgContainerDeserializer(clientSession.Logger) };
+            _parsers = new List<IObjectParser>(2) { new RpcDeserializer(messagesHandler.MessagesTrackers.MessageCompletionTracker, logger), new MsgContainerDeserializer(logger) };
             _logger = clientSession.Logger.ForContext<MessagesDispatcher>();
             _connection = connection;
             _messagesHandler = messagesHandler;
@@ -108,7 +108,6 @@ namespace CatraProto.Client.Connections.MessageScheduling
             }
 
             var deserialized = tryRead.Value;
-            _logger.Information("Handling message of type {T}", deserialized);
             if (connectionMessage.AuthKeyId != 0)
             {
                 if (IsMessageValid((EncryptedConnectionMessage)connectionMessage, deserialized))
@@ -118,6 +117,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
             }
             else
             {
+                _logger.Information("Received unencrypted message. id: {MessageId}, body: {Body}", connectionMessage.MessageId, deserialized);
                 HandleObject(connectionMessage, deserialized, reader);
             }
         }
@@ -152,7 +152,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
 
         private bool InternalCheckMessageValidity(EncryptedConnectionMessage connectionMessage, IObject deserialized)
         {
-            _logger.Information("Received message with id: {MessageId}, seqno: {Seqno}, session: {SessionId}, salt: {Salt}, body: {Body}", connectionMessage.MessageId, connectionMessage.SeqNo, connectionMessage.SessionId, connectionMessage.Salt, deserialized);
+            _logger.Information("Received encrypted message. id: {MessageId}, seqno: {Seqno}, session: {SessionId}, salt: {Salt}, body: {Body}", connectionMessage.MessageId, connectionMessage.SeqNo, connectionMessage.SessionId, connectionMessage.Salt, deserialized);
             if (deserialized is BadServerSalt badServerSalt)
             {
                 HandleBadServerSalt(badServerSalt, connectionMessage.MessageId);

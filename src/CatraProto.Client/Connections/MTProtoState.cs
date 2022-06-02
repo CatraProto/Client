@@ -23,6 +23,7 @@ using CatraProto.Client.Async.Loops.Extensions;
 using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.Crypto;
 using CatraProto.Client.MTProto.Auth;
+using Serilog;
 
 namespace CatraProto.Client.Connections
 {
@@ -42,19 +43,19 @@ namespace CatraProto.Client.Connections
             get => Connection.ConnectionInfo;
         }
         private readonly GenericLoopController _saltController;
-        public MTProtoState(Connection connection, Api api, TelegramClient client)
+        public MTProtoState(Connection connection, Api api, TelegramClient client, ILogger logger)
         {
             Api = api;
             Client = client;
             Connection = connection;
-            MessageIdsHandler = new MessageIdsHandler(client.ClientSession.Logger);
+            MessageIdsHandler = new MessageIdsHandler(logger);
             SessionIdHandler = new SessionIdHandler();
-            SeqnoHandler = new SeqnoHandler(client.ClientSession.Logger);
+            SeqnoHandler = new SeqnoHandler(logger);
             SessionIdHandler = new SessionIdHandler();
             SessionIdHandler.SetSessionId(CryptoTools.CreateRandomLong());
-            KeysHandler = new KeysHandler(this, api, client.ClientSession, client.ClientSession.Logger);
-            SaltHandler = new SaltHandler(this, client.ClientSession.Logger);
-            _saltController = new GenericLoopController(client.ClientSession.Logger);
+            KeysHandler = new KeysHandler(this, api, client.ClientSession, logger);
+            SaltHandler = new SaltHandler(this, logger);
+            _saltController = new GenericLoopController(logger);
             _saltController.BindTo(SaltHandler);
         }
 

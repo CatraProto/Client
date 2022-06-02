@@ -58,7 +58,7 @@ namespace CatraProto.Client.Connections.Loop
                             SetSignalHandled(ResumableLoopState.Running, currentState);
                             _logger.Information("Temporary authorization key generator started");
                             break;
-                        case ResumableSignalState.Sto
+                        case ResumableSignalState.Stop:
                             _logger.Information("Temporary authorization key generator stopped");
                             SetSignalHandled(ResumableLoopState.Stopped, currentState);
                             return;

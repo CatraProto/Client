@@ -24,22 +24,25 @@ namespace CatraProto.Client
 {
     public static class Logger
     {
-        public static ILogger CreateDefaultLogger(LoggingLevelSwitch? levelSwitch = null)
+        public static ExpressionTemplate ExpressionTemplate { get; }
+
+        static Logger()
         {
             var addContext = "[{Substring(SourceContext, LastIndexOf(SourceContext, '.') + 1)}]";
-            var addConnection = "{#if Connection is not null}[{Connection}]{#end}";
-            var aa = new ExpressionTemplate(
-                "[{@t:HH:mm:ss} {@l:u3}][{Session}]"
-                + addContext
-                + addConnection
-                + " {@m}\n{@x}",
-
-                theme: Serilog.Templates.Themes.TemplateTheme.Literate
+            var addConnection = "{#if Connection is not null} - {Connection}{#end}";
+            ExpressionTemplate = new ExpressionTemplate("({@t:HH:mm:ss} {@l:w4}) {Session} " + addContext + addConnection + " =>" + " {@m}{@x}" + "\n", theme: Serilog.Templates.Themes.TemplateTheme.Literate
             );
+        }
+
+        public static ILogger CreateDefaultLogger(LoggingLevelSwitch? levelSwitch = null)
+        {
             levelSwitch ??= new LoggingLevelSwitch();
-            return new LoggerConfiguration().WriteTo
-                .Console(aa).MinimumLevel
-                .ControlledBy(levelSwitch).CreateLogger();
+            return new LoggerConfiguration()
+                .WriteTo
+                .Console(ExpressionTemplate)
+                .MinimumLevel
+                .ControlledBy(levelSwitch)
+                .CreateLogger();
         }
     }
 }

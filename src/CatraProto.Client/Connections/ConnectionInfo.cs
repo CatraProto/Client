@@ -64,7 +64,7 @@ namespace CatraProto.Client.Connections
 
         public override string ToString()
         {
-            return $"DC{DcId} ({IpAddress}:{Port}, Main: {Main}, Test: {Test})";
+            return $"DC{DcId} ({IpAddress}:{Port}, Main: {Main})";
         }
     }
 }

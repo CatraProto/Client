@@ -56,9 +56,9 @@ namespace CatraProto.Client.Connections
             _loopsHandler = new LoopsHandler(this, client.ClientSession.Settings, _logger);
 
             ConnectionInfo = connectionInfo;
-            MessagesHandler = new MessagesHandler(this, client.ClientSession.Logger);
-            MtProtoState = new MTProtoState(this, new Api(client, MessagesHandler.MessagesQueue), client);
-            MessagesDispatcher = new MessagesDispatcher(this, MessagesHandler, MtProtoState, client.ClientSession);
+            MessagesHandler = new MessagesHandler(this, _logger);
+            MtProtoState = new MTProtoState(this, new Api(client, MessagesHandler.MessagesQueue), client, _logger);
+            MessagesDispatcher = new MessagesDispatcher(this, MessagesHandler, MtProtoState, client.ClientSession, _logger);
             Protocol = CreateProtocol();
         }
 

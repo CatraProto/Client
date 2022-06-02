@@ -18,7 +18,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using System;
 using System.Collections.Concurrent;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Async.Loops.Enums.Generic;
@@ -128,7 +127,6 @@ namespace CatraProto.Client.MTProto.Auth
 
             return chosenSalt;
         }
-
 
         public bool IsSaltValid(long saltId)
         {

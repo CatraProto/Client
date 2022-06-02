@@ -23,7 +23,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Async.Loops.Enums.Resumable;
 using CatraProto.Client.Async.Loops.Interfaces;
-using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.Connections.MessageScheduling.Items;
 using CatraProto.Client.MTProto.Rpc;
 using CatraProto.Client.TL.Schemas.MTProto;
@@ -63,7 +62,7 @@ namespace CatraProto.Client.Connections.Loop
                             _logger.Information("Acknowledgment handler loop started");
                             break;
                         case ResumableSignalState.Stop:
-                            _logger.Information("Acknowledgment handler loop stopped}");
+                            _logger.Information("Acknowledgment handler loop stopped");
                             SetSignalHandled(ResumableLoopState.Stopped, currentState);
                             return;
                         case ResumableSignalState.Resume:
