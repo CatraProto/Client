@@ -44,6 +44,12 @@ namespace CatraProto.Client.Updates
         {
             lock (_mutex)
             {
+                if (!_client.ClientSession.Settings.UpdatesSettings.QueueUpdates)
+                {
+                    Task.Run(() => SafelyInvoke(update, null));
+                    return;
+                }
+
                 var mustInvoke = false;
                 Queue<UpdateBase> updatesQueue;
                 if (UpdatesTools.TryExtractPeerId(update, out var peerId))
@@ -143,7 +149,10 @@ namespace CatraProto.Client.Updates
             }
             finally
             {
-                OnDispatchingDone(peerId);
+                if (_client.ClientSession.Settings.UpdatesSettings.QueueUpdates)
+                {
+                    OnDispatchingDone(peerId);
+                }
             }
         }
     }

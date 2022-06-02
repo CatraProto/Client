@@ -16,21 +16,21 @@ You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
 namespace CatraProto.Client.MTProto.Settings
 {
-    public class ClientSettings
+    public class UpdatesSettings
     {
-        public UpdatesSettings UpdatesSettings { get; }
-        public ConnectionSettings ConnectionSettings { get; }
-        public SessionSettings SessionSettings { get; }
-        public ApiSettings ApiSettings { get; }
+        public bool QueueUpdates { get; }
 
-        public ClientSettings(SessionSettings sessionSettings, ApiSettings apiSettings, ConnectionSettings connectionSetting, UpdatesSettings? updatesSettings = null)
+        public UpdatesSettings(bool queueUpdates)
         {
-            ConnectionSettings = connectionSetting;
-            SessionSettings = sessionSettings;
-            ApiSettings = apiSettings;
-            UpdatesSettings = updatesSettings ?? new UpdatesSettings(true);
+            QueueUpdates = queueUpdates;
         }
     }
 }
