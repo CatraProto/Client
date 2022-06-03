@@ -66,7 +66,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
         public MessagesDispatcher(Connection connection, MessagesHandler messagesHandler, MTProtoState mtProtoState, ClientSession clientSession, ILogger logger)
         {
             _parsers = new List<IObjectParser>(2) { new RpcDeserializer(messagesHandler.MessagesTrackers.MessageCompletionTracker, logger), new MsgContainerDeserializer(logger) };
-            _logger = clientSession.Logger.ForContext<MessagesDispatcher>();
+            _logger = logger.ForContext<MessagesDispatcher>();
             _connection = connection;
             _messagesHandler = messagesHandler;
             _mtProtoState = mtProtoState;
