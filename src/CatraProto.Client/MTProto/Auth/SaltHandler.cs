@@ -133,6 +133,12 @@ namespace CatraProto.Client.MTProto.Auth
                     return true;
                 }
 
+                if (_futureSalts.Count == 1)
+                {
+                    _logger.Information("Salts are missing, requesting new ones");
+                    RequestSalts();
+                }
+
                 return false;
             }
         }
