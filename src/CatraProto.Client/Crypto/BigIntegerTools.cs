@@ -31,14 +31,7 @@ namespace CatraProto.Client.Crypto
                 buffer[^1] = 254;
             }
 
-            if (positive)
-            {
-                var zeroByte = new byte[] { 0x00 };
-                buffer = isBigEndian ? zeroByte.Concat(buffer).ToArray() : buffer.Concat(zeroByte).ToArray();
-            }
-
-
-            return new BigInteger(buffer, false, isBigEndian);
+            return new BigInteger(buffer, positive, isBigEndian);
         }
 
         public static BigInteger UnsignedBigIntFromBytes(byte[] bytes, bool isBigEndian = false)
