@@ -69,7 +69,7 @@ namespace CatraProto.Client.MTProto.Deserializers
             {
                 _logger?.Information("Failed to read message body of length {Lenght} bytes, seeking stream and skipping message", msg.Bytes);
                 reader.Stream.Position = nowPosition + msg.Bytes;
-                msg.Body = new ContainerMessageFailed();
+                msg.Body = new MessageFailed();
             }
             else
             {

@@ -27,7 +27,7 @@ using CatraProto.TL.Results;
 
 namespace CatraProto.Client.TL
 {
-    internal class ContainerMessageFailed : IObject
+    internal class MessageFailed : IObject
     {
         public ReadResult<IObject> Deserialize(Reader reader)
         {
@@ -52,7 +52,7 @@ namespace CatraProto.Client.TL
 
         public IObject? Clone()
         {
-            return new ContainerMessageFailed();
+            return new MessageFailed();
         }
 
         public override string ToString()

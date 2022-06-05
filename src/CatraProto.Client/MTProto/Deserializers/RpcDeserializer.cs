@@ -20,6 +20,7 @@ using System.IO;
 using CatraProto.Client.Connections.MessageScheduling.Trackers;
 using CatraProto.Client.MTProto.Rpc.Parsers;
 using CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors;
+using CatraProto.Client.TL;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL;
@@ -96,7 +97,15 @@ namespace CatraProto.Client.MTProto.Deserializers
             else
             {
                 _logger.Information("Could not find {MessageId} in the list of outgoing rpc requests", rpcObject.ReqMsgId);
-                return new ReadResult<IObject>("Failed to parse rpc message because the message id could not be found", ParserErrors.ExternalError);
+                var currentPosition = reader.Stream.Position;
+                if (currentPosition - 12 > 0)
+                {
+                    return new ReadResult<IObject>("Failed to parse rpc message because the message id could not be found", ParserErrors.ExternalError);
+                }
+                else
+                {
+                    rpcObject.Result = new MessageFailed();
+                }
             }
 
             return new ReadResult<IObject>(obj);
