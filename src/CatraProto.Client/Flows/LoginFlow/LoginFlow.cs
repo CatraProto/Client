@@ -50,6 +50,12 @@ namespace CatraProto.Client.Flows.LoginFlow
             var auth = await _client.Api.CloudChatsApi.Auth.SendCodeAsync(phoneNumber, _clientSettings.ApiSettings.ApiId, _clientSettings.ApiSettings.ApiHash, codeSettings, cancellationToken: cancellationToken);
             if (auth.RpcCallFailed)
             {
+                if(auth.Error.ErrorMessage == "AUTH_RESTART")
+                {
+                    _logger.Information("Login failed with error AUTH_RESTART, restarting auth flow...", auth.Error);
+                    return await AsUserAsync(phoneNumber, codeSettings, cancellationToken);
+                }
+
                 _logger.Error("Login failed due to {Error}", auth.Error);
                 return new LoginFailed(auth.Error);
             }

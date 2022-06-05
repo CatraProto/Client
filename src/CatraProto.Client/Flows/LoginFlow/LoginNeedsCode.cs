@@ -24,6 +24,7 @@ using CatraProto.Client.MTProto.Rpc.RpcErrors;
 using CatraProto.Client.MTProto.Session.Models;
 using CatraProto.Client.TL.Schemas.CloudChats;
 using CatraProto.Client.TL.Schemas.CloudChats.Auth;
+using Serilog;
 using Authorization = CatraProto.Client.TL.Schemas.CloudChats.Auth.Authorization;
 
 namespace CatraProto.Client.Flows.LoginFlow
@@ -35,9 +36,10 @@ namespace CatraProto.Client.Flows.LoginFlow
         private readonly SentCodeBase _sentCode;
         private readonly string _phoneNumber;
         private readonly SessionData _sessionData;
-
+        private readonly ILogger _logger;
         internal LoginNeedsCode(TelegramClient client, SentCodeBase sentCode, string phoneNumber, SessionData sessionData)
         {
+            _logger = client.GetLogger<LoginNeedsCode>();
             CodeType = sentCode.Type;
             _client = client;
             _sentCode = sentCode;
@@ -47,9 +49,21 @@ namespace CatraProto.Client.Flows.LoginFlow
 
         public async Task<ILoginResult> WithCodeAsync(string receivedCode, CancellationToken cancellationToken = default)
         {
+            _logger.Information("Signing in using code {Code}", receivedCode);
             var query = await _client.Api!.CloudChatsApi.Auth.SignInAsync(_phoneNumber, _sentCode.PhoneCodeHash, receivedCode, cancellationToken: cancellationToken);
             if (query.RpcCallFailed)
             {
+                if(query.Error.ErrorMessage == "SESSION_PASSWORD_NEEDED")
+                {
+                    var tryGetPassword = await LoginNeedsPassword.CreateAsync(_client, _sessionData, _logger, cancellationToken);
+                    if (tryGetPassword.RpcCallFailed)
+                    {
+                        return new LoginFailed(tryGetPassword.Error);
+                    }
+
+                    return tryGetPassword.Response;
+                }
+
                 return new LoginFailed(query.Error);
             }
 
