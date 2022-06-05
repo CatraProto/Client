@@ -73,7 +73,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
             _clientSession = clientSession;
         }
 
-        public void DispatchMessage(IConnectionMessage connectionMessage)
+        public void DispatchMessage(IConnectionMessage connectionMessage, bool protocolError)
         {
             if (_startIgnoring)
             {
@@ -82,7 +82,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
             }
 
             using var reader = new Reader(MergedProvider.Singleton, connectionMessage.Body.ToMemoryStream(), false, _parsers);
-            if (connectionMessage.Body.Length == 4)
+            if (protocolError)
             {
                 var error = reader.ReadInt32().Value;
                 _logger.Warning("Received protocol error {Error} from server", error);
