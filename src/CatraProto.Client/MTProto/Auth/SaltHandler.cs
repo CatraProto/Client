@@ -23,6 +23,7 @@ using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.Connections;
 using CatraProto.Client.TL.Schemas.MTProto;
 using Serilog;
+using CatraProto.Client.Connections.MessageScheduling.Enums;
 
 namespace CatraProto.Client.MTProto.Auth
 {

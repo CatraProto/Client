@@ -175,7 +175,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
             }
         }
 
-        private bool GetMessageCompletion(long messageId, [MaybeNullWhen(false)] out MessageItem messageItem, bool remove = true)
+        public bool GetMessageCompletion(long messageId, [MaybeNullWhen(false)] out MessageItem messageItem, bool remove = true)
         {
             if (_messageCompletions.TryGetValue(messageId, out messageItem))
             {

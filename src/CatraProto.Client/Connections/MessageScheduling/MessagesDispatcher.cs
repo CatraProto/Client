@@ -330,7 +330,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
                         _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(pong.MsgId, pong, GetExecInfo());
                         break;
                     case MsgsAck msgsAck:
-                        var getExecInfo = GetExecInfo();
+                        var getExecInfo = GetExecInfo(false);
                         foreach (var id in msgsAck.MsgIds)
                         {
                             _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetAsAcknowledged(id, getExecInfo);
@@ -339,6 +339,8 @@ namespace CatraProto.Client.Connections.MessageScheduling
                         break;
                     case FutureSalts futureSalts:
                         _mtProtoState.SaltHandler.AddReceivedSalts(futureSalts);
+                        _messagesHandler.MessagesTrackers.MessageCompletionTracker.GetMessageCompletion(futureSalts.ReqMsgId, out var item, true);
+                        item?.SetCompleted(futureSalts, GetExecInfo(false));
                         break;
                     case RpcResult rpcResult:
                         HandleRpcResult(connectionMessage, obj, reader, rpcResult);
