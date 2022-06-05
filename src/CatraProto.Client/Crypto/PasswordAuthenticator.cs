@@ -70,14 +70,19 @@ namespace CatraProto.Client.Crypto
                 return RpcResponse<InputCheckPasswordSRP>.FromError(new InvalidDataError("SrpId missing"));
             }
 
-            var g = algo.G;
-            var gPadded = FillUntil(BitConverter.GetBytes(g).Reverse().ToArray(), 256, true);
             var p = new BigInteger(algo.P, true, true);
             if (!MTProto.KnownPrimes.Contains(p) || (!MTProto.CheckRangeDhPrime(p, _logger) && (!MTProto.CheckPrimeness(p, logger: _logger) || !MTProto.CheckPrimeness(p - 1 / 2, logger: _logger))))
             {
                 return RpcResponse<InputCheckPasswordSRP>.FromError(new InvalidDataError("Invalid P received from server"));
             }
 
+            var g = algo.G;
+            if (!Crypto.MTProto.CheckCyclicSubgroup(p, g, _logger))
+            {
+                return RpcResponse<InputCheckPasswordSRP>.FromError(new InvalidDataError("Invalid G received from server"));
+            }
+
+            var gPadded = FillUntil(BitConverter.GetBytes(g).Reverse().ToArray(), 256, true);
             var gb = _password.SrpB;
             var gbPadded = FillUntil(_password.SrpB, 256, true);
             var a = BigIntegerTools.GenerateBigInt(2048, true, true);
