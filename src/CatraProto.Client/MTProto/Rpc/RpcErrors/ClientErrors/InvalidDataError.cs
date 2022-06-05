@@ -16,16 +16,22 @@ You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using CatraProto.Client.MTProto.Rpc.Interfaces;
 
 namespace CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors
 {
-    public class InvalidTypeError : RpcError
+    public class InvalidDataError : RpcError
     {
-        public override string ErrorDescription { get; } = "Invalid type specified or received by the server";
+        public override string ErrorDescription { get; }
 
-        public InvalidTypeError() : base("INVALID_TYPE_ERROR", -10400)
+        public InvalidDataError(string errorDescription) : base("INVALID_DATA_ERROR", -10400)
         {
+            ErrorDescription = errorDescription;
         }
     }
 }
