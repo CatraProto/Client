@@ -40,20 +40,21 @@ namespace CatraProto.Client.MTProto.Auth
             var currentCount = computeServer ? ContentRelatedReceived : ContentRelatedSent;
             var newCount = currentCount + add;
 
-            if (computeServer)
-            {
-                ContentRelatedReceived = newCount;
-            }
-            else
+            if (!computeServer)
             {
                 ContentRelatedSent = newCount;
             }
 
             var computeSeqno = currentCount * 2 + add;
-
             var side = computeServer ? "server" : "client";
             _logger.Verbose("Computed {Side} seqno for object {Obj}, new value is {NSeqno}, old contentRelated {CRelated}", side, obj, computeSeqno, currentCount);
             return computeSeqno;
+        }
+
+        public void ConfirmServerSeqno(IObject obj)
+        {
+            ContentRelatedReceived += AcknowledgementHandler.IsContentRelated(obj) ? 1 : 0;
+            _logger.Information("Confirmed server seqno for object {Obj}", obj);
         }
     }
 }

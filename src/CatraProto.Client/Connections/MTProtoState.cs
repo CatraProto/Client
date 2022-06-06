@@ -52,7 +52,7 @@ namespace CatraProto.Client.Connections
             SessionIdHandler = new SessionIdHandler();
             SeqnoHandler = new SeqnoHandler(logger);
             SessionIdHandler = new SessionIdHandler();
-            SessionIdHandler.SetSessionId(CryptoTools.CreateRandomLong());
+            SessionIdHandler.SetSessionId(CryptoTools.CreateRandomLong(), 0);
             KeysHandler = new KeysHandler(this, api, client.ClientSession, logger);
             SaltHandler = new SaltHandler(this, logger);
         }

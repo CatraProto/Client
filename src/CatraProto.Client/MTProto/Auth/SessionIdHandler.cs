@@ -20,24 +20,24 @@ namespace CatraProto.Client.MTProto.Auth
 {
     public class SessionIdHandler
     {
-        private bool _isConfirmed;
         private readonly object _mutex = new object();
         private long _sessionId;
+        private long _uniqueId;
 
-        public long GetSessionId(out bool isConfirmed)
+        public long GetSessionId(out long uniqueId)
         {
             lock (_mutex)
             {
-                isConfirmed = _isConfirmed;
+                uniqueId = _uniqueId;
                 return _sessionId;
             }
         }
 
-        public void SetSessionId(long newSessionId, bool confirm = false)
+        public void SetSessionId(long newSessionId, long uniqueId)
         {
             lock (_mutex)
             {
-                _isConfirmed = confirm;
+                _uniqueId = uniqueId;
                 _sessionId = newSessionId;
             }
         }

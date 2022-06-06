@@ -25,7 +25,6 @@ using CatraProto.Client.Connections.MessageScheduling.Enums;
 using CatraProto.Client.Connections.MessageScheduling.Items;
 using CatraProto.Client.MTProto.Rpc;
 using CatraProto.Client.MTProto.Rpc.RpcErrors;
-using CatraProto.Client.TL.Schemas.CloudChats;
 using CatraProto.Client.TL.Schemas.CloudChats.Auth;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL.Interfaces;
