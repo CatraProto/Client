@@ -446,7 +446,7 @@ namespace CatraProto.Client.ApiManagers
             return null;
         }
 
-        private void SetCurrentState(LoginState newState, bool resetToLogin = true)
+        private void SetCurrentState(LoginState newState)
         {
             lock (_stateMutex)
             {
@@ -455,11 +455,6 @@ namespace CatraProto.Client.ApiManagers
                 if(ev is not null)
                 {
                     _sequentialInvoker.Invoke(() => ev.OnSessionUpdateAsync(newState));
-                }
-
-                if (resetToLogin && _currentState >= LoginState.LoggedOut && _currentState < LoginState.KeyDuplicated)
-                {
-                    SetCurrentState(LoginState.AwaitingLogin);
                 }
 
                 // Won't save other states because they might not be valid and most of them require AwaitingLogin to be sent, if the client saves at the wrong time things could go wrong
