@@ -36,8 +36,6 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
 {
     internal class TemporaryAuthKey
     {
-        public delegate void AuthKeyChanged(AuthKeyObject authKey, bool bindCompleted);
-
         private readonly PermanentAuthKey _permanentAuthKey;
         private readonly AuthKeyCache _keyCacheCache;
         private readonly ConnectionSettings _connectionSettings;
