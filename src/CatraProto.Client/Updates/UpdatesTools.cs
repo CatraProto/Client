@@ -26,6 +26,19 @@ namespace CatraProto.Client.Updates
 {
     internal static partial class UpdatesTools
     {
+        public static UpdateBase MergeUpdate(UpdateBase updateBase)
+        {
+            switch (updateBase)
+            {
+                case UpdateNewChannelMessage ch:
+                    return new UpdateNewMessage(ch.Message, -1, -1);
+                case UpdateEditChannelMessage eh:
+                    return new UpdateEditMessage(eh.Message, -1, -1);
+                default:
+                    return updateBase;
+            }
+        } 
+
         public static UpdateBase FromMessageToUpdate(MessageBase messageBase)
         {
             UpdateBase? updateBase = null;

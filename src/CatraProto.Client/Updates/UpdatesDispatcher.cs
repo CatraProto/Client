@@ -44,6 +44,7 @@ namespace CatraProto.Client.Updates
         {
             lock (_mutex)
             {
+                update = UpdatesTools.MergeUpdate(update);
                 if (!_client.ClientSession.Settings.UpdatesSettings.QueueUpdates)
                 {
                     Task.Run(() => SafelyInvoke(update, null));
