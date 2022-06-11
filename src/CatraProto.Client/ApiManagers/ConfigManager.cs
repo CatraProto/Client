@@ -23,7 +23,7 @@ using CatraProto.Client.Async.Locks;
 using CatraProto.Client.TL.Schemas.CloudChats;
 using Serilog;
 
-namespace CatraProto.Client.MTProto.Session
+namespace CatraProto.Client.ApiManagers
 {
     internal class ConfigManager : IDisposable
     {
