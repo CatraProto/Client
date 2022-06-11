@@ -161,7 +161,7 @@ namespace CatraProto.Client.Updates
                     }
                     else
                     {
-                        _client.ClientSession.SessionManager.SessionData.Authorization.IsAuthorized(out _, out var currentId, out _);
+                        _client.ClientSession.SessionManager.SessionData.Authorization.GetAuthorization(out _, out var currentId);
                         if (currentId is null)
                         {
                             return null;
@@ -204,7 +204,7 @@ namespace CatraProto.Client.Updates
                     PeerBase fromId;
                     if (sendMessage.SendAs is null)
                     {
-                        _client.ClientSession.SessionManager.SessionData.Authorization.IsAuthorized(out _, out var currentId, out _);
+                        _client.ClientSession.SessionManager.SessionData.Authorization.GetAuthorization(out _, out var currentId);
                         if (currentId is null)
                         {
                             return null;
@@ -357,7 +357,7 @@ namespace CatraProto.Client.Updates
         {
             lock (_mutex)
             {
-                if (!_client.ClientSession.SessionManager.SessionData.Authorization.IsAuthorized(out _, out _, out _))
+                if (_client.ClientSession.SessionManager.SessionData.Authorization.GetAuthorization(out _, out _) is not ApiManagers.LoginState.LoggedIn)
                 {
                     _logger.Information("Skipping get difference all because we are not authorized");
                     return Task.CompletedTask;

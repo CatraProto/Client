@@ -19,12 +19,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using CatraProto.Client.ApiManagers;
 using CatraProto.Client.Database;
-using CatraProto.Client.Flows.LoginFlow;
 using CatraProto.Client.MTProto.Session;
 using CatraProto.Client.MTProto.Session.Models;
 using CatraProto.Client.MTProto.Settings;
-using CatraProto.Client.TL.Schemas;
 using CatraProto.Client.Updates;
 using CatraProto.Client.Updates.Interfaces;
 using Serilog;
@@ -52,26 +51,29 @@ namespace CatraProto.Client
         {
             get => _randomIdHandler ?? throw new InvalidOperationException("Please call InitClientAsync first");
         }
-
+        
+        public LoginManager LoginManager { get; }
         internal ConfigManager ConfigManager { get; }
         internal DatabaseManager DatabaseManager { get; }
         internal UpdatesReceiver UpdatesReceiver { get; }
         internal ClientSession ClientSession { get; }
         internal UpdatesDispatcher UpdatesDispatcher { get; }
         internal IEventHandler? EventHandler { get; private set; }
-        private RandomId? _randomIdHandler;
+
         private readonly SessionEvents _sessionEvents;
+        private RandomId? _randomIdHandler;
         private readonly ILogger _logger;
 
         public TelegramClient(ClientSettings clientSettings, ILogger logger)
         {
             ClientSession = new ClientSession(this, clientSettings, logger);
+            _logger = ClientSession.Logger.ForContext<TelegramClient>();
             DatabaseManager = new DatabaseManager(this, ClientSession.Logger);
             UpdatesReceiver = new UpdatesReceiver(this, ClientSession.Logger);
             _sessionEvents = new SessionEvents(this, ClientSession.Logger);
             UpdatesDispatcher = new UpdatesDispatcher(this, ClientSession.Logger);
             ConfigManager = new ConfigManager(this, ClientSession.Logger);
-            _logger = ClientSession.Logger.ForContext<TelegramClient>();
+            LoginManager = new LoginManager(this);
         }
 
         public async Task<ClientState> InitClientAsync(CancellationToken token = default)
@@ -90,9 +92,10 @@ namespace CatraProto.Client
 
             _logger.Information("Initializing connection pool. Using test DCs: {IsTest}", ClientSession.Settings.ConnectionSettings.DefaultDatacenter.Test);
             await ClientSession.ConnectionPool.InitMainConnectionAsync(token);
-            if (!sessionData.Authorization.IsAuthorized(out var dcId, out _, out _))
+            if (sessionData.Authorization.GetAuthorization(out var dcId, out _) is not LoginState.LoggedIn)
             {
-                return ClientState.Unauthenticated;
+                LoginManager.SendFirstState();
+                return ClientState.Working;
             }
 
             if (ClientSession.ConnectionPool.GetMainConnection()!.ConnectionInfo.DcId == dcId)
@@ -107,7 +110,8 @@ namespace CatraProto.Client
 
             UpdatesReceiver.FillProcessors();
             await UpdatesReceiver.ForceGetDifferenceAllAsync(false);
-            return ClientState.Authenticated;
+            LoginManager.SendFirstState();
+            return ClientState.Working;
         }
 
         public void SetEventHandler(IEventHandler eventHandler)
@@ -136,11 +140,6 @@ namespace CatraProto.Client
         public ILogger GetLogger(string contextName)
         {
             return _logger.ForContext(Constants.SourceContextPropertyName, contextName);
-        }
-
-        public LoginFlow GetLoginFlow()
-        {
-            return new LoginFlow(this, ClientSession);
         }
 
         public async ValueTask DisposeAsync()

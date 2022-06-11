@@ -39,7 +39,7 @@ namespace CatraProto.Client
             {
                 case Authorization authorization:
                     _logger.Information("New authorization raised, fetching updates...");
-                    if (authorization.IsAuthorized(out _, out _, out _))
+                    if (authorization.GetAuthorization(out _, out _) is ApiManagers.LoginState.LoggedIn)
                     {
                         //Not awaiting is fine here.
                         _client.UpdatesReceiver.FillProcessors();
