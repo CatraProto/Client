@@ -23,14 +23,20 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.MTProto.Session.Models
 {
+    enum SessionVersion
+    {
+        BaseVersion = 1,
+        NewAuthorization,
+    }
+
     internal class SessionData : SessionModel, IDisposable
     {
-        private const int SupportedSessionVersion = 1;
+        private const int SupportedSessionVersion = 2;
         public Authorization Authorization { get; }
         public AuthorizationKeys AuthorizationKeys { get; }
         public UpdatesStates UpdatesStates { get; }
         public RandomId RandomId { get; }
-        private int _sessionVersion;
+        private SessionVersion _sessionVersion;
 
         public SessionData(object mutex) : base(mutex)
         {
@@ -42,13 +48,9 @@ namespace CatraProto.Client.MTProto.Session.Models
 
         private void EnsureVersion()
         {
-            if (_sessionVersion > SupportedSessionVersion)
+            if ((int)_sessionVersion > SupportedSessionVersion)
             {
                 throw new SessionDeserializationException($"Deserialization failed: the session has been serialized by a newer version of CatraProto ({_sessionVersion} > {SupportedSessionVersion})");
-            }
-            else if (_sessionVersion < SupportedSessionVersion)
-            {
-                throw new SessionDeserializationException($"Deserialization failed: the session has been serialized by an older version of CatraProto ({_sessionVersion} < {SupportedSessionVersion})");
             }
         }
 
@@ -56,9 +58,9 @@ namespace CatraProto.Client.MTProto.Session.Models
         {
             lock (Mutex)
             {
-                _sessionVersion = reader.ReadInt32().Value;
+                _sessionVersion = (SessionVersion)reader.ReadInt32().Value;
                 EnsureVersion();
-                Authorization.Read(reader);
+                Authorization.Read(reader, _sessionVersion);
                 AuthorizationKeys.Read(reader);
                 UpdatesStates.Read(reader);
                 RandomId.Read(reader);

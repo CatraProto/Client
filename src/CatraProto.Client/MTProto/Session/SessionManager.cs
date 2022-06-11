@@ -18,8 +18,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using System;
 using System.IO;
-using System.Runtime.InteropServices;
-using CatraProto.Client.MTProto.Session.Exceptions;
 using CatraProto.Client.MTProto.Session.Models;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.TL;

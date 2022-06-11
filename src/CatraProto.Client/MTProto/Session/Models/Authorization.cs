@@ -18,6 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using System;
 using System.Threading.Tasks;
+using CatraProto.Client.ApiManagers;
 using CatraProto.Client.Async.Signalers;
 using CatraProto.Client.MTProto.Session.Interfaces;
 using CatraProto.TL;
@@ -27,42 +28,32 @@ namespace CatraProto.Client.MTProto.Session.Models
     internal class Authorization : SessionModel, IDisposable
     {
         private readonly AsyncSignaler _asyncSignaler = new AsyncSignaler(false);
-        private long _userAccessHash;
-        private long _userId;
-        private int _dcId;
+        private LoginState _loginState = LoginState.AwaitingLogin;
+        private long? _userId;
+        private int? _dcId;
 
         public Authorization(object mutex) : base(mutex)
         {
         }
 
-        public void SetAuthorized(bool authorized, int dcId, long userId, long userAccessHash)
+        public void SetAuthorized(LoginState authorized, int? dcId, long? userId)
         {
             lock (Mutex)
             {
-                _userAccessHash = userAccessHash;
                 _userId = userId;
                 _dcId = dcId;
-                _asyncSignaler.SetSignal(authorized);
+                _asyncSignaler.SetSignal(authorized == LoginState.LoggedIn);
                 OnDataUpdated();
             }
         }
 
-        public bool IsAuthorized(out int? dcId, out long? userId, out long? userAccessHash)
+        public LoginState GetAuthorization(out int? dcId, out long? userId)
         {
             lock (Mutex)
             {
-                if (_asyncSignaler.IsReleased())
-                {
-                    dcId = _dcId;
-                    userId = _userId;
-                    userAccessHash = _userAccessHash;
-                    return true;
-                }
-
-                dcId = null;
-                userId = null;
-                userAccessHash = null;
-                return false;
+                dcId = _dcId;
+                userId = _userId;
+                return _loginState;
             }
         }
 
@@ -82,16 +73,35 @@ namespace CatraProto.Client.MTProto.Session.Models
             await task;
         }
 
-        public void Read(Reader reader)
+        public void Read(Reader reader, SessionVersion version)
         {
             lock (Mutex)
             {
-                _asyncSignaler.SetSignal(reader.ReadBool().Value);
-                if (_asyncSignaler.IsReleased())
+                if (version is SessionVersion.BaseVersion)
                 {
-                    _dcId = reader.ReadInt32().Value;
-                    _userId = reader.ReadInt64().Value;
-                    _userAccessHash = reader.ReadInt64().Value;
+                    var isAuthorized = reader.ReadBool().Value;
+                    _asyncSignaler.SetSignal(isAuthorized);
+                    if (isAuthorized)
+                    {
+                        _dcId = reader.ReadInt32().Value;
+                        _userId = reader.ReadInt64().Value;
+                        _loginState = LoginState.LoggedIn;
+                        //access_hash
+                        reader.ReadInt64();
+                    }
+                }
+                else if (version is SessionVersion.NewAuthorization) 
+                {
+                    _loginState = (LoginState)reader.ReadInt32().Value;
+                    if(_loginState is LoginState.LoggedIn)
+                    {
+                        _userId = reader.ReadInt64().Value;
+                        _dcId = reader.ReadInt32().Value;
+                    }
+                }
+                else
+                {
+                    throw new InvalidOperationException($"Invalid version {version}");
                 }
             }
         }
@@ -100,13 +110,11 @@ namespace CatraProto.Client.MTProto.Session.Models
         {
             lock (Mutex)
             {
-                var isAuth = IsAuthorized(out var dcId, out var userId, out var userAccessHash);
-                writer.WriteBool(isAuth);
-                if (isAuth)
+                writer.WriteInt32((int)_loginState);
+                if (_loginState is LoginState.LoggedIn)
                 {
-                    writer.WriteInt32(dcId!.Value);
-                    writer.WriteInt64(userId!.Value);
-                    writer.WriteInt64(userAccessHash!.Value);
+                    writer.WriteInt64(_userId!.Value);
+                    writer.WriteInt32(_dcId!.Value);
                 }
             }
         }
