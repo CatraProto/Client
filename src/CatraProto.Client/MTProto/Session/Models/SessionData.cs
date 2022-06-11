@@ -31,7 +31,7 @@ namespace CatraProto.Client.MTProto.Session.Models
 
     internal class SessionData : SessionModel, IDisposable
     {
-        private const int SupportedSessionVersion = 2;
+        private const int CurrentSessionVersion = 2;
         public Authorization Authorization { get; }
         public AuthorizationKeys AuthorizationKeys { get; }
         public UpdatesStates UpdatesStates { get; }
@@ -48,9 +48,9 @@ namespace CatraProto.Client.MTProto.Session.Models
 
         private void EnsureVersion()
         {
-            if ((int)_sessionVersion > SupportedSessionVersion)
+            if ((int)_sessionVersion > CurrentSessionVersion)
             {
-                throw new SessionDeserializationException($"Deserialization failed: the session has been serialized by a newer version of CatraProto ({_sessionVersion} > {SupportedSessionVersion})");
+                throw new SessionDeserializationException($"Deserialization failed: the session has been serialized by a newer version of CatraProto ({_sessionVersion} > {CurrentSessionVersion})");
             }
         }
 
@@ -71,7 +71,7 @@ namespace CatraProto.Client.MTProto.Session.Models
         {
             lock (Mutex)
             {
-                writer.WriteInt32(1);
+                writer.WriteInt32(CurrentSessionVersion);
                 Authorization.Save(writer);
                 AuthorizationKeys.Save(writer);
                 UpdatesStates.Save(writer);
