@@ -23,6 +23,7 @@ using System.Threading.Tasks;
 using CatraProto.Client.Database;
 using CatraProto.Client.MTProto;
 using CatraProto.Client.MTProto.Rpc;
+using CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors;
 using CatraProto.Client.MTProto.Rpc.Vectors;
 using CatraProto.Client.TL.Schemas.CloudChats;
 
@@ -30,6 +31,27 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 {
     public partial class Users
     {
+        public async Task<RpcResponse<User>> GetSelfAsync(CancellationToken cancellationToken = default)
+        {
+            if(_client.ClientSession.SessionManager.SessionData.Authorization.GetAuthorization(out _, out var userId) is not ApiManagers.LoginState.LoggedIn || userId is null)
+            {
+                return RpcResponse<User>.FromError(new UnauthorizedUserError());
+            }
+
+            var req = await GetUsersAsync(new List<long>(1) { userId.Value }, cancellationToken);
+            if (req.RpcCallFailed)
+            {
+                return RpcResponse<User>.FromError(req.Error);
+            }
+
+            if(req.Response.Count == 0)
+            {
+                return RpcResponse<User>.FromError(new PeerNotFoundError(userId.Value, PeerType.User));
+            }
+
+            return RpcResponse<User>.FromResult(req.Response[0]);
+        }
+
         public async Task<RpcResponse<RpcVector<User>>> GetUsersAsync(List<long> id, CancellationToken cancellationToken = default)
         {
             var request = await _client.DatabaseManager.PeerDatabase.GetPeersAsync(id.ConvertAll(x => PeerId.AsUser(x)), cancellationToken);
