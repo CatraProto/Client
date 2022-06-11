@@ -23,6 +23,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CatraProto.Client.ApiManagers;
 using CatraProto.Client.Async.Loops.Enums.Resumable;
 using CatraProto.Client.Async.Loops.Interfaces;
 using CatraProto.Client.Connections.MessageScheduling;
@@ -142,6 +143,12 @@ namespace CatraProto.Client.Connections.Loop
                     {
                         encryptedList.Value.Add(messageItem);
                         break;
+                    }
+
+                    if(messageItem.Body is IMethod method && !LoginManager.CanBeUnauthenticated(method) && _mtProtoState.Client.LoginManager.GetCurrentState() is not LoginState.LoggedIn)
+                    {
+                        _logger.Information("Postponing {Body} because we are not authorized", method);
+                        continue;
                     }
 
                     if (_mtProtoState.KeysHandler.TemporaryAuthKey.CanBeUsed())
@@ -325,7 +332,7 @@ namespace CatraProto.Client.Connections.Loop
             if (trySer.IsError)
             {
                 serialized = null;
-                item.SetCompleted(new SerializationFailed(trySer.GetError().Error), new ExecutionInfo(_mtProtoState.ConnectionInfo));
+                item.SetCompleted(new SerializationFailedError(trySer.GetError().Error), new ExecutionInfo(_mtProtoState.ConnectionInfo));
                 return false;
             }
 

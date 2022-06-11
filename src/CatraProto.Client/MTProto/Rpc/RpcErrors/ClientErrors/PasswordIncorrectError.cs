@@ -1,4 +1,4 @@
-/*
+﻿/*
 CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
 Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
 
@@ -16,18 +16,20 @@ You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-using CatraProto.Client.Flows.LoginFlow.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using CatraProto.Client.MTProto.Rpc.Interfaces;
 
-namespace CatraProto.Client.Flows.LoginFlow.Results
+namespace CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors
 {
-    public class LoginFailed : ILoginResult
+    public class PasswordIncorrectError : RpcError
     {
-        public RpcError FailReason { get; }
-
-        public LoginFailed(RpcError failReason)
+        public override string ErrorDescription { get; } = "Provided 2FA password is incorrect";
+        internal PasswordIncorrectError() : base("PASSWORD_INCORRECT", -10401)
         {
-            FailReason = failReason;
         }
     }
 }

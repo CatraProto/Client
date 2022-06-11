@@ -208,7 +208,11 @@ namespace CatraProto.Client.Connections.MessageScheduling
 
             //No need to worry about ContainerMessageFailed
             var shouldSeqno = _mtProtoState.SeqnoHandler.ComputeSeqno(deserialized, true);
-            if (shouldSeqno != connectionMessage.SeqNo)
+            if (shouldSeqno == connectionMessage.SeqNo)
+            {
+                _mtProtoState.SeqnoHandler.ConfirmServerSeqno(deserialized);
+            }
+            else
             {
                 _logger.Error("Received seqno {RSeqno} does not equal computed seqno {CSeqno} ({Obj})", connectionMessage.SeqNo, shouldSeqno, deserialized);
                 return false;
@@ -226,7 +230,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
                 _logger.Information("Resetting session");
                 var releaser = await _connection.DisconnectAndLockAsync();
 
-                _mtProtoState.SessionIdHandler.SetSessionId(CryptoTools.CreateRandomLong());
+                _mtProtoState.SessionIdHandler.SetSessionId(CryptoTools.CreateRandomLong(), 0);
                 _messagesHandler.MessagesTrackers.MessageCompletionTracker.ResendAll();
                 _messagesHandler.MessagesTrackers.AcknowledgementHandler.Reset();
                 _mtProtoState.SeqnoHandler.ContentRelatedReceived = 0;
@@ -260,12 +264,13 @@ namespace CatraProto.Client.Connections.MessageScheduling
 
         private void HandleNewSessionCreation(NewSessionCreated newSessionCreated, long sessionId)
         {
-            if(sessionId == _mtProtoState.SessionIdHandler.GetSessionId(out bool isConfirmed) && isConfirmed)
+            _mtProtoState.SessionIdHandler.GetSessionId(out var uniqueId);
+            if (uniqueId == newSessionCreated.UniqueId)
             {
                 return;
             }
 
-            _mtProtoState.SessionIdHandler.SetSessionId(sessionId, true);
+            _mtProtoState.SessionIdHandler.SetSessionId(sessionId, newSessionCreated.UniqueId);
             _mtProtoState.SaltHandler.SetSalt(newSessionCreated.ServerSalt);
             _mtProtoState.SeqnoHandler.ContentRelatedReceived = 0;
             _logger.Information("New session created, new server salt {Salt}, new SessionId {SessionId}", newSessionCreated.ServerSalt, sessionId);
@@ -385,28 +390,40 @@ namespace CatraProto.Client.Connections.MessageScheduling
         private void HandleRpcResult(IConnectionMessage connectionMessage, IObject obj, Reader reader, RpcResult rpcObject)
         {
             _logger.Information("Handling rpc message in response to id {Id}", rpcObject.ReqMsgId);
+            if (!_messagesHandler.MessagesTrackers.MessageCompletionTracker.GetRpcMethod(rpcObject.ReqMsgId, out var method))
+            {
+                _logger.Error("Not handling RPC message {Id} in reply to {ReplyTo} because it was not found in the list of sent RPC queries", connectionMessage.MessageId, rpcObject.ReqMsgId);
+                return;
+            }
+
             if (rpcObject.Result is MTProto.Rpc.Interfaces.RpcError error)
             {
                 if (error is IMigrateError migrateError)
                 {
-                    Task.Run(async () =>
+                    if (_messagesHandler.MessagesTrackers.MessageCompletionTracker.RemoveCompletion(rpcObject.ReqMsgId, out var item))
                     {
-                        if (_messagesHandler.MessagesTrackers.MessageCompletionTracker.RemoveCompletion(rpcObject.ReqMsgId, out var item))
+                        _logger.Information("Received migrate error, moving request and setting account dc to DC{DcId} ", migrateError.DcId);
+                        Task.Run(async () =>
                         {
-                            _logger.Information("Received migrate error, moving request and setting account dc to DC{DcId} ", migrateError.DcId);
-                            //TODO: Support cancellation
-                            await using var connection = await _clientSession.ConnectionPool.GetConnectionByDcAsync(migrateError.DcId, false, false, System.Threading.CancellationToken.None);
-                            await _clientSession.ConnectionPool.SetAccountConnectionAsync(connection.Connection, true);
-                            item.BindTo(connection.Connection.MessagesHandler);
-                            item.SetToSend();
-                        }
-                    });
+                            try
+                            {
+                                await using var connection = await _clientSession.ConnectionPool.GetConnectionByDcAsync(migrateError.DcId, false, false, item.CancellationToken);
+                                await _clientSession.ConnectionPool.SetAccountConnectionAsync(connection.Connection, true);
+                                item.BindTo(connection.Connection.MessagesHandler);
+                                item.SetToSend();
+                            }
+                            catch (Exception e) when (e is not OperationCanceledException)
+                            {
+                                _logger.Error("Caught exception while migrating request", e);
+                            }
+                        });
+                    }
                     return;
                 }
+
+                _mtProtoState.Client.LoginManager.OnErrorReceived(error, method);
             }
-
-
-            if (_messagesHandler.MessagesTrackers.MessageCompletionTracker.GetRpcMethod(rpcObject.ReqMsgId, out var method))
+            else
             {
                 if (rpcObject.Result is IObject iObj)
                 {

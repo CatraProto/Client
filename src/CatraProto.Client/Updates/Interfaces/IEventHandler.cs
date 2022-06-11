@@ -17,12 +17,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 using System.Threading.Tasks;
+using CatraProto.Client.ApiManagers;
 using CatraProto.Client.TL.Schemas.CloudChats;
 
 namespace CatraProto.Client.Updates.Interfaces
 {
     public interface IEventHandler
     {
+        public Task OnSessionUpdateAsync(LoginState loginState); 
         public Task OnUpdateAsync(UpdateBase update);
     }
 }
