@@ -442,9 +442,9 @@ namespace CatraProto.Client.Connections.MessageScheduling
                             break;
                     }
                 }
-
-                _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(rpcObject.ReqMsgId, rpcObject.Result, GetExecInfo(true));
             }
+
+            _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(rpcObject.ReqMsgId, rpcObject.Result, GetExecInfo(true));
         }
 
         public ExecutionInfo GetExecInfo(bool rpcTelegram = false)
