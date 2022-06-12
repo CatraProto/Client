@@ -79,13 +79,6 @@ namespace CatraProto.Client.MTProto.Session.Models
             }
         }
 
-        public new void RegisterOnUpdated(Action<SessionModel> action)
-        {
-            UpdatesStates.RegisterOnUpdated(action);
-            Authorization.RegisterOnUpdated(action);
-            AuthorizationKeys.RegisterOnUpdated(action);
-        }
-
         public void Dispose()
         {
             Authorization.Dispose();

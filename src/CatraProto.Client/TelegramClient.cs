@@ -70,7 +70,6 @@ namespace CatraProto.Client
             _logger = ClientSession.Logger.ForContext<TelegramClient>();
             DatabaseManager = new DatabaseManager(this, ClientSession.Logger);
             UpdatesReceiver = new UpdatesReceiver(this, ClientSession.Logger);
-            _sessionEvents = new SessionEvents(this, ClientSession.Logger);
             UpdatesDispatcher = new UpdatesDispatcher(this, ClientSession.Logger);
             ConfigManager = new ConfigManager(this, ClientSession.Logger);
             LoginManager = new LoginManager(this);
@@ -86,8 +85,6 @@ namespace CatraProto.Client
             _randomIdHandler = ClientSession.SessionManager.SessionData.RandomId;
             DatabaseManager.InitDb();
             var sessionData = ClientSession.SessionManager.SessionData;
-            sessionData.RegisterOnUpdated(_sessionEvents.OnDataUpdate);
-
             ClientSession.ConnectionPool.SetUpdatesHandler(UpdatesReceiver);
 
             _logger.Information("Initializing connection pool. Using test DCs: {IsTest}", ClientSession.Settings.ConnectionSettings.DefaultDatacenter.Test);

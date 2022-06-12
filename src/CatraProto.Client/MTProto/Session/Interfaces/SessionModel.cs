@@ -23,8 +23,6 @@ namespace CatraProto.Client.MTProto.Session.Interfaces
     internal abstract class SessionModel
     {
         protected object Mutex { get; }
-        protected Action<SessionModel>? OnUpdated;
-
         protected SessionModel(object mutex)
         {
             Mutex = mutex;
@@ -43,22 +41,6 @@ namespace CatraProto.Client.MTProto.Session.Interfaces
             lock (Mutex)
             {
                 action(this);
-            }
-        }
-
-        public void RegisterOnUpdated(Action<SessionModel> action)
-        {
-            lock (Mutex)
-            {
-                OnUpdated += action;
-            }
-        }
-
-        protected void OnDataUpdated()
-        {
-            lock (Mutex)
-            {
-                OnUpdated?.Invoke(this);
             }
         }
     }
