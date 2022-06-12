@@ -450,6 +450,11 @@ namespace CatraProto.Client.ApiManagers
         {
             lock (_stateMutex)
             {
+                if(_currentState >= LoginState.LoggedOut)
+                {
+                    return;
+                }
+
                 _currentState = newState;
                 var ev = _client.EventHandler;
                 if(ev is not null)
@@ -458,7 +463,7 @@ namespace CatraProto.Client.ApiManagers
                 }
 
                 // Won't save other states because they might not be valid and most of them require AwaitingLogin to be sent, if the client saves at the wrong time things could go wrong
-                if(_currentState is LoginState.KeyDuplicated or LoginState.AwaitingLogin)
+                if(_currentState >= LoginState.LoggedOut)
                 {
                     _sessionData.Authorization.SetAuthorized(_currentState, null, null);
                 }
@@ -506,6 +511,10 @@ namespace CatraProto.Client.ApiManagers
                     SetCurrentState(LoginState.AccountDeactivated);
                 }
                 else if(error.ErrorMessage == "SESSION_EXPIRED")
+                {
+                    SetCurrentState(LoginState.SessionRevoked);
+                }
+                else if (error.ErrorMessage == "AUTH_KEY_UNREGISTERED" && _currentState is LoginState.LoggedIn)
                 {
                     SetCurrentState(LoginState.SessionRevoked);
                 }
