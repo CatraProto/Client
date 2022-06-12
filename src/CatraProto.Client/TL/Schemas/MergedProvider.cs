@@ -17,6 +17,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 using System;
+using System.Collections.Generic;
+using System.Text;
+using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.TL.Schemas
@@ -33,10 +36,12 @@ namespace CatraProto.Client.TL.Schemas
 			{
 				case 1072550713:
 					return new CatraProto.Client.TL.Schemas.CloudChats.True();
+				case -1132882121:
+					return new CatraProto.Client.TL.Schemas.CloudChats.BoolFalse();
+				case -1720552011:
+					return new CatraProto.Client.TL.Schemas.CloudChats.BoolTrue();
 				case -994444869:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Error();
-				case 1450380236:
-					return new CatraProto.Client.TL.Schemas.CloudChats.Null();
 				case 2134579434:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputPeerEmpty();
 				case 2107670217:
@@ -187,7 +192,7 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelForbidden();
 				case -779165146:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChatFull();
-				case -516145888:
+				case -362240487:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChannelFull();
 				case -1070776313:
 					return new CatraProto.Client.TL.Schemas.CloudChats.ChatParticipant();
@@ -295,6 +300,10 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessageActionSetChatTheme();
 				case -339958837:
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessageActionChatJoinedByRequest();
+				case 1205698681:
+					return new CatraProto.Client.TL.Schemas.CloudChats.MessageActionWebViewDataSentMe();
+				case -1262252875:
+					return new CatraProto.Client.TL.Schemas.CloudChats.MessageActionWebViewDataSent();
 				case -1460809483:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Dialog();
 				case 1908216652:
@@ -335,9 +344,9 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputNotifyChats();
 				case -1311015810:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputNotifyBroadcasts();
-				case -1673717362:
+				case -551616469:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputPeerNotifySettings();
-				case -1353671392:
+				case -1472527322:
 					return new CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettings();
 				case -1525149427:
 					return new CatraProto.Client.TL.Schemas.CloudChats.PeerSettings();
@@ -361,7 +370,11 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputReportReasonGeoIrrelevant();
 				case -170010905:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputReportReasonFake();
-				case -818518751:
+				case 177124030:
+					return new CatraProto.Client.TL.Schemas.CloudChats.InputReportReasonIllegalDrugs();
+				case -1631091139:
+					return new CatraProto.Client.TL.Schemas.CloudChats.InputReportReasonPersonalDetails();
+				case -1938625919:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UserFull();
 				case 341499403:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Contact();
@@ -627,6 +640,14 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateBotChatInviteRequester();
 				case 357013699:
 					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateMessageReactions();
+				case 397910539:
+					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateAttachMenuBots();
+				case 361936797:
+					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateWebViewResultSent();
+				case 347625491:
+					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateBotMenuButton();
+				case 1960361625:
+					return new CatraProto.Client.TL.Schemas.CloudChats.UpdateSavedRingtones();
 				case -1519637954:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Updates.State();
 				case 1567990072:
@@ -909,7 +930,7 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetNotModified();
 				case -1032140601:
 					return new CatraProto.Client.TL.Schemas.CloudChats.BotCommand();
-				case 460632885:
+				case -468280483:
 					return new CatraProto.Client.TL.Schemas.CloudChats.BotInfo();
 				case -1560655744:
 					return new CatraProto.Client.TL.Schemas.CloudChats.KeyboardButton();
@@ -937,6 +958,10 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.InputKeyboardButtonUserProfile();
 				case 814112961:
 					return new CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonUserProfile();
+				case 326529584:
+					return new CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonWebView();
+				case -1598009252:
+					return new CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonSimpleWebView();
 				case 2002815875:
 					return new CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonRow();
 				case -1606526075:
@@ -1933,6 +1958,52 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.TranslateResultText();
 				case 1370914559:
 					return new CatraProto.Client.TL.Schemas.CloudChats.MessagePeerReaction();
+				case -2132064081:
+					return new CatraProto.Client.TL.Schemas.CloudChats.GroupCallStreamChannel();
+				case -790330702:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Phone.GroupCallStreamChannels();
+				case 767505458:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Phone.GroupCallStreamRtmpUrl();
+				case 1165423600:
+					return new CatraProto.Client.TL.Schemas.CloudChats.AttachMenuBotIconColor();
+				case -1297663893:
+					return new CatraProto.Client.TL.Schemas.CloudChats.AttachMenuBotIcon();
+				case -381896846:
+					return new CatraProto.Client.TL.Schemas.CloudChats.AttachMenuBot();
+				case -237467044:
+					return new CatraProto.Client.TL.Schemas.CloudChats.AttachMenuBotsNotModified();
+				case 1011024320:
+					return new CatraProto.Client.TL.Schemas.CloudChats.AttachMenuBots();
+				case -1816172929:
+					return new CatraProto.Client.TL.Schemas.CloudChats.AttachMenuBotsBot();
+				case 202659196:
+					return new CatraProto.Client.TL.Schemas.CloudChats.WebViewResultUrl();
+				case -2010155333:
+					return new CatraProto.Client.TL.Schemas.CloudChats.SimpleWebViewResultUrl();
+				case 211046684:
+					return new CatraProto.Client.TL.Schemas.CloudChats.WebViewMessageSent();
+				case 1966318984:
+					return new CatraProto.Client.TL.Schemas.CloudChats.BotMenuButtonDefault();
+				case 1113113093:
+					return new CatraProto.Client.TL.Schemas.CloudChats.BotMenuButtonCommands();
+				case -944407322:
+					return new CatraProto.Client.TL.Schemas.CloudChats.BotMenuButton();
+				case -67704655:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Account.SavedRingtonesNotModified();
+				case -1041683259:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Account.SavedRingtones();
+				case -1746354498:
+					return new CatraProto.Client.TL.Schemas.CloudChats.NotificationSoundDefault();
+				case 1863070943:
+					return new CatraProto.Client.TL.Schemas.CloudChats.NotificationSoundNone();
+				case -2096391452:
+					return new CatraProto.Client.TL.Schemas.CloudChats.NotificationSoundLocal();
+				case -9666487:
+					return new CatraProto.Client.TL.Schemas.CloudChats.NotificationSoundRingtone();
+				case -1222230163:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Account.SavedRingtone();
+				case 523271863:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Account.SavedRingtoneConverted();
 				case -878758099:
 					return new CatraProto.Client.TL.Schemas.CloudChats.InvokeAfterMsg();
 				case 1036301552:
@@ -2131,6 +2202,12 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.SetAuthorizationTTL();
 				case 1089766498:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Account.ChangeAuthorizationSettings();
+				case -510647672:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Account.GetSavedRingtones();
+				case 1038768899:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Account.SaveRingtone();
+				case -2095414366:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Account.UploadRingtone();
 				case 227648840:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Users.GetUsers();
 				case -1240508136:
@@ -2177,6 +2254,8 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Contacts.GetLocated();
 				case 698914348:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Contacts.BlockFromReplies();
+				case -1963375804:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Contacts.ResolvePhone();
 				case 1673946374:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetMessages();
 				case -1594569905:
@@ -2493,6 +2572,24 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetUnreadReactions();
 				case -2099097129:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.ReadReactions();
+				case 276705696:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchSentMedia();
+				case 385663691:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetAttachMenuBots();
+				case 1998676370:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetAttachMenuBot();
+				case 451818415:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.ToggleBotInAttachMenu();
+				case 262163967:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.RequestWebView();
+				case -768945848:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.ProlongWebView();
+				case 1790652275:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.RequestSimpleWebView();
+				case 172168437:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendWebViewResultMessage();
+				case -603831608:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendWebViewData();
 				case -304838614:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Updates.GetState();
 				case 630429265:
@@ -2617,7 +2714,7 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Channels.SetStickers();
 				case -357180360:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Channels.ReadMessageContents();
-				case -1355375294:
+				case -1683319225:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Channels.DeleteHistory();
 				case -356796084:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Channels.TogglePreHistoryHidden();
@@ -2655,6 +2752,14 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Bots.ResetBotCommands();
 				case -481554986:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Bots.GetBotCommands();
+				case 1157944655:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Bots.SetBotMenuButton();
+				case -1671369944:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Bots.GetBotMenuButton();
+				case 2021942497:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Bots.SetBotBroadcastDefaultAdminRights();
+				case -1839281686:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Bots.SetBotGroupDefaultAdminRights();
 				case -1976353651:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Payments.GetPaymentForm();
 				case 611897804:
@@ -2739,6 +2844,12 @@ namespace CatraProto.Client.TL.Schemas
 					return new CatraProto.Client.TL.Schemas.CloudChats.Phone.JoinGroupCallPresentation();
 				case 475058500:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Phone.LeaveGroupCallPresentation();
+				case 447879488:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Phone.GetGroupCallStreamChannels();
+				case -558650433:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Phone.GetGroupCallStreamRtmpUrl();
+				case 1092913030:
+					return new CatraProto.Client.TL.Schemas.CloudChats.Phone.SaveCallLog();
 				case -219008246:
 					return new CatraProto.Client.TL.Schemas.CloudChats.Langpack.GetLangPack();
 				case -269862909:
@@ -2856,174 +2967,174 @@ namespace CatraProto.Client.TL.Schemas
 			}
 
             return null;
-        }
-
-
+        }    
+        
+        
         public override IObject? GetNakedFromType(Type type)
         {
             if (InternalGetNakedFromType(type, out var obj))
             {
-                return obj;
+                return obj;        
             }
-
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.PQInnerDataDc))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.PQInnerDataDc();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.PQInnerDataTempDc))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.PQInnerDataTempDc();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.ServerDHParamsFail))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.ServerDHParamsFail();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.ServerDHParamsOk))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.ServerDHParamsOk();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.ServerDHInnerData))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.ServerDHInnerData();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.ClientDHInnerData))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.ClientDHInnerData();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.DhGenOk))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.DhGenOk();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.DhGenRetry))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.DhGenRetry();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.DhGenFail))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.DhGenFail();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.RpcResult))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.RpcResult();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.RpcError))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.RpcError();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.RpcAnswerUnknown))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.RpcAnswerUnknown();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.RpcAnswerDroppedRunning))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.RpcAnswerDroppedRunning();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.RpcAnswerDropped))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.RpcAnswerDropped();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.FutureSalt))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.FutureSalt();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.FutureSalts))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.FutureSalts();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.DestroySessionOk))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.DestroySessionOk();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.DestroySessionNone))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.DestroySessionNone();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.NewSessionCreated))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.NewSessionCreated();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.MsgContainer))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.MsgContainer();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.Message))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.Message();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.MsgCopy))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.MsgCopy();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.MsgsAck))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.MsgsAck();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.BadMsgNotification))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.BadMsgNotification();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.BadServerSalt))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.BadServerSalt();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.MsgsStateInfo))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.MsgsStateInfo();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.MsgsAllInfo))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.MsgsAllInfo();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.MsgDetailedInfo))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.MsgDetailedInfo();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.MsgNewDetailedInfo))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.MsgNewDetailedInfo();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.BindAuthKeyInner))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.BindAuthKeyInner();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.ReqDHParams))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.ReqDHParams();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.SetClientDHParams))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.SetClientDHParams();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.RpcDropAnswer))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.RpcDropAnswer();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.GetFutureSalts))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.GetFutureSalts();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.DestroySession))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.DestroySession();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.HttpWait))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.HttpWait();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.MsgsStateReq))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.MsgsStateReq();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.MsgResendReq))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.MsgResendReq();
-            }
-            if (type == typeof(CatraProto.Client.TL.Schemas.MTProto.MsgResendAnsReq))
-            {
-                return new CatraProto.Client.TL.Schemas.MTProto.MsgResendAnsReq();
-            }
-
+        
+            if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.PQInnerDataDc)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.PQInnerDataDc();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.PQInnerDataTempDc)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.PQInnerDataTempDc();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.ServerDHParamsFail)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.ServerDHParamsFail();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.ServerDHParamsOk)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.ServerDHParamsOk();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.ServerDHInnerData)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.ServerDHInnerData();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.ClientDHInnerData)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.ClientDHInnerData();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.DhGenOk)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.DhGenOk();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.DhGenRetry)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.DhGenRetry();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.DhGenFail)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.DhGenFail();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.RpcResult)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.RpcResult();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.RpcError)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.RpcError();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.RpcAnswerUnknown)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.RpcAnswerUnknown();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.RpcAnswerDroppedRunning)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.RpcAnswerDroppedRunning();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.RpcAnswerDropped)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.RpcAnswerDropped();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.FutureSalt)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.FutureSalt();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.FutureSalts)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.FutureSalts();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.DestroySessionOk)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.DestroySessionOk();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.DestroySessionNone)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.DestroySessionNone();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.NewSessionCreated)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.NewSessionCreated();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.MsgContainer)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.MsgContainer();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.Message)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.Message();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.MsgCopy)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.MsgCopy();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.MsgsAck)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.MsgsAck();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.BadMsgNotification)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.BadMsgNotification();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.BadServerSalt)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.BadServerSalt();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.MsgsStateInfo)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.MsgsStateInfo();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.MsgsAllInfo)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.MsgsAllInfo();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.MsgDetailedInfo)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.MsgDetailedInfo();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.MsgNewDetailedInfo)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.MsgNewDetailedInfo();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.BindAuthKeyInner)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.BindAuthKeyInner();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.ReqDHParams)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.ReqDHParams();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.SetClientDHParams)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.SetClientDHParams();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.RpcDropAnswer)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.RpcDropAnswer();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.GetFutureSalts)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.GetFutureSalts();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.DestroySession)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.DestroySession();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.HttpWait)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.HttpWait();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.MsgsStateReq)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.MsgsStateReq();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.MsgResendReq)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.MsgResendReq();
+}
+if(type == typeof(CatraProto.Client.TL.Schemas.MTProto.MsgResendAnsReq)) 
+{
+ return new CatraProto.Client.TL.Schemas.MTProto.MsgResendAnsReq();
+}
+   
             return null;
-        }
+        }  
     }
 }
