@@ -60,7 +60,6 @@ namespace CatraProto.Client
         internal UpdatesDispatcher UpdatesDispatcher { get; }
         internal IEventHandler? EventHandler { get; private set; }
 
-        private readonly SessionEvents _sessionEvents;
         private RandomId? _randomIdHandler;
         private readonly ILogger _logger;
 
