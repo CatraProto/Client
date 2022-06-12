@@ -42,7 +42,6 @@ namespace CatraProto.Client.MTProto.Session.Models
                 _firstSalt = firstServerSalt;
                 _expirationDate = expirationDate;
                 _isBound = isBound;
-                OnDataUpdated();
             }
         }
 

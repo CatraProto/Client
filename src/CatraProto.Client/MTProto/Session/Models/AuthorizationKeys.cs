@@ -45,12 +45,6 @@ namespace CatraProto.Client.MTProto.Session.Models
                 {
                     var permKey = new AuthKeyCache(Mutex);
                     var tempKey = new AuthKeyCache(Mutex);
-                    if (OnUpdated is not null)
-                    {
-                        permKey.RegisterOnUpdated(OnUpdated);
-                        tempKey.RegisterOnUpdated(OnUpdated);
-                    }
-
                     authKey.PermanentAuthKey = permKey;
                     authKey.TemporaryAuthKey = tempKey;
                     justCreated = true;
@@ -74,11 +68,6 @@ namespace CatraProto.Client.MTProto.Session.Models
                     permKey.Read(reader);
                     tempKey.Read(reader);
                     _authKeys.TryAdd(dc, (permKey, tempKey));
-                    if (OnUpdated is not null)
-                    {
-                        permKey.RegisterOnUpdated(OnUpdated);
-                        tempKey.RegisterOnUpdated(OnUpdated);
-                    }
                 }
             }
         }

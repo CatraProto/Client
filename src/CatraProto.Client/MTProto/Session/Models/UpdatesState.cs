@@ -51,7 +51,6 @@ namespace CatraProto.Client.MTProto.Session.Models
                 _seq = seq ?? currentSeq;
                 _date = date ?? currentDate;
                 _state = isActive ?? currentActive;
-                OnDataUpdated();
             }
         }
 

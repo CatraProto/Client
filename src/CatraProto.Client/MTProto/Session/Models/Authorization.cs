@@ -44,7 +44,6 @@ namespace CatraProto.Client.MTProto.Session.Models
                 _userId = userId;
                 _dcId = dcId;
                 _asyncSignaler.SetSignal(authorized == LoginState.LoggedIn);
-                OnDataUpdated();
             }
         }
 
