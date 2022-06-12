@@ -107,7 +107,7 @@ namespace CatraProto.Client.ApiManagers
             }
 
             _logger.Information("Sending authorization code to {Number}", phoneNumber);
-            var auth = await _client.Api.CloudChatsApi.Auth.SendCodeAsync(phoneNumber, _clientSettings.ApiSettings.ApiId, _clientSettings.ApiSettings.ApiHash, codeSettings, cancellationToken: cancellationToken);
+            var auth = await _client.Api.CloudChatsApi.Auth.InternalSendCodeAsync(phoneNumber, _clientSettings.ApiSettings.ApiId, _clientSettings.ApiSettings.ApiHash, codeSettings, cancellationToken: cancellationToken);
             if (auth.RpcCallFailed)
             {
                 if (auth.Error.ErrorMessage == "AUTH_RESTART")
@@ -138,7 +138,7 @@ namespace CatraProto.Client.ApiManagers
                 return null;
             }
 
-            var auth = await _client.Api.CloudChatsApi.Auth.ImportBotAuthorizationAsync(0, _clientSettings.ApiSettings.ApiId, _clientSettings.ApiSettings.ApiHash, token, cancellationToken: cancellationToken);
+            var auth = await _client.Api.CloudChatsApi.Auth.InternalImportBotAuthorizationAsync(0, _clientSettings.ApiSettings.ApiId, _clientSettings.ApiSettings.ApiHash, token, cancellationToken: cancellationToken);
             if (auth.RpcCallFailed)
             {
                 SetCurrentState(LoginState.AwaitingLogin);
@@ -173,7 +173,7 @@ namespace CatraProto.Client.ApiManagers
             }
 
             _logger.Information("Trying to sign-in using code {Code}", loginCode);
-            var query = await _client.Api.CloudChatsApi.Auth.SignInAsync(_phoneData.PhoneNumber, _phoneData.PhoneHash, loginCode, cancellationToken: cancellationToken);
+            var query = await _client.Api.CloudChatsApi.Auth.InternalSignInAsync(_phoneData.PhoneNumber, _phoneData.PhoneHash, loginCode, cancellationToken: cancellationToken);
             if (query.RpcCallFailed)
             {
                 if (query.Error.ErrorMessage == "SESSION_PASSWORD_NEEDED")
@@ -192,7 +192,7 @@ namespace CatraProto.Client.ApiManagers
             }
 
             switch (query.Response)
-            
+            {
                 case TL.Schemas.CloudChats.Auth.Authorization authorization when authorization.User is User user:
                     SetLoggedIn(user, query.ExecutionInfo.ExecutedBy.DcId, authorization.User.Id);
                     return null;
@@ -229,7 +229,7 @@ namespace CatraProto.Client.ApiManagers
                 return null;
             }
 
-            var r = await _client.Api.CloudChatsApi.Auth.ResendCodeAsync(_phoneData.PhoneNumber, _phoneData.PhoneHash);
+            var r = await _client.Api.CloudChatsApi.Auth.InternalResendCodeAsync(_phoneData.PhoneNumber, _phoneData.PhoneHash);
             if (r.RpcCallFailed)
             {
                 return r.Error;
@@ -249,7 +249,7 @@ namespace CatraProto.Client.ApiManagers
                 return null;
             }
 
-            var rpcQuery = await _client.Api.CloudChatsApi.Auth.SignUpAsync(_phoneData.PhoneNumber, _phoneData.PhoneHash, firstName, lastName, cancellationToken: cancellationToken);
+            var rpcQuery = await _client.Api.CloudChatsApi.Auth.InternalSignUpAsync(_phoneData.PhoneNumber, _phoneData.PhoneHash, firstName, lastName, cancellationToken: cancellationToken);
             if (rpcQuery.RpcCallFailed)
             {
                 SetCurrentState(LoginState.AwaitingLogin);
@@ -289,7 +289,7 @@ namespace CatraProto.Client.ApiManagers
                 return computedSrp.Error;
             }
 
-            var checkPasswordResult = await _client.Api.CloudChatsApi.Auth.CheckPasswordAsync(computedSrp.Response, cancellationToken: cancellationToken);
+            var checkPasswordResult = await _client.Api.CloudChatsApi.Auth.InternalCheckPasswordAsync(computedSrp.Response, cancellationToken: cancellationToken);
             if (checkPasswordResult.RpcCallFailed)
             {
                 if (checkPasswordResult.Error.ErrorMessage == "PASSWORD_HASH_INVALID")
@@ -318,7 +318,7 @@ namespace CatraProto.Client.ApiManagers
                 }
 
                 _logger.Error("An error occurred while checking password. Logging out... Error: {Error}", checkPasswordResult.Error);
-                var logOut = await _client.Api.CloudChatsApi.Auth.LogOutAsync(cancellationToken: cancellationToken);
+                var logOut = await _client.Api.CloudChatsApi.Auth.InternalLogOutAsync(cancellationToken: cancellationToken);
                 if (logOut.RpcCallFailed)
                 {
                     _logger.Error("Could not log out due to error: {Error}", logOut);
@@ -361,7 +361,7 @@ namespace CatraProto.Client.ApiManagers
             else
             {
                 _logger.Information("Terms of service declined, logging out...");
-                var logOut = await _client.Api.CloudChatsApi.Auth.LogOutAsync(cancellationToken: cancellationToken);
+                var logOut = await _client.Api.CloudChatsApi.Auth.InternalLogOutAsync(cancellationToken: cancellationToken);
                 if (logOut.RpcCallFailed)
                 {
                     _logger.Error("Could not log out due to error: {Error}", logOut);
@@ -381,7 +381,7 @@ namespace CatraProto.Client.ApiManagers
                 return null;
             }
 
-            var req = await _client.Api.CloudChatsApi.Auth.LogOutAsync(cancellationToken: token);
+            var req = await _client.Api.CloudChatsApi.Auth.InternalLogOutAsync(cancellationToken: token);
             if (req.RpcCallFailed)
             {
                 return req.Error;

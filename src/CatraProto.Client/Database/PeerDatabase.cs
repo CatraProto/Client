@@ -196,7 +196,7 @@ namespace CatraProto.Client.Database
                 }
                 else
                 {
-                    //Self, Contact, MutualContact, Deleted, Bot, BotChatHistory, BotNochats, Verified, Restricted, Min, BotInlineGeo, Support, Scam, ApplyMinPhoto are boolean flags
+                    //Self, Contact, MutualContact, Deleted, Bot, BotChatHistory, BotNochats, Verified, Restricted, Min, BotInlineGeo, Support, Scam, ApplyMinPhoto, BotAttachMenu are boolean flags
                     var storedObject = (User)fromDb!.Object!;
                     if (user.Flags != storedObject.Flags || user.Username != storedObject.Username || user.AccessHash != storedObject.AccessHash || user.LastName != storedObject.LastName || user.FirstName != storedObject.FirstName
                         || user.Phone != storedObject.Phone || user.LangCode != storedObject.LangCode || user.BotInfoVersion != storedObject.BotInfoVersion || user.BotInlinePlaceholder != storedObject.BotInlinePlaceholder
@@ -314,7 +314,7 @@ namespace CatraProto.Client.Database
                     {
                         if (fromDb!.Object is Chat storedChat)
                         {
-                            //Creator, Kicked, Left, Deactivated, CallActive, CallNotEmpty, Noforwards are boolean-flags
+                            //Creator, Left, Deactivated, CallActive, CallNotEmpty, Noforwards are boolean-flags
                             if (receivedChat.Flags != storedChat.Flags || receivedChat.Date != storedChat.Date || receivedChat.Title != storedChat.Title || receivedChat.MigratedTo != storedChat.MigratedTo)
                             {
                                 pushToDb = true;
