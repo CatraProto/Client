@@ -40,6 +40,7 @@ namespace CatraProto.Client.MTProto.Session.Models
         {
             lock (Mutex)
             {
+                _loginState = authorized;
                 _userId = userId;
                 _dcId = dcId;
                 _asyncSignaler.SetSignal(authorized == LoginState.LoggedIn);
