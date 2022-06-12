@@ -443,7 +443,7 @@ namespace CatraProto.Client.ApiManagers
         {
             lock (_stateMutex)
             {
-                _logger.Information("Successfully logged in!")
+                _logger.Information("Successfully logged in! Current user: {User}", user.ToJson());
                 _client.UpdatesReceiver.ForceGetDifferenceAllAsync(false);
                 _sessionData.Authorization.SetAuthorized(LoginState.LoggedIn, dcId, userId);
             }
