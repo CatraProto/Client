@@ -159,9 +159,8 @@ namespace CatraProto.Client.ApiManagers
                 return null;
             }
 
-            _sessionData.Authorization.SetAuthorized(LoginState.LoggedIn, auth.ExecutionInfo.ExecutedBy.DcId, castedUser.Id);
-            _logger.Information("Successfully logged in as @{BotUsername}", castedUser.Username);
-            SetCurrentState(LoginState.LoggedIn);
+
+            SetLoggedIn(castedUser, auth.ExecutionInfo.ExecutedBy.DcId, castedUser.Id);
             return null;
         }
 
@@ -193,11 +192,9 @@ namespace CatraProto.Client.ApiManagers
             }
 
             switch (query.Response)
-            {
+            
                 case TL.Schemas.CloudChats.Auth.Authorization authorization when authorization.User is User user:
-                    _logger.Information("Successfully logged in as user {User}", user.ToJson());
-                    _sessionData.Authorization.SetAuthorized(LoginState.LoggedIn, query.ExecutionInfo.ExecutedBy.DcId, authorization.User.Id);
-                    SetCurrentState(LoginState.LoggedIn);
+                    SetLoggedIn(user, query.ExecutionInfo.ExecutedBy.DcId, authorization.User.Id);
                     return null;
                 case TL.Schemas.CloudChats.Auth.Authorization authorization when authorization.User is not User:
                     _logger.Error("Received invalid user {User} object in authorization constructor", authorization.User);
@@ -273,9 +270,7 @@ namespace CatraProto.Client.ApiManagers
                 return null;
             }
 
-            _logger.Information("Successfully registered user {User}", castedUser.ToJson());
-            _sessionData.Authorization.SetAuthorized(LoginState.LoggedIn, rpcQuery.ExecutionInfo.ExecutedBy.DcId, castedUser.Id);
-            SetCurrentState(LoginState.LoggedIn);
+            SetLoggedIn(castedUser, rpcQuery.ExecutionInfo.ExecutedBy.DcId, castedUser.Id);
             return null;
         }
 
@@ -347,9 +342,7 @@ namespace CatraProto.Client.ApiManagers
                 return null;
             }
 
-            _sessionData.Authorization.SetAuthorized(LoginState.LoggedIn, checkPasswordResult.ExecutionInfo.ExecutedBy.DcId, authorization.User.Id);
-            _logger.Information("Successfully logged in as user {User}", castedUser.ToJson());
-            SetCurrentState(LoginState.LoggedIn);
+            SetLoggedIn(castedUser, checkPasswordResult.ExecutionInfo.ExecutedBy.DcId, castedUser.Id);
             return null;
         }
 
@@ -444,6 +437,16 @@ namespace CatraProto.Client.ApiManagers
             _passwordAuthenticator = new PasswordAuthenticator((Password)passwordData.Response, _logger);
             _passwordHint = ((Password)passwordData.Response).Hint;
             return null;
+        }
+
+        private void SetLoggedIn(User user, int dcId, long userId)
+        {
+            lock (_stateMutex)
+            {
+                _logger.Information("Successfully logged in!")
+                _client.UpdatesReceiver.ForceGetDifferenceAllAsync(false);
+                _sessionData.Authorization.SetAuthorized(LoginState.LoggedIn, dcId, userId);
+            }
         }
 
         private void SetCurrentState(LoginState newState)
