@@ -146,6 +146,7 @@ namespace CatraProto.TL.Generator.CodeGeneration.Optimization
 
                 if (matched)
                 {
+                    method.IsHidden = true;
                     optimizedMethod.NamingInfo = method.NamingInfo.OriginalName;
                     optimizedMethod.NamingInfo.OriginalNamespacedName = method.NamingInfo.OriginalNamespacedName;
                     optimizedMethod.Type = method.Type;

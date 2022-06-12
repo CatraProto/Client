@@ -367,7 +367,6 @@ namespace CatraProto.Client.Updates
                 _commonLoop.Processor.AddUpdateToQueue(new UpdatesTooLong());
                 var commonTask = _commonLoop.Controller.ResumeAndSuspendAsync();
                 return waitCompletion ? commonTask : Task.CompletedTask;
-              
             }
         }
 

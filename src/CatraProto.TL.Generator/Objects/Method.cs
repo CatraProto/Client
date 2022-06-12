@@ -37,12 +37,21 @@ namespace CatraProto.TL.Generator.Objects
             "messages.getChats",
             "messages.getFullChat",
             "channels.getChannels",
-            "channels.getFullChannel"
+            "channels.getFullChannel",
+            "auth.signIn", 
+            "auth.signUp", 
+            "auth.resendCode", 
+            "auth.sendCode", 
+            "auth.checkPassword",
+            "auth.logOut",
+            "auth.importBotAuthorization",
+            "auth.bindTempAuthkey"
         };
 
         public bool ReturnsVector { get; set; }
         public MethodCompletionType MethodCompletionType { get; }
-        public bool IsOptimized { get; set; } = false;
+        public bool IsOptimized { get; set; }
+        public bool IsHidden { get; set; }
 
         public Method(MethodCompletionType methodCompletionType)
         {
@@ -79,7 +88,7 @@ namespace CatraProto.TL.Generator.Objects
             }
 
             var comma = args.Length == 0 ? "" : ",";
-            var isInternal = HiddenMethods.Contains(NamingInfo.OriginalNamespacedName);
+            var isInternal = HiddenMethods.Contains(NamingInfo.OriginalNamespacedName) || IsHidden;
             var acc = isInternal ? "internal" : "public";
             var name = isInternal ? "Internal" + NamingInfo.PascalCaseName : NamingInfo.PascalCaseName;
             builder.AppendLine($"{acc} async Task<RpcResponse<{returnType}>> {name}Async({args}{comma} CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)\n{StringTools.TwoTabs}{{");
