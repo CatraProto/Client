@@ -82,8 +82,8 @@ namespace CatraProto.Client.Crypto
                 return false;
             }
 
-            BigInteger d = number - 1;
-            int s = 0;
+            var d = number - 1;
+            var s = 0;
 
             while (d % 2 == 0)
             {
@@ -92,7 +92,7 @@ namespace CatraProto.Client.Crypto
             }
 
             BigInteger a;
-            for (int i = 0; i < certainty; i++)
+            for (var i = 0; i < certainty; i++)
             {
                 do
                 {
@@ -100,13 +100,13 @@ namespace CatraProto.Client.Crypto
                 }
                 while (a < 2 || a >= number - 2);
 
-                BigInteger x = BigInteger.ModPow(a, d, number);
+                var x = BigInteger.ModPow(a, d, number);
                 if (x == 1 || x == number - 1)
                 {
                     continue;
                 }
 
-                for (int r = 1; r < s; r++)
+                for (var r = 1; r < s; r++)
                 {
                     x = BigInteger.ModPow(x, 2, number);
                     if (x == 1)

@@ -17,7 +17,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Security.Cryptography;
@@ -131,7 +130,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
                 var b = BigIntegerTools.GenerateBigInt(2048, true, true);
                 var dhPrime = new BigInteger(serverDhInnerData.DhPrime, true, true);
 
-                if(!Crypto.MTProto.CheckCyclicSubgroup(dhPrime, serverDhInnerData.G, _logger))
+                if (!Crypto.MTProto.CheckCyclicSubgroup(dhPrime, serverDhInnerData.G, _logger))
                 {
                     _logger.Error("Cyclic subgroup failed. DhPrime: {DhPrime}, G: {G}", dhPrime, serverDhInnerData.G);
                     return null;
@@ -150,7 +149,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
                     return null;
                 }
 
-                if(!CheckGABLength(ga, dhPrime, "g_a") || !CheckGABLength(gb, dhPrime, "g_b"))
+                if (!CheckGABLength(ga, dhPrime, "g_a") || !CheckGABLength(gb, dhPrime, "g_b"))
                 {
                     return null;
                 }

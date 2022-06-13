@@ -166,7 +166,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
 
             var messagesCount = getUnanswered.Count();
             var iteratedOver = 0;
-            foreach(var message in getUnanswered)
+            foreach (var message in getUnanswered)
             {
                 _logger.Information("Resending message {Message}", message.Body);
                 iteratedOver++;

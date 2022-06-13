@@ -40,7 +40,7 @@ namespace CatraProto.Client.Tools
             lock (_mutex)
             {
                 _currentlyWaiting = false;
-                if(_queuedTasks.Count > 0)
+                if (_queuedTasks.Count > 0)
                 {
                     Invoke(_queuedTasks.Dequeue());
                 }

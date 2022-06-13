@@ -27,7 +27,7 @@ namespace CatraProto.Client.MTProto.Settings
         public DatabaseSettings(string path, uint peerCacheSize = 50)
         {
             var dbName = System.IO.Path.GetFileName(path) + System.IO.Path.GetExtension(path);
-            if(dbName == string.Empty)
+            if (dbName == string.Empty)
             {
                 throw new InvalidOperationException("Invalid file name specified");
             }

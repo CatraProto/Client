@@ -37,7 +37,7 @@ namespace CatraProto.Client.Updates
                 default:
                     return updateBase;
             }
-        } 
+        }
 
         public static UpdateBase FromMessageToUpdate(MessageBase messageBase)
         {
@@ -176,7 +176,7 @@ namespace CatraProto.Client.Updates
         {
             return chatBase switch
             {
-                Chat chat => !(chat.Kicked || chat.Left),
+                Chat chat => !chat.Left,
                 ChatEmpty => false,
                 ChatForbidden => false,
                 Channel channel => !channel.Left,

@@ -16,9 +16,6 @@ You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
-using System.Security.Cryptography;
 using CatraProto.Client.TL;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL;
@@ -32,11 +29,11 @@ namespace CatraProto.Client.MTProto.Deserializers
     internal class MsgContainerDeserializer : IObjectParser
     {
         private readonly ILogger? _logger;
-        public MsgContainerDeserializer (ILogger? logger = null)
+        public MsgContainerDeserializer(ILogger? logger = null)
         {
-            if(logger is not null)
+            if (logger is not null)
             {
-                logger = logger.ForContext<MsgContainer>(); 
+                logger = logger.ForContext<MsgContainer>();
             }
 
             _logger = logger;

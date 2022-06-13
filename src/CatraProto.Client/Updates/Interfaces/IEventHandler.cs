@@ -24,7 +24,7 @@ namespace CatraProto.Client.Updates.Interfaces
 {
     public interface IEventHandler
     {
-        public Task OnSessionUpdateAsync(LoginState loginState); 
+        public Task OnSessionUpdateAsync(LoginState loginState);
         public Task OnUpdateAsync(UpdateBase update);
     }
 }

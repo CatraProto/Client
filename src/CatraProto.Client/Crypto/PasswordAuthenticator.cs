@@ -64,7 +64,7 @@ namespace CatraProto.Client.Crypto
             {
                 return RpcResponse<InputCheckPasswordSRP>.FromError(new InvalidDataError("Invalid password algorithm"));
             }
-            
+
             if (_password.SrpId is null)
             {
                 return RpcResponse<InputCheckPasswordSRP>.FromError(new InvalidDataError("SrpId missing"));
@@ -91,16 +91,16 @@ namespace CatraProto.Client.Crypto
 
             var k = SHA256.HashData(algo.P.Concat(gPadded).ToArray());
             var u = SHA256.HashData(gaAsBytes.Concat(gbPadded).ToArray());
-            
+
             var uAsBig = new BigInteger(u, true, true);
             var x = DoSecondaryPasswordHash(password, algo.Salt1, algo.Salt2);
-            
+
             var xAsBig = new BigInteger(x, true, true);
-            
+
             var v = BigInteger.ModPow(g, xAsBig, p);
             var kv = new BigInteger(k, true, true) * v % p;
             var t = (new BigInteger(gb, true, true) - kv) % p;
-            if(t.Sign == -1)
+            if (t.Sign == -1)
             {
                 t += p;
             }
@@ -123,7 +123,7 @@ namespace CatraProto.Client.Crypto
 
         private static byte[] FillUntil(byte[] source, int finalLength, bool first)
         {
-            if(source.Length >= finalLength)
+            if (source.Length >= finalLength)
             {
                 return source;
             }

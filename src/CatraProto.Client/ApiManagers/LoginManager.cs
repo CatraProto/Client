@@ -31,10 +31,10 @@ using CatraProto.Client.TL.Schemas.CloudChats.Account;
 using CatraProto.Client.TL.Schemas.CloudChats.Auth;
 using CatraProto.Client.TL.Schemas.CloudChats.Help;
 using CatraProto.Client.TL.Schemas.CloudChats.Langpack;
-using MTP = CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.Client.Tools;
 using CatraProto.TL.Interfaces;
 using Serilog;
+using MTP = CatraProto.Client.TL.Schemas.MTProto;
 
 namespace CatraProto.Client.ApiManagers
 {
@@ -243,7 +243,7 @@ namespace CatraProto.Client.ApiManagers
 
         public async Task<RpcError?> UseProfileDataAsync(string firstName, string lastName, CancellationToken cancellationToken = default)
         {
-            if(GetCurrentState() is not LoginState.AwaitingRegistration || _phoneData is null)
+            if (GetCurrentState() is not LoginState.AwaitingRegistration || _phoneData is null)
             {
                 _logger.Warning("Skipping RegisterUserAsync because state is not AwaitingRegistration");
                 return null;
@@ -453,20 +453,20 @@ namespace CatraProto.Client.ApiManagers
         {
             lock (_stateMutex)
             {
-                if(_currentState >= LoginState.LoggedOut)
+                if (_currentState >= LoginState.LoggedOut)
                 {
                     return;
                 }
 
                 _currentState = newState;
                 var ev = _client.EventHandler;
-                if(ev is not null)
+                if (ev is not null)
                 {
                     _sequentialInvoker.Invoke(() => ev.OnSessionUpdateAsync(newState));
                 }
 
                 // Won't save other states because they might not be valid and most of them require AwaitingLogin to be sent, if the client saves at the wrong time things could go wrong
-                if(_currentState >= LoginState.LoggedOut)
+                if (_currentState >= LoginState.LoggedOut)
                 {
                     _sessionData.Authorization.SetAuthorized(_currentState, null, null);
                 }
@@ -501,19 +501,19 @@ namespace CatraProto.Client.ApiManagers
                 {
                     SetCurrentState(LoginState.SessionRevoked);
                 }
-                else if(error.ErrorMessage == "AUTH_KEY_DROP_DUPLICATED")
+                else if (error.ErrorMessage == "AUTH_KEY_DROP_DUPLICATED")
                 {
                     SetCurrentState(LoginState.KeyDuplicated);
                 }
-                else if(error.ErrorMessage == "ACCOUNT_BANNED")
+                else if (error.ErrorMessage == "ACCOUNT_BANNED")
                 {
                     SetCurrentState(LoginState.AccountBanned);
                 }
-                else if(error.ErrorMessage == "USER_DEACTIVATED")
+                else if (error.ErrorMessage == "USER_DEACTIVATED")
                 {
                     SetCurrentState(LoginState.AccountDeactivated);
                 }
-                else if(error.ErrorMessage == "SESSION_EXPIRED")
+                else if (error.ErrorMessage == "SESSION_EXPIRED")
                 {
                     SetCurrentState(LoginState.SessionRevoked);
                 }

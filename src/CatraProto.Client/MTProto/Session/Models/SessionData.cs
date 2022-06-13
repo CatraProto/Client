@@ -23,7 +23,7 @@ using CatraProto.TL;
 
 namespace CatraProto.Client.MTProto.Session.Models
 {
-    enum SessionVersion
+    internal enum SessionVersion
     {
         BaseVersion = 1,
         NewAuthorization,

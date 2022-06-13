@@ -51,7 +51,7 @@ namespace CatraProto.Client
         {
             get => _randomIdHandler ?? throw new InvalidOperationException("Please call InitClientAsync first");
         }
-        
+
         public LoginManager LoginManager { get; }
         internal ConfigManager ConfigManager { get; }
         internal DatabaseManager DatabaseManager { get; }

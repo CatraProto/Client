@@ -69,7 +69,7 @@ namespace CatraProto.Client.Connections
                     }
                 }
 
-                if(pfsSeconds.TotalSeconds > _clientSettings.ConnectionSettings.PfsKeyDuration)
+                if (pfsSeconds.TotalSeconds > _clientSettings.ConnectionSettings.PfsKeyDuration)
                 {
                     pfsSeconds = TimeSpan.FromSeconds(_clientSettings.ConnectionSettings.PfsKeyDuration);
                 }

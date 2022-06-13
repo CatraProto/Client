@@ -145,7 +145,7 @@ namespace CatraProto.Client.Connections.Loop
                         break;
                     }
 
-                    if(messageItem.Body is IMethod method && !LoginManager.CanBeUnauthenticated(method) && _mtProtoState.Client.LoginManager.GetCurrentState() is not LoginState.LoggedIn)
+                    if (messageItem.Body is IMethod method && !LoginManager.CanBeUnauthenticated(method) && _mtProtoState.Client.LoginManager.GetCurrentState() is not LoginState.LoggedIn)
                     {
                         _logger.Information("Postponing {Body} because we are not authorized", method);
                         continue;

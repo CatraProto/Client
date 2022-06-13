@@ -59,7 +59,7 @@ namespace CatraProto.Client.MTProto.Session
                         {
                             SessionData.Read(reader);
                         }
-                        catch(Exception e)
+                        catch (Exception e)
                         {
                             _logger.Error(e, "Failed to deserialize session");
                             return false;

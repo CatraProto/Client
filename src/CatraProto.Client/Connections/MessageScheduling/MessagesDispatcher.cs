@@ -36,7 +36,6 @@ using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Interfaces.Deserializers;
 using Serilog;
-using System.IO;
 namespace CatraProto.Client.Connections.MessageScheduling
 {
     internal class MessagesDispatcher
@@ -193,7 +192,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
                 _logger.Information("Discarding message {Message} because it's a duplicate", connectionMessage.MessageId);
                 return false;
             }
-            else if(messageValidity is MessageValidity.TooOld)
+            else if (messageValidity is MessageValidity.TooOld)
             {
                 _logger.Information("Resetting session because message id {MessageId} is too old");
                 ResetSession();

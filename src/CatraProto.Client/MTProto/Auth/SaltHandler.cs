@@ -19,11 +19,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 using System;
 using System.Collections.Concurrent;
 using System.Threading;
-using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.Connections;
+using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.TL.Schemas.MTProto;
 using Serilog;
-using CatraProto.Client.Connections.MessageScheduling.Enums;
 
 namespace CatraProto.Client.MTProto.Auth
 {
@@ -32,7 +31,7 @@ namespace CatraProto.Client.MTProto.Auth
         // Concurrent dictionary is used here because it allows to be modified even while iterating, avoiding to create a copy of the dictionary each time GetSalt or AddReceivedSalts is called
         private readonly ConcurrentDictionary<long, FutureSaltBase> _futureSalts = new ConcurrentDictionary<long, FutureSaltBase>();
         private readonly MTProtoState _mtProtoState;
-        private object _mutex = new object();
+        private readonly object _mutex = new object();
         private readonly ILogger _logger;
         private bool _requestingSalts;
 

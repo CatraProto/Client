@@ -90,10 +90,10 @@ namespace CatraProto.Client.MTProto.Session.Models
                         reader.ReadInt64();
                     }
                 }
-                else if (version is SessionVersion.NewAuthorization) 
+                else if (version is SessionVersion.NewAuthorization)
                 {
                     _loginState = (LoginState)reader.ReadInt32().Value;
-                    if(_loginState is LoginState.LoggedIn)
+                    if (_loginState is LoginState.LoggedIn)
                     {
                         _userId = reader.ReadInt64().Value;
                         _dcId = reader.ReadInt32().Value;

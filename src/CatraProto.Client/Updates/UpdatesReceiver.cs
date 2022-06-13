@@ -21,7 +21,6 @@ using System.Threading.Tasks;
 using CatraProto.Client.Async.Loops;
 using CatraProto.Client.Async.Loops.Enums.Resumable;
 using CatraProto.Client.Async.Loops.Extensions;
-using CatraProto.Client.Connections.MessageScheduling.Enums;
 using CatraProto.Client.MTProto.Session.Models;
 using CatraProto.Client.TL.Schemas.CloudChats;
 using CatraProto.Client.TL.Schemas.CloudChats.Messages;
@@ -53,11 +52,11 @@ namespace CatraProto.Client.Updates
         public void OnNewUpdates(IObject socketObject, IMethod? callingMethod = null)
         {
             var localSeq = _commonSequence.GetData().seq;
-            if(socketObject is UpdateRedirect redirect)
+            if (socketObject is UpdateRedirect redirect)
             {
                 socketObject = redirect.Update;
             }
-            
+
             _logger.Information("Received new update {Update}", socketObject);
             if (socketObject is UpdatesBase updatesBase)
             {
@@ -326,7 +325,7 @@ namespace CatraProto.Client.Updates
 
                     tuple.Controller.SendSignal(ResumableSignalState.Start, out _);
                     tuple.Controller.SendSignal(ResumableSignalState.Suspend, out _);
-                    
+
                     if (forceFetchOnCreate)
                     {
                         _logger.Information("Forcing get difference on channel {Id}", channelId);

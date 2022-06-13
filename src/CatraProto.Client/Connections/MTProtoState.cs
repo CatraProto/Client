@@ -16,10 +16,6 @@ You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-using System.Threading.Tasks;
-using CatraProto.Client.Async.Loops;
-using CatraProto.Client.Async.Loops.Enums.Generic;
-using CatraProto.Client.Async.Loops.Extensions;
 using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.Crypto;
 using CatraProto.Client.MTProto.Auth;
