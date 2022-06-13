@@ -24,7 +24,7 @@ namespace CatraProto.Client.MTProto.Rpc.RpcErrors
     {
         public override string ErrorDescription
         {
-            get => "This RPC error hasn't been documented yet";
+            get => "Unknown error";
         }
 
         public UnknownError(string errorMessage, int errorCode) : base(errorMessage, errorCode)

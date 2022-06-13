@@ -26,7 +26,7 @@ namespace CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors
         public long Id { get; }
         public PeerType Type { get; }
 
-        public PeerNotFoundError(long id, PeerType peerType) : base("PEER_NOT_FOUND", -10404)
+        public PeerNotFoundError(long id, PeerType peerType) : base("PEER_NOT_FOUND", 404)
         {
             Id = id;
             Type = peerType;

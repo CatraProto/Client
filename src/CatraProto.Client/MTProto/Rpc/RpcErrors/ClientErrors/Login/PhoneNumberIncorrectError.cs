@@ -23,7 +23,7 @@ namespace CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors.Login
     public class PhoneNumberIncorrectError : RpcError
     {
         public override string ErrorDescription { get; } = "Provided login code is incorrect";
-        internal PhoneNumberIncorrectError() : base("PHONE_NUMBER_INCORRECT", -10401)
+        internal PhoneNumberIncorrectError() : base("PHONE_NUMBER_INCORRECT", 401)
         {
         }
     }

@@ -24,7 +24,7 @@ namespace CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors
     {
         public override string ErrorDescription { get; } = "Invalid type specified or received by the server";
 
-        public InvalidTypeError() : base("INVALID_TYPE_ERROR", -10400)
+        public InvalidTypeError() : base("INVALID_TYPE_ERROR", 400)
         {
         }
     }

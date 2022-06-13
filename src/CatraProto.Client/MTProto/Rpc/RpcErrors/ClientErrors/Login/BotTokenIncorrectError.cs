@@ -23,7 +23,7 @@ namespace CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors.Login
     public class BotTokenIncorrectError : RpcError
     {
         public override string ErrorDescription { get; } = "Provided bot token is incorrect";
-        internal BotTokenIncorrectError() : base("BOT_TOKEN_INCORRECT", -10401)
+        internal BotTokenIncorrectError() : base("BOT_TOKEN_INCORRECT", 401)
         {
         }
     }

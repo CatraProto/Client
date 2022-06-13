@@ -24,7 +24,7 @@ namespace CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors
     {
         public override string ErrorDescription { get; }
 
-        public InvalidDataError(string errorDescription) : base("INVALID_DATA_ERROR", -10400)
+        public InvalidDataError(string errorDescription) : base("INVALID_DATA_ERROR", 400)
         {
             ErrorDescription = errorDescription;
         }

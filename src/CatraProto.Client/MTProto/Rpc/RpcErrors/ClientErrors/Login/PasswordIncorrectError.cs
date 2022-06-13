@@ -23,7 +23,7 @@ namespace CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors.Login
     public class PasswordIncorrectError : RpcError
     {
         public override string ErrorDescription { get; } = "Provided 2FA password is incorrect";
-        internal PasswordIncorrectError() : base("PASSWORD_INCORRECT", -10401)
+        internal PasswordIncorrectError() : base("PASSWORD_INCORRECT", 401)
         {
         }
     }

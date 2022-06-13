@@ -24,7 +24,7 @@ namespace CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors
     {
         public override string ErrorDescription { get; }
 
-        internal SerializationFailedError(string parserError) : base("SERIALIZATION_FAILED", -10400)
+        internal SerializationFailedError(string parserError) : base("SERIALIZATION_FAILED", 400)
         {
             ErrorDescription = parserError;
         }

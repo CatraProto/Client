@@ -23,7 +23,7 @@ namespace CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors
     internal class UnauthorizedUserError : RpcError
     {
         public override string ErrorDescription { get; } = "This method cannot be called unless the instance is authorized";
-        public UnauthorizedUserError() : base("UNAUTHORIZED_USER", -10401)
+        public UnauthorizedUserError() : base("UNAUTHORIZED_USER", 401)
         {
         }
     }
