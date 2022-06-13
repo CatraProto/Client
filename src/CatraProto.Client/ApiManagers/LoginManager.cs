@@ -148,12 +148,11 @@ namespace CatraProto.Client.ApiManagers
             if (auth.RpcCallFailed)
             {
                 _logger.Information("Received {Error} after calling auth.importBotAuthorization", auth.Error);
-                if(auth.Error.ErrorMessage == "ACCESS_TOKEN_INVALID")
+                SetCurrentState(LoginState.AwaitingLogin);
+                if (auth.Error.ErrorMessage == "ACCESS_TOKEN_INVALID")
                 {
                     return new BotTokenIncorrectError();
                 }
-
-                SetCurrentState(LoginState.AwaitingLogin);
                 return auth.Error;
             }
 
