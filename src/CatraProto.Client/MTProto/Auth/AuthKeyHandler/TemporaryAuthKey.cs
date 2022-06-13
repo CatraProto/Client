@@ -95,7 +95,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
             var res = await _mtProtoState.Api.CloudChatsApi.Auth.BindTempAuthKeyAsync(permanentKey.AuthKeyId, innerData.Nonce, expiresAt, encryptedInnerData, messageOptions, token);
             if (res.RpcCallFailed)
             {
-                _logger.Error("Failed to bindTempAuthKey, resetting key...");
+                _logger.Error("Failed to bind authorization key. Error {error}", res.Error);
                 SetExpired();
                 return false;
             }

@@ -19,27 +19,28 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 using Serilog;
 using Serilog.Core;
 using Serilog.Templates;
+using Serilog.Templates.Themes;
 
 namespace CatraProto.Client
 {
     public static class Logger
     {
-        public static ExpressionTemplate ExpressionTemplate { get; }
+        public static string TemplateExpression { get; }
 
         static Logger()
         {
             var addContext = "[{Substring(SourceContext, LastIndexOf(SourceContext, '.') + 1)}]";
             var addConnection = "{#if Connection is not null} - {Connection}{#end}";
-            ExpressionTemplate = new ExpressionTemplate("({@t:HH:mm:ss} {@l:w4}) {Session} " + addContext + addConnection + " =>" + " {@m}{@x}" + "\n", theme: Serilog.Templates.Themes.TemplateTheme.Literate
-            );
+            TemplateExpression = "({@t:HH:mm:ss} {@l:w4}) {Session} " + addContext + addConnection + " =>" + " {@m}{@x}" + "\n";
         }
 
-        public static ILogger CreateDefaultLogger(LoggingLevelSwitch? levelSwitch = null)
+        public static ILogger CreateDefaultLogger(LoggingLevelSwitch? levelSwitch = null, TemplateTheme? theme = null)
         {
+            theme ??= TemplateTheme.Code;
             levelSwitch ??= new LoggingLevelSwitch();
             return new LoggerConfiguration()
                 .WriteTo
-                .Console(ExpressionTemplate)
+                .Console(new ExpressionTemplate(TemplateExpression, theme: theme))
                 .MinimumLevel
                 .ControlledBy(levelSwitch)
                 .CreateLogger();
