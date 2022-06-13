@@ -21,7 +21,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Crypto;
 using CatraProto.Client.MTProto.Rpc.Interfaces;
-using CatraProto.Client.MTProto.Rpc.RpcErrors;
 using CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors;
 using CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors.Login;
 using CatraProto.Client.MTProto.Session.Models;
@@ -362,12 +361,12 @@ namespace CatraProto.Client.ApiManagers
             return null;
         }
 
-        public async Task<RpcError?> SetTermsAsync(bool accept, CancellationToken cancellationToken = default)
+        public void SetTerms(bool accept)
         {
             if (GetCurrentState() is not LoginState.AwaitingTermsAcceptance || _termsOfService is null)
             {
                 _logger.Warning("Skipping SetTermsAsync because state is not AwaitingTermsAcceptance");
-                return null;
+                return;
             }
 
             if (accept)
@@ -376,24 +375,17 @@ namespace CatraProto.Client.ApiManagers
             }
             else
             {
-                _logger.Information("Terms of service declined, logging out...");
-                var logOut = await _client.Api.CloudChatsApi.Auth.InternalLogOutAsync(cancellationToken: cancellationToken);
-                if (logOut.RpcCallFailed)
-                {
-                    _logger.Error("Could not log out due to error: {Error}", logOut);
-                }
-
                 SetCurrentState(LoginState.AwaitingLogin);
             }
 
-            return null;
+            return;
         }
 
         public async Task<RpcError?> LogoutAsync(CancellationToken token = default)
         {
-            if (GetCurrentState() is not LoginState.AwaitingLogin)
+            if (GetCurrentState() is not LoginState.LoggedIn)
             {
-                _logger.Warning("Skipping LogoutAsync because state is not AwaitingLogin");
+                _logger.Warning("Skipping LogoutAsync because state is not LoggedIn");
                 return null;
             }
 
