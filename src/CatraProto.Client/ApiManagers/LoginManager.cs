@@ -23,6 +23,7 @@ using CatraProto.Client.Crypto;
 using CatraProto.Client.MTProto.Rpc.Interfaces;
 using CatraProto.Client.MTProto.Rpc.RpcErrors;
 using CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors;
+using CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors.Login;
 using CatraProto.Client.MTProto.Session.Models;
 using CatraProto.Client.MTProto.Settings;
 using CatraProto.Client.TL;
@@ -118,6 +119,11 @@ namespace CatraProto.Client.ApiManagers
 
                 _logger.Information("Send code failed because error {Error} occured", auth.Error);
                 SetCurrentState(LoginState.AwaitingLogin);
+                if(auth.Error.ErrorMessage == "PHONE_NUMBER_INVALID")
+                {
+                    return new PhoneNumberIncorrectError();
+                }
+
                 return auth.Error;
             }
             else
@@ -141,6 +147,12 @@ namespace CatraProto.Client.ApiManagers
             var auth = await _client.Api.CloudChatsApi.Auth.InternalImportBotAuthorizationAsync(0, _clientSettings.ApiSettings.ApiId, _clientSettings.ApiSettings.ApiHash, token, cancellationToken: cancellationToken);
             if (auth.RpcCallFailed)
             {
+                _logger.Information("Received {Error} after calling auth.importBotAuthorization", auth.Error);
+                if(auth.Error.ErrorMessage == "ACCESS_TOKEN_INVALID")
+                {
+                    return new BotTokenIncorrectError();
+                }
+
                 SetCurrentState(LoginState.AwaitingLogin);
                 return auth.Error;
             }
@@ -176,15 +188,16 @@ namespace CatraProto.Client.ApiManagers
             var query = await _client.Api.CloudChatsApi.Auth.InternalSignInAsync(_phoneData.PhoneNumber, _phoneData.PhoneHash, loginCode, cancellationToken: cancellationToken);
             if (query.RpcCallFailed)
             {
+                _logger.Information("Received {Error} after calling auth.signIn", query.Error);
                 if (query.Error.ErrorMessage == "SESSION_PASSWORD_NEEDED")
                 {
-                    var fetchResult = await FetchPasswordConfigAsync(cancellationToken);
-                    if (fetchResult is null)
-                    {
-                        SetCurrentState(LoginState.AwaitingPassword);
-                    }
+                    SetCurrentState(LoginState.AwaitingPassword);
+                    return null;
+                }
 
-                    return fetchResult;
+                if(query.Error.ErrorMessage == "PHONE_CODE_INVALID" || query.Error.ErrorMessage == "PHONE_CODE_EMPTY")
+                {
+                    return new PhoneCodeIncorrectError();
                 }
 
                 SetCurrentState(LoginState.AwaitingLogin);
@@ -232,6 +245,12 @@ namespace CatraProto.Client.ApiManagers
             var r = await _client.Api.CloudChatsApi.Auth.InternalResendCodeAsync(_phoneData.PhoneNumber, _phoneData.PhoneHash);
             if (r.RpcCallFailed)
             {
+                if(r.Error.ErrorMessage != "SEND_CODE_UNAVAILABLE")
+                {
+                    SetCurrentState(LoginState.AwaitingLogin);
+                }
+
+                _logger.Information("Received {Error} after calling auth.resendCode", r.Error);
                 return r.Error;
             }
 
@@ -276,13 +295,23 @@ namespace CatraProto.Client.ApiManagers
 
         public async Task<RpcError?> UsePasswordAsync(string password, CancellationToken cancellationToken = default)
         {
-            if (GetCurrentState() is not LoginState.AwaitingPassword || _passwordAuthenticator is null)
+            if (GetCurrentState() is not LoginState.AwaitingPassword)
             {
                 _logger.Warning("Skipping UsePasswordAsync because state is not AwaitingLogin");
                 return null;
             }
 
-            var computedSrp = _passwordAuthenticator.CheckPassword(Encoding.UTF8.GetBytes(password));
+            if(_passwordAuthenticator is null)
+            {
+                var fetchResult = await FetchPasswordConfigAsync(cancellationToken: cancellationToken);
+                if (fetchResult is not null)
+                {
+                    SetCurrentState(LoginState.AwaitingLogin);
+                    return fetchResult;
+                }
+            }
+
+            var computedSrp = _passwordAuthenticator!.CheckPassword(Encoding.UTF8.GetBytes(password));
             if (computedSrp.RpcCallFailed)
             {
                 SetCurrentState(LoginState.AwaitingLogin);
@@ -300,21 +329,9 @@ namespace CatraProto.Client.ApiManagers
 
                 if (checkPasswordResult.Error.ErrorMessage == "SRP_ID_INVALID")
                 {
+                    _passwordAuthenticator = null;
                     _logger.Information("SRP token has expired, refetching data and retrying request...");
-                    var fetchResult = await FetchPasswordConfigAsync(cancellationToken: cancellationToken);
-                    if (fetchResult is not null)
-                    {
-                        SetCurrentState(LoginState.AwaitingLogin);
-                        return fetchResult;
-                    }
-
                     return await UsePasswordAsync(password, cancellationToken);
-                }
-
-                if (checkPasswordResult.Error is FloodWaitError floodWait)
-                {
-                    _logger.Information("A wait of {Time} seconds is required before trying another password", floodWait.WaitTime.TotalSeconds);
-                    return checkPasswordResult.Error;
                 }
 
                 _logger.Error("An error occurred while checking password. Logging out... Error: {Error}", checkPasswordResult.Error);
@@ -391,7 +408,7 @@ namespace CatraProto.Client.ApiManagers
             return null;
         }
 
-        public (SentCodeTypeBase codeType, CodeTypeBase? nextCodeType)? GetCodeTypes()
+        public (SentCodeTypeBase CodeType, CodeTypeBase? NextCodeType)? GetCodeTypes()
         {
             if (GetCurrentState() is not LoginState.AwaitingCode || _phoneData is null)
             {
@@ -446,6 +463,7 @@ namespace CatraProto.Client.ApiManagers
                 _logger.Information("Successfully logged in! Current user: {User}", user.ToJson());
                 _client.UpdatesReceiver.ForceGetDifferenceAllAsync(false);
                 _sessionData.Authorization.SetAuthorized(LoginState.LoggedIn, dcId, userId);
+                SetCurrentState(LoginState.LoggedIn);
             }
         }
 
@@ -537,6 +555,7 @@ namespace CatraProto.Client.ApiManagers
                 case LogOut:
                 case GetCountriesList:
                 case SendCode:
+                case ResendCode:
                 case GetPassword:
                 case CheckPassword:
                 case SignUp:

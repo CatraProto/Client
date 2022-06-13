@@ -18,12 +18,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using CatraProto.Client.MTProto.Rpc.Interfaces;
 
-namespace CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors
+namespace CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors.Login
 {
-    public class PasswordIncorrectError : RpcError
+    public class BotTokenIncorrectError : RpcError
     {
-        public override string ErrorDescription { get; } = "Provided 2FA password is incorrect";
-        internal PasswordIncorrectError() : base("PASSWORD_INCORRECT", -10401)
+        public override string ErrorDescription { get; } = "Provided bot token is incorrect";
+        internal BotTokenIncorrectError() : base("BOT_TOKEN_INCORRECT", -10401)
         {
         }
     }
