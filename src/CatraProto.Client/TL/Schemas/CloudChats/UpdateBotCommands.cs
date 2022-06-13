@@ -123,6 +123,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             }
             newClonedObject.Peer = clonePeer;
             newClonedObject.BotId = BotId;
+            newClonedObject.Commands = new List<CatraProto.Client.TL.Schemas.CloudChats.BotCommandBase>();
             foreach (var commands in Commands)
             {
                 var clonecommands = (CatraProto.Client.TL.Schemas.CloudChats.BotCommandBase?)commands.Clone();

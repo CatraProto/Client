@@ -102,7 +102,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         {
             var newClonedObject = new SavedGifs
             {
-                Hash = Hash
+                Hash = Hash,
+                Gifs = new List<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>()
             };
             foreach (var gifs in Gifs)
             {

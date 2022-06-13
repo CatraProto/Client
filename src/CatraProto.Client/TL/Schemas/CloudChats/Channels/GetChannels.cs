@@ -93,7 +93,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new GetChannels();
+            var newClonedObject = new GetChannels
+            {
+                Id = new List<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>()
+            };
             foreach (var id in Id)
             {
                 var cloneid = (CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase?)id.Clone();

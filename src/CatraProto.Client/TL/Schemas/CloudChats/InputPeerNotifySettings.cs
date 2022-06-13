@@ -37,7 +37,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         }
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -1673717362; }
+        public static int ConstructorId { get => -551616469; }
 
         [Newtonsoft.Json.JsonIgnore]
         public int Flags { get; set; }
@@ -53,7 +53,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         [MaybeNull]
         [Newtonsoft.Json.JsonProperty("sound")]
-        public sealed override string Sound { get; set; }
+        public sealed override CatraProto.Client.TL.Schemas.CloudChats.NotificationSoundBase Sound { get; set; }
 
 
 
@@ -101,8 +101,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
             if (FlagsHelper.IsFlagSet(Flags, 3))
             {
-
-                writer.WriteString(Sound);
+                var checksound = writer.WriteObject(Sound);
+                if (checksound.IsError)
+                {
+                    return checksound;
+                }
             }
 
 
@@ -150,7 +153,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
             if (FlagsHelper.IsFlagSet(Flags, 3))
             {
-                var trysound = reader.ReadString();
+                var trysound = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.NotificationSoundBase>();
                 if (trysound.IsError)
                 {
                     return ReadResult<IObject>.Move(trysound);
@@ -180,9 +183,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 Flags = Flags,
                 ShowPreviews = ShowPreviews,
                 Silent = Silent,
-                MuteUntil = MuteUntil,
-                Sound = Sound
+                MuteUntil = MuteUntil
             };
+            if (Sound is not null)
+            {
+                var cloneSound = (CatraProto.Client.TL.Schemas.CloudChats.NotificationSoundBase?)Sound.Clone();
+                if (cloneSound is null)
+                {
+                    return null;
+                }
+                newClonedObject.Sound = cloneSound;
+            }
             return newClonedObject;
 
         }

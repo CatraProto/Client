@@ -54,7 +54,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.DialogsBase>> GetDialogsAsync(int offsetDate, int offsetId, CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase offsetPeer, int limit, long hash, bool excludePinned = false, int? folderId = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.DialogsBase>> InternalGetDialogsAsync(int offsetDate, int offsetId, CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase offsetPeer, int limit, long hash, bool excludePinned = false, int? folderId = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.DialogsBase>(
@@ -75,7 +75,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>> GetHistoryAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int offsetId, int offsetDate, int addOffset, int limit, int maxId, int minId, long hash, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>> InternalGetHistoryAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int offsetId, int offsetDate, int addOffset, int limit, int maxId, int minId, long hash, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>(
@@ -97,7 +97,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>> SearchAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, string q, CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase filter, int minDate, int maxDate, int offsetId, int addOffset, int limit, int maxId, int minId, long hash, CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase? fromId = null, int? topMsgId = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>> InternalSearchAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, string q, CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase filter, int minDate, int maxDate, int offsetId, int addOffset, int limit, int maxId, int minId, long hash, CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase? fromId = null, int? topMsgId = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>(
@@ -124,7 +124,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedMessagesBase>> ReadHistoryAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int maxId, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedMessagesBase>> InternalReadHistoryAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int maxId, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedMessagesBase>(
@@ -140,7 +140,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedHistoryBase>> DeleteHistoryAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int maxId, bool justClear = false, bool revoke = false, int? minDate = null, int? maxDate = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedHistoryBase>> InternalDeleteHistoryAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int maxId, bool justClear = false, bool revoke = false, int? minDate = null, int? maxDate = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedHistoryBase>(
@@ -192,7 +192,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<bool>> SetTypingAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.TL.Schemas.CloudChats.SendMessageActionBase action, int? topMsgId = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<bool>> InternalSetTypingAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.TL.Schemas.CloudChats.SendMessageActionBase action, int? topMsgId = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<bool>(
@@ -209,7 +209,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> SendMessageAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, string message, long randomId, bool noWebpage = false, bool silent = false, bool background = false, bool clearDraft = false, bool noforwards = false, int? replyToMsgId = null, CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase? replyMarkup = null, List<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>? entities = null, int? scheduleDate = null, CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase? sendAs = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> InternalSendMessageAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, string message, long randomId, bool noWebpage = false, bool silent = false, bool background = false, bool clearDraft = false, bool noforwards = false, int? replyToMsgId = null, CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase? replyMarkup = null, List<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>? entities = null, int? scheduleDate = null, CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase? sendAs = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
@@ -236,7 +236,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> SendMediaAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase media, string message, long randomId, bool silent = false, bool background = false, bool clearDraft = false, bool noforwards = false, int? replyToMsgId = null, CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase? replyMarkup = null, List<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>? entities = null, int? scheduleDate = null, CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase? sendAs = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> InternalSendMediaAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase media, string message, long randomId, bool silent = false, bool background = false, bool clearDraft = false, bool noforwards = false, int? replyToMsgId = null, CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase? replyMarkup = null, List<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>? entities = null, int? scheduleDate = null, CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase? sendAs = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
@@ -263,7 +263,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> ForwardMessagesAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase fromPeer, List<int> id, List<long> randomId, CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase toPeer, bool silent = false, bool background = false, bool withMyScore = false, bool dropAuthor = false, bool dropMediaCaptions = false, bool noforwards = false, int? scheduleDate = null, CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase? sendAs = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> InternalForwardMessagesAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase fromPeer, List<int> id, List<long> randomId, CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase toPeer, bool silent = false, bool background = false, bool withMyScore = false, bool dropAuthor = false, bool dropMediaCaptions = false, bool noforwards = false, int? scheduleDate = null, CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase? sendAs = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
@@ -289,7 +289,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<bool>> ReportSpamAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<bool>> InternalReportSpamAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<bool>(
@@ -304,7 +304,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.PeerSettingsBase>> GetPeerSettingsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.PeerSettingsBase>> InternalGetPeerSettingsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.PeerSettingsBase>(
@@ -319,7 +319,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<bool>> ReportAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, List<int> id, CatraProto.Client.TL.Schemas.CloudChats.ReportReasonBase reason, string message, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<bool>> InternalReportAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, List<int> id, CatraProto.Client.TL.Schemas.CloudChats.ReportReasonBase reason, string message, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<bool>(
@@ -399,7 +399,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> AddChatUserAsync(long chatId, CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId, int fwdLimit, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> InternalAddChatUserAsync(long chatId, CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId, int fwdLimit, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
@@ -416,7 +416,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> DeleteChatUserAsync(long chatId, CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId, bool revokeHistory = false, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> InternalDeleteChatUserAsync(long chatId, CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId, bool revokeHistory = false, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
@@ -433,7 +433,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> CreateChatAsync(List<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase> users, string title, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> InternalCreateChatAsync(List<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase> users, string title, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
@@ -465,7 +465,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.EncryptedChatBase>> RequestEncryptionAsync(CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId, int randomId, byte[] gA, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.EncryptedChatBase>> InternalRequestEncryptionAsync(CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId, int randomId, byte[] gA, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.EncryptedChatBase>(
@@ -547,7 +547,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.SentEncryptedMessageBase>> SendEncryptedAsync(CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedChatBase peer, long randomId, byte[] data, bool silent = false, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.SentEncryptedMessageBase>> InternalSendEncryptedAsync(CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedChatBase peer, long randomId, byte[] data, bool silent = false, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.SentEncryptedMessageBase>(
@@ -565,7 +565,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.SentEncryptedMessageBase>> SendEncryptedFileAsync(CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedChatBase peer, long randomId, byte[] data, CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedFileBase file, bool silent = false, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.SentEncryptedMessageBase>> InternalSendEncryptedFileAsync(CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedChatBase peer, long randomId, byte[] data, CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedFileBase file, bool silent = false, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.SentEncryptedMessageBase>(
@@ -584,7 +584,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.SentEncryptedMessageBase>> SendEncryptedServiceAsync(CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedChatBase peer, long randomId, byte[] data, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.SentEncryptedMessageBase>> InternalSendEncryptedServiceAsync(CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedChatBase peer, long randomId, byte[] data, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.SentEncryptedMessageBase>(
@@ -694,7 +694,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.ExportedChatInviteBase>> ExportChatInviteAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, bool legacyRevokePermanent = false, bool requestNeeded = false, int? expireDate = null, int? usageLimit = null, string? title = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.ExportedChatInviteBase>> InternalExportChatInviteAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, bool legacyRevokePermanent = false, bool requestNeeded = false, int? expireDate = null, int? usageLimit = null, string? title = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.ExportedChatInviteBase>(
@@ -791,7 +791,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> StartBotAsync(CatraProto.Client.TL.Schemas.CloudChats.InputUserBase bot, CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, long randomId, string startParam, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> InternalStartBotAsync(CatraProto.Client.TL.Schemas.CloudChats.InputUserBase bot, CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, long randomId, string startParam, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
@@ -809,7 +809,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessageViewsBase>> GetMessagesViewsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, List<int> id, bool increment, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessageViewsBase>> InternalGetMessagesViewsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, List<int> id, bool increment, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessageViewsBase>(
@@ -826,7 +826,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<bool>> EditChatAdminAsync(long chatId, CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId, bool isAdmin, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<bool>> InternalEditChatAdminAsync(long chatId, CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId, bool isAdmin, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<bool>(
@@ -858,7 +858,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>> SearchGlobalAsync(string q, CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase filter, int minDate, int maxDate, int offsetRate, CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase offsetPeer, int offsetId, int limit, int? folderId = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>> InternalSearchGlobalAsync(string q, CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase filter, int minDate, int maxDate, int offsetRate, CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase offsetPeer, int offsetId, int limit, int? folderId = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>(
@@ -945,7 +945,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.BotResultsBase>> GetInlineBotResultsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputUserBase bot, CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, string query, string offset, CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase? geoPoint = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.BotResultsBase>> InternalGetInlineBotResultsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputUserBase bot, CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, string query, string offset, CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase? geoPoint = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.BotResultsBase>(
@@ -985,7 +985,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> SendInlineBotResultAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, long randomId, long queryId, string id, bool silent = false, bool background = false, bool clearDraft = false, bool hideVia = false, int? replyToMsgId = null, int? scheduleDate = null, CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase? sendAs = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> InternalSendInlineBotResultAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, long randomId, long queryId, string id, bool silent = false, bool background = false, bool clearDraft = false, bool hideVia = false, int? replyToMsgId = null, int? scheduleDate = null, CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase? sendAs = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
@@ -1010,7 +1010,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessageEditDataBase>> GetMessageEditDataAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int id, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessageEditDataBase>> InternalGetMessageEditDataAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int id, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessageEditDataBase>(
@@ -1026,7 +1026,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> EditMessageAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int id, bool noWebpage = false, string? message = null, CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase? media = null, CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase? replyMarkup = null, List<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>? entities = null, int? scheduleDate = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> InternalEditMessageAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int id, bool noWebpage = false, string? message = null, CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase? media = null, CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase? replyMarkup = null, List<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>? entities = null, int? scheduleDate = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
@@ -1068,7 +1068,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.BotCallbackAnswerBase>> GetBotCallbackAnswerAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int msgId, bool game = false, byte[]? data = null, CatraProto.Client.TL.Schemas.CloudChats.InputCheckPasswordSRPBase? password = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.BotCallbackAnswerBase>> InternalGetBotCallbackAnswerAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int msgId, bool game = false, byte[]? data = null, CatraProto.Client.TL.Schemas.CloudChats.InputCheckPasswordSRPBase? password = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.BotCallbackAnswerBase>(
@@ -1121,7 +1121,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<bool>> SaveDraftAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, string message, bool noWebpage = false, int? replyToMsgId = null, List<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>? entities = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<bool>> InternalSaveDraftAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, string message, bool noWebpage = false, int? replyToMsgId = null, List<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>? entities = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<bool>(
@@ -1280,7 +1280,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> SetGameScoreAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int id, CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId, int score, bool editMessage = false, bool force = false, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> InternalSetGameScoreAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int id, CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId, int score, bool editMessage = false, bool force = false, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
@@ -1300,7 +1300,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<bool>> SetInlineGameScoreAsync(CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageIDBase id, CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId, int score, bool editMessage = false, bool force = false, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<bool>> InternalSetInlineGameScoreAsync(CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageIDBase id, CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId, int score, bool editMessage = false, bool force = false, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<bool>(
@@ -1319,7 +1319,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.HighScoresBase>> GetGameHighScoresAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int id, CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.HighScoresBase>> InternalGetGameHighScoresAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int id, CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.HighScoresBase>(
@@ -1336,7 +1336,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.HighScoresBase>> GetInlineGameHighScoresAsync(CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageIDBase id, CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.HighScoresBase>> InternalGetInlineGameHighScoresAsync(CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageIDBase id, CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.HighScoresBase>(
@@ -1352,7 +1352,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ChatsBase>> GetCommonChatsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId, long maxId, int limit, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ChatsBase>> InternalGetCommonChatsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId, long maxId, int limit, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ChatsBase>(
@@ -1482,7 +1482,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase>> UploadMediaAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase media, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase>> InternalUploadMediaAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase media, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase>(
@@ -1498,7 +1498,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> SendScreenshotNotificationAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int replyToMsgId, long randomId, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> InternalSendScreenshotNotificationAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int replyToMsgId, long randomId, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
@@ -1546,7 +1546,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>> GetUnreadMentionsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int offsetId, int addOffset, int limit, int maxId, int minId, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>> InternalGetUnreadMentionsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int offsetId, int addOffset, int limit, int maxId, int minId, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>(
@@ -1566,7 +1566,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedHistoryBase>> ReadMentionsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedHistoryBase>> InternalReadMentionsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedHistoryBase>(
@@ -1581,7 +1581,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>> GetRecentLocationsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int limit, long hash, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>> InternalGetRecentLocationsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int limit, long hash, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>(
@@ -1598,7 +1598,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> SendMultiMediaAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, List<CatraProto.Client.TL.Schemas.CloudChats.InputSingleMediaBase> multiMedia, bool silent = false, bool background = false, bool clearDraft = false, bool noforwards = false, int? replyToMsgId = null, int? scheduleDate = null, CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase? sendAs = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> InternalSendMultiMediaAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, List<CatraProto.Client.TL.Schemas.CloudChats.InputSingleMediaBase> multiMedia, bool silent = false, bool background = false, bool clearDraft = false, bool noforwards = false, int? replyToMsgId = null, int? scheduleDate = null, CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase? sendAs = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
@@ -1714,7 +1714,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> UpdatePinnedMessageAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int id, bool silent = false, bool unpin = false, bool pmOneside = false, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> InternalUpdatePinnedMessageAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int id, bool silent = false, bool unpin = false, bool pmOneside = false, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
@@ -1733,7 +1733,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> SendVoteAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int msgId, List<byte[]> options, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> InternalSendVoteAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int msgId, List<byte[]> options, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
@@ -1750,7 +1750,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> GetPollResultsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int msgId, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> InternalGetPollResultsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int msgId, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
@@ -1766,7 +1766,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.ChatOnlinesBase>> GetOnlinesAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.ChatOnlinesBase>> InternalGetOnlinesAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.ChatOnlinesBase>(
@@ -1781,7 +1781,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<bool>> EditChatAboutAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, string about, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<bool>> InternalEditChatAboutAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, string about, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<bool>(
@@ -1797,7 +1797,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> EditChatDefaultBannedRightsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase bannedRights, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> InternalEditChatDefaultBannedRightsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase bannedRights, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
@@ -1875,7 +1875,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchCounterBase>>> GetSearchCountersAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, List<CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase> filters, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchCounterBase>>> InternalGetSearchCountersAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, List<CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase> filters, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchCounterBase>>(
@@ -1892,7 +1892,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UrlAuthResultBase>> RequestUrlAuthAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase? peer = null, int? msgId = null, int? buttonId = null, string? url = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UrlAuthResultBase>> InternalRequestUrlAuthAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase? peer = null, int? msgId = null, int? buttonId = null, string? url = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UrlAuthResultBase>(
@@ -1910,7 +1910,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UrlAuthResultBase>> AcceptUrlAuthAsync(bool writeAllowed = false, CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase? peer = null, int? msgId = null, int? buttonId = null, string? url = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UrlAuthResultBase>> InternalAcceptUrlAuthAsync(bool writeAllowed = false, CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase? peer = null, int? msgId = null, int? buttonId = null, string? url = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UrlAuthResultBase>(
@@ -1929,7 +1929,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<bool>> HidePeerSettingsBarAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<bool>> InternalHidePeerSettingsBarAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<bool>(
@@ -1944,7 +1944,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>> GetScheduledHistoryAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, long hash, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>> InternalGetScheduledHistoryAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, long hash, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>(
@@ -1960,7 +1960,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>> GetScheduledMessagesAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, List<int> id, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>> InternalGetScheduledMessagesAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, List<int> id, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>(
@@ -1976,7 +1976,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> SendScheduledMessagesAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, List<int> id, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> InternalSendScheduledMessagesAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, List<int> id, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
@@ -1992,7 +1992,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> DeleteScheduledMessagesAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, List<int> id, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> InternalDeleteScheduledMessagesAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, List<int> id, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
@@ -2008,7 +2008,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.VotesListBase>> GetPollVotesAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int id, int limit, byte[]? option = null, string? offset = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.VotesListBase>> InternalGetPollVotesAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int id, int limit, byte[]? option = null, string? offset = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.VotesListBase>(
@@ -2123,7 +2123,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>> GetRepliesAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int msgId, int offsetId, int offsetDate, int addOffset, int limit, int maxId, int minId, long hash, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>> InternalGetRepliesAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int msgId, int offsetId, int offsetDate, int addOffset, int limit, int maxId, int minId, long hash, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>(
@@ -2146,7 +2146,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.DiscussionMessageBase>> GetDiscussionMessageAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int msgId, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.DiscussionMessageBase>> InternalGetDiscussionMessageAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int msgId, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.DiscussionMessageBase>(
@@ -2162,7 +2162,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<bool>> ReadDiscussionAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int msgId, int readMaxId, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<bool>> InternalReadDiscussionAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int msgId, int readMaxId, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<bool>(
@@ -2179,7 +2179,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedHistoryBase>> UnpinAllMessagesAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedHistoryBase>> InternalUnpinAllMessagesAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedHistoryBase>(
@@ -2239,7 +2239,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.HistoryImportBase>> InitHistoryImportAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.TL.Schemas.CloudChats.InputFileBase file, int mediaCount, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.HistoryImportBase>> InternalInitHistoryImportAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.TL.Schemas.CloudChats.InputFileBase file, int mediaCount, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.HistoryImportBase>(
@@ -2256,7 +2256,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase>> UploadImportedMediaAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, long importId, string fileName, CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase media, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase>> InternalUploadImportedMediaAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, long importId, string fileName, CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase media, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase>(
@@ -2274,7 +2274,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<bool>> StartHistoryImportAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, long importId, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<bool>> InternalStartHistoryImportAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, long importId, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<bool>(
@@ -2290,7 +2290,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ExportedChatInvitesBase>> GetExportedChatInvitesAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.TL.Schemas.CloudChats.InputUserBase adminId, int limit, bool revoked = false, int? offsetDate = null, string? offsetLink = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ExportedChatInvitesBase>> InternalGetExportedChatInvitesAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.TL.Schemas.CloudChats.InputUserBase adminId, int limit, bool revoked = false, int? offsetDate = null, string? offsetLink = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ExportedChatInvitesBase>(
@@ -2310,7 +2310,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ExportedChatInviteBase>> GetExportedChatInviteAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, string link, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ExportedChatInviteBase>> InternalGetExportedChatInviteAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, string link, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ExportedChatInviteBase>(
@@ -2326,7 +2326,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ExportedChatInviteBase>> EditExportedChatInviteAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, string link, bool revoked = false, int? expireDate = null, int? usageLimit = null, bool? requestNeeded = null, string? title = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ExportedChatInviteBase>> InternalEditExportedChatInviteAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, string link, bool revoked = false, int? expireDate = null, int? usageLimit = null, bool? requestNeeded = null, string? title = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ExportedChatInviteBase>(
@@ -2347,7 +2347,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<bool>> DeleteRevokedExportedChatInvitesAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.TL.Schemas.CloudChats.InputUserBase adminId, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<bool>> InternalDeleteRevokedExportedChatInvitesAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.TL.Schemas.CloudChats.InputUserBase adminId, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<bool>(
@@ -2363,7 +2363,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<bool>> DeleteExportedChatInviteAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, string link, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<bool>> InternalDeleteExportedChatInviteAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, string link, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<bool>(
@@ -2379,7 +2379,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ChatAdminsWithInvitesBase>> GetAdminsWithInvitesAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ChatAdminsWithInvitesBase>> InternalGetAdminsWithInvitesAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ChatAdminsWithInvitesBase>(
@@ -2394,7 +2394,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ChatInviteImportersBase>> GetChatInviteImportersAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int offsetDate, CatraProto.Client.TL.Schemas.CloudChats.InputUserBase offsetUser, int limit, bool requested = false, string? link = null, string? q = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ChatInviteImportersBase>> InternalGetChatInviteImportersAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int offsetDate, CatraProto.Client.TL.Schemas.CloudChats.InputUserBase offsetUser, int limit, bool requested = false, string? link = null, string? q = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ChatInviteImportersBase>(
@@ -2415,7 +2415,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> SetHistoryTTLAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int period, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> InternalSetHistoryTTLAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int period, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
@@ -2431,7 +2431,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.CheckedHistoryImportPeerBase>> CheckHistoryImportPeerAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.CheckedHistoryImportPeerBase>> InternalCheckHistoryImportPeerAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.CheckedHistoryImportPeerBase>(
@@ -2446,7 +2446,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> SetChatThemeAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, string emoticon, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> InternalSetChatThemeAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, string emoticon, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
@@ -2462,7 +2462,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<long>>> GetMessageReadParticipantsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int msgId, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<long>>> InternalGetMessageReadParticipantsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int msgId, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<long>>(
@@ -2479,7 +2479,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchResultsCalendarBase>> GetSearchResultsCalendarAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase filter, int offsetId, int offsetDate, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchResultsCalendarBase>> InternalGetSearchResultsCalendarAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase filter, int offsetId, int offsetDate, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchResultsCalendarBase>(
@@ -2497,7 +2497,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchResultsPositionsBase>> GetSearchResultsPositionsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase filter, int offsetId, int limit, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchResultsPositionsBase>> InternalGetSearchResultsPositionsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase filter, int offsetId, int limit, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchResultsPositionsBase>(
@@ -2515,7 +2515,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> HideChatJoinRequestAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId, bool approved = false, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> InternalHideChatJoinRequestAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId, bool approved = false, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
@@ -2532,7 +2532,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> HideAllChatJoinRequestsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, bool approved = false, string? link = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> InternalHideAllChatJoinRequestsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, bool approved = false, string? link = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
@@ -2549,7 +2549,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> ToggleNoForwardsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, bool enabled, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> InternalToggleNoForwardsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, bool enabled, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
@@ -2565,7 +2565,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<bool>> SaveDefaultSendAsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase sendAs, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<bool>> InternalSaveDefaultSendAsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase sendAs, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<bool>(
@@ -2581,7 +2581,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> SendReactionAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int msgId, bool big = false, string? reaction = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> InternalSendReactionAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int msgId, bool big = false, string? reaction = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
@@ -2599,7 +2599,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> GetMessagesReactionsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, List<int> id, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> InternalGetMessagesReactionsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, List<int> id, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
@@ -2615,7 +2615,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessageReactionsListBase>> GetMessageReactionsListAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int id, int limit, string? reaction = null, string? offset = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessageReactionsListBase>> InternalGetMessageReactionsListAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int id, int limit, string? reaction = null, string? offset = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessageReactionsListBase>(
@@ -2634,7 +2634,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> SetChatAvailableReactionsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, List<string> availableReactions, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> InternalSetChatAvailableReactionsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, List<string> availableReactions, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
@@ -2680,7 +2680,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.TranslatedTextBase>> TranslateTextAsync(string toLang, CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase? peer = null, int? msgId = null, string? text = null, string? fromLang = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.TranslatedTextBase>> InternalTranslateTextAsync(string toLang, CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase? peer = null, int? msgId = null, string? text = null, string? fromLang = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.TranslatedTextBase>(
@@ -2699,7 +2699,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>> GetUnreadReactionsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int offsetId, int addOffset, int limit, int maxId, int minId, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>> InternalGetUnreadReactionsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int offsetId, int addOffset, int limit, int maxId, int minId, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>(
@@ -2719,7 +2719,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedHistoryBase>> ReadReactionsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedHistoryBase>> InternalReadReactionsAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedHistoryBase>(
@@ -2728,6 +2728,161 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ReadReactions()
             {
                 Peer = peer,
+            };
+
+            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+            await taskCompletionSource!;
+            return rpcResponse;
+        }
+        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>> SearchSentMediaAsync(string q, CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase filter, int limit, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        {
+
+            var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>(
+            );
+            messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+            var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchSentMedia()
+            {
+                Q = q,
+                Filter = filter,
+                Limit = limit,
+            };
+
+            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+            await taskCompletionSource!;
+            return rpcResponse;
+        }
+        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.AttachMenuBotsBase>> GetAttachMenuBotsAsync(long hash, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        {
+
+            var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.AttachMenuBotsBase>(
+            );
+            messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+            var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetAttachMenuBots()
+            {
+                Hash = hash,
+            };
+
+            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+            await taskCompletionSource!;
+            return rpcResponse;
+        }
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.AttachMenuBotsBotBase>> InternalGetAttachMenuBotAsync(CatraProto.Client.TL.Schemas.CloudChats.InputUserBase bot, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        {
+
+            var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.AttachMenuBotsBotBase>(
+            );
+            messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+            var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetAttachMenuBot()
+            {
+                Bot = bot,
+            };
+
+            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+            await taskCompletionSource!;
+            return rpcResponse;
+        }
+        internal async Task<RpcResponse<bool>> InternalToggleBotInAttachMenuAsync(CatraProto.Client.TL.Schemas.CloudChats.InputUserBase bot, bool enabled, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        {
+
+            var rpcResponse = new RpcResponse<bool>(
+            );
+            messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+            var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ToggleBotInAttachMenu()
+            {
+                Bot = bot,
+                Enabled = enabled,
+            };
+
+            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+            await taskCompletionSource!;
+            return rpcResponse;
+        }
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.WebViewResultBase>> InternalRequestWebViewAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.TL.Schemas.CloudChats.InputUserBase bot, bool fromBotMenu = false, bool silent = false, string? url = null, string? startParam = null, CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase? themeParams = null, int? replyToMsgId = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        {
+
+            var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.WebViewResultBase>(
+            );
+            messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+            var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.RequestWebView()
+            {
+                Peer = peer,
+                Bot = bot,
+                FromBotMenu = fromBotMenu,
+                Silent = silent,
+                Url = url,
+                StartParam = startParam,
+                ThemeParams = themeParams,
+                ReplyToMsgId = replyToMsgId,
+            };
+
+            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+            await taskCompletionSource!;
+            return rpcResponse;
+        }
+        internal async Task<RpcResponse<bool>> InternalProlongWebViewAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.TL.Schemas.CloudChats.InputUserBase bot, long queryId, bool silent = false, int? replyToMsgId = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        {
+
+            var rpcResponse = new RpcResponse<bool>(
+            );
+            messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+            var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ProlongWebView()
+            {
+                Peer = peer,
+                Bot = bot,
+                QueryId = queryId,
+                Silent = silent,
+                ReplyToMsgId = replyToMsgId,
+            };
+
+            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+            await taskCompletionSource!;
+            return rpcResponse;
+        }
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.SimpleWebViewResultBase>> InternalRequestSimpleWebViewAsync(CatraProto.Client.TL.Schemas.CloudChats.InputUserBase bot, string url, CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase? themeParams = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        {
+
+            var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.SimpleWebViewResultBase>(
+            );
+            messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+            var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.RequestSimpleWebView()
+            {
+                Bot = bot,
+                Url = url,
+                ThemeParams = themeParams,
+            };
+
+            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+            await taskCompletionSource!;
+            return rpcResponse;
+        }
+        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.WebViewMessageSentBase>> SendWebViewResultMessageAsync(string botQueryId, CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineResultBase result, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        {
+
+            var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.WebViewMessageSentBase>(
+            );
+            messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+            var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendWebViewResultMessage()
+            {
+                BotQueryId = botQueryId,
+                Result = result,
+            };
+
+            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+            await taskCompletionSource!;
+            return rpcResponse;
+        }
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> InternalSendWebViewDataAsync(CatraProto.Client.TL.Schemas.CloudChats.InputUserBase bot, long randomId, string buttonText, string data, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        {
+
+            var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
+            );
+            messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+            var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendWebViewData()
+            {
+                Bot = bot,
+                RandomId = randomId,
+                ButtonText = buttonText,
+                Data = data,
             };
 
             _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -4980,6 +5135,165 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ReadReactions()
             {
                 Peer = peerResolved,
+            };
+
+            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+            await taskCompletionSource!;
+            return rpcResponse;
+        }
+        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.AttachMenuBotsBotBase>> GetAttachMenuBotAsync(long bot, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        {
+
+            var botToResolve = _client.DatabaseManager.PeerDatabase.ResolveUser(bot);
+            if (botToResolve is null)
+            {
+                return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.AttachMenuBotsBotBase>.FromError(new PeerNotFoundError(bot, CatraProto.Client.MTProto.PeerType.User));
+            }
+            var botResolved = botToResolve;
+            var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.AttachMenuBotsBotBase>(
+            );
+            messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+            var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetAttachMenuBot()
+            {
+                Bot = botResolved,
+            };
+
+            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+            await taskCompletionSource!;
+            return rpcResponse;
+        }
+        public async Task<RpcResponse<bool>> ToggleBotInAttachMenuAsync(long bot, bool enabled, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        {
+
+            var botToResolve = _client.DatabaseManager.PeerDatabase.ResolveUser(bot);
+            if (botToResolve is null)
+            {
+                return RpcResponse<bool>.FromError(new PeerNotFoundError(bot, CatraProto.Client.MTProto.PeerType.User));
+            }
+            var botResolved = botToResolve;
+            var rpcResponse = new RpcResponse<bool>(
+            );
+            messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+            var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ToggleBotInAttachMenu()
+            {
+                Bot = botResolved,
+                Enabled = enabled,
+            };
+
+            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+            await taskCompletionSource!;
+            return rpcResponse;
+        }
+        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.WebViewResultBase>> RequestWebViewAsync(CatraProto.Client.MTProto.PeerId peer, long bot, bool fromBotMenu = false, bool silent = false, string? url = null, string? startParam = null, CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase? themeParams = null, int? replyToMsgId = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        {
+
+            var peerToResolve = _client.DatabaseManager.PeerDatabase.ResolvePeer(peer);
+            if (peerToResolve is null)
+            {
+                return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.WebViewResultBase>.FromError(new PeerNotFoundError(peer.Id, peer.Type));
+            }
+            var peerResolved = peerToResolve;
+            var botToResolve = _client.DatabaseManager.PeerDatabase.ResolveUser(bot);
+            if (botToResolve is null)
+            {
+                return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.WebViewResultBase>.FromError(new PeerNotFoundError(bot, CatraProto.Client.MTProto.PeerType.User));
+            }
+            var botResolved = botToResolve;
+            var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.WebViewResultBase>(
+            );
+            messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+            var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.RequestWebView()
+            {
+                Peer = peerResolved,
+                Bot = botResolved,
+                FromBotMenu = fromBotMenu,
+                Silent = silent,
+                Url = url,
+                StartParam = startParam,
+                ThemeParams = themeParams,
+                ReplyToMsgId = replyToMsgId,
+            };
+
+            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+            await taskCompletionSource!;
+            return rpcResponse;
+        }
+        public async Task<RpcResponse<bool>> ProlongWebViewAsync(CatraProto.Client.MTProto.PeerId peer, long bot, long queryId, bool silent = false, int? replyToMsgId = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        {
+
+            var peerToResolve = _client.DatabaseManager.PeerDatabase.ResolvePeer(peer);
+            if (peerToResolve is null)
+            {
+                return RpcResponse<bool>.FromError(new PeerNotFoundError(peer.Id, peer.Type));
+            }
+            var peerResolved = peerToResolve;
+            var botToResolve = _client.DatabaseManager.PeerDatabase.ResolveUser(bot);
+            if (botToResolve is null)
+            {
+                return RpcResponse<bool>.FromError(new PeerNotFoundError(bot, CatraProto.Client.MTProto.PeerType.User));
+            }
+            var botResolved = botToResolve;
+            var rpcResponse = new RpcResponse<bool>(
+            );
+            messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+            var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ProlongWebView()
+            {
+                Peer = peerResolved,
+                Bot = botResolved,
+                QueryId = queryId,
+                Silent = silent,
+                ReplyToMsgId = replyToMsgId,
+            };
+
+            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+            await taskCompletionSource!;
+            return rpcResponse;
+        }
+        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.SimpleWebViewResultBase>> RequestSimpleWebViewAsync(long bot, string url, CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase? themeParams = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        {
+
+            var botToResolve = _client.DatabaseManager.PeerDatabase.ResolveUser(bot);
+            if (botToResolve is null)
+            {
+                return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.SimpleWebViewResultBase>.FromError(new PeerNotFoundError(bot, CatraProto.Client.MTProto.PeerType.User));
+            }
+            var botResolved = botToResolve;
+            var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.SimpleWebViewResultBase>(
+            );
+            messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+            var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.RequestSimpleWebView()
+            {
+                Bot = botResolved,
+                Url = url,
+                ThemeParams = themeParams,
+            };
+
+            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+            await taskCompletionSource!;
+            return rpcResponse;
+        }
+        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> SendWebViewDataAsync(long bot, string buttonText, string data, long? randomId = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        {
+
+            var botToResolve = _client.DatabaseManager.PeerDatabase.ResolveUser(bot);
+            if (botToResolve is null)
+            {
+                return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>.FromError(new PeerNotFoundError(bot, CatraProto.Client.MTProto.PeerType.User));
+            }
+            var botResolved = botToResolve;
+            if (randomId is null)
+            {
+                randomId = _client.RandomIdHandler.GetNextId();
+            }
+            var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
+            );
+            messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+            var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendWebViewData()
+            {
+                Bot = botResolved,
+                ButtonText = buttonText,
+                Data = data,
+                RandomId = randomId.Value,
             };
 
             _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);

@@ -133,9 +133,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new ValidatedRequestedInfo();
-            newClonedObject.Flags = Flags;
-            newClonedObject.Id = Id;
+            var newClonedObject = new ValidatedRequestedInfo
+            {
+                Flags = Flags,
+                Id = Id
+            };
             if (ShippingOptions is not null)
             {
                 newClonedObject.ShippingOptions = new List<CatraProto.Client.TL.Schemas.CloudChats.ShippingOptionBase>();

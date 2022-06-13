@@ -100,7 +100,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             var newClonedObject = new StickerPack
             {
-                Emoticon = Emoticon
+                Emoticon = Emoticon,
+                Documents = new List<long>()
             };
             foreach (var documents in Documents)
             {

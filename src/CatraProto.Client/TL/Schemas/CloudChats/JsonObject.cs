@@ -89,7 +89,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new JsonObject();
+            var newClonedObject = new JsonObject
+            {
+                Value = new List<CatraProto.Client.TL.Schemas.CloudChats.JSONObjectValueBase>()
+            };
             foreach (var value in Value)
             {
                 var clonevalue = (CatraProto.Client.TL.Schemas.CloudChats.JSONObjectValueBase?)value.Clone();

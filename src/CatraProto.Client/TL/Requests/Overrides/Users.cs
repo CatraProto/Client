@@ -33,7 +33,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
     {
         public async Task<RpcResponse<User>> GetSelfAsync(CancellationToken cancellationToken = default)
         {
-            if(_client.ClientSession.SessionManager.SessionData.Authorization.GetAuthorization(out _, out var userId) is not ApiManagers.LoginState.LoggedIn || userId is null)
+            if (_client.ClientSession.SessionManager.SessionData.Authorization.GetAuthorization(out _, out var userId) is not ApiManagers.LoginState.LoggedIn || userId is null)
             {
                 return RpcResponse<User>.FromError(new UnauthorizedUserError());
             }
@@ -44,7 +44,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
                 return RpcResponse<User>.FromError(req.Error);
             }
 
-            if(req.Response.Count == 0)
+            if (req.Response.Count == 0)
             {
                 return RpcResponse<User>.FromError(new PeerNotFoundError(userId.Value, PeerType.User));
             }

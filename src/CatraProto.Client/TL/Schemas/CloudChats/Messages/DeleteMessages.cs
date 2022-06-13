@@ -115,7 +115,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             var newClonedObject = new DeleteMessages
             {
                 Flags = Flags,
-                Revoke = Revoke
+                Revoke = Revoke,
+                Id = new List<int>()
             };
             foreach (var id in Id)
             {

@@ -89,7 +89,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new Chats();
+            var newClonedObject = new Chats
+            {
+                ChatsField = new List<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>()
+            };
             foreach (var chatsField in ChatsField)
             {
                 var clonechatsField = (CatraProto.Client.TL.Schemas.CloudChats.ChatBase?)chatsField.Clone();

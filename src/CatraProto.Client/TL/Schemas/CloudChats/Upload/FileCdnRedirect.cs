@@ -141,7 +141,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
                 DcId = DcId,
                 FileToken = FileToken,
                 EncryptionKey = EncryptionKey,
-                EncryptionIv = EncryptionIv
+                EncryptionIv = EncryptionIv,
+                FileHashes = new List<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>()
             };
             foreach (var fileHashes in FileHashes)
             {

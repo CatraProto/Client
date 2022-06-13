@@ -733,7 +733,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 Date = Date,
                 Expires = Expires,
                 TestMode = TestMode,
-                ThisDc = ThisDc
+                ThisDc = ThisDc,
+                DcOptions = new List<CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase>()
             };
             foreach (var dcOptions in DcOptions)
             {

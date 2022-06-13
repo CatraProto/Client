@@ -153,9 +153,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new BotInlineMessageMediaAuto();
-            newClonedObject.Flags = Flags;
-            newClonedObject.Message = Message;
+            var newClonedObject = new BotInlineMessageMediaAuto
+            {
+                Flags = Flags,
+                Message = Message
+            };
             if (Entities is not null)
             {
                 newClonedObject.Entities = new List<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();

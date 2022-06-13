@@ -167,7 +167,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 WebpageId = WebpageId,
                 AuthorPhotoId = AuthorPhotoId,
                 Author = Author,
-                Date = Date
+                Date = Date,
+                Blocks = new List<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase>()
             };
             foreach (var blocks in Blocks)
             {

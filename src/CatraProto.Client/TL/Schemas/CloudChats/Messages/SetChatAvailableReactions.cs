@@ -112,6 +112,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 return null;
             }
             newClonedObject.Peer = clonePeer;
+            newClonedObject.AvailableReactions = new List<string>();
             foreach (var availableReactions in AvailableReactions)
             {
                 newClonedObject.AvailableReactions.Add(availableReactions);

@@ -104,7 +104,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new WebAuthorizations();
+            var newClonedObject = new WebAuthorizations
+            {
+                Authorizations = new List<CatraProto.Client.TL.Schemas.CloudChats.WebAuthorizationBase>()
+            };
             foreach (var authorizations in Authorizations)
             {
                 var cloneauthorizations = (CatraProto.Client.TL.Schemas.CloudChats.WebAuthorizationBase?)authorizations.Clone();
@@ -114,6 +117,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 }
                 newClonedObject.Authorizations.Add(cloneauthorizations);
             }
+            newClonedObject.Users = new List<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
             foreach (var users in Users)
             {
                 var cloneusers = (CatraProto.Client.TL.Schemas.CloudChats.UserBase?)users.Clone();

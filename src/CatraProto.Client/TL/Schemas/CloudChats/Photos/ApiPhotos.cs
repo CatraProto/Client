@@ -104,7 +104,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new ApiPhotos();
+            var newClonedObject = new ApiPhotos
+            {
+                Photos = new List<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>()
+            };
             foreach (var photos in Photos)
             {
                 var clonephotos = (CatraProto.Client.TL.Schemas.CloudChats.PhotoBase?)photos.Clone();
@@ -114,6 +117,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
                 }
                 newClonedObject.Photos.Add(clonephotos);
             }
+            newClonedObject.Users = new List<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
             foreach (var users in Users)
             {
                 var cloneusers = (CatraProto.Client.TL.Schemas.CloudChats.UserBase?)users.Clone();

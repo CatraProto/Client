@@ -89,7 +89,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new PageListItemBlocks();
+            var newClonedObject = new PageListItemBlocks
+            {
+                Blocks = new List<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase>()
+            };
             foreach (var blocks in Blocks)
             {
                 var cloneblocks = (CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase?)blocks.Clone();

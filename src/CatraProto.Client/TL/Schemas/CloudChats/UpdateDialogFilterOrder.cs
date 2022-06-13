@@ -86,7 +86,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new UpdateDialogFilterOrder();
+            var newClonedObject = new UpdateDialogFilterOrder
+            {
+                Order = new List<int>()
+            };
             foreach (var order in Order)
             {
                 newClonedObject.Order.Add(order);

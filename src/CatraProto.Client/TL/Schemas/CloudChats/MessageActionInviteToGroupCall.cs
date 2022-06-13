@@ -108,6 +108,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 return null;
             }
             newClonedObject.Call = cloneCall;
+            newClonedObject.Users = new List<long>();
             foreach (var users in Users)
             {
                 newClonedObject.Users.Add(users);

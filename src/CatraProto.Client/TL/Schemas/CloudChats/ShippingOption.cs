@@ -116,7 +116,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             var newClonedObject = new ShippingOption
             {
                 Id = Id,
-                Title = Title
+                Title = Title,
+                Prices = new List<CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase>()
             };
             foreach (var prices in Prices)
             {

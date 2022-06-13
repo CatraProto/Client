@@ -90,7 +90,10 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new MsgResendReq();
+            var newClonedObject = new MsgResendReq
+            {
+                MsgIds = new List<long>()
+            };
             foreach (var msgIds in MsgIds)
             {
                 newClonedObject.MsgIds.Add(msgIds);

@@ -242,7 +242,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 ExcludeArchived = ExcludeArchived,
                 Id = Id,
                 Title = Title,
-                Emoticon = Emoticon
+                Emoticon = Emoticon,
+                PinnedPeers = new List<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>()
             };
             foreach (var pinnedPeers in PinnedPeers)
             {
@@ -253,6 +254,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 }
                 newClonedObject.PinnedPeers.Add(clonepinnedPeers);
             }
+            newClonedObject.IncludePeers = new List<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
             foreach (var includePeers in IncludePeers)
             {
                 var cloneincludePeers = (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase?)includePeers.Clone();
@@ -262,6 +264,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 }
                 newClonedObject.IncludePeers.Add(cloneincludePeers);
             }
+            newClonedObject.ExcludePeers = new List<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
             foreach (var excludePeers in ExcludePeers)
             {
                 var cloneexcludePeers = (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase?)excludePeers.Clone();

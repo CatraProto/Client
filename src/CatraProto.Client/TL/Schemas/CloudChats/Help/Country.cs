@@ -164,7 +164,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
                 Hidden = Hidden,
                 Iso2 = Iso2,
                 DefaultName = DefaultName,
-                Name = Name
+                Name = Name,
+                CountryCodes = new List<CatraProto.Client.TL.Schemas.CloudChats.Help.CountryCodeBase>()
             };
             foreach (var countryCodes in CountryCodes)
             {

@@ -217,7 +217,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 Flexible = Flexible,
                 PhoneToProvider = PhoneToProvider,
                 EmailToProvider = EmailToProvider,
-                Currency = Currency
+                Currency = Currency,
+                Prices = new List<CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase>()
             };
             foreach (var prices in Prices)
             {
@@ -229,9 +230,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 newClonedObject.Prices.Add(cloneprices);
             }
             newClonedObject.MaxTipAmount = MaxTipAmount;
-            foreach (var suggestedTipAmounts in SuggestedTipAmounts)
+            if (SuggestedTipAmounts is not null)
             {
-                newClonedObject.SuggestedTipAmounts.Add(suggestedTipAmounts);
+                newClonedObject.SuggestedTipAmounts = new List<long>();
+                foreach (var suggestedTipAmounts in SuggestedTipAmounts)
+                {
+                    newClonedObject.SuggestedTipAmounts.Add(suggestedTipAmounts);
+                }
             }
             return newClonedObject;
 

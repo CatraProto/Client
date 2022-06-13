@@ -225,7 +225,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
                 CanNotSkip = CanNotSkip,
                 Id = Id,
                 Version = Version,
-                Text = Text
+                Text = Text,
+                Entities = new List<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>()
             };
             foreach (var entities in Entities)
             {

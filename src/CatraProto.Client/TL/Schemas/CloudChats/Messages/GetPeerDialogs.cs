@@ -93,7 +93,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new GetPeerDialogs();
+            var newClonedObject = new GetPeerDialogs
+            {
+                Peers = new List<CatraProto.Client.TL.Schemas.CloudChats.InputDialogPeerBase>()
+            };
             foreach (var peers in Peers)
             {
                 var clonepeers = (CatraProto.Client.TL.Schemas.CloudChats.InputDialogPeerBase?)peers.Clone();

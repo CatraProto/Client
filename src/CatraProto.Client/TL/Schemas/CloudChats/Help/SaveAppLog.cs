@@ -93,7 +93,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new SaveAppLog();
+            var newClonedObject = new SaveAppLog
+            {
+                Events = new List<CatraProto.Client.TL.Schemas.CloudChats.InputAppEventBase>()
+            };
             foreach (var events in Events)
             {
                 var cloneevents = (CatraProto.Client.TL.Schemas.CloudChats.InputAppEventBase?)events.Clone();

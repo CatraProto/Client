@@ -22,8 +22,11 @@ using CatraProto.TL.Results;
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public abstract class NullBase : IObject
+    public abstract class SimpleWebViewResultBase : IObject
     {
+
+        [Newtonsoft.Json.JsonProperty("url")]
+        public abstract string Url { get; set; }
 
         public abstract void UpdateFlags();
         public abstract ReadResult<IObject> Deserialize(Reader reader);

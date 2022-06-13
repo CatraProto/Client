@@ -126,7 +126,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             var newClonedObject = new FeaturedStickers
             {
                 Hash = Hash,
-                Count = Count
+                Count = Count,
+                Sets = new List<CatraProto.Client.TL.Schemas.CloudChats.StickerSetCoveredBase>()
             };
             foreach (var sets in Sets)
             {
@@ -137,6 +138,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 }
                 newClonedObject.Sets.Add(clonesets);
             }
+            newClonedObject.Unread = new List<long>();
             foreach (var unread in Unread)
             {
                 newClonedObject.Unread.Add(unread);

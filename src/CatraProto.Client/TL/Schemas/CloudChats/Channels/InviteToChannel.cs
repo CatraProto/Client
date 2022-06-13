@@ -115,6 +115,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
                 return null;
             }
             newClonedObject.Channel = cloneChannel;
+            newClonedObject.Users = new List<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
             foreach (var users in Users)
             {
                 var cloneusers = (CatraProto.Client.TL.Schemas.CloudChats.InputUserBase?)users.Clone();

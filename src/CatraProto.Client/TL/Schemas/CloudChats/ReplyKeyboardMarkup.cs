@@ -151,7 +151,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 Flags = Flags,
                 Resize = Resize,
                 SingleUse = SingleUse,
-                Selective = Selective
+                Selective = Selective,
+                Rows = new List<CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonRowBase>()
             };
             foreach (var rows in Rows)
             {

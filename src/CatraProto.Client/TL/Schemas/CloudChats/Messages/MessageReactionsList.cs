@@ -172,7 +172,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             var newClonedObject = new MessageReactionsList
             {
                 Flags = Flags,
-                Count = Count
+                Count = Count,
+                Reactions = new List<CatraProto.Client.TL.Schemas.CloudChats.MessagePeerReactionBase>()
             };
             foreach (var reactions in Reactions)
             {
@@ -183,6 +184,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 }
                 newClonedObject.Reactions.Add(clonereactions);
             }
+            newClonedObject.Chats = new List<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
             foreach (var chats in Chats)
             {
                 var clonechats = (CatraProto.Client.TL.Schemas.CloudChats.ChatBase?)chats.Clone();
@@ -192,6 +194,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 }
                 newClonedObject.Chats.Add(clonechats);
             }
+            newClonedObject.Users = new List<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
             foreach (var users in Users)
             {
                 var cloneusers = (CatraProto.Client.TL.Schemas.CloudChats.UserBase?)users.Clone();

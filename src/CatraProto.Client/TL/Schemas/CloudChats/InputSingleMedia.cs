@@ -154,8 +154,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new InputSingleMedia();
-            newClonedObject.Flags = Flags;
+            var newClonedObject = new InputSingleMedia
+            {
+                Flags = Flags
+            };
             var cloneMedia = (CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase?)Media.Clone();
             if (cloneMedia is null)
             {

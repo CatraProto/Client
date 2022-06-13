@@ -93,7 +93,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new DeleteContacts();
+            var newClonedObject = new DeleteContacts
+            {
+                Id = new List<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>()
+            };
             foreach (var id in Id)
             {
                 var cloneid = (CatraProto.Client.TL.Schemas.CloudChats.InputUserBase?)id.Clone();

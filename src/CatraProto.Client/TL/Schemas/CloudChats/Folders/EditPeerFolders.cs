@@ -93,7 +93,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Folders
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new EditPeerFolders();
+            var newClonedObject = new EditPeerFolders
+            {
+                FolderPeers = new List<CatraProto.Client.TL.Schemas.CloudChats.InputFolderPeerBase>()
+            };
             foreach (var folderPeers in FolderPeers)
             {
                 var clonefolderPeers = (CatraProto.Client.TL.Schemas.CloudChats.InputFolderPeerBase?)folderPeers.Clone();

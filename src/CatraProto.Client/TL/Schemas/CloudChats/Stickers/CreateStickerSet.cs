@@ -238,6 +238,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
                 }
                 newClonedObject.Thumb = cloneThumb;
             }
+            newClonedObject.Stickers = new List<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetItemBase>();
             foreach (var stickers in Stickers)
             {
                 var clonestickers = (CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetItemBase?)stickers.Clone();

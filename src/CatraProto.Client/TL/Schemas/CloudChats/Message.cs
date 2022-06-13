@@ -567,19 +567,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new Message();
-            newClonedObject.Flags = Flags;
-            newClonedObject.Out = Out;
-            newClonedObject.Mentioned = Mentioned;
-            newClonedObject.MediaUnread = MediaUnread;
-            newClonedObject.Silent = Silent;
-            newClonedObject.Post = Post;
-            newClonedObject.FromScheduled = FromScheduled;
-            newClonedObject.Legacy = Legacy;
-            newClonedObject.EditHide = EditHide;
-            newClonedObject.Pinned = Pinned;
-            newClonedObject.Noforwards = Noforwards;
-            newClonedObject.Id = Id;
+            var newClonedObject = new Message
+            {
+                Flags = Flags,
+                Out = Out,
+                Mentioned = Mentioned,
+                MediaUnread = MediaUnread,
+                Silent = Silent,
+                Post = Post,
+                FromScheduled = FromScheduled,
+                Legacy = Legacy,
+                EditHide = EditHide,
+                Pinned = Pinned,
+                Noforwards = Noforwards,
+                Id = Id
+            };
             if (FromId is not null)
             {
                 var cloneFromId = (CatraProto.Client.TL.Schemas.CloudChats.PeerBase?)FromId.Clone();

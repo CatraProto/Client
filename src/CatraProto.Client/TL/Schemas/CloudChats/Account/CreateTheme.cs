@@ -169,10 +169,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new CreateTheme();
-            newClonedObject.Flags = Flags;
-            newClonedObject.Slug = Slug;
-            newClonedObject.Title = Title;
+            var newClonedObject = new CreateTheme
+            {
+                Flags = Flags,
+                Slug = Slug,
+                Title = Title
+            };
             if (Document is not null)
             {
                 var cloneDocument = (CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase?)Document.Clone();

@@ -115,6 +115,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 return null;
             }
             newClonedObject.Peer = clonePeer;
+            newClonedObject.Filters = new List<CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase>();
             foreach (var filters in Filters)
             {
                 var clonefilters = (CatraProto.Client.TL.Schemas.CloudChats.MessagesFilterBase?)filters.Clone();

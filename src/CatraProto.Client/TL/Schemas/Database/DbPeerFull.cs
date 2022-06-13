@@ -99,7 +99,7 @@ namespace CatraProto.Client.TL.Schemas.Database
             {
                 newObj.Object = Object.Clone();
             }
-            
+
             return newObj;
         }
     }

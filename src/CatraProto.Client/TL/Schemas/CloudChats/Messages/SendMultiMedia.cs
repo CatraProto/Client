@@ -229,6 +229,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             }
             newClonedObject.Peer = clonePeer;
             newClonedObject.ReplyToMsgId = ReplyToMsgId;
+            newClonedObject.MultiMedia = new List<CatraProto.Client.TL.Schemas.CloudChats.InputSingleMediaBase>();
             foreach (var multiMedia in MultiMedia)
             {
                 var clonemultiMedia = (CatraProto.Client.TL.Schemas.CloudChats.InputSingleMediaBase?)multiMedia.Clone();

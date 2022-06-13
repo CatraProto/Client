@@ -89,7 +89,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new KeyboardButtonRow();
+            var newClonedObject = new KeyboardButtonRow
+            {
+                Buttons = new List<CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonBase>()
+            };
             foreach (var buttons in Buttons)
             {
                 var clonebuttons = (CatraProto.Client.TL.Schemas.CloudChats.KeyboardButtonBase?)buttons.Clone();

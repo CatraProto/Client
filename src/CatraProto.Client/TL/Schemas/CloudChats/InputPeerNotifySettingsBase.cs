@@ -37,7 +37,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         [MaybeNull]
         [Newtonsoft.Json.JsonProperty("sound")]
-        public abstract string Sound { get; set; }
+        public abstract CatraProto.Client.TL.Schemas.CloudChats.NotificationSoundBase Sound { get; set; }
 
         public abstract void UpdateFlags();
         public abstract ReadResult<IObject> Deserialize(Reader reader);

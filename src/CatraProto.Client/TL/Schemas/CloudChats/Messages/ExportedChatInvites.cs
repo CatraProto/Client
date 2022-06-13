@@ -117,7 +117,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         {
             var newClonedObject = new ExportedChatInvites
             {
-                Count = Count
+                Count = Count,
+                Invites = new List<CatraProto.Client.TL.Schemas.CloudChats.ExportedChatInviteBase>()
             };
             foreach (var invites in Invites)
             {
@@ -128,6 +129,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 }
                 newClonedObject.Invites.Add(cloneinvites);
             }
+            newClonedObject.Users = new List<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
             foreach (var users in Users)
             {
                 var cloneusers = (CatraProto.Client.TL.Schemas.CloudChats.UserBase?)users.Clone();

@@ -43,11 +43,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             FolderId = 1 << 11,
             TtlPeriod = 1 << 14,
             ThemeEmoticon = 1 << 15,
-            PrivateForwardName = 1 << 16
+            PrivateForwardName = 1 << 16,
+            BotGroupAdminRights = 1 << 17,
+            BotBroadcastAdminRights = 1 << 18
         }
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -818518751; }
+        public static int ConstructorId { get => -1938625919; }
 
         [Newtonsoft.Json.JsonIgnore]
         public int Flags { get; set; }
@@ -111,6 +113,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("private_forward_name")]
         public sealed override string PrivateForwardName { get; set; }
 
+        [MaybeNull]
+        [Newtonsoft.Json.JsonProperty("bot_group_admin_rights")]
+        public sealed override CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase BotGroupAdminRights { get; set; }
+
+        [MaybeNull]
+        [Newtonsoft.Json.JsonProperty("bot_broadcast_admin_rights")]
+        public sealed override CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase BotBroadcastAdminRights { get; set; }
+
 
 #nullable enable
         public UserFull(long id, CatraProto.Client.TL.Schemas.CloudChats.PeerSettingsBase settings, CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase notifySettings, int commonChatsCount)
@@ -142,6 +152,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = TtlPeriod == null ? FlagsHelper.UnsetFlag(Flags, 14) : FlagsHelper.SetFlag(Flags, 14);
             Flags = ThemeEmoticon == null ? FlagsHelper.UnsetFlag(Flags, 15) : FlagsHelper.SetFlag(Flags, 15);
             Flags = PrivateForwardName == null ? FlagsHelper.UnsetFlag(Flags, 16) : FlagsHelper.SetFlag(Flags, 16);
+            Flags = BotGroupAdminRights == null ? FlagsHelper.UnsetFlag(Flags, 17) : FlagsHelper.SetFlag(Flags, 17);
+            Flags = BotBroadcastAdminRights == null ? FlagsHelper.UnsetFlag(Flags, 18) : FlagsHelper.SetFlag(Flags, 18);
 
         }
 
@@ -212,6 +224,24 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
 
                 writer.WriteString(PrivateForwardName);
+            }
+
+            if (FlagsHelper.IsFlagSet(Flags, 17))
+            {
+                var checkbotGroupAdminRights = writer.WriteObject(BotGroupAdminRights);
+                if (checkbotGroupAdminRights.IsError)
+                {
+                    return checkbotGroupAdminRights;
+                }
+            }
+
+            if (FlagsHelper.IsFlagSet(Flags, 18))
+            {
+                var checkbotBroadcastAdminRights = writer.WriteObject(BotBroadcastAdminRights);
+                if (checkbotBroadcastAdminRights.IsError)
+                {
+                    return checkbotBroadcastAdminRights;
+                }
             }
 
 
@@ -337,6 +367,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 PrivateForwardName = tryprivateForwardName.Value;
             }
 
+            if (FlagsHelper.IsFlagSet(Flags, 17))
+            {
+                var trybotGroupAdminRights = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase>();
+                if (trybotGroupAdminRights.IsError)
+                {
+                    return ReadResult<IObject>.Move(trybotGroupAdminRights);
+                }
+                BotGroupAdminRights = trybotGroupAdminRights.Value;
+            }
+
+            if (FlagsHelper.IsFlagSet(Flags, 18))
+            {
+                var trybotBroadcastAdminRights = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase>();
+                if (trybotBroadcastAdminRights.IsError)
+                {
+                    return ReadResult<IObject>.Move(trybotBroadcastAdminRights);
+                }
+                BotBroadcastAdminRights = trybotBroadcastAdminRights.Value;
+            }
+
             return new ReadResult<IObject>(this);
 
         }
@@ -402,6 +452,24 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             newClonedObject.TtlPeriod = TtlPeriod;
             newClonedObject.ThemeEmoticon = ThemeEmoticon;
             newClonedObject.PrivateForwardName = PrivateForwardName;
+            if (BotGroupAdminRights is not null)
+            {
+                var cloneBotGroupAdminRights = (CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase?)BotGroupAdminRights.Clone();
+                if (cloneBotGroupAdminRights is null)
+                {
+                    return null;
+                }
+                newClonedObject.BotGroupAdminRights = cloneBotGroupAdminRights;
+            }
+            if (BotBroadcastAdminRights is not null)
+            {
+                var cloneBotBroadcastAdminRights = (CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase?)BotBroadcastAdminRights.Clone();
+                if (cloneBotBroadcastAdminRights is null)
+                {
+                    return null;
+                }
+                newClonedObject.BotBroadcastAdminRights = cloneBotBroadcastAdminRights;
+            }
             return newClonedObject;
 
         }

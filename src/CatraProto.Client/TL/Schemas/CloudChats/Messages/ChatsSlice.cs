@@ -102,7 +102,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         {
             var newClonedObject = new ChatsSlice
             {
-                Count = Count
+                Count = Count,
+                ChatsField = new List<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>()
             };
             foreach (var chatsField in ChatsField)
             {

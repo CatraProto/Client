@@ -142,7 +142,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 UdpP2p = UdpP2p,
                 UdpReflector = UdpReflector,
                 MinLayer = MinLayer,
-                MaxLayer = MaxLayer
+                MaxLayer = MaxLayer,
+                LibraryVersions = new List<string>()
             };
             foreach (var libraryVersions in LibraryVersions)
             {

@@ -31,7 +31,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public enum FlagsEnum
         {
             Creator = 1 << 0,
-            Kicked = 1 << 1,
             Left = 1 << 2,
             Deactivated = 1 << 5,
             CallActive = 1 << 23,
@@ -50,9 +49,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         [Newtonsoft.Json.JsonProperty("creator")]
         public bool Creator { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("kicked")]
-        public bool Kicked { get; set; }
 
         [Newtonsoft.Json.JsonProperty("left")]
         public bool Left { get; set; }
@@ -119,7 +115,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override void UpdateFlags()
         {
             Flags = Creator ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
-            Flags = Kicked ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
             Flags = Left ? FlagsHelper.SetFlag(Flags, 2) : FlagsHelper.UnsetFlag(Flags, 2);
             Flags = Deactivated ? FlagsHelper.SetFlag(Flags, 5) : FlagsHelper.UnsetFlag(Flags, 5);
             Flags = CallActive ? FlagsHelper.SetFlag(Flags, 23) : FlagsHelper.UnsetFlag(Flags, 23);
@@ -189,7 +184,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             }
             Flags = tryflags.Value;
             Creator = FlagsHelper.IsFlagSet(Flags, 0);
-            Kicked = FlagsHelper.IsFlagSet(Flags, 1);
             Left = FlagsHelper.IsFlagSet(Flags, 2);
             Deactivated = FlagsHelper.IsFlagSet(Flags, 5);
             CallActive = FlagsHelper.IsFlagSet(Flags, 23);
@@ -282,7 +276,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 Flags = Flags,
                 Creator = Creator,
-                Kicked = Kicked,
                 Left = Left,
                 Deactivated = Deactivated,
                 CallActive = CallActive,

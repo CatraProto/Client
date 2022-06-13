@@ -127,7 +127,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 LangCode = LangCode,
                 FromVersion = FromVersion,
-                Version = Version
+                Version = Version,
+                Strings = new List<CatraProto.Client.TL.Schemas.CloudChats.LangPackStringBase>()
             };
             foreach (var strings in Strings)
             {

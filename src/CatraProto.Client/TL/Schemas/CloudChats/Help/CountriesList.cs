@@ -100,7 +100,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new CountriesList();
+            var newClonedObject = new CountriesList
+            {
+                Countries = new List<CatraProto.Client.TL.Schemas.CloudChats.Help.CountryBase>()
+            };
             foreach (var countries in Countries)
             {
                 var clonecountries = (CatraProto.Client.TL.Schemas.CloudChats.Help.CountryBase?)countries.Clone();

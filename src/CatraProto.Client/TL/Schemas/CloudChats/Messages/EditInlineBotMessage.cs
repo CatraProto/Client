@@ -213,9 +213,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new EditInlineBotMessage();
-            newClonedObject.Flags = Flags;
-            newClonedObject.NoWebpage = NoWebpage;
+            var newClonedObject = new EditInlineBotMessage
+            {
+                Flags = Flags,
+                NoWebpage = NoWebpage
+            };
             var cloneId = (CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineMessageIDBase?)Id.Clone();
             if (cloneId is null)
             {

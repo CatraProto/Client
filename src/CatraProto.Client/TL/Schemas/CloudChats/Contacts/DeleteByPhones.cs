@@ -90,7 +90,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new DeleteByPhones();
+            var newClonedObject = new DeleteByPhones
+            {
+                Phones = new List<string>()
+            };
             foreach (var phones in Phones)
             {
                 newClonedObject.Phones.Add(phones);

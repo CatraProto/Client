@@ -93,7 +93,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new GetMultiWallPapers();
+            var newClonedObject = new GetMultiWallPapers
+            {
+                Wallpapers = new List<CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase>()
+            };
             foreach (var wallpapers in Wallpapers)
             {
                 var clonewallpapers = (CatraProto.Client.TL.Schemas.CloudChats.InputWallPaperBase?)wallpapers.Clone();

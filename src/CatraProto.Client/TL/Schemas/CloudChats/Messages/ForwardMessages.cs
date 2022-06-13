@@ -246,10 +246,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 return null;
             }
             newClonedObject.FromPeer = cloneFromPeer;
+            newClonedObject.Id = new List<int>();
             foreach (var id in Id)
             {
                 newClonedObject.Id.Add(id);
             }
+            newClonedObject.RandomId = new List<long>();
             foreach (var randomId in RandomId)
             {
                 newClonedObject.RandomId.Add(randomId);

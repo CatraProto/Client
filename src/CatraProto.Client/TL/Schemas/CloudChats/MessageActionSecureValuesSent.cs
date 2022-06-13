@@ -89,7 +89,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new MessageActionSecureValuesSent();
+            var newClonedObject = new MessageActionSecureValuesSent
+            {
+                Types = new List<CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase>()
+            };
             foreach (var types in Types)
             {
                 var clonetypes = (CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase?)types.Clone();

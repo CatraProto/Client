@@ -119,7 +119,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new PrivacyRules();
+            var newClonedObject = new PrivacyRules
+            {
+                Rules = new List<CatraProto.Client.TL.Schemas.CloudChats.PrivacyRuleBase>()
+            };
             foreach (var rules in Rules)
             {
                 var clonerules = (CatraProto.Client.TL.Schemas.CloudChats.PrivacyRuleBase?)rules.Clone();
@@ -129,6 +132,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 }
                 newClonedObject.Rules.Add(clonerules);
             }
+            newClonedObject.Chats = new List<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
             foreach (var chats in Chats)
             {
                 var clonechats = (CatraProto.Client.TL.Schemas.CloudChats.ChatBase?)chats.Clone();
@@ -138,6 +142,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 }
                 newClonedObject.Chats.Add(clonechats);
             }
+            newClonedObject.Users = new List<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
             foreach (var users in Users)
             {
                 var cloneusers = (CatraProto.Client.TL.Schemas.CloudChats.UserBase?)users.Clone();

@@ -169,7 +169,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 TokenType = TokenType,
                 Token = Token,
                 AppSandbox = AppSandbox,
-                Secret = Secret
+                Secret = Secret,
+                OtherUids = new List<long>()
             };
             foreach (var otherUids in OtherUids)
             {

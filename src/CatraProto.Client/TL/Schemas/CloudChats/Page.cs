@@ -191,7 +191,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 Part = Part,
                 Rtl = Rtl,
                 V2 = V2,
-                Url = Url
+                Url = Url,
+                Blocks = new List<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase>()
             };
             foreach (var blocks in Blocks)
             {
@@ -202,6 +203,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 }
                 newClonedObject.Blocks.Add(cloneblocks);
             }
+            newClonedObject.Photos = new List<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>();
             foreach (var photos in Photos)
             {
                 var clonephotos = (CatraProto.Client.TL.Schemas.CloudChats.PhotoBase?)photos.Clone();
@@ -211,6 +213,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 }
                 newClonedObject.Photos.Add(clonephotos);
             }
+            newClonedObject.Documents = new List<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
             foreach (var documents in Documents)
             {
                 var clonedocuments = (CatraProto.Client.TL.Schemas.CloudChats.DocumentBase?)documents.Clone();

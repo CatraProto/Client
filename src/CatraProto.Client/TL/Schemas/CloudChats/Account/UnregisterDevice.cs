@@ -116,7 +116,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             var newClonedObject = new UnregisterDevice
             {
                 TokenType = TokenType,
-                Token = Token
+                Token = Token,
+                OtherUids = new List<long>()
             };
             foreach (var otherUids in OtherUids)
             {

@@ -110,7 +110,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             var newClonedObject = new MessageUserVoteMultiple
             {
-                UserId = UserId
+                UserId = UserId,
+                Options = new List<byte[]>()
             };
             foreach (var options in Options)
             {

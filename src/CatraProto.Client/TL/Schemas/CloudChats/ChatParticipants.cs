@@ -113,7 +113,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             var newClonedObject = new ChatParticipants
             {
-                ChatId = ChatId
+                ChatId = ChatId,
+                Participants = new List<CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantBase>()
             };
             foreach (var participants in Participants)
             {

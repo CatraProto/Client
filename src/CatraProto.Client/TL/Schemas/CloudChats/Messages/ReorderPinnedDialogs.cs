@@ -130,7 +130,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             {
                 Flags = Flags,
                 Force = Force,
-                FolderId = FolderId
+                FolderId = FolderId,
+                Order = new List<CatraProto.Client.TL.Schemas.CloudChats.InputDialogPeerBase>()
             };
             foreach (var order in Order)
             {

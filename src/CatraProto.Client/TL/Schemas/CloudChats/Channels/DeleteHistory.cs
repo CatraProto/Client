@@ -16,6 +16,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
@@ -26,13 +27,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 {
     public partial class DeleteHistory : IMethod
     {
-
+        [Flags]
+        public enum FlagsEnum
+        {
+            ForEveryone = 1 << 0
+        }
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -1355375294; }
+        public static int ConstructorId { get => -1683319225; }
 
         [Newtonsoft.Json.JsonIgnore]
-        ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
+        ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
+
+        [Newtonsoft.Json.JsonIgnore]
+        public int Flags { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("for_everyone")]
+        public bool ForEveryone { get; set; }
 
         [Newtonsoft.Json.JsonProperty("channel")]
         public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase Channel { get; set; }
@@ -56,12 +67,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 
         public void UpdateFlags()
         {
+            Flags = ForEveryone ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
 
         }
 
         public WriteResult Serialize(Writer writer)
         {
             writer.WriteInt32(ConstructorId);
+            UpdateFlags();
+
+            writer.WriteInt32(Flags);
             var checkchannel = writer.WriteObject(Channel);
             if (checkchannel.IsError)
             {
@@ -75,6 +90,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 
         public ReadResult<IObject> Deserialize(Reader reader)
         {
+            var tryflags = reader.ReadInt32();
+            if (tryflags.IsError)
+            {
+                return ReadResult<IObject>.Move(tryflags);
+            }
+            Flags = tryflags.Value;
+            ForEveryone = FlagsHelper.IsFlagSet(Flags, 0);
             var trychannel = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase>();
             if (trychannel.IsError)
             {
@@ -103,7 +125,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new DeleteHistory();
+            var newClonedObject = new DeleteHistory
+            {
+                Flags = Flags,
+                ForEveryone = ForEveryone
+            };
             var cloneChannel = (CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase?)Channel.Clone();
             if (cloneChannel is null)
             {

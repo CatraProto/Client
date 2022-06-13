@@ -175,7 +175,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         {
             var newClonedObject = new AuthorizationForm
             {
-                Flags = Flags
+                Flags = Flags,
+                RequiredTypes = new List<CatraProto.Client.TL.Schemas.CloudChats.SecureRequiredTypeBase>()
             };
             foreach (var requiredTypes in RequiredTypes)
             {
@@ -186,6 +187,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 }
                 newClonedObject.RequiredTypes.Add(clonerequiredTypes);
             }
+            newClonedObject.Values = new List<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase>();
             foreach (var values in Values)
             {
                 var clonevalues = (CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase?)values.Clone();
@@ -195,6 +197,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 }
                 newClonedObject.Values.Add(clonevalues);
             }
+            newClonedObject.Errors = new List<CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase>();
             foreach (var errors in Errors)
             {
                 var cloneerrors = (CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase?)errors.Clone();
@@ -204,6 +207,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 }
                 newClonedObject.Errors.Add(cloneerrors);
             }
+            newClonedObject.Users = new List<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
             foreach (var users in Users)
             {
                 var cloneusers = (CatraProto.Client.TL.Schemas.CloudChats.UserBase?)users.Clone();

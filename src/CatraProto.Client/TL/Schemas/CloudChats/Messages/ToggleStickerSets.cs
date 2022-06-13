@@ -132,7 +132,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 Flags = Flags,
                 Uninstall = Uninstall,
                 Archive = Archive,
-                Unarchive = Unarchive
+                Unarchive = Unarchive,
+                Stickersets = new List<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase>()
             };
             foreach (var stickersets in Stickersets)
             {

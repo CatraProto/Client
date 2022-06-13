@@ -111,6 +111,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
                 return null;
             }
             newClonedObject.PhotoField = clonePhotoField;
+            newClonedObject.Users = new List<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
             foreach (var users in Users)
             {
                 var cloneusers = (CatraProto.Client.TL.Schemas.CloudChats.UserBase?)users.Clone();

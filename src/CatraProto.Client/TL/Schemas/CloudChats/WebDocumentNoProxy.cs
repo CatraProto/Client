@@ -128,7 +128,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 Url = Url,
                 Size = Size,
-                MimeType = MimeType
+                MimeType = MimeType,
+                Attributes = new List<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase>()
             };
             foreach (var attributes in Attributes)
             {

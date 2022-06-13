@@ -114,7 +114,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             var newClonedObject = new ChannelMessagesFilter
             {
                 Flags = Flags,
-                ExcludeNewMessages = ExcludeNewMessages
+                ExcludeNewMessages = ExcludeNewMessages,
+                Ranges = new List<CatraProto.Client.TL.Schemas.CloudChats.MessageRangeBase>()
             };
             foreach (var ranges in Ranges)
             {

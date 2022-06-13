@@ -35,6 +35,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("commands")]
         public abstract List<CatraProto.Client.TL.Schemas.CloudChats.BotCommandBase> Commands { get; set; }
 
+        [Newtonsoft.Json.JsonProperty("menu_button")]
+        public abstract CatraProto.Client.TL.Schemas.CloudChats.BotMenuButtonBase MenuButton { get; set; }
+
         public abstract void UpdateFlags();
         public abstract ReadResult<IObject> Deserialize(Reader reader);
         public abstract WriteResult Serialize(Writer writer);

@@ -90,7 +90,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new UpdateDialogFiltersOrder();
+            var newClonedObject = new UpdateDialogFiltersOrder
+            {
+                Order = new List<int>()
+            };
             foreach (var order in Order)
             {
                 newClonedObject.Order.Add(order);

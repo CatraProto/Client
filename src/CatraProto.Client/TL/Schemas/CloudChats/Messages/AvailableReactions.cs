@@ -102,7 +102,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         {
             var newClonedObject = new AvailableReactions
             {
-                Hash = Hash
+                Hash = Hash,
+                Reactions = new List<CatraProto.Client.TL.Schemas.CloudChats.AvailableReactionBase>()
             };
             foreach (var reactions in Reactions)
             {

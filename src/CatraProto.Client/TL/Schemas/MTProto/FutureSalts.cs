@@ -114,7 +114,8 @@ namespace CatraProto.Client.TL.Schemas.MTProto
             var newClonedObject = new FutureSalts
             {
                 ReqMsgId = ReqMsgId,
-                Now = Now
+                Now = Now,
+                Salts = new List<CatraProto.Client.TL.Schemas.MTProto.FutureSalt>()
             };
             foreach (var salts in Salts)
             {

@@ -211,13 +211,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new UpdateShortSentMessage();
-            newClonedObject.Flags = Flags;
-            newClonedObject.Out = Out;
-            newClonedObject.Id = Id;
-            newClonedObject.Pts = Pts;
-            newClonedObject.PtsCount = PtsCount;
-            newClonedObject.Date = Date;
+            var newClonedObject = new UpdateShortSentMessage
+            {
+                Flags = Flags,
+                Out = Out,
+                Id = Id,
+                Pts = Pts,
+                PtsCount = PtsCount,
+                Date = Date
+            };
             if (Media is not null)
             {
                 var cloneMedia = (CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase?)Media.Clone();

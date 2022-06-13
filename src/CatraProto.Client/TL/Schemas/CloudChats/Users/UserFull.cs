@@ -126,6 +126,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Users
                 return null;
             }
             newClonedObject.FullUser = cloneFullUser;
+            newClonedObject.Chats = new List<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
             foreach (var chats in Chats)
             {
                 var clonechats = (CatraProto.Client.TL.Schemas.CloudChats.ChatBase?)chats.Clone();
@@ -135,6 +136,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Users
                 }
                 newClonedObject.Chats.Add(clonechats);
             }
+            newClonedObject.Users = new List<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
             foreach (var users in Users)
             {
                 var cloneusers = (CatraProto.Client.TL.Schemas.CloudChats.UserBase?)users.Clone();

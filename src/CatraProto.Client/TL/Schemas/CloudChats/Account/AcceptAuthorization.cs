@@ -147,7 +147,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             {
                 BotId = BotId,
                 Scope = Scope,
-                PublicKey = PublicKey
+                PublicKey = PublicKey,
+                ValueHashes = new List<CatraProto.Client.TL.Schemas.CloudChats.SecureValueHashBase>()
             };
             foreach (var valueHashes in ValueHashes)
             {

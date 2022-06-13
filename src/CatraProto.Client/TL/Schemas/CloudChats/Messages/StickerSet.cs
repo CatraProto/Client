@@ -126,6 +126,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 return null;
             }
             newClonedObject.Set = cloneSet;
+            newClonedObject.Packs = new List<CatraProto.Client.TL.Schemas.CloudChats.StickerPackBase>();
             foreach (var packs in Packs)
             {
                 var clonepacks = (CatraProto.Client.TL.Schemas.CloudChats.StickerPackBase?)packs.Clone();
@@ -135,6 +136,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 }
                 newClonedObject.Packs.Add(clonepacks);
             }
+            newClonedObject.Documents = new List<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
             foreach (var documents in Documents)
             {
                 var clonedocuments = (CatraProto.Client.TL.Schemas.CloudChats.DocumentBase?)documents.Clone();

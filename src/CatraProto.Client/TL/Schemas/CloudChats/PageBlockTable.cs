@@ -144,6 +144,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 return null;
             }
             newClonedObject.Title = cloneTitle;
+            newClonedObject.Rows = new List<CatraProto.Client.TL.Schemas.CloudChats.PageTableRowBase>();
             foreach (var rows in Rows)
             {
                 var clonerows = (CatraProto.Client.TL.Schemas.CloudChats.PageTableRowBase?)rows.Clone();

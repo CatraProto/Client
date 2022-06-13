@@ -384,6 +384,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
                 return null;
             }
             newClonedObject.LanguagesGraph = cloneLanguagesGraph;
+            newClonedObject.RecentMessageInteractions = new List<CatraProto.Client.TL.Schemas.CloudChats.MessageInteractionCountersBase>();
             foreach (var recentMessageInteractions in RecentMessageInteractions)
             {
                 var clonerecentMessageInteractions = (CatraProto.Client.TL.Schemas.CloudChats.MessageInteractionCountersBase?)recentMessageInteractions.Clone();

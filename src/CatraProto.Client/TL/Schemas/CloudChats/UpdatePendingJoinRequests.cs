@@ -120,6 +120,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             }
             newClonedObject.Peer = clonePeer;
             newClonedObject.RequestsPending = RequestsPending;
+            newClonedObject.RecentRequesters = new List<long>();
             foreach (var recentRequesters in RecentRequesters)
             {
                 newClonedObject.RecentRequesters.Add(recentRequesters);

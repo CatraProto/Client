@@ -39,7 +39,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 
         }
 
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetBase>> CreateStickerSetAsync(CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId, string title, string shortName, List<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetItemBase> stickers, bool masks = false, bool animated = false, bool videos = false, CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase? thumb = null, string? software = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetBase>> InternalCreateStickerSetAsync(CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId, string title, string shortName, List<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetItemBase> stickers, bool masks = false, bool animated = false, bool videos = false, CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase? thumb = null, string? software = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetBase>(

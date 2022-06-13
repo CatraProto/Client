@@ -90,7 +90,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new GetEmojiKeywordsLanguages();
+            var newClonedObject = new GetEmojiKeywordsLanguages
+            {
+                LangCodes = new List<string>()
+            };
             foreach (var langCodes in LangCodes)
             {
                 newClonedObject.LangCodes.Add(langCodes);

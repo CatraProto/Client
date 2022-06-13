@@ -105,7 +105,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new CreateChat();
+            var newClonedObject = new CreateChat
+            {
+                Users = new List<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>()
+            };
             foreach (var users in Users)
             {
                 var cloneusers = (CatraProto.Client.TL.Schemas.CloudChats.InputUserBase?)users.Clone();

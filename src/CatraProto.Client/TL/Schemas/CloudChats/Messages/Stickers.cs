@@ -102,7 +102,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         {
             var newClonedObject = new Stickers
             {
-                Hash = Hash
+                Hash = Hash,
+                StickersField = new List<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>()
             };
             foreach (var stickersField in StickersField)
             {

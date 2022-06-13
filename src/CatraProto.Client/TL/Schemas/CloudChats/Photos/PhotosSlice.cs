@@ -117,7 +117,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
         {
             var newClonedObject = new PhotosSlice
             {
-                Count = Count
+                Count = Count,
+                Photos = new List<CatraProto.Client.TL.Schemas.CloudChats.PhotoBase>()
             };
             foreach (var photos in Photos)
             {
@@ -128,6 +129,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
                 }
                 newClonedObject.Photos.Add(clonephotos);
             }
+            newClonedObject.Users = new List<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
             foreach (var users in Users)
             {
                 var cloneusers = (CatraProto.Client.TL.Schemas.CloudChats.UserBase?)users.Clone();

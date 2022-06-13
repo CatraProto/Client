@@ -100,7 +100,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             var newClonedObject = new GroupCallParticipantVideoSourceGroup
             {
-                Semantics = Semantics
+                Semantics = Semantics,
+                Sources = new List<int>()
             };
             foreach (var sources in Sources)
             {

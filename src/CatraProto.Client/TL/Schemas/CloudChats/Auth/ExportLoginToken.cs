@@ -116,7 +116,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
             var newClonedObject = new ExportLoginToken
             {
                 ApiId = ApiId,
-                ApiHash = ApiHash
+                ApiHash = ApiHash,
+                ExceptIds = new List<long>()
             };
             foreach (var exceptIds in ExceptIds)
             {

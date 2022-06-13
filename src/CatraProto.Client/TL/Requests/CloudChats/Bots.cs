@@ -21,6 +21,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.MTProto.Rpc;
+using CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors;
 
 
 namespace CatraProto.Client.TL.Requests.CloudChats
@@ -114,6 +115,110 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             {
                 Scope = scope,
                 LangCode = langCode,
+            };
+
+            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+            await taskCompletionSource!;
+            return rpcResponse;
+        }
+        internal async Task<RpcResponse<bool>> InternalSetBotMenuButtonAsync(CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId, CatraProto.Client.TL.Schemas.CloudChats.BotMenuButtonBase button, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        {
+
+            var rpcResponse = new RpcResponse<bool>(
+            );
+            messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+            var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Bots.SetBotMenuButton()
+            {
+                UserId = userId,
+                Button = button,
+            };
+
+            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+            await taskCompletionSource!;
+            return rpcResponse;
+        }
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.BotMenuButtonBase>> InternalGetBotMenuButtonAsync(CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        {
+
+            var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.BotMenuButtonBase>(
+            );
+            messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+            var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Bots.GetBotMenuButton()
+            {
+                UserId = userId,
+            };
+
+            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+            await taskCompletionSource!;
+            return rpcResponse;
+        }
+        public async Task<RpcResponse<bool>> SetBotBroadcastDefaultAdminRightsAsync(CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase adminRights, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        {
+
+            var rpcResponse = new RpcResponse<bool>(
+            );
+            messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+            var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Bots.SetBotBroadcastDefaultAdminRights()
+            {
+                AdminRights = adminRights,
+            };
+
+            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+            await taskCompletionSource!;
+            return rpcResponse;
+        }
+        public async Task<RpcResponse<bool>> SetBotGroupDefaultAdminRightsAsync(CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase adminRights, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        {
+
+            var rpcResponse = new RpcResponse<bool>(
+            );
+            messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+            var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Bots.SetBotGroupDefaultAdminRights()
+            {
+                AdminRights = adminRights,
+            };
+
+            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+            await taskCompletionSource!;
+            return rpcResponse;
+        }
+        public async Task<RpcResponse<bool>> SetBotMenuButtonAsync(long userId, CatraProto.Client.TL.Schemas.CloudChats.BotMenuButtonBase button, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        {
+
+            var userIdToResolve = _client.DatabaseManager.PeerDatabase.ResolveUser(userId);
+            if (userIdToResolve is null)
+            {
+                return RpcResponse<bool>.FromError(new PeerNotFoundError(userId, CatraProto.Client.MTProto.PeerType.User));
+            }
+            var userIdResolved = userIdToResolve;
+            var rpcResponse = new RpcResponse<bool>(
+            );
+            messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+            var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Bots.SetBotMenuButton()
+            {
+                UserId = userIdResolved,
+                Button = button,
+            };
+
+            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+            await taskCompletionSource!;
+            return rpcResponse;
+        }
+        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.BotMenuButtonBase>> GetBotMenuButtonAsync(long userId, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        {
+
+            var userIdToResolve = _client.DatabaseManager.PeerDatabase.ResolveUser(userId);
+            if (userIdToResolve is null)
+            {
+                return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.BotMenuButtonBase>.FromError(new PeerNotFoundError(userId, CatraProto.Client.MTProto.PeerType.User));
+            }
+            var userIdResolved = userIdToResolve;
+            var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.BotMenuButtonBase>(
+            );
+            messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+            var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Bots.GetBotMenuButton()
+            {
+                UserId = userIdResolved,
             };
 
             _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);

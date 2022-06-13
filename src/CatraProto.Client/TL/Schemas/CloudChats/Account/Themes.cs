@@ -102,7 +102,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         {
             var newClonedObject = new Themes
             {
-                Hash = Hash
+                Hash = Hash,
+                ThemesField = new List<CatraProto.Client.TL.Schemas.CloudChats.ThemeBase>()
             };
             foreach (var themesField in ThemesField)
             {

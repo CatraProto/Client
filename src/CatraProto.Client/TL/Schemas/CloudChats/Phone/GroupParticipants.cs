@@ -155,7 +155,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
         {
             var newClonedObject = new GroupParticipants
             {
-                Count = Count
+                Count = Count,
+                Participants = new List<CatraProto.Client.TL.Schemas.CloudChats.GroupCallParticipantBase>()
             };
             foreach (var participants in Participants)
             {
@@ -167,6 +168,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
                 newClonedObject.Participants.Add(cloneparticipants);
             }
             newClonedObject.NextOffset = NextOffset;
+            newClonedObject.Chats = new List<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
             foreach (var chats in Chats)
             {
                 var clonechats = (CatraProto.Client.TL.Schemas.CloudChats.ChatBase?)chats.Clone();
@@ -176,6 +178,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
                 }
                 newClonedObject.Chats.Add(clonechats);
             }
+            newClonedObject.Users = new List<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
             foreach (var users in Users)
             {
                 var cloneusers = (CatraProto.Client.TL.Schemas.CloudChats.UserBase?)users.Clone();

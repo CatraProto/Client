@@ -150,6 +150,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
                 return null;
             }
             newClonedObject.Call = cloneCall;
+            newClonedObject.Ids = new List<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
             foreach (var ids in Ids)
             {
                 var cloneids = (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase?)ids.Clone();
@@ -159,6 +160,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
                 }
                 newClonedObject.Ids.Add(cloneids);
             }
+            newClonedObject.Sources = new List<int>();
             foreach (var sources in Sources)
             {
                 newClonedObject.Sources.Add(sources);

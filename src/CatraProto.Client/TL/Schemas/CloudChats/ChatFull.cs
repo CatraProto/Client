@@ -426,12 +426,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new ChatFull();
-            newClonedObject.Flags = Flags;
-            newClonedObject.CanSetUsername = CanSetUsername;
-            newClonedObject.HasScheduled = HasScheduled;
-            newClonedObject.Id = Id;
-            newClonedObject.About = About;
+            var newClonedObject = new ChatFull
+            {
+                Flags = Flags,
+                CanSetUsername = CanSetUsername,
+                HasScheduled = HasScheduled,
+                Id = Id,
+                About = About
+            };
             var cloneParticipants = (CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantsBase?)Participants.Clone();
             if (cloneParticipants is null)
             {

@@ -129,7 +129,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         {
             var newClonedObject = new RecentStickers
             {
-                Hash = Hash
+                Hash = Hash,
+                Packs = new List<CatraProto.Client.TL.Schemas.CloudChats.StickerPackBase>()
             };
             foreach (var packs in Packs)
             {
@@ -140,6 +141,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 }
                 newClonedObject.Packs.Add(clonepacks);
             }
+            newClonedObject.Stickers = new List<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
             foreach (var stickers in Stickers)
             {
                 var clonestickers = (CatraProto.Client.TL.Schemas.CloudChats.DocumentBase?)stickers.Clone();
@@ -149,6 +151,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 }
                 newClonedObject.Stickers.Add(clonestickers);
             }
+            newClonedObject.Dates = new List<int>();
             foreach (var dates in Dates)
             {
                 newClonedObject.Dates.Add(dates);

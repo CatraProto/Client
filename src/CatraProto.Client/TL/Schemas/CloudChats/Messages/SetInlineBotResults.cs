@@ -196,7 +196,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 Flags = Flags,
                 Gallery = Gallery,
                 Private = Private,
-                QueryId = QueryId
+                QueryId = QueryId,
+                Results = new List<CatraProto.Client.TL.Schemas.CloudChats.InputBotInlineResultBase>()
             };
             foreach (var results in Results)
             {

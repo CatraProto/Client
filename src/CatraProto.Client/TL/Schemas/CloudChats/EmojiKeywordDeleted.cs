@@ -100,7 +100,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             var newClonedObject = new EmojiKeywordDeleted
             {
-                Keyword = Keyword
+                Keyword = Keyword,
+                Emoticons = new List<string>()
             };
             foreach (var emoticons in Emoticons)
             {

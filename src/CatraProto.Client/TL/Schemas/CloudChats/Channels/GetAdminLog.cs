@@ -205,8 +205,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new GetAdminLog();
-            newClonedObject.Flags = Flags;
+            var newClonedObject = new GetAdminLog
+            {
+                Flags = Flags
+            };
             var cloneChannel = (CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase?)Channel.Clone();
             if (cloneChannel is null)
             {

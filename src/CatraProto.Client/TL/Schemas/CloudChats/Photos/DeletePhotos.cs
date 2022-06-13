@@ -93,7 +93,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Photos
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new DeletePhotos();
+            var newClonedObject = new DeletePhotos
+            {
+                Id = new List<CatraProto.Client.TL.Schemas.CloudChats.InputPhotoBase>()
+            };
             foreach (var id in Id)
             {
                 var cloneid = (CatraProto.Client.TL.Schemas.CloudChats.InputPhotoBase?)id.Clone();

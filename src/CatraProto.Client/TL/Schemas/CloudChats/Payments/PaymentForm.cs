@@ -319,6 +319,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
                 }
                 newClonedObject.SavedCredentials = cloneSavedCredentials;
             }
+            newClonedObject.Users = new List<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
             foreach (var users in Users)
             {
                 var cloneusers = (CatraProto.Client.TL.Schemas.CloudChats.UserBase?)users.Clone();

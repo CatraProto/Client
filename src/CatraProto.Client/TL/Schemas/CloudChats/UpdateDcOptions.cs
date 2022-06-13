@@ -89,7 +89,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new UpdateDcOptions();
+            var newClonedObject = new UpdateDcOptions
+            {
+                DcOptions = new List<CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase>()
+            };
             foreach (var dcOptions in DcOptions)
             {
                 var clonedcOptions = (CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase?)dcOptions.Clone();

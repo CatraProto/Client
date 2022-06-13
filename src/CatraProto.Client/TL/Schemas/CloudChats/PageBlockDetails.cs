@@ -129,7 +129,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             var newClonedObject = new PageBlockDetails
             {
                 Flags = Flags,
-                Open = Open
+                Open = Open,
+                Blocks = new List<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase>()
             };
             foreach (var blocks in Blocks)
             {

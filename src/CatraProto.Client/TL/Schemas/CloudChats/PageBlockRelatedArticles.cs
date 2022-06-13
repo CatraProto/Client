@@ -111,6 +111,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 return null;
             }
             newClonedObject.Title = cloneTitle;
+            newClonedObject.Articles = new List<CatraProto.Client.TL.Schemas.CloudChats.PageRelatedArticleBase>();
             foreach (var articles in Articles)
             {
                 var clonearticles = (CatraProto.Client.TL.Schemas.CloudChats.PageRelatedArticleBase?)articles.Clone();

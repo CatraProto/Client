@@ -145,7 +145,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 Flags = Flags,
                 Pinned = Pinned,
-                ChannelId = ChannelId
+                ChannelId = ChannelId,
+                Messages = new List<int>()
             };
             foreach (var messages in Messages)
             {

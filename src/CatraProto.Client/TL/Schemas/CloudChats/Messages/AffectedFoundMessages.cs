@@ -123,7 +123,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             {
                 Pts = Pts,
                 PtsCount = PtsCount,
-                Offset = Offset
+                Offset = Offset,
+                Messages = new List<int>()
             };
             foreach (var messages in Messages)
             {

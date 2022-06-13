@@ -122,6 +122,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 return null;
             }
             newClonedObject.Call = cloneCall;
+            newClonedObject.Participants = new List<CatraProto.Client.TL.Schemas.CloudChats.GroupCallParticipantBase>();
             foreach (var participants in Participants)
             {
                 var cloneparticipants = (CatraProto.Client.TL.Schemas.CloudChats.GroupCallParticipantBase?)participants.Clone();

@@ -111,7 +111,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new UpdateFolderPeers();
+            var newClonedObject = new UpdateFolderPeers
+            {
+                FolderPeers = new List<CatraProto.Client.TL.Schemas.CloudChats.FolderPeerBase>()
+            };
             foreach (var folderPeers in FolderPeers)
             {
                 var clonefolderPeers = (CatraProto.Client.TL.Schemas.CloudChats.FolderPeerBase?)folderPeers.Clone();

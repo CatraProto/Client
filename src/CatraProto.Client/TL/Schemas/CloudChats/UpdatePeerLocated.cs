@@ -89,7 +89,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new UpdatePeerLocated();
+            var newClonedObject = new UpdatePeerLocated
+            {
+                Peers = new List<CatraProto.Client.TL.Schemas.CloudChats.PeerLocatedBase>()
+            };
             foreach (var peers in Peers)
             {
                 var clonepeers = (CatraProto.Client.TL.Schemas.CloudChats.PeerLocatedBase?)peers.Clone();

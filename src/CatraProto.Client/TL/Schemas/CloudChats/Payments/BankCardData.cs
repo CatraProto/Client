@@ -103,7 +103,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
         {
             var newClonedObject = new BankCardData
             {
-                Title = Title
+                Title = Title,
+                OpenUrls = new List<CatraProto.Client.TL.Schemas.CloudChats.BankCardOpenUrlBase>()
             };
             foreach (var openUrls in OpenUrls)
             {

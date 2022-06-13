@@ -123,6 +123,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             }
             newClonedObject.Category = cloneCategory;
             newClonedObject.Count = Count;
+            newClonedObject.Peers = new List<CatraProto.Client.TL.Schemas.CloudChats.TopPeerBase>();
             foreach (var peers in Peers)
             {
                 var clonepeers = (CatraProto.Client.TL.Schemas.CloudChats.TopPeerBase?)peers.Clone();

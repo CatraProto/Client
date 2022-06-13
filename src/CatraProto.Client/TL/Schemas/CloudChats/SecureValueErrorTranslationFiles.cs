@@ -120,6 +120,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 return null;
             }
             newClonedObject.Type = cloneType;
+            newClonedObject.FileHash = new List<byte[]>();
             foreach (var fileHash in FileHash)
             {
                 newClonedObject.FileHash.Add(fileHash);

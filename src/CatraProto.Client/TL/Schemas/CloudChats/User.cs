@@ -46,6 +46,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Scam = 1 << 24,
             ApplyMinPhoto = 1 << 25,
             Fake = 1 << 26,
+            BotAttachMenu = 1 << 27,
             AccessHash = 1 << 0,
             FirstName = 1 << 1,
             LastName = 1 << 2,
@@ -109,6 +110,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         [Newtonsoft.Json.JsonProperty("fake")]
         public bool Fake { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("bot_attach_menu")]
+        public bool BotAttachMenu { get; set; }
 
         [Newtonsoft.Json.JsonProperty("id")]
         public sealed override long Id { get; set; }
@@ -184,6 +188,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = Scam ? FlagsHelper.SetFlag(Flags, 24) : FlagsHelper.UnsetFlag(Flags, 24);
             Flags = ApplyMinPhoto ? FlagsHelper.SetFlag(Flags, 25) : FlagsHelper.UnsetFlag(Flags, 25);
             Flags = Fake ? FlagsHelper.SetFlag(Flags, 26) : FlagsHelper.UnsetFlag(Flags, 26);
+            Flags = BotAttachMenu ? FlagsHelper.SetFlag(Flags, 27) : FlagsHelper.UnsetFlag(Flags, 27);
             Flags = AccessHash == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
             Flags = FirstName == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
             Flags = LastName == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
@@ -306,6 +311,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Scam = FlagsHelper.IsFlagSet(Flags, 24);
             ApplyMinPhoto = FlagsHelper.IsFlagSet(Flags, 25);
             Fake = FlagsHelper.IsFlagSet(Flags, 26);
+            BotAttachMenu = FlagsHelper.IsFlagSet(Flags, 27);
             var tryid = reader.ReadInt64();
             if (tryid.IsError)
             {
@@ -439,29 +445,32 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new User();
-            newClonedObject.Flags = Flags;
-            newClonedObject.Self = Self;
-            newClonedObject.Contact = Contact;
-            newClonedObject.MutualContact = MutualContact;
-            newClonedObject.Deleted = Deleted;
-            newClonedObject.Bot = Bot;
-            newClonedObject.BotChatHistory = BotChatHistory;
-            newClonedObject.BotNochats = BotNochats;
-            newClonedObject.Verified = Verified;
-            newClonedObject.Restricted = Restricted;
-            newClonedObject.Min = Min;
-            newClonedObject.BotInlineGeo = BotInlineGeo;
-            newClonedObject.Support = Support;
-            newClonedObject.Scam = Scam;
-            newClonedObject.ApplyMinPhoto = ApplyMinPhoto;
-            newClonedObject.Fake = Fake;
-            newClonedObject.Id = Id;
-            newClonedObject.AccessHash = AccessHash;
-            newClonedObject.FirstName = FirstName;
-            newClonedObject.LastName = LastName;
-            newClonedObject.Username = Username;
-            newClonedObject.Phone = Phone;
+            var newClonedObject = new User
+            {
+                Flags = Flags,
+                Self = Self,
+                Contact = Contact,
+                MutualContact = MutualContact,
+                Deleted = Deleted,
+                Bot = Bot,
+                BotChatHistory = BotChatHistory,
+                BotNochats = BotNochats,
+                Verified = Verified,
+                Restricted = Restricted,
+                Min = Min,
+                BotInlineGeo = BotInlineGeo,
+                Support = Support,
+                Scam = Scam,
+                ApplyMinPhoto = ApplyMinPhoto,
+                Fake = Fake,
+                BotAttachMenu = BotAttachMenu,
+                Id = Id,
+                AccessHash = AccessHash,
+                FirstName = FirstName,
+                LastName = LastName,
+                Username = Username,
+                Phone = Phone
+            };
             if (Photo is not null)
             {
                 var clonePhoto = (CatraProto.Client.TL.Schemas.CloudChats.UserProfilePhotoBase?)Photo.Clone();

@@ -147,7 +147,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 Flags = Flags,
                 Paused = Paused,
-                Endpoint = Endpoint
+                Endpoint = Endpoint,
+                SourceGroups = new List<CatraProto.Client.TL.Schemas.CloudChats.GroupCallParticipantVideoSourceGroupBase>()
             };
             foreach (var sourceGroups in SourceGroups)
             {

@@ -127,7 +127,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 LangCode = LangCode,
                 FromVersion = FromVersion,
-                Version = Version
+                Version = Version,
+                Keywords = new List<CatraProto.Client.TL.Schemas.CloudChats.EmojiKeywordBase>()
             };
             foreach (var keywords in Keywords)
             {

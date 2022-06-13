@@ -244,9 +244,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new EditMessage();
-            newClonedObject.Flags = Flags;
-            newClonedObject.NoWebpage = NoWebpage;
+            var newClonedObject = new EditMessage
+            {
+                Flags = Flags,
+                NoWebpage = NoWebpage
+            };
             var clonePeer = (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase?)Peer.Clone();
             if (clonePeer is null)
             {

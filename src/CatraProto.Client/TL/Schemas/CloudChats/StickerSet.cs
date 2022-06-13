@@ -274,18 +274,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new StickerSet();
-            newClonedObject.Flags = Flags;
-            newClonedObject.Archived = Archived;
-            newClonedObject.Official = Official;
-            newClonedObject.Masks = Masks;
-            newClonedObject.Animated = Animated;
-            newClonedObject.Videos = Videos;
-            newClonedObject.InstalledDate = InstalledDate;
-            newClonedObject.Id = Id;
-            newClonedObject.AccessHash = AccessHash;
-            newClonedObject.Title = Title;
-            newClonedObject.ShortName = ShortName;
+            var newClonedObject = new StickerSet
+            {
+                Flags = Flags,
+                Archived = Archived,
+                Official = Official,
+                Masks = Masks,
+                Animated = Animated,
+                Videos = Videos,
+                InstalledDate = InstalledDate,
+                Id = Id,
+                AccessHash = AccessHash,
+                Title = Title,
+                ShortName = ShortName
+            };
             if (Thumbs is not null)
             {
                 newClonedObject.Thumbs = new List<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase>();

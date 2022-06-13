@@ -164,7 +164,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new DifferenceSlice();
+            var newClonedObject = new DifferenceSlice
+            {
+                NewMessages = new List<CatraProto.Client.TL.Schemas.CloudChats.MessageBase>()
+            };
             foreach (var newMessages in NewMessages)
             {
                 var clonenewMessages = (CatraProto.Client.TL.Schemas.CloudChats.MessageBase?)newMessages.Clone();
@@ -174,6 +177,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
                 }
                 newClonedObject.NewMessages.Add(clonenewMessages);
             }
+            newClonedObject.NewEncryptedMessages = new List<CatraProto.Client.TL.Schemas.CloudChats.EncryptedMessageBase>();
             foreach (var newEncryptedMessages in NewEncryptedMessages)
             {
                 var clonenewEncryptedMessages = (CatraProto.Client.TL.Schemas.CloudChats.EncryptedMessageBase?)newEncryptedMessages.Clone();
@@ -183,6 +187,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
                 }
                 newClonedObject.NewEncryptedMessages.Add(clonenewEncryptedMessages);
             }
+            newClonedObject.OtherUpdates = new List<CatraProto.Client.TL.Schemas.CloudChats.UpdateBase>();
             foreach (var otherUpdates in OtherUpdates)
             {
                 var cloneotherUpdates = (CatraProto.Client.TL.Schemas.CloudChats.UpdateBase?)otherUpdates.Clone();
@@ -192,6 +197,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
                 }
                 newClonedObject.OtherUpdates.Add(cloneotherUpdates);
             }
+            newClonedObject.Chats = new List<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
             foreach (var chats in Chats)
             {
                 var clonechats = (CatraProto.Client.TL.Schemas.CloudChats.ChatBase?)chats.Clone();
@@ -201,6 +207,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Updates
                 }
                 newClonedObject.Chats.Add(clonechats);
             }
+            newClonedObject.Users = new List<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
             foreach (var users in Users)
             {
                 var cloneusers = (CatraProto.Client.TL.Schemas.CloudChats.UserBase?)users.Clone();

@@ -126,7 +126,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
         {
             var newClonedObject = new UserInfo
             {
-                Message = Message
+                Message = Message,
+                Entities = new List<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>()
             };
             foreach (var entities in Entities)
             {

@@ -89,7 +89,10 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new MsgContainer();
+            var newClonedObject = new MsgContainer
+            {
+                Messages = new List<CatraProto.Client.TL.Schemas.MTProto.Message>()
+            };
             foreach (var messages in Messages)
             {
                 var clonemessages = (CatraProto.Client.TL.Schemas.MTProto.Message?)messages.Clone();

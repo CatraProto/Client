@@ -216,9 +216,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new UpdateTheme();
-            newClonedObject.Flags = Flags;
-            newClonedObject.Format = Format;
+            var newClonedObject = new UpdateTheme
+            {
+                Flags = Flags,
+                Format = Format
+            };
             var cloneTheme = (CatraProto.Client.TL.Schemas.CloudChats.InputThemeBase?)Theme.Clone();
             if (cloneTheme is null)
             {

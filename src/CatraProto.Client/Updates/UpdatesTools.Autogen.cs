@@ -255,6 +255,12 @@ namespace CatraProto.Client.Updates
                     chatsVector = messageReactionsList.Chats;
                     usersVector = messageReactionsList.Users;
                     break;
+                case CatraProto.Client.TL.Schemas.CloudChats.AttachMenuBots attachMenuBots:
+                    usersVector = attachMenuBots.Users;
+                    break;
+                case CatraProto.Client.TL.Schemas.CloudChats.AttachMenuBotsBot attachMenuBotsBot:
+                    usersVector = attachMenuBotsBot.Users;
+                    break;
 
             }
 

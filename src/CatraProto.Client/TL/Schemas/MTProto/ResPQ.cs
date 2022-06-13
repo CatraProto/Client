@@ -126,7 +126,8 @@ namespace CatraProto.Client.TL.Schemas.MTProto
             {
                 Nonce = Nonce,
                 ServerNonce = ServerNonce,
-                Pq = Pq
+                Pq = Pq,
+                ServerPublicKeyFingerprints = new List<long>()
             };
             foreach (var serverPublicKeyFingerprints in ServerPublicKeyFingerprints)
             {

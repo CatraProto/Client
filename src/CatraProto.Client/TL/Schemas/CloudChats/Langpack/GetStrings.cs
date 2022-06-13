@@ -117,7 +117,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Langpack
             var newClonedObject = new GetStrings
             {
                 LangPack = LangPack,
-                LangCode = LangCode
+                LangCode = LangCode,
+                Keys = new List<string>()
             };
             foreach (var keys in Keys)
             {

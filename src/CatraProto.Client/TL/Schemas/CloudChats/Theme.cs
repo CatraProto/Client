@@ -247,15 +247,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new Theme();
-            newClonedObject.Flags = Flags;
-            newClonedObject.Creator = Creator;
-            newClonedObject.Default = Default;
-            newClonedObject.ForChat = ForChat;
-            newClonedObject.Id = Id;
-            newClonedObject.AccessHash = AccessHash;
-            newClonedObject.Slug = Slug;
-            newClonedObject.Title = Title;
+            var newClonedObject = new Theme
+            {
+                Flags = Flags,
+                Creator = Creator,
+                Default = Default,
+                ForChat = ForChat,
+                Id = Id,
+                AccessHash = AccessHash,
+                Slug = Slug,
+                Title = Title
+            };
             if (Document is not null)
             {
                 var cloneDocument = (CatraProto.Client.TL.Schemas.CloudChats.DocumentBase?)Document.Clone();

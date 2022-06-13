@@ -100,7 +100,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             var newClonedObject = new MessageActionChatCreate
             {
-                Title = Title
+                Title = Title,
+                Users = new List<long>()
             };
             foreach (var users in Users)
             {

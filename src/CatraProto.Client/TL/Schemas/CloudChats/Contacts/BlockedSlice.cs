@@ -132,7 +132,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
         {
             var newClonedObject = new BlockedSlice
             {
-                Count = Count
+                Count = Count,
+                BlockedField = new List<CatraProto.Client.TL.Schemas.CloudChats.PeerBlockedBase>()
             };
             foreach (var blockedField in BlockedField)
             {
@@ -143,6 +144,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
                 }
                 newClonedObject.BlockedField.Add(cloneblockedField);
             }
+            newClonedObject.Chats = new List<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
             foreach (var chats in Chats)
             {
                 var clonechats = (CatraProto.Client.TL.Schemas.CloudChats.ChatBase?)chats.Clone();
@@ -152,6 +154,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
                 }
                 newClonedObject.Chats.Add(clonechats);
             }
+            newClonedObject.Users = new List<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
             foreach (var users in Users)
             {
                 var cloneusers = (CatraProto.Client.TL.Schemas.CloudChats.UserBase?)users.Clone();

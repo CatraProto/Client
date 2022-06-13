@@ -212,6 +212,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 }
                 newClonedObject.SwitchPm = cloneSwitchPm;
             }
+            newClonedObject.Results = new List<CatraProto.Client.TL.Schemas.CloudChats.BotInlineResultBase>();
             foreach (var results in Results)
             {
                 var cloneresults = (CatraProto.Client.TL.Schemas.CloudChats.BotInlineResultBase?)results.Clone();
@@ -222,6 +223,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 newClonedObject.Results.Add(cloneresults);
             }
             newClonedObject.CacheTime = CacheTime;
+            newClonedObject.Users = new List<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
             foreach (var users in Users)
             {
                 var cloneusers = (CatraProto.Client.TL.Schemas.CloudChats.UserBase?)users.Clone();

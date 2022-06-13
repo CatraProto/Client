@@ -36,8 +36,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public abstract int? MuteUntil { get; set; }
 
         [MaybeNull]
-        [Newtonsoft.Json.JsonProperty("sound")]
-        public abstract string Sound { get; set; }
+        [Newtonsoft.Json.JsonProperty("ios_sound")]
+        public abstract CatraProto.Client.TL.Schemas.CloudChats.NotificationSoundBase IosSound { get; set; }
+
+        [MaybeNull]
+        [Newtonsoft.Json.JsonProperty("android_sound")]
+        public abstract CatraProto.Client.TL.Schemas.CloudChats.NotificationSoundBase AndroidSound { get; set; }
+
+        [MaybeNull]
+        [Newtonsoft.Json.JsonProperty("other_sound")]
+        public abstract CatraProto.Client.TL.Schemas.CloudChats.NotificationSoundBase OtherSound { get; set; }
 
         public abstract void UpdateFlags();
         public abstract ReadResult<IObject> Deserialize(Reader reader);

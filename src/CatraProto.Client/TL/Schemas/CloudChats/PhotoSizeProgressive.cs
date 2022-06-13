@@ -124,7 +124,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 Type = Type,
                 W = W,
-                H = H
+                H = H,
+                Sizes = new List<int>()
             };
             foreach (var sizes in Sizes)
             {

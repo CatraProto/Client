@@ -67,8 +67,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             AvailableReactions = 1 << 30
         }
 
+        [Flags]
+        public enum Flags2Enum
+        {
+            CanDeleteChannel = 1 << 0
+        }
+
         [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -516145888; }
+        public static int ConstructorId { get => -362240487; }
 
         [Newtonsoft.Json.JsonIgnore]
         public int Flags { get; set; }
@@ -96,6 +102,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         [Newtonsoft.Json.JsonProperty("blocked")]
         public bool Blocked { get; set; }
+
+        [Newtonsoft.Json.JsonIgnore]
+        public int Flags2 { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("can_delete_channel")]
+        public bool CanDeleteChannel { get; set; }
 
         [Newtonsoft.Json.JsonProperty("id")]
         public sealed override long Id { get; set; }
@@ -241,6 +253,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = HasScheduled ? FlagsHelper.SetFlag(Flags, 19) : FlagsHelper.UnsetFlag(Flags, 19);
             Flags = CanViewStats ? FlagsHelper.SetFlag(Flags, 20) : FlagsHelper.UnsetFlag(Flags, 20);
             Flags = Blocked ? FlagsHelper.SetFlag(Flags, 22) : FlagsHelper.UnsetFlag(Flags, 22);
+            Flags2 = CanDeleteChannel ? FlagsHelper.SetFlag(Flags2, 0) : FlagsHelper.UnsetFlag(Flags2, 0);
             Flags = ParticipantsCount == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
             Flags = AdminsCount == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
             Flags = KickedCount == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
@@ -276,6 +289,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             UpdateFlags();
 
             writer.WriteInt32(Flags);
+            UpdateFlags();
+
+            writer.WriteInt32(Flags2);
             writer.WriteInt64(Id);
 
             writer.WriteString(About);
@@ -477,6 +493,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             HasScheduled = FlagsHelper.IsFlagSet(Flags, 19);
             CanViewStats = FlagsHelper.IsFlagSet(Flags, 20);
             Blocked = FlagsHelper.IsFlagSet(Flags, 22);
+            var tryflags2 = reader.ReadInt32();
+            if (tryflags2.IsError)
+            {
+                return ReadResult<IObject>.Move(tryflags2);
+            }
+            Flags2 = tryflags2.Value;
+            CanDeleteChannel = FlagsHelper.IsFlagSet(Flags2, 0);
             var tryid = reader.ReadInt64();
             if (tryid.IsError)
             {
@@ -808,26 +831,30 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new ChannelFull();
-            newClonedObject.Flags = Flags;
-            newClonedObject.CanViewParticipants = CanViewParticipants;
-            newClonedObject.CanSetUsername = CanSetUsername;
-            newClonedObject.CanSetStickers = CanSetStickers;
-            newClonedObject.HiddenPrehistory = HiddenPrehistory;
-            newClonedObject.CanSetLocation = CanSetLocation;
-            newClonedObject.HasScheduled = HasScheduled;
-            newClonedObject.CanViewStats = CanViewStats;
-            newClonedObject.Blocked = Blocked;
-            newClonedObject.Id = Id;
-            newClonedObject.About = About;
-            newClonedObject.ParticipantsCount = ParticipantsCount;
-            newClonedObject.AdminsCount = AdminsCount;
-            newClonedObject.KickedCount = KickedCount;
-            newClonedObject.BannedCount = BannedCount;
-            newClonedObject.OnlineCount = OnlineCount;
-            newClonedObject.ReadInboxMaxId = ReadInboxMaxId;
-            newClonedObject.ReadOutboxMaxId = ReadOutboxMaxId;
-            newClonedObject.UnreadCount = UnreadCount;
+            var newClonedObject = new ChannelFull
+            {
+                Flags = Flags,
+                CanViewParticipants = CanViewParticipants,
+                CanSetUsername = CanSetUsername,
+                CanSetStickers = CanSetStickers,
+                HiddenPrehistory = HiddenPrehistory,
+                CanSetLocation = CanSetLocation,
+                HasScheduled = HasScheduled,
+                CanViewStats = CanViewStats,
+                Blocked = Blocked,
+                Flags2 = Flags2,
+                CanDeleteChannel = CanDeleteChannel,
+                Id = Id,
+                About = About,
+                ParticipantsCount = ParticipantsCount,
+                AdminsCount = AdminsCount,
+                KickedCount = KickedCount,
+                BannedCount = BannedCount,
+                OnlineCount = OnlineCount,
+                ReadInboxMaxId = ReadInboxMaxId,
+                ReadOutboxMaxId = ReadOutboxMaxId,
+                UnreadCount = UnreadCount
+            };
             var cloneChatPhoto = (CatraProto.Client.TL.Schemas.CloudChats.PhotoBase?)ChatPhoto.Clone();
             if (cloneChatPhoto is null)
             {

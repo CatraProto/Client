@@ -102,7 +102,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         {
             var newClonedObject = new WallPapers
             {
-                Hash = Hash
+                Hash = Hash,
+                Wallpapers = new List<CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase>()
             };
             foreach (var wallpapers in Wallpapers)
             {

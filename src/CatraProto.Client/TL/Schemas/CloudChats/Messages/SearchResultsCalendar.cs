@@ -216,7 +216,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 Count = Count,
                 MinDate = MinDate,
                 MinMsgId = MinMsgId,
-                OffsetIdOffset = OffsetIdOffset
+                OffsetIdOffset = OffsetIdOffset,
+                Periods = new List<CatraProto.Client.TL.Schemas.CloudChats.SearchResultsCalendarPeriodBase>()
             };
             foreach (var periods in Periods)
             {
@@ -227,6 +228,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 }
                 newClonedObject.Periods.Add(cloneperiods);
             }
+            newClonedObject.Messages = new List<CatraProto.Client.TL.Schemas.CloudChats.MessageBase>();
             foreach (var messages in Messages)
             {
                 var clonemessages = (CatraProto.Client.TL.Schemas.CloudChats.MessageBase?)messages.Clone();
@@ -236,6 +238,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 }
                 newClonedObject.Messages.Add(clonemessages);
             }
+            newClonedObject.Chats = new List<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
             foreach (var chats in Chats)
             {
                 var clonechats = (CatraProto.Client.TL.Schemas.CloudChats.ChatBase?)chats.Clone();
@@ -245,6 +248,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 }
                 newClonedObject.Chats.Add(clonechats);
             }
+            newClonedObject.Users = new List<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
             foreach (var users in Users)
             {
                 var cloneusers = (CatraProto.Client.TL.Schemas.CloudChats.UserBase?)users.Clone();

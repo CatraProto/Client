@@ -227,9 +227,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             newClonedObject.BaseTheme = cloneBaseTheme;
             newClonedObject.AccentColor = AccentColor;
             newClonedObject.OutboxAccentColor = OutboxAccentColor;
-            foreach (var messageColors in MessageColors)
+            if (MessageColors is not null)
             {
-                newClonedObject.MessageColors.Add(messageColors);
+                newClonedObject.MessageColors = new List<int>();
+                foreach (var messageColors in MessageColors)
+                {
+                    newClonedObject.MessageColors.Add(messageColors);
+                }
             }
             if (Wallpaper is not null)
             {

@@ -115,6 +115,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 return null;
             }
             newClonedObject.Key = cloneKey;
+            newClonedObject.Rules = new List<CatraProto.Client.TL.Schemas.CloudChats.InputPrivacyRuleBase>();
             foreach (var rules in Rules)
             {
                 var clonerules = (CatraProto.Client.TL.Schemas.CloudChats.InputPrivacyRuleBase?)rules.Clone();

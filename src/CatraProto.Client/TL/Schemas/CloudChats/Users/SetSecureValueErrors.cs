@@ -115,6 +115,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Users
                 return null;
             }
             newClonedObject.Id = cloneId;
+            newClonedObject.Errors = new List<CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase>();
             foreach (var errors in Errors)
             {
                 var cloneerrors = (CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase?)errors.Clone();

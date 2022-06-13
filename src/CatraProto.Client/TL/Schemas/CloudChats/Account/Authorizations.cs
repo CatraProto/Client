@@ -102,7 +102,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         {
             var newClonedObject = new Authorizations
             {
-                AuthorizationTtlDays = AuthorizationTtlDays
+                AuthorizationTtlDays = AuthorizationTtlDays,
+                AuthorizationsField = new List<CatraProto.Client.TL.Schemas.CloudChats.AuthorizationBase>()
             };
             foreach (var authorizationsField in AuthorizationsField)
             {

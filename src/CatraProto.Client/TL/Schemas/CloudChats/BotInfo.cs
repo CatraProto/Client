@@ -29,7 +29,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 460632885; }
+        public static int ConstructorId { get => -468280483; }
 
         [Newtonsoft.Json.JsonProperty("user_id")]
         public sealed override long UserId { get; set; }
@@ -40,13 +40,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("commands")]
         public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.BotCommandBase> Commands { get; set; }
 
+        [Newtonsoft.Json.JsonProperty("menu_button")]
+        public sealed override CatraProto.Client.TL.Schemas.CloudChats.BotMenuButtonBase MenuButton { get; set; }
+
 
 #nullable enable
-        public BotInfo(long userId, string description, List<CatraProto.Client.TL.Schemas.CloudChats.BotCommandBase> commands)
+        public BotInfo(long userId, string description, List<CatraProto.Client.TL.Schemas.CloudChats.BotCommandBase> commands, CatraProto.Client.TL.Schemas.CloudChats.BotMenuButtonBase menuButton)
         {
             UserId = userId;
             Description = description;
             Commands = commands;
+            MenuButton = menuButton;
 
         }
 #nullable disable
@@ -69,6 +73,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             if (checkcommands.IsError)
             {
                 return checkcommands;
+            }
+            var checkmenuButton = writer.WriteObject(MenuButton);
+            if (checkmenuButton.IsError)
+            {
+                return checkmenuButton;
             }
 
             return new WriteResult();
@@ -95,6 +104,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 return ReadResult<IObject>.Move(trycommands);
             }
             Commands = trycommands.Value;
+            var trymenuButton = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.BotMenuButtonBase>();
+            if (trymenuButton.IsError)
+            {
+                return ReadResult<IObject>.Move(trymenuButton);
+            }
+            MenuButton = trymenuButton.Value;
             return new ReadResult<IObject>(this);
 
         }
@@ -115,7 +130,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             var newClonedObject = new BotInfo
             {
                 UserId = UserId,
-                Description = Description
+                Description = Description,
+                Commands = new List<CatraProto.Client.TL.Schemas.CloudChats.BotCommandBase>()
             };
             foreach (var commands in Commands)
             {
@@ -126,6 +142,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 }
                 newClonedObject.Commands.Add(clonecommands);
             }
+            var cloneMenuButton = (CatraProto.Client.TL.Schemas.CloudChats.BotMenuButtonBase?)MenuButton.Clone();
+            if (cloneMenuButton is null)
+            {
+                return null;
+            }
+            newClonedObject.MenuButton = cloneMenuButton;
             return newClonedObject;
 
         }

@@ -111,7 +111,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             var newClonedObject = new UpdateStickerSetsOrder
             {
                 Flags = Flags,
-                Masks = Masks
+                Masks = Masks,
+                Order = new List<long>()
             };
             foreach (var order in Order)
             {

@@ -404,29 +404,31 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new Channel();
-            newClonedObject.Flags = Flags;
-            newClonedObject.Creator = Creator;
-            newClonedObject.Left = Left;
-            newClonedObject.Broadcast = Broadcast;
-            newClonedObject.Verified = Verified;
-            newClonedObject.Megagroup = Megagroup;
-            newClonedObject.Restricted = Restricted;
-            newClonedObject.Signatures = Signatures;
-            newClonedObject.Min = Min;
-            newClonedObject.Scam = Scam;
-            newClonedObject.HasLink = HasLink;
-            newClonedObject.HasGeo = HasGeo;
-            newClonedObject.SlowmodeEnabled = SlowmodeEnabled;
-            newClonedObject.CallActive = CallActive;
-            newClonedObject.CallNotEmpty = CallNotEmpty;
-            newClonedObject.Fake = Fake;
-            newClonedObject.Gigagroup = Gigagroup;
-            newClonedObject.Noforwards = Noforwards;
-            newClonedObject.Id = Id;
-            newClonedObject.AccessHash = AccessHash;
-            newClonedObject.Title = Title;
-            newClonedObject.Username = Username;
+            var newClonedObject = new Channel
+            {
+                Flags = Flags,
+                Creator = Creator,
+                Left = Left,
+                Broadcast = Broadcast,
+                Verified = Verified,
+                Megagroup = Megagroup,
+                Restricted = Restricted,
+                Signatures = Signatures,
+                Min = Min,
+                Scam = Scam,
+                HasLink = HasLink,
+                HasGeo = HasGeo,
+                SlowmodeEnabled = SlowmodeEnabled,
+                CallActive = CallActive,
+                CallNotEmpty = CallNotEmpty,
+                Fake = Fake,
+                Gigagroup = Gigagroup,
+                Noforwards = Noforwards,
+                Id = Id,
+                AccessHash = AccessHash,
+                Title = Title,
+                Username = Username
+            };
             var clonePhoto = (CatraProto.Client.TL.Schemas.CloudChats.ChatPhotoBase?)Photo.Clone();
             if (clonePhoto is null)
             {

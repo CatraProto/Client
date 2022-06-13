@@ -102,7 +102,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         {
             var newClonedObject = new SearchResultsPositions
             {
-                Count = Count
+                Count = Count,
+                Positions = new List<CatraProto.Client.TL.Schemas.CloudChats.SearchResultsPositionBase>()
             };
             foreach (var positions in Positions)
             {

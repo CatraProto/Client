@@ -85,6 +85,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("private_forward_name")]
         public abstract string PrivateForwardName { get; set; }
 
+        [MaybeNull]
+        [Newtonsoft.Json.JsonProperty("bot_group_admin_rights")]
+        public abstract CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase BotGroupAdminRights { get; set; }
+
+        [MaybeNull]
+        [Newtonsoft.Json.JsonProperty("bot_broadcast_admin_rights")]
+        public abstract CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase BotBroadcastAdminRights { get; set; }
+
         public abstract void UpdateFlags();
         public abstract ReadResult<IObject> Deserialize(Reader reader);
         public abstract WriteResult Serialize(Writer writer);

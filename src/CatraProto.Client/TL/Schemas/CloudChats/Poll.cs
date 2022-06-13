@@ -200,7 +200,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 PublicVoters = PublicVoters,
                 MultipleChoice = MultipleChoice,
                 Quiz = Quiz,
-                Question = Question
+                Question = Question,
+                Answers = new List<CatraProto.Client.TL.Schemas.CloudChats.PollAnswerBase>()
             };
             foreach (var answers in Answers)
             {

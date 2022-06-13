@@ -93,7 +93,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new GetSecureValue();
+            var newClonedObject = new GetSecureValue
+            {
+                Types = new List<CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase>()
+            };
             foreach (var types in Types)
             {
                 var clonetypes = (CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase?)types.Clone();

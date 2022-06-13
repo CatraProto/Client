@@ -132,9 +132,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new GetWebPagePreview();
-            newClonedObject.Flags = Flags;
-            newClonedObject.Message = Message;
+            var newClonedObject = new GetWebPagePreview
+            {
+                Flags = Flags,
+                Message = Message
+            };
             if (Entities is not null)
             {
                 newClonedObject.Entities = new List<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();

@@ -89,7 +89,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new TextConcat();
+            var newClonedObject = new TextConcat
+            {
+                Texts = new List<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>()
+            };
             foreach (var texts in Texts)
             {
                 var clonetexts = (CatraProto.Client.TL.Schemas.CloudChats.RichTextBase?)texts.Clone();

@@ -408,6 +408,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
                 return null;
             }
             newClonedObject.WeekdaysGraph = cloneWeekdaysGraph;
+            newClonedObject.TopPosters = new List<CatraProto.Client.TL.Schemas.CloudChats.StatsGroupTopPosterBase>();
             foreach (var topPosters in TopPosters)
             {
                 var clonetopPosters = (CatraProto.Client.TL.Schemas.CloudChats.StatsGroupTopPosterBase?)topPosters.Clone();
@@ -417,6 +418,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
                 }
                 newClonedObject.TopPosters.Add(clonetopPosters);
             }
+            newClonedObject.TopAdmins = new List<CatraProto.Client.TL.Schemas.CloudChats.StatsGroupTopAdminBase>();
             foreach (var topAdmins in TopAdmins)
             {
                 var clonetopAdmins = (CatraProto.Client.TL.Schemas.CloudChats.StatsGroupTopAdminBase?)topAdmins.Clone();
@@ -426,6 +428,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
                 }
                 newClonedObject.TopAdmins.Add(clonetopAdmins);
             }
+            newClonedObject.TopInviters = new List<CatraProto.Client.TL.Schemas.CloudChats.StatsGroupTopInviterBase>();
             foreach (var topInviters in TopInviters)
             {
                 var clonetopInviters = (CatraProto.Client.TL.Schemas.CloudChats.StatsGroupTopInviterBase?)topInviters.Clone();
@@ -435,6 +438,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
                 }
                 newClonedObject.TopInviters.Add(clonetopInviters);
             }
+            newClonedObject.Users = new List<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
             foreach (var users in Users)
             {
                 var cloneusers = (CatraProto.Client.TL.Schemas.CloudChats.UserBase?)users.Clone();

@@ -105,7 +105,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new InvokeAfterMsgs();
+            var newClonedObject = new InvokeAfterMsgs
+            {
+                MsgIds = new List<long>()
+            };
             foreach (var msgIds in MsgIds)
             {
                 newClonedObject.MsgIds.Add(msgIds);

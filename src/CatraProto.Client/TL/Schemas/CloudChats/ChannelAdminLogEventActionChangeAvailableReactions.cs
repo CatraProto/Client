@@ -98,11 +98,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new ChannelAdminLogEventActionChangeAvailableReactions();
+            var newClonedObject = new ChannelAdminLogEventActionChangeAvailableReactions
+            {
+                PrevValue = new List<string>()
+            };
             foreach (var prevValue in PrevValue)
             {
                 newClonedObject.PrevValue.Add(prevValue);
             }
+            newClonedObject.NewValue = new List<string>();
             foreach (var newValue in NewValue)
             {
                 newClonedObject.NewValue.Add(newValue);

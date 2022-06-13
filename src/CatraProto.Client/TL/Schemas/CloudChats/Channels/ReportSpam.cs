@@ -133,6 +133,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
                 return null;
             }
             newClonedObject.Participant = cloneParticipant;
+            newClonedObject.Id = new List<int>();
             foreach (var id in Id)
             {
                 newClonedObject.Id.Add(id);

@@ -33,11 +33,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             ShowPreviews = 1 << 0,
             Silent = 1 << 1,
             MuteUntil = 1 << 2,
-            Sound = 1 << 3
+            IosSound = 1 << 3,
+            AndroidSound = 1 << 4,
+            OtherSound = 1 << 5
         }
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -1353671392; }
+        public static int ConstructorId { get => -1472527322; }
 
         [Newtonsoft.Json.JsonIgnore]
         public int Flags { get; set; }
@@ -52,8 +54,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public sealed override int? MuteUntil { get; set; }
 
         [MaybeNull]
-        [Newtonsoft.Json.JsonProperty("sound")]
-        public sealed override string Sound { get; set; }
+        [Newtonsoft.Json.JsonProperty("ios_sound")]
+        public sealed override CatraProto.Client.TL.Schemas.CloudChats.NotificationSoundBase IosSound { get; set; }
+
+        [MaybeNull]
+        [Newtonsoft.Json.JsonProperty("android_sound")]
+        public sealed override CatraProto.Client.TL.Schemas.CloudChats.NotificationSoundBase AndroidSound { get; set; }
+
+        [MaybeNull]
+        [Newtonsoft.Json.JsonProperty("other_sound")]
+        public sealed override CatraProto.Client.TL.Schemas.CloudChats.NotificationSoundBase OtherSound { get; set; }
 
 
 
@@ -66,7 +76,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = ShowPreviews == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
             Flags = Silent == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
             Flags = MuteUntil == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
-            Flags = Sound == null ? FlagsHelper.UnsetFlag(Flags, 3) : FlagsHelper.SetFlag(Flags, 3);
+            Flags = IosSound == null ? FlagsHelper.UnsetFlag(Flags, 3) : FlagsHelper.SetFlag(Flags, 3);
+            Flags = AndroidSound == null ? FlagsHelper.UnsetFlag(Flags, 4) : FlagsHelper.SetFlag(Flags, 4);
+            Flags = OtherSound == null ? FlagsHelper.UnsetFlag(Flags, 5) : FlagsHelper.SetFlag(Flags, 5);
 
         }
 
@@ -101,8 +113,29 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
             if (FlagsHelper.IsFlagSet(Flags, 3))
             {
+                var checkiosSound = writer.WriteObject(IosSound);
+                if (checkiosSound.IsError)
+                {
+                    return checkiosSound;
+                }
+            }
 
-                writer.WriteString(Sound);
+            if (FlagsHelper.IsFlagSet(Flags, 4))
+            {
+                var checkandroidSound = writer.WriteObject(AndroidSound);
+                if (checkandroidSound.IsError)
+                {
+                    return checkandroidSound;
+                }
+            }
+
+            if (FlagsHelper.IsFlagSet(Flags, 5))
+            {
+                var checkotherSound = writer.WriteObject(OtherSound);
+                if (checkotherSound.IsError)
+                {
+                    return checkotherSound;
+                }
             }
 
 
@@ -150,12 +183,32 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
             if (FlagsHelper.IsFlagSet(Flags, 3))
             {
-                var trysound = reader.ReadString();
-                if (trysound.IsError)
+                var tryiosSound = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.NotificationSoundBase>();
+                if (tryiosSound.IsError)
                 {
-                    return ReadResult<IObject>.Move(trysound);
+                    return ReadResult<IObject>.Move(tryiosSound);
                 }
-                Sound = trysound.Value;
+                IosSound = tryiosSound.Value;
+            }
+
+            if (FlagsHelper.IsFlagSet(Flags, 4))
+            {
+                var tryandroidSound = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.NotificationSoundBase>();
+                if (tryandroidSound.IsError)
+                {
+                    return ReadResult<IObject>.Move(tryandroidSound);
+                }
+                AndroidSound = tryandroidSound.Value;
+            }
+
+            if (FlagsHelper.IsFlagSet(Flags, 5))
+            {
+                var tryotherSound = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.NotificationSoundBase>();
+                if (tryotherSound.IsError)
+                {
+                    return ReadResult<IObject>.Move(tryotherSound);
+                }
+                OtherSound = tryotherSound.Value;
             }
 
             return new ReadResult<IObject>(this);
@@ -180,9 +233,35 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 Flags = Flags,
                 ShowPreviews = ShowPreviews,
                 Silent = Silent,
-                MuteUntil = MuteUntil,
-                Sound = Sound
+                MuteUntil = MuteUntil
             };
+            if (IosSound is not null)
+            {
+                var cloneIosSound = (CatraProto.Client.TL.Schemas.CloudChats.NotificationSoundBase?)IosSound.Clone();
+                if (cloneIosSound is null)
+                {
+                    return null;
+                }
+                newClonedObject.IosSound = cloneIosSound;
+            }
+            if (AndroidSound is not null)
+            {
+                var cloneAndroidSound = (CatraProto.Client.TL.Schemas.CloudChats.NotificationSoundBase?)AndroidSound.Clone();
+                if (cloneAndroidSound is null)
+                {
+                    return null;
+                }
+                newClonedObject.AndroidSound = cloneAndroidSound;
+            }
+            if (OtherSound is not null)
+            {
+                var cloneOtherSound = (CatraProto.Client.TL.Schemas.CloudChats.NotificationSoundBase?)OtherSound.Clone();
+                if (cloneOtherSound is null)
+                {
+                    return null;
+                }
+                newClonedObject.OtherSound = cloneOtherSound;
+            }
             return newClonedObject;
 
         }

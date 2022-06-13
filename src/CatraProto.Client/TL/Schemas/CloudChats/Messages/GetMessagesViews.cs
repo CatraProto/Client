@@ -127,6 +127,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 return null;
             }
             newClonedObject.Peer = clonePeer;
+            newClonedObject.Id = new List<int>();
             foreach (var id in Id)
             {
                 newClonedObject.Id.Add(id);

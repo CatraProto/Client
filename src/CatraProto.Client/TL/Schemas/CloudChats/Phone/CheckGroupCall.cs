@@ -112,6 +112,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
                 return null;
             }
             newClonedObject.Call = cloneCall;
+            newClonedObject.Sources = new List<int>();
             foreach (var sources in Sources)
             {
                 newClonedObject.Sources.Add(sources);

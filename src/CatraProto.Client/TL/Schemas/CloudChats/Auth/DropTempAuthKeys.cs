@@ -90,7 +90,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new DropTempAuthKeys();
+            var newClonedObject = new DropTempAuthKeys
+            {
+                ExceptAuthKeys = new List<long>()
+            };
             foreach (var exceptAuthKeys in ExceptAuthKeys)
             {
                 newClonedObject.ExceptAuthKeys.Add(exceptAuthKeys);

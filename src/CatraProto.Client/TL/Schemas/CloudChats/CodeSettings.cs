@@ -138,9 +138,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 AllowAppHash = AllowAppHash,
                 AllowMissedCall = AllowMissedCall
             };
-            foreach (var logoutTokens in LogoutTokens)
+            if (LogoutTokens is not null)
             {
-                newClonedObject.LogoutTokens.Add(logoutTokens);
+                newClonedObject.LogoutTokens = new List<byte[]>();
+                foreach (var logoutTokens in LogoutTokens)
+                {
+                    newClonedObject.LogoutTokens.Add(logoutTokens);
+                }
             }
             return newClonedObject;
 

@@ -99,7 +99,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             var newClonedObject = new UpdateChannelReadMessagesContents
             {
-                ChannelId = ChannelId
+                ChannelId = ChannelId,
+                Messages = new List<int>()
             };
             foreach (var messages in Messages)
             {

@@ -136,8 +136,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new WebPageAttributeTheme();
-            newClonedObject.Flags = Flags;
+            var newClonedObject = new WebPageAttributeTheme
+            {
+                Flags = Flags
+            };
             if (Documents is not null)
             {
                 newClonedObject.Documents = new List<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();

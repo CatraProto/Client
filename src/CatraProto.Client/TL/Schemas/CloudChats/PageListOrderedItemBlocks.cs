@@ -103,7 +103,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             var newClonedObject = new PageListOrderedItemBlocks
             {
-                Num = Num
+                Num = Num,
+                Blocks = new List<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase>()
             };
             foreach (var blocks in Blocks)
             {

@@ -89,7 +89,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new SecureRequiredTypeOneOf();
+            var newClonedObject = new SecureRequiredTypeOneOf
+            {
+                Types = new List<CatraProto.Client.TL.Schemas.CloudChats.SecureRequiredTypeBase>()
+            };
             foreach (var types in Types)
             {
                 var clonetypes = (CatraProto.Client.TL.Schemas.CloudChats.SecureRequiredTypeBase?)types.Clone();

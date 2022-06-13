@@ -240,6 +240,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 return null;
             }
             newClonedObject.Protocol = cloneProtocol;
+            newClonedObject.Connections = new List<CatraProto.Client.TL.Schemas.CloudChats.PhoneConnectionBase>();
             foreach (var connections in Connections)
             {
                 var cloneconnections = (CatraProto.Client.TL.Schemas.CloudChats.PhoneConnectionBase?)connections.Clone();

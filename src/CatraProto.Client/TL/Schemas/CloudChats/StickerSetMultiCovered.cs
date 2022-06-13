@@ -111,6 +111,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 return null;
             }
             newClonedObject.Set = cloneSet;
+            newClonedObject.Covers = new List<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
             foreach (var covers in Covers)
             {
                 var clonecovers = (CatraProto.Client.TL.Schemas.CloudChats.DocumentBase?)covers.Clone();

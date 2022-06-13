@@ -98,7 +98,10 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new MsgsAllInfo();
+            var newClonedObject = new MsgsAllInfo
+            {
+                MsgIds = new List<long>()
+            };
             foreach (var msgIds in MsgIds)
             {
                 newClonedObject.MsgIds.Add(msgIds);

@@ -1,0 +1,175 @@
+/*
+CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
+Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using CatraProto.TL;
+using CatraProto.TL.Interfaces;
+using CatraProto.TL.Results;
+
+#nullable disable
+namespace CatraProto.Client.TL.Schemas.CloudChats
+{
+    public partial class AttachMenuBotIcon : CatraProto.Client.TL.Schemas.CloudChats.AttachMenuBotIconBase
+    {
+        [Flags]
+        public enum FlagsEnum
+        {
+            Colors = 1 << 0
+        }
+
+        [Newtonsoft.Json.JsonIgnore]
+        public static int ConstructorId { get => -1297663893; }
+
+        [Newtonsoft.Json.JsonIgnore]
+        public int Flags { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("name")]
+        public sealed override string Name { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("icon")]
+        public sealed override CatraProto.Client.TL.Schemas.CloudChats.DocumentBase Icon { get; set; }
+
+        [MaybeNull]
+        [Newtonsoft.Json.JsonProperty("colors")]
+        public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.AttachMenuBotIconColorBase> Colors { get; set; }
+
+
+#nullable enable
+        public AttachMenuBotIcon(string name, CatraProto.Client.TL.Schemas.CloudChats.DocumentBase icon)
+        {
+            Name = name;
+            Icon = icon;
+
+        }
+#nullable disable
+        internal AttachMenuBotIcon()
+        {
+        }
+
+        public override void UpdateFlags()
+        {
+            Flags = Colors == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
+
+        }
+
+        public override WriteResult Serialize(Writer writer)
+        {
+            writer.WriteInt32(ConstructorId);
+            UpdateFlags();
+
+            writer.WriteInt32(Flags);
+
+            writer.WriteString(Name);
+            var checkicon = writer.WriteObject(Icon);
+            if (checkicon.IsError)
+            {
+                return checkicon;
+            }
+            if (FlagsHelper.IsFlagSet(Flags, 0))
+            {
+                var checkcolors = writer.WriteVector(Colors, false);
+                if (checkcolors.IsError)
+                {
+                    return checkcolors;
+                }
+            }
+
+
+            return new WriteResult();
+
+        }
+
+        public override ReadResult<IObject> Deserialize(Reader reader)
+        {
+            var tryflags = reader.ReadInt32();
+            if (tryflags.IsError)
+            {
+                return ReadResult<IObject>.Move(tryflags);
+            }
+            Flags = tryflags.Value;
+            var tryname = reader.ReadString();
+            if (tryname.IsError)
+            {
+                return ReadResult<IObject>.Move(tryname);
+            }
+            Name = tryname.Value;
+            var tryicon = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
+            if (tryicon.IsError)
+            {
+                return ReadResult<IObject>.Move(tryicon);
+            }
+            Icon = tryicon.Value;
+            if (FlagsHelper.IsFlagSet(Flags, 0))
+            {
+                var trycolors = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.AttachMenuBotIconColorBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
+                if (trycolors.IsError)
+                {
+                    return ReadResult<IObject>.Move(trycolors);
+                }
+                Colors = trycolors.Value;
+            }
+
+            return new ReadResult<IObject>(this);
+
+        }
+
+        public override string ToString()
+        {
+            return "attachMenuBotIcon";
+        }
+
+        public override int GetConstructorId()
+        {
+            return ConstructorId;
+        }
+
+#nullable enable
+        public override IObject? Clone()
+        {
+            var newClonedObject = new AttachMenuBotIcon
+            {
+                Flags = Flags,
+                Name = Name
+            };
+            var cloneIcon = (CatraProto.Client.TL.Schemas.CloudChats.DocumentBase?)Icon.Clone();
+            if (cloneIcon is null)
+            {
+                return null;
+            }
+            newClonedObject.Icon = cloneIcon;
+            if (Colors is not null)
+            {
+                newClonedObject.Colors = new List<CatraProto.Client.TL.Schemas.CloudChats.AttachMenuBotIconColorBase>();
+                foreach (var colors in Colors)
+                {
+                    var clonecolors = (CatraProto.Client.TL.Schemas.CloudChats.AttachMenuBotIconColorBase?)colors.Clone();
+                    if (clonecolors is null)
+                    {
+                        return null;
+                    }
+                    newClonedObject.Colors.Add(clonecolors);
+                }
+            }
+            return newClonedObject;
+
+        }
+#nullable disable
+    }
+}

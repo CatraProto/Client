@@ -86,7 +86,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new PrivacyValueAllowUsers();
+            var newClonedObject = new PrivacyValueAllowUsers
+            {
+                Users = new List<long>()
+            };
             foreach (var users in Users)
             {
                 newClonedObject.Users.Add(users);
