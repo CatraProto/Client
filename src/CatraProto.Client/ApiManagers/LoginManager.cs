@@ -98,22 +98,22 @@ namespace CatraProto.Client.ApiManagers
             SetCurrentState(_sessionData.Authorization.GetAuthorization(out _, out _));
         }
 
-        public async Task<RpcError?> UsePhoneNumberAsync(string phoneNumber, CodeSettings codeSettings, CancellationToken cancellationToken = default)
+        public async Task<RpcError?> UsePhoneNumberAsync(string phoneNumber, CodeSettings codeSettings)
         {
             if (GetCurrentState() is not LoginState.AwaitingLogin)
             {
-                _logger.Warning("Skipping AsUserAsync because state is not AwaitingLogin");
+                _logger.Information("Skipping AsUserAsync because state is not AwaitingLogin");
                 return new InvalidTypeError();
             }
 
             _logger.Information("Sending authorization code to {Number}", phoneNumber);
-            var auth = await _client.Api.CloudChatsApi.Auth.InternalSendCodeAsync(phoneNumber, _clientSettings.ApiSettings.ApiId, _clientSettings.ApiSettings.ApiHash, codeSettings, cancellationToken: cancellationToken);
+            var auth = await _client.Api.CloudChatsApi.Auth.InternalSendCodeAsync(phoneNumber, _clientSettings.ApiSettings.ApiId, _clientSettings.ApiSettings.ApiHash, codeSettings);
             if (auth.RpcCallFailed)
             {
                 if (auth.Error.ErrorMessage == "AUTH_RESTART")
                 {
                     _logger.Information("Received AUTH_RESTART keeping state to AwaitingLogin and trying again...");
-                    return await UsePhoneNumberAsync(phoneNumber, codeSettings, cancellationToken);
+                    return await UsePhoneNumberAsync(phoneNumber, codeSettings);
                 }
 
                 _logger.Information("Send code failed because error {Error} occured", auth.Error);
@@ -135,15 +135,16 @@ namespace CatraProto.Client.ApiManagers
             return null;
         }
 
-        public async Task<RpcError?> UseBotTokenAsync(string token, CancellationToken cancellationToken = default)
+        public async Task<RpcError?> UseBotTokenAsync(string token)
         {
             if (GetCurrentState() is not LoginState.AwaitingLogin)
             {
-                _logger.Warning("Skipping AsBotAsync because state is not AwaitingLogin");
+                _logger.Information("Skipping AsBotAsync because state is not AwaitingLogin");
                 return null;
             }
 
-            var auth = await _client.Api.CloudChatsApi.Auth.InternalImportBotAuthorizationAsync(0, _clientSettings.ApiSettings.ApiId, _clientSettings.ApiSettings.ApiHash, token, cancellationToken: cancellationToken);
+            _logger.Information("Importing bot authorization {Token}", token);
+            var auth = await _client.Api.CloudChatsApi.Auth.InternalImportBotAuthorizationAsync(0, _clientSettings.ApiSettings.ApiId, _clientSettings.ApiSettings.ApiHash, token);
             if (auth.RpcCallFailed)
             {
                 _logger.Information("Received {Error} after calling auth.importBotAuthorization", auth.Error);
@@ -174,16 +175,16 @@ namespace CatraProto.Client.ApiManagers
             return null;
         }
 
-        public async Task<RpcError?> UseLoginCodeAsync(string loginCode, CancellationToken cancellationToken = default)
+        public async Task<RpcError?> UseLoginCodeAsync(string loginCode)
         {
             if (GetCurrentState() is not LoginState.AwaitingCode || _phoneData is null)
             {
-                _logger.Warning("Skipping UseLoginCodeAsync because state is not AwaitingLogin");
+                _logger.Information("Skipping UseLoginCodeAsync because state is not AwaitingLogin");
                 return null;
             }
 
             _logger.Information("Trying to sign-in using code {Code}", loginCode);
-            var query = await _client.Api.CloudChatsApi.Auth.InternalSignInAsync(_phoneData.PhoneNumber, _phoneData.PhoneHash, loginCode, cancellationToken: cancellationToken);
+            var query = await _client.Api.CloudChatsApi.Auth.InternalSignInAsync(_phoneData.PhoneNumber, _phoneData.PhoneHash, loginCode);
             if (query.RpcCallFailed)
             {
                 _logger.Information("Received {Error} after calling auth.signIn", query.Error);
@@ -236,10 +237,11 @@ namespace CatraProto.Client.ApiManagers
         {
             if (GetCurrentState() is not LoginState.AwaitingCode || _phoneData is null)
             {
-                _logger.Warning("Skipping ResendCodeAsync because state is not AwaitingLogin");
+                _logger.Information("Skipping ResendCodeAsync because state is not AwaitingLogin");
                 return null;
             }
 
+            _logger.Information("Resending login code to phone number {Number} and phone hash {Hash}", _phoneData.PhoneNumber, _phoneData.PhoneHash);
             var r = await _client.Api.CloudChatsApi.Auth.InternalResendCodeAsync(_phoneData.PhoneNumber, _phoneData.PhoneHash);
             if (r.RpcCallFailed)
             {
@@ -258,15 +260,16 @@ namespace CatraProto.Client.ApiManagers
             return null;
         }
 
-        public async Task<RpcError?> UseProfileDataAsync(string firstName, string lastName, CancellationToken cancellationToken = default)
+        public async Task<RpcError?> UseProfileDataAsync(string firstName, string lastName)
         {
             if (GetCurrentState() is not LoginState.AwaitingRegistration || _phoneData is null)
             {
-                _logger.Warning("Skipping RegisterUserAsync because state is not AwaitingRegistration");
+                _logger.Information("Skipping RegisterUserAsync because state is not AwaitingRegistration");
                 return null;
             }
 
-            var rpcQuery = await _client.Api.CloudChatsApi.Auth.InternalSignUpAsync(_phoneData.PhoneNumber, _phoneData.PhoneHash, firstName, lastName, cancellationToken: cancellationToken);
+            _logger.Information("Signing up as with first name: {FirstName} and last name: {LastName}", firstName, lastName);
+            var rpcQuery = await _client.Api.CloudChatsApi.Auth.InternalSignUpAsync(_phoneData.PhoneNumber, _phoneData.PhoneHash, firstName, lastName);
             if (rpcQuery.RpcCallFailed)
             {
                 SetCurrentState(LoginState.AwaitingLogin);
@@ -291,17 +294,17 @@ namespace CatraProto.Client.ApiManagers
             return null;
         }
 
-        public async Task<RpcError?> UsePasswordAsync(string password, CancellationToken cancellationToken = default)
+        public async Task<RpcError?> UsePasswordAsync(string password)
         {
             if (GetCurrentState() is not LoginState.AwaitingPassword)
             {
-                _logger.Warning("Skipping UsePasswordAsync because state is not AwaitingLogin");
+                _logger.Information("Skipping UsePasswordAsync because state is not AwaitingLogin");
                 return null;
             }
 
             if(_passwordAuthenticator is null)
             {
-                var fetchResult = await FetchPasswordConfigAsync(cancellationToken: cancellationToken);
+                var fetchResult = await FetchPasswordConfigAsync();
                 if (fetchResult is not null)
                 {
                     SetCurrentState(LoginState.AwaitingLogin);
@@ -316,7 +319,8 @@ namespace CatraProto.Client.ApiManagers
                 return computedSrp.Error;
             }
 
-            var checkPasswordResult = await _client.Api.CloudChatsApi.Auth.InternalCheckPasswordAsync(computedSrp.Response, cancellationToken: cancellationToken);
+            _logger.Information("Checking password with srp_id {SrpId}", computedSrp.Response.SrpId);
+            var checkPasswordResult = await _client.Api.CloudChatsApi.Auth.InternalCheckPasswordAsync(computedSrp.Response);
             if (checkPasswordResult.RpcCallFailed)
             {
                 if (checkPasswordResult.Error.ErrorMessage == "PASSWORD_HASH_INVALID")
@@ -329,11 +333,11 @@ namespace CatraProto.Client.ApiManagers
                 {
                     _passwordAuthenticator = null;
                     _logger.Information("SRP token has expired, refetching data and retrying request...");
-                    return await UsePasswordAsync(password, cancellationToken);
+                    return await UsePasswordAsync(password);
                 }
 
                 _logger.Error("An error occurred while checking password. Logging out... Error: {Error}", checkPasswordResult.Error);
-                var logOut = await _client.Api.CloudChatsApi.Auth.InternalLogOutAsync(cancellationToken: cancellationToken);
+                var logOut = await _client.Api.CloudChatsApi.Auth.InternalLogOutAsync();
                 if (logOut.RpcCallFailed)
                 {
                     _logger.Error("Could not log out due to error: {Error}", logOut);
@@ -365,31 +369,33 @@ namespace CatraProto.Client.ApiManagers
         {
             if (GetCurrentState() is not LoginState.AwaitingTermsAcceptance || _termsOfService is null)
             {
-                _logger.Warning("Skipping SetTermsAsync because state is not AwaitingTermsAcceptance");
+                _logger.Information("Skipping SetTermsAsync because state is not AwaitingTermsAcceptance");
                 return;
             }
 
             if (accept)
             {
+                _logger.Information("Terms of service accepted");
                 SetCurrentState(LoginState.AwaitingRegistration);
             }
             else
             {
+                _logger.Information("Terms of service declined");
                 SetCurrentState(LoginState.AwaitingLogin);
             }
 
             return;
         }
 
-        public async Task<RpcError?> LogoutAsync(CancellationToken token = default)
+        public async Task<RpcError?> LogoutAsync()
         {
             if (GetCurrentState() is not LoginState.LoggedIn)
             {
-                _logger.Warning("Skipping LogoutAsync because state is not LoggedIn");
+                _logger.Information("Skipping LogoutAsync because state is not LoggedIn");
                 return null;
             }
 
-            var req = await _client.Api.CloudChatsApi.Auth.InternalLogOutAsync(cancellationToken: token);
+            var req = await _client.Api.CloudChatsApi.Auth.InternalLogOutAsync();
             if (req.RpcCallFailed)
             {
                 return req.Error;
@@ -399,11 +405,30 @@ namespace CatraProto.Client.ApiManagers
             return null;
         }
 
+        public async Task<RpcError?> CancelAsync()
+        {
+            var state = GetCurrentState();
+            if (state >= LoginState.LoggedIn)
+            {
+                _logger.Information("Skipping CancelAsync because state is not higher or equal to LoggedIn");
+                return null;
+            }
+
+            if (state is LoginState.AwaitingCode && _phoneData is not null)
+            {
+                await _client.Api.CloudChatsApi.Auth.CancelCodeAsync(_phoneData.PhoneNumber, _phoneData.PhoneHash);
+            }
+
+            await _client.Api.CloudChatsApi.Auth.InternalLogOutAsync();
+            SetCurrentState(LoginState.AwaitingLogin);
+            return null;
+        }
+
         public (SentCodeTypeBase CodeType, CodeTypeBase? NextCodeType)? GetCodeTypes()
         {
             if (GetCurrentState() is not LoginState.AwaitingCode || _phoneData is null)
             {
-                _logger.Warning("Skipping GetCodeTypes because state is not AwaitingCode");
+                _logger.Information("Skipping GetCodeTypes because state is not AwaitingCode");
                 return null;
             }
 
@@ -414,7 +439,7 @@ namespace CatraProto.Client.ApiManagers
         {
             if (GetCurrentState() is not LoginState.AwaitingTermsAcceptance || _termsOfService is null)
             {
-                _logger.Warning("Skipping DeclineTermsAsync because state is not AwaitingTermsAcceptance");
+                _logger.Information("Skipping DeclineTermsAsync because state is not AwaitingTermsAcceptance");
                 return null;
             }
 
@@ -425,23 +450,24 @@ namespace CatraProto.Client.ApiManagers
         {
             if (GetCurrentState() is not LoginState.AwaitingPassword)
             {
-                _logger.Warning("Skipping GetPasswordHint because state is not AwaitingPassword");
+                _logger.Information("Skipping GetPasswordHint because state is not AwaitingPassword");
                 return null;
             }
 
             return _passwordHint;
         }
 
-        private async Task<RpcError?> FetchPasswordConfigAsync(CancellationToken cancellationToken)
+        private async Task<RpcError?> FetchPasswordConfigAsync()
         {
             _logger.Information("Account is protected by 2FA password, fetching password data...");
-            var passwordData = await _client.Api.CloudChatsApi.Account.GetPasswordAsync(cancellationToken: cancellationToken);
+            var passwordData = await _client.Api.CloudChatsApi.Account.GetPasswordAsync();
             if (passwordData.RpcCallFailed)
             {
                 SetCurrentState(LoginState.AwaitingLogin);
                 return passwordData.Error;
             }
 
+            _logger.Information("Fetched current 2FA configuration. SrpId: {SrpId}", passwordData.Response.SrpId);
             _passwordAuthenticator = new PasswordAuthenticator((Password)passwordData.Response, _logger);
             _passwordHint = ((Password)passwordData.Response).Hint;
             return null;
