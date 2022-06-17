@@ -16,8 +16,10 @@ You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+using System;
 using Serilog;
 using Serilog.Core;
+using Serilog.Expressions;
 using Serilog.Templates;
 using Serilog.Templates.Themes;
 
@@ -25,13 +27,13 @@ namespace CatraProto.Client
 {
     public static class Logger
     {
-        public static string TemplateExpression { get; }
+        private static readonly string Template;
 
         static Logger()
         {
             var addContext = "[{Substring(SourceContext, LastIndexOf(SourceContext, '.') + 1)}]";
             var addConnection = "{#if Connection is not null} - {Connection}{#end}";
-            TemplateExpression = "({@t:HH:mm:ss} {@l:w4}) {Session} " + addContext + addConnection + " =>" + " {@m}{@x}" + "\n";
+            Template = "({@t:HH:mm:ss} {@l:w4}) {Session} " + addContext + addConnection + " =>" + " {@m}{@x}" + "\n";
         }
 
         public static ILogger CreateDefaultLogger(LoggingLevelSwitch? levelSwitch = null, TemplateTheme? theme = null)
@@ -40,10 +42,15 @@ namespace CatraProto.Client
             levelSwitch ??= new LoggingLevelSwitch();
             return new LoggerConfiguration()
                 .WriteTo
-                .Console(new ExpressionTemplate(TemplateExpression, theme: theme))
+                .Console(GetExpressionTemplate(templateTheme: theme))
                 .MinimumLevel
                 .ControlledBy(levelSwitch)
                 .CreateLogger();
+        }
+
+        public static ExpressionTemplate GetExpressionTemplate(IFormatProvider? formatProvider = null, NameResolver? nameResolver = null, TemplateTheme? templateTheme = null, bool applyThemeWhenOutputIsRedirected = false)
+        {
+            return new ExpressionTemplate(Template, formatProvider, nameResolver, templateTheme, applyThemeWhenOutputIsRedirected);
         }
     }
 }
