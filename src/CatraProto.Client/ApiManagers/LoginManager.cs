@@ -17,7 +17,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Crypto;
 using CatraProto.Client.MTProto.Rpc.Interfaces;
@@ -43,8 +42,8 @@ namespace CatraProto.Client.ApiManagers
         AwaitingLogin,
         AwaitingCode,
         AwaitingPassword,
-        AwaitingRegistration,
         AwaitingTermsAcceptance,
+        AwaitingRegistration,
         LoggedIn,
         LoggedOut,
         SessionRevoked = 10000,
@@ -405,13 +404,13 @@ namespace CatraProto.Client.ApiManagers
             return null;
         }
 
-        public async Task<RpcError?> CancelAsync()
+        public async Task CancelAsync()
         {
             var state = GetCurrentState();
             if (state >= LoginState.LoggedIn)
             {
                 _logger.Information("Skipping CancelAsync because state is not higher or equal to LoggedIn");
-                return null;
+                return;
             }
 
             if (state is LoginState.AwaitingCode && _phoneData is not null)
@@ -432,7 +431,7 @@ namespace CatraProto.Client.ApiManagers
             }
 
             SetCurrentState(LoginState.AwaitingLogin);
-            return null;
+            return;
         }
 
         public (SentCodeTypeBase CodeType, CodeTypeBase? NextCodeType)? GetCodeTypes()
