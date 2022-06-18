@@ -1,21 +1,3 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -285,6 +267,101 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             return newClonedObject;
 
         }
+
+        public override bool Compare(IObject other)
+        {
+            if (other is not Document castedOther)
+            {
+                return true;
+            }
+            if (Flags != castedOther.Flags)
+            {
+                return true;
+            }
+            if (Id != castedOther.Id)
+            {
+                return true;
+            }
+            if (AccessHash != castedOther.AccessHash)
+            {
+                return true;
+            }
+            if (FileReference != castedOther.FileReference)
+            {
+                return true;
+            }
+            if (Date != castedOther.Date)
+            {
+                return true;
+            }
+            if (MimeType != castedOther.MimeType)
+            {
+                return true;
+            }
+            if (Size != castedOther.Size)
+            {
+                return true;
+            }
+            if (Thumbs is null && castedOther.Thumbs is not null || Thumbs is not null && castedOther.Thumbs is null)
+            {
+                return true;
+            }
+            if (Thumbs is not null && castedOther.Thumbs is not null)
+            {
+
+                var thumbssize = castedOther.Thumbs.Count;
+                if (thumbssize != Thumbs.Count)
+                {
+                    return true;
+                }
+                for (var i = 0; i < thumbssize; i++)
+                {
+                    if (castedOther.Thumbs[i].Compare(Thumbs[i]))
+                    {
+                        return true;
+                    }
+                }
+            }
+            if (VideoThumbs is null && castedOther.VideoThumbs is not null || VideoThumbs is not null && castedOther.VideoThumbs is null)
+            {
+                return true;
+            }
+            if (VideoThumbs is not null && castedOther.VideoThumbs is not null)
+            {
+
+                var videoThumbssize = castedOther.VideoThumbs.Count;
+                if (videoThumbssize != VideoThumbs.Count)
+                {
+                    return true;
+                }
+                for (var i = 0; i < videoThumbssize; i++)
+                {
+                    if (castedOther.VideoThumbs[i].Compare(VideoThumbs[i]))
+                    {
+                        return true;
+                    }
+                }
+            }
+            if (DcId != castedOther.DcId)
+            {
+                return true;
+            }
+            var attributessize = castedOther.Attributes.Count;
+            if (attributessize != Attributes.Count)
+            {
+                return true;
+            }
+            for (var i = 0; i < attributessize; i++)
+            {
+                if (castedOther.Attributes[i].Compare(Attributes[i]))
+                {
+                    return true;
+                }
+            }
+            return false;
+
+        }
+
 #nullable disable
     }
 }

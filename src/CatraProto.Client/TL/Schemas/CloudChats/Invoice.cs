@@ -1,21 +1,3 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
 using CatraProto.TL;
@@ -241,6 +223,93 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             return newClonedObject;
 
         }
+
+        public override bool Compare(IObject other)
+        {
+            if (other is not Invoice castedOther)
+            {
+                return true;
+            }
+            if (Flags != castedOther.Flags)
+            {
+                return true;
+            }
+            if (Test != castedOther.Test)
+            {
+                return true;
+            }
+            if (NameRequested != castedOther.NameRequested)
+            {
+                return true;
+            }
+            if (PhoneRequested != castedOther.PhoneRequested)
+            {
+                return true;
+            }
+            if (EmailRequested != castedOther.EmailRequested)
+            {
+                return true;
+            }
+            if (ShippingAddressRequested != castedOther.ShippingAddressRequested)
+            {
+                return true;
+            }
+            if (Flexible != castedOther.Flexible)
+            {
+                return true;
+            }
+            if (PhoneToProvider != castedOther.PhoneToProvider)
+            {
+                return true;
+            }
+            if (EmailToProvider != castedOther.EmailToProvider)
+            {
+                return true;
+            }
+            if (Currency != castedOther.Currency)
+            {
+                return true;
+            }
+            var pricessize = castedOther.Prices.Count;
+            if (pricessize != Prices.Count)
+            {
+                return true;
+            }
+            for (var i = 0; i < pricessize; i++)
+            {
+                if (castedOther.Prices[i].Compare(Prices[i]))
+                {
+                    return true;
+                }
+            }
+            if (MaxTipAmount != castedOther.MaxTipAmount)
+            {
+                return true;
+            }
+            if (SuggestedTipAmounts is null && castedOther.SuggestedTipAmounts is not null || SuggestedTipAmounts is not null && castedOther.SuggestedTipAmounts is null)
+            {
+                return true;
+            }
+            if (SuggestedTipAmounts is not null && castedOther.SuggestedTipAmounts is not null)
+            {
+
+                var suggestedTipAmountssize = castedOther.SuggestedTipAmounts.Count;
+                if (suggestedTipAmountssize != SuggestedTipAmounts.Count)
+                {
+                    return true;
+                }
+                for (var i = 0; i < suggestedTipAmountssize; i++)
+                {
+                    if (castedOther.SuggestedTipAmounts[i] != SuggestedTipAmounts[i])
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+
+        }
+
 #nullable disable
     }
 }

@@ -1,21 +1,3 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
@@ -283,6 +265,89 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             return newClonedObject;
 
         }
+
+        public override bool Compare(IObject other)
+        {
+            if (other is not Authorization castedOther)
+            {
+                return true;
+            }
+            if (Flags != castedOther.Flags)
+            {
+                return true;
+            }
+            if (Current != castedOther.Current)
+            {
+                return true;
+            }
+            if (OfficialApp != castedOther.OfficialApp)
+            {
+                return true;
+            }
+            if (PasswordPending != castedOther.PasswordPending)
+            {
+                return true;
+            }
+            if (EncryptedRequestsDisabled != castedOther.EncryptedRequestsDisabled)
+            {
+                return true;
+            }
+            if (CallRequestsDisabled != castedOther.CallRequestsDisabled)
+            {
+                return true;
+            }
+            if (Hash != castedOther.Hash)
+            {
+                return true;
+            }
+            if (DeviceModel != castedOther.DeviceModel)
+            {
+                return true;
+            }
+            if (Platform != castedOther.Platform)
+            {
+                return true;
+            }
+            if (SystemVersion != castedOther.SystemVersion)
+            {
+                return true;
+            }
+            if (ApiId != castedOther.ApiId)
+            {
+                return true;
+            }
+            if (AppName != castedOther.AppName)
+            {
+                return true;
+            }
+            if (AppVersion != castedOther.AppVersion)
+            {
+                return true;
+            }
+            if (DateCreated != castedOther.DateCreated)
+            {
+                return true;
+            }
+            if (DateActive != castedOther.DateActive)
+            {
+                return true;
+            }
+            if (Ip != castedOther.Ip)
+            {
+                return true;
+            }
+            if (Country != castedOther.Country)
+            {
+                return true;
+            }
+            if (Region != castedOther.Region)
+            {
+                return true;
+            }
+            return false;
+
+        }
+
 #nullable disable
     }
 }

@@ -1,21 +1,3 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
@@ -451,6 +433,117 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
             return newClonedObject;
 
         }
+
+        public override bool Compare(IObject other)
+        {
+            if (other is not MegagroupStats castedOther)
+            {
+                return true;
+            }
+            if (Period.Compare(castedOther.Period))
+            {
+                return true;
+            }
+            if (Members.Compare(castedOther.Members))
+            {
+                return true;
+            }
+            if (Messages.Compare(castedOther.Messages))
+            {
+                return true;
+            }
+            if (Viewers.Compare(castedOther.Viewers))
+            {
+                return true;
+            }
+            if (Posters.Compare(castedOther.Posters))
+            {
+                return true;
+            }
+            if (GrowthGraph.Compare(castedOther.GrowthGraph))
+            {
+                return true;
+            }
+            if (MembersGraph.Compare(castedOther.MembersGraph))
+            {
+                return true;
+            }
+            if (NewMembersBySourceGraph.Compare(castedOther.NewMembersBySourceGraph))
+            {
+                return true;
+            }
+            if (LanguagesGraph.Compare(castedOther.LanguagesGraph))
+            {
+                return true;
+            }
+            if (MessagesGraph.Compare(castedOther.MessagesGraph))
+            {
+                return true;
+            }
+            if (ActionsGraph.Compare(castedOther.ActionsGraph))
+            {
+                return true;
+            }
+            if (TopHoursGraph.Compare(castedOther.TopHoursGraph))
+            {
+                return true;
+            }
+            if (WeekdaysGraph.Compare(castedOther.WeekdaysGraph))
+            {
+                return true;
+            }
+            var topPosterssize = castedOther.TopPosters.Count;
+            if (topPosterssize != TopPosters.Count)
+            {
+                return true;
+            }
+            for (var i = 0; i < topPosterssize; i++)
+            {
+                if (castedOther.TopPosters[i].Compare(TopPosters[i]))
+                {
+                    return true;
+                }
+            }
+            var topAdminssize = castedOther.TopAdmins.Count;
+            if (topAdminssize != TopAdmins.Count)
+            {
+                return true;
+            }
+            for (var i = 0; i < topAdminssize; i++)
+            {
+                if (castedOther.TopAdmins[i].Compare(TopAdmins[i]))
+                {
+                    return true;
+                }
+            }
+            var topInviterssize = castedOther.TopInviters.Count;
+            if (topInviterssize != TopInviters.Count)
+            {
+                return true;
+            }
+            for (var i = 0; i < topInviterssize; i++)
+            {
+                if (castedOther.TopInviters[i].Compare(TopInviters[i]))
+                {
+                    return true;
+                }
+            }
+            var userssize = castedOther.Users.Count;
+            if (userssize != Users.Count)
+            {
+                return true;
+            }
+            for (var i = 0; i < userssize; i++)
+            {
+                if (castedOther.Users[i].Compare(Users[i]))
+                {
+                    return true;
+                }
+            }
+            return false;
+
+        }
+
 #nullable disable
     }
 }

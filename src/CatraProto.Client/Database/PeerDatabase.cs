@@ -235,7 +235,7 @@ namespace CatraProto.Client.Database
                 else
                 {
                     pushToDb = fromDb.Object.Compare(chat);
-                }    
+                }
 
                 if (pushToDb)
                 {

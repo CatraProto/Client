@@ -1,21 +1,3 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -242,6 +224,68 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
             newClonedObject.MinId = MinId;
             newClonedObject.Limit = Limit;
             return newClonedObject;
+
+        }
+
+        public bool Compare(IObject other)
+        {
+            if (other is not GetAdminLog castedOther)
+            {
+                return true;
+            }
+            if (Flags != castedOther.Flags)
+            {
+                return true;
+            }
+            if (Channel.Compare(castedOther.Channel))
+            {
+                return true;
+            }
+            if (Q != castedOther.Q)
+            {
+                return true;
+            }
+            if (EventsFilter is null && castedOther.EventsFilter is not null || EventsFilter is not null && castedOther.EventsFilter is null)
+            {
+                return true;
+            }
+            if (EventsFilter is not null && castedOther.EventsFilter is not null && EventsFilter.Compare(castedOther.EventsFilter))
+            {
+                return true;
+            }
+            if (Admins is null && castedOther.Admins is not null || Admins is not null && castedOther.Admins is null)
+            {
+                return true;
+            }
+            if (Admins is not null && castedOther.Admins is not null)
+            {
+
+                var adminssize = castedOther.Admins.Count;
+                if (adminssize != Admins.Count)
+                {
+                    return true;
+                }
+                for (var i = 0; i < adminssize; i++)
+                {
+                    if (castedOther.Admins[i].Compare(Admins[i]))
+                    {
+                        return true;
+                    }
+                }
+            }
+            if (MaxId != castedOther.MaxId)
+            {
+                return true;
+            }
+            if (MinId != castedOther.MinId)
+            {
+                return true;
+            }
+            if (Limit != castedOther.Limit)
+            {
+                return true;
+            }
+            return false;
 
         }
 #nullable disable

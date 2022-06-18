@@ -65,7 +65,7 @@ namespace CatraProto.Client.Updates.CustomTypes
 
         public override bool Compare(IObject other)
         {
-            if(other is not UpdateRedirect castedOther)
+            if (other is not UpdateRedirect castedOther)
             {
                 return false;
             }

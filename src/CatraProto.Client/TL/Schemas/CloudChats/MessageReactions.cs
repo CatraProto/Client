@@ -1,21 +1,3 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -175,6 +157,61 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             return newClonedObject;
 
         }
+
+        public override bool Compare(IObject other)
+        {
+            if (other is not MessageReactions castedOther)
+            {
+                return true;
+            }
+            if (Flags != castedOther.Flags)
+            {
+                return true;
+            }
+            if (Min != castedOther.Min)
+            {
+                return true;
+            }
+            if (CanSeeList != castedOther.CanSeeList)
+            {
+                return true;
+            }
+            var resultssize = castedOther.Results.Count;
+            if (resultssize != Results.Count)
+            {
+                return true;
+            }
+            for (var i = 0; i < resultssize; i++)
+            {
+                if (castedOther.Results[i].Compare(Results[i]))
+                {
+                    return true;
+                }
+            }
+            if (RecentReactions is null && castedOther.RecentReactions is not null || RecentReactions is not null && castedOther.RecentReactions is null)
+            {
+                return true;
+            }
+            if (RecentReactions is not null && castedOther.RecentReactions is not null)
+            {
+
+                var recentReactionssize = castedOther.RecentReactions.Count;
+                if (recentReactionssize != RecentReactions.Count)
+                {
+                    return true;
+                }
+                for (var i = 0; i < recentReactionssize; i++)
+                {
+                    if (castedOther.RecentReactions[i].Compare(RecentReactions[i]))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+
+        }
+
 #nullable disable
     }
 }

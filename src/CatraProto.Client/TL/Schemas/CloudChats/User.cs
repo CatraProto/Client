@@ -1,21 +1,3 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -508,6 +490,157 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             return newClonedObject;
 
         }
+
+        public override bool Compare(IObject other)
+        {
+            if (other is not User castedOther)
+            {
+                return true;
+            }
+            if (Flags != castedOther.Flags)
+            {
+                return true;
+            }
+            if (Self != castedOther.Self)
+            {
+                return true;
+            }
+            if (Contact != castedOther.Contact)
+            {
+                return true;
+            }
+            if (MutualContact != castedOther.MutualContact)
+            {
+                return true;
+            }
+            if (Deleted != castedOther.Deleted)
+            {
+                return true;
+            }
+            if (Bot != castedOther.Bot)
+            {
+                return true;
+            }
+            if (BotChatHistory != castedOther.BotChatHistory)
+            {
+                return true;
+            }
+            if (BotNochats != castedOther.BotNochats)
+            {
+                return true;
+            }
+            if (Verified != castedOther.Verified)
+            {
+                return true;
+            }
+            if (Restricted != castedOther.Restricted)
+            {
+                return true;
+            }
+            if (Min != castedOther.Min)
+            {
+                return true;
+            }
+            if (BotInlineGeo != castedOther.BotInlineGeo)
+            {
+                return true;
+            }
+            if (Support != castedOther.Support)
+            {
+                return true;
+            }
+            if (Scam != castedOther.Scam)
+            {
+                return true;
+            }
+            if (ApplyMinPhoto != castedOther.ApplyMinPhoto)
+            {
+                return true;
+            }
+            if (Fake != castedOther.Fake)
+            {
+                return true;
+            }
+            if (BotAttachMenu != castedOther.BotAttachMenu)
+            {
+                return true;
+            }
+            if (Id != castedOther.Id)
+            {
+                return true;
+            }
+            if (AccessHash != castedOther.AccessHash)
+            {
+                return true;
+            }
+            if (FirstName != castedOther.FirstName)
+            {
+                return true;
+            }
+            if (LastName != castedOther.LastName)
+            {
+                return true;
+            }
+            if (Username != castedOther.Username)
+            {
+                return true;
+            }
+            if (Phone != castedOther.Phone)
+            {
+                return true;
+            }
+            if (Photo is null && castedOther.Photo is not null || Photo is not null && castedOther.Photo is null)
+            {
+                return true;
+            }
+            if (Photo is not null && castedOther.Photo is not null && Photo.Compare(castedOther.Photo))
+            {
+                return true;
+            }
+            if (Status is null && castedOther.Status is not null || Status is not null && castedOther.Status is null)
+            {
+                return true;
+            }
+            if (Status is not null && castedOther.Status is not null && Status.Compare(castedOther.Status))
+            {
+                return true;
+            }
+            if (BotInfoVersion != castedOther.BotInfoVersion)
+            {
+                return true;
+            }
+            if (RestrictionReason is null && castedOther.RestrictionReason is not null || RestrictionReason is not null && castedOther.RestrictionReason is null)
+            {
+                return true;
+            }
+            if (RestrictionReason is not null && castedOther.RestrictionReason is not null)
+            {
+
+                var restrictionReasonsize = castedOther.RestrictionReason.Count;
+                if (restrictionReasonsize != RestrictionReason.Count)
+                {
+                    return true;
+                }
+                for (var i = 0; i < restrictionReasonsize; i++)
+                {
+                    if (castedOther.RestrictionReason[i].Compare(RestrictionReason[i]))
+                    {
+                        return true;
+                    }
+                }
+            }
+            if (BotInlinePlaceholder != castedOther.BotInlinePlaceholder)
+            {
+                return true;
+            }
+            if (LangCode != castedOther.LangCode)
+            {
+                return true;
+            }
+            return false;
+
+        }
+
 #nullable disable
     }
 }

@@ -1,21 +1,3 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL;
@@ -473,6 +455,117 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             return newClonedObject;
 
         }
+
+        public override bool Compare(IObject other)
+        {
+            if (other is not UserFull castedOther)
+            {
+                return true;
+            }
+            if (Flags != castedOther.Flags)
+            {
+                return true;
+            }
+            if (Blocked != castedOther.Blocked)
+            {
+                return true;
+            }
+            if (PhoneCallsAvailable != castedOther.PhoneCallsAvailable)
+            {
+                return true;
+            }
+            if (PhoneCallsPrivate != castedOther.PhoneCallsPrivate)
+            {
+                return true;
+            }
+            if (CanPinMessage != castedOther.CanPinMessage)
+            {
+                return true;
+            }
+            if (HasScheduled != castedOther.HasScheduled)
+            {
+                return true;
+            }
+            if (VideoCallsAvailable != castedOther.VideoCallsAvailable)
+            {
+                return true;
+            }
+            if (Id != castedOther.Id)
+            {
+                return true;
+            }
+            if (About != castedOther.About)
+            {
+                return true;
+            }
+            if (Settings.Compare(castedOther.Settings))
+            {
+                return true;
+            }
+            if (ProfilePhoto is null && castedOther.ProfilePhoto is not null || ProfilePhoto is not null && castedOther.ProfilePhoto is null)
+            {
+                return true;
+            }
+            if (ProfilePhoto is not null && castedOther.ProfilePhoto is not null && ProfilePhoto.Compare(castedOther.ProfilePhoto))
+            {
+                return true;
+            }
+            if (NotifySettings.Compare(castedOther.NotifySettings))
+            {
+                return true;
+            }
+            if (BotInfo is null && castedOther.BotInfo is not null || BotInfo is not null && castedOther.BotInfo is null)
+            {
+                return true;
+            }
+            if (BotInfo is not null && castedOther.BotInfo is not null && BotInfo.Compare(castedOther.BotInfo))
+            {
+                return true;
+            }
+            if (PinnedMsgId != castedOther.PinnedMsgId)
+            {
+                return true;
+            }
+            if (CommonChatsCount != castedOther.CommonChatsCount)
+            {
+                return true;
+            }
+            if (FolderId != castedOther.FolderId)
+            {
+                return true;
+            }
+            if (TtlPeriod != castedOther.TtlPeriod)
+            {
+                return true;
+            }
+            if (ThemeEmoticon != castedOther.ThemeEmoticon)
+            {
+                return true;
+            }
+            if (PrivateForwardName != castedOther.PrivateForwardName)
+            {
+                return true;
+            }
+            if (BotGroupAdminRights is null && castedOther.BotGroupAdminRights is not null || BotGroupAdminRights is not null && castedOther.BotGroupAdminRights is null)
+            {
+                return true;
+            }
+            if (BotGroupAdminRights is not null && castedOther.BotGroupAdminRights is not null && BotGroupAdminRights.Compare(castedOther.BotGroupAdminRights))
+            {
+                return true;
+            }
+            if (BotBroadcastAdminRights is null && castedOther.BotBroadcastAdminRights is not null || BotBroadcastAdminRights is not null && castedOther.BotBroadcastAdminRights is null)
+            {
+                return true;
+            }
+            if (BotBroadcastAdminRights is not null && castedOther.BotBroadcastAdminRights is not null && BotBroadcastAdminRights.Compare(castedOther.BotBroadcastAdminRights))
+            {
+                return true;
+            }
+            return false;
+
+        }
+
 #nullable disable
     }
 }

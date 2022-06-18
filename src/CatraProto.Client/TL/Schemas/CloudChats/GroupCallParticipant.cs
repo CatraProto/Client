@@ -1,21 +1,3 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL;
@@ -366,6 +348,105 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             return newClonedObject;
 
         }
+
+        public override bool Compare(IObject other)
+        {
+            if (other is not GroupCallParticipant castedOther)
+            {
+                return true;
+            }
+            if (Flags != castedOther.Flags)
+            {
+                return true;
+            }
+            if (Muted != castedOther.Muted)
+            {
+                return true;
+            }
+            if (Left != castedOther.Left)
+            {
+                return true;
+            }
+            if (CanSelfUnmute != castedOther.CanSelfUnmute)
+            {
+                return true;
+            }
+            if (JustJoined != castedOther.JustJoined)
+            {
+                return true;
+            }
+            if (Versioned != castedOther.Versioned)
+            {
+                return true;
+            }
+            if (Min != castedOther.Min)
+            {
+                return true;
+            }
+            if (MutedByYou != castedOther.MutedByYou)
+            {
+                return true;
+            }
+            if (VolumeByAdmin != castedOther.VolumeByAdmin)
+            {
+                return true;
+            }
+            if (Self != castedOther.Self)
+            {
+                return true;
+            }
+            if (VideoJoined != castedOther.VideoJoined)
+            {
+                return true;
+            }
+            if (Peer.Compare(castedOther.Peer))
+            {
+                return true;
+            }
+            if (Date != castedOther.Date)
+            {
+                return true;
+            }
+            if (ActiveDate != castedOther.ActiveDate)
+            {
+                return true;
+            }
+            if (Source != castedOther.Source)
+            {
+                return true;
+            }
+            if (Volume != castedOther.Volume)
+            {
+                return true;
+            }
+            if (About != castedOther.About)
+            {
+                return true;
+            }
+            if (RaiseHandRating != castedOther.RaiseHandRating)
+            {
+                return true;
+            }
+            if (Video is null && castedOther.Video is not null || Video is not null && castedOther.Video is null)
+            {
+                return true;
+            }
+            if (Video is not null && castedOther.Video is not null && Video.Compare(castedOther.Video))
+            {
+                return true;
+            }
+            if (Presentation is null && castedOther.Presentation is not null || Presentation is not null && castedOther.Presentation is null)
+            {
+                return true;
+            }
+            if (Presentation is not null && castedOther.Presentation is not null && Presentation.Compare(castedOther.Presentation))
+            {
+                return true;
+            }
+            return false;
+
+        }
+
 #nullable disable
     }
 }

@@ -1,21 +1,3 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -512,6 +494,121 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             return newClonedObject;
 
         }
+
+        public override bool Compare(IObject other)
+        {
+            if (other is not WebPage castedOther)
+            {
+                return true;
+            }
+            if (Flags != castedOther.Flags)
+            {
+                return true;
+            }
+            if (Id != castedOther.Id)
+            {
+                return true;
+            }
+            if (Url != castedOther.Url)
+            {
+                return true;
+            }
+            if (DisplayUrl != castedOther.DisplayUrl)
+            {
+                return true;
+            }
+            if (Hash != castedOther.Hash)
+            {
+                return true;
+            }
+            if (Type != castedOther.Type)
+            {
+                return true;
+            }
+            if (SiteName != castedOther.SiteName)
+            {
+                return true;
+            }
+            if (Title != castedOther.Title)
+            {
+                return true;
+            }
+            if (Description != castedOther.Description)
+            {
+                return true;
+            }
+            if (Photo is null && castedOther.Photo is not null || Photo is not null && castedOther.Photo is null)
+            {
+                return true;
+            }
+            if (Photo is not null && castedOther.Photo is not null && Photo.Compare(castedOther.Photo))
+            {
+                return true;
+            }
+            if (EmbedUrl != castedOther.EmbedUrl)
+            {
+                return true;
+            }
+            if (EmbedType != castedOther.EmbedType)
+            {
+                return true;
+            }
+            if (EmbedWidth != castedOther.EmbedWidth)
+            {
+                return true;
+            }
+            if (EmbedHeight != castedOther.EmbedHeight)
+            {
+                return true;
+            }
+            if (Duration != castedOther.Duration)
+            {
+                return true;
+            }
+            if (Author != castedOther.Author)
+            {
+                return true;
+            }
+            if (Document is null && castedOther.Document is not null || Document is not null && castedOther.Document is null)
+            {
+                return true;
+            }
+            if (Document is not null && castedOther.Document is not null && Document.Compare(castedOther.Document))
+            {
+                return true;
+            }
+            if (CachedPage is null && castedOther.CachedPage is not null || CachedPage is not null && castedOther.CachedPage is null)
+            {
+                return true;
+            }
+            if (CachedPage is not null && castedOther.CachedPage is not null && CachedPage.Compare(castedOther.CachedPage))
+            {
+                return true;
+            }
+            if (Attributes is null && castedOther.Attributes is not null || Attributes is not null && castedOther.Attributes is null)
+            {
+                return true;
+            }
+            if (Attributes is not null && castedOther.Attributes is not null)
+            {
+
+                var attributessize = castedOther.Attributes.Count;
+                if (attributessize != Attributes.Count)
+                {
+                    return true;
+                }
+                for (var i = 0; i < attributessize; i++)
+                {
+                    if (castedOther.Attributes[i].Compare(Attributes[i]))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+
+        }
+
 #nullable disable
     }
 }

@@ -1,21 +1,3 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL;
@@ -301,6 +283,77 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             return newClonedObject;
 
         }
+
+        public override bool Compare(IObject other)
+        {
+            if (other is not Dialog castedOther)
+            {
+                return true;
+            }
+            if (Flags != castedOther.Flags)
+            {
+                return true;
+            }
+            if (Pinned != castedOther.Pinned)
+            {
+                return true;
+            }
+            if (UnreadMark != castedOther.UnreadMark)
+            {
+                return true;
+            }
+            if (Peer.Compare(castedOther.Peer))
+            {
+                return true;
+            }
+            if (TopMessage != castedOther.TopMessage)
+            {
+                return true;
+            }
+            if (ReadInboxMaxId != castedOther.ReadInboxMaxId)
+            {
+                return true;
+            }
+            if (ReadOutboxMaxId != castedOther.ReadOutboxMaxId)
+            {
+                return true;
+            }
+            if (UnreadCount != castedOther.UnreadCount)
+            {
+                return true;
+            }
+            if (UnreadMentionsCount != castedOther.UnreadMentionsCount)
+            {
+                return true;
+            }
+            if (UnreadReactionsCount != castedOther.UnreadReactionsCount)
+            {
+                return true;
+            }
+            if (NotifySettings.Compare(castedOther.NotifySettings))
+            {
+                return true;
+            }
+            if (Pts != castedOther.Pts)
+            {
+                return true;
+            }
+            if (Draft is null && castedOther.Draft is not null || Draft is not null && castedOther.Draft is null)
+            {
+                return true;
+            }
+            if (Draft is not null && castedOther.Draft is not null && Draft.Compare(castedOther.Draft))
+            {
+                return true;
+            }
+            if (FolderId != castedOther.FolderId)
+            {
+                return true;
+            }
+            return false;
+
+        }
+
 #nullable disable
     }
 }

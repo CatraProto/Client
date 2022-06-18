@@ -1,21 +1,3 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -229,6 +211,77 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             return newClonedObject;
 
         }
+
+        public override bool Compare(IObject other)
+        {
+            if (other is not Photo castedOther)
+            {
+                return true;
+            }
+            if (Flags != castedOther.Flags)
+            {
+                return true;
+            }
+            if (HasStickers != castedOther.HasStickers)
+            {
+                return true;
+            }
+            if (Id != castedOther.Id)
+            {
+                return true;
+            }
+            if (AccessHash != castedOther.AccessHash)
+            {
+                return true;
+            }
+            if (FileReference != castedOther.FileReference)
+            {
+                return true;
+            }
+            if (Date != castedOther.Date)
+            {
+                return true;
+            }
+            var sizessize = castedOther.Sizes.Count;
+            if (sizessize != Sizes.Count)
+            {
+                return true;
+            }
+            for (var i = 0; i < sizessize; i++)
+            {
+                if (castedOther.Sizes[i].Compare(Sizes[i]))
+                {
+                    return true;
+                }
+            }
+            if (VideoSizes is null && castedOther.VideoSizes is not null || VideoSizes is not null && castedOther.VideoSizes is null)
+            {
+                return true;
+            }
+            if (VideoSizes is not null && castedOther.VideoSizes is not null)
+            {
+
+                var videoSizessize = castedOther.VideoSizes.Count;
+                if (videoSizessize != VideoSizes.Count)
+                {
+                    return true;
+                }
+                for (var i = 0; i < videoSizessize; i++)
+                {
+                    if (castedOther.VideoSizes[i].Compare(VideoSizes[i]))
+                    {
+                        return true;
+                    }
+                }
+            }
+            if (DcId != castedOther.DcId)
+            {
+                return true;
+            }
+            return false;
+
+        }
+
 #nullable disable
     }
 }

@@ -1,21 +1,3 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL;
@@ -294,6 +276,81 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             return newClonedObject;
 
         }
+
+        public override bool Compare(IObject other)
+        {
+            if (other is not MessageService castedOther)
+            {
+                return true;
+            }
+            if (Flags != castedOther.Flags)
+            {
+                return true;
+            }
+            if (Out != castedOther.Out)
+            {
+                return true;
+            }
+            if (Mentioned != castedOther.Mentioned)
+            {
+                return true;
+            }
+            if (MediaUnread != castedOther.MediaUnread)
+            {
+                return true;
+            }
+            if (Silent != castedOther.Silent)
+            {
+                return true;
+            }
+            if (Post != castedOther.Post)
+            {
+                return true;
+            }
+            if (Legacy != castedOther.Legacy)
+            {
+                return true;
+            }
+            if (Id != castedOther.Id)
+            {
+                return true;
+            }
+            if (FromId is null && castedOther.FromId is not null || FromId is not null && castedOther.FromId is null)
+            {
+                return true;
+            }
+            if (FromId is not null && castedOther.FromId is not null && FromId.Compare(castedOther.FromId))
+            {
+                return true;
+            }
+            if (PeerId.Compare(castedOther.PeerId))
+            {
+                return true;
+            }
+            if (ReplyTo is null && castedOther.ReplyTo is not null || ReplyTo is not null && castedOther.ReplyTo is null)
+            {
+                return true;
+            }
+            if (ReplyTo is not null && castedOther.ReplyTo is not null && ReplyTo.Compare(castedOther.ReplyTo))
+            {
+                return true;
+            }
+            if (Date != castedOther.Date)
+            {
+                return true;
+            }
+            if (Action.Compare(castedOther.Action))
+            {
+                return true;
+            }
+            if (TtlPeriod != castedOther.TtlPeriod)
+            {
+                return true;
+            }
+            return false;
+
+        }
+
 #nullable disable
     }
 }

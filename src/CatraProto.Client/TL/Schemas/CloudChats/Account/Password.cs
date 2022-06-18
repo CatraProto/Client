@@ -1,21 +1,3 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL;
@@ -317,6 +299,73 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             return newClonedObject;
 
         }
+
+        public override bool Compare(IObject other)
+        {
+            if (other is not Password castedOther)
+            {
+                return true;
+            }
+            if (Flags != castedOther.Flags)
+            {
+                return true;
+            }
+            if (HasRecovery != castedOther.HasRecovery)
+            {
+                return true;
+            }
+            if (HasSecureValues != castedOther.HasSecureValues)
+            {
+                return true;
+            }
+            if (HasPassword != castedOther.HasPassword)
+            {
+                return true;
+            }
+            if (CurrentAlgo is null && castedOther.CurrentAlgo is not null || CurrentAlgo is not null && castedOther.CurrentAlgo is null)
+            {
+                return true;
+            }
+            if (CurrentAlgo is not null && castedOther.CurrentAlgo is not null && CurrentAlgo.Compare(castedOther.CurrentAlgo))
+            {
+                return true;
+            }
+            if (SrpB != castedOther.SrpB)
+            {
+                return true;
+            }
+            if (SrpId != castedOther.SrpId)
+            {
+                return true;
+            }
+            if (Hint != castedOther.Hint)
+            {
+                return true;
+            }
+            if (EmailUnconfirmedPattern != castedOther.EmailUnconfirmedPattern)
+            {
+                return true;
+            }
+            if (NewAlgo.Compare(castedOther.NewAlgo))
+            {
+                return true;
+            }
+            if (NewSecureAlgo.Compare(castedOther.NewSecureAlgo))
+            {
+                return true;
+            }
+            if (SecureRandom != castedOther.SecureRandom)
+            {
+                return true;
+            }
+            if (PendingResetDate != castedOther.PendingResetDate)
+            {
+                return true;
+            }
+            return false;
+
+        }
+
 #nullable disable
     }
 }

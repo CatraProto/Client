@@ -1,21 +1,3 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -179,6 +161,49 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
             return newClonedObject;
 
         }
+
+        public override bool Compare(IObject other)
+        {
+            if (other is not Country castedOther)
+            {
+                return true;
+            }
+            if (Flags != castedOther.Flags)
+            {
+                return true;
+            }
+            if (Hidden != castedOther.Hidden)
+            {
+                return true;
+            }
+            if (Iso2 != castedOther.Iso2)
+            {
+                return true;
+            }
+            if (DefaultName != castedOther.DefaultName)
+            {
+                return true;
+            }
+            if (Name != castedOther.Name)
+            {
+                return true;
+            }
+            var countryCodessize = castedOther.CountryCodes.Count;
+            if (countryCodessize != CountryCodes.Count)
+            {
+                return true;
+            }
+            for (var i = 0; i < countryCodessize; i++)
+            {
+                if (castedOther.CountryCodes[i].Compare(CountryCodes[i]))
+                {
+                    return true;
+                }
+            }
+            return false;
+
+        }
+
 #nullable disable
     }
 }

@@ -1,21 +1,3 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -689,6 +671,201 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             return newClonedObject;
 
         }
+
+        public override bool Compare(IObject other)
+        {
+            if (other is not Message castedOther)
+            {
+                return true;
+            }
+            if (Flags != castedOther.Flags)
+            {
+                return true;
+            }
+            if (Out != castedOther.Out)
+            {
+                return true;
+            }
+            if (Mentioned != castedOther.Mentioned)
+            {
+                return true;
+            }
+            if (MediaUnread != castedOther.MediaUnread)
+            {
+                return true;
+            }
+            if (Silent != castedOther.Silent)
+            {
+                return true;
+            }
+            if (Post != castedOther.Post)
+            {
+                return true;
+            }
+            if (FromScheduled != castedOther.FromScheduled)
+            {
+                return true;
+            }
+            if (Legacy != castedOther.Legacy)
+            {
+                return true;
+            }
+            if (EditHide != castedOther.EditHide)
+            {
+                return true;
+            }
+            if (Pinned != castedOther.Pinned)
+            {
+                return true;
+            }
+            if (Noforwards != castedOther.Noforwards)
+            {
+                return true;
+            }
+            if (Id != castedOther.Id)
+            {
+                return true;
+            }
+            if (FromId is null && castedOther.FromId is not null || FromId is not null && castedOther.FromId is null)
+            {
+                return true;
+            }
+            if (FromId is not null && castedOther.FromId is not null && FromId.Compare(castedOther.FromId))
+            {
+                return true;
+            }
+            if (PeerId.Compare(castedOther.PeerId))
+            {
+                return true;
+            }
+            if (FwdFrom is null && castedOther.FwdFrom is not null || FwdFrom is not null && castedOther.FwdFrom is null)
+            {
+                return true;
+            }
+            if (FwdFrom is not null && castedOther.FwdFrom is not null && FwdFrom.Compare(castedOther.FwdFrom))
+            {
+                return true;
+            }
+            if (ViaBotId != castedOther.ViaBotId)
+            {
+                return true;
+            }
+            if (ReplyTo is null && castedOther.ReplyTo is not null || ReplyTo is not null && castedOther.ReplyTo is null)
+            {
+                return true;
+            }
+            if (ReplyTo is not null && castedOther.ReplyTo is not null && ReplyTo.Compare(castedOther.ReplyTo))
+            {
+                return true;
+            }
+            if (Date != castedOther.Date)
+            {
+                return true;
+            }
+            if (MessageField != castedOther.MessageField)
+            {
+                return true;
+            }
+            if (Media is null && castedOther.Media is not null || Media is not null && castedOther.Media is null)
+            {
+                return true;
+            }
+            if (Media is not null && castedOther.Media is not null && Media.Compare(castedOther.Media))
+            {
+                return true;
+            }
+            if (ReplyMarkup is null && castedOther.ReplyMarkup is not null || ReplyMarkup is not null && castedOther.ReplyMarkup is null)
+            {
+                return true;
+            }
+            if (ReplyMarkup is not null && castedOther.ReplyMarkup is not null && ReplyMarkup.Compare(castedOther.ReplyMarkup))
+            {
+                return true;
+            }
+            if (Entities is null && castedOther.Entities is not null || Entities is not null && castedOther.Entities is null)
+            {
+                return true;
+            }
+            if (Entities is not null && castedOther.Entities is not null)
+            {
+
+                var entitiessize = castedOther.Entities.Count;
+                if (entitiessize != Entities.Count)
+                {
+                    return true;
+                }
+                for (var i = 0; i < entitiessize; i++)
+                {
+                    if (castedOther.Entities[i].Compare(Entities[i]))
+                    {
+                        return true;
+                    }
+                }
+            }
+            if (Views != castedOther.Views)
+            {
+                return true;
+            }
+            if (Forwards != castedOther.Forwards)
+            {
+                return true;
+            }
+            if (Replies is null && castedOther.Replies is not null || Replies is not null && castedOther.Replies is null)
+            {
+                return true;
+            }
+            if (Replies is not null && castedOther.Replies is not null && Replies.Compare(castedOther.Replies))
+            {
+                return true;
+            }
+            if (EditDate != castedOther.EditDate)
+            {
+                return true;
+            }
+            if (PostAuthor != castedOther.PostAuthor)
+            {
+                return true;
+            }
+            if (GroupedId != castedOther.GroupedId)
+            {
+                return true;
+            }
+            if (Reactions is null && castedOther.Reactions is not null || Reactions is not null && castedOther.Reactions is null)
+            {
+                return true;
+            }
+            if (Reactions is not null && castedOther.Reactions is not null && Reactions.Compare(castedOther.Reactions))
+            {
+                return true;
+            }
+            if (RestrictionReason is null && castedOther.RestrictionReason is not null || RestrictionReason is not null && castedOther.RestrictionReason is null)
+            {
+                return true;
+            }
+            if (RestrictionReason is not null && castedOther.RestrictionReason is not null)
+            {
+
+                var restrictionReasonsize = castedOther.RestrictionReason.Count;
+                if (restrictionReasonsize != RestrictionReason.Count)
+                {
+                    return true;
+                }
+                for (var i = 0; i < restrictionReasonsize; i++)
+                {
+                    if (castedOther.RestrictionReason[i].Compare(RestrictionReason[i]))
+                    {
+                        return true;
+                    }
+                }
+            }
+            if (TtlPeriod != castedOther.TtlPeriod)
+            {
+                return true;
+            }
+            return false;
+
+        }
+
 #nullable disable
     }
 }

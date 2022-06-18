@@ -1,21 +1,3 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -171,6 +153,65 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
             return newClonedObject;
 
         }
+
+        public override bool Compare(IObject other)
+        {
+            if (other is not CountryCode castedOther)
+            {
+                return true;
+            }
+            if (Flags != castedOther.Flags)
+            {
+                return true;
+            }
+            if (CountryCodeField != castedOther.CountryCodeField)
+            {
+                return true;
+            }
+            if (Prefixes is null && castedOther.Prefixes is not null || Prefixes is not null && castedOther.Prefixes is null)
+            {
+                return true;
+            }
+            if (Prefixes is not null && castedOther.Prefixes is not null)
+            {
+
+                var prefixessize = castedOther.Prefixes.Count;
+                if (prefixessize != Prefixes.Count)
+                {
+                    return true;
+                }
+                for (var i = 0; i < prefixessize; i++)
+                {
+                    if (castedOther.Prefixes[i] != Prefixes[i])
+                    {
+                        return true;
+                    }
+                }
+            }
+            if (Patterns is null && castedOther.Patterns is not null || Patterns is not null && castedOther.Patterns is null)
+            {
+                return true;
+            }
+            if (Patterns is not null && castedOther.Patterns is not null)
+            {
+
+                var patternssize = castedOther.Patterns.Count;
+                if (patternssize != Patterns.Count)
+                {
+                    return true;
+                }
+                for (var i = 0; i < patternssize; i++)
+                {
+                    if (castedOther.Patterns[i] != Patterns[i])
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+
+        }
+
 #nullable disable
     }
 }

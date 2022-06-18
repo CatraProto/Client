@@ -1,21 +1,3 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -209,6 +191,69 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             return newClonedObject;
 
         }
+
+        public override bool Compare(IObject other)
+        {
+            if (other is not InputMediaPoll castedOther)
+            {
+                return true;
+            }
+            if (Flags != castedOther.Flags)
+            {
+                return true;
+            }
+            if (Poll.Compare(castedOther.Poll))
+            {
+                return true;
+            }
+            if (CorrectAnswers is null && castedOther.CorrectAnswers is not null || CorrectAnswers is not null && castedOther.CorrectAnswers is null)
+            {
+                return true;
+            }
+            if (CorrectAnswers is not null && castedOther.CorrectAnswers is not null)
+            {
+
+                var correctAnswerssize = castedOther.CorrectAnswers.Count;
+                if (correctAnswerssize != CorrectAnswers.Count)
+                {
+                    return true;
+                }
+                for (var i = 0; i < correctAnswerssize; i++)
+                {
+                    if (castedOther.CorrectAnswers[i] != CorrectAnswers[i])
+                    {
+                        return true;
+                    }
+                }
+            }
+            if (Solution != castedOther.Solution)
+            {
+                return true;
+            }
+            if (SolutionEntities is null && castedOther.SolutionEntities is not null || SolutionEntities is not null && castedOther.SolutionEntities is null)
+            {
+                return true;
+            }
+            if (SolutionEntities is not null && castedOther.SolutionEntities is not null)
+            {
+
+                var solutionEntitiessize = castedOther.SolutionEntities.Count;
+                if (solutionEntitiessize != SolutionEntities.Count)
+                {
+                    return true;
+                }
+                for (var i = 0; i < solutionEntitiessize; i++)
+                {
+                    if (castedOther.SolutionEntities[i].Compare(SolutionEntities[i]))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+
+        }
+
 #nullable disable
     }
 }

@@ -1,21 +1,3 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL;
@@ -164,6 +146,37 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             return newClonedObject;
 
         }
+
+        public override bool Compare(IObject other)
+        {
+            if (other is not MessageReplyHeader castedOther)
+            {
+                return true;
+            }
+            if (Flags != castedOther.Flags)
+            {
+                return true;
+            }
+            if (ReplyToMsgId != castedOther.ReplyToMsgId)
+            {
+                return true;
+            }
+            if (ReplyToPeerId is null && castedOther.ReplyToPeerId is not null || ReplyToPeerId is not null && castedOther.ReplyToPeerId is null)
+            {
+                return true;
+            }
+            if (ReplyToPeerId is not null && castedOther.ReplyToPeerId is not null && ReplyToPeerId.Compare(castedOther.ReplyToPeerId))
+            {
+                return true;
+            }
+            if (ReplyToTopId != castedOther.ReplyToTopId)
+            {
+                return true;
+            }
+            return false;
+
+        }
+
 #nullable disable
     }
 }

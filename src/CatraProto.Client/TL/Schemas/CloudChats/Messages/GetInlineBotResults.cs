@@ -1,21 +1,3 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL;
@@ -201,6 +183,44 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             newClonedObject.Query = Query;
             newClonedObject.Offset = Offset;
             return newClonedObject;
+
+        }
+
+        public bool Compare(IObject other)
+        {
+            if (other is not GetInlineBotResults castedOther)
+            {
+                return true;
+            }
+            if (Flags != castedOther.Flags)
+            {
+                return true;
+            }
+            if (Bot.Compare(castedOther.Bot))
+            {
+                return true;
+            }
+            if (Peer.Compare(castedOther.Peer))
+            {
+                return true;
+            }
+            if (GeoPoint is null && castedOther.GeoPoint is not null || GeoPoint is not null && castedOther.GeoPoint is null)
+            {
+                return true;
+            }
+            if (GeoPoint is not null && castedOther.GeoPoint is not null && GeoPoint.Compare(castedOther.GeoPoint))
+            {
+                return true;
+            }
+            if (Query != castedOther.Query)
+            {
+                return true;
+            }
+            if (Offset != castedOther.Offset)
+            {
+                return true;
+            }
+            return false;
 
         }
 #nullable disable

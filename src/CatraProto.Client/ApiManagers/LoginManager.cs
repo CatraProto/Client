@@ -117,7 +117,7 @@ namespace CatraProto.Client.ApiManagers
 
                 _logger.Information("Send code failed because error {Error} occured", auth.Error);
                 SetCurrentState(LoginState.AwaitingLogin);
-                if(auth.Error.ErrorMessage == "PHONE_NUMBER_INVALID")
+                if (auth.Error.ErrorMessage == "PHONE_NUMBER_INVALID")
                 {
                     return new PhoneNumberIncorrectError();
                 }
@@ -193,7 +193,7 @@ namespace CatraProto.Client.ApiManagers
                     return null;
                 }
 
-                if(query.Error.ErrorMessage == "PHONE_CODE_INVALID" || query.Error.ErrorMessage == "PHONE_CODE_EMPTY")
+                if (query.Error.ErrorMessage == "PHONE_CODE_INVALID" || query.Error.ErrorMessage == "PHONE_CODE_EMPTY")
                 {
                     return new PhoneCodeIncorrectError();
                 }
@@ -244,7 +244,7 @@ namespace CatraProto.Client.ApiManagers
             var r = await _client.Api.CloudChatsApi.Auth.InternalResendCodeAsync(_phoneData.PhoneNumber, _phoneData.PhoneHash);
             if (r.RpcCallFailed)
             {
-                if(r.Error.ErrorMessage != "SEND_CODE_UNAVAILABLE")
+                if (r.Error.ErrorMessage != "SEND_CODE_UNAVAILABLE")
                 {
                     SetCurrentState(LoginState.AwaitingLogin);
                 }
@@ -301,7 +301,7 @@ namespace CatraProto.Client.ApiManagers
                 return null;
             }
 
-            if(_passwordAuthenticator is null)
+            if (_passwordAuthenticator is null)
             {
                 var fetchResult = await FetchPasswordConfigAsync();
                 if (fetchResult is not null)

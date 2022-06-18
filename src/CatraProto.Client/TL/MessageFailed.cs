@@ -52,7 +52,7 @@ namespace CatraProto.Client.TL
 
         public bool Compare(IObject other)
         {
-            if(other is not MessageFailed)
+            if (other is not MessageFailed)
             {
                 return true;
             }

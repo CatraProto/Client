@@ -1,21 +1,3 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL;
@@ -273,6 +255,68 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             }
             newClonedObject.Query = Query;
             return newClonedObject;
+
+        }
+
+        public bool Compare(IObject other)
+        {
+            if (other is not InitConnection castedOther)
+            {
+                return true;
+            }
+            if (Flags != castedOther.Flags)
+            {
+                return true;
+            }
+            if (ApiId != castedOther.ApiId)
+            {
+                return true;
+            }
+            if (DeviceModel != castedOther.DeviceModel)
+            {
+                return true;
+            }
+            if (SystemVersion != castedOther.SystemVersion)
+            {
+                return true;
+            }
+            if (AppVersion != castedOther.AppVersion)
+            {
+                return true;
+            }
+            if (SystemLangCode != castedOther.SystemLangCode)
+            {
+                return true;
+            }
+            if (LangPack != castedOther.LangPack)
+            {
+                return true;
+            }
+            if (LangCode != castedOther.LangCode)
+            {
+                return true;
+            }
+            if (Proxy is null && castedOther.Proxy is not null || Proxy is not null && castedOther.Proxy is null)
+            {
+                return true;
+            }
+            if (Proxy is not null && castedOther.Proxy is not null && Proxy.Compare(castedOther.Proxy))
+            {
+                return true;
+            }
+            if (Params is null && castedOther.Params is not null || Params is not null && castedOther.Params is null)
+            {
+                return true;
+            }
+            if (Params is not null && castedOther.Params is not null && Params.Compare(castedOther.Params))
+            {
+                return true;
+            }
+            if (Query != castedOther.Query)
+            {
+                return true;
+            }
+            return false;
 
         }
 #nullable disable

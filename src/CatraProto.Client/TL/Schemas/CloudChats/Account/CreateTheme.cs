@@ -1,21 +1,3 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -198,6 +180,56 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 }
             }
             return newClonedObject;
+
+        }
+
+        public bool Compare(IObject other)
+        {
+            if (other is not CreateTheme castedOther)
+            {
+                return true;
+            }
+            if (Flags != castedOther.Flags)
+            {
+                return true;
+            }
+            if (Slug != castedOther.Slug)
+            {
+                return true;
+            }
+            if (Title != castedOther.Title)
+            {
+                return true;
+            }
+            if (Document is null && castedOther.Document is not null || Document is not null && castedOther.Document is null)
+            {
+                return true;
+            }
+            if (Document is not null && castedOther.Document is not null && Document.Compare(castedOther.Document))
+            {
+                return true;
+            }
+            if (Settings is null && castedOther.Settings is not null || Settings is not null && castedOther.Settings is null)
+            {
+                return true;
+            }
+            if (Settings is not null && castedOther.Settings is not null)
+            {
+
+                var settingssize = castedOther.Settings.Count;
+                if (settingssize != Settings.Count)
+                {
+                    return true;
+                }
+                for (var i = 0; i < settingssize; i++)
+                {
+                    if (castedOther.Settings[i].Compare(Settings[i]))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
 
         }
 #nullable disable

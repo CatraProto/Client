@@ -1,21 +1,3 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -240,6 +222,77 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             return newClonedObject;
 
         }
+
+        public override bool Compare(IObject other)
+        {
+            if (other is not ChatInvite castedOther)
+            {
+                return true;
+            }
+            if (Flags != castedOther.Flags)
+            {
+                return true;
+            }
+            if (Channel != castedOther.Channel)
+            {
+                return true;
+            }
+            if (Broadcast != castedOther.Broadcast)
+            {
+                return true;
+            }
+            if (Public != castedOther.Public)
+            {
+                return true;
+            }
+            if (Megagroup != castedOther.Megagroup)
+            {
+                return true;
+            }
+            if (RequestNeeded != castedOther.RequestNeeded)
+            {
+                return true;
+            }
+            if (Title != castedOther.Title)
+            {
+                return true;
+            }
+            if (About != castedOther.About)
+            {
+                return true;
+            }
+            if (Photo.Compare(castedOther.Photo))
+            {
+                return true;
+            }
+            if (ParticipantsCount != castedOther.ParticipantsCount)
+            {
+                return true;
+            }
+            if (Participants is null && castedOther.Participants is not null || Participants is not null && castedOther.Participants is null)
+            {
+                return true;
+            }
+            if (Participants is not null && castedOther.Participants is not null)
+            {
+
+                var participantssize = castedOther.Participants.Count;
+                if (participantssize != Participants.Count)
+                {
+                    return true;
+                }
+                for (var i = 0; i < participantssize; i++)
+                {
+                    if (castedOther.Participants[i].Compare(Participants[i]))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+
+        }
+
 #nullable disable
     }
 }

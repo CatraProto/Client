@@ -1,21 +1,3 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -519,6 +501,157 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             return newClonedObject;
 
         }
+
+        public override bool Compare(IObject other)
+        {
+            if (other is not ChatFull castedOther)
+            {
+                return true;
+            }
+            if (Flags != castedOther.Flags)
+            {
+                return true;
+            }
+            if (CanSetUsername != castedOther.CanSetUsername)
+            {
+                return true;
+            }
+            if (HasScheduled != castedOther.HasScheduled)
+            {
+                return true;
+            }
+            if (Id != castedOther.Id)
+            {
+                return true;
+            }
+            if (About != castedOther.About)
+            {
+                return true;
+            }
+            if (Participants.Compare(castedOther.Participants))
+            {
+                return true;
+            }
+            if (ChatPhoto is null && castedOther.ChatPhoto is not null || ChatPhoto is not null && castedOther.ChatPhoto is null)
+            {
+                return true;
+            }
+            if (ChatPhoto is not null && castedOther.ChatPhoto is not null && ChatPhoto.Compare(castedOther.ChatPhoto))
+            {
+                return true;
+            }
+            if (NotifySettings.Compare(castedOther.NotifySettings))
+            {
+                return true;
+            }
+            if (ExportedInvite is null && castedOther.ExportedInvite is not null || ExportedInvite is not null && castedOther.ExportedInvite is null)
+            {
+                return true;
+            }
+            if (ExportedInvite is not null && castedOther.ExportedInvite is not null && ExportedInvite.Compare(castedOther.ExportedInvite))
+            {
+                return true;
+            }
+            if (BotInfo is null && castedOther.BotInfo is not null || BotInfo is not null && castedOther.BotInfo is null)
+            {
+                return true;
+            }
+            if (BotInfo is not null && castedOther.BotInfo is not null)
+            {
+
+                var botInfosize = castedOther.BotInfo.Count;
+                if (botInfosize != BotInfo.Count)
+                {
+                    return true;
+                }
+                for (var i = 0; i < botInfosize; i++)
+                {
+                    if (castedOther.BotInfo[i].Compare(BotInfo[i]))
+                    {
+                        return true;
+                    }
+                }
+            }
+            if (PinnedMsgId != castedOther.PinnedMsgId)
+            {
+                return true;
+            }
+            if (FolderId != castedOther.FolderId)
+            {
+                return true;
+            }
+            if (Call is null && castedOther.Call is not null || Call is not null && castedOther.Call is null)
+            {
+                return true;
+            }
+            if (Call is not null && castedOther.Call is not null && Call.Compare(castedOther.Call))
+            {
+                return true;
+            }
+            if (TtlPeriod != castedOther.TtlPeriod)
+            {
+                return true;
+            }
+            if (GroupcallDefaultJoinAs is null && castedOther.GroupcallDefaultJoinAs is not null || GroupcallDefaultJoinAs is not null && castedOther.GroupcallDefaultJoinAs is null)
+            {
+                return true;
+            }
+            if (GroupcallDefaultJoinAs is not null && castedOther.GroupcallDefaultJoinAs is not null && GroupcallDefaultJoinAs.Compare(castedOther.GroupcallDefaultJoinAs))
+            {
+                return true;
+            }
+            if (ThemeEmoticon != castedOther.ThemeEmoticon)
+            {
+                return true;
+            }
+            if (RequestsPending != castedOther.RequestsPending)
+            {
+                return true;
+            }
+            if (RecentRequesters is null && castedOther.RecentRequesters is not null || RecentRequesters is not null && castedOther.RecentRequesters is null)
+            {
+                return true;
+            }
+            if (RecentRequesters is not null && castedOther.RecentRequesters is not null)
+            {
+
+                var recentRequesterssize = castedOther.RecentRequesters.Count;
+                if (recentRequesterssize != RecentRequesters.Count)
+                {
+                    return true;
+                }
+                for (var i = 0; i < recentRequesterssize; i++)
+                {
+                    if (castedOther.RecentRequesters[i] != RecentRequesters[i])
+                    {
+                        return true;
+                    }
+                }
+            }
+            if (AvailableReactions is null && castedOther.AvailableReactions is not null || AvailableReactions is not null && castedOther.AvailableReactions is null)
+            {
+                return true;
+            }
+            if (AvailableReactions is not null && castedOther.AvailableReactions is not null)
+            {
+
+                var availableReactionssize = castedOther.AvailableReactions.Count;
+                if (availableReactionssize != AvailableReactions.Count)
+                {
+                    return true;
+                }
+                for (var i = 0; i < availableReactionssize; i++)
+                {
+                    if (castedOther.AvailableReactions[i] != AvailableReactions[i])
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+
+        }
+
 #nullable disable
     }
 }

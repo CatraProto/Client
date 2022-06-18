@@ -1,21 +1,3 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -250,6 +232,68 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
             }
             newClonedObject.Software = Software;
             return newClonedObject;
+
+        }
+
+        public bool Compare(IObject other)
+        {
+            if (other is not CreateStickerSet castedOther)
+            {
+                return true;
+            }
+            if (Flags != castedOther.Flags)
+            {
+                return true;
+            }
+            if (Masks != castedOther.Masks)
+            {
+                return true;
+            }
+            if (Animated != castedOther.Animated)
+            {
+                return true;
+            }
+            if (Videos != castedOther.Videos)
+            {
+                return true;
+            }
+            if (UserId.Compare(castedOther.UserId))
+            {
+                return true;
+            }
+            if (Title != castedOther.Title)
+            {
+                return true;
+            }
+            if (ShortName != castedOther.ShortName)
+            {
+                return true;
+            }
+            if (Thumb is null && castedOther.Thumb is not null || Thumb is not null && castedOther.Thumb is null)
+            {
+                return true;
+            }
+            if (Thumb is not null && castedOther.Thumb is not null && Thumb.Compare(castedOther.Thumb))
+            {
+                return true;
+            }
+            var stickerssize = castedOther.Stickers.Count;
+            if (stickerssize != Stickers.Count)
+            {
+                return true;
+            }
+            for (var i = 0; i < stickerssize; i++)
+            {
+                if (castedOther.Stickers[i].Compare(Stickers[i]))
+                {
+                    return true;
+                }
+            }
+            if (Software != castedOther.Software)
+            {
+                return true;
+            }
+            return false;
 
         }
 #nullable disable

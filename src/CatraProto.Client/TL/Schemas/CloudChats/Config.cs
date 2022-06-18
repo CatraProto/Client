@@ -1,21 +1,3 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -787,6 +769,233 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             return newClonedObject;
 
         }
+
+        public override bool Compare(IObject other)
+        {
+            if (other is not Config castedOther)
+            {
+                return true;
+            }
+            if (Flags != castedOther.Flags)
+            {
+                return true;
+            }
+            if (PhonecallsEnabled != castedOther.PhonecallsEnabled)
+            {
+                return true;
+            }
+            if (DefaultP2pContacts != castedOther.DefaultP2pContacts)
+            {
+                return true;
+            }
+            if (PreloadFeaturedStickers != castedOther.PreloadFeaturedStickers)
+            {
+                return true;
+            }
+            if (IgnorePhoneEntities != castedOther.IgnorePhoneEntities)
+            {
+                return true;
+            }
+            if (RevokePmInbox != castedOther.RevokePmInbox)
+            {
+                return true;
+            }
+            if (BlockedMode != castedOther.BlockedMode)
+            {
+                return true;
+            }
+            if (PfsEnabled != castedOther.PfsEnabled)
+            {
+                return true;
+            }
+            if (Date != castedOther.Date)
+            {
+                return true;
+            }
+            if (Expires != castedOther.Expires)
+            {
+                return true;
+            }
+            if (TestMode != castedOther.TestMode)
+            {
+                return true;
+            }
+            if (ThisDc != castedOther.ThisDc)
+            {
+                return true;
+            }
+            var dcOptionssize = castedOther.DcOptions.Count;
+            if (dcOptionssize != DcOptions.Count)
+            {
+                return true;
+            }
+            for (var i = 0; i < dcOptionssize; i++)
+            {
+                if (castedOther.DcOptions[i].Compare(DcOptions[i]))
+                {
+                    return true;
+                }
+            }
+            if (DcTxtDomainName != castedOther.DcTxtDomainName)
+            {
+                return true;
+            }
+            if (ChatSizeMax != castedOther.ChatSizeMax)
+            {
+                return true;
+            }
+            if (MegagroupSizeMax != castedOther.MegagroupSizeMax)
+            {
+                return true;
+            }
+            if (ForwardedCountMax != castedOther.ForwardedCountMax)
+            {
+                return true;
+            }
+            if (OnlineUpdatePeriodMs != castedOther.OnlineUpdatePeriodMs)
+            {
+                return true;
+            }
+            if (OfflineBlurTimeoutMs != castedOther.OfflineBlurTimeoutMs)
+            {
+                return true;
+            }
+            if (OfflineIdleTimeoutMs != castedOther.OfflineIdleTimeoutMs)
+            {
+                return true;
+            }
+            if (OnlineCloudTimeoutMs != castedOther.OnlineCloudTimeoutMs)
+            {
+                return true;
+            }
+            if (NotifyCloudDelayMs != castedOther.NotifyCloudDelayMs)
+            {
+                return true;
+            }
+            if (NotifyDefaultDelayMs != castedOther.NotifyDefaultDelayMs)
+            {
+                return true;
+            }
+            if (PushChatPeriodMs != castedOther.PushChatPeriodMs)
+            {
+                return true;
+            }
+            if (PushChatLimit != castedOther.PushChatLimit)
+            {
+                return true;
+            }
+            if (SavedGifsLimit != castedOther.SavedGifsLimit)
+            {
+                return true;
+            }
+            if (EditTimeLimit != castedOther.EditTimeLimit)
+            {
+                return true;
+            }
+            if (RevokeTimeLimit != castedOther.RevokeTimeLimit)
+            {
+                return true;
+            }
+            if (RevokePmTimeLimit != castedOther.RevokePmTimeLimit)
+            {
+                return true;
+            }
+            if (RatingEDecay != castedOther.RatingEDecay)
+            {
+                return true;
+            }
+            if (StickersRecentLimit != castedOther.StickersRecentLimit)
+            {
+                return true;
+            }
+            if (StickersFavedLimit != castedOther.StickersFavedLimit)
+            {
+                return true;
+            }
+            if (ChannelsReadMediaPeriod != castedOther.ChannelsReadMediaPeriod)
+            {
+                return true;
+            }
+            if (TmpSessions != castedOther.TmpSessions)
+            {
+                return true;
+            }
+            if (PinnedDialogsCountMax != castedOther.PinnedDialogsCountMax)
+            {
+                return true;
+            }
+            if (PinnedInfolderCountMax != castedOther.PinnedInfolderCountMax)
+            {
+                return true;
+            }
+            if (CallReceiveTimeoutMs != castedOther.CallReceiveTimeoutMs)
+            {
+                return true;
+            }
+            if (CallRingTimeoutMs != castedOther.CallRingTimeoutMs)
+            {
+                return true;
+            }
+            if (CallConnectTimeoutMs != castedOther.CallConnectTimeoutMs)
+            {
+                return true;
+            }
+            if (CallPacketTimeoutMs != castedOther.CallPacketTimeoutMs)
+            {
+                return true;
+            }
+            if (MeUrlPrefix != castedOther.MeUrlPrefix)
+            {
+                return true;
+            }
+            if (AutoupdateUrlPrefix != castedOther.AutoupdateUrlPrefix)
+            {
+                return true;
+            }
+            if (GifSearchUsername != castedOther.GifSearchUsername)
+            {
+                return true;
+            }
+            if (VenueSearchUsername != castedOther.VenueSearchUsername)
+            {
+                return true;
+            }
+            if (ImgSearchUsername != castedOther.ImgSearchUsername)
+            {
+                return true;
+            }
+            if (StaticMapsProvider != castedOther.StaticMapsProvider)
+            {
+                return true;
+            }
+            if (CaptionLengthMax != castedOther.CaptionLengthMax)
+            {
+                return true;
+            }
+            if (MessageLengthMax != castedOther.MessageLengthMax)
+            {
+                return true;
+            }
+            if (WebfileDcId != castedOther.WebfileDcId)
+            {
+                return true;
+            }
+            if (SuggestedLangCode != castedOther.SuggestedLangCode)
+            {
+                return true;
+            }
+            if (LangPackVersion != castedOther.LangPackVersion)
+            {
+                return true;
+            }
+            if (BaseLangPackVersion != castedOther.BaseLangPackVersion)
+            {
+                return true;
+            }
+            return false;
+
+        }
+
 #nullable disable
     }
 }

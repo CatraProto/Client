@@ -1,21 +1,3 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -332,6 +314,89 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
             return newClonedObject;
 
         }
+
+        public override bool Compare(IObject other)
+        {
+            if (other is not PaymentForm castedOther)
+            {
+                return true;
+            }
+            if (Flags != castedOther.Flags)
+            {
+                return true;
+            }
+            if (CanSaveCredentials != castedOther.CanSaveCredentials)
+            {
+                return true;
+            }
+            if (PasswordMissing != castedOther.PasswordMissing)
+            {
+                return true;
+            }
+            if (FormId != castedOther.FormId)
+            {
+                return true;
+            }
+            if (BotId != castedOther.BotId)
+            {
+                return true;
+            }
+            if (Invoice.Compare(castedOther.Invoice))
+            {
+                return true;
+            }
+            if (ProviderId != castedOther.ProviderId)
+            {
+                return true;
+            }
+            if (Url != castedOther.Url)
+            {
+                return true;
+            }
+            if (NativeProvider != castedOther.NativeProvider)
+            {
+                return true;
+            }
+            if (NativeParams is null && castedOther.NativeParams is not null || NativeParams is not null && castedOther.NativeParams is null)
+            {
+                return true;
+            }
+            if (NativeParams is not null && castedOther.NativeParams is not null && NativeParams.Compare(castedOther.NativeParams))
+            {
+                return true;
+            }
+            if (SavedInfo is null && castedOther.SavedInfo is not null || SavedInfo is not null && castedOther.SavedInfo is null)
+            {
+                return true;
+            }
+            if (SavedInfo is not null && castedOther.SavedInfo is not null && SavedInfo.Compare(castedOther.SavedInfo))
+            {
+                return true;
+            }
+            if (SavedCredentials is null && castedOther.SavedCredentials is not null || SavedCredentials is not null && castedOther.SavedCredentials is null)
+            {
+                return true;
+            }
+            if (SavedCredentials is not null && castedOther.SavedCredentials is not null && SavedCredentials.Compare(castedOther.SavedCredentials))
+            {
+                return true;
+            }
+            var userssize = castedOther.Users.Count;
+            if (userssize != Users.Count)
+            {
+                return true;
+            }
+            for (var i = 0; i < userssize; i++)
+            {
+                if (castedOther.Users[i].Compare(Users[i]))
+                {
+                    return true;
+                }
+            }
+            return false;
+
+        }
+
 #nullable disable
     }
 }

@@ -1,21 +1,3 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
 using CatraProto.TL;
@@ -261,6 +243,89 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             return newClonedObject;
 
         }
+
+        public override bool Compare(IObject other)
+        {
+            if (other is not SearchResultsCalendar castedOther)
+            {
+                return true;
+            }
+            if (Flags != castedOther.Flags)
+            {
+                return true;
+            }
+            if (Inexact != castedOther.Inexact)
+            {
+                return true;
+            }
+            if (Count != castedOther.Count)
+            {
+                return true;
+            }
+            if (MinDate != castedOther.MinDate)
+            {
+                return true;
+            }
+            if (MinMsgId != castedOther.MinMsgId)
+            {
+                return true;
+            }
+            if (OffsetIdOffset != castedOther.OffsetIdOffset)
+            {
+                return true;
+            }
+            var periodssize = castedOther.Periods.Count;
+            if (periodssize != Periods.Count)
+            {
+                return true;
+            }
+            for (var i = 0; i < periodssize; i++)
+            {
+                if (castedOther.Periods[i].Compare(Periods[i]))
+                {
+                    return true;
+                }
+            }
+            var messagessize = castedOther.Messages.Count;
+            if (messagessize != Messages.Count)
+            {
+                return true;
+            }
+            for (var i = 0; i < messagessize; i++)
+            {
+                if (castedOther.Messages[i].Compare(Messages[i]))
+                {
+                    return true;
+                }
+            }
+            var chatssize = castedOther.Chats.Count;
+            if (chatssize != Chats.Count)
+            {
+                return true;
+            }
+            for (var i = 0; i < chatssize; i++)
+            {
+                if (castedOther.Chats[i].Compare(Chats[i]))
+                {
+                    return true;
+                }
+            }
+            var userssize = castedOther.Users.Count;
+            if (userssize != Users.Count)
+            {
+                return true;
+            }
+            for (var i = 0; i < userssize; i++)
+            {
+                if (castedOther.Users[i].Compare(Users[i]))
+                {
+                    return true;
+                }
+            }
+            return false;
+
+        }
+
 #nullable disable
     }
 }

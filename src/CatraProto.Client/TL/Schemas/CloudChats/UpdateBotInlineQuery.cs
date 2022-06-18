@@ -1,21 +1,3 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL;
@@ -215,6 +197,53 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             return newClonedObject;
 
         }
+
+        public override bool Compare(IObject other)
+        {
+            if (other is not UpdateBotInlineQuery castedOther)
+            {
+                return true;
+            }
+            if (Flags != castedOther.Flags)
+            {
+                return true;
+            }
+            if (QueryId != castedOther.QueryId)
+            {
+                return true;
+            }
+            if (UserId != castedOther.UserId)
+            {
+                return true;
+            }
+            if (Query != castedOther.Query)
+            {
+                return true;
+            }
+            if (Geo is null && castedOther.Geo is not null || Geo is not null && castedOther.Geo is null)
+            {
+                return true;
+            }
+            if (Geo is not null && castedOther.Geo is not null && Geo.Compare(castedOther.Geo))
+            {
+                return true;
+            }
+            if (PeerType is null && castedOther.PeerType is not null || PeerType is not null && castedOther.PeerType is null)
+            {
+                return true;
+            }
+            if (PeerType is not null && castedOther.PeerType is not null && PeerType.Compare(castedOther.PeerType))
+            {
+                return true;
+            }
+            if (Offset != castedOther.Offset)
+            {
+                return true;
+            }
+            return false;
+
+        }
+
 #nullable disable
     }
 }

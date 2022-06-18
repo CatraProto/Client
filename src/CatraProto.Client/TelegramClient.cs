@@ -128,7 +128,7 @@ namespace CatraProto.Client
             {
                 await ClientSession.SaveSessionAsync(token);
             }
-            catch(Exception e) when (e is not OperationCanceledException)
+            catch (Exception e) when (e is not OperationCanceledException)
             {
                 _logger.Error(e, "Could not save session file");
             }

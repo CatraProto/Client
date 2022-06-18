@@ -1,21 +1,3 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
@@ -397,6 +379,85 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
             return newClonedObject;
 
         }
+
+        public override bool Compare(IObject other)
+        {
+            if (other is not BroadcastStats castedOther)
+            {
+                return true;
+            }
+            if (Period.Compare(castedOther.Period))
+            {
+                return true;
+            }
+            if (Followers.Compare(castedOther.Followers))
+            {
+                return true;
+            }
+            if (ViewsPerPost.Compare(castedOther.ViewsPerPost))
+            {
+                return true;
+            }
+            if (SharesPerPost.Compare(castedOther.SharesPerPost))
+            {
+                return true;
+            }
+            if (EnabledNotifications.Compare(castedOther.EnabledNotifications))
+            {
+                return true;
+            }
+            if (GrowthGraph.Compare(castedOther.GrowthGraph))
+            {
+                return true;
+            }
+            if (FollowersGraph.Compare(castedOther.FollowersGraph))
+            {
+                return true;
+            }
+            if (MuteGraph.Compare(castedOther.MuteGraph))
+            {
+                return true;
+            }
+            if (TopHoursGraph.Compare(castedOther.TopHoursGraph))
+            {
+                return true;
+            }
+            if (InteractionsGraph.Compare(castedOther.InteractionsGraph))
+            {
+                return true;
+            }
+            if (IvInteractionsGraph.Compare(castedOther.IvInteractionsGraph))
+            {
+                return true;
+            }
+            if (ViewsBySourceGraph.Compare(castedOther.ViewsBySourceGraph))
+            {
+                return true;
+            }
+            if (NewFollowersBySourceGraph.Compare(castedOther.NewFollowersBySourceGraph))
+            {
+                return true;
+            }
+            if (LanguagesGraph.Compare(castedOther.LanguagesGraph))
+            {
+                return true;
+            }
+            var recentMessageInteractionssize = castedOther.RecentMessageInteractions.Count;
+            if (recentMessageInteractionssize != RecentMessageInteractions.Count)
+            {
+                return true;
+            }
+            for (var i = 0; i < recentMessageInteractionssize; i++)
+            {
+                if (castedOther.RecentMessageInteractions[i].Compare(RecentMessageInteractions[i]))
+                {
+                    return true;
+                }
+            }
+            return false;
+
+        }
+
 #nullable disable
     }
 }
