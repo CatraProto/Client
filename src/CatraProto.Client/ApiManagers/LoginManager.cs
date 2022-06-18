@@ -416,10 +416,10 @@ namespace CatraProto.Client.ApiManagers
             if (state is LoginState.AwaitingCode && _phoneData is not null)
             {
                 _logger.Information("Cancelling login code sento to phone number {Number} and phone hash {Hash}", _phoneData.PhoneNumber, _phoneData.PhoneHash);
-                var r = await _client.Api.CloudChatsApi.Auth.CancelCodeAsync(_phoneData.PhoneNumber, _phoneData.PhoneHash);
-                if (r.RpcCallFailed)
+                var cancelCode = await _client.Api.CloudChatsApi.Auth.CancelCodeAsync(_phoneData.PhoneNumber, _phoneData.PhoneHash);
+                if (cancelCode.RpcCallFailed)
                 {
-                    _logger.Information("Failed to cancel login code due to {Error}", r.Error);
+                    _logger.Information("Failed to cancel login code due to {Error}", cancelCode.Error);
                 }
             }
 
