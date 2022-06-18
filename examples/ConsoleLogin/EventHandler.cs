@@ -12,13 +12,11 @@ namespace ConsoleLogin;
 public class EventHandler : IEventHandler
 {
     private readonly TelegramClient _client;
-    private readonly ILogger _logger;
-    private readonly SemaphoreSlim _loggedIn = new SemaphoreSlim(0, 1);
+    private readonly SemaphoreSlim _blockingConsole = new SemaphoreSlim(0, 1);
 
-    public EventHandler(TelegramClient client, ILogger logger)
+    public EventHandler(TelegramClient client)
     {
         _client = client;
-        _logger = logger.ForContext<EventHandler>();
     }
 
     public async Task OnSessionUpdateAsync(LoginState loginState)
@@ -142,11 +140,17 @@ public class EventHandler : IEventHandler
         }
         else if (loginState is LoginState.LoggedIn)
         {
-            Console.WriteLine($"Wow! We are logged in! We are: {(await _client.Api.CloudChatsApi.Users.GetSelfAsync()).Response.ToJson()}");
-            _loggedIn.Release();
+            _blockingConsole.Release();
+            var getSelf = await _client.Api.CloudChatsApi.Users.GetSelfAsync();
+            if (getSelf.RpcCallFailed)
+            {
+                Console.WriteLine($"Something went wrong and I could not fetch the bot's profile. Error {getSelf.Error}");
+            }
+            Console.WriteLine($"Wow! We are logged in! We are: {getSelf.Response}");
         }
         else if (loginState >= LoginState.LoggedOut)
         {
+            _blockingConsole.Release();
             Console.WriteLine($"Hey! The session is dead. I received the following state: {loginState}");
         }
         else
@@ -179,8 +183,8 @@ public class EventHandler : IEventHandler
         }
     }
 
-    public Task WaitLoginAsync()
+    public Task WaitConsoleAsync()
     {
-        return _loggedIn.WaitAsync();
+        return _blockingConsole.WaitAsync();
     }
 }
