@@ -511,9 +511,10 @@ namespace CatraProto.Client.ApiManagers
                 }
 
                 // Won't save other states because they might not be valid and most of them require AwaitingLogin to be sent, if the client saves at the wrong time things could go wrong
-                if (_currentState >= LoginState.LoggedOut)
+                if (_currentState >= LoginState.LoggedIn)
                 {
                     _sessionData.Authorization.SetAuthorized(_currentState, null, null);
+                    _ = _client.ForceSaveAsync();
                 }
             }
         }

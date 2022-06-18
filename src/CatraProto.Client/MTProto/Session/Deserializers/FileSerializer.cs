@@ -20,6 +20,7 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using CatraProto.Client.Async.Locks;
 using CatraProto.Client.MTProto.Session.Interfaces;
 using Serilog;
 
@@ -27,6 +28,7 @@ namespace CatraProto.Client.MTProto.Session.Deserializers
 {
     public class FileSerializer : IAsyncSessionSerializer
     {
+        private readonly AsyncLock _lock = new AsyncLock();
         private readonly string _filePath;
         public FileSerializer(string filePath)
         {
@@ -51,14 +53,16 @@ namespace CatraProto.Client.MTProto.Session.Deserializers
             return File.ReadAllBytesAsync(_filePath, token);
         }
 
-        public Task SaveAsync(byte[] data, ILogger logger, CancellationToken token)
+        public async Task SaveAsync(byte[] data, ILogger logger, CancellationToken token)
         {
+            using var lk = await _lock.LockAsync(token);
             logger.Information("Writing session file {FileName}. Total length {FileLength} bytes", _filePath, data.Length);
-            return File.WriteAllBytesAsync(_filePath, data, token);
+            await File.WriteAllBytesAsync(_filePath, data, token);
         }
 
         public void Dispose()
         {
+            _lock.Dispose();
         }
     }
 }

@@ -122,9 +122,16 @@ namespace CatraProto.Client
             }
         }
 
-        public Task ForceSaveAsync(CancellationToken token = default)
+        public async Task ForceSaveAsync(CancellationToken token = default)
         {
-            return ClientSession.SaveSessionAsync(token);
+            try
+            {
+                await ClientSession.SaveSessionAsync(token);
+            }
+            catch(Exception e) when (e is not OperationCanceledException)
+            {
+                _logger.Error(e, "Could not save session file");
+            }
         }
 
         public ILogger GetLogger<T>()
