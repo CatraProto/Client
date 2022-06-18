@@ -50,6 +50,16 @@ namespace CatraProto.Client.TL
             return new MessageFailed();
         }
 
+        public bool Compare(IObject other)
+        {
+            if(other is not MessageFailed)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public override string ToString()
         {
             return "container_message_failed";

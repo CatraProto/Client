@@ -16,6 +16,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
@@ -101,6 +102,12 @@ namespace CatraProto.Client.TL.Schemas.Database
             }
 
             return newObj;
+        }
+
+        public bool Compare(IObject other)
+        {
+            //Don't care, won't use it
+            throw new InvalidOperationException();
         }
     }
 }

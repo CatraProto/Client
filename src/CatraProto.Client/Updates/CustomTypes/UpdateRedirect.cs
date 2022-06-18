@@ -62,5 +62,15 @@ namespace CatraProto.Client.Updates.CustomTypes
 
             return new UpdateRedirect((UpdateBase)cloneUpdate);
         }
+
+        public override bool Compare(IObject other)
+        {
+            if(other is not UpdateRedirect castedOther)
+            {
+                return false;
+            }
+
+            return castedOther.Update.Compare(Update);
+        }
     }
 }

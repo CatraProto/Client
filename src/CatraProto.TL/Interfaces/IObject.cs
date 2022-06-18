@@ -27,5 +27,6 @@ namespace CatraProto.TL.Interfaces
         public void UpdateFlags();
         public int GetConstructorId();
         public IObject? Clone();
+        public bool Compare(IObject other);
     }
 }
