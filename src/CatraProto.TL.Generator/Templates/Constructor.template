@@ -52,6 +52,12 @@ namespace ^Namespace^
 		{
 			^Clone^
 		}
+
+		^MethodAccessibility^ bool Compare(IObject other)
+		{
+			^Compare^
+		}
+
 		#nullable disable
 	}
 }

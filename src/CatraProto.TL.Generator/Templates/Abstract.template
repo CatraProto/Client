@@ -15,6 +15,7 @@ namespace ^Namespace^
         public abstract int GetConstructorId();
         #nullable enable
         public abstract IObject? Clone();
+        public abstract bool Compare(IObject other);
         #nullable disable
     }
 }

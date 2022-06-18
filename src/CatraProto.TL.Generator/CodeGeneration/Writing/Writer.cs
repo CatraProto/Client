@@ -148,12 +148,14 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
             var deserializer = new StringBuilder();
             var flagsUpdating = new StringBuilder();
             var cloner = new StringBuilder();
+            var comparer = new StringBuilder();
             obj.WriteFlagsUpdating(flagsUpdating);
             obj.WriteFlagsEnums(flagsEnum);
             obj.WriteParameters(parameters);
             obj.WriteSerializer(serializer);
             obj.WriteDeserializer(deserializer);
             obj.WriteCloner(cloner);
+            obj.WriteComparer(comparer);
             var emptyConstructoAccess = "";
             var publicContru = "";
             var hasNotNullParams = obj.HasNotNullParameters();
@@ -185,7 +187,8 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
                 .Replace("^ObjectRawName^", obj.NamingInfo.OriginalNamespacedName)
                 .Replace("^PublicConstructor^", publicContru)
                 .Replace("^EmptyConstructorAccessibility^", emptyConstructoAccess)
-                .Replace("^Clone^", cloner.ToString());
+                .Replace("^Clone^", cloner.ToString())
+                .Replace("^Compare^", comparer.ToString());
 
             Directory.CreateDirectory(StringTools.NamespaceToDirectory(obj.Namespace.PartialNamespace));
             if (obj is Method method)

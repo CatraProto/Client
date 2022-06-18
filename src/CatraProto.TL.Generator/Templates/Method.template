@@ -54,6 +54,11 @@ namespace ^Namespace^
 		{
 			^Clone^
 		}
+
+		public bool Compare(IObject other)
+		{
+			^Compare^
+		}
 		#nullable disable
 	}
 }

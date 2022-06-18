@@ -234,5 +234,59 @@ namespace CatraProto.TL.Generator.Objects.Interfaces
             cloner.AppendLine("return newClonedObject;");
 
         }
+
+        public void WriteComparer(StringBuilder comparer)
+        {
+            comparer.AppendLine($"if(other is not {NamingInfo.PascalCaseName} castedOther)\n{{\nreturn true;\n}}");
+            foreach (var parameter in Parameters)
+            {
+                if (parameter.VectorInfo.IsVector)
+                {
+                    if (parameter.HasFlag)
+                    {
+                        comparer.AppendLine($"if ({parameter.NamingInfo.PascalCaseName} is null && castedOther.{parameter.NamingInfo.PascalCaseName} is not null || {parameter.NamingInfo.PascalCaseName} is not null && castedOther.{parameter.NamingInfo.PascalCaseName} is null)\n{{\nreturn true;\n}}");
+                        comparer.AppendLine($"if ({parameter.NamingInfo.PascalCaseName} is not null && castedOther.{parameter.NamingInfo.PascalCaseName} is not null){{\n");
+                    }
+                    comparer.AppendLine($"var {parameter.NamingInfo.CamelCaseName}size = castedOther.{parameter.NamingInfo.PascalCaseName}.Count;");
+                    comparer.AppendLine($"if ({parameter.NamingInfo.CamelCaseName}size != {parameter.NamingInfo.PascalCaseName}.Count)\n{{\nreturn true;\n}}");
+                    comparer.AppendLine($"for (var i = 0; i < {parameter.NamingInfo.CamelCaseName}size; i++)\n{{");
+                    if (parameter.Type.TypeInfo.IsBare)
+                    {
+                        comparer.AppendLine($"if (castedOther.{parameter.NamingInfo.PascalCaseName}[i] != {parameter.NamingInfo.PascalCaseName}[i])\n{{return true;\n}}");
+                    }
+                    else
+                    {
+                        comparer.AppendLine($"if (castedOther.{parameter.NamingInfo.PascalCaseName}[i].Compare({parameter.NamingInfo.PascalCaseName}[i]))\n{{return true;\n}}");
+                    }
+
+                    comparer.AppendLine("}");
+                    if (parameter.HasFlag)
+                    {
+                        comparer.AppendLine("}");
+                    }
+                }
+                else
+                {
+                    if (parameter.Type.TypeInfo.IsBare)
+                    {
+                        comparer.AppendLine($"if ({parameter.NamingInfo.PascalCaseName} != castedOther.{parameter.NamingInfo.PascalCaseName})\n{{return true;\n}}");
+                    }
+                    else
+                    {
+                        if (parameter.HasFlag)
+                        {
+                            comparer.AppendLine($"if ({parameter.NamingInfo.PascalCaseName} is null && castedOther.{parameter.NamingInfo.PascalCaseName} is not null || {parameter.NamingInfo.PascalCaseName} is not null && castedOther.{parameter.NamingInfo.PascalCaseName} is null)\n{{\nreturn true;\n}}");
+                            comparer.AppendLine($"if ({parameter.NamingInfo.PascalCaseName} is not null && castedOther.{parameter.NamingInfo.PascalCaseName} is not null && {parameter.NamingInfo.PascalCaseName}.Compare(castedOther.{parameter.NamingInfo.PascalCaseName}))\n{{return true;\n}}");
+                        }
+                        else
+                        {
+                            comparer.AppendLine($"if ({parameter.NamingInfo.PascalCaseName}.Compare(castedOther.{parameter.NamingInfo.PascalCaseName}))\n{{return true;\n}}");
+                        }
+                    }
+                }
+            }
+
+            comparer.AppendLine("return false;");
+        }
     }
 }
