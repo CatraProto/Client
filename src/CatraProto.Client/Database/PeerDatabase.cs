@@ -196,83 +196,7 @@ namespace CatraProto.Client.Database
                 }
                 else
                 {
-                    //Self, Contact, MutualContact, Deleted, Bot, BotChatHistory, BotNochats, Verified, Restricted, Min, BotInlineGeo, Support, Scam, ApplyMinPhoto, BotAttachMenu are boolean flags
-                    var storedObject = (User)fromDb!.Object!;
-                    if (user.Flags != storedObject.Flags || user.Username != storedObject.Username || user.AccessHash != storedObject.AccessHash || user.LastName != storedObject.LastName || user.FirstName != storedObject.FirstName
-                        || user.Phone != storedObject.Phone || user.LangCode != storedObject.LangCode || user.BotInfoVersion != storedObject.BotInfoVersion || user.BotInlinePlaceholder != storedObject.BotInlinePlaceholder
-                        || user.Restricted != storedObject.Restricted)
-                    {
-                        pushToDb = true;
-                    }
-
-                    if (user.Status is null && storedObject.Status is not null || user.Status is not null && storedObject.Status is null)
-                    {
-                        pushToDb = true;
-                    }
-                    else if (user.Status is not null && storedObject.Status is not null)
-                    {
-                        if (user.Status.GetConstructorId() == storedObject.Status.GetConstructorId())
-                        {
-                            if (user.Status is UserStatusOffline offline)
-                            {
-                                if (offline.WasOnline != ((UserStatusOffline)storedObject.Status).WasOnline)
-                                {
-                                    pushToDb = true;
-                                }
-                            }
-                            else if (user.Status is UserStatusOnline online)
-                            {
-                                if (online.Expires != ((UserStatusOnline)storedObject.Status).Expires)
-                                {
-                                    pushToDb = true;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            pushToDb = true;
-                        }
-                    }
-
-
-                    if (storedObject.RestrictionReason is null && user.RestrictionReason is not null || storedObject.RestrictionReason is not null && user.RestrictionReason is null)
-                    {
-                        pushToDb = true;
-                    }
-                    else if (storedObject.RestrictionReason is not null && user.RestrictionReason is not null && CompareRestrictionReason(storedObject.RestrictionReason, user.RestrictionReason))
-                    {
-                        pushToDb = true;
-                    }
-
-
-                    if (storedObject.Photo is null && user.Photo is not null || storedObject.Photo is not null && user.Photo is null)
-                    {
-                        pushToDb = true;
-                    }
-                    else if (storedObject.Photo is not null && user.Photo is not null)
-                    {
-                        if (user.Photo.GetConstructorId() == storedObject.Photo.GetConstructorId())
-                        {
-                            if (user.Photo is UserProfilePhoto newPhoto)
-                            {
-                                var oldPhoto = (UserProfilePhoto)storedObject.Photo;
-                                if (oldPhoto.PhotoId != newPhoto.PhotoId || oldPhoto.HasVideo != newPhoto.HasVideo || oldPhoto.DcId != newPhoto.DcId)
-                                {
-                                    pushToDb = true;
-                                }
-
-                                if (newPhoto.StrippedThumb is null && oldPhoto.StrippedThumb is not null || newPhoto.StrippedThumb is not null && oldPhoto.StrippedThumb is null ||
-                                    (oldPhoto.StrippedThumb is not null && newPhoto.StrippedThumb is not null && !oldPhoto.StrippedThumb.SequenceEqual(newPhoto.StrippedThumb)))
-                                {
-                                    pushToDb = true;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            pushToDb = true;
-                        }
-                    }
+                    pushToDb = fromDb.Object.Compare(user);
                 }
 
                 if (pushToDb)
@@ -310,58 +234,8 @@ namespace CatraProto.Client.Database
                 }
                 else
                 {
-                    if (chat is Chat receivedChat)
-                    {
-                        if (fromDb!.Object is Chat storedChat)
-                        {
-                            //Creator, Left, Deactivated, CallActive, CallNotEmpty, Noforwards are boolean-flags
-                            if (receivedChat.Flags != storedChat.Flags || receivedChat.Date != storedChat.Date || receivedChat.Title != storedChat.Title || receivedChat.MigratedTo != storedChat.MigratedTo)
-                            {
-                                pushToDb = true;
-                            }
-
-                            if (CompareChatPhoto(storedChat.Photo, receivedChat.Photo))
-                            {
-                                pushToDb = true;
-                            }
-
-                            if (receivedChat.Version > storedChat.Version)
-                            {
-                                if (storedChat.Version + 1 != receivedChat.Version)
-                                {
-                                    _logger.Information("Requesting chat full of chat {ChatId} because of version mismatch", storedChat.Id);
-                                    _ = _client.Api.CloudChatsApi.Messages.InternalGetFullChatAsync(receivedChat.Id);
-                                    pushToDb = false;
-                                }
-                                else
-                                {
-                                    pushToDb = true;
-                                }
-                            }
-                        }
-                        else if (fromDb.Object is ChatForbidden)
-                        {
-                            _logger.Information("Pushing chat object {Chat} because locally-stored is ChatForbidden", peer);
-                            pushToDb = true;
-                        }
-                    }
-                    else if (chat is ChatForbidden receivedForbidden)
-                    {
-                        if (fromDb!.Object is ChatForbidden storedForbidden)
-                        {
-                            //Creator, Kicked, Left, Deactivated, CallActive, CallNotEmpty, Noforwards are boolean-flags
-                            if (storedForbidden.Title != storedForbidden.Title)
-                            {
-                                pushToDb = true;
-                            }
-                        }
-                        else if (fromDb.Object is Chat)
-                        {
-                            _logger.Information("Pushing chat object {Chat} because locally-stored is Chat", peer);
-                            pushToDb = true;
-                        }
-                    }
-                }
+                    pushToDb = fromDb.Object.Compare(chat);
+                }    
 
                 if (pushToDb)
                 {
@@ -404,73 +278,7 @@ namespace CatraProto.Client.Database
                 }
                 else
                 {
-                    if (chat is Channel receivedChannel)
-                    {
-                        if (fromDb!.Object is Channel storedChannel)
-                        {
-                            //Creator, Left, Broadcast, Verified, Megagroup, Restricted, Signatures, Min, Scam, HasLink, HasGeo, SlowmodeEnabled, CallActive, CallNotEmpty, Fake, Gigagroup, Noforwards
-                            //are all boolean-flags
-                            if (receivedChannel.Flags != storedChannel.Flags || receivedChannel.AccessHash != storedChannel.AccessHash || receivedChannel.Title != storedChannel.Title || receivedChannel.Username != storedChannel.Username
-                                || receivedChannel.Date != storedChannel.Date || receivedChannel.ParticipantsCount != storedChannel.ParticipantsCount)
-                            {
-                                pushToDb = true;
-                            }
-
-                            if (receivedChannel.AdminRights is null && receivedChannel.AdminRights is not null || receivedChannel.AdminRights is not null && receivedChannel.AdminRights is null)
-                            {
-                                pushToDb = true;
-                            }
-                            else if (receivedChannel.AdminRights is not null && storedChannel.AdminRights is not null &&
-                                    ((ChatAdminRights)receivedChannel.AdminRights).Flags != ((ChatAdminRights)storedChannel.AdminRights).Flags)
-                            {
-                                pushToDb = true;
-                            }
-
-
-                            if (receivedChannel.BannedRights is null && receivedChannel.BannedRights is not null || receivedChannel.BannedRights is not null && receivedChannel.BannedRights is null)
-                            {
-                                pushToDb = true;
-                            }
-                            else if (receivedChannel.BannedRights is not null && storedChannel.BannedRights is not null &&
-                                ((ChatBannedRights)receivedChannel.BannedRights).Flags != ((ChatBannedRights)storedChannel.BannedRights).Flags)
-                            {
-                                pushToDb = true;
-                            }
-
-
-                            if (receivedChannel.DefaultBannedRights is null && receivedChannel.DefaultBannedRights is not null || receivedChannel.DefaultBannedRights is not null && receivedChannel.DefaultBannedRights is null)
-                            {
-                                pushToDb = true;
-                            }
-                            else if (receivedChannel.DefaultBannedRights is not null && storedChannel.DefaultBannedRights is not null &&
-                                ((ChatBannedRights)receivedChannel.DefaultBannedRights).Flags != ((ChatBannedRights)storedChannel.DefaultBannedRights).Flags)
-                            {
-                                pushToDb = true;
-                            }
-
-                        }
-                        else if (fromDb.Object is ChannelForbidden)
-                        {
-                            _logger.Information("Pushing channel object {Channel} because locally-stored is ChannelForbidden", peer);
-                            pushToDb = true;
-                        }
-                    }
-                    else if (chat is ChannelForbidden receivedForbidden)
-                    {
-                        if (fromDb!.Object is ChannelForbidden storedForbidden)
-                        {
-                            //Skipping Megagroup and Broadcast because they are boolean flags
-                            if (receivedForbidden.Flags != storedForbidden.Flags || receivedForbidden.UntilDate != storedForbidden.UntilDate || receivedForbidden.Title != storedForbidden.Title || receivedForbidden.AccessHash != storedForbidden.AccessHash)
-                            {
-                                pushToDb = true;
-                            }
-                        }
-                        else if (fromDb.Object is Channel)
-                        {
-                            _logger.Information("Pushing ChannelForbidden object {Channel} because locally-stored is Channel", peer);
-                            pushToDb = true;
-                        }
-                    }
+                    pushToDb = fromDb.Object.Compare(chat));
                 }
 
                 if (pushToDb)
@@ -701,45 +509,6 @@ namespace CatraProto.Client.Database
         private bool FullTypeMatches<T>(T instance, PeerType type)
         {
             return (instance is UserFull && type is PeerType.User) || (instance is ChannelFull && type is PeerType.Channel) || (instance is ChatFull && type is PeerType.Group);
-        }
-
-        private bool CompareRestrictionReason(IList<RestrictionReasonBase> oldReasons, IList<RestrictionReasonBase> newReasons)
-        {
-            if (newReasons.Count == oldReasons.Count)
-            {
-                for (var i = 0; i < newReasons.Count; i++)
-                {
-                    var newReason = newReasons[i];
-                    var oldReason = oldReasons[i];
-                    if (newReason.Platform != oldReason.Platform || newReason.Reason != oldReason.Reason || newReason.Text != oldReason.Text)
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            return true;
-        }
-
-        private bool CompareChatPhoto(ChatPhotoBase oldChatPhotoBase, ChatPhotoBase newChatPhotoBase)
-        {
-            if (oldChatPhotoBase.GetConstructorId() != newChatPhotoBase.GetConstructorId())
-            {
-                return true;
-            }
-
-            if (oldChatPhotoBase is ChatPhotoEmpty && newChatPhotoBase is ChatPhotoEmpty)
-            {
-                return false;
-            }
-
-            if (oldChatPhotoBase is ChatPhoto oldPhoto && newChatPhotoBase is ChatPhoto newPhoto)
-            {
-                return oldPhoto.PhotoId != newPhoto.PhotoId || oldPhoto.HasVideo != newPhoto.HasVideo || oldPhoto.DcId != newPhoto.DcId || !oldPhoto.StrippedThumb.SequenceEqual(newPhoto.StrippedThumb);
-            }
-
-            return false;
         }
     }
 }
