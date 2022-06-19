@@ -88,6 +88,7 @@ namespace CatraProto.Client
 
             _logger.Information("Initializing connection pool. Using test DCs: {IsTest}", ClientSession.Settings.ConnectionSettings.DefaultDatacenter.Test);
             await ClientSession.ConnectionPool.InitMainConnectionAsync(token);
+            UpdatesReceiver.FillProcessors();
             if (sessionData.Authorization.GetAuthorization(out var dcId, out _) is not LoginState.LoggedIn)
             {
                 LoginManager.SendFirstState();
@@ -104,7 +105,6 @@ namespace CatraProto.Client
                 await ClientSession.ConnectionPool.SetAccountConnectionAsync(newConnection.Connection, true);
             }
 
-            UpdatesReceiver.FillProcessors();
             await UpdatesReceiver.ForceGetDifferenceAllAsync(false);
             LoginManager.SendFirstState();
             return ClientState.Working;

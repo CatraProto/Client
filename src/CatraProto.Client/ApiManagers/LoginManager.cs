@@ -148,7 +148,7 @@ namespace CatraProto.Client.ApiManagers
             {
                 _logger.Information("Received {Error} after calling auth.importBotAuthorization", auth.Error);
                 SetCurrentState(LoginState.AwaitingLogin);
-                if (auth.Error.ErrorMessage == "ACCESS_TOKEN_INVALID")
+                if (auth.Error.ErrorMessage == "ACCESS_TOKEN_INVALID" || auth.Error.ErrorMessage == "ACCESS_TOKEN_EXPIRED")
                 {
                     return new BotTokenIncorrectError();
                 }
@@ -488,9 +488,9 @@ namespace CatraProto.Client.ApiManagers
             lock (_stateMutex)
             {
                 _logger.Information("Successfully logged in! Current user: {User}", user.ToJson());
-                _client.UpdatesReceiver.ForceGetDifferenceAllAsync(false);
                 _sessionData.Authorization.SetAuthorized(LoginState.LoggedIn, dcId, userId);
                 SetCurrentState(LoginState.LoggedIn);
+                _client.UpdatesReceiver.ForceGetDifferenceAllAsync(false);
             }
         }
 
@@ -504,17 +504,18 @@ namespace CatraProto.Client.ApiManagers
                 }
 
                 _currentState = newState;
+
+                // Won't save other states because they might not be valid and most of them require AwaitingLogin to be sent, if the client saves at the wrong time things could go wrong
+                if (_currentState >= LoginState.LoggedOut)
+                {
+                    _sessionData.Authorization.SetAuthorized(_currentState, null, null);
+                    _ = _client.ForceSaveAsync();
+                }
+
                 var ev = _client.EventHandler;
                 if (ev is not null)
                 {
                     _sequentialInvoker.Invoke(() => ev.OnSessionUpdateAsync(newState));
-                }
-
-                // Won't save other states because they might not be valid and most of them require AwaitingLogin to be sent, if the client saves at the wrong time things could go wrong
-                if (_currentState >= LoginState.LoggedIn)
-                {
-                    _sessionData.Authorization.SetAuthorized(_currentState, null, null);
-                    _ = _client.ForceSaveAsync();
                 }
             }
         }
