@@ -24,6 +24,7 @@ namespace CatraProto.Client.Utilities
 {
     public enum MarkupType
     {
+        None = 0x00,
         Bold = 0x01,
         Italic = 0x02,
         Monospace = 0x04,
@@ -101,14 +102,14 @@ namespace CatraProto.Client.Utilities
             return this;
         }
 
-        public TextFormatter AddLink(string text, string link, MarkupType otherMarkup)
+        public TextFormatter AddLink(string text, string link, MarkupType otherMarkup = MarkupType.None)
         {
             _entities.Add(new MessageEntityTextUrl(_stringBuilder.Length, GetEntityLength(text), link));
             AddMarkup(text, otherMarkup);
             return this;
         }
 
-        public TextFormatter AddMention(string text, long userId, MarkupType otherMarkup)
+        public TextFormatter AddMention(string text, long userId, MarkupType otherMarkup = MarkupType.None)
         {
             var inputUser = _client.DatabaseManager.PeerDatabase.ResolveUser(userId);
             if(inputUser is null)
@@ -117,6 +118,13 @@ namespace CatraProto.Client.Utilities
             }
 
             _entities.Add(new InputMessageEntityMentionName(_stringBuilder.Length, GetEntityLength(text), inputUser));
+            AddMarkup(text, otherMarkup);
+            return this;
+        }
+
+        public TextFormatter AddCode(string text, string language, MarkupType otherMarkup = MarkupType.None)
+        {
+            _entities.Add(new MessageEntityPre(_stringBuilder.Length, GetEntityLength(text), language));
             AddMarkup(text, otherMarkup);
             return this;
         }
