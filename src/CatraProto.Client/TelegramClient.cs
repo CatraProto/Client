@@ -26,6 +26,7 @@ using CatraProto.Client.MTProto.Session.Models;
 using CatraProto.Client.MTProto.Settings;
 using CatraProto.Client.Updates;
 using CatraProto.Client.Updates.Interfaces;
+using CatraProto.Client.Utilities;
 using Serilog;
 using Serilog.Core;
 
@@ -132,6 +133,11 @@ namespace CatraProto.Client
             {
                 _logger.Error(e, "Could not save session file");
             }
+        }
+
+        public TextFormatter GetTextFormatter(MarkupOptions options = MarkupOptions.SkipTrailingSpaces)
+        {
+            return new TextFormatter(this, options);
         }
 
         public ILogger GetLogger<T>()
