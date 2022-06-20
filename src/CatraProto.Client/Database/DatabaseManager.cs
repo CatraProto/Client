@@ -67,7 +67,7 @@ namespace CatraProto.Client.Database
                 {
                     if (chat is Channel or ChannelForbidden)
                     {
-                        PeerDatabase.UpdateChannel(chat, transaction);
+                        PeerDatabase.UpdatePeerObject(chat, transaction);
                         if (Updates.UpdatesTools.IsInChat(chat))
                         {
                             _client.UpdatesReceiver.CreateProcessor(chat.Id, true);
@@ -79,7 +79,7 @@ namespace CatraProto.Client.Database
                     }
                     else
                     {
-                        PeerDatabase.UpdateChat(chat, transaction);
+                        PeerDatabase.UpdatePeerObject(chat, transaction);
                     }
                 }
             }
@@ -88,7 +88,7 @@ namespace CatraProto.Client.Database
             {
                 foreach (var user in users)
                 {
-                    PeerDatabase.UpdateUser(user, transaction);
+                    PeerDatabase.UpdatePeerObject(user, transaction);
                 }
             }
 

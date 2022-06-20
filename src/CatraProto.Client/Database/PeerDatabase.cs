@@ -163,128 +163,47 @@ namespace CatraProto.Client.Database
             }
         }
 
-        public void UpdateUser(UserBase userObject, SqliteTransaction? sqliteTransaction = null)
+        public void UpdatePeerObject(IObject peerObject, SqliteTransaction? sqliteTransaction = null)
         {
             lock (_commonMutex)
             {
-                if (userObject is not User user)
+                if (peerObject is Channel or ChannelForbidden or User or Chat or ChatForbidden)
                 {
-                    _logger.Warning("Expected user but {Obj} received", userObject);
-                    return;
-                }
+                    var peer = IdTools.GetPeerFromObject(peerObject);
+                    if (peerObject is Channel asChannel && asChannel.Min || peerObject is User asUser && asUser.Min)
+                    {
+                        _logger.Information("Not updating peer {Chat} because a min update was received", peer);
+                        return;
+                    }
 
-                var peer = IdTools.GetPeerFromObject(userObject);
-                if (user.Min)
-                {
-                    _logger.Information("Not updating user {User} because a min update was received", peer);
-                    return;
-                }
+                    _logger.Information("Trying to fetch cached peer object of {Chat}", peer);
+                    var fromDb = (DbPeer?)GetPeerObject(peer, false, sqliteTransaction);
+                    var pushToDb = false;
 
-                _logger.Information("Trying to fetch cached peer object of user {Chat}", peer);
-                var fromDb = (DbPeer?)GetPeerObject(peer, false, sqliteTransaction);
-                var pushToDb = false;
+                    if (fromDb is null)
+                    {
+                        _logger.Information("Don't have peer object of {Chat} stored, pushing to database", peer);
+                        pushToDb = true;
+                    }
+                    else if (fromDb.Object is null)
+                    {
+                        _logger.Information("Could not deserialize store peer object of {Chat}, pushing to database", peer);
+                        pushToDb = true;
+                    }
+                    else
+                    {
+                        pushToDb = fromDb.Object.Compare(peerObject);
+                    }
 
-                if (fromDb is null)
-                {
-                    _logger.Information("Don't have peer object of User {Chat} stored, pushing to database", peer);
-                    pushToDb = true;
-                }
-                else if (fromDb.Object is null)
-                {
-                    _logger.Information("Could not deserialize store peer object of User {Chat}, pushing new one to database", peer);
-                    pushToDb = true;
+                    if (pushToDb)
+                    {
+                        _logger.Information("Pushing updated peer object of {Chat} to database", peer);
+                        PushChatToDb(peerObject, sqliteTransaction);
+                    }
                 }
                 else
                 {
-                    pushToDb = fromDb.Object.Compare(user);
-                }
-
-                if (pushToDb)
-                {
-                    _logger.Information("Pushing updated User {Chat} to database", peer);
-                    PushChatToDb(userObject, sqliteTransaction);
-                }
-            }
-        }
-
-        public void UpdateChat(ChatBase chat, SqliteTransaction? sqliteTransaction = null)
-        {
-            lock (_commonMutex)
-            {
-                if (!(chat is Chat or ChatForbidden))
-                {
-                    _logger.Warning("Expected chat but {Obj} received", chat);
-                    return;
-                }
-
-                var peer = IdTools.GetPeerFromObject(chat);
-                _logger.Information("Trying to fetch cached peer object of chat {Chat}", peer);
-                var fromDb = (DbPeer?)GetPeerObject(peer, false, sqliteTransaction);
-                var pushToDb = false;
-
-                if (fromDb is null)
-                {
-                    _logger.Information("Don't have peer object of chat {Chat} stored, pushing to database", peer);
-                    pushToDb = true;
-                }
-                else if (fromDb.Object is null)
-                {
-                    _logger.Information("Could not deserialize store peer object of chat {Chat}, pushing new one to database", peer);
-                    pushToDb = true;
-                }
-                else
-                {
-                    pushToDb = fromDb.Object.Compare(chat);
-                }
-
-                if (pushToDb)
-                {
-                    _logger.Information("Pushing updated chat {Chat} to database", peer);
-                    PushChatToDb(chat, sqliteTransaction);
-                }
-            }
-        }
-
-        public void UpdateChannel(ChatBase chat, SqliteTransaction? sqliteTransaction = null)
-        {
-            lock (_commonMutex)
-            {
-                if (!(chat is Channel or ChannelForbidden))
-                {
-                    _logger.Warning("Expected channel or channel_forbidden but {Obj} received", chat);
-                    return;
-                }
-
-                var peer = IdTools.GetPeerFromObject(chat);
-                if (chat is Channel asChannel && asChannel.Min)
-                {
-                    _logger.Information("Not updating channel {Channel} because a min update was received", peer);
-                    return;
-                }
-
-                _logger.Information("Trying to fetch cached peer object of channel {Chat}", peer);
-                var fromDb = (DbPeer?)GetPeerObject(peer, false, sqliteTransaction);
-                var pushToDb = false;
-
-                if (fromDb is null)
-                {
-                    _logger.Information("Don't have peer object of channel {Chat} stored, pushing to database", peer);
-                    pushToDb = true;
-                }
-                else if (fromDb.Object is null)
-                {
-                    _logger.Information("Could not deserialize store peer object of channel {Chat}, pushing new one to database", peer);
-                    pushToDb = true;
-                }
-                else
-                {
-                    pushToDb = fromDb.Object.Compare(chat);
-                }
-
-                if (pushToDb)
-                {
-                    _logger.Information("Pushing updated channel {Chat} to database", peer);
-                    PushChatToDb(chat, sqliteTransaction);
+                    _logger.Warning("Received {Obj} in UpdatePeerObject", peerObject);
                 }
             }
         }
