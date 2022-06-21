@@ -112,7 +112,7 @@ namespace CatraProto.Client.Utilities
         public TextFormatter AddMention(string text, long userId, MarkupType otherMarkup = MarkupType.None)
         {
             var inputUser = _client.DatabaseManager.PeerDatabase.ResolveUser(userId);
-            if(inputUser is null)
+            if (inputUser is null)
             {
                 inputUser = new InputUser(userId, 0);
             }
