@@ -23,7 +23,7 @@ using CatraProto.TL.Results;
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class BoolFalse : bool
+    public partial class BoolFalse : IObject
     {
 
 
@@ -36,12 +36,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
         }
 
-        public override void UpdateFlags()
+        public void UpdateFlags()
         {
 
         }
 
-        public override WriteResult Serialize(Writer writer)
+        public WriteResult Serialize(Writer writer)
         {
             writer.WriteInt32(ConstructorId);
 
@@ -49,7 +49,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         }
 
-        public override ReadResult<IObject> Deserialize(Reader reader)
+        public ReadResult<IObject> Deserialize(Reader reader)
         {
             return new ReadResult<IObject>(this);
 
@@ -60,20 +60,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             return "boolFalse";
         }
 
-        public override int GetConstructorId()
+        public int GetConstructorId()
         {
             return ConstructorId;
         }
 
 #nullable enable
-        public override IObject? Clone()
+        public IObject? Clone()
         {
             var newClonedObject = new BoolFalse();
             return newClonedObject;
 
         }
 
-        public override bool Compare(IObject other)
+        public bool Compare(IObject other)
         {
             if (other is not BoolFalse castedOther)
             {
