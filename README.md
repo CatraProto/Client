@@ -4,7 +4,7 @@ This means you can interact with the Telegram API (**as a regular user** as well
 It also implements many aspects of the API so **you won't have to take care of any database implementation or updates handling.**
 
 ## Getting started
-To get started, please visit the [Getting Started](configuration/index.md) section of the documentation.
+To get started, please visit the [Getting Started](https://catraproto.github.io/docs/configuration/index.md) section of the documentation.
 
 ## Stay in touch
 We also have a [Telegram Channel](https://t.me/s/CatraProto) where important information will be published.
