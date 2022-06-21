@@ -40,7 +40,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         }
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -262453244; }
+        public static int ConstructorId { get => -1896617296; }
 
         [Newtonsoft.Json.JsonIgnore]
         ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
@@ -67,7 +67,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public bool Files { get; set; }
 
         [Newtonsoft.Json.JsonProperty("file_max_size")]
-        public int? FileMaxSize { get; set; }
+        public long? FileMaxSize { get; set; }
 
 
 
@@ -96,7 +96,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             writer.WriteInt32(Flags);
             if (FlagsHelper.IsFlagSet(Flags, 5))
             {
-                writer.WriteInt32(FileMaxSize.Value);
+                writer.WriteInt64(FileMaxSize.Value);
             }
 
 
@@ -120,7 +120,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             Files = FlagsHelper.IsFlagSet(Flags, 5);
             if (FlagsHelper.IsFlagSet(Flags, 5))
             {
-                var tryfileMaxSize = reader.ReadInt32();
+                var tryfileMaxSize = reader.ReadInt64();
                 if (tryfileMaxSize.IsError)
                 {
                     return ReadResult<IObject>.Move(tryfileMaxSize);

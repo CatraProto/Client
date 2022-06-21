@@ -49,47 +49,47 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("contacts")]
-        public sealed override bool Contacts { get; set; }
+        public bool Contacts { get; set; }
 
         [Newtonsoft.Json.JsonProperty("non_contacts")]
-        public sealed override bool NonContacts { get; set; }
+        public bool NonContacts { get; set; }
 
         [Newtonsoft.Json.JsonProperty("groups")]
-        public sealed override bool Groups { get; set; }
+        public bool Groups { get; set; }
 
         [Newtonsoft.Json.JsonProperty("broadcasts")]
-        public sealed override bool Broadcasts { get; set; }
+        public bool Broadcasts { get; set; }
 
         [Newtonsoft.Json.JsonProperty("bots")]
-        public sealed override bool Bots { get; set; }
+        public bool Bots { get; set; }
 
         [Newtonsoft.Json.JsonProperty("exclude_muted")]
-        public sealed override bool ExcludeMuted { get; set; }
+        public bool ExcludeMuted { get; set; }
 
         [Newtonsoft.Json.JsonProperty("exclude_read")]
-        public sealed override bool ExcludeRead { get; set; }
+        public bool ExcludeRead { get; set; }
 
         [Newtonsoft.Json.JsonProperty("exclude_archived")]
-        public sealed override bool ExcludeArchived { get; set; }
+        public bool ExcludeArchived { get; set; }
 
         [Newtonsoft.Json.JsonProperty("id")]
-        public sealed override int Id { get; set; }
+        public int Id { get; set; }
 
         [Newtonsoft.Json.JsonProperty("title")]
-        public sealed override string Title { get; set; }
+        public string Title { get; set; }
 
         [MaybeNull]
         [Newtonsoft.Json.JsonProperty("emoticon")]
-        public sealed override string Emoticon { get; set; }
+        public string Emoticon { get; set; }
 
         [Newtonsoft.Json.JsonProperty("pinned_peers")]
-        public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> PinnedPeers { get; set; }
+        public List<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> PinnedPeers { get; set; }
 
         [Newtonsoft.Json.JsonProperty("include_peers")]
-        public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> IncludePeers { get; set; }
+        public List<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> IncludePeers { get; set; }
 
         [Newtonsoft.Json.JsonProperty("exclude_peers")]
-        public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> ExcludePeers { get; set; }
+        public List<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase> ExcludePeers { get; set; }
 
 
 #nullable enable

@@ -38,6 +38,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             RevokePmInbox = 1 << 6,
             BlockedMode = 1 << 8,
             PfsEnabled = 1 << 13,
+            ForceTryIpv6 = 1 << 14,
             TmpSessions = 1 << 0,
             AutoupdateUrlPrefix = 1 << 7,
             GifSearchUsername = 1 << 9,
@@ -75,6 +76,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         [Newtonsoft.Json.JsonProperty("pfs_enabled")]
         public sealed override bool PfsEnabled { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("force_try_ipv6")]
+        public sealed override bool ForceTryIpv6 { get; set; }
 
         [Newtonsoft.Json.JsonProperty("date")]
         public sealed override int Date { get; set; }
@@ -269,6 +273,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = RevokePmInbox ? FlagsHelper.SetFlag(Flags, 6) : FlagsHelper.UnsetFlag(Flags, 6);
             Flags = BlockedMode ? FlagsHelper.SetFlag(Flags, 8) : FlagsHelper.UnsetFlag(Flags, 8);
             Flags = PfsEnabled ? FlagsHelper.SetFlag(Flags, 13) : FlagsHelper.UnsetFlag(Flags, 13);
+            Flags = ForceTryIpv6 ? FlagsHelper.SetFlag(Flags, 14) : FlagsHelper.UnsetFlag(Flags, 14);
             Flags = TmpSessions == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
             Flags = AutoupdateUrlPrefix == null ? FlagsHelper.UnsetFlag(Flags, 7) : FlagsHelper.SetFlag(Flags, 7);
             Flags = GifSearchUsername == null ? FlagsHelper.UnsetFlag(Flags, 9) : FlagsHelper.SetFlag(Flags, 9);
@@ -403,6 +408,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             RevokePmInbox = FlagsHelper.IsFlagSet(Flags, 6);
             BlockedMode = FlagsHelper.IsFlagSet(Flags, 8);
             PfsEnabled = FlagsHelper.IsFlagSet(Flags, 13);
+            ForceTryIpv6 = FlagsHelper.IsFlagSet(Flags, 14);
             var trydate = reader.ReadInt32();
             if (trydate.IsError)
             {
@@ -730,6 +736,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 RevokePmInbox = RevokePmInbox,
                 BlockedMode = BlockedMode,
                 PfsEnabled = PfsEnabled,
+                ForceTryIpv6 = ForceTryIpv6,
                 Date = Date,
                 Expires = Expires,
                 TestMode = TestMode,
@@ -823,6 +830,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 return true;
             }
             if (PfsEnabled != castedOther.PfsEnabled)
+            {
+                return true;
+            }
+            if (ForceTryIpv6 != castedOther.ForceTryIpv6)
             {
                 return true;
             }

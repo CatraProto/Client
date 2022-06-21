@@ -30,6 +30,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Flags]
         public enum FlagsEnum
         {
+            RecurringInit = 1 << 2,
+            RecurringUsed = 1 << 3,
             Info = 1 << 0,
             ShippingOptionId = 1 << 1
         }
@@ -39,6 +41,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         [Newtonsoft.Json.JsonIgnore]
         public int Flags { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("recurring_init")]
+        public bool RecurringInit { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("recurring_used")]
+        public bool RecurringUsed { get; set; }
 
         [Newtonsoft.Json.JsonProperty("currency")]
         public string Currency { get; set; }
@@ -77,6 +85,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void UpdateFlags()
         {
+            Flags = RecurringInit ? FlagsHelper.SetFlag(Flags, 2) : FlagsHelper.UnsetFlag(Flags, 2);
+            Flags = RecurringUsed ? FlagsHelper.SetFlag(Flags, 3) : FlagsHelper.UnsetFlag(Flags, 3);
             Flags = Info == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
             Flags = ShippingOptionId == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
 
@@ -126,6 +136,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 return ReadResult<IObject>.Move(tryflags);
             }
             Flags = tryflags.Value;
+            RecurringInit = FlagsHelper.IsFlagSet(Flags, 2);
+            RecurringUsed = FlagsHelper.IsFlagSet(Flags, 3);
             var trycurrency = reader.ReadString();
             if (trycurrency.IsError)
             {
@@ -190,6 +202,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             var newClonedObject = new MessageActionPaymentSentMe
             {
                 Flags = Flags,
+                RecurringInit = RecurringInit,
+                RecurringUsed = RecurringUsed,
                 Currency = Currency,
                 TotalAmount = TotalAmount,
                 Payload = Payload
@@ -221,6 +235,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 return true;
             }
             if (Flags != castedOther.Flags)
+            {
+                return true;
+            }
+            if (RecurringInit != castedOther.RecurringInit)
+            {
+                return true;
+            }
+            if (RecurringUsed != castedOther.RecurringUsed)
             {
                 return true;
             }

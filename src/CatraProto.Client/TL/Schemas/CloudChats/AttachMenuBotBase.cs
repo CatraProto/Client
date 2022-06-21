@@ -29,11 +29,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("inactive")]
         public abstract bool Inactive { get; set; }
 
+        [Newtonsoft.Json.JsonProperty("has_settings")]
+        public abstract bool HasSettings { get; set; }
+
         [Newtonsoft.Json.JsonProperty("bot_id")]
         public abstract long BotId { get; set; }
 
         [Newtonsoft.Json.JsonProperty("short_name")]
         public abstract string ShortName { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("peer_types")]
+        public abstract List<CatraProto.Client.TL.Schemas.CloudChats.AttachMenuPeerTypeBase> PeerTypes { get; set; }
 
         [Newtonsoft.Json.JsonProperty("icons")]
         public abstract List<CatraProto.Client.TL.Schemas.CloudChats.AttachMenuBotIconBase> Icons { get; set; }

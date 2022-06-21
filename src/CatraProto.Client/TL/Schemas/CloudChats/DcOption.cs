@@ -34,6 +34,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             TcpoOnly = 1 << 2,
             Cdn = 1 << 3,
             Static = 1 << 4,
+            ThisPortOnly = 1 << 5,
             Secret = 1 << 10
         }
 
@@ -57,6 +58,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         [Newtonsoft.Json.JsonProperty("static")]
         public sealed override bool Static { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("this_port_only")]
+        public sealed override bool ThisPortOnly { get; set; }
 
         [Newtonsoft.Json.JsonProperty("id")]
         public sealed override int Id { get; set; }
@@ -91,6 +95,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = TcpoOnly ? FlagsHelper.SetFlag(Flags, 2) : FlagsHelper.UnsetFlag(Flags, 2);
             Flags = Cdn ? FlagsHelper.SetFlag(Flags, 3) : FlagsHelper.UnsetFlag(Flags, 3);
             Flags = Static ? FlagsHelper.SetFlag(Flags, 4) : FlagsHelper.UnsetFlag(Flags, 4);
+            Flags = ThisPortOnly ? FlagsHelper.SetFlag(Flags, 5) : FlagsHelper.UnsetFlag(Flags, 5);
             Flags = Secret == null ? FlagsHelper.UnsetFlag(Flags, 10) : FlagsHelper.SetFlag(Flags, 10);
 
         }
@@ -129,6 +134,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             TcpoOnly = FlagsHelper.IsFlagSet(Flags, 2);
             Cdn = FlagsHelper.IsFlagSet(Flags, 3);
             Static = FlagsHelper.IsFlagSet(Flags, 4);
+            ThisPortOnly = FlagsHelper.IsFlagSet(Flags, 5);
             var tryid = reader.ReadInt32();
             if (tryid.IsError)
             {
@@ -182,6 +188,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 TcpoOnly = TcpoOnly,
                 Cdn = Cdn,
                 Static = Static,
+                ThisPortOnly = ThisPortOnly,
                 Id = Id,
                 IpAddress = IpAddress,
                 Port = Port,
@@ -218,6 +225,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 return true;
             }
             if (Static != castedOther.Static)
+            {
+                return true;
+            }
+            if (ThisPortOnly != castedOther.ThisPortOnly)
             {
                 return true;
             }

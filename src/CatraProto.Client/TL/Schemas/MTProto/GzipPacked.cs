@@ -31,7 +31,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
         public static int ConstructorId { get => 812830625; }
 
         [Newtonsoft.Json.JsonProperty("packed_data")]
-        public byte[] PackedData { get; set; }
+        public sealed override byte[] PackedData { get; set; }
 
 
 #nullable enable

@@ -29,7 +29,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -956147407; }
+        public static int ConstructorId { get => -1856595926; }
 
         [Newtonsoft.Json.JsonIgnore]
         ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
@@ -38,11 +38,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
         public CatraProto.Client.TL.Schemas.CloudChats.InputFileLocationBase Location { get; set; }
 
         [Newtonsoft.Json.JsonProperty("offset")]
-        public int Offset { get; set; }
+        public long Offset { get; set; }
 
 
 #nullable enable
-        public GetFileHashes(CatraProto.Client.TL.Schemas.CloudChats.InputFileLocationBase location, int offset)
+        public GetFileHashes(CatraProto.Client.TL.Schemas.CloudChats.InputFileLocationBase location, long offset)
         {
             Location = location;
             Offset = offset;
@@ -67,7 +67,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
             {
                 return checklocation;
             }
-            writer.WriteInt32(Offset);
+            writer.WriteInt64(Offset);
 
             return new WriteResult();
 
@@ -81,7 +81,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
                 return ReadResult<IObject>.Move(trylocation);
             }
             Location = trylocation.Value;
-            var tryoffset = reader.ReadInt32();
+            var tryoffset = reader.ReadInt64();
             if (tryoffset.IsError)
             {
                 return ReadResult<IObject>.Move(tryoffset);

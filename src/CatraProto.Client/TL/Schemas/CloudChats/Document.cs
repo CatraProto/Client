@@ -36,7 +36,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         }
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 512177195; }
+        public static int ConstructorId { get => -1881881384; }
 
         [Newtonsoft.Json.JsonIgnore]
         public int Flags { get; set; }
@@ -57,7 +57,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public string MimeType { get; set; }
 
         [Newtonsoft.Json.JsonProperty("size")]
-        public int Size { get; set; }
+        public long Size { get; set; }
 
         [MaybeNull]
         [Newtonsoft.Json.JsonProperty("thumbs")]
@@ -75,7 +75,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
 #nullable enable
-        public Document(long id, long accessHash, byte[] fileReference, int date, string mimeType, int size, int dcId, List<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase> attributes)
+        public Document(long id, long accessHash, byte[] fileReference, int date, string mimeType, long size, int dcId, List<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase> attributes)
         {
             Id = id;
             AccessHash = accessHash;
@@ -112,7 +112,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             writer.WriteInt32(Date);
 
             writer.WriteString(MimeType);
-            writer.WriteInt32(Size);
+            writer.WriteInt64(Size);
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
                 var checkthumbs = writer.WriteVector(Thumbs, false);
@@ -180,7 +180,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 return ReadResult<IObject>.Move(trymimeType);
             }
             MimeType = trymimeType.Value;
-            var trysize = reader.ReadInt32();
+            var trysize = reader.ReadInt64();
             if (trysize.IsError)
             {
                 return ReadResult<IObject>.Move(trysize);

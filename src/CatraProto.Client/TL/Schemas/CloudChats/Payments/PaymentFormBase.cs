@@ -39,6 +39,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
         [Newtonsoft.Json.JsonProperty("bot_id")]
         public abstract long BotId { get; set; }
 
+        [Newtonsoft.Json.JsonProperty("title")]
+        public abstract string Title { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("description")]
+        public abstract string Description { get; set; }
+
+        [MaybeNull]
+        [Newtonsoft.Json.JsonProperty("photo")]
+        public abstract CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase Photo { get; set; }
+
         [Newtonsoft.Json.JsonProperty("invoice")]
         public abstract CatraProto.Client.TL.Schemas.CloudChats.InvoiceBase Invoice { get; set; }
 

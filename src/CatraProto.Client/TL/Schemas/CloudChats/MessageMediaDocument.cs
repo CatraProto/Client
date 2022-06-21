@@ -30,6 +30,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Flags]
         public enum FlagsEnum
         {
+            Nopremium = 1 << 3,
             Document = 1 << 0,
             TtlSeconds = 1 << 2
         }
@@ -39,6 +40,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         [Newtonsoft.Json.JsonIgnore]
         public int Flags { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("nopremium")]
+        public bool Nopremium { get; set; }
 
         [MaybeNull]
         [Newtonsoft.Json.JsonProperty("document")]
@@ -55,6 +59,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void UpdateFlags()
         {
+            Flags = Nopremium ? FlagsHelper.SetFlag(Flags, 3) : FlagsHelper.UnsetFlag(Flags, 3);
             Flags = Document == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
             Flags = TtlSeconds == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
 
@@ -93,6 +98,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 return ReadResult<IObject>.Move(tryflags);
             }
             Flags = tryflags.Value;
+            Nopremium = FlagsHelper.IsFlagSet(Flags, 3);
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
                 var trydocument = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
@@ -132,7 +138,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             var newClonedObject = new MessageMediaDocument
             {
-                Flags = Flags
+                Flags = Flags,
+                Nopremium = Nopremium
             };
             if (Document is not null)
             {
@@ -155,6 +162,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 return true;
             }
             if (Flags != castedOther.Flags)
+            {
+                return true;
+            }
+            if (Nopremium != castedOther.Nopremium)
             {
                 return true;
             }

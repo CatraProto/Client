@@ -48,41 +48,41 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("revoked")]
-        public sealed override bool Revoked { get; set; }
+        public bool Revoked { get; set; }
 
         [Newtonsoft.Json.JsonProperty("permanent")]
-        public sealed override bool Permanent { get; set; }
+        public bool Permanent { get; set; }
 
         [Newtonsoft.Json.JsonProperty("request_needed")]
-        public sealed override bool RequestNeeded { get; set; }
+        public bool RequestNeeded { get; set; }
 
         [Newtonsoft.Json.JsonProperty("link")]
-        public sealed override string Link { get; set; }
+        public string Link { get; set; }
 
         [Newtonsoft.Json.JsonProperty("admin_id")]
-        public sealed override long AdminId { get; set; }
+        public long AdminId { get; set; }
 
         [Newtonsoft.Json.JsonProperty("date")]
-        public sealed override int Date { get; set; }
+        public int Date { get; set; }
 
         [Newtonsoft.Json.JsonProperty("start_date")]
-        public sealed override int? StartDate { get; set; }
+        public int? StartDate { get; set; }
 
         [Newtonsoft.Json.JsonProperty("expire_date")]
-        public sealed override int? ExpireDate { get; set; }
+        public int? ExpireDate { get; set; }
 
         [Newtonsoft.Json.JsonProperty("usage_limit")]
-        public sealed override int? UsageLimit { get; set; }
+        public int? UsageLimit { get; set; }
 
         [Newtonsoft.Json.JsonProperty("usage")]
-        public sealed override int? Usage { get; set; }
+        public int? Usage { get; set; }
 
         [Newtonsoft.Json.JsonProperty("requested")]
-        public sealed override int? Requested { get; set; }
+        public int? Requested { get; set; }
 
         [MaybeNull]
         [Newtonsoft.Json.JsonProperty("title")]
-        public sealed override string Title { get; set; }
+        public string Title { get; set; }
 
 
 #nullable enable

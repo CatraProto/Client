@@ -28,10 +28,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 1648543603; }
+        public static int ConstructorId { get => -207944868; }
 
         [Newtonsoft.Json.JsonProperty("offset")]
-        public sealed override int Offset { get; set; }
+        public sealed override long Offset { get; set; }
 
         [Newtonsoft.Json.JsonProperty("limit")]
         public sealed override int Limit { get; set; }
@@ -41,7 +41,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
 #nullable enable
-        public FileHash(int offset, int limit, byte[] hash)
+        public FileHash(long offset, int limit, byte[] hash)
         {
             Offset = offset;
             Limit = limit;
@@ -61,7 +61,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override WriteResult Serialize(Writer writer)
         {
             writer.WriteInt32(ConstructorId);
-            writer.WriteInt32(Offset);
+            writer.WriteInt64(Offset);
             writer.WriteInt32(Limit);
 
             writer.WriteBytes(Hash);
@@ -72,7 +72,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override ReadResult<IObject> Deserialize(Reader reader)
         {
-            var tryoffset = reader.ReadInt32();
+            var tryoffset = reader.ReadInt64();
             if (tryoffset.IsError)
             {
                 return ReadResult<IObject>.Move(tryoffset);

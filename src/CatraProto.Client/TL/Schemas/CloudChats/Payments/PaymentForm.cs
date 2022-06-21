@@ -33,6 +33,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
         {
             CanSaveCredentials = 1 << 2,
             PasswordMissing = 1 << 3,
+            Photo = 1 << 5,
             NativeProvider = 1 << 4,
             NativeParams = 1 << 4,
             SavedInfo = 1 << 0,
@@ -40,7 +41,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
         }
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 378828315; }
+        public static int ConstructorId { get => -1340916937; }
 
         [Newtonsoft.Json.JsonIgnore]
         public int Flags { get; set; }
@@ -56,6 +57,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 
         [Newtonsoft.Json.JsonProperty("bot_id")]
         public sealed override long BotId { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("title")]
+        public sealed override string Title { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("description")]
+        public sealed override string Description { get; set; }
+
+        [MaybeNull]
+        [Newtonsoft.Json.JsonProperty("photo")]
+        public sealed override CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase Photo { get; set; }
 
         [Newtonsoft.Json.JsonProperty("invoice")]
         public sealed override CatraProto.Client.TL.Schemas.CloudChats.InvoiceBase Invoice { get; set; }
@@ -87,10 +98,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 
 
 #nullable enable
-        public PaymentForm(long formId, long botId, CatraProto.Client.TL.Schemas.CloudChats.InvoiceBase invoice, long providerId, string url, List<CatraProto.Client.TL.Schemas.CloudChats.UserBase> users)
+        public PaymentForm(long formId, long botId, string title, string description, CatraProto.Client.TL.Schemas.CloudChats.InvoiceBase invoice, long providerId, string url, List<CatraProto.Client.TL.Schemas.CloudChats.UserBase> users)
         {
             FormId = formId;
             BotId = botId;
+            Title = title;
+            Description = description;
             Invoice = invoice;
             ProviderId = providerId;
             Url = url;
@@ -106,6 +119,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
         {
             Flags = CanSaveCredentials ? FlagsHelper.SetFlag(Flags, 2) : FlagsHelper.UnsetFlag(Flags, 2);
             Flags = PasswordMissing ? FlagsHelper.SetFlag(Flags, 3) : FlagsHelper.UnsetFlag(Flags, 3);
+            Flags = Photo == null ? FlagsHelper.UnsetFlag(Flags, 5) : FlagsHelper.SetFlag(Flags, 5);
             Flags = NativeProvider == null ? FlagsHelper.UnsetFlag(Flags, 4) : FlagsHelper.SetFlag(Flags, 4);
             Flags = NativeParams == null ? FlagsHelper.UnsetFlag(Flags, 4) : FlagsHelper.SetFlag(Flags, 4);
             Flags = SavedInfo == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
@@ -121,6 +135,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
             writer.WriteInt32(Flags);
             writer.WriteInt64(FormId);
             writer.WriteInt64(BotId);
+
+            writer.WriteString(Title);
+
+            writer.WriteString(Description);
+            if (FlagsHelper.IsFlagSet(Flags, 5))
+            {
+                var checkphoto = writer.WriteObject(Photo);
+                if (checkphoto.IsError)
+                {
+                    return checkphoto;
+                }
+            }
+
             var checkinvoice = writer.WriteObject(Invoice);
             if (checkinvoice.IsError)
             {
@@ -194,6 +221,28 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
                 return ReadResult<IObject>.Move(trybotId);
             }
             BotId = trybotId.Value;
+            var trytitle = reader.ReadString();
+            if (trytitle.IsError)
+            {
+                return ReadResult<IObject>.Move(trytitle);
+            }
+            Title = trytitle.Value;
+            var trydescription = reader.ReadString();
+            if (trydescription.IsError)
+            {
+                return ReadResult<IObject>.Move(trydescription);
+            }
+            Description = trydescription.Value;
+            if (FlagsHelper.IsFlagSet(Flags, 5))
+            {
+                var tryphoto = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase>();
+                if (tryphoto.IsError)
+                {
+                    return ReadResult<IObject>.Move(tryphoto);
+                }
+                Photo = tryphoto.Value;
+            }
+
             var tryinvoice = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InvoiceBase>();
             if (tryinvoice.IsError)
             {
@@ -281,8 +330,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
                 CanSaveCredentials = CanSaveCredentials,
                 PasswordMissing = PasswordMissing,
                 FormId = FormId,
-                BotId = BotId
+                BotId = BotId,
+                Title = Title,
+                Description = Description
             };
+            if (Photo is not null)
+            {
+                var clonePhoto = (CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase?)Photo.Clone();
+                if (clonePhoto is null)
+                {
+                    return null;
+                }
+                newClonedObject.Photo = clonePhoto;
+            }
             var cloneInvoice = (CatraProto.Client.TL.Schemas.CloudChats.InvoiceBase?)Invoice.Clone();
             if (cloneInvoice is null)
             {
@@ -356,6 +416,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
                 return true;
             }
             if (BotId != castedOther.BotId)
+            {
+                return true;
+            }
+            if (Title != castedOther.Title)
+            {
+                return true;
+            }
+            if (Description != castedOther.Description)
+            {
+                return true;
+            }
+            if (Photo is null && castedOther.Photo is not null || Photo is not null && castedOther.Photo is null)
+            {
+                return true;
+            }
+            if (Photo is not null && castedOther.Photo is not null && Photo.Compare(castedOther.Photo))
             {
                 return true;
             }

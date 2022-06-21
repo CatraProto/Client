@@ -31,6 +31,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public enum FlagsEnum
         {
             Inactive = 1 << 0,
+            Premium = 1 << 2,
             AroundAnimation = 1 << 1,
             CenterIcon = 1 << 1
         }
@@ -43,6 +44,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         [Newtonsoft.Json.JsonProperty("inactive")]
         public sealed override bool Inactive { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("premium")]
+        public sealed override bool Premium { get; set; }
 
         [Newtonsoft.Json.JsonProperty("reaction")]
         public sealed override string Reaction { get; set; }
@@ -94,6 +98,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override void UpdateFlags()
         {
             Flags = Inactive ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
+            Flags = Premium ? FlagsHelper.SetFlag(Flags, 2) : FlagsHelper.UnsetFlag(Flags, 2);
             Flags = AroundAnimation == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
             Flags = CenterIcon == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
 
@@ -166,6 +171,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             }
             Flags = tryflags.Value;
             Inactive = FlagsHelper.IsFlagSet(Flags, 0);
+            Premium = FlagsHelper.IsFlagSet(Flags, 2);
             var tryreaction = reader.ReadString();
             if (tryreaction.IsError)
             {
@@ -249,6 +255,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 Flags = Flags,
                 Inactive = Inactive,
+                Premium = Premium,
                 Reaction = Reaction,
                 Title = Title
             };
@@ -315,6 +322,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 return true;
             }
             if (Inactive != castedOther.Inactive)
+            {
+                return true;
+            }
+            if (Premium != castedOther.Premium)
             {
                 return true;
             }

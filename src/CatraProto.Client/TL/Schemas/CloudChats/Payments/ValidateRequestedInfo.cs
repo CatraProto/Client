@@ -34,7 +34,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
         }
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -619695760; }
+        public static int ConstructorId { get => -1228345045; }
 
         [Newtonsoft.Json.JsonIgnore]
         ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
@@ -45,21 +45,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
         [Newtonsoft.Json.JsonProperty("save")]
         public bool Save { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("peer")]
-        public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("msg_id")]
-        public int MsgId { get; set; }
+        [Newtonsoft.Json.JsonProperty("invoice")]
+        public CatraProto.Client.TL.Schemas.CloudChats.InputInvoiceBase Invoice { get; set; }
 
         [Newtonsoft.Json.JsonProperty("info")]
         public CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase Info { get; set; }
 
 
 #nullable enable
-        public ValidateRequestedInfo(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int msgId, CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase info)
+        public ValidateRequestedInfo(CatraProto.Client.TL.Schemas.CloudChats.InputInvoiceBase invoice, CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase info)
         {
-            Peer = peer;
-            MsgId = msgId;
+            Invoice = invoice;
             Info = info;
 
         }
@@ -81,12 +77,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
             UpdateFlags();
 
             writer.WriteInt32(Flags);
-            var checkpeer = writer.WriteObject(Peer);
-            if (checkpeer.IsError)
+            var checkinvoice = writer.WriteObject(Invoice);
+            if (checkinvoice.IsError)
             {
-                return checkpeer;
+                return checkinvoice;
             }
-            writer.WriteInt32(MsgId);
             var checkinfo = writer.WriteObject(Info);
             if (checkinfo.IsError)
             {
@@ -106,18 +101,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
             }
             Flags = tryflags.Value;
             Save = FlagsHelper.IsFlagSet(Flags, 0);
-            var trypeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
-            if (trypeer.IsError)
+            var tryinvoice = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputInvoiceBase>();
+            if (tryinvoice.IsError)
             {
-                return ReadResult<IObject>.Move(trypeer);
+                return ReadResult<IObject>.Move(tryinvoice);
             }
-            Peer = trypeer.Value;
-            var trymsgId = reader.ReadInt32();
-            if (trymsgId.IsError)
-            {
-                return ReadResult<IObject>.Move(trymsgId);
-            }
-            MsgId = trymsgId.Value;
+            Invoice = tryinvoice.Value;
             var tryinfo = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase>();
             if (tryinfo.IsError)
             {
@@ -145,13 +134,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
                 Flags = Flags,
                 Save = Save
             };
-            var clonePeer = (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase?)Peer.Clone();
-            if (clonePeer is null)
+            var cloneInvoice = (CatraProto.Client.TL.Schemas.CloudChats.InputInvoiceBase?)Invoice.Clone();
+            if (cloneInvoice is null)
             {
                 return null;
             }
-            newClonedObject.Peer = clonePeer;
-            newClonedObject.MsgId = MsgId;
+            newClonedObject.Invoice = cloneInvoice;
             var cloneInfo = (CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase?)Info.Clone();
             if (cloneInfo is null)
             {
@@ -176,11 +164,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
             {
                 return true;
             }
-            if (Peer.Compare(castedOther.Peer))
-            {
-                return true;
-            }
-            if (MsgId != castedOther.MsgId)
+            if (Invoice.Compare(castedOther.Invoice))
             {
                 return true;
             }

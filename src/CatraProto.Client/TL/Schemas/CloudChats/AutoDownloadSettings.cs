@@ -36,7 +36,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         }
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -532532493; }
+        public static int ConstructorId { get => -1896171181; }
 
         [Newtonsoft.Json.JsonIgnore]
         public int Flags { get; set; }
@@ -57,17 +57,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public sealed override int PhotoSizeMax { get; set; }
 
         [Newtonsoft.Json.JsonProperty("video_size_max")]
-        public sealed override int VideoSizeMax { get; set; }
+        public sealed override long VideoSizeMax { get; set; }
 
         [Newtonsoft.Json.JsonProperty("file_size_max")]
-        public sealed override int FileSizeMax { get; set; }
+        public sealed override long FileSizeMax { get; set; }
 
         [Newtonsoft.Json.JsonProperty("video_upload_maxbitrate")]
         public sealed override int VideoUploadMaxbitrate { get; set; }
 
 
 #nullable enable
-        public AutoDownloadSettings(int photoSizeMax, int videoSizeMax, int fileSizeMax, int videoUploadMaxbitrate)
+        public AutoDownloadSettings(int photoSizeMax, long videoSizeMax, long fileSizeMax, int videoUploadMaxbitrate)
         {
             PhotoSizeMax = photoSizeMax;
             VideoSizeMax = videoSizeMax;
@@ -96,8 +96,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
             writer.WriteInt32(Flags);
             writer.WriteInt32(PhotoSizeMax);
-            writer.WriteInt32(VideoSizeMax);
-            writer.WriteInt32(FileSizeMax);
+            writer.WriteInt64(VideoSizeMax);
+            writer.WriteInt64(FileSizeMax);
             writer.WriteInt32(VideoUploadMaxbitrate);
 
             return new WriteResult();
@@ -122,13 +122,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 return ReadResult<IObject>.Move(tryphotoSizeMax);
             }
             PhotoSizeMax = tryphotoSizeMax.Value;
-            var tryvideoSizeMax = reader.ReadInt32();
+            var tryvideoSizeMax = reader.ReadInt64();
             if (tryvideoSizeMax.IsError)
             {
                 return ReadResult<IObject>.Move(tryvideoSizeMax);
             }
             VideoSizeMax = tryvideoSizeMax.Value;
-            var tryfileSizeMax = reader.ReadInt32();
+            var tryfileSizeMax = reader.ReadInt64();
             if (tryfileSizeMax.IsError)
             {
                 return ReadResult<IObject>.Move(tryfileSizeMax);

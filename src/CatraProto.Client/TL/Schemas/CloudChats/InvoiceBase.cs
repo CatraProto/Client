@@ -17,6 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
@@ -50,6 +51,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("email_to_provider")]
         public abstract bool EmailToProvider { get; set; }
 
+        [Newtonsoft.Json.JsonProperty("recurring")]
+        public abstract bool Recurring { get; set; }
+
         [Newtonsoft.Json.JsonProperty("currency")]
         public abstract string Currency { get; set; }
 
@@ -61,6 +65,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         [Newtonsoft.Json.JsonProperty("suggested_tip_amounts")]
         public abstract List<long> SuggestedTipAmounts { get; set; }
+
+        [MaybeNull]
+        [Newtonsoft.Json.JsonProperty("recurring_terms_url")]
+        public abstract string RecurringTermsUrl { get; set; }
 
         public abstract void UpdateFlags();
         public abstract ReadResult<IObject> Deserialize(Reader reader);

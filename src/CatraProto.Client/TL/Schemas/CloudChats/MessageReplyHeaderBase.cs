@@ -26,6 +26,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class MessageReplyHeaderBase : IObject
     {
 
+        [Newtonsoft.Json.JsonProperty("reply_to_scheduled")]
+        public abstract bool ReplyToScheduled { get; set; }
+
         [Newtonsoft.Json.JsonProperty("reply_to_msg_id")]
         public abstract int ReplyToMsgId { get; set; }
 

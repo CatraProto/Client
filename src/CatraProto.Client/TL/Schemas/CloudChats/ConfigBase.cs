@@ -48,6 +48,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("pfs_enabled")]
         public abstract bool PfsEnabled { get; set; }
 
+        [Newtonsoft.Json.JsonProperty("force_try_ipv6")]
+        public abstract bool ForceTryIpv6 { get; set; }
+
         [Newtonsoft.Json.JsonProperty("date")]
         public abstract int Date { get; set; }
 

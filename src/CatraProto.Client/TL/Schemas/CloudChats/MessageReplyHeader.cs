@@ -30,6 +30,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Flags]
         public enum FlagsEnum
         {
+            ReplyToScheduled = 1 << 2,
             ReplyToPeerId = 1 << 0,
             ReplyToTopId = 1 << 1
         }
@@ -39,6 +40,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         [Newtonsoft.Json.JsonIgnore]
         public int Flags { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("reply_to_scheduled")]
+        public sealed override bool ReplyToScheduled { get; set; }
 
         [Newtonsoft.Json.JsonProperty("reply_to_msg_id")]
         public sealed override int ReplyToMsgId { get; set; }
@@ -64,6 +68,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void UpdateFlags()
         {
+            Flags = ReplyToScheduled ? FlagsHelper.SetFlag(Flags, 2) : FlagsHelper.UnsetFlag(Flags, 2);
             Flags = ReplyToPeerId == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
             Flags = ReplyToTopId == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
 
@@ -103,6 +108,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 return ReadResult<IObject>.Move(tryflags);
             }
             Flags = tryflags.Value;
+            ReplyToScheduled = FlagsHelper.IsFlagSet(Flags, 2);
             var tryreplyToMsgId = reader.ReadInt32();
             if (tryreplyToMsgId.IsError)
             {
@@ -149,6 +155,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             var newClonedObject = new MessageReplyHeader
             {
                 Flags = Flags,
+                ReplyToScheduled = ReplyToScheduled,
                 ReplyToMsgId = ReplyToMsgId
             };
             if (ReplyToPeerId is not null)
@@ -172,6 +179,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 return true;
             }
             if (Flags != castedOther.Flags)
+            {
+                return true;
+            }
+            if (ReplyToScheduled != castedOther.ReplyToScheduled)
             {
                 return true;
             }

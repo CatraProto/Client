@@ -28,7 +28,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 1248893260; }
+        public static int ConstructorId { get => -1476358952; }
 
         [Newtonsoft.Json.JsonProperty("id")]
         public long Id { get; set; }
@@ -37,7 +37,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public long AccessHash { get; set; }
 
         [Newtonsoft.Json.JsonProperty("size")]
-        public int Size { get; set; }
+        public long Size { get; set; }
 
         [Newtonsoft.Json.JsonProperty("dc_id")]
         public int DcId { get; set; }
@@ -47,7 +47,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
 #nullable enable
-        public EncryptedFile(long id, long accessHash, int size, int dcId, int keyFingerprint)
+        public EncryptedFile(long id, long accessHash, long size, int dcId, int keyFingerprint)
         {
             Id = id;
             AccessHash = accessHash;
@@ -71,7 +71,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             writer.WriteInt32(ConstructorId);
             writer.WriteInt64(Id);
             writer.WriteInt64(AccessHash);
-            writer.WriteInt32(Size);
+            writer.WriteInt64(Size);
             writer.WriteInt32(DcId);
             writer.WriteInt32(KeyFingerprint);
 
@@ -93,7 +93,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 return ReadResult<IObject>.Move(tryaccessHash);
             }
             AccessHash = tryaccessHash.Value;
-            var trysize = reader.ReadInt32();
+            var trysize = reader.ReadInt64();
             if (trysize.IsError)
             {
                 return ReadResult<IObject>.Move(trysize);

@@ -23,16 +23,16 @@ using CatraProto.TL.Results;
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
-    public partial class True : CatraProto.Client.TL.Schemas.CloudChats.TrueBase
+    public partial class AttachMenuPeerTypeBotPM : CatraProto.Client.TL.Schemas.CloudChats.AttachMenuPeerTypeBase
     {
 
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 1072550713; }
+        public static int ConstructorId { get => -1020528102; }
 
 
 
-        public True()
+        public AttachMenuPeerTypeBotPM()
         {
         }
 
@@ -57,7 +57,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override string ToString()
         {
-            return "true";
+            return "attachMenuPeerTypeBotPM";
         }
 
         public override int GetConstructorId()
@@ -68,14 +68,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new True();
+            var newClonedObject = new AttachMenuPeerTypeBotPM();
             return newClonedObject;
 
         }
 
         public override bool Compare(IObject other)
         {
-            if (other is not True castedOther)
+            if (other is not AttachMenuPeerTypeBotPM castedOther)
             {
                 return true;
             }

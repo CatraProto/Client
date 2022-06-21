@@ -41,10 +41,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public abstract int PhotoSizeMax { get; set; }
 
         [Newtonsoft.Json.JsonProperty("video_size_max")]
-        public abstract int VideoSizeMax { get; set; }
+        public abstract long VideoSizeMax { get; set; }
 
         [Newtonsoft.Json.JsonProperty("file_size_max")]
-        public abstract int FileSizeMax { get; set; }
+        public abstract long FileSizeMax { get; set; }
 
         [Newtonsoft.Json.JsonProperty("video_upload_maxbitrate")]
         public abstract int VideoUploadMaxbitrate { get; set; }

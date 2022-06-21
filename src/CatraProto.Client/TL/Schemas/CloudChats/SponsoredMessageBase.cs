@@ -27,6 +27,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     public abstract class SponsoredMessageBase : IObject
     {
 
+        [Newtonsoft.Json.JsonProperty("recommended")]
+        public abstract bool Recommended { get; set; }
+
         [Newtonsoft.Json.JsonProperty("random_id")]
         public abstract byte[] RandomId { get; set; }
 

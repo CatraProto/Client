@@ -40,6 +40,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("static")]
         public abstract bool Static { get; set; }
 
+        [Newtonsoft.Json.JsonProperty("this_port_only")]
+        public abstract bool ThisPortOnly { get; set; }
+
         [Newtonsoft.Json.JsonProperty("id")]
         public abstract int Id { get; set; }
 

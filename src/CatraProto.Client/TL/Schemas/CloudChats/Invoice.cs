@@ -18,6 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
@@ -38,12 +39,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flexible = 1 << 5,
             PhoneToProvider = 1 << 6,
             EmailToProvider = 1 << 7,
+            Recurring = 1 << 9,
             MaxTipAmount = 1 << 8,
-            SuggestedTipAmounts = 1 << 8
+            SuggestedTipAmounts = 1 << 8,
+            RecurringTermsUrl = 1 << 9
         }
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 215516896; }
+        public static int ConstructorId { get => 1048946971; }
 
         [Newtonsoft.Json.JsonIgnore]
         public int Flags { get; set; }
@@ -72,6 +75,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("email_to_provider")]
         public sealed override bool EmailToProvider { get; set; }
 
+        [Newtonsoft.Json.JsonProperty("recurring")]
+        public sealed override bool Recurring { get; set; }
+
         [Newtonsoft.Json.JsonProperty("currency")]
         public sealed override string Currency { get; set; }
 
@@ -83,6 +89,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         [Newtonsoft.Json.JsonProperty("suggested_tip_amounts")]
         public sealed override List<long> SuggestedTipAmounts { get; set; }
+
+        [MaybeNull]
+        [Newtonsoft.Json.JsonProperty("recurring_terms_url")]
+        public sealed override string RecurringTermsUrl { get; set; }
 
 
 #nullable enable
@@ -107,8 +117,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = Flexible ? FlagsHelper.SetFlag(Flags, 5) : FlagsHelper.UnsetFlag(Flags, 5);
             Flags = PhoneToProvider ? FlagsHelper.SetFlag(Flags, 6) : FlagsHelper.UnsetFlag(Flags, 6);
             Flags = EmailToProvider ? FlagsHelper.SetFlag(Flags, 7) : FlagsHelper.UnsetFlag(Flags, 7);
+            Flags = Recurring ? FlagsHelper.SetFlag(Flags, 9) : FlagsHelper.UnsetFlag(Flags, 9);
             Flags = MaxTipAmount == null ? FlagsHelper.UnsetFlag(Flags, 8) : FlagsHelper.SetFlag(Flags, 8);
             Flags = SuggestedTipAmounts == null ? FlagsHelper.UnsetFlag(Flags, 8) : FlagsHelper.SetFlag(Flags, 8);
+            Flags = RecurringTermsUrl == null ? FlagsHelper.UnsetFlag(Flags, 9) : FlagsHelper.SetFlag(Flags, 9);
 
         }
 
@@ -136,6 +148,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 writer.WriteVector(SuggestedTipAmounts, false);
             }
 
+            if (FlagsHelper.IsFlagSet(Flags, 9))
+            {
+
+                writer.WriteString(RecurringTermsUrl);
+            }
+
 
             return new WriteResult();
 
@@ -157,6 +175,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flexible = FlagsHelper.IsFlagSet(Flags, 5);
             PhoneToProvider = FlagsHelper.IsFlagSet(Flags, 6);
             EmailToProvider = FlagsHelper.IsFlagSet(Flags, 7);
+            Recurring = FlagsHelper.IsFlagSet(Flags, 9);
             var trycurrency = reader.ReadString();
             if (trycurrency.IsError)
             {
@@ -189,6 +208,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 SuggestedTipAmounts = trysuggestedTipAmounts.Value;
             }
 
+            if (FlagsHelper.IsFlagSet(Flags, 9))
+            {
+                var tryrecurringTermsUrl = reader.ReadString();
+                if (tryrecurringTermsUrl.IsError)
+                {
+                    return ReadResult<IObject>.Move(tryrecurringTermsUrl);
+                }
+                RecurringTermsUrl = tryrecurringTermsUrl.Value;
+            }
+
             return new ReadResult<IObject>(this);
 
         }
@@ -217,6 +246,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 Flexible = Flexible,
                 PhoneToProvider = PhoneToProvider,
                 EmailToProvider = EmailToProvider,
+                Recurring = Recurring,
                 Currency = Currency,
                 Prices = new List<CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase>()
             };
@@ -238,6 +268,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                     newClonedObject.SuggestedTipAmounts.Add(suggestedTipAmounts);
                 }
             }
+            newClonedObject.RecurringTermsUrl = RecurringTermsUrl;
             return newClonedObject;
 
         }
@@ -284,6 +315,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+            if (Recurring != castedOther.Recurring)
+            {
+                return true;
+            }
             if (Currency != castedOther.Currency)
             {
                 return true;
@@ -323,6 +358,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                         return true;
                     }
                 }
+            }
+            if (RecurringTermsUrl != castedOther.RecurringTermsUrl)
+            {
+                return true;
             }
             return false;
 

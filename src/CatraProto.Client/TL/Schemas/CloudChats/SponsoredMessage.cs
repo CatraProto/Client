@@ -31,6 +31,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Flags]
         public enum FlagsEnum
         {
+            Recommended = 1 << 5,
             FromId = 1 << 3,
             ChatInvite = 1 << 4,
             ChatInviteHash = 1 << 4,
@@ -44,6 +45,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         [Newtonsoft.Json.JsonIgnore]
         public int Flags { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("recommended")]
+        public sealed override bool Recommended { get; set; }
 
         [Newtonsoft.Json.JsonProperty("random_id")]
         public sealed override byte[] RandomId { get; set; }
@@ -89,6 +93,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void UpdateFlags()
         {
+            Flags = Recommended ? FlagsHelper.SetFlag(Flags, 5) : FlagsHelper.UnsetFlag(Flags, 5);
             Flags = FromId == null ? FlagsHelper.UnsetFlag(Flags, 3) : FlagsHelper.SetFlag(Flags, 3);
             Flags = ChatInvite == null ? FlagsHelper.UnsetFlag(Flags, 4) : FlagsHelper.SetFlag(Flags, 4);
             Flags = ChatInviteHash == null ? FlagsHelper.UnsetFlag(Flags, 4) : FlagsHelper.SetFlag(Flags, 4);
@@ -165,6 +170,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 return ReadResult<IObject>.Move(tryflags);
             }
             Flags = tryflags.Value;
+            Recommended = FlagsHelper.IsFlagSet(Flags, 5);
             var tryrandomId = reader.ReadBytes();
             if (tryrandomId.IsError)
             {
@@ -257,6 +263,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             var newClonedObject = new SponsoredMessage
             {
                 Flags = Flags,
+                Recommended = Recommended,
                 RandomId = RandomId
             };
             if (FromId is not null)
@@ -305,6 +312,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 return true;
             }
             if (Flags != castedOther.Flags)
+            {
+                return true;
+            }
+            if (Recommended != castedOther.Recommended)
             {
                 return true;
             }

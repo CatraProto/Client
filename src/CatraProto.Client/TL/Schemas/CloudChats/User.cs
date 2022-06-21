@@ -47,6 +47,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             ApplyMinPhoto = 1 << 25,
             Fake = 1 << 26,
             BotAttachMenu = 1 << 27,
+            Premium = 1 << 28,
+            AttachMenuEnabled = 1 << 29,
             AccessHash = 1 << 0,
             FirstName = 1 << 1,
             LastName = 1 << 2,
@@ -113,6 +115,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         [Newtonsoft.Json.JsonProperty("bot_attach_menu")]
         public bool BotAttachMenu { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("premium")]
+        public bool Premium { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("attach_menu_enabled")]
+        public bool AttachMenuEnabled { get; set; }
 
         [Newtonsoft.Json.JsonProperty("id")]
         public sealed override long Id { get; set; }
@@ -189,6 +197,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = ApplyMinPhoto ? FlagsHelper.SetFlag(Flags, 25) : FlagsHelper.UnsetFlag(Flags, 25);
             Flags = Fake ? FlagsHelper.SetFlag(Flags, 26) : FlagsHelper.UnsetFlag(Flags, 26);
             Flags = BotAttachMenu ? FlagsHelper.SetFlag(Flags, 27) : FlagsHelper.UnsetFlag(Flags, 27);
+            Flags = Premium ? FlagsHelper.SetFlag(Flags, 28) : FlagsHelper.UnsetFlag(Flags, 28);
+            Flags = AttachMenuEnabled ? FlagsHelper.SetFlag(Flags, 29) : FlagsHelper.UnsetFlag(Flags, 29);
             Flags = AccessHash == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
             Flags = FirstName == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
             Flags = LastName == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
@@ -312,6 +322,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             ApplyMinPhoto = FlagsHelper.IsFlagSet(Flags, 25);
             Fake = FlagsHelper.IsFlagSet(Flags, 26);
             BotAttachMenu = FlagsHelper.IsFlagSet(Flags, 27);
+            Premium = FlagsHelper.IsFlagSet(Flags, 28);
+            AttachMenuEnabled = FlagsHelper.IsFlagSet(Flags, 29);
             var tryid = reader.ReadInt64();
             if (tryid.IsError)
             {
@@ -464,6 +476,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 ApplyMinPhoto = ApplyMinPhoto,
                 Fake = Fake,
                 BotAttachMenu = BotAttachMenu,
+                Premium = Premium,
+                AttachMenuEnabled = AttachMenuEnabled,
                 Id = Id,
                 AccessHash = AccessHash,
                 FirstName = FirstName,
@@ -580,6 +594,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 return true;
             }
             if (BotAttachMenu != castedOther.BotAttachMenu)
+            {
+                return true;
+            }
+            if (Premium != castedOther.Premium)
+            {
+                return true;
+            }
+            if (AttachMenuEnabled != castedOther.AttachMenuEnabled)
             {
                 return true;
             }

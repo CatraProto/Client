@@ -16,6 +16,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
@@ -26,10 +27,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public partial class FeaturedStickers : CatraProto.Client.TL.Schemas.CloudChats.Messages.FeaturedStickersBase
     {
-
+        [Flags]
+        public enum FlagsEnum
+        {
+            Premium = 1 << 0
+        }
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -2067782896; }
+        public static int ConstructorId { get => -1103615738; }
+
+        [Newtonsoft.Json.JsonIgnore]
+        public int Flags { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("premium")]
+        public bool Premium { get; set; }
 
         [Newtonsoft.Json.JsonProperty("hash")]
         public long Hash { get; set; }
@@ -60,12 +71,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public override void UpdateFlags()
         {
+            Flags = Premium ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
 
         }
 
         public override WriteResult Serialize(Writer writer)
         {
             writer.WriteInt32(ConstructorId);
+            UpdateFlags();
+
+            writer.WriteInt32(Flags);
             writer.WriteInt64(Hash);
             writer.WriteInt32(Count);
             var checksets = writer.WriteVector(Sets, false);
@@ -82,6 +97,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public override ReadResult<IObject> Deserialize(Reader reader)
         {
+            var tryflags = reader.ReadInt32();
+            if (tryflags.IsError)
+            {
+                return ReadResult<IObject>.Move(tryflags);
+            }
+            Flags = tryflags.Value;
+            Premium = FlagsHelper.IsFlagSet(Flags, 0);
             var tryhash = reader.ReadInt64();
             if (tryhash.IsError)
             {
@@ -125,6 +147,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         {
             var newClonedObject = new FeaturedStickers
             {
+                Flags = Flags,
+                Premium = Premium,
                 Hash = Hash,
                 Count = Count,
                 Sets = new List<CatraProto.Client.TL.Schemas.CloudChats.StickerSetCoveredBase>()
@@ -150,6 +174,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public override bool Compare(IObject other)
         {
             if (other is not FeaturedStickers castedOther)
+            {
+                return true;
+            }
+            if (Flags != castedOther.Flags)
+            {
+                return true;
+            }
+            if (Premium != castedOther.Premium)
             {
                 return true;
             }

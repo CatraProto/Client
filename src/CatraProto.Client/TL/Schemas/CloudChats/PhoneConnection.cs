@@ -16,6 +16,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+using System;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
@@ -25,10 +26,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class PhoneConnection : CatraProto.Client.TL.Schemas.CloudChats.PhoneConnectionBase
     {
-
+        [Flags]
+        public enum FlagsEnum
+        {
+            Tcp = 1 << 0
+        }
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -1655957568; }
+        public static int ConstructorId { get => -1665063993; }
+
+        [Newtonsoft.Json.JsonIgnore]
+        public int Flags { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("tcp")]
+        public bool Tcp { get; set; }
 
         [Newtonsoft.Json.JsonProperty("id")]
         public sealed override long Id { get; set; }
@@ -63,12 +74,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void UpdateFlags()
         {
+            Flags = Tcp ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
 
         }
 
         public override WriteResult Serialize(Writer writer)
         {
             writer.WriteInt32(ConstructorId);
+            UpdateFlags();
+
+            writer.WriteInt32(Flags);
             writer.WriteInt64(Id);
 
             writer.WriteString(Ip);
@@ -84,6 +99,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override ReadResult<IObject> Deserialize(Reader reader)
         {
+            var tryflags = reader.ReadInt32();
+            if (tryflags.IsError)
+            {
+                return ReadResult<IObject>.Move(tryflags);
+            }
+            Flags = tryflags.Value;
+            Tcp = FlagsHelper.IsFlagSet(Flags, 0);
             var tryid = reader.ReadInt64();
             if (tryid.IsError)
             {
@@ -133,6 +155,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             var newClonedObject = new PhoneConnection
             {
+                Flags = Flags,
+                Tcp = Tcp,
                 Id = Id,
                 Ip = Ip,
                 Ipv6 = Ipv6,
@@ -146,6 +170,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override bool Compare(IObject other)
         {
             if (other is not PhoneConnection castedOther)
+            {
+                return true;
+            }
+            if (Flags != castedOther.Flags)
+            {
+                return true;
+            }
+            if (Tcp != castedOther.Tcp)
             {
                 return true;
             }

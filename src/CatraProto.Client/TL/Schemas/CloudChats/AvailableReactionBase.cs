@@ -29,6 +29,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("inactive")]
         public abstract bool Inactive { get; set; }
 
+        [Newtonsoft.Json.JsonProperty("premium")]
+        public abstract bool Premium { get; set; }
+
         [Newtonsoft.Json.JsonProperty("reaction")]
         public abstract string Reaction { get; set; }
 

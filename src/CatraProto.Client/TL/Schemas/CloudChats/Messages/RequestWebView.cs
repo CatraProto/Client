@@ -36,11 +36,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             Url = 1 << 1,
             StartParam = 1 << 3,
             ThemeParams = 1 << 2,
-            ReplyToMsgId = 1 << 0
+            ReplyToMsgId = 1 << 0,
+            SendAs = 1 << 13
         }
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 262163967; }
+        public static int ConstructorId { get => -1850648527; }
 
         [Newtonsoft.Json.JsonIgnore]
         ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
@@ -75,6 +76,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         [Newtonsoft.Json.JsonProperty("reply_to_msg_id")]
         public int? ReplyToMsgId { get; set; }
 
+        [MaybeNull]
+        [Newtonsoft.Json.JsonProperty("send_as")]
+        public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase SendAs { get; set; }
+
 
 #nullable enable
         public RequestWebView(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, CatraProto.Client.TL.Schemas.CloudChats.InputUserBase bot)
@@ -97,6 +102,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             Flags = StartParam == null ? FlagsHelper.UnsetFlag(Flags, 3) : FlagsHelper.SetFlag(Flags, 3);
             Flags = ThemeParams == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
             Flags = ReplyToMsgId == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
+            Flags = SendAs == null ? FlagsHelper.UnsetFlag(Flags, 13) : FlagsHelper.SetFlag(Flags, 13);
 
         }
 
@@ -140,6 +146,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
                 writer.WriteInt32(ReplyToMsgId.Value);
+            }
+
+            if (FlagsHelper.IsFlagSet(Flags, 13))
+            {
+                var checksendAs = writer.WriteObject(SendAs);
+                if (checksendAs.IsError)
+                {
+                    return checksendAs;
+                }
             }
 
 
@@ -209,6 +224,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 ReplyToMsgId = tryreplyToMsgId.Value;
             }
 
+            if (FlagsHelper.IsFlagSet(Flags, 13))
+            {
+                var trysendAs = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
+                if (trysendAs.IsError)
+                {
+                    return ReadResult<IObject>.Move(trysendAs);
+                }
+                SendAs = trysendAs.Value;
+            }
+
             return new ReadResult<IObject>(this);
 
         }
@@ -255,6 +280,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 newClonedObject.ThemeParams = cloneThemeParams;
             }
             newClonedObject.ReplyToMsgId = ReplyToMsgId;
+            if (SendAs is not null)
+            {
+                var cloneSendAs = (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase?)SendAs.Clone();
+                if (cloneSendAs is null)
+                {
+                    return null;
+                }
+                newClonedObject.SendAs = cloneSendAs;
+            }
             return newClonedObject;
 
         }
@@ -302,6 +336,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 return true;
             }
             if (ReplyToMsgId != castedOther.ReplyToMsgId)
+            {
+                return true;
+            }
+            if (SendAs is null && castedOther.SendAs is not null || SendAs is not null && castedOther.SendAs is null)
+            {
+                return true;
+            }
+            if (SendAs is not null && castedOther.SendAs is not null && SendAs.Compare(castedOther.SendAs))
             {
                 return true;
             }

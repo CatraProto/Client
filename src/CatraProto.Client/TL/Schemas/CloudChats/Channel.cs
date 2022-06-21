@@ -48,6 +48,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Fake = 1 << 25,
             Gigagroup = 1 << 26,
             Noforwards = 1 << 27,
+            JoinToSend = 1 << 28,
+            JoinRequest = 1 << 29,
             AccessHash = 1 << 13,
             Username = 1 << 6,
             RestrictionReason = 1 << 9,
@@ -113,6 +115,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         [Newtonsoft.Json.JsonProperty("noforwards")]
         public bool Noforwards { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("join_to_send")]
+        public bool JoinToSend { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("join_request")]
+        public bool JoinRequest { get; set; }
 
         [Newtonsoft.Json.JsonProperty("id")]
         public sealed override long Id { get; set; }
@@ -186,6 +194,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = Fake ? FlagsHelper.SetFlag(Flags, 25) : FlagsHelper.UnsetFlag(Flags, 25);
             Flags = Gigagroup ? FlagsHelper.SetFlag(Flags, 26) : FlagsHelper.UnsetFlag(Flags, 26);
             Flags = Noforwards ? FlagsHelper.SetFlag(Flags, 27) : FlagsHelper.UnsetFlag(Flags, 27);
+            Flags = JoinToSend ? FlagsHelper.SetFlag(Flags, 28) : FlagsHelper.UnsetFlag(Flags, 28);
+            Flags = JoinRequest ? FlagsHelper.SetFlag(Flags, 29) : FlagsHelper.UnsetFlag(Flags, 29);
             Flags = AccessHash == null ? FlagsHelper.UnsetFlag(Flags, 13) : FlagsHelper.SetFlag(Flags, 13);
             Flags = Username == null ? FlagsHelper.UnsetFlag(Flags, 6) : FlagsHelper.SetFlag(Flags, 6);
             Flags = RestrictionReason == null ? FlagsHelper.UnsetFlag(Flags, 9) : FlagsHelper.SetFlag(Flags, 9);
@@ -293,6 +303,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Fake = FlagsHelper.IsFlagSet(Flags, 25);
             Gigagroup = FlagsHelper.IsFlagSet(Flags, 26);
             Noforwards = FlagsHelper.IsFlagSet(Flags, 27);
+            JoinToSend = FlagsHelper.IsFlagSet(Flags, 28);
+            JoinRequest = FlagsHelper.IsFlagSet(Flags, 29);
             var tryid = reader.ReadInt64();
             if (tryid.IsError)
             {
@@ -424,6 +436,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 Fake = Fake,
                 Gigagroup = Gigagroup,
                 Noforwards = Noforwards,
+                JoinToSend = JoinToSend,
+                JoinRequest = JoinRequest,
                 Id = Id,
                 AccessHash = AccessHash,
                 Title = Title,
@@ -556,6 +570,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 return true;
             }
             if (Noforwards != castedOther.Noforwards)
+            {
+                return true;
+            }
+            if (JoinToSend != castedOther.JoinToSend)
+            {
+                return true;
+            }
+            if (JoinRequest != castedOther.JoinRequest)
             {
                 return true;
             }

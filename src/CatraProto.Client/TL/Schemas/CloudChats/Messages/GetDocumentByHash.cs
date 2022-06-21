@@ -29,7 +29,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 864953444; }
+        public static int ConstructorId { get => -1309538785; }
 
         [Newtonsoft.Json.JsonIgnore]
         ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
@@ -38,14 +38,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public byte[] Sha256 { get; set; }
 
         [Newtonsoft.Json.JsonProperty("size")]
-        public int Size { get; set; }
+        public long Size { get; set; }
 
         [Newtonsoft.Json.JsonProperty("mime_type")]
         public string MimeType { get; set; }
 
 
 #nullable enable
-        public GetDocumentByHash(byte[] sha256, int size, string mimeType)
+        public GetDocumentByHash(byte[] sha256, long size, string mimeType)
         {
             Sha256 = sha256;
             Size = size;
@@ -68,7 +68,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             writer.WriteInt32(ConstructorId);
 
             writer.WriteBytes(Sha256);
-            writer.WriteInt32(Size);
+            writer.WriteInt64(Size);
 
             writer.WriteString(MimeType);
 
@@ -84,7 +84,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 return ReadResult<IObject>.Move(trysha256);
             }
             Sha256 = trysha256.Value;
-            var trysize = reader.ReadInt32();
+            var trysize = reader.ReadInt64();
             if (trysize.IsError)
             {
                 return ReadResult<IObject>.Move(trysize);

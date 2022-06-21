@@ -29,7 +29,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 
 
         [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 536919235; }
+        public static int ConstructorId { get => 962554330; }
 
         [Newtonsoft.Json.JsonIgnore]
         ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
@@ -38,14 +38,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
         public byte[] FileToken { get; set; }
 
         [Newtonsoft.Json.JsonProperty("offset")]
-        public int Offset { get; set; }
+        public long Offset { get; set; }
 
         [Newtonsoft.Json.JsonProperty("limit")]
         public int Limit { get; set; }
 
 
 #nullable enable
-        public GetCdnFile(byte[] fileToken, int offset, int limit)
+        public GetCdnFile(byte[] fileToken, long offset, int limit)
         {
             FileToken = fileToken;
             Offset = offset;
@@ -68,7 +68,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
             writer.WriteInt32(ConstructorId);
 
             writer.WriteBytes(FileToken);
-            writer.WriteInt32(Offset);
+            writer.WriteInt64(Offset);
             writer.WriteInt32(Limit);
 
             return new WriteResult();
@@ -83,7 +83,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
                 return ReadResult<IObject>.Move(tryfileToken);
             }
             FileToken = tryfileToken.Value;
-            var tryoffset = reader.ReadInt32();
+            var tryoffset = reader.ReadInt64();
             if (tryoffset.IsError)
             {
                 return ReadResult<IObject>.Move(tryoffset);

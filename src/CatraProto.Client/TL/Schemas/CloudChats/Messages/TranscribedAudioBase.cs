@@ -20,10 +20,19 @@ using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
 #nullable disable
-namespace CatraProto.Client.TL.Schemas.CloudChats
+namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
-    public abstract class TrueBase : IObject
+    public abstract class TranscribedAudioBase : IObject
     {
+
+        [Newtonsoft.Json.JsonProperty("pending")]
+        public abstract bool Pending { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("transcription_id")]
+        public abstract long TranscriptionId { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("text")]
+        public abstract string Text { get; set; }
 
         public abstract void UpdateFlags();
         public abstract ReadResult<IObject> Deserialize(Reader reader);

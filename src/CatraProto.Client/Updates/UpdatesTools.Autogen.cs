@@ -261,6 +261,9 @@ namespace CatraProto.Client.Updates
                 case CatraProto.Client.TL.Schemas.CloudChats.AttachMenuBotsBot attachMenuBotsBot:
                     usersVector = attachMenuBotsBot.Users;
                     break;
+                case CatraProto.Client.TL.Schemas.CloudChats.Help.PremiumPromo premiumPromo:
+                    usersVector = premiumPromo.Users;
+                    break;
 
             }
 
@@ -490,6 +493,8 @@ updateNewScheduledMessage.Message)
                     peerId = CatraProto.Client.MTProto.PeerId.AsUser(updateBotChatInviteRequester.UserId); return true;
                 case CatraProto.Client.TL.Schemas.CloudChats.UpdateMessageReactions updateMessageReactions:
                     peerId = CatraProto.Client.MTProto.PeerId.FromPeer(updateMessageReactions.Peer); return true;
+                case CatraProto.Client.TL.Schemas.CloudChats.UpdateTranscribedAudio updateTranscribedAudio:
+                    peerId = CatraProto.Client.MTProto.PeerId.FromPeer(updateTranscribedAudio.Peer); return true;
 
             }
 

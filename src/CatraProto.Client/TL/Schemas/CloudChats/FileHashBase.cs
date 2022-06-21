@@ -26,7 +26,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
     {
 
         [Newtonsoft.Json.JsonProperty("offset")]
-        public abstract int Offset { get; set; }
+        public abstract long Offset { get; set; }
 
         [Newtonsoft.Json.JsonProperty("limit")]
         public abstract int Limit { get; set; }

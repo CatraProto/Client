@@ -38,7 +38,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 
         }
 
-        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentFormBase>> InternalGetPaymentFormAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int msgId, CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase? themeParams = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentFormBase>> GetPaymentFormAsync(CatraProto.Client.TL.Schemas.CloudChats.InputInvoiceBase invoice, CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase? themeParams = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentFormBase>(
@@ -46,8 +46,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
             var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Payments.GetPaymentForm()
             {
-                Peer = peer,
-                MsgId = msgId,
+                Invoice = invoice,
                 ThemeParams = themeParams,
             };
 
@@ -71,7 +70,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Payments.ValidatedRequestedInfoBase>> InternalValidateRequestedInfoAsync(CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int msgId, CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase info, bool save = false, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Payments.ValidatedRequestedInfoBase>> ValidateRequestedInfoAsync(CatraProto.Client.TL.Schemas.CloudChats.InputInvoiceBase invoice, CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase info, bool save = false, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Payments.ValidatedRequestedInfoBase>(
@@ -79,8 +78,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
             var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Payments.ValidateRequestedInfo()
             {
-                Peer = peer,
-                MsgId = msgId,
+                Invoice = invoice,
                 Info = info,
                 Save = save,
             };
@@ -89,7 +87,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentResultBase>> InternalSendPaymentFormAsync(long formId, CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase peer, int msgId, CatraProto.Client.TL.Schemas.CloudChats.InputPaymentCredentialsBase credentials, string? requestedInfoId = null, string? shippingOptionId = null, long? tipAmount = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentResultBase>> SendPaymentFormAsync(long formId, CatraProto.Client.TL.Schemas.CloudChats.InputInvoiceBase invoice, CatraProto.Client.TL.Schemas.CloudChats.InputPaymentCredentialsBase credentials, string? requestedInfoId = null, string? shippingOptionId = null, long? tipAmount = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
             var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentResultBase>(
@@ -98,8 +96,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Payments.SendPaymentForm()
             {
                 FormId = formId,
-                Peer = peer,
-                MsgId = msgId,
+                Invoice = invoice,
                 Credentials = credentials,
                 RequestedInfoId = requestedInfoId,
                 ShippingOptionId = shippingOptionId,
@@ -155,23 +152,77 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentFormBase>> GetPaymentFormAsync(CatraProto.Client.MTProto.PeerId peer, int msgId, CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase? themeParams = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Payments.ExportedInvoiceBase>> ExportInvoiceAsync(CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase invoiceMedia, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
-            var peerToResolve = _client.DatabaseManager.PeerDatabase.ResolvePeer(peer);
-            if (peerToResolve is null)
-            {
-                return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentFormBase>.FromError(new PeerNotFoundError(peer.Id, peer.Type));
-            }
-            var peerResolved = peerToResolve;
-            var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentFormBase>(
+            var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Payments.ExportedInvoiceBase>(
             );
             messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
-            var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Payments.GetPaymentForm()
+            var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Payments.ExportInvoice()
             {
-                Peer = peerResolved,
-                MsgId = msgId,
-                ThemeParams = themeParams,
+                InvoiceMedia = invoiceMedia,
+            };
+
+            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+            await taskCompletionSource!;
+            return rpcResponse;
+        }
+        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> AssignAppStoreTransactionAsync(byte[] receipt, bool restore = false, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        {
+
+            var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
+            );
+            messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+            var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Payments.AssignAppStoreTransaction()
+            {
+                Receipt = receipt,
+                Restore = restore,
+            };
+
+            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+            await taskCompletionSource!;
+            return rpcResponse;
+        }
+        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> AssignPlayMarketTransactionAsync(string purchaseToken, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        {
+
+            var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
+            );
+            messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+            var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Payments.AssignPlayMarketTransaction()
+            {
+                PurchaseToken = purchaseToken,
+            };
+
+            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+            await taskCompletionSource!;
+            return rpcResponse;
+        }
+        public async Task<RpcResponse<bool>> CanPurchasePremiumAsync(CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        {
+
+            var rpcResponse = new RpcResponse<bool>(
+            );
+            messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+            var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Payments.CanPurchasePremium()
+            {
+            };
+
+            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
+            await taskCompletionSource!;
+            return rpcResponse;
+        }
+        internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> InternalRequestRecurringPaymentAsync(CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId, string recurringInitCharge, CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase invoiceMedia, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        {
+
+            var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
+            );
+            messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+            var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Payments.RequestRecurringPayment()
+            {
+                UserId = userId,
+                RecurringInitCharge = recurringInitCharge,
+                InvoiceMedia = invoiceMedia,
             };
 
             _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
@@ -200,51 +251,23 @@ namespace CatraProto.Client.TL.Requests.CloudChats
             await taskCompletionSource!;
             return rpcResponse;
         }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Payments.ValidatedRequestedInfoBase>> ValidateRequestedInfoAsync(CatraProto.Client.MTProto.PeerId peer, int msgId, CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase info, bool save = false, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>> RequestRecurringPaymentAsync(long userId, string recurringInitCharge, CatraProto.Client.TL.Schemas.CloudChats.InputMediaBase invoiceMedia, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
         {
 
-            var peerToResolve = _client.DatabaseManager.PeerDatabase.ResolvePeer(peer);
-            if (peerToResolve is null)
+            var userIdToResolve = _client.DatabaseManager.PeerDatabase.ResolveUser(userId);
+            if (userIdToResolve is null)
             {
-                return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Payments.ValidatedRequestedInfoBase>.FromError(new PeerNotFoundError(peer.Id, peer.Type));
+                return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>.FromError(new PeerNotFoundError(userId, CatraProto.Client.MTProto.PeerType.User));
             }
-            var peerResolved = peerToResolve;
-            var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Payments.ValidatedRequestedInfoBase>(
+            var userIdResolved = userIdToResolve;
+            var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
             );
             messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
-            var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Payments.ValidateRequestedInfo()
+            var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Payments.RequestRecurringPayment()
             {
-                Peer = peerResolved,
-                MsgId = msgId,
-                Info = info,
-                Save = save,
-            };
-
-            _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
-            await taskCompletionSource!;
-            return rpcResponse;
-        }
-        public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentResultBase>> SendPaymentFormAsync(long formId, CatraProto.Client.MTProto.PeerId peer, int msgId, CatraProto.Client.TL.Schemas.CloudChats.InputPaymentCredentialsBase credentials, string? requestedInfoId = null, string? shippingOptionId = null, long? tipAmount = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
-        {
-
-            var peerToResolve = _client.DatabaseManager.PeerDatabase.ResolvePeer(peer);
-            if (peerToResolve is null)
-            {
-                return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentResultBase>.FromError(new PeerNotFoundError(peer.Id, peer.Type));
-            }
-            var peerResolved = peerToResolve;
-            var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Payments.PaymentResultBase>(
-            );
-            messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
-            var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Payments.SendPaymentForm()
-            {
-                FormId = formId,
-                Peer = peerResolved,
-                MsgId = msgId,
-                Credentials = credentials,
-                RequestedInfoId = requestedInfoId,
-                ShippingOptionId = shippingOptionId,
-                TipAmount = tipAmount,
+                UserId = userIdResolved,
+                RecurringInitCharge = recurringInitCharge,
+                InvoiceMedia = invoiceMedia,
             };
 
             _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);
