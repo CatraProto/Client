@@ -293,6 +293,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
                     return;
                 }
 
+                _mtProtoState.SaltHandler.SetSalt(serverSalt.NewServerSalt);
                 if (_mtProtoState.MessageIdsHandler.SetTimeDifference(MessageIdsHandler.GetSeconds(messageId)))
                 {
                     _logger.Information("Resetting session after time changed on bad_server_salt");
@@ -300,7 +301,6 @@ namespace CatraProto.Client.Connections.MessageScheduling
                     return;
                 }
 
-                _mtProtoState.SaltHandler.SetSalt(serverSalt.NewServerSalt);
                 var count = messageItems.Count;
                 for (var i = 0; i < count; i++)
                 {
