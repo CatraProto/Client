@@ -114,7 +114,7 @@ namespace CatraProto.Client.Crypto
             {
                 var tempKey = CryptoTools.GenerateRandomBytes(32);
                 var dataWithHash = dataPaddedReversed.Concat(SHA256.HashData(tempKey.Concat(dataWithPadding).ToArray())).ToArray();
-                using var encryptor = new Aes.IgeEncryptor(tempKey, Enumerable.Repeat((byte)0, 32).ToArray());
+                using var encryptor = new AesEncryption.IgeEncryptor(tempKey, Enumerable.Repeat((byte)0, 32).ToArray());
                 var aesEncrypted = encryptor.Encrypt(dataWithHash);
                 var tempKeyXor = CryptoTools.XorBlock(tempKey, SHA256.HashData(aesEncrypted));
                 var keyAesEncrypted = tempKeyXor.Concat(aesEncrypted).ToArray();

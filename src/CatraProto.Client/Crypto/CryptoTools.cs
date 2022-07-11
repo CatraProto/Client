@@ -26,7 +26,7 @@ namespace CatraProto.Client.Crypto
 {
     internal static class CryptoTools
     {
-        private static readonly RandomNumberGenerator CryptoRandom = new RNGCryptoServiceProvider();
+        private static readonly RandomNumberGenerator CryptoRandom = RandomNumberGenerator.Create();
 
         public static long CreateRandomLong()
         {
@@ -42,6 +42,32 @@ namespace CatraProto.Client.Crypto
         {
             stream.Write(GenerateRandomBytes(minBytes));
             stream.Write(GenerateRandomBytes(divisibleBy - (int)stream.Length % divisibleBy));
+        }
+
+        public static void XorBlock(ReadOnlySpan<byte> first, ReadOnlySpan<byte> second, Span<byte> destination)
+        {
+            if (first.Length != second.Length && destination.Length == first.Length)
+            {
+                throw new ArgumentException("First byte span and second must have the same length as the destination span");
+            }
+
+            for (var i = 0; i < first.Length; i++)
+            {
+                destination[i] = (byte)(first[i] ^ second[i]);
+            }
+        }
+
+        public static void XorBlock(byte[] first, byte[] second, byte[] destination)
+        {
+            if (first.Length != second.Length && destination.Length == first.Length)
+            {
+                throw new ArgumentException("First byte array and second must have the same length as the destination array");
+            }
+
+            for (var i = 0; i < first.Length; i++)
+            {
+                destination[i] = (byte)(first[i] ^ second[i]);
+            }
         }
 
         public static byte[] XorBlock(byte[] first, byte[] second)
@@ -61,7 +87,6 @@ namespace CatraProto.Client.Crypto
             return output;
         }
 
-
         public static Tuple<byte[], byte[]> GetFastPq(ulong pq)
         {
             var first = FastFactor((long)pq);
@@ -73,7 +98,6 @@ namespace CatraProto.Client.Crypto
         }
 
         //https://github.com/UnigramDev/Unigram/blob/cd8ddb40bffd427fd9bc3fa6f2b99608e2118124/Unigram/Unigram.Api/Helpers/Utils.cs#L244
-
         public static long GreatestCommonDivisor(long a, long b)
         {
             while (a != 0 && b != 0)

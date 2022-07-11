@@ -19,7 +19,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 using System.IO;
 using System.Linq;
 using System.Numerics;
-using CatraProto.Client.Crypto.Aes;
+using CatraProto.Client.Crypto.AesEncryption;
 using CatraProto.TL;
 
 namespace CatraProto.Client.Crypto.KeyExchange

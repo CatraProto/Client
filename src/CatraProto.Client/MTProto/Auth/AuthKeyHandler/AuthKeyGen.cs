@@ -24,7 +24,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections;
 using CatraProto.Client.Crypto;
-using CatraProto.Client.Crypto.Aes;
+using CatraProto.Client.Crypto.AesEncryption;
 using CatraProto.Client.Crypto.KeyExchange;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.Client.TL.Schemas.MTProto;

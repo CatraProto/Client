@@ -24,6 +24,7 @@ using System.Linq;
 using CatraProto.Client.Connections.MessageScheduling.Enums;
 using CatraProto.Client.Connections.MessageScheduling.Items;
 using CatraProto.Client.MTProto.Rpc;
+using CatraProto.Client.MTProto.Rpc.Interfaces;
 using CatraProto.Client.MTProto.Rpc.RpcErrors;
 using CatraProto.Client.TL.Schemas.CloudChats.Auth;
 using CatraProto.Client.TL.Schemas.MTProto;
@@ -104,7 +105,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
                         var method = x.GetMessageMethod();
                         if (method is not null)
                         {
-                            if (response is RpcError)
+                            if (response is MTProto.Rpc.Interfaces.RpcError)
                             {
                                 return true;
                             }
@@ -132,7 +133,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
 
             if (GetMessageCompletion(messageId, out var messageItem))
             {
-                if (_stopInitAt == -2 && messageItem.GetProtocolInfo().initConn && executionInfo.IsTelegramRpc && response is not RpcError)
+                if (_stopInitAt == -2 && messageItem.GetProtocolInfo().initConn && executionInfo.IsTelegramRpc && response is not MTProto.Rpc.Interfaces.RpcError)
                 {
                     _stopInitAt = ((int)DateTimeOffset.UtcNow.ToUnixTimeSeconds()) + InitConnTime;
                 }

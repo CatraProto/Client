@@ -18,7 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using System.Linq;
 using System.Security.Cryptography;
-using CatraProto.Client.Crypto.Aes;
+using CatraProto.Client.Crypto.AesEncryption;
 
 namespace CatraProto.Client.Crypto
 {

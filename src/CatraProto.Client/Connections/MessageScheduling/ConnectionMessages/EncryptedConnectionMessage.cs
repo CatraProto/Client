@@ -16,6 +16,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+using System.Buffers;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -75,7 +76,9 @@ namespace CatraProto.Client.Connections.MessageScheduling.ConnectionMessages
                 MsgKey = reader.ReadBytes(16);
                 using var encryptor = AesCryptoCreator.CreateEncryptorV2(AuthKey.KeyArray, MsgKey, fromClient);
                 var encryptedBuffer = reader.ReadBytes((int)(reader.BaseStream.Length - reader.BaseStream.Position));
-                var decryptedText = encryptor.Decrypt(encryptedBuffer);
+
+                var decryptedText = ArrayPool<byte>.Shared.Rent(encryptedBuffer.Length);
+                encryptor.Decrypt(encryptedBuffer, decryptedText);
                 using (var cleanReader = new BinaryReader(decryptedText.ToMemoryStream()))
                 {
                     Salt = cleanReader.ReadInt64();
@@ -84,8 +87,10 @@ namespace CatraProto.Client.Connections.MessageScheduling.ConnectionMessages
                     SeqNo = cleanReader.ReadInt32();
                     var length = cleanReader.ReadInt32();
                     Body = cleanReader.ReadBytes(length);
-                    Padding = cleanReader.ReadBytes((int)(cleanReader.BaseStream.Length - cleanReader.BaseStream.Position));
+                    // ArrayPool might have returned an array bigger than what we requested so cleanReader.BaseStream.Length return a number bigger than the actual payload's length
+                    Padding = cleanReader.ReadBytes((int)(encryptedBuffer.Length - cleanReader.BaseStream.Position));
                 }
+                ArrayPool<byte>.Shared.Return(decryptedText, true);
             }
         }
 
@@ -130,8 +135,14 @@ namespace CatraProto.Client.Connections.MessageScheduling.ConnectionMessages
                 using var encryptor = AesCryptoCreator.CreateEncryptorV2(AuthKey.KeyArray, msgKey, true);
                 writer.Write(AuthKeyId);
                 writer.Write(msgKey);
-                writer.Write(encryptor.Encrypt(toEncryptData));
 
+                var encrypted = ArrayPool<byte>.Shared.Rent(toEncryptData.Length);
+                encryptor.Encrypt(toEncryptData, encrypted);
+
+                // ArrayPool might have returned an array bigger than what we requested and writing more than we have encrypted would invalidate the payload
+                writer.Write(encrypted, 0, toEncryptData.Length);
+                ArrayPool<byte>.Shared.Return(encrypted, true);
+                
                 var array = ((MemoryStream)writer.BaseStream).ToArray();
                 return array;
             }
