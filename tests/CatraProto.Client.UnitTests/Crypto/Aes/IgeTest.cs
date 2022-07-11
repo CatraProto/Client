@@ -1,6 +1,7 @@
 using System.Linq;
-using CatraProto.Client.Crypto.Aes;
 using Xunit;
+using CatraProto.Client.Crypto.AesEncryption;
+using System;
 
 namespace CatraProto.Client.UnitTests.Crypto.Aes
 {
@@ -38,8 +39,8 @@ namespace CatraProto.Client.UnitTests.Crypto.Aes
 		public void EncryptionTest(byte[] plainText, byte[] key, byte[] iv, byte[] expectedEncrypted)
 		{
 			var encryptor = new IgeEncryptor(key, iv);
-			var result = encryptor.Encrypt(plainText);
-			Assert.True(expectedEncrypted.SequenceEqual(result));
+            var result = encryptor.Encrypt(plainText);
+            Assert.True(expectedEncrypted.SequenceEqual(result));
 		}
 
 		[Theory]
@@ -74,7 +75,7 @@ namespace CatraProto.Client.UnitTests.Crypto.Aes
 		public void DecryptionTest(byte[] encrypted, byte[] key, byte[] iv, byte[] expectedResult)
 		{
 			var encryptor = new IgeEncryptor(key, iv);
-			var decrypted = encryptor.Decrypt(encrypted);
+            var decrypted = encryptor.Decrypt(encrypted);
 			Assert.True(expectedResult.SequenceEqual(decrypted));
 		}
 	}

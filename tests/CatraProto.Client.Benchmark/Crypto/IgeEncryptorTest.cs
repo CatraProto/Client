@@ -1,6 +1,9 @@
 using System;
+using System.Buffers;
 using BenchmarkDotNet.Attributes;
-using CatraProto.Client.Crypto.Aes;
+using CatraProto.Client.Crypto.AAA;
+using CatraProto.Client.Crypto.AesEncryption;
+using Microsoft.Diagnostics.Tracing.Parsers;
 
 namespace CatraProto.Client.Benchmark.Crypto
 {
@@ -8,8 +11,12 @@ namespace CatraProto.Client.Benchmark.Crypto
 	[MemoryDiagnoser]
 	public class IgeEncryptorTest
 	{
-		private IgeEncryptor _encryptor;
-		private byte[] _payload;
+        private const int MAX_ITER = 1;
+		private OldCryptoFuckery _encryptorOld;
+        private IgeEncryptor _encryptorPool;
+        private IgeEncryptorOneShot _encryptorOneShot;
+
+        private byte[] _payload;
 
 		[GlobalSetup]
 		public void Setup()
@@ -23,25 +30,101 @@ namespace CatraProto.Client.Benchmark.Crypto
 			random.NextBytes(iv);
 			random.NextBytes(key);
 			random.NextBytes(_payload);
-			_encryptor = new IgeEncryptor(key, iv);
-		}
+			_encryptorOld = new OldCryptoFuckery(key, iv);
+            _encryptorOneShot = new IgeEncryptorOneShot(key, iv);
+            _encryptorPool = new IgeEncryptor(key, iv);
+        }
 
-		[Benchmark]
-		public void Encrypt()
+        [Benchmark]
+		public void EncryptOld()
 		{
-			_encryptor.Encrypt(_payload);
-		}
+            for (int i = 0; i < MAX_ITER; i++)
+            {
+                _encryptorOld.Encrypt(_payload);
+            }
+        }
 		
 		[Benchmark]
-		public void Decrypt()
+		public void DecryptOld()
 		{
-			_encryptor.Decrypt(_payload);
-		}
+            for(int i = 0; i < MAX_ITER; i++)
+            {
+                _encryptorOld.Decrypt(_payload);
+            }
+        }
 
-		[GlobalCleanup]
+        /*
+        [Benchmark]
+        public void EncryptOneShot()
+        {
+            for (int i = 0; i < MAX_ITER; i++)
+            {
+                using (var memory = MemoryPool<byte>.Shared.Rent(_payload.Length))
+                {
+                    _encryptorOneShot.Transform(_payload, memory.Memory.Span, true);
+                }
+            }
+        }
+
+        [Benchmark]
+        public void DecryptOneShot()
+        {
+            for (int i = 0; i < MAX_ITER; i++)
+            {       
+                using (var memory = MemoryPool<byte>.Shared.Rent(_payload.Length))
+                {
+                    _encryptorOneShot.Transform(_payload, memory.Memory.Span, false);
+                }
+            }
+        }*/
+
+        [Benchmark]
+        public void EncryptPool()
+        {
+            for (int i = 0; i < MAX_ITER; i++)
+            {
+                _encryptorPool.Encrypt(_payload);
+            }
+        }
+
+        [Benchmark]
+        public void DecryptPool()
+        {
+            for (int i = 0; i < MAX_ITER; i++)
+            {
+                _encryptorPool.Decrypt(_payload);
+            }
+        }
+
+        [Benchmark]
+        public void EncryptPool_PoolResult()
+        {
+            for (int i = 0; i < MAX_ITER; i++)
+            {
+                var destination = ArrayPool<byte>.Shared.Rent(_payload.Length);
+                _encryptorPool.Encrypt(_payload, destination);
+                ArrayPool<byte>.Shared.Return(destination, true);
+            }
+        }
+
+        [Benchmark]
+        public void DecryptPool_PoolResult()
+        {
+            for (int i = 0; i < MAX_ITER; i++)
+            {
+                var destination = ArrayPool<byte>.Shared.Rent(_payload.Length);
+                _encryptorPool.Decrypt(_payload, destination);
+                ArrayPool<byte>.Shared.Return(destination, true);
+            }
+        }
+
+
+        [GlobalCleanup]
 		public void CleanUp()
 		{
-			_encryptor.Dispose();
+			_encryptorOld.Dispose();
+            _encryptorOneShot.Dispose();
+            _encryptorPool.Dispose();
 		}
 	}
 }
