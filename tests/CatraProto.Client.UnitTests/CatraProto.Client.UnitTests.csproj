@@ -23,11 +23,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\CatraProto.Client\CatraProto.Client.csproj" />
+      <Folder Include="Connections" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Connections" />
+      <ProjectReference Include="..\..\src\CatraProto.Client\CatraProto.Client.csproj" />
     </ItemGroup>
 
 </Project>

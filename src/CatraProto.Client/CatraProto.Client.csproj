@@ -1,15 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <LangVersion>9</LangVersion>
+        <LangVersion>10</LangVersion>
         <Nullable>enable</Nullable>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
 		<IncludeSymbols>true</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
 
 	<PropertyGroup>
 		<PackageId>CatraProto.Client</PackageId>
-		<Version>1.1</Version>
+		<Version>1.1.2</Version>
 		<Authors>Aquathing</Authors>
 		<Company>CatraProto</Company>
 		<Title>CatraProto Client</Title>
@@ -32,6 +32,7 @@
     <ItemGroup>
         <InternalsVisibleTo Include="CatraProto.Client.UnitTests" />
         <InternalsVisibleTo Include="CatraProto.Client.Benchmark" />
-        <ProjectReference Include="..\CatraProto.TL\CatraProto.TL.csproj" />
-    </ItemGroup>
+		<InternalsVisibleTo Include="CatraProto.Start" />
+		<ProjectReference Include="..\CatraProto.TL\CatraProto.TL.csproj" />
+	</ItemGroup>
 </Project>
