@@ -129,6 +129,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
             if (!msgComputed.SequenceEqual(connectionMessage.MsgKey!))
             {
                 _logger.Warning("DISCARDING MESSAGE DUE TO MSG_KEY MISMATCH {ComputeKey} != {ReceivedKey}", msgComputed, connectionMessage.MsgKey);
+                ResetSession();
                 return false;
             }
 
