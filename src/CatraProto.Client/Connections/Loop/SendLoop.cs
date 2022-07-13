@@ -121,7 +121,7 @@ namespace CatraProto.Client.Connections.Loop
             {
                 var mustWrap = false;
                 _logger.Verbose("Pulling {Count} encrypted messages out of queue to send...", count);
-                for (var i = 0; i < count; i++)
+                for (var i = 0; i < 1; i++)
                 {
                     if (!_messagesHandler.MessagesQueue.TryGetMessage(true, out var messageItem))
                     {
@@ -145,9 +145,10 @@ namespace CatraProto.Client.Connections.Loop
                         break;
                     }
 
-                    if (messageItem.Body is IMethod method && !LoginManager.CanBeUnauthenticated(method) && _mtProtoState.Client.LoginManager.GetCurrentState() is not LoginState.LoggedIn)
+                    var currentState = _mtProtoState.Client.LoginManager.GetCurrentState();
+                    if (messageItem.Body is IMethod method && !LoginManager.CanBeUnauthenticated(method) && currentState is not LoginState.LoggedIn)
                     {
-                        _logger.Information("Postponing {Body} because we are not authorized", method);
+                        _logger.Information("Postponing {Body} because we are not authorized, current state is {CurrentState}", method, currentState);
                         continue;
                     }
 
@@ -225,6 +226,7 @@ namespace CatraProto.Client.Connections.Loop
                     }
                     else
                     {
+
                         return;
                     }
 
@@ -363,7 +365,7 @@ namespace CatraProto.Client.Connections.Loop
 
             if (fineList.Count == 0)
             {
-                _logger.Verbose("No message made it into the container");
+                _logger.Information("No message made it into the container");
                 containerizedItems = null;
                 container = null;
                 return false;

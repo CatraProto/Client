@@ -17,13 +17,21 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 using System;
+using System.Buffers;
+using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.ApiManagers;
+using CatraProto.Client.ApiManagers.Files;
+using CatraProto.Client.ApiManagers.Files.Upload;
 using CatraProto.Client.Database;
+using CatraProto.Client.MTProto.Rpc;
 using CatraProto.Client.MTProto.Session;
 using CatraProto.Client.MTProto.Session.Models;
 using CatraProto.Client.MTProto.Settings;
+using CatraProto.Client.TL.Schemas.CloudChats;
+using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.Client.Updates;
 using CatraProto.Client.Updates.Interfaces;
 using CatraProto.Client.Utilities;
@@ -32,6 +40,19 @@ using Serilog.Core;
 
 namespace CatraProto.Client
 {
+    public class CurrentPart
+    {
+        public int Part { get; }
+        public long Start { get; }
+        public long End { get; }
+
+        public CurrentPart(int part, long start, long end)
+        {
+            Part = part;
+            Start = start;
+            End = end;
+        }
+    }
     public class TelegramClient : IAsyncDisposable
     {
         public Api Api
@@ -106,7 +127,6 @@ namespace CatraProto.Client
                 await ClientSession.ConnectionPool.SetAccountConnectionAsync(newConnection.Connection, true);
             }
 
-            await UpdatesReceiver.ForceGetDifferenceAllAsync(false);
             LoginManager.SendFirstState();
             return ClientState.Working;
         }
@@ -149,6 +169,18 @@ namespace CatraProto.Client
         public ILogger GetLogger(string contextName)
         {
             return _logger.ForContext(Constants.SourceContextPropertyName, contextName);
+        }
+
+        public async Task<RpcResponse<InputFileBase>> UploadFileAsync(Stream stream, FileProgressCallback callback, CancellationToken token = default)
+        {
+            var tryCreate = FileUploadSession.Create(this, stream, callback, _logger);
+            if (tryCreate.RpcCallFailed)
+            {
+                return RpcResponse<InputFileBase>.FromError(tryCreate.Error);
+            }
+
+            using var session = tryCreate.Response;
+            return await session.UploadFileAsync(token);
         }
 
         public async ValueTask DisposeAsync()

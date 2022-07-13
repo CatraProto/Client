@@ -16,6 +16,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 using CatraProto.Client.Crypto;
@@ -498,17 +499,22 @@ namespace CatraProto.Client.ApiManagers
         {
             lock (_stateMutex)
             {
+                _logger.Information("Set new currentState {State}", newState);
                 if (_currentState >= LoginState.LoggedOut)
                 {
                     return;
                 }
 
                 _currentState = newState;
-
+                _client.UpdatesReceiver.ForceGetDifferenceAllAsync(false);
                 // Won't save other states because they might not be valid and most of them require AwaitingLogin to be sent, if the client saves at the wrong time things could go wrong
                 if (_currentState >= LoginState.LoggedOut)
                 {
                     _sessionData.Authorization.SetAuthorized(_currentState, null, null);
+                }
+
+                if(_currentState >= LoginState.LoggedIn)
+                {
                     _ = _client.ForceSaveAsync();
                 }
 
