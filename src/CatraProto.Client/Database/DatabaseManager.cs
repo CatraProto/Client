@@ -60,40 +60,42 @@ namespace CatraProto.Client.Database
 
         public void UpdateChats(IList<ChatBase>? chats = null, IList<UserBase>? users = null)
         {
-            using var transaction = _sqliteConnection.BeginTransaction(System.Data.IsolationLevel.Serializable);
-            if (chats is not null)
+            lock (_mutex)
             {
-                foreach (var chat in chats)
+                using var transaction = _sqliteConnection.BeginTransaction(System.Data.IsolationLevel.Serializable);
+                if (chats is not null)
                 {
-                    if (chat is Channel or ChannelForbidden)
+                    foreach (var chat in chats)
                     {
-                        PeerDatabase.UpdatePeerObject(chat, transaction);
-                        if (Updates.UpdatesTools.IsInChat(chat))
+                        if (chat is Channel or ChannelForbidden)
                         {
-                            _client.UpdatesReceiver.CreateProcessor(chat.Id, true);
+                            PeerDatabase.UpdatePeerObject(chat, transaction);
+                            if (Updates.UpdatesTools.IsInChat(chat))
+                            {
+                                _client.UpdatesReceiver.CreateProcessor(chat.Id, true);
+                            }
+                            else
+                            {
+                                _client.UpdatesReceiver.CloseProcessor(chat.Id);
+                            }
                         }
                         else
                         {
-                            _client.UpdatesReceiver.CloseProcessor(chat.Id);
+                            PeerDatabase.UpdatePeerObject(chat, transaction);
                         }
                     }
-                    else
+                }
+
+                if (users is not null)
+                {
+                    foreach (var user in users)
                     {
-                        PeerDatabase.UpdatePeerObject(chat, transaction);
+                        PeerDatabase.UpdatePeerObject(user, transaction);
                     }
                 }
+
+                transaction.Commit();
             }
-
-            if (users is not null)
-            {
-                foreach (var user in users)
-                {
-                    PeerDatabase.UpdatePeerObject(user, transaction);
-                }
-            }
-
-            transaction.Commit();
-
         }
 
         public void Dispose()
