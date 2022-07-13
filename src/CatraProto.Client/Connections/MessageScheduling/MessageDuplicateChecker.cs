@@ -30,7 +30,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
 
     internal class MessageDuplicateChecker
     {
-        private const int MaxCapacity = 200;
+        private const int MaxCapacity = 1000;
         private readonly HashSet<long> _hashSet = new HashSet<long>();
         private long _currentMax;
         private long _currentMin;
