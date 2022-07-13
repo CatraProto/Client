@@ -48,6 +48,11 @@ namespace CatraProto.Client.MTProto
             }
         }
 
+        public static long FromApiToTd(PeerId peerId)
+        {
+            return FromApiToTd(peerId.Id, peerId.Type);
+        }
+
         public static PeerId FromTdToApi(long id)
         {
             if (id < 0)
