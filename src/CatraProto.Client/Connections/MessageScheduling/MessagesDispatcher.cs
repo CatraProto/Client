@@ -195,7 +195,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
             }
             else if (messageValidity is MessageValidity.TooOld)
             {
-                _logger.Information("Resetting session because message id {MessageId} is too old");
+                _logger.Information("Resetting session because message id {MessageId} is too old", connectionMessage.MessageId);
                 ResetSession();
                 return false;
             }
@@ -214,6 +214,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
             }
             else
             {
+                ResetSession();
                 _logger.Error("Received seqno {RSeqno} does not equal computed seqno {CSeqno} ({Obj})", connectionMessage.SeqNo, shouldSeqno, deserialized);
                 return false;
             }
