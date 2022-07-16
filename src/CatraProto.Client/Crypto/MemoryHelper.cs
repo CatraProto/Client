@@ -16,18 +16,10 @@ You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-using System;
-using System.IO;
+using Microsoft.IO;
+namespace CatraProto.Client.Crypto;
 
-namespace CatraProto.Client.Connections.MessageScheduling.ConnectionMessages.Interfaces
+internal static class MemoryHelper
 {
-    internal interface IConnectionMessage : IDisposable
-    {
-        public long AuthKeyId { get; }
-        public long MessageId { get; }
-        public MemoryStream Body { get; }
-
-        public void Import(MemoryStream message);
-        public MemoryStream Export();
-    }
+    public static RecyclableMemoryStreamManager RecyclableMemoryStreamManager { get; } = new RecyclableMemoryStreamManager();
 }

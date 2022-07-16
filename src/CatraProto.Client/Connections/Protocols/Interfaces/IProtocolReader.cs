@@ -16,6 +16,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,6 +24,6 @@ namespace CatraProto.Client.Connections.Protocols.Interfaces
 {
     internal interface IProtocolReader
     {
-        public Task<byte[]> ReadMessageAsync(CancellationToken token = default);
+        public Task<MemoryStream> ReadMessageAsync(CancellationToken token = default);
     }
 }

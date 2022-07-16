@@ -135,9 +135,9 @@ namespace CatraProto.Client.Connections
             }
         }
 
-        public void SignalNewMessage()
+        public void SignalNewMessage(bool onlyIfSuspended = true)
         {
-            _loopsHandler.WakeUpWriteLoop();
+            _loopsHandler.WakeUpWriteLoop(onlyIfSuspended);
         }
 
         public void RegenKey()

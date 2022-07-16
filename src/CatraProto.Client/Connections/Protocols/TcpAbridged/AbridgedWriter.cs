@@ -23,6 +23,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections.Protocols.Interfaces;
+using CatraProto.Client.Crypto;
 using CatraProto.TL;
 using Serilog;
 
@@ -39,10 +40,11 @@ namespace CatraProto.Client.Connections.Protocols.TcpAbridged
             _stream = stream;
         }
 
-        private MemoryStream SetProtocolHeaders(MemoryStream stream)
+        private Stream SetProtocolHeaders(Stream stream)
         {
             var streamLength = stream.Length / 4;
-            using var streamWriter = new BinaryWriter(new MemoryStream(), Encoding.UTF8, true);
+            var outputStream = MemoryHelper.RecyclableMemoryStreamManager.GetStream();
+            using var streamWriter = new BinaryWriter(outputStream, Encoding.UTF8, true);
             if (streamLength >= 127)
             {
                 streamWriter.Write((byte)127);
@@ -55,19 +57,17 @@ namespace CatraProto.Client.Connections.Protocols.TcpAbridged
                 streamWriter.Write((byte)streamLength);
             }
 
-            streamWriter.Write(stream.ToArray());
-            return (MemoryStream)streamWriter.BaseStream;
+            stream.CopyTo(outputStream);
+            outputStream.Seek(0, SeekOrigin.Begin);
+            return outputStream;
         }
 
-        public async Task<bool> SendAsync(byte[] message, CancellationToken cancellationToken = default)
+        public async ValueTask<bool> SendAsync(Stream message, CancellationToken cancellationToken = default)
         {
             try
             {
-                // ReSharper disable once UseAwaitUsing
-                using var toStream = message.ToMemoryStream();
-                // ReSharper disable once UseAwaitUsing
-                using var headedMessage = SetProtocolHeaders(toStream);
-                await _stream.WriteAsync(headedMessage.ToArray(), cancellationToken);
+                using var headedMessage = SetProtocolHeaders(message);
+                await headedMessage.CopyToAsync(_stream, cancellationToken);
             }
             catch (IOException)
             {

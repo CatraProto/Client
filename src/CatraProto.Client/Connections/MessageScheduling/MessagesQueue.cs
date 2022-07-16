@@ -62,18 +62,21 @@ namespace CatraProto.Client.Connections.MessageScheduling
 
         public void PutInQueue(MessageItem item, bool wakeUpLoop)
         {
+            int count;
             if (item.MessageSendingOptions.IsEncrypted)
             {
+                count = _concurrentQueue.Count;
                 _concurrentQueue.Enqueue(item);
             }
             else
             {
+                count = _unencryptedQueue.Count;
                 _unencryptedQueue.Enqueue(item);
             }
 
             if (wakeUpLoop)
             {
-                _messagesHandler.Connection.SignalNewMessage();
+                _messagesHandler.Connection.SignalNewMessage(count > 1);
             }
         }
 

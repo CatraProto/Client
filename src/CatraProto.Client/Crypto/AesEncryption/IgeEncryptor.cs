@@ -19,7 +19,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 using System;
 using System.Buffers;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography;
 
 namespace CatraProto.Client.Crypto.AesEncryption
@@ -39,21 +41,21 @@ namespace CatraProto.Client.Crypto.AesEncryption
             _iv = iv;
         }
 
-
-        private void Process(byte[] from, byte[] destination, bool encrypt)
+        private void Process(Stream from, Stream destination, bool encrypt)
         {
             GetParameters(encrypt, out var transformer, out var oldCleanBlock, out var oldProcessedBlock);
+            var length = from.Length - from.Position;
             var xoredToEncrypt = ArrayPool<byte>.Shared.Rent(16);
             var cleanBlock = ArrayPool<byte>.Shared.Rent(16);
             var blockResult = ArrayPool<byte>.Shared.Rent(16);
 
-            for (var i = 0; i < from.Length; i += 16)
+            for (var i = 0; i < length; i += 16)
             {
-                Array.Copy(from, i, cleanBlock, 0, 16);
+                from.Read(cleanBlock, 0, 16);   
                 CryptoTools.XorBlock(cleanBlock, oldProcessedBlock, xoredToEncrypt);
                 transformer.TransformBlock(xoredToEncrypt, 0, 16, blockResult, 0);
                 CryptoTools.XorBlock(blockResult, oldCleanBlock, oldProcessedBlock);
-                Array.Copy(oldProcessedBlock, 0, destination, i, 16);
+                destination.Write(oldProcessedBlock, 0, 16);
                 Array.Copy(cleanBlock, oldCleanBlock, 16);
             }
             transformer.Dispose();
@@ -99,10 +101,28 @@ namespace CatraProto.Client.Crypto.AesEncryption
 
         public void Encrypt(byte[] plainText, byte[] destination)
         {
-            Process(plainText, destination, true);
+            using var from = MemoryHelper.RecyclableMemoryStreamManager.GetStream(plainText);
+            using var destinationStream = MemoryHelper.RecyclableMemoryStreamManager.GetStream();
+            Encrypt(from, destinationStream);
+            destinationStream.Seek(0, SeekOrigin.Begin);
+            destinationStream.Read(destination, 0, destination.Length);
         }
 
         public void Decrypt(byte[] encryptedText, byte[] destination)
+        {
+            using var from = MemoryHelper.RecyclableMemoryStreamManager.GetStream(encryptedText);
+            using var destinationStream = MemoryHelper.RecyclableMemoryStreamManager.GetStream();
+            Decrypt(from, destinationStream);
+            destinationStream.Seek(0, SeekOrigin.Begin);
+            destinationStream.Read(destination, 0, destination.Length);
+        }
+
+        public void Encrypt(Stream plainText, Stream destination)
+        {
+            Process(plainText, destination, true);
+        }
+
+        public void Decrypt(Stream encryptedText, Stream destination)
         {
             Process(encryptedText, destination, false);
         }

@@ -29,8 +29,10 @@ using CatraProto.Client.Async.Loops.Interfaces;
 using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.Connections.MessageScheduling.ConnectionMessages;
 using CatraProto.Client.Connections.MessageScheduling.Items;
+using CatraProto.Client.Crypto;
 using CatraProto.Client.MTProto.Rpc;
 using CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors;
+using CatraProto.Client.TL;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.Client.TL.Schemas.CloudChats;
 using CatraProto.Client.TL.Schemas.CloudChats.Auth;
@@ -103,139 +105,153 @@ namespace CatraProto.Client.Connections.Loop
             }
         }
 
-
         private async Task EncryptedTickAsync(CancellationToken stoppingToken)
         {
+            var addBack = new Lazy<List<MessageItem>>(() => new List<MessageItem>(1));
             var encryptedList = new Lazy<List<MessageItem>>(() => new List<MessageItem>(1));
-            var getAcks = _mtProtoState.Connection.MessagesHandler.MessagesTrackers.AcknowledgementHandler.GetAckMessages();
 
-            foreach (var x in getAcks)
-            {
-                x.BindTo(_connection.MessagesHandler);
-                encryptedList.Value.Add(x);
-            }
-
-            var count = _messagesHandler.MessagesQueue.GetCount(true);
             var totalSent = 0;
-            if (count > 0)
+            var mustWrap = false;
+            while (_messagesHandler.MessagesQueue.TryGetMessage(true, out var messageItem))
             {
-                var mustWrap = false;
-                _logger.Verbose("Pulling {Count} encrypted messages out of queue to send...", count);
-                for (var i = 0; i < 1; i++)
+                _logger.Information("Pulled out from queue message {Message}", messageItem.Body);
+                if (stoppingToken.IsCancellationRequested)
                 {
-                    if (!_messagesHandler.MessagesQueue.TryGetMessage(true, out var messageItem))
+                    return;
+                }
+
+                if (messageItem.CancellationToken.IsCancellationRequested)
+                {
+                    continue;
+                }
+
+                if (messageItem.Body is MsgsStateReq)
+                {
+                    encryptedList.Value.Add(messageItem);
+                    break;
+                }
+
+                var currentState = _mtProtoState.Client.LoginManager.GetCurrentState();
+                if (messageItem.Body is IMethod method && !LoginManager.CanBeUnauthenticated(method) && currentState is not LoginState.LoggedIn)
+                {
+                    //TODO: fix piece of shit postponing by adding a list at the end
+                    _logger.Information("Postponing {Body} because we are not authorized, current state is {CurrentState}", method, currentState);
+                    addBack.Value.Add(messageItem);
+                    continue;
+                }
+
+                if (_mtProtoState.KeysHandler.TemporaryAuthKey.CanBeUsed())
+                {
+                    mustWrap = _messagesHandler.MessagesTrackers.MessageCompletionTracker.MustInitConnection();
+                    encryptedList.Value.Add(messageItem);
+                }
+                else
+                {
+                    //These messages will only be sent when TemporaryAuthKey.CanBeUsed is false because for it to be true the connection needs to be Initialized
+                    //This way, we're only gonna send this message
+                    if (messageItem.Body is BindTempAuthKey)
                     {
-                        _logger.Error("RACE CONDITION");
+                        _messagesHandler.MessagesTrackers.MessageCompletionTracker.ResetInitConnection();
+                        encryptedList.Value.Add(messageItem);
                         break;
                     }
 
-                    if (stoppingToken.IsCancellationRequested)
+                    //Even if we check afterwards, it's better to check here because we'll avoid allocating a List
+                    _logger.Verbose("Skipping {Message} because authorization key is not ready (while dequeuing)", messageItem.Body);
+
+                    //Not waking up the loop because it's going to be woken up by the authorization key generation.
+                    addBack.Value.Add(messageItem);
+                }
+            }
+
+            if (addBack.IsValueCreated)
+            {
+                foreach(var item in addBack.Value)
+                {
+                    item.SetToSend(wakeUpLoop: false, canDelete: true);
+                }
+            }
+
+            if (encryptedList.IsValueCreated && encryptedList.Value.Count > 0)
+            {
+                IObject upperMost;
+                MemoryStream? msgSerialization = null;
+                List<MessageItem> finalItems;
+                List<MessageItem>? containerizedItems = null;
+                var seqBef = _mtProtoState.SeqnoHandler.ContentRelatedSent;
+
+                if (encryptedList.Value.Count > 1 && GetContainer(encryptedList.Value, mustWrap, out containerizedItems, out msgSerialization))
+                {
+                    if (!_mtProtoState.KeysHandler.TemporaryAuthKey.CanBeUsed())
                     {
+                        //After generating the container we have increased the seqno number, but these messages aren't going to be sent so we need to rollback the changes
+                        _mtProtoState.SeqnoHandler.ContentRelatedSent = seqBef;
+
+                        _logger.Verbose("Postponing container of {MessageCount} because the authorization key is not ready", containerizedItems.Count);
+                        //Not waking up the loop because it's going to be woken up by the authorization key generation.
+                        containerizedItems.SetToSend(false);
                         return;
                     }
 
-                    if (messageItem.CancellationToken.IsCancellationRequested)
+                    _logger.Information("Sending {Count} messages inside of a container", containerizedItems.Count);
+                    finalItems = containerizedItems;
+                    upperMost = new MsgContainer();
+                    totalSent += containerizedItems.Count;
+                }
+                else
+                {
+                    MessageItem message;
+                    if (containerizedItems is not null && msgSerialization is not null)
                     {
-                        continue;
-                    }
-
-                    if (messageItem.Body is MsgsStateReq)
-                    {
-                        encryptedList.Value.Add(messageItem);
-                        break;
-                    }
-
-                    var currentState = _mtProtoState.Client.LoginManager.GetCurrentState();
-                    if (messageItem.Body is IMethod method && !LoginManager.CanBeUnauthenticated(method) && currentState is not LoginState.LoggedIn)
-                    {
-                        _logger.Information("Postponing {Body} because we are not authorized, current state is {CurrentState}", method, currentState);
-                        continue;
-                    }
-
-                    if (_mtProtoState.KeysHandler.TemporaryAuthKey.CanBeUsed())
-                    {
-                        mustWrap = _messagesHandler.MessagesTrackers.MessageCompletionTracker.MustInitConnection();
-                        encryptedList.Value.Add(messageItem);
+                        message = containerizedItems[0];
+                        finalItems = new List<MessageItem>(1) { message };
                     }
                     else
                     {
-                        //These messages will only be sent when TemporaryAuthKey.CanBeUsed is false because for it to be true the connection needs to be Initialized
-                        //This way, we're only gonna send this message
-                        if (messageItem.Body is BindTempAuthKey)
+                        message = encryptedList.Value[0];
+                        finalItems = encryptedList.Value;
+                        if (!TrySerialize(message, mustWrap, out msgSerialization))
                         {
-                            _messagesHandler.MessagesTrackers.MessageCompletionTracker.ResetInitConnection();
-                            encryptedList.Value.Add(messageItem);
-                            break;
+                            return;
                         }
-
-                        //Even if we check afterwards, it's better to check here because we'll avoid allocating a List
-                        _logger.Verbose("Skipping {Message} because authorization key is not ready (while dequeuing)", messageItem.Body);
+                    }
+                    
+                    if (!_mtProtoState.KeysHandler.TemporaryAuthKey.CanBeUsed() && message.Body is not BindTempAuthKey && message.Body is not MsgsAck)
+                    {
+                        _logger.Verbose("Postponing {Message} because the authorization key is not ready", message.Body);
 
                         //Not waking up the loop because it's going to be woken up by the authorization key generation.
-                        messageItem.SetToSend(wakeUpLoop: false, canDelete: true);
-                    }
-                }
-
-                if (encryptedList.IsValueCreated)
-                {
-                    IObject upperMost;
-                    byte[]? msgSerialization;
-                    List<MessageItem> finalItems;
-                    var seqBef = _mtProtoState.SeqnoHandler.ContentRelatedSent;
-
-                    if (encryptedList.Value.Count == 1)
-                    {
-                        var message = encryptedList.Value[0];
-                        if (TrySerialize(message, mustWrap, out msgSerialization))
-                        {
-                            if (!_mtProtoState.KeysHandler.TemporaryAuthKey.CanBeUsed() && message.Body is not BindTempAuthKey && message.Body is not MsgsAck)
-                            {
-                                _logger.Verbose("Postponing {Message} because the authorization key is not ready", message.Body);
-
-                                //Not waking up the loop because it's going to be woken up by the authorization key generation.
-                                message.SetToSend(wakeUpLoop: false, canDelete: true);
-                                return;
-                            }
-
-                            finalItems = encryptedList.Value;
-                            upperMost = message.Body;
-                            totalSent++;
-                        }
-                        else
-                        {
-                            return;
-                        }
-                    }
-                    else if (GetContainer(encryptedList.Value, mustWrap, out var containerizedItems, out msgSerialization))
-                    {
-                        if (!_mtProtoState.KeysHandler.TemporaryAuthKey.CanBeUsed())
-                        {
-                            //After generating the container we have increased the seqno number, but these messages aren't going to be sent so we need to rollback the changes
-                            _mtProtoState.SeqnoHandler.ContentRelatedSent = seqBef;
-
-                            _logger.Verbose("Postponing container of {MessageCount} because the authorization key is not ready", containerizedItems.Count);
-                            //Not waking up the loop because it's going to be woken up by the authorization key generation.
-                            containerizedItems.SetToSend(false);
-                            return;
-                        }
-
-                        _logger.Information("Sending {Count} messages inside of a container", containerizedItems.Count);
-                        finalItems = containerizedItems;
-                        upperMost = new MsgContainer();
-                        totalSent += containerizedItems.Count;
-                    }
-                    else
-                    {
-
+                        message.SetToSend(wakeUpLoop: false, canDelete: true);
                         return;
                     }
 
-                    await SendEncryptedAsync(upperMost, finalItems, msgSerialization);
+                    upperMost = message.Body;
+                    totalSent++;
                 }
 
-                _logger.Information("Sent {Count} messages", totalSent);
+                var getAcks = _mtProtoState.Connection.MessagesHandler.MessagesTrackers.AcknowledgementHandler.GetAckMessages();
+                foreach (var acks in getAcks)
+                {
+                    _logger.Information("Sending acknowledgment of {Total} messages", ((MsgsAck)acks.Body).MsgIds.Count);
+                    if (TrySerialize(acks, false, out var serialized))
+                    {
+                        totalSent++;
+                        await SendEncryptedAsync(acks.Body, new List<MessageItem>(1) { acks }, serialized);
+                        serialized.Dispose();
+                    }
+                    else
+                    {
+                        _logger.Error("Failed to serialized msg_ack");
+                    }
+                }
+
+                await SendEncryptedAsync(upperMost, finalItems, msgSerialization);
+                msgSerialization.Dispose();
             }
+
+            _logger.Information("Sent {Count} messages", totalSent);
         }
+
 
         public async Task UnencryptedTickAsync(CancellationToken stoppingToken)
         {
@@ -269,7 +285,7 @@ namespace CatraProto.Client.Connections.Loop
             }
         }
 
-        public async Task SendEncryptedAsync(IObject upperMost, IList<MessageItem> messages, byte[] payload)
+        public async ValueTask SendEncryptedAsync(IObject upperMost, IList<MessageItem> messages, MemoryStream payload)
         {
             var authKey = _mtProtoState.KeysHandler.TemporaryAuthKey.GetCachedKey();
             var sessionId = _mtProtoState.SessionIdHandler.GetSessionId(out _);
@@ -285,7 +301,8 @@ namespace CatraProto.Client.Connections.Loop
 
             var encryptedMsg = new EncryptedConnectionMessage(authKey, messageId, getSalt, sessionId, seqno, payload);
             messages.SetSent(_connection.MessagesDispatcher.GetExecInfo(), encryptedMsg.MessageId, seqno);
-            await _connection.Protocol.Writer.SendAsync(encryptedMsg.Export());
+            using var exportedMessage = encryptedMsg.Export();
+            await _connection.Protocol.Writer.SendAsync(exportedMessage);
         }
 
         public async Task SendUnencryptedAsync(MessageItem messageItem, CancellationToken token)
@@ -293,20 +310,20 @@ namespace CatraProto.Client.Connections.Loop
             if (TrySerialize(messageItem, false, out var serializedBody))
             {
                 var messageId = _connection.MtProtoState.MessageIdsHandler.ComputeMessageId();
-                var unencryptedMessage = new UnencryptedConnectionMessage(messageId, serializedBody);
+                using var unencryptedMessage = new UnencryptedConnectionMessage(messageId, serializedBody);
                 messageItem.SetProtocolInfo(0, 0);
                 messageItem.SetSent(_connection.MessagesDispatcher.GetExecInfo());
-                var unencryptedBody = unencryptedMessage.Export();
+                using var unencryptedBody = unencryptedMessage.Export();
                 await _connection.Protocol.Writer.SendAsync(unencryptedBody, token);
                 _logger.Verbose("Sent unencrypted message");
             }
         }
 
-        public bool TrySerialize(MessageItem item, bool mustWrap, [MaybeNullWhen(false)] out byte[] serialized)
+        public bool TrySerialize(MessageItem item, bool mustWrap, [MaybeNullWhen(false)] out MemoryStream serialized)
         {
+            WriteResult trySer;
             var body = item.Body;
             _logger.Verbose("Trying to serialize {Type}", body);
-            WriteResult trySer;
             if (mustWrap && body is not Ping and not GetFutureSalts and not MsgsStateReq and not Pong and not MsgsAck)
             {
                 var clientSettings = _mtProtoState.Client.ClientSession.Settings;
@@ -323,12 +340,12 @@ namespace CatraProto.Client.Connections.Loop
                     Query = body
                 };
                 var invokeWithLayer = new InvokeWithLayer(MergedProvider.LayerId, initConnection);
-                trySer = invokeWithLayer.ToArray(MergedProvider.Singleton, out serialized);
+                trySer = invokeWithLayer.ToRecyclableStream(MergedProvider.Singleton, out serialized);
                 item.SetProtocolInfo(null, null, true, false);
             }
             else
             {
-                trySer = body.ToArray(MergedProvider.Singleton, out serialized);
+                trySer = body.ToRecyclableStream(MergedProvider.Singleton, out serialized);
             }
 
             if (trySer.IsError)
@@ -338,42 +355,49 @@ namespace CatraProto.Client.Connections.Loop
                 return false;
             }
 
+            if(serialized is null)
+            {
+                //Not necessary as we already check for the result of tryRes, but it's here to suppress the warning
+                return false;
+            }
+
             return true;
         }
 
-        public bool GetContainer(List<MessageItem> messageItems, bool mustWrap, [MaybeNullWhen(false)] out List<MessageItem> containerizedItems, [MaybeNullWhen(false)] out byte[] container)
+        public bool GetContainer(List<MessageItem> messageItems, bool mustWrap, out List<MessageItem> containerizedItems, out MemoryStream payload)
         {
             var currentBytes = 0;
             var currentMessagesCount = 0;
-            var fineList = new List<Tuple<MessageItem, byte[]>>();
-            foreach (var messageItem in messageItems)
+            var fineList = new List<Tuple<MessageItem, MemoryStream>>();
+            for (var i = 0; i < messageItems.Count; i++)
             {
+                var messageItem = messageItems[i];
                 if (TrySerialize(messageItem, mustWrap, out var serialized))
                 {
                     if (currentBytes + (serialized.Length + 8 + 4 + 4) > ContainerBytesLimit || currentMessagesCount > ContainerMessagesLimit)
                     {
+                        if(i == messageItems.Count - 1)
+                        {
+                            _logger.Information("Returning single message {Body} otherwise no message made it into the container", messageItem.Body);
+                            containerizedItems = new List<MessageItem>(1) { messageItem };
+                            payload = serialized;
+                            return false;
+                        }
+
                         _logger.Information("Postponing {Message} as container size would be too big", messageItem.Body);
                         messageItem.SetToSend();
                         continue;
                     }
 
                     currentMessagesCount++;
-                    currentBytes = serialized.Length + 8 + 4 + 4;
+                    currentBytes = (int)serialized.Length + 8 + 4 + 4;
                     fineList.Add(Tuple.Create(messageItem, serialized));
                 }
             }
 
-            if (fineList.Count == 0)
-            {
-                _logger.Information("No message made it into the container");
-                containerizedItems = null;
-                container = null;
-                return false;
-            }
-
             containerizedItems = fineList.Select(x => x.Item1).ToList();
-
-            using var writer = new Writer(MergedProvider.Singleton, new MemoryStream());
+            var reusableStream = MemoryHelper.RecyclableMemoryStreamManager.GetStream();
+            using var writer = new Writer(MergedProvider.Singleton, reusableStream, true);
             writer.WriteInt32(MsgContainer.ConstructorId);
             writer.WriteInt32(containerizedItems.Count);
             foreach (var item in fineList)
@@ -384,11 +408,12 @@ namespace CatraProto.Client.Connections.Loop
                 messageItem.SetProtocolInfo(messageId, seqno);
                 writer.WriteInt64(messageId);
                 writer.WriteInt32(seqno);
-                writer.WriteInt32(item.Item2.Length);
-                writer.Stream.Write(item.Item2);
+                writer.WriteInt32((int)item.Item2.Length);
+                item.Item2.CopyTo(writer.Stream);
+                item.Item2.Dispose();
             }
 
-            container = ((MemoryStream)writer.Stream).ToArray();
+            payload = reusableStream;
             return true;
         }
 

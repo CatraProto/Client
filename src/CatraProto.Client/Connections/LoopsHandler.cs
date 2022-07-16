@@ -140,11 +140,12 @@ namespace CatraProto.Client.Connections
             }
         }
 
-        public void WakeUpWriteLoop()
+        public void WakeUpWriteLoop(bool onlyIfSuspended)
         {
             lock (_mutex)
             {
-                if (_writeLoop.Controller?.GetCurrentState() is ResumableLoopState.Running or ResumableLoopState.Suspended)
+                var getState = _writeLoop.Controller?.GetCurrentState();
+                if (onlyIfSuspended && getState is ResumableLoopState.Suspended || !onlyIfSuspended && getState is ResumableLoopState.Running or ResumableLoopState.Suspended)
                 {
                     _writeLoop.Controller?.SendSignal(ResumableSignalState.Resume, out _);
                     _writeLoop.Controller?.SendSignal(ResumableSignalState.Suspend, out _);

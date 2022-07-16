@@ -17,11 +17,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 using System;
+using System.Buffers;
+using System.IO;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections.Exceptions;
 using CatraProto.Client.Connections.Protocols.Interfaces;
+using CatraProto.Client.Crypto;
 using CatraProto.Client.Extensions;
 using Serilog;
 
@@ -38,7 +41,7 @@ namespace CatraProto.Client.Connections.Protocols.TcpAbridged
             _networkStream = stream;
         }
 
-        private async Task<int> GetMessageLength(int firstByte, CancellationToken token = default)
+        private async ValueTask<int> GetMessageLength(int firstByte, CancellationToken token = default)
         {
             var length = firstByte;
             if (length >= 0x7f)
@@ -51,13 +54,20 @@ namespace CatraProto.Client.Connections.Protocols.TcpAbridged
             return length;
         }
 
-        public async Task<byte[]> ReadMessageAsync(CancellationToken token = default)
+        public async Task<MemoryStream> ReadMessageAsync(CancellationToken token = default)
         {
             try
             {
                 var firstByte = await _networkStream.ReadByteAsync(token);
                 var length = await GetMessageLength(firstByte, token);
-                return await _networkStream.ReadBytesAsync(length, cancellationToken: token);
+
+                // Cannot use CopyTo here because it doesn't allow to specify the maximum length
+                var buffer = ArrayPool<byte>.Shared.Rent(length);
+                await _networkStream.ReadBytesAsync(buffer, length, token);
+                var returnStream = MemoryHelper.RecyclableMemoryStreamManager.GetStream(buffer.AsSpan(0, length));
+                ArrayPool<byte>.Shared.Return(buffer);
+
+                return returnStream;
             }
             catch (ObjectDisposedException e) when (e.ObjectName == "System.Net.Sockets.NetworkStream")
             {

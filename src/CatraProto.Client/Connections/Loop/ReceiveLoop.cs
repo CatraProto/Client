@@ -73,8 +73,9 @@ namespace CatraProto.Client.Connections.Loop
 
                 try
                 {
+                    // Already disposed when disposing reader
                     var message = await _connection.Protocol.Reader.ReadMessageAsync(cancellationToken);
-                    using var reader = new Reader(MergedProvider.Singleton, message.ToMemoryStream());
+                    using var reader = new Reader(MergedProvider.Singleton, message);
 
                     if (message.Length < 4)
                     {
@@ -97,6 +98,7 @@ namespace CatraProto.Client.Connections.Loop
 
 
                     var authKeyId = reader.ReadInt64().Value;
+                    message.Seek(0, SeekOrigin.Begin);
                     IConnectionMessage imported;
                     if (authKeyId == 0)
                     {
@@ -117,6 +119,7 @@ namespace CatraProto.Client.Connections.Loop
                     }
 
                     _messagesDispatcher.DispatchMessage(imported, false);
+                    imported.Dispose();
                 }
                 catch (OperationCanceledException e) when (e.CancellationToken == cancellationToken)
                 {

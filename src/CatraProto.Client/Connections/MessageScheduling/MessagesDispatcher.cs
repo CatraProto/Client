@@ -80,7 +80,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
                 return;
             }
 
-            using var reader = new Reader(MergedProvider.Singleton, connectionMessage.Body.ToMemoryStream(), false, _parsers);
+            using var reader = new Reader(MergedProvider.Singleton, connectionMessage.Body, false, _parsers);
             if (protocolError)
             {
                 var error = reader.ReadInt32().Value;
@@ -124,7 +124,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
         private bool IsMessageValid(EncryptedConnectionMessage connectionMessage, IObject deserialization)
         {
             using var stream = connectionMessage.GetPlainTextStream(connectionMessage.Padding);
-            var msgComputed = connectionMessage.ComputeMsgKey(stream.ToArray(), false);
+            var msgComputed = connectionMessage.ComputeMsgKey(stream, false);
 
             if (!msgComputed.SequenceEqual(connectionMessage.MsgKey!))
             {
@@ -140,7 +140,8 @@ namespace CatraProto.Client.Connections.MessageScheduling
 
             foreach (var cMessage in container.Messages)
             {
-                var newMessage = new EncryptedConnectionMessage(connectionMessage.AuthKey, cMessage.MsgId, connectionMessage.Salt, connectionMessage.SessionId, cMessage.Seqno, Array.Empty<byte>());
+                // DO NOT DISPOSE
+                var newMessage = new EncryptedConnectionMessage(connectionMessage.AuthKey, cMessage.MsgId, connectionMessage.Salt, connectionMessage.SessionId, cMessage.Seqno, null!);
                 if (!InternalCheckMessageValidity(newMessage, cMessage.Body))
                 {
                     return false;
@@ -173,6 +174,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
                 return false;
             }
 
+            _messagesHandler.MessagesTrackers.AcknowledgementHandler.SendAcknowledgment(connectionMessage.MessageId, deserialized);
             var sessionId = _mtProtoState.SessionIdHandler.GetSessionId(out _);
             if (sessionId != connectionMessage.SessionId)
             {
@@ -219,7 +221,6 @@ namespace CatraProto.Client.Connections.MessageScheduling
                 return false;
             }
 
-            _messagesHandler.MessagesTrackers.AcknowledgementHandler.SendAcknowledgment(connectionMessage.MessageId, deserialized);
             return true;
         }
 
