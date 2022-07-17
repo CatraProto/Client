@@ -134,7 +134,6 @@ namespace CatraProto.Client.Connections.Loop
                 var currentState = _mtProtoState.Client.LoginManager.GetCurrentState();
                 if (messageItem.Body is IMethod method && !LoginManager.CanBeUnauthenticated(method) && currentState is not LoginState.LoggedIn)
                 {
-                    //TODO: fix piece of shit postponing by adding a list at the end
                     _logger.Information("Postponing {Body} because we are not authorized, current state is {CurrentState}", method, currentState);
                     addBack.Value.Add(messageItem);
                     continue;
