@@ -23,10 +23,10 @@ namespace CatraProto.Client.Connections.MessageScheduling
     internal class MessageIdsHandler
     {
         public MessageDuplicateChecker MessageDuplicateChecker { get; } = new MessageDuplicateChecker();
-        private int _timeDifference;
-        private long _lastGeneratedId;
-        private readonly ILogger _logger;
         private readonly object _mutex = new object();
+        private readonly ILogger _logger;
+        private long _lastGeneratedId;
+        private int _timeDifference;
 
         public MessageIdsHandler(ILogger logger)
         {
