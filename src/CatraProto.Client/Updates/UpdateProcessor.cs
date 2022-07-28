@@ -601,8 +601,7 @@ namespace CatraProto.Client.Updates
                 return false;
             }
 
-            _updatesQueue.Enqueue(update);
-            if (_updatesQueue.GetCount() - 1 == 0)
+            if (_updatesQueue.Enqueue(update) - 1 == 0)
             {
                 return true;
             }
