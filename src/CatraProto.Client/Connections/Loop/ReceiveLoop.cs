@@ -106,7 +106,7 @@ namespace CatraProto.Client.Connections.Loop
                     }
                     else
                     {
-                        var getAuthKey = _mtProtoState.KeysHandler.TemporaryAuthKey.GetCachedKey();
+                        var getAuthKey = _mtProtoState.KeyManager!.TemporaryAuthKey.GetCachedKey();
                         if (authKeyId == getAuthKey.AuthKeyId)
                         {
                             imported = new EncryptedConnectionMessage(getAuthKey, message);

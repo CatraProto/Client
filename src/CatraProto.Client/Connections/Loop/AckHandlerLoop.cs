@@ -92,7 +92,7 @@ namespace CatraProto.Client.Connections.Loop
                     }
                 }
 
-                if (_connection.MtProtoState.KeysHandler.TemporaryAuthKey.CanBeUsed())
+                if (_connection.MtProtoState.KeyManager!.TemporaryAuthKey.CanBeUsed())
                 {
                     _logger.Information("Getting list of old messages that have not yet received an answer from the server");
                     var messages = _connection.MessagesHandler.MessagesTrackers.MessageCompletionTracker.GetUnanswered(isStart);

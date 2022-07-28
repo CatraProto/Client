@@ -78,7 +78,7 @@ namespace CatraProto.Client.Connections.Loop
 
                 try
                 {
-                    if (_connection.MtProtoState.KeysHandler.TemporaryAuthKey.CanBeUsed())
+                    if (_connection.MtProtoState.KeyManager!.TemporaryAuthKey.CanBeUsed())
                     {
                         _logger.Information("Sending ping to server with timeout of {Time} seconds", _timeout.TotalSeconds);
                         await _connection.MtProtoState.Api.MtProtoApi.PingAsync(CryptoTools.CreateRandomLong(), cancellationToken: linked.Token);
