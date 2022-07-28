@@ -21,10 +21,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Async.Loops.Enums.Resumable;
 using CatraProto.Client.Async.Loops.Interfaces;
-using CatraProto.Client.MTProto.Auth.AuthKeyHandler;
+using CatraProto.Client.Connections;
 using Serilog;
 
-namespace CatraProto.Client.Connections.Loop
+namespace CatraProto.Client.MTProto.Auth.AuthKey
 {
     internal class KeyGeneratorLoop : LoopImplementation<ResumableLoopState, ResumableSignalState>
     {
@@ -80,47 +80,49 @@ namespace CatraProto.Client.Connections.Loop
                     }
                 }
 
-                using var timeout = new CancellationTokenSource(TimeSpan.FromMinutes(1));
-                using var linked = CancellationTokenSource.CreateLinkedTokenSource(timeout.Token, stoppingToken);
+                while (true)
+                {
+                    using var timeout = new CancellationTokenSource(TimeSpan.FromMinutes(1));
+                    using var linked = CancellationTokenSource.CreateLinkedTokenSource(timeout.Token, stoppingToken);
 
-                Task<bool>? task = null;
-                if (!_temporaryAuthKey.Exists())
-                {
-                    _logger.Information("Generating new temporary authorization key because we don't have any ");
-                    task = _temporaryAuthKey.GenerateNewAuthKey(linked.Token);
-                }
-                else if (!_temporaryAuthKey.CanBeUsed())
-                {
-                    _logger.Information("Generating new temporary authorization key because the old one has expired ");
-                    task = _temporaryAuthKey.GenerateNewAuthKey(linked.Token);
-                }
-
-                try
-                {
-                    if (task is not null)
+                    Task<bool>? task = null;
+                    if (!_temporaryAuthKey.Exists())
                     {
-                        var result = await task;
-                        if (!result)
-                        {
-                            _logger.Warning("Failed to generate authorization key, reconnecting...");
-                            _ = _connection.ConnectAsync(CancellationToken.None);
-                            continue;
-                        }
-                        _connection.OnKeyGenerated();
+                        _logger.Information("Generating new temporary authorization key because we don't have any ");
+                        task = _temporaryAuthKey.GenerateNewAuthKey(linked.Token);
                     }
-                }
-                catch (OperationCanceledException) when (timeout.Token.IsCancellationRequested)
-                {
-                    _logger.Warning("Authorization key was not generated after 1 minute, reconnecting...");
-                    _ = _connection.ConnectAsync(CancellationToken.None);
-                    SetLoopState(ResumableLoopState.Stopped);
-                    return;
-                }
-                catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
-                {
-                    _logger.Information("Authorization key was not generated or connection wasn't initialized because loop received stop signal");
-                    SetLoopState(ResumableLoopState.Stopped);
-                    return;
+                    else if (!_temporaryAuthKey.CanBeUsed())
+                    {
+                        _logger.Information("Generating new temporary authorization key because the old one has expired ");
+                        task = _temporaryAuthKey.GenerateNewAuthKey(linked.Token);
+                    }
+
+                    try
+                    {
+                        if (task is not null)
+                        {
+                            var result = await task;
+                            if (!result)
+                            {
+                                _logger.Warning("Failed to generate authorization key, reconnecting...");
+                                await _connection.ConnectAsync(CancellationToken.None);
+                                continue;
+                            }
+                            _connection.OnKeyGenerated();
+                        }
+                        break;
+                    }
+                    catch (OperationCanceledException) when (timeout.Token.IsCancellationRequested)
+                    {
+                        _logger.Warning("Authorization key was not generated after 1 minute, reconnecting...");
+                        await _connection.ConnectAsync(CancellationToken.None);
+                    }
+                    catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
+                    {
+                        _logger.Information("Authorization key was not generated or connection wasn't initialized because loop received stop signal");
+                        SetLoopState(ResumableLoopState.Stopped);
+                        return;
+                    }
                 }
             }
         }

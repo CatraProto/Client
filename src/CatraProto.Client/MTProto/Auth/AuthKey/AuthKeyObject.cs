@@ -16,22 +16,20 @@ You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-using CatraProto.Client.MTProto.Auth.AuthKeyHandler;
-using CatraProto.Client.MTProto.Session;
-using Serilog;
-
-namespace CatraProto.Client.Connections
+namespace CatraProto.Client.MTProto.Auth.AuthKey
 {
-    internal class KeysHandler
+    public class AuthKeyObject
     {
-        public TemporaryAuthKey TemporaryAuthKey { get; }
-        public PermanentAuthKey PermanentAuthKey { get; }
-
-        public KeysHandler(MTProtoState state, Api api, ClientSession clientSession, ILogger logger)
+        public byte[] KeyArray { get; }
+        public long AuthKeyId { get; }
+        public long ServerSalt { get; }
+        public int? ExpiresAt { get; }
+        public AuthKeyObject(byte[] keyArray, long authKeyId, long serverSalt, int? expiresAt)
         {
-            var AuthData = clientSession.SessionManager.SessionData.AuthorizationKeys.GetAuthKeys(state.ConnectionInfo.DcId, out _);
-            PermanentAuthKey = new PermanentAuthKey(AuthData.PermanentAuthKey, state, clientSession.Logger);
-            TemporaryAuthKey = new TemporaryAuthKey(AuthData.TemporaryAuthKey, clientSession.Settings.ConnectionSettings, PermanentAuthKey, state, logger);
+            KeyArray = keyArray;
+            AuthKeyId = authKeyId;
+            ServerSalt = serverSalt;
+            ExpiresAt = expiresAt;
         }
     }
 }

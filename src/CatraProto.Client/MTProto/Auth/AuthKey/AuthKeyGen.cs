@@ -31,7 +31,7 @@ using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL;
 using Serilog;
 
-namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
+namespace CatraProto.Client.MTProto.Auth.AuthKey
 {
     internal class AuthKeyGen
     {
@@ -136,7 +136,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
                     return null;
                 }
 
-                if (!Crypto.MTProto.KnownPrimes.Contains(dhPrime) || (!Crypto.MTProto.CheckRangeDhPrime(dhPrime, _logger) && (!Crypto.MTProto.CheckPrimeness(dhPrime, logger: _logger) || !Crypto.MTProto.CheckPrimeness(dhPrime - 1 / 2, logger: _logger))))
+                if (!Crypto.MTProto.KnownPrimes.Contains(dhPrime) || !Crypto.MTProto.CheckRangeDhPrime(dhPrime, _logger) && (!Crypto.MTProto.CheckPrimeness(dhPrime, logger: _logger) || !Crypto.MTProto.CheckPrimeness(dhPrime - 1 / 2, logger: _logger)))
                 {
                     return null;
                 }

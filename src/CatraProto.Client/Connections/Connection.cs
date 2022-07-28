@@ -24,6 +24,7 @@ using CatraProto.Client.Async.Locks;
 using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.Connections.Protocols.Interfaces;
 using CatraProto.Client.Connections.Protocols.TcpAbridged;
+using CatraProto.Client.Crypto;
 using CatraProto.Client.MTProto.Settings;
 using Serilog;
 
@@ -39,6 +40,7 @@ namespace CatraProto.Client.Connections
 
         private CancellationTokenSource _fullShutdownSource = new CancellationTokenSource();
         private readonly SingleCallAsync<CancellationToken> _singleCallAsync;
+        private readonly int _connectionId = CryptoTools.CreateRandomInt();
         private readonly AsyncLock _lock = new AsyncLock();
         private readonly ConnectionProtocol _protocolType;
         private readonly ClientSettings _clientSettings;
@@ -48,14 +50,14 @@ namespace CatraProto.Client.Connections
         private bool _isDisposed = false;
         public Connection(ConnectionInfo connectionInfo, TelegramClient client)
         {
+            ConnectionInfo = connectionInfo;
             _client = client;
-            _logger = client.ClientSession.Logger.ForContext<Connection>().ForContext("Connection", connectionInfo);
+            _logger = client.ClientSession.Logger.ForContext<Connection>().ForContext("Connection", ToString());
             _clientSettings = client.ClientSession.Settings;
             _singleCallAsync = new SingleCallAsync<CancellationToken>(InternalConnectAsync);
             _protocolType = connectionInfo.ConnectionProtocol;
             _loopsHandler = new LoopsHandler(this, client.ClientSession.Settings, _logger);
 
-            ConnectionInfo = connectionInfo;
             MessagesHandler = new MessagesHandler(this, _logger);
             MtProtoState = new MTProtoState(this, new Api(client, MessagesHandler.MessagesQueue), client, _logger);
             MessagesDispatcher = new MessagesDispatcher(this, MessagesHandler, MtProtoState, client.ClientSession, _logger);
@@ -120,8 +122,20 @@ namespace CatraProto.Client.Connections
         public void OnKeyGenerated()
         {
             _logger.Information("Resetting key loop timer after key generation and forcing updates");
-            _loopsHandler.ResetKeyLoop();
-            SignalNewMessage();
+            if (ConnectionInfo.Main)
+            {
+                _client.UpdatesReceiver.ForceGetDifferenceAllAsync(false);
+            }
+
+            if(MtProtoState.KeyManager!.Connection != this)
+            {
+                _ = ResetSessionAsync(false);
+            }
+            else
+            {
+                MtProtoState.KeyManager!.ResetKeyLoop();
+                SignalNewMessage();
+            }
         }
 
         private IProtocol CreateProtocol()
@@ -142,11 +156,37 @@ namespace CatraProto.Client.Connections
 
         public void RegenKey()
         {
-            if (!MtProtoState.KeysHandler.TemporaryAuthKey.HasExpired())
+            if (MtProtoState.KeyManager!.TemporaryAuthKey.SetExpiredSafe())
             {
-                _logger.Information("Waking up loop to regen key and resetting timer");
-                MtProtoState.KeysHandler.TemporaryAuthKey.SetExpired();
-                _loopsHandler.WakeUpKeyLoop();
+                MtProtoState.KeyManager!.WakeUpKeyLoop();
+            }
+        }
+
+        public async Task ResetSessionAsync(bool wait, long salt = -1)
+        {
+            MessagesDispatcher.IgnoreMessages(true);
+            var task = Task.Run(async () =>
+            {
+                _logger.Information("Resetting session");
+                var releaser = await DisconnectAndLockAsync();
+
+                MtProtoState.SessionIdHandler.SetSessionId(CryptoTools.CreateRandomLong(), 0);
+                MessagesHandler.MessagesTrackers.MessageCompletionTracker.ResendAll();
+                MessagesHandler.MessagesTrackers.AcknowledgementHandler.Reset();
+                MtProtoState.SeqnoHandler.ContentRelatedReceived = 0;
+                MtProtoState.SeqnoHandler.ContentRelatedSent = 0;
+                MtProtoState.MessageIdsHandler.MessageDuplicateChecker.Clear();
+                MtProtoState.SaltHandler.SetSalt(salt);
+                MessagesDispatcher.IgnoreMessages(false);
+
+                releaser.Dispose();
+                _logger.Information("Session resetted. Reconnecting...");
+                await ConnectAsync();
+            });
+
+            if (wait)
+            {
+                await task;
             }
         }
 
@@ -182,6 +222,11 @@ namespace CatraProto.Client.Connections
 
             _isDisposed = true;
             _logger.Information("Connection successfully disposed");
+        }
+
+        public override string ToString()
+        {
+            return $"DC{ConnectionInfo.DcId} ({ConnectionInfo.IpAddress}:{ConnectionInfo.Port}, Main: {ConnectionInfo.Main}, Id: {_connectionId})";
         }
     }
 }

@@ -28,12 +28,13 @@ namespace CatraProto.Client.MTProto.Session.Models
         private long? _authKeyId;
         private int? _expirationDate;
         private bool? _isBound;
+        private bool _isAuthorized;
 
         public AuthKeyCache(object mutex) : base(mutex)
         {
         }
 
-        public void SetData(byte[] authKey, long authKeyId, long firstServerSalt, int? expirationDate = null, bool? isBound = null)
+        public void SetData(byte[] authKey, long authKeyId, long firstServerSalt, int? expirationDate = null, bool? isBound = null, bool? isAuthorized = null)
         {
             lock (Mutex)
             {
@@ -42,10 +43,14 @@ namespace CatraProto.Client.MTProto.Session.Models
                 _firstSalt = firstServerSalt;
                 _expirationDate = expirationDate;
                 _isBound = isBound;
+                if(isAuthorized is not null)
+                {
+                    _isAuthorized = isAuthorized.Value;
+                }
             }
         }
 
-        public (byte[] Key, long KeyId, long Salt, int? ExpirationDate, bool? IsBound)? GetData()
+        public (byte[] Key, long KeyId, long Salt, int? ExpirationDate, bool? IsBound, bool IsAuthorized)? GetData()
         {
             lock (Mutex)
             {
@@ -54,7 +59,7 @@ namespace CatraProto.Client.MTProto.Session.Models
                     return null;
                 }
 
-                return (_authKey!, _authKeyId!.Value, _firstSalt!.Value, _expirationDate, _isBound);
+                return (_authKey!, _authKeyId!.Value, _firstSalt!.Value, _expirationDate, _isBound, _isAuthorized);
             }
         }
 

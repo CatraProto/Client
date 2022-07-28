@@ -24,7 +24,7 @@ using System.Security.Cryptography;
 using System.Text;
 using CatraProto.Client.Connections.MessageScheduling.ConnectionMessages.Interfaces;
 using CatraProto.Client.Crypto;
-using CatraProto.Client.MTProto.Auth.AuthKeyHandler;
+using CatraProto.Client.MTProto.Auth.AuthKey;
 using CatraProto.TL;
 
 namespace CatraProto.Client.Connections.MessageScheduling.ConnectionMessages

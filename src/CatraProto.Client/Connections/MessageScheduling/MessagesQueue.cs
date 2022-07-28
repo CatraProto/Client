@@ -16,10 +16,12 @@ You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+using System;
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
+using CatraProto.Client.Connections.MessageScheduling.Interfaces;
 using CatraProto.Client.Connections.MessageScheduling.Items;
 using CatraProto.Client.MTProto.Rpc.Interfaces;
 using CatraProto.TL.Interfaces;
@@ -27,7 +29,7 @@ using Serilog;
 
 namespace CatraProto.Client.Connections.MessageScheduling
 {
-    internal class MessagesQueue
+    internal class MessagesQueue : IMessagesQueue
     {
         private readonly ConcurrentQueue<MessageItem> _concurrentQueue = new ConcurrentQueue<MessageItem>();
         private readonly ConcurrentQueue<MessageItem> _unencryptedQueue = new ConcurrentQueue<MessageItem>();
@@ -51,8 +53,22 @@ namespace CatraProto.Client.Connections.MessageScheduling
             messageItem.SetToSend();
         }
 
+
+        public MessageItem Sorrt(IObject body, MessageSendingOptions messageSendingOptions, IRpcResponse? rpcMessage, out Task completionTask, CancellationToken requestCancellationToken)
+        {
+            var taskCompletionSource = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+            completionTask = taskCompletionSource.Task;
+            var messageCompletion = new MessageCompletion(taskCompletionSource, rpcMessage, body is IMethod method ? method : null);
+            var messageStatusTracker = new MessageStatus(messageCompletion);
+            var messageItem = new MessageItem(body, messageSendingOptions, messageStatusTracker, _logger, requestCancellationToken);
+            messageItem.BindTo(_messagesHandler);
+            messageItem.SetToSend();
+            return messageItem;
+        }
+
         public void SendObject(IObject body, MessageSendingOptions messageSendingOptions, CancellationToken requestCancellationToken)
         {
+            _logger.Information(messageTemplate: "Sending raw object {Item}", body);
             var messageCompletion = new MessageCompletion(null, null, null);
             var messageStatusTracker = new MessageStatus(messageCompletion);
             var messageItem = new MessageItem(body, messageSendingOptions, messageStatusTracker, _logger, requestCancellationToken);
@@ -62,18 +78,17 @@ namespace CatraProto.Client.Connections.MessageScheduling
 
         public void PutInQueue(MessageItem item, bool wakeUpLoop)
         {
-            int count;
             if (item.MessageSendingOptions.IsEncrypted)
             {
-                count = _concurrentQueue.Count;
                 _concurrentQueue.Enqueue(item);
             }
             else
             {
-                count = _unencryptedQueue.Count;
                 _unencryptedQueue.Enqueue(item);
             }
 
+            var count = Math.Min(_unencryptedQueue.Count, _concurrentQueue.Count);
+            _logger.Information("Message {Item} added to queue", item.Body);
             if (wakeUpLoop)
             {
                 _messagesHandler.Connection.SignalNewMessage(count > 1);

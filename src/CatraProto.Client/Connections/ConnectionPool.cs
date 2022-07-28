@@ -23,6 +23,9 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using CatraProto.Client.ApiManagers;
+using CatraProto.Client.Async.Locks;
+using CatraProto.Client.MTProto.Auth.AuthKey;
 using CatraProto.Client.Updates;
 using Serilog;
 
@@ -30,10 +33,12 @@ namespace CatraProto.Client.Connections
 {
     internal class ConnectionPool : IAsyncDisposable
     {
+        public RouterQueue MessagesQueue { get; }
+        private readonly Dictionary<AuthKeyManager, int> _authKeys = new Dictionary<AuthKeyManager, int>();
         private readonly Dictionary<Connection, int> _referenceCounts = new Dictionary<Connection, int>();
-        private readonly TelegramClient _client;
-        private readonly object _mutex = new object();
+        private readonly AsyncLock _asyncLock = new AsyncLock();
         private UpdatesReceiver? _updatesHandler;
+        private readonly TelegramClient _client;
         private Connection? _mainConnection;
         private readonly ILogger _logger;
 
@@ -41,25 +46,36 @@ namespace CatraProto.Client.Connections
         {
             _client = client;
             _logger = logger.ForContext<ConnectionPool>();
+            MessagesQueue = new RouterQueue(logger);
         }
 
         public async Task InitMainConnectionAsync(CancellationToken token)
         {
             var conn = new Connection(_client.ClientSession.Settings.ConnectionSettings.DefaultDatacenter, _client);
+            conn.MtProtoState.KeyManager = CreateOrGetKey(conn, _client.ClientSession.Settings.ConnectionSettings.DefaultDatacenter.DcId, out _);
+            await conn.MtProtoState.KeyManager.StartAsync();
+
             await SetAccountConnectionAsync(conn, false);
             await conn.ConnectAsync(token);
         }
 
-        public async ValueTask<ConnectionItem> GetConnectionByDcAsync(int dcId, bool forceNew, bool isMediaPreferred, CancellationToken token)
+        public async Task<ConnectionItem> GetConnectionByDcAsync(int dcId, bool forceNew, bool isMediaPreferred, CancellationToken token)
         {
+            if (_mainConnection is null)
+            {
+                throw new InvalidOperationException("InitMainConnection not called");
+            }
+            
             ConnectionItem connectionItem;
+            ConnectionItem? mainConnectionItem = null;
             var config = await _client.ConfigManager.GetConfigAsync(token);
-            lock (_mutex)
+            using (await _asyncLock.LockAsync(token))
             {
                 if (!forceNew && TryFindLocal(dcId, isMediaPreferred, out var connection))
                 {
                     return CreateConnectionItem(connection);
                 }
+
                 var isTestDc = _client.ClientSession.Settings.ConnectionSettings.DefaultDatacenter.Test;
                 var matches = config.DcOptions.Where(x => Matches(ConnectionInfo.FromDcOption(x, isTestDc), dcId, isMediaPreferred)).OrderBy(x => x.MediaOnly).ToList();
                 if (matches.Count == 0)
@@ -69,17 +85,36 @@ namespace CatraProto.Client.Connections
 
                 var datacenter = matches[0];
                 var connectionInfo = new ConnectionInfo(IPAddress.Parse(datacenter.IpAddress), datacenter.Port, dcId, isTestDc);
-                connectionItem = CreateConnectionItem(new Connection(connectionInfo, _client));
+                var createdConnection = new Connection(connectionInfo, _client);
+                createdConnection.MtProtoState.KeyManager = CreateOrGetKey(createdConnection, dcId, out var justCreated);
+                if (justCreated)
+                {
+                    mainConnectionItem = CreateConnectionItem(_mainConnection);
+                    await createdConnection.MtProtoState.KeyManager.StartAsync();
+                }
+
+                connectionItem = CreateConnectionItem(createdConnection);
             }
 
             try
             {
                 await connectionItem.Connection.ConnectAsync(token);
+                if (mainConnectionItem is not null && _client.LoginManager.GetCurrentState() is LoginState.LoggedIn)
+                {
+                    await connectionItem.Connection.MtProtoState.KeyManager!.CopyAuthorizationAsync(mainConnectionItem.Connection, token);
+                }
             }
             catch (OperationCanceledException)
             {
                 await connectionItem.DisposeAsync();
                 throw;
+            }
+            finally
+            {
+                if(mainConnectionItem is not null)
+                {
+                    await mainConnectionItem.DisposeAsync();
+                }
             }
 
             return connectionItem;
@@ -93,17 +128,61 @@ namespace CatraProto.Client.Connections
             return connItem;
         }
 
-        public ValueTask DecreaseReferenceAsync(Connection connection)
+        public async ValueTask DecreaseReferenceAsync(Connection connection)
         {
-            lock (_mutex)
+            using (await _asyncLock.LockAsync())
             {
+                int? keyReferences = null;
+                var connKeyManager = connection.MtProtoState.KeyManager;
+
                 if (_referenceCounts.Remove(connection, out var rCount))
                 {
+                    // Connection is not used by any ConnectionItem
                     if (rCount - 1 == 0)
                     {
-                        if (_mainConnection != connection)
+                        if (_mainConnection == connection)
                         {
-                            return connection.DisposeAsync();
+                            // main connection must be kept alive even if no one is using it
+                            return;
+                        }
+
+                        if (connKeyManager is not null && _authKeys.Remove(connKeyManager, out var references))
+                        {
+                            keyReferences = references - 1;
+                            _authKeys.Add(connKeyManager, references - 1);
+                        }
+
+                        if (connKeyManager is null || keyReferences is null)
+                        {
+                            _logger.Information("Disposing connection {Connection} because no one holds a reference to it and its auth key is not part of this pool", connection);
+                            await connection.DisposeAsync();
+                            return;
+                        }
+
+                        if (connKeyManager.Connection == connection && keyReferences > 0)
+                        {
+                            _logger.Information("Not disposing connection {Connection} because AuthKey {AuthKey} still holds a reference to it", connection, connKeyManager);
+                            return;
+                        }
+
+                        if (keyReferences == 0)
+                        {
+                            _logger.Information("Disposing connection {Connection} and auth key {AuthKey}", connection, connKeyManager);
+                            _authKeys.Remove(connKeyManager);
+
+                            await connKeyManager.DisposeAsync();
+                            if (connKeyManager.Connection != connection)
+                            {
+                                _logger.Information("Disposing auth key {AuthKey}'s connection {Connection}", connKeyManager, connKeyManager.Connection);
+                                await connKeyManager.Connection.DisposeAsync();
+                            }
+
+                            await connection.DisposeAsync();
+                        }
+                        else
+                        {
+                            _logger.Information("Disposing connection {Connection} because no one holds a reference to it", connection);
+                            await connection.DisposeAsync();    
                         }
                     }
                     else
@@ -111,22 +190,22 @@ namespace CatraProto.Client.Connections
                         _referenceCounts.Add(connection, --rCount);
                     }
                 }
-
-                return ValueTask.CompletedTask;
             }
         }
 
-        public Connection? GetMainConnection()
+        // Only used at first startup, no need to return item
+        public async Task<Connection?> GetMainConnectionAsync(CancellationToken cancellationToken)
         {
-            lock (_mutex)
+            using (await _asyncLock.LockAsync(cancellationToken))
             {
                 return _mainConnection;
             }
         }
 
-        public void ConfirmMain()
+        // Only used at first startup, no need to check if instance changed
+        public async Task ConfirmMainAsync(CancellationToken cancellationToken)
         {
-            lock (_mutex)
+            using (await _asyncLock.LockAsync(cancellationToken))
             {
                 if (_mainConnection is not null)
                 {
@@ -137,38 +216,51 @@ namespace CatraProto.Client.Connections
 
         public async Task SetAccountConnectionAsync(Connection connection, bool isConfirmedMain)
         {
-            var disposeTask = ValueTask.CompletedTask;
-            lock (_mutex)
+            Connection? previousConnection = null;
+            using (await _asyncLock.LockAsync())
             {
                 if (_mainConnection is not null)
                 {
-                    _mainConnection!.MessagesDispatcher.UpdatesHandler = null;
-                    _mainConnection!.ConnectionInfo.Main = false;
-                    if (_referenceCounts.TryGetValue(_mainConnection, out var count))
-                    {
-                        if (count == 0)
-                        {
-                            _referenceCounts.Remove(_mainConnection);
-                            disposeTask = _mainConnection.DisposeAsync();
-                        }
-                    }
-                    else
-                    {
-                        disposeTask = _mainConnection.DisposeAsync();
-                    }
+                    _mainConnection.MessagesDispatcher.UpdatesHandler = null;
+                    _mainConnection.ConnectionInfo.Main = false;
                 }
 
                 connection.MessagesDispatcher.UpdatesHandler = _updatesHandler;
                 connection.ConnectionInfo.Main = isConfirmedMain;
+                previousConnection = _mainConnection;
                 _mainConnection = connection;
             }
 
-            await disposeTask;
+            await MessagesQueue.ReplaceConnectionAsync(CreateConnectionItem(connection));
+            if (previousConnection is not null)
+            {
+                _logger.Information("Main connection changed, forcefully fetching updates difference");
+                _ = _client.UpdatesReceiver.ForceGetDifferenceAllAsync(false);
+            }
         }
 
-        public void SetUpdatesHandler(UpdatesReceiver updatesReceiver)
+        private AuthKeyManager CreateOrGetKey(Connection connection, int dcId, out bool justCreated)
         {
-            lock (_mutex)
+            var (findKey, _) = _authKeys.FirstOrDefault(x => x.Key.DcId == dcId);
+            if (findKey is null)
+            {
+                findKey = new AuthKeyManager(connection, _client.ClientSession, dcId, _logger);
+                _authKeys.Add(findKey, 1);
+                justCreated = true;
+            }
+            else
+            {
+                _authKeys.Remove(findKey, out var oldCount);
+                _authKeys.Add(findKey, ++oldCount);
+                justCreated = false;
+            }
+
+            return findKey!;
+        }
+
+        public async Task SetUpdatesHandlerAsync(UpdatesReceiver updatesReceiver)
+        {
+            using(await _asyncLock.LockAsync())
             {
                 _updatesHandler = updatesReceiver;
                 if (_mainConnection != null)
@@ -176,34 +268,6 @@ namespace CatraProto.Client.Connections
                     _mainConnection.MessagesDispatcher.UpdatesHandler = _updatesHandler;
                 }
             }
-        }
-
-        public async ValueTask DisposeAsync()
-        {
-            ValueTask[] toWait;
-            lock (_mutex)
-            {
-                toWait = new ValueTask[_referenceCounts.Count + 1];
-                var i = 0;
-                foreach (var (conn, _) in _referenceCounts)
-                {
-                    if (_mainConnection == conn)
-                    {
-                        continue;
-                    }
-
-                    toWait[i++] = conn.DisposeAsync();
-                }
-
-                toWait[_referenceCounts.Count] = _mainConnection is null ? ValueTask.CompletedTask : _mainConnection.DisposeAsync();
-            }
-
-            foreach (var vTask in toWait)
-            {
-                await vTask;
-            }
-
-            _logger.Information("Connection pool disposed");
         }
 
         private bool Matches(ConnectionInfo connectionInfo, int dcId, bool isMediaPreferred)
@@ -250,6 +314,32 @@ namespace CatraProto.Client.Connections
 
             connection = null;
             return false;
+        }
+
+        public async ValueTask DisposeAsync()
+        {
+            using (await _asyncLock.LockAsync())
+            {
+                foreach (var (conn, _) in _referenceCounts)
+                {
+                    if (_mainConnection == conn)
+                    {
+                        continue;
+                    }
+
+                    _logger.Information("Disposing connection {Conn}", conn);
+                    await conn.DisposeAsync();
+                }
+
+                if(_mainConnection is not null)
+                {
+                    _logger.Information("Disposing main connection {Conn}", _mainConnection);
+                    await _mainConnection.DisposeAsync();
+                }
+            }
+
+            _asyncLock.Dispose();
+            _logger.Information("Connection pool disposed");
         }
     }
 }

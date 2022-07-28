@@ -32,10 +32,13 @@ using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL;
 using Serilog;
 
-namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
+namespace CatraProto.Client.MTProto.Auth.AuthKey
 {
     internal class TemporaryAuthKey
     {
+        public event KeyGenerated? OnKeyGenerated;
+        public delegate void KeyGenerated();
+
         private readonly PermanentAuthKey _permanentAuthKey;
         private readonly AuthKeyCache _keyCacheCache;
         private readonly ConnectionSettings _connectionSettings;
@@ -74,6 +77,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
             }
 
             _logger.Information("Generated temporary authentication key {AuthId} which expires at {Time}", keyObject.AuthKeyId, expiresAt);
+            await _mtProtoState.Connection.ResetSessionAsync(true, keyObject.ServerSalt);
             var innerData = new BindAuthKeyInner
             {
                 Nonce = CryptoTools.CreateRandomLong(),
@@ -91,7 +95,6 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
             }
 
             var messageOptions = new MessageSendingOptions(true, messageId);
-            _mtProtoState.SaltHandler.SetSalt(keyObject.ServerSalt);
             var res = await _mtProtoState.Api.CloudChatsApi.Auth.BindTempAuthKeyAsync(permanentKey.AuthKeyId, innerData.Nonce, expiresAt, encryptedInnerData, messageOptions, token);
             if (res.RpcCallFailed)
             {
@@ -106,6 +109,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
             }
 
             _logger.Information("Temporary authentication key {AuthId} bound to permanent {PAuthId}", keyObject.AuthKeyId, permanentKey.AuthKeyId);
+            OnKeyGenerated?.Invoke();
             return true;
         }
 
@@ -156,8 +160,21 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
                     throw new InvalidOperationException("No cached authorization key");
                 }
 
-                var (authKey, authKeyId, salt, _, isBound) = data.Value;
+                var (authKey, authKeyId, salt, _, isBound, _) = data.Value;
                 _keyCacheCache.SetData(authKey, authKeyId, salt, -1, isBound);
+            }
+        }
+
+        public bool SetExpiredSafe()
+        {
+            lock (_mutex)
+            {
+                if (!HasExpired())
+                {
+                    SetExpired();
+                    return true;
+                }
+                return false;
             }
         }
 

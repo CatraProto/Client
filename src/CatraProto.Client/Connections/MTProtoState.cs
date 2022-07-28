@@ -19,14 +19,32 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.Crypto;
 using CatraProto.Client.MTProto.Auth;
+using CatraProto.Client.MTProto.Auth.AuthKey;
 using Serilog;
 
 namespace CatraProto.Client.Connections
 {
     internal class MTProtoState
     {
+        public AuthKeyManager? KeyManager { 
+            get { 
+                return _authKeyManager; 
+            }
+            set {
+                _authKeyManager = value;
+                if(value is not null)
+                {
+                    value.TemporaryAuthKey.OnKeyGenerated += Connection.OnKeyGenerated;
+                }
+            } 
+        }
+
+        public ConnectionInfo ConnectionInfo
+        {
+            get => Connection.ConnectionInfo;
+        }
+
         public TelegramClient Client { get; }
-        public KeysHandler KeysHandler { get; }
         public MessageIdsHandler MessageIdsHandler { get; }
         public SeqnoHandler SeqnoHandler { get; }
         public SessionIdHandler SessionIdHandler { get; }
@@ -34,11 +52,7 @@ namespace CatraProto.Client.Connections
         public Connection Connection { get; }
         public Api Api { get; }
 
-        public ConnectionInfo ConnectionInfo
-        {
-            get => Connection.ConnectionInfo;
-        }
-
+        private AuthKeyManager? _authKeyManager;
         public MTProtoState(Connection connection, Api api, TelegramClient client, ILogger logger)
         {
             Api = api;
@@ -49,7 +63,6 @@ namespace CatraProto.Client.Connections
             SeqnoHandler = new SeqnoHandler(logger);
             SessionIdHandler = new SessionIdHandler();
             SessionIdHandler.SetSessionId(CryptoTools.CreateRandomLong(), 0);
-            KeysHandler = new KeysHandler(this, api, client.ClientSession, logger);
             SaltHandler = new SaltHandler(this, logger);
         }
     }

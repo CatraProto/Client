@@ -22,7 +22,7 @@ using CatraProto.Client.Connections;
 using CatraProto.Client.MTProto.Session.Models;
 using Serilog;
 
-namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
+namespace CatraProto.Client.MTProto.Auth.AuthKey
 {
     internal class PermanentAuthKey
     {
@@ -51,8 +51,31 @@ namespace CatraProto.Client.MTProto.Auth.AuthKeyHandler
                 return result;
             }
 
-            var (key, keyId, serverSalt, _, _) = getData.Value;
+            var (key, keyId, serverSalt, _, _, _) = getData.Value;
             return new AuthKeyObject(key, keyId, serverSalt, null);
+        }
+
+        public void SetAuthorized(bool isAuthorized)
+        {
+            var getData = _authKeyCache.GetData();
+            if (getData is null)
+            {
+                return;
+            }
+
+            (var Key, var KeyId, var Salt, var ExpirationDate, var IsBound, var _) = getData.Value;
+            _authKeyCache.SetData(Key, KeyId, Salt, ExpirationDate, IsBound, isAuthorized);
+        }
+
+        public bool IsAuthorized()
+        {
+            var getData = _authKeyCache.GetData();
+            if (getData is null)
+            {
+                return false;
+            }
+
+            return getData.Value.IsAuthorized;
         }
     }
 }
