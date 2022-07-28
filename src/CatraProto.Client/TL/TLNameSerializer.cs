@@ -19,9 +19,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CatraProto.TL.Interfaces;
 using Newtonsoft.Json.Serialization;
 
@@ -33,11 +30,18 @@ internal class TLNameSerializer : ISerializationBinder
     public void BindToName(Type serializedType, out string? assemblyName, out string? typeName)
     {
         assemblyName = null;
-        typeName = _tlObjectCache.GetOrAdd(serializedType, (type) =>
+        typeName = null;
+        if (serializedType.GetInterface(nameof(IObject)) != null)
         {
-            return (IObject?)Activator.CreateInstance(type, true);
-        })?.ToString();
-
+            typeName = _tlObjectCache.GetOrAdd(serializedType, (type) =>
+            {
+                return (IObject?)Activator.CreateInstance(type, true);
+            })?.ToString();
+        }
+        else if (serializedType == typeof(byte[]))
+        {
+            typeName = "bytes";
+        }
     }
 
     public Type BindToType(string? assemblyName, string typeName)
