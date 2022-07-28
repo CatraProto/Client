@@ -52,21 +52,6 @@ internal class RouterQueue : IMessagesQueue
         }
     }
 
-    public MessageItem Sorrt(IObject body, MessageSendingOptions messageSendingOptions, IRpcResponse? rpcMessage, out Task completionTask, CancellationToken requestCancellationToken)
-    {
-        lock (_mutex)
-        {
-            if (_connection is null)
-            {
-                _logger.Warning(messageTemplate: "ConnectionItem is null, message is not going to be sent.");
-                completionTask = Task.FromException(new Exception("Tried to route a message while connection was not ready"));
-                throw new NotImplementedException();
-            }
-
-            return _connection.Connection.MessagesHandler.MessagesQueue.Sorrt(body, messageSendingOptions, rpcMessage, out completionTask, requestCancellationToken);
-        }
-    }
-
     public void SendObject(IObject body, MessageSendingOptions messageSendingOptions, CancellationToken requestCancellationToken)
     {
         lock (_mutex)

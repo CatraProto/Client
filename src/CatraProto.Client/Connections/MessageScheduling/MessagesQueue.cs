@@ -53,19 +53,6 @@ namespace CatraProto.Client.Connections.MessageScheduling
             messageItem.SetToSend();
         }
 
-
-        public MessageItem Sorrt(IObject body, MessageSendingOptions messageSendingOptions, IRpcResponse? rpcMessage, out Task completionTask, CancellationToken requestCancellationToken)
-        {
-            var taskCompletionSource = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
-            completionTask = taskCompletionSource.Task;
-            var messageCompletion = new MessageCompletion(taskCompletionSource, rpcMessage, body is IMethod method ? method : null);
-            var messageStatusTracker = new MessageStatus(messageCompletion);
-            var messageItem = new MessageItem(body, messageSendingOptions, messageStatusTracker, _logger, requestCancellationToken);
-            messageItem.BindTo(_messagesHandler);
-            messageItem.SetToSend();
-            return messageItem;
-        }
-
         public void SendObject(IObject body, MessageSendingOptions messageSendingOptions, CancellationToken requestCancellationToken)
         {
             _logger.Information(messageTemplate: "Sending raw object {Item}", body);

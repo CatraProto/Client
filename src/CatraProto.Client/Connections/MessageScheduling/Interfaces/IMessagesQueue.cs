@@ -26,7 +26,5 @@ namespace CatraProto.Client.Connections.MessageScheduling.Interfaces;
 internal interface IMessagesQueue
 {
     public void EnqueueMessage(IObject body, MessageSendingOptions messageSendingOptions, IRpcResponse? rpcMessage, out Task completionTask, CancellationToken requestCancellationToken);
-    public MessageItem Sorrt(IObject body, MessageSendingOptions messageSendingOptions, IRpcResponse? rpcMessage, out Task completionTask, CancellationToken requestCancellationToken);
-
     public void SendObject(IObject body, MessageSendingOptions messageSendingOptions, CancellationToken requestCancellationToken);
 }
