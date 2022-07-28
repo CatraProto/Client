@@ -39,11 +39,12 @@ namespace CatraProto.Client.Async.Collections
             }
         }
 
-        public void Enqueue(T item)
+        public int Enqueue(T item)
         {
             lock (_mutex)
             {
                 _list.Add(item);
+                return _list.Count;
             }
         }
 
