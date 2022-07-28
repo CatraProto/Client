@@ -50,6 +50,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
 
         public void AddCompletion(long messageId, MessageItem messageCompletion)
         {
+            _logger.Information("Adding completion for message {Message} with message id {MessageId}", messageCompletion, messageId);
             if (messageId == 0)
             {
                 lock (_mutex)
@@ -231,16 +232,17 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
                 return true;
             }
 
+            var retTrue = false;
             foreach (var item in _messageCompletions)
             {
                 if (item.Value.GetMessageMethod() is BindTempAuthKey)
                 {
                     item.Value.SetCompleted(error, executionInfo);
-                    return true;
+                    retTrue = true;
                 }
             }
 
-            return false;
+            return retTrue;
         }
 
         public bool MustInitConnection()

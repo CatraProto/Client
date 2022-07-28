@@ -19,6 +19,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 using System;
 using System.Threading;
 using CatraProto.Client.Connections.MessageScheduling.Enums;
+using CatraProto.Client.Crypto;
 using CatraProto.Client.MTProto.Rpc;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL.Interfaces;
@@ -32,6 +33,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
         public CancellationToken CancellationToken { get; }
         public IObject Body { get; }
 
+        private int _trackId = CryptoTools.CreateRandomInt();
         private readonly object _mutex = new object();
         private readonly MessageStatus _messageStatus;
         private MessagesHandler? _messagesHandler;
@@ -39,11 +41,11 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
 
         public MessageItem(IObject body, MessageSendingOptions messageSendingOptions, MessageStatus messageStatus, ILogger logger, CancellationToken cancellationToken)
         {
+            Body = body;
             MessageSendingOptions = messageSendingOptions;
-            _logger = logger.ForContext<MessageItem>();
+            _logger = logger.ForContext<MessageItem>().ForContext("MessageItemTrackId", ToString());
             CancellationToken = cancellationToken;
             _messageStatus = messageStatus;
-            Body = body;
 
             if (cancellationToken.CanBeCanceled)
             {
@@ -69,14 +71,13 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
                     throw new InvalidOperationException("Can't set as sent when message id is null");
                 }
 
-                _logger.Information("Message {Body} sent with id {MessageId}", Body, messageId);
-
+                _logger.Information("Message sent with id {MessageId} and upperId {upperId}", messageId, upperId);
                 if (upperId != null)
                 {
                     _messageStatus.MessageProtocolInfo.UpperMessageId = upperId;
                     _messageStatus.MessageProtocolInfo.UpperSeqno = upperSeqno;
                 }
-
+                
                 _messageStatus.MessageState = MessageState.MessageSent;
                 if (MessageSendingOptions.AwaiterType == AwaiterType.OnSent)
                 {
@@ -98,8 +99,8 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
                     throw new InvalidOperationException("MessageHandler is not set");
                 }
 
+                _logger.Information("Setting message with id {MessageId} as to be sent", _messageStatus.MessageProtocolInfo.MessageId);
                 RemoveSelfFromTrackers();
-
                 if (CancellationToken.IsCancellationRequested)
                 {
                     _logger.Verbose("Tried to send a canceled message (this is not an error)");
@@ -121,6 +122,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
                 }
                 else
                 {
+                    _logger.Information("Setting message as NotYetSent");
                     _messageStatus.MessageState = MessageState.NotYetSent;
                     _messagesHandler?.MessagesQueue.PutInQueue(this, wakeUpLoop);
                 }
@@ -222,6 +224,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
         {
             lock (_mutex)
             {
+                _logger.Information("Setting message Id from {FromId} to {ToId}", _messageStatus.MessageProtocolInfo.MessageId, messageId);
                 if (set)
                 {
                     _messageStatus.MessageProtocolInfo.MessageId = messageId;
@@ -232,6 +235,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
                 {
                     if (MessageSendingOptions.SendWithMessageId is not null)
                     {
+                        _logger.Information("Ignoring set message Id from {FromId} to {ToId} because SendWithMessageId {SendWith} is set", _messageStatus.MessageProtocolInfo.MessageId, messageId, MessageSendingOptions.SendWithMessageId.Value);
                         _messageStatus.MessageProtocolInfo.MessageId = MessageSendingOptions.SendWithMessageId.Value;
                     }
                     else if (messageId is not null)
@@ -300,6 +304,11 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
                     _messagesHandler?.MessagesTrackers.MessageCompletionTracker.RemoveUnencryptedCompletion(this);
                 }
             }
+        }
+
+        public override string ToString()
+        {
+            return $"[Body: {Body} TrackId: {_trackId}]";
         }
     }
 }
