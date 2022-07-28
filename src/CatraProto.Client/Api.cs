@@ -16,7 +16,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-using CatraProto.Client.Connections.MessageScheduling;
+using CatraProto.Client.Connections.MessageScheduling.Interfaces;
 using CatraProto.Client.TL.Requests;
 
 namespace CatraProto.Client
@@ -26,7 +26,7 @@ namespace CatraProto.Client
         public CloudChatsApi CloudChatsApi { get; }
         internal MTProtoApi MtProtoApi { get; }
 
-        internal Api(TelegramClient client, MessagesQueue messagesQueue)
+        internal Api(TelegramClient client, IMessagesQueue messagesQueue)
         {
             CloudChatsApi = new CloudChatsApi(client, messagesQueue);
             MtProtoApi = new MTProtoApi(client, messagesQueue);
