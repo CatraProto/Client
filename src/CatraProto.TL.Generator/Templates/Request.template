@@ -2,10 +2,10 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections;
-using CatraProto.Client.Connections.MessageScheduling;
+using CatraProto.Client.Connections.MessageScheduling.Interfaces;
 using CatraProto.Client.MTProto.Rpc;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client;
+using CatraProto.Client
 using CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors;
 using System.Collections.Generic;
 using System.Numerics;
@@ -16,10 +16,10 @@ namespace ^Namespace^
 	public partial class ^Class^
 	{
 		^Other^
-	    private readonly MessagesQueue _messagesQueue;
+	    private readonly IMessagesQueue _messagesQueue;
         private readonly TelegramClient _client;
 	    
-	    internal ^Class^(TelegramClient client, MessagesQueue messagesQueue)
+	    internal ^Class^(TelegramClient client, IMessagesQueue messagesQueue)
 	    {
 	        _client = client;
 	        _messagesQueue = messagesQueue;
