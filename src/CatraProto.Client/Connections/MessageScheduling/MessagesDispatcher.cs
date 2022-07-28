@@ -22,7 +22,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections.MessageScheduling.ConnectionMessages;
 using CatraProto.Client.Connections.MessageScheduling.ConnectionMessages.Interfaces;
-using CatraProto.Client.Crypto;
 using CatraProto.Client.MTProto.Deserializers;
 using CatraProto.Client.MTProto.Rpc;
 using CatraProto.Client.MTProto.Rpc.RpcErrors.Migrations.Interfaces;
@@ -60,6 +59,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
         private readonly ClientSession _clientSession;
         private readonly MTProtoState _mtProtoState;
         private readonly List<IObjectParser> _parsers;
+        private readonly object _mutex = new object();
         private readonly ILogger _logger;
         private bool _startIgnoring;
         public MessagesDispatcher(Connection connection, MessagesHandler messagesHandler, MTProtoState mtProtoState, ClientSession clientSession, ILogger logger)
@@ -74,50 +74,53 @@ namespace CatraProto.Client.Connections.MessageScheduling
 
         public void DispatchMessage(IConnectionMessage connectionMessage, bool protocolError)
         {
-            if (_startIgnoring)
+            lock (_mutex)
             {
-                _logger.Information("Ignoring received message because connection is getting closed");
-                return;
-            }
-
-            using var reader = new Reader(MergedProvider.Singleton, connectionMessage.Body, false, _parsers);
-            if (protocolError)
-            {
-                var error = reader.ReadInt32().Value;
-                _logger.Warning("Received protocol error {Error} from server", error);
-                if (error == -404)
+                if (_startIgnoring)
                 {
-                    if (!_messagesHandler.MessagesTrackers.MessageCompletionTracker.OnNotFoundProtocolError(GetExecInfo()))
+                    _logger.Information("Ignoring received message");
+                    return;
+                }
+
+                using var reader = new Reader(MergedProvider.Singleton, connectionMessage.Body, false, _parsers);
+                if (protocolError)
+                {
+                    var error = reader.ReadInt32().Value;
+                    _logger.Warning("Received protocol error {Error} from server", error);
+                    if (error == -404)
                     {
-                        _logger.Information("Server forgot authorization key, regenerating...");
-                        _connection.RegenKey();
+                        if (!_messagesHandler.MessagesTrackers.MessageCompletionTracker.OnNotFoundProtocolError(GetExecInfo()))
+                        {
+                            _logger.Information("Server forgot authorization key, regenerating...");
+                            _connection.RegenKey();
+                        }
+                    }
+
+                    return;
+                }
+
+
+                var tryRead = reader.ReadObject();
+                if (tryRead.IsError)
+                {
+                    _messagesHandler.MessagesTrackers.AcknowledgementHandler.SendAcknowledgment(connectionMessage.MessageId, null);
+                    _logger.Error("Could not deserialize received payload. Error {Error}", tryRead.GetError().Error);
+                    return;
+                }
+
+                var deserialized = tryRead.Value;
+                if (connectionMessage.AuthKeyId != 0)
+                {
+                    if (IsMessageValid((EncryptedConnectionMessage)connectionMessage, deserialized))
+                    {
+                        HandleObject(connectionMessage, deserialized, reader);
                     }
                 }
-
-                return;
-            }
-
-
-            var tryRead = reader.ReadObject();
-            if (tryRead.IsError)
-            {
-                _messagesHandler.MessagesTrackers.AcknowledgementHandler.SendAcknowledgment(connectionMessage.MessageId, null);
-                _logger.Error("Could not deserialize received payload. Error {Error}", tryRead.GetError().Error);
-                return;
-            }
-
-            var deserialized = tryRead.Value;
-            if (connectionMessage.AuthKeyId != 0)
-            {
-                if (IsMessageValid((EncryptedConnectionMessage)connectionMessage, deserialized))
+                else
                 {
+                    _logger.Information("Received unencrypted message. id: {MessageId}, body: {Body}", connectionMessage.MessageId, deserialized);
                     HandleObject(connectionMessage, deserialized, reader);
                 }
-            }
-            else
-            {
-                _logger.Information("Received unencrypted message. id: {MessageId}, body: {Body}", connectionMessage.MessageId, deserialized);
-                HandleObject(connectionMessage, deserialized, reader);
             }
         }
 
@@ -129,7 +132,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
             if (!msgComputed.SequenceEqual(connectionMessage.MsgKey!))
             {
                 _logger.Warning("DISCARDING MESSAGE DUE TO MSG_KEY MISMATCH {ComputeKey} != {ReceivedKey}", msgComputed, connectionMessage.MsgKey);
-                ResetSession();
+                _ = _connection.ResetSessionAsync(false);
                 return false;
             }
 
@@ -174,18 +177,18 @@ namespace CatraProto.Client.Connections.MessageScheduling
                 return false;
             }
 
-            _messagesHandler.MessagesTrackers.AcknowledgementHandler.SendAcknowledgment(connectionMessage.MessageId, deserialized);
             var sessionId = _mtProtoState.SessionIdHandler.GetSessionId(out _);
             if (sessionId != connectionMessage.SessionId)
             {
-                _logger.Error("Local session {LSession} does not equal to the remote session {RSession}", sessionId, connectionMessage.SessionId);
+                _logger.Error("Resetting session because local session id {LSession} does not equal to the remote session id {RSession}", sessionId, connectionMessage.SessionId);
+                _ = _connection.ResetSessionAsync(false);
                 return false;
             }
 
             if (!_mtProtoState.MessageIdsHandler.CheckMessageIdAge(connectionMessage.MessageId))
             {
                 _logger.Information("Resetting session because message id {MessageId} age check failed", connectionMessage.MessageId);
-                ResetSession();
+                _ = _connection.ResetSessionAsync(false);
                 return false;
             }
 
@@ -198,13 +201,18 @@ namespace CatraProto.Client.Connections.MessageScheduling
             else if (messageValidity is MessageValidity.TooOld)
             {
                 _logger.Information("Resetting session because message id {MessageId} is too old", connectionMessage.MessageId);
-                ResetSession();
+                _ = _connection.ResetSessionAsync(false);
                 return false;
             }
 
             if (!_mtProtoState.SaltHandler.IsSaltValid(connectionMessage.Salt))
             {
                 _logger.Information("Skipping message {MessageId} because it was sent using an invalid salt", connectionMessage.MessageId);
+                if(_mtProtoState.SaltHandler.GetSalt() != -1)
+                {
+                    _logger.Information("Resetting session due to invalid salt");
+                    _ = _connection.ResetSessionAsync(false);
+                }
                 return false;
             }
 
@@ -216,39 +224,18 @@ namespace CatraProto.Client.Connections.MessageScheduling
             }
             else
             {
-                ResetSession();
+                _ = _connection.ResetSessionAsync(false);
                 _logger.Error("Received seqno {RSeqno} does not equal computed seqno {CSeqno} ({Obj})", connectionMessage.SeqNo, shouldSeqno, deserialized);
                 return false;
             }
 
+            _messagesHandler.MessagesTrackers.AcknowledgementHandler.SendAcknowledgment(connectionMessage.MessageId, deserialized);
             return true;
-        }
-
-        private void ResetSession()
-        {
-            _startIgnoring = true;
-            Task.Run(async () =>
-            {
-                _logger.Information("Resetting session");
-                var releaser = await _connection.DisconnectAndLockAsync();
-
-                _mtProtoState.SessionIdHandler.SetSessionId(CryptoTools.CreateRandomLong(), 0);
-                _messagesHandler.MessagesTrackers.MessageCompletionTracker.ResendAll();
-                _messagesHandler.MessagesTrackers.AcknowledgementHandler.Reset();
-                _mtProtoState.SeqnoHandler.ContentRelatedReceived = 0;
-                _mtProtoState.SeqnoHandler.ContentRelatedSent = 0;
-                _mtProtoState.MessageIdsHandler.MessageDuplicateChecker.Clear();
-                _startIgnoring = false;
-
-                releaser.Dispose();
-                _logger.Information("Session resetted. Reconnecting...");
-                await _connection.ConnectAsync();
-            });
         }
 
         private void HandleBadMsgNotification(BadMsgNotification badMsgNotification, long messageId)
         {
-            _logger.Information("Received bad_msg_notification with error code {Error} for message {Message}", badMsgNotification.ErrorCode, badMsgNotification.BadMsgId);
+            _logger.Error("Received bad_msg_notification with error code {Error} for message {Message}", badMsgNotification.ErrorCode, badMsgNotification.BadMsgId);
             switch (badMsgNotification.ErrorCode)
             {
                 case (int)ErrorCodes.MsgIdTooLow:
@@ -258,7 +245,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
                         messageItems[0].GetProtocolInfo().upperSeqno!.Value == badMsgNotification.BadMsgSeqno)
                     {
                         _mtProtoState.MessageIdsHandler.SetTimeDifference(MessageIdsHandler.GetSeconds(messageId));
-                        ResetSession();
+                        _ = _connection.ResetSessionAsync(false);
                     }
                     break;
             }
@@ -300,7 +287,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
                 if (_mtProtoState.MessageIdsHandler.SetTimeDifference(MessageIdsHandler.GetSeconds(messageId)))
                 {
                     _logger.Information("Resetting session after time changed on bad_server_salt");
-                    ResetSession();
+                    _ = _connection.ResetSessionAsync(false, serverSalt.NewServerSalt);
                     return;
                 }
 
@@ -447,6 +434,14 @@ namespace CatraProto.Client.Connections.MessageScheduling
             }
 
             _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(rpcObject.ReqMsgId, rpcObject.Result, GetExecInfo(true));
+        }
+
+        public void IgnoreMessages(bool ignore)
+        {
+            lock (_mutex)
+            {
+                _startIgnoring = ignore;
+            }
         }
 
         public ExecutionInfo GetExecInfo(bool rpcTelegram = false)
