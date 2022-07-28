@@ -165,6 +165,7 @@ namespace CatraProto.Client.MTProto.Auth
             //No need to lock as it's already called from a function that has already acquired the lock
             if (!_requestingSalts)
             {
+                _logger.Information("Sending get_future_salts");
                 _mtProtoState.Connection.MessagesHandler.MessagesQueue.SendObject(new GetFutureSalts(64), new MessageSendingOptions(true), CancellationToken.None);
                 _requestingSalts = true;
             }
