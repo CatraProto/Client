@@ -21,6 +21,7 @@ using System.Linq;
 using System.Text;
 using CatraProto.TL.Generator.DeclarationInfo;
 using CatraProto.TL.Generator.Objects.Types.Interfaces;
+using CatraProto.TL.Generator.Settings;
 
 namespace CatraProto.TL.Generator.Objects.Types
 {
@@ -28,7 +29,7 @@ namespace CatraProto.TL.Generator.Objects.Types
 	{
 		public GenericType(string ns, TypeInfo typeInfo)
 		{
-			Namespace = new Namespace(ns);
+			Namespace = new Namespace(ns, !ns.Contains(Configuration.DictionaryNamespace));
 			TypeInfo = typeInfo;
 			NamingInfo = ns.Split('.')[^1];
 		}
