@@ -14,7 +14,7 @@ jobs:
         uses: xt0rted/dotnet-tool-restore@v1.0.1
 
       - name: Run dotnet format
-        uses: xt0rted/dotnet-format@v1.2.0
+        uses: xt0rted/dotnet-format@06fadcf678dd69c6e7446b9f2664a25c6094f6a0
         with:
           action: fix
           version: 4
