@@ -17,3 +17,4 @@ jobs:
         uses: xt0rted/dotnet-format@v1.2.0
         with:
           action: fix
+          version: 4
