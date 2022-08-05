@@ -48,7 +48,7 @@ namespace CatraProto.TL
 
         public ReadResult<short> ReadInt16()
         {
-            var checkLength = CheckLength<short>(8);
+            var checkLength = CheckLength<short>(sizeof(short));
             if (checkLength.IsError)
             {
                 return checkLength;
@@ -59,7 +59,7 @@ namespace CatraProto.TL
 
         public ReadResult<int> ReadInt32()
         {
-            var checkLength = CheckLength<int>(4);
+            var checkLength = CheckLength<int>(sizeof(int));
             if (checkLength.IsError)
             {
                 return checkLength;
@@ -70,7 +70,7 @@ namespace CatraProto.TL
 
         public ReadResult<long> ReadInt64()
         {
-            var checkLength = CheckLength<long>(8);
+            var checkLength = CheckLength<long>(sizeof(long));
             if (checkLength.IsError)
             {
                 return checkLength;
@@ -81,7 +81,7 @@ namespace CatraProto.TL
 
         public ReadResult<double> ReadDouble()
         {
-            var checkLength = CheckLength<double>(8);
+            var checkLength = CheckLength<double>(sizeof(double));
             if (checkLength.IsError)
             {
                 return checkLength;
@@ -98,7 +98,7 @@ namespace CatraProto.TL
                 return checkProvider;
             }
 
-            var checkLength = CheckLength<bool>(4);
+            var checkLength = CheckLength<bool>(sizeof(int));
             if (checkLength.IsError)
             {
                 return checkLength;
@@ -121,7 +121,7 @@ namespace CatraProto.TL
 
         public ReadResult<byte> ReadByte()
         {
-            var checkLength = CheckLength<byte>(1);
+            var checkLength = CheckLength<byte>(sizeof(byte));
             if (checkLength.IsError)
             {
                 return checkLength;
@@ -238,7 +238,7 @@ namespace CatraProto.TL
                 return checkProvider;
             }
 
-            var checkLength = CheckLength<IObject>(4);
+            var checkLength = CheckLength<IObject>(sizeof(int));
             if (checkLength.IsError)
             {
                 return checkLength;
