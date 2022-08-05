@@ -9,7 +9,7 @@
 
 	<PropertyGroup>
 		<PackageId>CatraProto.TL</PackageId>
-		<Version>1.1</Version>
+		<Version>1.2</Version>
 		<Authors>Aquathing</Authors>
 		<Company>CatraProto</Company>
 		<Title>CatraProto TL</Title>

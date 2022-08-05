@@ -52,6 +52,11 @@ namespace CatraProto.TL
             _writer.Write(value);
         }
 
+        public void WriteInt16(short value)
+        {
+            _writer.Write(value);
+        }
+
         public void WriteDouble(double value)
         {
             _writer.Write(value);

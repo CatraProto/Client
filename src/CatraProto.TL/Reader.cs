@@ -46,6 +46,17 @@ namespace CatraProto.TL
             _customParsers = objectParsers ?? new List<IObjectParser>(0);
         }
 
+        public ReadResult<short> ReadInt16()
+        {
+            var checkLength = CheckLength<short>(8);
+            if (checkLength.IsError)
+            {
+                return checkLength;
+            }
+
+            return new ReadResult<short>(_reader.ReadInt16());
+        }
+
         public ReadResult<int> ReadInt32()
         {
             var checkLength = CheckLength<int>(4);
