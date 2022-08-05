@@ -9,7 +9,7 @@ namespace CatraProto.TL.Generator.UnitTests.OptimizerTests
 {
 	public class TypeBindingTest
 	{
-		private void AreAllReferenced(TypeBase mainType, params Object[] objects)
+		private void AreAllReferenced(TypeBase mainType, params TLObject[] objects)
 		{
 			foreach (var obj in objects)
 			{
