@@ -32,9 +32,9 @@ namespace CatraProto.Client.Extensions
             return stream.WriteAsync(bArray, cancellationToken);
         }
 
-        public static async Task<int> ReadInt32Async(this NetworkStream stream)
+        public static async Task<int> ReadInt32Async(this NetworkStream stream, CancellationToken cancellationToken = default)
         {
-            var bytes = await stream.ReadBytesAsync(4);
+            var bytes = await stream.ReadBytesAsync(4, cancellationToken);
             return BitConverter.ToInt32(bytes);
         }
 
