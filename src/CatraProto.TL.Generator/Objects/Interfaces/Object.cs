@@ -25,7 +25,7 @@ using CatraProto.TL.Generator.Objects.Types.Interfaces;
 
 namespace CatraProto.TL.Generator.Objects.Interfaces
 {
-    public abstract class Object
+    public abstract class TLObject
     {
         public int Id { get; set; }
         public Namespace Namespace { get; set; }

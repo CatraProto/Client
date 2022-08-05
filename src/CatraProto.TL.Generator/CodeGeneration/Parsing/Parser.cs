@@ -26,7 +26,7 @@ using System.Threading.Tasks;
 using CatraProto.TL.Generator.DeclarationInfo;
 using CatraProto.TL.Generator.Objects;
 using CatraProto.TL.Generator.Settings;
-using Object = CatraProto.TL.Generator.Objects.Interfaces.Object;
+using TLObject = CatraProto.TL.Generator.Objects.Interfaces.TLObject;
 
 namespace CatraProto.TL.Generator.CodeGeneration.Parsing
 {
@@ -39,10 +39,10 @@ namespace CatraProto.TL.Generator.CodeGeneration.Parsing
             _line = line;
         }
 
-        public static async Task<List<Object>> StartAnalyzing(string[] schemaString = null)
+        public static async Task<List<TLObject>> StartAnalyzing(string[] schemaString = null)
         {
             var schema = schemaString ?? await File.ReadAllLinesAsync("schema.tl");
-            var objects = new List<Object>();
+            var objects = new List<TLObject>();
             var readType = ReadType.ReadingConstructor;
             var methodType = MethodCompletionType.ReturnsEncryptedRPCResult;
             for (var index = 0; index < schema.Length; index++)
@@ -89,7 +89,7 @@ namespace CatraProto.TL.Generator.CodeGeneration.Parsing
                         continue;
                 }
 
-                Object constructor = readType switch
+                TLObject constructor = readType switch
                 {
                     ReadType.ReadingConstructor => new Constructor(),
                     ReadType.ReadingMethod => new Method(methodType),

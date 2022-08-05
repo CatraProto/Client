@@ -35,16 +35,16 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
         private string _apiTemplated;
         private string _constructorTemplate;
         private string _methodTemplate;
-        private List<Object> _objects;
+        private List<TLObject> _objects;
         private string _typeTemplate;
         private List<Type> _writtenTypes = new List<Type>();
 
-        private Writer(List<Object> objects)
+        private Writer(List<TLObject> objects)
         {
             _objects = objects;
         }
 
-        public static async Task<Writer> Create(List<Object> objects)
+        public static async Task<Writer> Create(List<TLObject> objects)
         {
             return new Writer(objects)
             {
@@ -140,7 +140,7 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
             await Task.WhenAll(taskList);
         }
 
-        private Task WriteObject(Object obj)
+        private Task WriteObject(TLObject obj)
         {
             var flagsEnum = new StringBuilder();
             var parameters = new StringBuilder();

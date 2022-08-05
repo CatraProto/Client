@@ -23,7 +23,7 @@ using CatraProto.TL.Generator.Objects;
 using CatraProto.TL.Generator.Objects.Types;
 using CatraProto.TL.Generator.Objects.Types.Interfaces;
 using CatraProto.TL.Generator.Objects.Types.InternalTypes;
-using Object = CatraProto.TL.Generator.Objects.Interfaces.Object;
+using TLObject = CatraProto.TL.Generator.Objects.Interfaces.TLObject;
 
 namespace CatraProto.TL.Generator.CodeGeneration.Optimization
 {
@@ -32,19 +32,19 @@ namespace CatraProto.TL.Generator.CodeGeneration.Optimization
         private bool _areObjectsBind;
         private bool _areParametersBind;
         private bool _areParametersCommonized;
-        private List<Object> _objects;
+        private List<TLObject> _objects;
 
-        public Optimizer(IEnumerable<Object> objects)
+        public Optimizer(IEnumerable<TLObject> objects)
         {
             _objects = objects.ToList();
         }
 
-        public List<Object> Objects
+        public List<TLObject> Objects
         {
             get => _objects.ToList();
         }
 
-        public static List<Object> Optimize(IEnumerable<Object> objects)
+        public static List<TLObject> Optimize(IEnumerable<TLObject> objects)
         {
             var optimizer = new Optimizer(objects);
             optimizer.BindObjects();
@@ -57,11 +57,11 @@ namespace CatraProto.TL.Generator.CodeGeneration.Optimization
 
         public void BindObjects()
         {
-            var newObjectList = new List<Object>(_objects);
+            var newObjectList = new List<TLObject>(_objects);
             while (newObjectList.Count != 0)
             {
                 var obj = newObjectList[0];
-                var parsedObjectList = new List<Object>();
+                var parsedObjectList = new List<TLObject>();
                 foreach (var passTwo in newObjectList)
                 {
                     if (passTwo.Type == obj.Type && passTwo != obj)

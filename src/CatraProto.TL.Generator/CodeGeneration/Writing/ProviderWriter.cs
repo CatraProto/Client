@@ -31,18 +31,18 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
     public class ProviderWriter
     {
         private string _dictionaryTemplate;
-        private List<Object> _objects;
+        private List<TLObject> _objects;
 
-        private ProviderWriter(params List<Object>[] objects)
+        private ProviderWriter(params List<TLObject>[] objects)
         {
-            _objects = new List<Object>();
+            _objects = new List<TLObject>();
             foreach (var objectList in objects)
             {
                 _objects = _objects.Concat(objectList).ToList();
             }
         }
 
-        public static async Task<ProviderWriter> CreateAsync(params List<Object>[] objects)
+        public static async Task<ProviderWriter> CreateAsync(params List<TLObject>[] objects)
         {
             return new ProviderWriter(objects)
             {

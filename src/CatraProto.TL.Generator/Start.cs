@@ -46,16 +46,16 @@ namespace CatraProto.TL.Generator
             var updateToolsWriter = new UpdateExtractorsWriter(optimizedObjects);
             var taskList = new List<Task>
             {
+                updateToolsWriter.WriteAsync(),
                 writer.Write(),
                 writer.WriteMethods(),
                 dictionaryWriter.WriteDictionary(),
-                updateToolsWriter.WriteAsync()
             };
 
             await Task.WhenAll(taskList);
             stopwatch.Stop();
 
-            Console.WriteLine($"Done! {stopwatch.Elapsed.Seconds.ToString()}s");
+            Console.WriteLine($"Done! {stopwatch.Elapsed.Seconds}s");
         }
     }
 }

@@ -48,5 +48,13 @@ namespace CatraProto.Client.Updates
             ptsCount = null;
             return false;
         }
+
+        public static void OnFileReceived(CatraProto.TL.Interfaces.IObject socketObject, CatraProto.TL.Interfaces.IObject context, bool preserveContext)
+        {
+            switch(socketObject)
+            {
+                ^FileConditions^
+            }
+        }
     }
 }

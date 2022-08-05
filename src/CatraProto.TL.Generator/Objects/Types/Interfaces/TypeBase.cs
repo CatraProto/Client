@@ -31,7 +31,7 @@ namespace CatraProto.TL.Generator.Objects.Types.Interfaces
         public TypeInfo TypeInfo { get; set; } = new TypeInfo();
         public Namespace Namespace { get; set; }
         public List<Parameter> ReferencedParameters { get; set; } = new List<Parameter>();
-        public List<Object> ReferencedObjects { get; set; } = new List<Object>();
+        public List<TLObject> ReferencedObjects { get; set; } = new List<TLObject>();
 
         public abstract void WriteBaseParameters(StringBuilder stringBuilder, bool isAbstract = false);
 

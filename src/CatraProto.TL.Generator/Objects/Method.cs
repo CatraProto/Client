@@ -27,7 +27,7 @@ using CatraProto.TL.Generator.Objects.Types;
 
 namespace CatraProto.TL.Generator.Objects
 {
-    class Method : Object
+    class Method : TLObject
     {
         public static readonly List<string> HiddenMethods = new List<string>()
         {
