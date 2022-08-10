@@ -77,6 +77,12 @@ namespace CatraProto.Client.Connections
             }
 
             using var lk = await _lock.LockAsync(token);
+            if (_isDisposed)
+            {
+                _logger.Information("Exiting earlier from loop because connection is disposed");
+                return;
+            }
+
             await DisconnectAsync();
             Protocol = CreateProtocol();
             token = CancellationTokenSource.CreateLinkedTokenSource(token, _fullShutdownSource.Token).Token;
@@ -127,7 +133,7 @@ namespace CatraProto.Client.Connections
                 _client.UpdatesReceiver.ForceGetDifferenceAllAsync(false);
             }
 
-            if(MtProtoState.KeyManager!.Connection != this)
+            if (MtProtoState.KeyManager!.Connection != this)
             {
                 _ = ResetSessionAsync(false);
             }
@@ -197,6 +203,10 @@ namespace CatraProto.Client.Connections
 
             //Connect async has already exited after acquiring lock
             var lk = await _lock.LockAsync();
+            if (_isDisposed)
+            {
+                return lk;
+            }
 
             //At this point, any call to ConnectAsync will have to wait for the lock to be released
             //So we can safely replace the cancellation token as it will not be used
@@ -216,11 +226,14 @@ namespace CatraProto.Client.Connections
                 return;
             }
 
-            (await DisconnectAndLockAsync()).Dispose();
+            using (await DisconnectAndLockAsync())
+            {
+                _isDisposed = true;
+            }
+
             _lock.Dispose();
             _fullShutdownSource.Dispose();
-
-            _isDisposed = true;
+            MessagesHandler.MessagesTrackers.MessageCompletionTracker.CloseTracker(new MTProto.Rpc.ExecutionInfo(ConnectionInfo));
             _logger.Information("Connection successfully disposed");
         }
 

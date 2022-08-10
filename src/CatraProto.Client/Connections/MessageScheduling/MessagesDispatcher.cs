@@ -29,6 +29,7 @@ using CatraProto.Client.MTProto.Session;
 using CatraProto.Client.TL;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.Client.TL.Schemas.CloudChats;
+using CatraProto.Client.TL.Schemas.CloudChats.Updates;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.Client.Updates;
 using CatraProto.TL;
@@ -311,6 +312,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
             {
                 UpdatesTools.ExtractChats(obj, out var chats, out var users);
                 _mtProtoState.Client.DatabaseManager.UpdateChats(chats, users);
+                UpdatesTools.OnFileReceived(obj, obj, false);
 
                 switch (obj)
                 {
@@ -418,7 +420,8 @@ namespace CatraProto.Client.Connections.MessageScheduling
                 {
                     UpdatesTools.ExtractChats(iObj, out var chats, out var users);
                     _mtProtoState.Client.DatabaseManager.UpdateChats(chats, users);
-                    switch (rpcObject.Result)
+                    UpdatesTools.OnFileReceived(iObj, method, method is not GetDifference or GetChannelDifference or Client.TL.Schemas.CloudChats.Message);
+                    switch (iObj)
                     {
                         case TL.Schemas.CloudChats.Users.UserFull uFull:
                             _mtProtoState.Client.DatabaseManager.PeerDatabase.PushChatToDb(uFull.FullUser);
