@@ -298,7 +298,7 @@ namespace CatraProto.Client.ApiManagers
         {
             if (GetCurrentState() is not LoginState.AwaitingPassword)
             {
-                _logger.Information("Skipping UsePasswordAsync because state is not AwaitingLogin");
+                _logger.Information("Skipping UsePasswordAsync because state is not AwaitingPassword");
                 return null;
             }
 
@@ -491,7 +491,6 @@ namespace CatraProto.Client.ApiManagers
                 _logger.Information("Successfully logged in! Current user: {User}", user.ToJson());
                 _sessionData.Authorization.SetAuthorized(LoginState.LoggedIn, dcId, userId);
                 SetCurrentState(LoginState.LoggedIn);
-                _client.UpdatesReceiver.ForceGetDifferenceAllAsync(false);
             }
         }
 
@@ -506,7 +505,6 @@ namespace CatraProto.Client.ApiManagers
                 }
 
                 _currentState = newState;
-                _client.UpdatesReceiver.ForceGetDifferenceAllAsync(false);
                 // Won't save other states because they might not be valid and most of them require AwaitingLogin to be sent, if the client saves at the wrong time things could go wrong
                 if (_currentState >= LoginState.LoggedOut)
                 {
@@ -515,6 +513,7 @@ namespace CatraProto.Client.ApiManagers
 
                 if(_currentState >= LoginState.LoggedIn)
                 {
+                    _client.UpdatesReceiver.ForceGetDifferenceAllAsync(false);
                     _ = _client.ForceSaveAsync();
                 }
 
