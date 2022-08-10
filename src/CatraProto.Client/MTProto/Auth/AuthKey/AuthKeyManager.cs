@@ -117,7 +117,7 @@ internal class AuthKeyManager : IAsyncDisposable
         {
             if (_permanentAuthKey.IsAuthorized())
             {
-                _logger.Information("Not copying authorization as we are already authroized for connection {Connection}", fromConnection);
+                _logger.Information("Not copying authorization as we are already authorized for connection {Connection}", fromConnection);
                 return;
             }
 
