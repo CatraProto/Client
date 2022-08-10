@@ -60,7 +60,7 @@ namespace CatraProto.Client.ApiManagers
                     }
                 }
 
-                return _lastConfig;
+                return (Config)_lastConfig.Clone()!;
             }
         }
 
