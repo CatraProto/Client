@@ -27,6 +27,7 @@ using CatraProto.Client.Async.Loops.Enums.Resumable;
 using CatraProto.Client.Async.Loops.Interfaces;
 using CatraProto.Client.Collections;
 using CatraProto.Client.MTProto;
+using CatraProto.Client.MTProto.Rpc.RpcErrors;
 using CatraProto.Client.MTProto.Session.Models;
 using CatraProto.Client.TL.Schemas.CloudChats;
 using CatraProto.Client.TL.Schemas.CloudChats.Updates;
@@ -53,6 +54,10 @@ namespace CatraProto.Client.Updates
             _channelId = channelId;
             _updatesState = updatesState;
             _logger = logger.ForContext<UpdateProcessor>();
+            if (channelId is not null)
+            {
+                _logger = _logger.ForContext("UpdateProcessorId", channelId.Value);
+            }
         }
 
         public override async Task LoopAsync(CancellationToken stoppingToken)
@@ -74,20 +79,20 @@ namespace CatraProto.Client.Updates
                         {
                             case ResumableSignalState.Start:
                                 SetSignalHandled(ResumableLoopState.Running, currentState);
-                                _logger.Information("{Name} started", ToString());
+                                _logger.Information("Loop started");
                                 skipTick = true;
                                 break;
                             case ResumableSignalState.Stop:
-                                _logger.Information("{Name} stopped", ToString());
+                                _logger.Information("Loop stopped");
                                 SetSignalHandled(ResumableLoopState.Stopped, currentState);
                                 return;
                             case ResumableSignalState.Resume:
                                 SetSignalHandled(ResumableLoopState.Running, currentState);
-                                _logger.Information("{Name} woken up", ToString());
+                                _logger.Information("Loop woken up");
                                 break;
                             case ResumableSignalState.Suspend:
                                 SetSignalHandled(ResumableLoopState.Suspended, currentState);
-                                _logger.Verbose("{Name} suspended", ToString());
+                                _logger.Verbose("Loop suspended");
                                 currentState = await StateSignaler.WaitAsync(stoppingToken);
                                 break;
                         }
@@ -98,7 +103,7 @@ namespace CatraProto.Client.Updates
                         }
                     }
 
-                    if (_updatesQueue.GetCount() <= 0)
+                    if (_updatesQueue.GetCount() == 0)
                     {
                         continue;
                     }
@@ -144,10 +149,21 @@ namespace CatraProto.Client.Updates
             var fetchDifference = false;
             while (_updatesQueue.TryPeek(out var update))
             {
-                _logger.Information("Extracted {Update} from queue", update.Item);
+                _logger.Information("Extracted {Update} from queue, remaining items: {Remaining}", update.Item, _updatesQueue.GetCount());
                 if (update.Item is UpdateConfig)
                 {
-                    await _client.ConfigManager.ForceRefreshConfig(stoppingToken);
+                    _logger.Information("Received UpdateConfig, refetching configuration");
+                    _ = Task.Run(async () => 
+                    {
+                        try
+                        {
+                            await _client.ConfigManager.ForceRefreshConfig(stoppingToken);
+                        }
+                        catch (Exception e)
+                        {
+                            _logger.Error(e, "Exception occurred while forcefully refetching configuration");
+                        }
+                    }, stoppingToken);
                 }
 
                 if (update.Item is UpdatesTooLong or UpdateChannelTooLong)
@@ -161,6 +177,7 @@ namespace CatraProto.Client.Updates
                 {
                     if (!UpdatesTools.IsInChat((ChatBase)update.Item))
                     {
+                        _logger.Information("Closing processor because we are not participants of this chat");
                         _client.UpdatesReceiver.CloseProcessor(_channelId!.Value);
                         break;
                     }
@@ -273,8 +290,15 @@ namespace CatraProto.Client.Updates
                     var difference = await _client.Api.CloudChatsApi.Updates.GetDifferenceAsync(localPts, localDate, localQts, cancellationToken: token);
                     if (difference.RpcCallFailed)
                     {
-                        _logger.Error("Couldn't get difference because error {Error} occured", difference.Error);
-                        yield break;
+                        var waitTime = TimeSpan.FromSeconds(5);
+                        if(difference.Error is FloodWaitError error)
+                        {
+                            waitTime = error.WaitTime;
+                        }
+
+                        _logger.Error("Couldn't get difference because error {Error} occured, retrying in {Seconds} seconds", waitTime.TotalSeconds, difference.Error);
+                        await Task.Delay(waitTime, token);
+                        continue;
                     }
 
                     switch (difference.Response)
@@ -303,24 +327,31 @@ namespace CatraProto.Client.Updates
                     var difference = await _client.Api.CloudChatsApi.Updates.GetChannelDifferenceAsync(_channelId.Value, new ChannelMessagesFilterEmpty(), localPts, 100, true, cancellationToken: token);
                     if (difference.RpcCallFailed)
                     {
-                        _logger.Error("Couldn't get difference because error {Error} occured for channel {Channel}, removing channel from states", difference.Error, _channelId.Value);
-                        yield break;
+                        var waitTime = TimeSpan.FromSeconds(5);
+                        if (difference.Error is FloodWaitError error)
+                        {
+                            waitTime = error.WaitTime;
+                        }
+
+                        _logger.Error("Couldn't get difference because error {Error} occured, retrying in {Seconds} seconds", waitTime.TotalSeconds, difference.Error);
+                        await Task.Delay(waitTime, token);
+                        continue;
                     }
 
                     switch (difference.Response)
                     {
                         case ChannelDifferenceEmpty empty:
-                            _logger.Information("Received differenceEmpty for channel {ChannelId}", _channelId.Value);
+                            _logger.Information("Received differenceEmpty");
                             _updatesState.SetData(pts: empty.Pts);
                             yield break;
                         case ChannelDifferenceTooLong differenceTooLong:
                             //TODO: Implement this
-                            _logger.Information("Received difference too long, not yet implemented. Setting new PTS for {ChannelId}", _channelId.Value);
+                            _logger.Information("Received difference too long, not yet implemented. Setting new PTS to {Pts}", ((Dialog)differenceTooLong.Dialog).Pts);
                             _updatesState.SetData(((Dialog)differenceTooLong.Dialog).Pts);
                             continue;
                         case ChannelDifference channelDifference:
                             {
-                                _logger.Information("Received difference for channel {ChannelId}, new messages: {MCount}, other updates: {OCount}, chats: {CCount}, users: {UCount}", _channelId.Value, channelDifference.NewMessages.Count, channelDifference.OtherUpdates.Count, channelDifference.Chats.Count, channelDifference.Users.Count);
+                                _logger.Information("Received difference. new messages: {MCount}, other updates: {OCount}, chats: {CCount}, users: {UCount}", channelDifference.NewMessages.Count, channelDifference.OtherUpdates.Count, channelDifference.Chats.Count, channelDifference.Users.Count);
                                 _updatesState.SetData(channelDifference.Pts);
                                 yield return channelDifference.NewMessages.Select(UpdatesTools.FromMessageToUpdate).Concat(channelDifference.OtherUpdates).ToList();
                                 done = channelDifference.Final;
@@ -600,14 +631,15 @@ namespace CatraProto.Client.Updates
                 _logger.Warning("Received invalid update of type {Type}", update);
                 return false;
             }
-
-            if (_updatesQueue.Enqueue(update) - 1 == 0)
+            var add = _updatesQueue.Enqueue(update);
+            if (add - 1 == 0)
             {
+                _logger.Verbose("Added update {Update} to queue, current count: {Count}", update, add);
                 return true;
             }
             else
             {
-                _logger.Verbose("Not waking up loop because a signal is still being processed");
+                _logger.Verbose("Not waking up loop because a signal is still being processed, current amount of items {Count}", add);
             }
             return false;
         }
@@ -664,7 +696,7 @@ namespace CatraProto.Client.Updates
 
         public override string ToString()
         {
-            return _channelId is null ? "Common sequence update processor" : $"Update processor for channelId {_channelId}";
+            return "UpdateProcessor";
         }
     }
 }

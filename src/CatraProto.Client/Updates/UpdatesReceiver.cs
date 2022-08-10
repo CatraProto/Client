@@ -153,7 +153,6 @@ namespace CatraProto.Client.Updates
                     toNewMessage.PtsCount = updateShortMessage.PtsCount;
                     toNewMessage.Message = message;
 
-                    //TODO FAST: Set from_id as the id of the destination user, unless outgoing is true.
                     if (updateShortMessage.Out)
                     {
                         message.FromId = new PeerUser() { UserId = updateShortMessage.UserId };
@@ -288,7 +287,7 @@ namespace CatraProto.Client.Updates
                         continue;
                     }
 
-                    _logger.Information("Creating processor for chatId {ChatId}", chatId);
+                    _logger.Information("Creating processor for channelId {ChatId}", chatId);
                     var tuple = CreateProcessor(chatId);
                     _processors.TryAdd(chatId, tuple);
                 }

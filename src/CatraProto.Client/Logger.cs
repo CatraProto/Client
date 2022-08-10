@@ -35,7 +35,9 @@ namespace CatraProto.Client
             var addConnection = "{#if Connection is not null} - {Connection}{#end}";
             var addFile = "{#if FileId is not null} - [FileId: {FileId}]{#end}";
             var addMessageItem = "{#if MessageItemTrackId is not null} - {MessageItemTrackId}{#end}";
-            Template = "({@t:HH:mm:ss} {@l:w4}) {Session} " + addContext + addFile + addConnection + addMessageItem + " =>" + " {@m} {@x}" + "\n";
+            var addUpdateProcessor = "{#if UpdateProcessorId is not null} - [ChannelId: {UpdateProcessorId}]{#end}";
+
+            Template = "({@t:HH:mm:ss} {@l:w4}) {Session} " + addContext + addFile + addConnection + addMessageItem + addUpdateProcessor + " =>" + " {@m} {@x}" + "\n";
         }
 
         public static ILogger CreateDefaultLogger(LoggingLevelSwitch? levelSwitch = null, TemplateTheme? theme = null)
