@@ -400,7 +400,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
                             {
                                 await using var connection = await _clientSession.ConnectionPool.GetConnectionByDcAsync(migrateError.DcId, false, false, item.CancellationToken);
                                 await _clientSession.ConnectionPool.SetAccountConnectionAsync(connection.Connection, true);
-                                item.BindTo(connection.Connection.MessagesHandler);
+                                item.BindTo(connection.Connection.MessagesHandler, true);
                                 item.SetToSend();
                             }
                             catch (Exception e) when (e is not OperationCanceledException)

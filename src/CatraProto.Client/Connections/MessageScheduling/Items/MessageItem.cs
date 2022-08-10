@@ -193,7 +193,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
             }
         }
 
-        public void BindTo(MessagesHandler messagesHandler)
+        public void BindTo(MessagesHandler messagesHandler, bool resetMessageInfo = false)
         {
             lock (_mutex)
             {
@@ -206,6 +206,11 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
                     }
 
                     RemoveSelfFromTrackers();
+                }
+
+                if (resetMessageInfo)
+                {
+                    SetProtocolInfo(null, null, null, true);
                 }
 
                 _messagesHandler = messagesHandler;
