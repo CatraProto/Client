@@ -87,83 +87,100 @@ namespace CatraProto.Client.Crypto
             return output;
         }
 
-        public static Tuple<byte[], byte[]> GetFastPq(ulong pq)
+        public static (byte[], byte[]) GetFastPq(ulong pq)
         {
-            var first = FastFactor((long)pq);
-            var second = (long)pq / first;
+            var first = PqFactorize(pq);
+            var second = pq / first;
 
-            var transformedFirst = RemoveStartingZeros(BitConverter.GetBytes(first).Reverse().ToArray());
-            var transformedSecond = RemoveStartingZeros(BitConverter.GetBytes(second).Reverse().ToArray());
-            return first < second ? new Tuple<byte[], byte[]>(transformedFirst, transformedSecond) : new Tuple<byte[], byte[]>(transformedSecond, transformedFirst);
+            var firstAdjusted = SkipFirstNulls(BitConverter.GetBytes(first).Reverse().ToArray());
+            var secondAdjusted = SkipFirstNulls(BitConverter.GetBytes(second).Reverse().ToArray());
+            return first < second ? (firstAdjusted, secondAdjusted) : (secondAdjusted, firstAdjusted);
         }
 
-        //https://github.com/UnigramDev/Unigram/blob/cd8ddb40bffd427fd9bc3fa6f2b99608e2118124/Unigram/Unigram.Api/Helpers/Utils.cs#L244
-        public static long GreatestCommonDivisor(long a, long b)
+        // PQ Factorization is taken from TDLib and simply adapted to C#
+        // https://github.com/tdlib/td/blob/master/tdutils/td/utils/crypto.cpp
+        public static ulong PqGcd(ulong a, ulong b)
         {
-            while (a != 0 && b != 0)
+            if (a == 0)
             {
-                while ((b & 1) == 0)
-                {
-                    b >>= 1;
-                }
+                return b;
+            }
+            while ((a & 1) == 0)
+            {
+                a >>= 1;
+            }
 
-                while ((a & 1) == 0)
-                {
-                    a >>= 1;
-                }
-
+            while (true)
+            {
                 if (a > b)
                 {
-                    a -= b;
+                    a = (a - b) >> 1;
+                    while ((a & 1) == 0)
+                    {
+                        a >>= 1;
+                    }
+                }
+                else if (b > a)
+                {
+                    b = (b - a) >> 1;
+                    while ((b & 1) == 0)
+                    {
+                        b >>= 1;
+                    }
                 }
                 else
                 {
-                    b -= a;
+                    return a;
                 }
             }
-
-            return b == 0 ? a : b;
         }
 
-        public static long FastFactor(long what)
+        // returns (c + a * b) % pq
+        public static ulong PqAddMul(ulong c, ulong a, ulong b, ulong pq)
         {
-            var r = new Random();
-            long g = 0;
-            var it = 0;
-            for (var i = 0; i < 3; i++)
+            while (b > 0)
             {
-                var q = (r.Next(128) & 15) + 17;
-                long x = r.Next(1000000000) + 1, y = x;
-                var lim = 1 << (i + 18);
-                for (var j = 1; j < lim; j++)
+                if ((b & 1) > 0)
                 {
-                    it++;
-                    var a = x;
-                    var b = x;
-                    long c = q;
-                    while (b != 0)
+                    c += a;
+                    if (c >= pq)
                     {
-                        if ((b & 1) != 0)
-                        {
-                            c += a;
-                            if (c >= what)
-                            {
-                                c -= what;
-                            }
-                        }
-
-                        a += a;
-                        if (a >= what)
-                        {
-                            a -= what;
-                        }
-
-                        b >>= 1;
+                        c -= pq;
                     }
+                }
+                a += a;
+                if (a >= pq)
+                {
+                    a -= pq;
+                }
+                b >>= 1;
+            }
+            return c;
+        }
 
-                    x = c;
-                    var z = x < y ? y - x : x - y;
-                    g = GreatestCommonDivisor(z, what);
+        public static ulong PqFactorize(ulong pq)
+        {
+            if (pq <= 2 || pq > (((ulong)1) << 63))
+            {
+                return 1;
+            }
+            if ((pq & 1) == 0)
+            {
+                return 2;
+            }
+            ulong g = 0;
+            for (int i = 0, iter = 0; i < 3 || iter < 1000; i++)
+            {
+                ulong q = (ulong)Random.Shared.Next(17, 32) % (pq - 1);
+                ulong x = ((ulong)Random.Shared.NextInt64()) % (pq - 1) + 1;
+                ulong y = x;
+                int lim = 1 << (Math.Min(5, i) + 18);
+                for (int j = 1; j < lim; j++)
+                {
+                    iter++;
+                    x = PqAddMul(q, x, x, pq);
+                    ulong z = x < y ? pq + x - y : x - y;
+                    g = PqGcd(z, pq);
                     if (g != 1)
                     {
                         break;
@@ -175,14 +192,21 @@ namespace CatraProto.Client.Crypto
                     }
                 }
 
-                if (g > 1)
+                if (g > 1 && g < pq)
                 {
                     break;
                 }
             }
 
-            var p = what / g;
-            return Math.Min(p, g);
+            if (g != 0)
+            {
+                ulong other = pq / g;
+                if (other < g)
+                {
+                    g = other;
+                }
+            }
+            return g;
         }
 
         public static byte[] GenerateRandomBytes(int count)
@@ -192,15 +216,9 @@ namespace CatraProto.Client.Crypto
             return byteArray;
         }
 
-        public static byte[] RemoveStartingZeros(byte[] array)
+        public static byte[] SkipFirstNulls(byte[] array)
         {
-            var result = new List<byte>(array);
-            while (result.Count > 0 && result[0] == 0x00)
-            {
-                result.RemoveAt(0);
-            }
-
-            return result.ToArray();
+            return array.SkipWhile(x => x == 0).ToArray();
         }
     }
 }

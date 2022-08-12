@@ -184,7 +184,7 @@ namespace CatraProto.Client.MTProto.Auth.AuthKey
                         return null;
                     }
 
-                    var rawKey = CryptoTools.RemoveStartingZeros(BigInteger.ModPow(new BigInteger(serverDhInnerData.GA, true, true), b, dhPrime).ToByteArray(isBigEndian: true));
+                    var rawKey = CryptoTools.SkipFirstNulls(BigInteger.ModPow(new BigInteger(serverDhInnerData.GA, true, true), b, dhPrime).ToByteArray(isBigEndian: true));
                     Array.Resize(ref rawKey, 256);
                     var authKeyId = BitConverter.ToInt64(SHA1.HashData(rawKey).TakeLast(8).ToArray());
                     var serverSalt = BitConverter.ToInt64(KeyExchangeTools.ComputeServerSalt(serverNonce, newNonce));
