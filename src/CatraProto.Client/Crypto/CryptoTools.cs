@@ -171,15 +171,15 @@ namespace CatraProto.Client.Crypto
             ulong g = 0;
             for (int i = 0, iter = 0; i < 3 || iter < 1000; i++)
             {
-                ulong q = (ulong)Random.Shared.Next(17, 32) % (pq - 1);
-                ulong x = ((ulong)Random.Shared.NextInt64()) % (pq - 1) + 1;
-                ulong y = x;
-                int lim = 1 << (Math.Min(5, i) + 18);
-                for (int j = 1; j < lim; j++)
+                var q = (ulong)Random.Shared.Next(17, 32) % (pq - 1);
+                var x = ((ulong)Random.Shared.NextInt64()) % (pq - 1) + 1;
+                var y = x;
+                var lim = 1 << (Math.Min(5, i) + 18);
+                for (var j = 1; j < lim; j++)
                 {
                     iter++;
                     x = PqAddMul(q, x, x, pq);
-                    ulong z = x < y ? pq + x - y : x - y;
+                    var z = x < y ? pq + x - y : x - y;
                     g = PqGcd(z, pq);
                     if (g != 1)
                     {
@@ -200,7 +200,7 @@ namespace CatraProto.Client.Crypto
 
             if (g != 0)
             {
-                ulong other = pq / g;
+                var other = pq / g;
                 if (other < g)
                 {
                     g = other;
