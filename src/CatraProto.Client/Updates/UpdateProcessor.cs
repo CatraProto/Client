@@ -199,15 +199,32 @@ namespace CatraProto.Client.Updates
                     continue;
                 }
 
+                // Null check is necessary because some updates may have int? as pts, ptsCount or qts
                 if (UpdatesTools.TryExtractPts(update.Item, out var newPts, out var ptsCount))
                 {
-                    searchType = SearchType.Pts;
-                    updateCheckResult = CheckPts(newPts!.Value, ptsCount!.Value);
+                    if(newPts is null || ptsCount is null)
+                    {
+                        _logger.Information("Skipping sequence checks for {Update} because its pts or pts count are null", update.Item);
+                        updateCheckResult = UpdateCheckResult.CanBeApplied;
+                    }
+                    else
+                    {
+                        searchType = SearchType.Pts;
+                        updateCheckResult = CheckPts(newPts!.Value, ptsCount!.Value);
+                    }
                 }
                 else if (UpdatesTools.TryExtractQts(update.Item, out newQts))
                 {
-                    searchType = SearchType.Qts;
-                    updateCheckResult = CheckQts(newQts!.Value);
+                    if (newPts is null || ptsCount is null)
+                    {
+                        _logger.Information("Skipping sequence checks for {Update} because its qts is null", update.Item);
+                        updateCheckResult = UpdateCheckResult.CanBeApplied;
+                    }
+                    else
+                    {
+                        searchType = SearchType.Qts;
+                        updateCheckResult = CheckQts(newQts!.Value);
+                    }
                 }
                 else
                 {
@@ -376,8 +393,9 @@ namespace CatraProto.Client.Updates
 
                 var found = searchType switch
                 {
-                    SearchType.Pts => UpdatesTools.TryExtractPts(update, out newPts, out var ptsCount) && CheckPts(newPts!.Value, ptsCount!.Value) is UpdateCheckResult.CanBeApplied,
-                    SearchType.Qts => UpdatesTools.TryExtractQts(update, out newQts) && CheckQts(newQts!.Value) is UpdateCheckResult.CanBeApplied,
+                    // Null check is necessary because some updates may have int? as pts, ptsCount or qts
+                    SearchType.Pts => UpdatesTools.TryExtractPts(update, out newPts, out var ptsCount) && newPts is not null && ptsCount is not null && CheckPts(newPts!.Value, ptsCount!.Value) is UpdateCheckResult.CanBeApplied,
+                    SearchType.Qts => UpdatesTools.TryExtractQts(update, out newQts) && newQts is not null && CheckQts(newQts!.Value) is UpdateCheckResult.CanBeApplied,
                     _ => false
                 };
 
