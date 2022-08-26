@@ -22,6 +22,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using CatraProto.TL.Generator.Objects;
 using CatraProto.TL.Generator.Objects.Interfaces;
@@ -40,55 +41,46 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
     class UpdateExtractorsWriter
     {
         private readonly List<TLObject> _objects;
-        private static readonly List<string> s_knownContexts = new List<string>
+        private static Dictionary<string, int> s_knownContexts = new Dictionary<string, int>();
+
+        private static readonly List<string> s_keepContext = new List<string>
         {
+            "CatraProto.Client.TL.Schemas.CloudChats.Message",
+            "CatraProto.Client.TL.Schemas.CloudChats.MessageService",
+            "CatraProto.Client.TL.Schemas.CloudChats.ChatFull",
             "CatraProto.Client.TL.Schemas.CloudChats.ChannelFull",
-            "CatraProto.Client.TL.Schemas.CloudChats.MessageMediaPhoto",
-            "CatraProto.Client.TL.Schemas.CloudChats.MessageActionChatEditPhoto",
-            "CatraProto.Client.TL.Schemas.CloudChats.Photos.ApiPhotos",
-            "CatraProto.Client.TL.Schemas.CloudChats.Photos.PhotosSlice",
-            "CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionChangePhoto",
-            "CatraProto.Client.TL.Schemas.CloudChats.MessageMediaDocument",
-            "CatraProto.Client.TL.Schemas.CloudChats.BotInlineMediaResult",
-            "CatraProto.Client.TL.Schemas.CloudChats.StickerSetMultiCovered",
-            "CatraProto.Client.TL.Schemas.CloudChats.WebPageAttributeTheme",
-            "CatraProto.Client.TL.Schemas.CloudChats.Account.SavedRingtoneConverted",
-            "CatraProto.Client.TL.Schemas.CloudChats.WallPaper",
+            "CatraProto.Client.TL.Schemas.CloudChats.UserFull",
             "CatraProto.Client.TL.Schemas.CloudChats.Help.AppUpdate",
-            "CatraProto.Client.TL.Schemas.CloudChats.Messages.Stickers",
             "CatraProto.Client.TL.Schemas.CloudChats.WebPage",
             "CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSet",
-            "CatraProto.Client.TL.Schemas.CloudChats.BotInfo",
+            "CatraProto.Client.TL.Schemas.CloudChats.WallPaper",
             "CatraProto.Client.TL.Schemas.CloudChats.Messages.SavedGifs",
-            "CatraProto.Client.TL.Schemas.CloudChats.BotInlineResult",
             "CatraProto.Client.TL.Schemas.CloudChats.Messages.RecentStickers",
-            "CatraProto.Client.TL.Schemas.CloudChats.StickerSetCovered",
-            "CatraProto.Client.TL.Schemas.CloudChats.StickerSetCovered",
+            "CatraProto.Client.TL.Schemas.CloudChats.Messages.FeaturedStickers",
+            "CatraProto.Client.TL.Schemas.CloudChats.Messages.ArchivedStickers",
+            "CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetInstallResultArchive",
             "CatraProto.Client.TL.Schemas.CloudChats.Game",
-            "CatraProto.Client.TL.Schemas.CloudChats.Messages.FavedStickers",
-            "CatraProto.Client.TL.Schemas.CloudChats.Page",
             "CatraProto.Client.TL.Schemas.CloudChats.Theme",
-            "CatraProto.Client.TL.Schemas.CloudChats.WebPageAttribute",
             "CatraProto.Client.TL.Schemas.CloudChats.AvailableReaction",
-            "CatraProto.Client.TL.Schemas.CloudChats.AttachMenuBotIcon",
+            "CatraProto.Client.TL.Schemas.AttachMenuBots",
+            "CatraProto.Client.TL.Schemas.AttachMenuBotsBot",
             "CatraProto.Client.TL.Schemas.CloudChats.Account.SavedRingtones",
-            "CatraProto.Client.TL.Schemas.CloudChats.Account.SavedRingtone",
+            "CatraProto.Client.TL.Schemas.CloudChats.Account.SavedRingtoneConverted",
             "CatraProto.Client.TL.Schemas.CloudChats.Help.PremiumPromo",
-            "CatraProto.Client.TL.Schemas.CloudChats.ChatFull",
-            "CatraProto.Client.TL.Schemas.CloudChats.ChatFull",
-            "CatraProto.Client.TL.Schemas.CloudChats.MessageMedia",
-            "CatraProto.Client.TL.Schemas.CloudChats.MessageAction",
-            "CatraProto.Client.TL.Schemas.CloudChats.UserFull",
-            "CatraProto.Client.TL.Schemas.CloudChats.Photos.Photos",
-            "CatraProto.Client.TL.Schemas.CloudChats.Photos.Photos",
-            "CatraProto.Client.TL.Schemas.CloudChats.Photos.Photo",
-            "CatraProto.Client.TL.Schemas.CloudChats.WebPage",
-            "CatraProto.Client.TL.Schemas.CloudChats.ChatInvite",
-            "CatraProto.Client.TL.Schemas.CloudChats.BotInfo",
-            "CatraProto.Client.TL.Schemas.CloudChats.BotInlineResult",
-            "CatraProto.Client.TL.Schemas.CloudChats.Game",
-            "CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventAction",
-            "CatraProto.Client.TL.Schemas.CloudChats.Page",
+            "CatraProto.Client.TL.Schemas.CloudChats.UpdateServiceNotification",
+            "CatraProto.Client.TL.Schemas.CloudChats.UpdateShortSentMessage",
+            "CatraProto.Client.TL.Schemas.CloudChats.Messages.BotResults",
+            
+            // methods
+            "CatraProto.Client.TL.Schemas.CloudChats.Photos.UpdateProfilePhoto",
+            "CatraProto.Client.TL.Schemas.CloudChats.Photos.UploadProfilePhoto",
+            "CatraProto.Client.TL.Schemas.CloudChats.Messages.CheckChatInvite",
+            "CatraProto.Client.TL.Schemas.CloudChats.Channels.GetAdminLog",
+            "CatraProto.Client.TL.Schemas.CloudChats.Messages.GetStickers",
+            "CatraProto.Client.TL.Schemas.CloudChats.Help.GetRecentMeUrls",
+            "CatraProto.Client.TL.Schemas.CloudChats.Channels.GetSponsoredMessages",
+            "CatraProto.Client.TL.Schemas.CloudChats.Photos.GetUserPhotos",
+            "CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchStickerSets"
         };
 
         public UpdateExtractorsWriter(List<TLObject> objects)
@@ -104,28 +96,57 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
                 .Replace("^QtsConditions^", GetQtsConditions())
                 .Replace("^PeerConditions^", GetPeerConditions())
                 .Replace("^VectorChatsConditions^", GetChatsConditions())
-                .Replace("^FileConditions^", GetDocumentsWalker());
+                .Replace("^FileConditions^", await GetDocumentsWalker());
             Directory.CreateDirectory(Configuration.UpdatesToolsWritePath[0..^1]);
             await File.WriteAllTextAsync(Configuration.UpdatesToolsWritePath, replaced);
         }
 
         // Recursively finds every path to every namespace defined in the namespaces List
-        private void FindAndGenWhereContext(List<string> namespaces, List<string> alreadyHandled, StringBuilder builder, bool first = false)
+        private async Task FindAndGenWhereContext(List<string> namespaces, List<string> alreadyHandled, StringBuilder builder, bool first = false)
         {
             var objects = _objects.Where(x => x.Parameters.FirstOrDefault(x => x.Type.Namespace is not null && namespaces.Contains(x.Type.Namespace.FullNamespace)) is not null);
             var alsoSearch = new List<string>();
             foreach (var obj in objects)
             {
-                if (first && !s_knownContexts.Contains(obj.Namespace.FullNamespace))
+                if (!s_knownContexts.TryGetValue(obj.Namespace.FullNamespace, out var hash) || hash != obj.Id)
                 {
-                    Console.WriteLine($"NEW CONTEXT! {obj.Namespace.FullNamespace}");
+                    Console.WriteLine($"NEW CONTEXT OR HASH CHANGED! {obj.Namespace.FullNamespace}");
+                    Console.WriteLine(obj.TLDeclaration);
+                    Console.WriteLine("Do you want to add this context to the list of known contexts?");
+                    var ans = Console.ReadLine();
+                    if (ans.Length > 0 && ans.ToLower()[0] == 'y')
+                    {
+                        Console.WriteLine("Added!");
+                        s_knownContexts[obj.Namespace.FullNamespace] = obj.Id;
+                    }
                 }
 
+                foreach(var method in _objects.Where(x => x is Method && x.Type.Namespace is not null && x.Type.Namespace == obj.Namespace))
+                {
+                    if (!s_knownContexts.TryGetValue(method.Namespace.FullNamespace, out hash) || hash != method.Id)
+                    {
+                        Console.WriteLine($"NEW METHOD RETURN CONTEXT! {method.Namespace.FullNamespace}");
+                        Console.WriteLine(method.TLDeclaration);
+                        Console.WriteLine("Do you want to add this context to the list of known contexts?");
+                        var ans = Console.ReadLine();
+                        if (ans.Length > 0 && ans.ToLower()[0] == 'y')
+                        {
+                            Console.WriteLine("Added!");
+                            s_knownContexts[method.Namespace.FullNamespace] = method.Id;
+                        }
+                    }
+                }
+
+                await File.WriteAllTextAsync("knownContexts.json", JsonSerializer.Serialize(s_knownContexts, typeof(Dictionary<string, int>)));
                 alsoSearch.Add(obj.Type.Namespace.FullNamespace);
-                var getFixedName = obj.Type.Namespace.FullNamespace.Replace(".", "");
+                var getFixedName = obj.Namespace.FullNamespace.Replace(".", "");
                 getFixedName = getFixedName[0].ToString().ToLower() + getFixedName[1..];
                 var wroteAlready = false;
-                foreach(var param in obj.Parameters.Where(x => x.Type.Namespace is not null && namespaces.Contains(x.Type.Namespace.FullNamespace)))
+                var find = obj.Parameters
+                    .Where(x => x.Type.Namespace is not null && namespaces.Contains(x.Type.Namespace.FullNamespace))
+                    .ToList();
+                var i = 0;
+                foreach (var param in find)
                 {
                     if (alreadyHandled.Contains(obj.Namespace.FullNamespace))
                     {
@@ -147,25 +168,35 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
                     }
 
                     var propName = getFixedName + "." + param.NamingInfo.PascalCaseName;
+                    var treeName = "tree";
                     if (param.VectorInfo.IsVector)
                     {
                         builder.AppendLine($"foreach (var item in {getFixedName}.{param.NamingInfo.PascalCaseName}){{");
+                        builder.AppendLine($"var newTree = new List<IObject>(tree);");
                         propName = "item";
+                        treeName = "newTree";
+                    }
+                    else if (find.Count > 1)
+                    {
+                        treeName = propName.Split('.')[0] + "Tree" + i;
+                        builder.AppendLine($"var {treeName} = new List<IObject>(tree);");
                     }
 
-                    if (obj.Namespace.FullNamespace == "CatraProto.Client.TL.Schemas.CloudChats.Message")
+                    builder.AppendLine($"{treeName}.Add({propName});");
+                    if (s_keepContext.Contains(obj.Namespace.FullNamespace))
                     {
-                        builder.AppendLine($"OnFileReceived({propName}, {getFixedName}, true);");
+                        builder.AppendLine($"OnFileReceived({propName}, {getFixedName}, true, {treeName});");
                     }
                     else
                     {
-                        builder.AppendLine($"OnFileReceived({propName}, preserveContext ? context : {getFixedName}, preserveContext);");
+                        builder.AppendLine($"OnFileReceived({propName}, preserveContext ? context : {getFixedName}, preserveContext, {treeName});");
                     }
 
                     if (param.VectorInfo.IsVector)
                     {
                         builder.AppendLine("}");
                     }
+                    i++;
                 }
 
                 if (wroteAlready)
@@ -176,47 +207,20 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
 
             if (alsoSearch.Count > 0)
             {
-                FindAndGenWhereContext(alsoSearch, alreadyHandled, builder);
+                await FindAndGenWhereContext(alsoSearch, alreadyHandled, builder);
             }
         }
 
-        private string GetDocumentsWalker()
+        private async Task<string> GetDocumentsWalker()
         {
             var strinbBud = new StringBuilder();
-            FindAndGenWhereContext(new List<string> { "CatraProto.Client.TL.Schemas.CloudChats.Document", "CatraProto.Client.TL.Schemas.CloudChats.Photo" }, new List<string>(), strinbBud, true);
+            s_knownContexts = (Dictionary<string, int>)JsonSerializer.Deserialize(await File.ReadAllTextAsync("knownContexts.json"), typeof(Dictionary<string, int>));
+            await FindAndGenWhereContext(new List<string> { "CatraProto.Client.TL.Schemas.CloudChats.Document", "CatraProto.Client.TL.Schemas.CloudChats.Photo" }, new List<string>(), strinbBud, true);
 
             strinbBud.AppendLine("case CatraProto.Client.TL.Schemas.CloudChats.Photo:");
             strinbBud.AppendLine("case CatraProto.Client.TL.Schemas.CloudChats.Document:");
-            strinbBud.AppendLine("CatraProto.Client.ApiManagers.Files.FileLocation.UpdateId(socketObject, context);");
+            strinbBud.AppendLine("callback(socketObject, context, tree);");
             strinbBud.AppendLine("break;");
-            /*
-            var stringBuilder = new StringBuilder();
-            var whereDocuments = _objects
-                .Where(x => x is Constructor && x.Parameters.FirstOrDefault(x => x.Type.Namespace is not null && (x.Type.Namespace.FullNamespace == "CatraProto.Client.TL.Schemas.CloudChats.Document" || x.Type.Namespace.FullNamespace == "CatraProto.Client.TL.Schemas.CloudChats.Photo")) is not null)
-                .ToList();
-            foreach (var docConObject in whereDocuments)
-            {
-                if (!s_knownContexts.Contains(docConObject.Namespace.FullNamespace))
-                {
-                    System.Console.WriteLine($"NEW CONTEXT! {docConObject.Namespace.FullNamespace}");
-                }
-
-                foreach (var item in docConObject.Parameters)
-                {
-                    System.Console.WriteLine($"Is in parameter {item.NamingInfo.OriginalName}");
-                }
-            }
-
-            var reverseFind = whereDocuments;
-            while (true)
-            {
-                foreach (var item in reverseFind)
-                {
-                    item.Type.ReferencedParameters.ForEach(x => System.Console.WriteLine(x.NamingInfo.OriginalName));
-                }
-                
-                break;
-            }*/
             return strinbBud.ToString();
         }
 
