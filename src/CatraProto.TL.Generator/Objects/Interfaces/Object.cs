@@ -32,6 +32,7 @@ namespace CatraProto.TL.Generator.Objects.Interfaces
         public List<Parameter> Parameters { get; set; } = new List<Parameter>();
         public TypeBase Type { get; set; }
         public NamingInfo NamingInfo { get; set; }
+        public string TLDeclaration { get; set; }
 
         public virtual string GetMethodsAccessibility()
         {

@@ -96,6 +96,8 @@ namespace CatraProto.TL.Generator.CodeGeneration.Parsing
                     _ => throw new Exception("Unrecognized type")
                 };
 
+                constructor.TLDeclaration = line; 
+
                 var analyzer = new Parser(line);
                 var id = analyzer.FindId();
                 if (id != null)
