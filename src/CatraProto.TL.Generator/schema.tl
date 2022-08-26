@@ -1,4 +1,39 @@
-﻿boolFalse#bc799737 = Bool;
+﻿-/-namespace-/-
+CatraProto.Client.TL.Schemas.FileContexts
+---constructors---
+// constructor ids are generated from their original form and are not supposed to be changed when the constructor changes
+contextFromFeaturedStickers#53DEB6C3 = Context;
+contextFromWallPaper#DE69FEF7 id:long access_hash:long = Context;
+contextFromMessage#e11a9fd9 peer:long msg_id:int = Context;
+contextFromPeerFull#74BC3BCD peer:long = Context;
+contextFromPeerPhotos#69C3430B peer:long = Context;
+contextFromOwnPhotos#8A3FAAB3 = Context;
+contextFromAppUpdate#8572302A = Context;
+contextFromGetStickers#7F663D30 emoji:string = Context;
+contextFromWebPage#75A976DE url:string = Context;
+contextFromChatInvite#31BAA6FF hash:string = Context;
+contextFromSavedGifs#AE150BED = Context;
+contextFromStickerSet#EF4AB097 id:long access_hash:long = Context;
+contextFromRecentStickers#1CDCE1B4 id:long access_hash:long = Context;
+contextFromGame#F0D02364 id:long access_hash:long = Context;
+contextFromAdminLog#421AB4A6 id:long = Context;
+contextFromSavedStickers#80CF2BF1 = Context;
+contextFromTheme#42FFA783 id:long access_hash:long = Context;
+contextFromAvailableReactions#1DAE6256 = Context;
+contextFromAttachMenu#E24B9F35 = Context;
+contextFromRingtones#F0C1ECB7 = Context;
+contextFromPremium#CB92F953 = Context;
+contextFromRecentMeUrl#D12A4907 referer:string = Context;
+contextFromSponsoredMessage#B40E2B12 id:long = Context;
+contextFromArchivedStickers#9B1A452F = Context;
+
+contextUnrecoverable#230E9467 contextType:int = Context;
+contextUnknown#885068ce = Context;
+
+-/-namespace-/-
+CatraProto.Client.TL.Schemas.CloudChats
+
+boolFalse#bc799737 = Bool;
 boolTrue#997275b5 = Bool;
 
 error#c4b9f9bb code:int text:string = Error;
