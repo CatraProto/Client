@@ -5,7 +5,7 @@ using CatraProto.Client.Connections;
 using CatraProto.Client.Connections.MessageScheduling.Interfaces;
 using CatraProto.Client.MTProto.Rpc;
 using CatraProto.TL.Interfaces;
-using CatraProto.Client
+using CatraProto.Client;
 using CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors;
 using System.Collections.Generic;
 using System.Numerics;
