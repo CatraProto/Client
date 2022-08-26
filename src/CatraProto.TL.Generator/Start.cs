@@ -17,7 +17,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using CatraProto.TL.Generator.CodeGeneration.Optimization;
@@ -44,15 +43,11 @@ namespace CatraProto.TL.Generator
             var writer = await Writer.Create(optimizedObjects);
             var dictionaryWriter = await ProviderWriter.CreateAsync(optimizedObjects);
             var updateToolsWriter = new UpdateExtractorsWriter(optimizedObjects);
-            var taskList = new List<Task>
-            {
-                updateToolsWriter.WriteAsync(),
-                writer.Write(),
-                writer.WriteMethods(),
-                dictionaryWriter.WriteDictionary(),
-            };
+            await updateToolsWriter.WriteAsync();
+            await writer.Write();
+            await writer.WriteMethods();
+            await dictionaryWriter.WriteDictionary();
 
-            await Task.WhenAll(taskList);
             stopwatch.Stop();
 
             Console.WriteLine($"Done! {stopwatch.Elapsed.Seconds}s");

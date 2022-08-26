@@ -63,10 +63,11 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
                 if (!_writtenTypes.Contains(obj.Type) && !obj.Type.TypeInfo.IsBare)
                 {
                     _writtenTypes.Add(obj.Type);
-                    tasks.Add(WriteType(obj.Type));
+                    await WriteType(obj.Type);
                 }
 
-                tasks.Add(WriteObject(obj));
+                await WriteObject(obj)
+                    ;
             }
 
             await Task.WhenAll(tasks);
