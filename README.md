@@ -14,6 +14,6 @@ You can create tickets on [GitHub](https://github.com/CatraProto/Client/issues) 
 
 ## JetBrains Support
 <div>
-<p>JetBrains provides free All-In-One license(s) to the main active contributors of CatraProto through the <a href="https://www.jetbrains.com/community/opensource">Free OpenSource Licenses</a> program.</p>
+<p>JetBrains provides free All-Products-Pack license(s) to the main active contributors of CatraProto through the <a href="https://www.jetbrains.com/community/opensource">Free OpenSource Licenses</a> program.</p>
 <img src="assets/jb_beam.png" width="300" height="300" alt="JetBrains Logo">
 </div>
