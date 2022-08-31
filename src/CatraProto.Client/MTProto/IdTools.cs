@@ -68,7 +68,7 @@ namespace CatraProto.Client.MTProto
                     return PeerId.AsChannel(ZeroChannelId - id);
                 }
 
-                if (ZeroSecretChatId - int.MinValue <= id && id != ZeroSecretChatId)
+                if (ZeroSecretChatId + int.MinValue <= id && id != ZeroSecretChatId)
                 {
                     return PeerId.AsSecret(id - ZeroSecretChatId);
                 }
