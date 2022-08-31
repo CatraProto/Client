@@ -11,3 +11,7 @@ We also have a [Telegram Channel](https://t.me/s/CatraProto) where important inf
 
 ## Getting support
 You can create tickets on [GitHub](https://github.com/CatraProto/Client/issues) if you need help, or if you feel more comfortable you'll be more than welcome in our [support group](https://t.me/catraprotodiscussion)
+
+## JetBrains Support
+JetBrains provides free All-In-One license(s) to the main active contributors of CatraProto through the [Free OpenSource Licenses](https://www.jetbrains.com/community/opensource) program.
+<img src="assets/jb_beam.png"  width="300" height="300">
