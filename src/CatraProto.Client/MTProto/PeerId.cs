@@ -41,6 +41,11 @@ namespace CatraProto.Client.MTProto
             Type = peerType;
         }
 
+        public long ToDatabase()
+        {
+            return IdTools.FromApiToTd(Id, Type);
+        }
+        
         public static PeerId AsUser(long id)
         {
             return new PeerId(id, PeerType.User);
@@ -71,6 +76,11 @@ namespace CatraProto.Client.MTProto
                 _ => throw new InvalidOperationException("Unreachable")
             };
         }
+        
+        public static PeerId FromDatabase(long id)
+        {
+            return IdTools.FromTdToApi(id);
+        }
 
         public override string ToString()
         {
@@ -94,12 +104,6 @@ namespace CatraProto.Client.MTProto
             return other.Type == Type && other.Id == Id;
         }
 
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine((int)Type, Id);
-        }
-
         public static bool operator ==(PeerId left, PeerId right)
         {
             return left.Equals(right);
@@ -108,6 +112,11 @@ namespace CatraProto.Client.MTProto
         public static bool operator !=(PeerId left, PeerId right)
         {
             return !(left == right);
+        }
+        
+        public override int GetHashCode()
+        {
+            return HashCode.Combine((int)Type, Id);
         }
     }
 }
