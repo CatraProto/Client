@@ -1,15 +1,18 @@
-using System;
+#region
+
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using CatraProto.Client.Connections;
+using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.Connections.MessageScheduling.Interfaces;
+using CatraProto.Client.MTProto;
 using CatraProto.Client.MTProto.Rpc;
-using CatraProto.TL.Interfaces;
-using CatraProto.Client;
 using CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors;
-using System.Collections.Generic;
-using System.Numerics;
+using CatraProto.Client.TL.Schemas.CloudChats;
+using CatraProto.Client.TL.Schemas.CloudChats.Stickers;
+using StickerSetBase = CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetBase;
 
+#endregion
 
 namespace CatraProto.Client.TL.Requests.CloudChats
 {
@@ -26,13 +29,14 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 	        
 	    }
 	    
-	    internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetBase>> InternalCreateStickerSetAsync(CatraProto.Client.TL.Schemas.CloudChats.InputUserBase userId, string title, string shortName, List<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetItemBase> stickers, bool masks = false, bool animated = false, bool videos = false, CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase? thumb = null, string? software = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+	    internal async Task<RpcResponse<StickerSetBase>> InternalCreateStickerSetAsync(InputUserBase userId, string title, string shortName, List<InputStickerSetItemBase> stickers, bool masks = false, bool animated = false, bool videos = false, InputDocumentBase? thumb = null, string? software = null, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetBase>(
+var rpcResponse = new RpcResponse<StickerSetBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
-var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Stickers.CreateStickerSet(){
+messageSendingOptions ??= new MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
+var methodBody = new CreateStickerSet(){
 UserId = userId,
 Title = title,
 ShortName = shortName,
@@ -48,13 +52,14 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource!;
 return rpcResponse;
 }
-public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetBase>> RemoveStickerFromSetAsync(CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase sticker, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+public async Task<RpcResponse<StickerSetBase>> RemoveStickerFromSetAsync(InputDocumentBase sticker, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetBase>(
+var rpcResponse = new RpcResponse<StickerSetBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
-var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Stickers.RemoveStickerFromSet(){
+messageSendingOptions ??= new MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
+var methodBody = new RemoveStickerFromSet(){
 Sticker = sticker,
 };
 
@@ -62,13 +67,14 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource!;
 return rpcResponse;
 }
-public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetBase>> ChangeStickerPositionAsync(CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase sticker, int position, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+public async Task<RpcResponse<StickerSetBase>> ChangeStickerPositionAsync(InputDocumentBase sticker, int position, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetBase>(
+var rpcResponse = new RpcResponse<StickerSetBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
-var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Stickers.ChangeStickerPosition(){
+messageSendingOptions ??= new MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
+var methodBody = new ChangeStickerPosition(){
 Sticker = sticker,
 Position = position,
 };
@@ -77,13 +83,14 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource!;
 return rpcResponse;
 }
-public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetBase>> AddStickerToSetAsync(CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase stickerset, CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetItemBase sticker, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+public async Task<RpcResponse<StickerSetBase>> AddStickerToSetAsync(InputStickerSetBase stickerset, InputStickerSetItemBase sticker, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetBase>(
+var rpcResponse = new RpcResponse<StickerSetBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
-var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Stickers.AddStickerToSet(){
+messageSendingOptions ??= new MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
+var methodBody = new AddStickerToSet(){
 Stickerset = stickerset,
 Sticker = sticker,
 };
@@ -92,13 +99,14 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource!;
 return rpcResponse;
 }
-public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetBase>> SetStickerSetThumbAsync(CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase stickerset, CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase thumb, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+public async Task<RpcResponse<StickerSetBase>> SetStickerSetThumbAsync(InputStickerSetBase stickerset, InputDocumentBase thumb, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetBase>(
+var rpcResponse = new RpcResponse<StickerSetBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
-var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Stickers.SetStickerSetThumb(){
+messageSendingOptions ??= new MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
+var methodBody = new SetStickerSetThumb(){
 Stickerset = stickerset,
 Thumb = thumb,
 };
@@ -107,13 +115,14 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource!;
 return rpcResponse;
 }
-public async Task<RpcResponse<bool>> CheckShortNameAsync(string shortName, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+public async Task<RpcResponse<bool>> CheckShortNameAsync(string shortName, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
-var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Stickers.CheckShortName(){
+messageSendingOptions ??= new MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
+var methodBody = new CheckShortName(){
 ShortName = shortName,
 };
 
@@ -121,13 +130,14 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource!;
 return rpcResponse;
 }
-public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Stickers.SuggestedShortNameBase>> SuggestShortNameAsync(string title, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+public async Task<RpcResponse<SuggestedShortNameBase>> SuggestShortNameAsync(string title, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
-var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Stickers.SuggestedShortNameBase>(
+var rpcResponse = new RpcResponse<SuggestedShortNameBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
-var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Stickers.SuggestShortName(){
+messageSendingOptions ??= new MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
+var methodBody = new SuggestShortName(){
 Title = title,
 };
 
@@ -135,18 +145,19 @@ _messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, ou
 await taskCompletionSource!;
 return rpcResponse;
 }
-public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetBase>> CreateStickerSetAsync(long userId, string title, string shortName, List<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetItemBase> stickers, bool masks = false, bool animated = false, bool videos = false, CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase? thumb = null, string? software = null, CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
+public async Task<RpcResponse<StickerSetBase>> CreateStickerSetAsync(long userId, string title, string shortName, List<InputStickerSetItemBase> stickers, bool masks = false, bool animated = false, bool videos = false, InputDocumentBase? thumb = null, string? software = null, MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)
 		{
 
 var userIdToResolve = _client.DatabaseManager.PeerDatabase.ResolveUser(userId);
 if(userIdToResolve is null) {
-return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetBase>.FromError(new PeerNotFoundError(userId, CatraProto.Client.MTProto.PeerType.User));
+return RpcResponse<StickerSetBase>.FromError(new PeerNotFoundError(userId, PeerType.User));
 }
 var userIdResolved = userIdToResolve;
-var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetBase>(
+var rpcResponse = new RpcResponse<StickerSetBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
-var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Stickers.CreateStickerSet(){
+messageSendingOptions ??= new MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
+var methodBody = new CreateStickerSet(){
 UserId = userIdResolved,
 Title = title,
 ShortName = shortName,

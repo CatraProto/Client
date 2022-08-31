@@ -65,7 +65,8 @@ Stats = new CatraProto.Client.TL.Requests.CloudChats.Stats(client, messagesQueue
 
 var rpcResponse = new RpcResponse<IObject>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.InvokeAfterMsg(){
 MsgId = msgId,
 Query = query,
@@ -80,7 +81,8 @@ public async Task<RpcResponse<IObject>> InvokeAfterMsgsAsync(List<long> msgIds, 
 
 var rpcResponse = new RpcResponse<IObject>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.InvokeAfterMsgs(){
 MsgIds = msgIds,
 Query = query,
@@ -95,7 +97,8 @@ public async Task<RpcResponse<IObject>> InitConnectionAsync(int apiId, string de
 
 var rpcResponse = new RpcResponse<IObject>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.InitConnection(){
 ApiId = apiId,
 DeviceModel = deviceModel,
@@ -118,7 +121,8 @@ public async Task<RpcResponse<IObject>> InvokeWithLayerAsync(int layer, IObject 
 
 var rpcResponse = new RpcResponse<IObject>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.InvokeWithLayer(){
 Layer = layer,
 Query = query,
@@ -133,7 +137,8 @@ public async Task<RpcResponse<IObject>> InvokeWithoutUpdatesAsync(IObject query,
 
 var rpcResponse = new RpcResponse<IObject>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.InvokeWithoutUpdates(){
 Query = query,
 };
@@ -147,7 +152,8 @@ public async Task<RpcResponse<IObject>> InvokeWithMessagesRangeAsync(CatraProto.
 
 var rpcResponse = new RpcResponse<IObject>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.InvokeWithMessagesRange(){
 Range = range,
 Query = query,
@@ -162,7 +168,8 @@ public async Task<RpcResponse<IObject>> InvokeWithTakeoutAsync(long takeoutId, I
 
 var rpcResponse = new RpcResponse<IObject>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.InvokeWithTakeout(){
 TakeoutId = takeoutId,
 Query = query,

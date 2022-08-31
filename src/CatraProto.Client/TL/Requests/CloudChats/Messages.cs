@@ -31,7 +31,8 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetMessages(){
 Id = id,
 };
@@ -45,7 +46,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.DialogsBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetDialogs(){
 OffsetDate = offsetDate,
 OffsetId = offsetId,
@@ -65,7 +67,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetHistory(){
 Peer = peer,
 OffsetId = offsetId,
@@ -86,7 +89,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.Search(){
 Peer = peer,
 Q = q,
@@ -112,7 +116,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedMessagesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ReadHistory(){
 Peer = peer,
 MaxId = maxId,
@@ -127,7 +132,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedHistoryBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.DeleteHistory(){
 Peer = peer,
 MaxId = maxId,
@@ -146,7 +152,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.A
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedMessagesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.DeleteMessages(){
 Id = id,
 Revoke = revoke,
@@ -162,7 +169,8 @@ public async Task<RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<Ca
 var rpcResponse = new RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.ReceivedNotifyMessageBase>>(
 new CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.ReceivedNotifyMessageBase>()
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ReceivedMessages(){
 MaxId = maxId,
 };
@@ -176,7 +184,8 @@ internal async Task<RpcResponse<bool>> InternalSetTypingAsync(CatraProto.Client.
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SetTyping(){
 Peer = peer,
 Action = action,
@@ -192,7 +201,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesB
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendMessage(){
 Peer = peer,
 Message = message,
@@ -218,7 +228,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesB
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendMedia(){
 Peer = peer,
 Media = media,
@@ -244,7 +255,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesB
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ForwardMessages(){
 FromPeer = fromPeer,
 Id = id,
@@ -269,7 +281,8 @@ internal async Task<RpcResponse<bool>> InternalReportSpamAsync(CatraProto.Client
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ReportSpam(){
 Peer = peer,
 };
@@ -283,7 +296,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.PeerSettingsBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetPeerSettings(){
 Peer = peer,
 };
@@ -297,7 +311,8 @@ internal async Task<RpcResponse<bool>> InternalReportAsync(CatraProto.Client.TL.
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.Report(){
 Peer = peer,
 Id = id,
@@ -314,7 +329,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ChatsBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetChats(){
 Id = id,
 };
@@ -328,7 +344,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ChatFullBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetFullChat(){
 ChatId = chatId,
 };
@@ -342,7 +359,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBas
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.EditChatTitle(){
 ChatId = chatId,
 Title = title,
@@ -357,7 +375,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBas
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.EditChatPhoto(){
 ChatId = chatId,
 Photo = photo,
@@ -372,7 +391,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesB
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.AddChatUser(){
 ChatId = chatId,
 UserId = userId,
@@ -388,7 +408,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesB
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.DeleteChatUser(){
 ChatId = chatId,
 UserId = userId,
@@ -404,7 +425,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesB
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.CreateChat(){
 Users = users,
 Title = title,
@@ -419,7 +441,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.D
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.DhConfigBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetDhConfig(){
 Version = version,
 RandomLength = randomLength,
@@ -434,7 +457,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Encrypte
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.EncryptedChatBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.RequestEncryption(){
 UserId = userId,
 RandomId = randomId,
@@ -450,7 +474,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.EncryptedC
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.EncryptedChatBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.AcceptEncryption(){
 Peer = peer,
 GB = gB,
@@ -466,7 +491,8 @@ public async Task<RpcResponse<bool>> DiscardEncryptionAsync(int chatId, bool del
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.DiscardEncryption(){
 ChatId = chatId,
 DeleteHistory = deleteHistory,
@@ -481,7 +507,8 @@ public async Task<RpcResponse<bool>> SetEncryptedTypingAsync(CatraProto.Client.T
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SetEncryptedTyping(){
 Peer = peer,
 Typing = typing,
@@ -496,7 +523,8 @@ public async Task<RpcResponse<bool>> ReadEncryptedHistoryAsync(CatraProto.Client
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ReadEncryptedHistory(){
 Peer = peer,
 MaxDate = maxDate,
@@ -511,7 +539,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.SentEncryptedMessageBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendEncrypted(){
 Peer = peer,
 RandomId = randomId,
@@ -528,7 +557,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.SentEncryptedMessageBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendEncryptedFile(){
 Peer = peer,
 RandomId = randomId,
@@ -546,7 +576,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.SentEncryptedMessageBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendEncryptedService(){
 Peer = peer,
 RandomId = randomId,
@@ -563,7 +594,8 @@ public async Task<RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<lo
 var rpcResponse = new RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<long>>(
 new CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<long>()
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ReceivedQueue(){
 MaxQts = maxQts,
 };
@@ -577,7 +609,8 @@ public async Task<RpcResponse<bool>> ReportEncryptedSpamAsync(CatraProto.Client.
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ReportEncryptedSpam(){
 Peer = peer,
 };
@@ -591,7 +624,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.A
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedMessagesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ReadMessageContents(){
 Id = id,
 };
@@ -605,7 +639,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.S
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.StickersBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetStickers(){
 Emoticon = emoticon,
 Hash = hash,
@@ -620,7 +655,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.A
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AllStickersBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetAllStickers(){
 Hash = hash,
 };
@@ -634,7 +670,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.MessageMed
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetWebPagePreview(){
 Message = message,
 Entities = entities,
@@ -649,7 +686,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Exported
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.ExportedChatInviteBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ExportChatInvite(){
 Peer = peer,
 LegacyRevokePermanent = legacyRevokePermanent,
@@ -668,7 +706,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.ChatInvite
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.ChatInviteBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.CheckChatInvite(){
 Hash = hash,
 };
@@ -682,7 +721,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBas
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ImportChatInvite(){
 Hash = hash,
 };
@@ -696,7 +736,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.S
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetStickerSet(){
 Stickerset = stickerset,
 Hash = hash,
@@ -711,7 +752,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.S
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetInstallResultBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.InstallStickerSet(){
 Stickerset = stickerset,
 Archived = archived,
@@ -726,7 +768,8 @@ public async Task<RpcResponse<bool>> UninstallStickerSetAsync(CatraProto.Client.
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.UninstallStickerSet(){
 Stickerset = stickerset,
 };
@@ -740,7 +783,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesB
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.StartBot(){
 Bot = bot,
 Peer = peer,
@@ -757,7 +801,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessageViewsBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetMessagesViews(){
 Peer = peer,
 Id = id,
@@ -773,7 +818,8 @@ internal async Task<RpcResponse<bool>> InternalEditChatAdminAsync(long chatId, C
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.EditChatAdmin(){
 ChatId = chatId,
 UserId = userId,
@@ -789,7 +835,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBas
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.MigrateChat(){
 ChatId = chatId,
 };
@@ -803,7 +850,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchGlobal(){
 Q = q,
 Filter = filter,
@@ -825,7 +873,8 @@ public async Task<RpcResponse<bool>> ReorderStickerSetsAsync(List<long> order, b
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ReorderStickerSets(){
 Order = order,
 Masks = masks,
@@ -840,7 +889,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.DocumentBa
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetDocumentByHash(){
 Sha256 = sha256,
 Size = size,
@@ -856,7 +906,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.S
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.SavedGifsBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetSavedGifs(){
 Hash = hash,
 };
@@ -870,7 +921,8 @@ public async Task<RpcResponse<bool>> SaveGifAsync(CatraProto.Client.TL.Schemas.C
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SaveGif(){
 Id = id,
 Unsave = unsave,
@@ -885,7 +937,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.BotResultsBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetInlineBotResults(){
 Bot = bot,
 Peer = peer,
@@ -903,7 +956,8 @@ public async Task<RpcResponse<bool>> SetInlineBotResultsAsync(long queryId, List
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SetInlineBotResults(){
 QueryId = queryId,
 Results = results,
@@ -923,7 +977,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesB
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendInlineBotResult(){
 Peer = peer,
 RandomId = randomId,
@@ -947,7 +1002,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessageEditDataBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetMessageEditData(){
 Peer = peer,
 Id = id,
@@ -962,7 +1018,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesB
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.EditMessage(){
 Peer = peer,
 Id = id,
@@ -983,7 +1040,8 @@ public async Task<RpcResponse<bool>> EditInlineBotMessageAsync(CatraProto.Client
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.EditInlineBotMessage(){
 Id = id,
 NoWebpage = noWebpage,
@@ -1002,7 +1060,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.BotCallbackAnswerBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetBotCallbackAnswer(){
 Peer = peer,
 MsgId = msgId,
@@ -1020,7 +1079,8 @@ public async Task<RpcResponse<bool>> SetBotCallbackAnswerAsync(long queryId, int
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SetBotCallbackAnswer(){
 QueryId = queryId,
 CacheTime = cacheTime,
@@ -1038,7 +1098,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.P
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.PeerDialogsBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetPeerDialogs(){
 Peers = peers,
 };
@@ -1052,7 +1113,8 @@ internal async Task<RpcResponse<bool>> InternalSaveDraftAsync(CatraProto.Client.
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SaveDraft(){
 Peer = peer,
 Message = message,
@@ -1070,7 +1132,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBas
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetAllDrafts(){
 };
 
@@ -1083,7 +1146,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.F
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.FeaturedStickersBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetFeaturedStickers(){
 Hash = hash,
 };
@@ -1097,7 +1161,8 @@ public async Task<RpcResponse<bool>> ReadFeaturedStickersAsync(List<long> id, Ca
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ReadFeaturedStickers(){
 Id = id,
 };
@@ -1111,7 +1176,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.R
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.RecentStickersBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetRecentStickers(){
 Hash = hash,
 Attached = attached,
@@ -1126,7 +1192,8 @@ public async Task<RpcResponse<bool>> SaveRecentStickerAsync(CatraProto.Client.TL
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SaveRecentSticker(){
 Id = id,
 Unsave = unsave,
@@ -1142,7 +1209,8 @@ public async Task<RpcResponse<bool>> ClearRecentStickersAsync(bool attached = fa
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ClearRecentStickers(){
 Attached = attached,
 };
@@ -1156,7 +1224,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.A
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ArchivedStickersBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetArchivedStickers(){
 OffsetId = offsetId,
 Limit = limit,
@@ -1172,7 +1241,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.A
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AllStickersBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetMaskStickers(){
 Hash = hash,
 };
@@ -1187,7 +1257,8 @@ public async Task<RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<Ca
 var rpcResponse = new RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.StickerSetCoveredBase>>(
 new CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.StickerSetCoveredBase>()
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetAttachedStickers(){
 Media = media,
 };
@@ -1201,7 +1272,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesB
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SetGameScore(){
 Peer = peer,
 Id = id,
@@ -1220,7 +1292,8 @@ internal async Task<RpcResponse<bool>> InternalSetInlineGameScoreAsync(CatraProt
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SetInlineGameScore(){
 Id = id,
 UserId = userId,
@@ -1238,7 +1311,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.HighScoresBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetGameHighScores(){
 Peer = peer,
 Id = id,
@@ -1254,7 +1328,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.HighScoresBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetInlineGameHighScores(){
 Id = id,
 UserId = userId,
@@ -1269,7 +1344,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ChatsBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetCommonChats(){
 UserId = userId,
 MaxId = maxId,
@@ -1285,7 +1361,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.C
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ChatsBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetAllChats(){
 ExceptIds = exceptIds,
 };
@@ -1299,7 +1376,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.WebPageBas
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.WebPageBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetWebPage(){
 Url = url,
 Hash = hash,
@@ -1314,7 +1392,8 @@ public async Task<RpcResponse<bool>> ToggleDialogPinAsync(CatraProto.Client.TL.S
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ToggleDialogPin(){
 Peer = peer,
 Pinned = pinned,
@@ -1329,7 +1408,8 @@ public async Task<RpcResponse<bool>> ReorderPinnedDialogsAsync(int folderId, Lis
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ReorderPinnedDialogs(){
 FolderId = folderId,
 Order = order,
@@ -1345,7 +1425,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.P
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.PeerDialogsBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetPinnedDialogs(){
 FolderId = folderId,
 };
@@ -1359,7 +1440,8 @@ public async Task<RpcResponse<bool>> SetBotShippingResultsAsync(long queryId, st
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SetBotShippingResults(){
 QueryId = queryId,
 Error = error,
@@ -1375,7 +1457,8 @@ public async Task<RpcResponse<bool>> SetBotPrecheckoutResultsAsync(long queryId,
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SetBotPrecheckoutResults(){
 QueryId = queryId,
 Success = success,
@@ -1391,7 +1474,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.MessageM
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.UploadMedia(){
 Peer = peer,
 Media = media,
@@ -1406,7 +1490,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesB
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendScreenshotNotification(){
 Peer = peer,
 ReplyToMsgId = replyToMsgId,
@@ -1422,7 +1507,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.F
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.FavedStickersBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetFavedStickers(){
 Hash = hash,
 };
@@ -1436,7 +1522,8 @@ public async Task<RpcResponse<bool>> FaveStickerAsync(CatraProto.Client.TL.Schem
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.FaveSticker(){
 Id = id,
 Unfave = unfave,
@@ -1451,7 +1538,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetUnreadMentions(){
 Peer = peer,
 OffsetId = offsetId,
@@ -1470,7 +1558,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedHistoryBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ReadMentions(){
 Peer = peer,
 };
@@ -1484,7 +1573,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetRecentLocations(){
 Peer = peer,
 Limit = limit,
@@ -1500,7 +1590,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesB
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendMultiMedia(){
 Peer = peer,
 MultiMedia = multiMedia,
@@ -1522,7 +1613,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.EncryptedF
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.EncryptedFileBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.UploadEncryptedFile(){
 Peer = peer,
 File = file,
@@ -1537,7 +1629,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.F
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.FoundStickerSetsBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchStickerSets(){
 Q = q,
 Hash = hash,
@@ -1554,7 +1647,8 @@ public async Task<RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<Ca
 var rpcResponse = new RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.MessageRangeBase>>(
 new CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.MessageRangeBase>()
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetSplitRanges(){
 };
 
@@ -1567,7 +1661,8 @@ public async Task<RpcResponse<bool>> MarkDialogUnreadAsync(CatraProto.Client.TL.
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.MarkDialogUnread(){
 Peer = peer,
 Unread = unread,
@@ -1583,7 +1678,8 @@ public async Task<RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<Ca
 var rpcResponse = new RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.DialogPeerBase>>(
 new CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.DialogPeerBase>()
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetDialogUnreadMarks(){
 };
 
@@ -1596,7 +1692,8 @@ public async Task<RpcResponse<bool>> ClearAllDraftsAsync( CatraProto.Client.Conn
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ClearAllDrafts(){
 };
 
@@ -1609,7 +1706,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesB
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.UpdatePinnedMessage(){
 Peer = peer,
 Id = id,
@@ -1627,7 +1725,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesB
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendVote(){
 Peer = peer,
 MsgId = msgId,
@@ -1643,7 +1742,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesB
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetPollResults(){
 Peer = peer,
 MsgId = msgId,
@@ -1658,7 +1758,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.ChatOnli
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.ChatOnlinesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetOnlines(){
 Peer = peer,
 };
@@ -1672,7 +1773,8 @@ internal async Task<RpcResponse<bool>> InternalEditChatAboutAsync(CatraProto.Cli
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.EditChatAbout(){
 Peer = peer,
 About = about,
@@ -1687,7 +1789,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesB
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.EditChatDefaultBannedRights(){
 Peer = peer,
 BannedRights = bannedRights,
@@ -1702,7 +1805,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.EmojiKeywo
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.EmojiKeywordsDifferenceBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetEmojiKeywords(){
 LangCode = langCode,
 };
@@ -1716,7 +1820,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.EmojiKeywo
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.EmojiKeywordsDifferenceBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetEmojiKeywordsDifference(){
 LangCode = langCode,
 FromVersion = fromVersion,
@@ -1732,7 +1837,8 @@ public async Task<RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<Ca
 var rpcResponse = new RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.EmojiLanguageBase>>(
 new CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.EmojiLanguageBase>()
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetEmojiKeywordsLanguages(){
 LangCodes = langCodes,
 };
@@ -1746,7 +1852,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.EmojiURLBa
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.EmojiURLBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetEmojiURL(){
 LangCode = langCode,
 };
@@ -1761,7 +1868,8 @@ internal async Task<RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<
 var rpcResponse = new RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchCounterBase>>(
 new CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchCounterBase>()
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetSearchCounters(){
 Peer = peer,
 Filters = filters,
@@ -1776,7 +1884,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UrlAuthR
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UrlAuthResultBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.RequestUrlAuth(){
 Peer = peer,
 MsgId = msgId,
@@ -1793,7 +1902,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UrlAuthR
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UrlAuthResultBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.AcceptUrlAuth(){
 WriteAllowed = writeAllowed,
 Peer = peer,
@@ -1811,7 +1921,8 @@ internal async Task<RpcResponse<bool>> InternalHidePeerSettingsBarAsync(CatraPro
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.HidePeerSettingsBar(){
 Peer = peer,
 };
@@ -1825,7 +1936,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetScheduledHistory(){
 Peer = peer,
 Hash = hash,
@@ -1840,7 +1952,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetScheduledMessages(){
 Peer = peer,
 Id = id,
@@ -1855,7 +1968,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesB
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendScheduledMessages(){
 Peer = peer,
 Id = id,
@@ -1870,7 +1984,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesB
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.DeleteScheduledMessages(){
 Peer = peer,
 Id = id,
@@ -1885,7 +2000,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.VotesListBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetPollVotes(){
 Peer = peer,
 Id = id,
@@ -1903,7 +2019,8 @@ public async Task<RpcResponse<bool>> ToggleStickerSetsAsync(List<CatraProto.Clie
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ToggleStickerSets(){
 Stickersets = stickersets,
 Uninstall = uninstall,
@@ -1921,7 +2038,8 @@ public async Task<RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<Ca
 var rpcResponse = new RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.DialogFilterBase>>(
 new CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.DialogFilterBase>()
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetDialogFilters(){
 };
 
@@ -1935,7 +2053,8 @@ public async Task<RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<Ca
 var rpcResponse = new RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.DialogFilterSuggestedBase>>(
 new CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.DialogFilterSuggestedBase>()
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetSuggestedDialogFilters(){
 };
 
@@ -1948,7 +2067,8 @@ public async Task<RpcResponse<bool>> UpdateDialogFilterAsync(int id, CatraProto.
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.UpdateDialogFilter(){
 Id = id,
 Filter = filter,
@@ -1963,7 +2083,8 @@ public async Task<RpcResponse<bool>> UpdateDialogFiltersOrderAsync(List<int> ord
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.UpdateDialogFiltersOrder(){
 Order = order,
 };
@@ -1977,7 +2098,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.F
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.FeaturedStickersBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetOldFeaturedStickers(){
 Offset = offset,
 Limit = limit,
@@ -1993,7 +2115,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetReplies(){
 Peer = peer,
 MsgId = msgId,
@@ -2015,7 +2138,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.DiscussionMessageBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetDiscussionMessage(){
 Peer = peer,
 MsgId = msgId,
@@ -2030,7 +2154,8 @@ internal async Task<RpcResponse<bool>> InternalReadDiscussionAsync(CatraProto.Cl
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ReadDiscussion(){
 Peer = peer,
 MsgId = msgId,
@@ -2046,7 +2171,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedHistoryBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.UnpinAllMessages(){
 Peer = peer,
 };
@@ -2060,7 +2186,8 @@ public async Task<RpcResponse<bool>> DeleteChatAsync(long chatId, CatraProto.Cli
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.DeleteChat(){
 ChatId = chatId,
 };
@@ -2074,7 +2201,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.A
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedFoundMessagesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.DeletePhoneCallHistory(){
 Revoke = revoke,
 };
@@ -2088,7 +2216,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.H
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.HistoryImportParsedBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.CheckHistoryImport(){
 ImportHead = importHead,
 };
@@ -2102,7 +2231,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.HistoryImportBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.InitHistoryImport(){
 Peer = peer,
 File = file,
@@ -2118,7 +2248,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.MessageM
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.UploadImportedMedia(){
 Peer = peer,
 ImportId = importId,
@@ -2135,7 +2266,8 @@ internal async Task<RpcResponse<bool>> InternalStartHistoryImportAsync(CatraProt
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.StartHistoryImport(){
 Peer = peer,
 ImportId = importId,
@@ -2150,7 +2282,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ExportedChatInvitesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetExportedChatInvites(){
 Peer = peer,
 AdminId = adminId,
@@ -2169,7 +2302,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ExportedChatInviteBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetExportedChatInvite(){
 Peer = peer,
 Link = link,
@@ -2184,7 +2318,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ExportedChatInviteBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.EditExportedChatInvite(){
 Peer = peer,
 Link = link,
@@ -2204,7 +2339,8 @@ internal async Task<RpcResponse<bool>> InternalDeleteRevokedExportedChatInvitesA
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.DeleteRevokedExportedChatInvites(){
 Peer = peer,
 AdminId = adminId,
@@ -2219,7 +2355,8 @@ internal async Task<RpcResponse<bool>> InternalDeleteExportedChatInviteAsync(Cat
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.DeleteExportedChatInvite(){
 Peer = peer,
 Link = link,
@@ -2234,7 +2371,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ChatAdminsWithInvitesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetAdminsWithInvites(){
 Peer = peer,
 };
@@ -2248,7 +2386,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ChatInviteImportersBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetChatInviteImporters(){
 Peer = peer,
 OffsetDate = offsetDate,
@@ -2268,7 +2407,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesB
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SetHistoryTTL(){
 Peer = peer,
 Period = period,
@@ -2283,7 +2423,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.CheckedHistoryImportPeerBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.CheckHistoryImportPeer(){
 Peer = peer,
 };
@@ -2297,7 +2438,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesB
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SetChatTheme(){
 Peer = peer,
 Emoticon = emoticon,
@@ -2313,7 +2455,8 @@ internal async Task<RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<
 var rpcResponse = new RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<long>>(
 new CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<long>()
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetMessageReadParticipants(){
 Peer = peer,
 MsgId = msgId,
@@ -2328,7 +2471,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchResultsCalendarBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetSearchResultsCalendar(){
 Peer = peer,
 Filter = filter,
@@ -2345,7 +2489,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchResultsPositionsBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetSearchResultsPositions(){
 Peer = peer,
 Filter = filter,
@@ -2362,7 +2507,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesB
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.HideChatJoinRequest(){
 Peer = peer,
 UserId = userId,
@@ -2378,7 +2524,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesB
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.HideAllChatJoinRequests(){
 Peer = peer,
 Approved = approved,
@@ -2394,7 +2541,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesB
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ToggleNoForwards(){
 Peer = peer,
 Enabled = enabled,
@@ -2409,7 +2557,8 @@ internal async Task<RpcResponse<bool>> InternalSaveDefaultSendAsAsync(CatraProto
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SaveDefaultSendAs(){
 Peer = peer,
 SendAs = sendAs,
@@ -2424,7 +2573,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesB
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendReaction(){
 Peer = peer,
 MsgId = msgId,
@@ -2441,7 +2591,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesB
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetMessagesReactions(){
 Peer = peer,
 Id = id,
@@ -2456,7 +2607,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessageReactionsListBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetMessageReactionsList(){
 Peer = peer,
 Id = id,
@@ -2474,7 +2626,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesB
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SetChatAvailableReactions(){
 Peer = peer,
 AvailableReactions = availableReactions,
@@ -2489,7 +2642,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.A
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AvailableReactionsBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetAvailableReactions(){
 Hash = hash,
 };
@@ -2503,7 +2657,8 @@ public async Task<RpcResponse<bool>> SetDefaultReactionAsync(string reaction, Ca
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SetDefaultReaction(){
 Reaction = reaction,
 };
@@ -2517,7 +2672,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.TranslatedTextBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.TranslateText(){
 ToLang = toLang,
 Peer = peer,
@@ -2535,7 +2691,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetUnreadReactions(){
 Peer = peer,
 OffsetId = offsetId,
@@ -2554,7 +2711,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedHistoryBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ReadReactions(){
 Peer = peer,
 };
@@ -2568,7 +2726,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.M
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchSentMedia(){
 Q = q,
 Filter = filter,
@@ -2584,7 +2743,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.AttachMenu
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.AttachMenuBotsBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetAttachMenuBots(){
 Hash = hash,
 };
@@ -2598,7 +2758,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.AttachMe
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.AttachMenuBotsBotBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetAttachMenuBot(){
 Bot = bot,
 };
@@ -2612,7 +2773,8 @@ internal async Task<RpcResponse<bool>> InternalToggleBotInAttachMenuAsync(CatraP
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ToggleBotInAttachMenu(){
 Bot = bot,
 Enabled = enabled,
@@ -2627,7 +2789,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.WebViewR
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.WebViewResultBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.RequestWebView(){
 Peer = peer,
 Bot = bot,
@@ -2649,7 +2812,8 @@ internal async Task<RpcResponse<bool>> InternalProlongWebViewAsync(CatraProto.Cl
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ProlongWebView(){
 Peer = peer,
 Bot = bot,
@@ -2668,7 +2832,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.SimpleWe
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.SimpleWebViewResultBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.RequestSimpleWebView(){
 Bot = bot,
 Url = url,
@@ -2684,7 +2849,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.WebViewMes
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.WebViewMessageSentBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendWebViewResultMessage(){
 BotQueryId = botQueryId,
 Result = result,
@@ -2699,7 +2865,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesB
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendWebViewData(){
 Bot = bot,
 RandomId = randomId,
@@ -2716,7 +2883,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.TranscribedAudioBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.TranscribeAudio(){
 Peer = peer,
 MsgId = msgId,
@@ -2731,7 +2899,8 @@ internal async Task<RpcResponse<bool>> InternalRateTranscribedAudioAsync(CatraPr
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.RateTranscribedAudio(){
 Peer = peer,
 MsgId = msgId,
@@ -2753,7 +2922,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.DialogsBase>
 var offsetPeerResolved = offsetPeerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.DialogsBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetDialogs(){
 OffsetDate = offsetDate,
 OffsetId = offsetId,
@@ -2778,7 +2948,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetHistory(){
 Peer = peerResolved,
 OffsetId = offsetId,
@@ -2812,7 +2983,8 @@ fromIdResolved = fromIdToResolve;
 }
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.Search(){
 Peer = peerResolved,
 Q = q,
@@ -2843,7 +3015,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedMess
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedMessagesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ReadHistory(){
 Peer = peerResolved,
 MaxId = maxId,
@@ -2863,7 +3036,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedHist
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedHistoryBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.DeleteHistory(){
 Peer = peerResolved,
 MaxId = maxId,
@@ -2887,7 +3061,8 @@ return RpcResponse<bool>.FromError(new PeerNotFoundError(peer.Id, peer.Type));
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SetTyping(){
 Peer = peerResolved,
 Action = action,
@@ -2919,7 +3094,8 @@ sendAsResolved = sendAsToResolve;
 }
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendMessage(){
 Peer = peerResolved,
 Message = message,
@@ -2961,7 +3137,8 @@ sendAsResolved = sendAsToResolve;
 }
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendMedia(){
 Peer = peerResolved,
 Media = media,
@@ -3011,7 +3188,8 @@ sendAsResolved = sendAsToResolve;
 }
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ForwardMessages(){
 FromPeer = fromPeerResolved,
 Id = id,
@@ -3041,7 +3219,8 @@ return RpcResponse<bool>.FromError(new PeerNotFoundError(peer.Id, peer.Type));
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ReportSpam(){
 Peer = peerResolved,
 };
@@ -3060,7 +3239,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.PeerSettings
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.PeerSettingsBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetPeerSettings(){
 Peer = peerResolved,
 };
@@ -3079,7 +3259,8 @@ return RpcResponse<bool>.FromError(new PeerNotFoundError(peer.Id, peer.Type));
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.Report(){
 Peer = peerResolved,
 Id = id,
@@ -3101,7 +3282,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>.FromErro
 var userIdResolved = userIdToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.AddChatUser(){
 ChatId = chatId,
 UserId = userIdResolved,
@@ -3122,7 +3304,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>.FromErro
 var userIdResolved = userIdToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.DeleteChatUser(){
 ChatId = chatId,
 UserId = userIdResolved,
@@ -3147,7 +3330,8 @@ usersResolved.Add(usersToResolve);
 }
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.CreateChat(){
 Users = usersResolved,
 Title = title,
@@ -3167,7 +3351,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.EncryptedChatBase>.Fr
 var userIdResolved = userIdToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.EncryptedChatBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.RequestEncryption(){
 UserId = userIdResolved,
 RandomId = randomId,
@@ -3186,7 +3371,8 @@ randomId = _client.RandomIdHandler.GetNextId();
 }
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.SentEncryptedMessageBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendEncrypted(){
 Peer = peer,
 Data = data,
@@ -3206,7 +3392,8 @@ randomId = _client.RandomIdHandler.GetNextId();
 }
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.SentEncryptedMessageBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendEncryptedFile(){
 Peer = peer,
 Data = data,
@@ -3227,7 +3414,8 @@ randomId = _client.RandomIdHandler.GetNextId();
 }
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.SentEncryptedMessageBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendEncryptedService(){
 Peer = peer,
 Data = data,
@@ -3248,7 +3436,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.ExportedChatInviteBas
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.ExportedChatInviteBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ExportChatInvite(){
 Peer = peerResolved,
 LegacyRevokePermanent = legacyRevokePermanent,
@@ -3280,7 +3469,8 @@ randomId = _client.RandomIdHandler.GetNextId();
 }
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.StartBot(){
 Bot = botResolved,
 Peer = peerResolved,
@@ -3302,7 +3492,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessageViews
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessageViewsBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetMessagesViews(){
 Peer = peerResolved,
 Id = id,
@@ -3323,7 +3514,8 @@ return RpcResponse<bool>.FromError(new PeerNotFoundError(userId, CatraProto.Clie
 var userIdResolved = userIdToResolve;
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.EditChatAdmin(){
 ChatId = chatId,
 UserId = userIdResolved,
@@ -3344,7 +3536,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase
 var offsetPeerResolved = offsetPeerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchGlobal(){
 Q = q,
 Filter = filter,
@@ -3376,7 +3569,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.BotResultsBa
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.BotResultsBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetInlineBotResults(){
 Bot = botResolved,
 Peer = peerResolved,
@@ -3410,7 +3604,8 @@ sendAsResolved = sendAsToResolve;
 }
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendInlineBotResult(){
 Peer = peerResolved,
 QueryId = queryId,
@@ -3439,7 +3634,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessageEditD
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessageEditDataBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetMessageEditData(){
 Peer = peerResolved,
 Id = id,
@@ -3459,7 +3655,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>.FromErro
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.EditMessage(){
 Peer = peerResolved,
 Id = id,
@@ -3485,7 +3682,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.BotCallbackA
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.BotCallbackAnswerBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetBotCallbackAnswer(){
 Peer = peerResolved,
 MsgId = msgId,
@@ -3508,7 +3706,8 @@ return RpcResponse<bool>.FromError(new PeerNotFoundError(peer.Id, peer.Type));
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SaveDraft(){
 Peer = peerResolved,
 Message = message,
@@ -3536,7 +3735,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>.FromErro
 var userIdResolved = userIdToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SetGameScore(){
 Peer = peerResolved,
 Id = id,
@@ -3560,7 +3760,8 @@ return RpcResponse<bool>.FromError(new PeerNotFoundError(userId, CatraProto.Clie
 var userIdResolved = userIdToResolve;
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SetInlineGameScore(){
 Id = id,
 UserId = userIdResolved,
@@ -3588,7 +3789,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.HighScoresBa
 var userIdResolved = userIdToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.HighScoresBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetGameHighScores(){
 Peer = peerResolved,
 Id = id,
@@ -3609,7 +3811,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.HighScoresBa
 var userIdResolved = userIdToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.HighScoresBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetInlineGameHighScores(){
 Id = id,
 UserId = userIdResolved,
@@ -3629,7 +3832,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ChatsBase>.F
 var userIdResolved = userIdToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ChatsBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetCommonChats(){
 UserId = userIdResolved,
 MaxId = maxId,
@@ -3650,7 +3854,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase>.Fro
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.UploadMedia(){
 Peer = peerResolved,
 Media = media,
@@ -3673,7 +3878,8 @@ randomId = _client.RandomIdHandler.GetNextId();
 }
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendScreenshotNotification(){
 Peer = peerResolved,
 ReplyToMsgId = replyToMsgId,
@@ -3694,7 +3900,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetUnreadMentions(){
 Peer = peerResolved,
 OffsetId = offsetId,
@@ -3718,7 +3925,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedHist
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedHistoryBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ReadMentions(){
 Peer = peerResolved,
 };
@@ -3737,7 +3945,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetRecentLocations(){
 Peer = peerResolved,
 Limit = limit,
@@ -3766,7 +3975,8 @@ sendAsResolved = sendAsToResolve;
 }
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendMultiMedia(){
 Peer = peerResolved,
 MultiMedia = multiMedia,
@@ -3793,7 +4003,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>.FromErro
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.UpdatePinnedMessage(){
 Peer = peerResolved,
 Id = id,
@@ -3816,7 +4027,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>.FromErro
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendVote(){
 Peer = peerResolved,
 MsgId = msgId,
@@ -3837,7 +4049,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>.FromErro
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetPollResults(){
 Peer = peerResolved,
 MsgId = msgId,
@@ -3857,7 +4070,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.ChatOnlinesBase>.From
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.ChatOnlinesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetOnlines(){
 Peer = peerResolved,
 };
@@ -3876,7 +4090,8 @@ return RpcResponse<bool>.FromError(new PeerNotFoundError(peer.Id, peer.Type));
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.EditChatAbout(){
 Peer = peerResolved,
 About = about,
@@ -3896,7 +4111,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>.FromErro
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.EditChatDefaultBannedRights(){
 Peer = peerResolved,
 BannedRights = bannedRights,
@@ -3917,7 +4133,8 @@ var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchCounterBase>>(
 new CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchCounterBase>()
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetSearchCounters(){
 Peer = peerResolved,
 Filters = filters,
@@ -3940,7 +4157,8 @@ peerResolved = peerToResolve;
 }
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UrlAuthResultBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.RequestUrlAuth(){
 Peer = peerResolved,
 MsgId = msgId,
@@ -3965,7 +4183,8 @@ peerResolved = peerToResolve;
 }
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UrlAuthResultBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.AcceptUrlAuth(){
 WriteAllowed = writeAllowed,
 Peer = peerResolved,
@@ -3988,7 +4207,8 @@ return RpcResponse<bool>.FromError(new PeerNotFoundError(peer.Id, peer.Type));
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.HidePeerSettingsBar(){
 Peer = peerResolved,
 };
@@ -4007,7 +4227,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetScheduledHistory(){
 Peer = peerResolved,
 Hash = hash,
@@ -4027,7 +4248,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetScheduledMessages(){
 Peer = peerResolved,
 Id = id,
@@ -4047,7 +4269,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>.FromErro
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendScheduledMessages(){
 Peer = peerResolved,
 Id = id,
@@ -4067,7 +4290,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>.FromErro
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.DeleteScheduledMessages(){
 Peer = peerResolved,
 Id = id,
@@ -4087,7 +4311,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.VotesListBas
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.VotesListBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetPollVotes(){
 Peer = peerResolved,
 Id = id,
@@ -4110,7 +4335,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetReplies(){
 Peer = peerResolved,
 MsgId = msgId,
@@ -4137,7 +4363,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.DiscussionMe
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.DiscussionMessageBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetDiscussionMessage(){
 Peer = peerResolved,
 MsgId = msgId,
@@ -4157,7 +4384,8 @@ return RpcResponse<bool>.FromError(new PeerNotFoundError(peer.Id, peer.Type));
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ReadDiscussion(){
 Peer = peerResolved,
 MsgId = msgId,
@@ -4178,7 +4406,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedHist
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedHistoryBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.UnpinAllMessages(){
 Peer = peerResolved,
 };
@@ -4197,7 +4426,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.HistoryImpor
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.HistoryImportBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.InitHistoryImport(){
 Peer = peerResolved,
 File = file,
@@ -4218,7 +4448,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase>.Fro
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.MessageMediaBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.UploadImportedMedia(){
 Peer = peerResolved,
 ImportId = importId,
@@ -4240,7 +4471,8 @@ return RpcResponse<bool>.FromError(new PeerNotFoundError(peer.Id, peer.Type));
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.StartHistoryImport(){
 Peer = peerResolved,
 ImportId = importId,
@@ -4265,7 +4497,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ExportedChat
 var adminIdResolved = adminIdToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ExportedChatInvitesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetExportedChatInvites(){
 Peer = peerResolved,
 AdminId = adminIdResolved,
@@ -4289,7 +4522,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ExportedChat
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ExportedChatInviteBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetExportedChatInvite(){
 Peer = peerResolved,
 Link = link,
@@ -4309,7 +4543,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ExportedChat
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ExportedChatInviteBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.EditExportedChatInvite(){
 Peer = peerResolved,
 Link = link,
@@ -4339,7 +4574,8 @@ return RpcResponse<bool>.FromError(new PeerNotFoundError(adminId, CatraProto.Cli
 var adminIdResolved = adminIdToResolve;
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.DeleteRevokedExportedChatInvites(){
 Peer = peerResolved,
 AdminId = adminIdResolved,
@@ -4359,7 +4595,8 @@ return RpcResponse<bool>.FromError(new PeerNotFoundError(peer.Id, peer.Type));
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.DeleteExportedChatInvite(){
 Peer = peerResolved,
 Link = link,
@@ -4379,7 +4616,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ChatAdminsWi
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ChatAdminsWithInvitesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetAdminsWithInvites(){
 Peer = peerResolved,
 };
@@ -4403,7 +4641,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ChatInviteIm
 var offsetUserResolved = offsetUserToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.ChatInviteImportersBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetChatInviteImporters(){
 Peer = peerResolved,
 OffsetDate = offsetDate,
@@ -4428,7 +4667,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>.FromErro
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SetHistoryTTL(){
 Peer = peerResolved,
 Period = period,
@@ -4448,7 +4688,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.CheckedHisto
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.CheckedHistoryImportPeerBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.CheckHistoryImportPeer(){
 Peer = peerResolved,
 };
@@ -4467,7 +4708,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>.FromErro
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SetChatTheme(){
 Peer = peerResolved,
 Emoticon = emoticon,
@@ -4488,7 +4730,8 @@ var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<long>>(
 new CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<long>()
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetMessageReadParticipants(){
 Peer = peerResolved,
 MsgId = msgId,
@@ -4508,7 +4751,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchResult
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchResultsCalendarBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetSearchResultsCalendar(){
 Peer = peerResolved,
 Filter = filter,
@@ -4530,7 +4774,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchResult
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchResultsPositionsBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetSearchResultsPositions(){
 Peer = peerResolved,
 Filter = filter,
@@ -4557,7 +4802,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>.FromErro
 var userIdResolved = userIdToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.HideChatJoinRequest(){
 Peer = peerResolved,
 UserId = userIdResolved,
@@ -4578,7 +4824,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>.FromErro
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.HideAllChatJoinRequests(){
 Peer = peerResolved,
 Approved = approved,
@@ -4599,7 +4846,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>.FromErro
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ToggleNoForwards(){
 Peer = peerResolved,
 Enabled = enabled,
@@ -4624,7 +4872,8 @@ return RpcResponse<bool>.FromError(new PeerNotFoundError(sendAs.Id, sendAs.Type)
 var sendAsResolved = sendAsToResolve;
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SaveDefaultSendAs(){
 Peer = peerResolved,
 SendAs = sendAsResolved,
@@ -4644,7 +4893,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>.FromErro
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendReaction(){
 Peer = peerResolved,
 MsgId = msgId,
@@ -4666,7 +4916,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>.FromErro
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetMessagesReactions(){
 Peer = peerResolved,
 Id = id,
@@ -4686,7 +4937,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessageReact
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessageReactionsListBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetMessageReactionsList(){
 Peer = peerResolved,
 Id = id,
@@ -4709,7 +4961,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>.FromErro
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SetChatAvailableReactions(){
 Peer = peerResolved,
 AvailableReactions = availableReactions,
@@ -4732,7 +4985,8 @@ peerResolved = peerToResolve;
 }
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.TranslatedTextBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.TranslateText(){
 ToLang = toLang,
 Peer = peerResolved,
@@ -4755,7 +5009,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.MessagesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetUnreadReactions(){
 Peer = peerResolved,
 OffsetId = offsetId,
@@ -4779,7 +5034,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedHist
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedHistoryBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ReadReactions(){
 Peer = peerResolved,
 };
@@ -4798,7 +5054,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.AttachMenuBotsBotBase
 var botResolved = botToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.AttachMenuBotsBotBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.GetAttachMenuBot(){
 Bot = botResolved,
 };
@@ -4817,7 +5074,8 @@ return RpcResponse<bool>.FromError(new PeerNotFoundError(bot, CatraProto.Client.
 var botResolved = botToResolve;
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ToggleBotInAttachMenu(){
 Bot = botResolved,
 Enabled = enabled,
@@ -4850,7 +5108,8 @@ sendAsResolved = sendAsToResolve;
 }
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.WebViewResultBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.RequestWebView(){
 Peer = peerResolved,
 Bot = botResolved,
@@ -4890,7 +5149,8 @@ sendAsResolved = sendAsToResolve;
 }
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.ProlongWebView(){
 Peer = peerResolved,
 Bot = botResolved,
@@ -4914,7 +5174,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.SimpleWebViewResultBa
 var botResolved = botToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.SimpleWebViewResultBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.RequestSimpleWebView(){
 Bot = botResolved,
 Url = url,
@@ -4938,7 +5199,8 @@ randomId = _client.RandomIdHandler.GetNextId();
 }
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.UpdatesBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.SendWebViewData(){
 Bot = botResolved,
 ButtonText = buttonText,
@@ -4960,7 +5222,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.TranscribedA
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Messages.TranscribedAudioBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.TranscribeAudio(){
 Peer = peerResolved,
 MsgId = msgId,
@@ -4980,7 +5243,8 @@ return RpcResponse<bool>.FromError(new PeerNotFoundError(peer.Id, peer.Type));
 var peerResolved = peerToResolve;
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Messages.RateTranscribedAudio(){
 Peer = peerResolved,
 MsgId = msgId,

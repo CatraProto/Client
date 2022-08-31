@@ -31,7 +31,8 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Updates.StateBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Updates.GetState(){
 };
 
@@ -44,7 +45,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Updates.Di
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Updates.DifferenceBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Updates.GetDifference(){
 Pts = pts,
 Date = date,
@@ -61,7 +63,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Updates.
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Updates.ChannelDifferenceBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Updates.GetChannelDifference(){
 Channel = channel,
 Filter = filter,
@@ -84,7 +87,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Updates.ChannelDiffer
 var channelResolved = channelToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Updates.ChannelDifferenceBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Updates.GetChannelDifference(){
 Channel = channelResolved,
 Filter = filter,

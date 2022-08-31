@@ -31,7 +31,8 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Photos.PhotoBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Photos.UpdateProfilePhoto(){
 Id = id,
 };
@@ -45,7 +46,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Photos.Pho
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Photos.PhotoBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Photos.UploadProfilePhoto(){
 File = file,
 Video = video,
@@ -62,7 +64,8 @@ public async Task<RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<lo
 var rpcResponse = new RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<long>>(
 new CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<long>()
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Photos.DeletePhotos(){
 Id = id,
 };
@@ -76,7 +79,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Photos.P
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Photos.PhotosBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Photos.GetUserPhotos(){
 UserId = userId,
 Offset = offset,
@@ -98,7 +102,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Photos.PhotosBase>.Fr
 var userIdResolved = userIdToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Photos.PhotosBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Photos.GetUserPhotos(){
 UserId = userIdResolved,
 Offset = offset,

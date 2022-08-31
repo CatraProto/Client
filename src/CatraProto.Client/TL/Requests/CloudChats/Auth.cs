@@ -31,7 +31,8 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.SendCode(){
 PhoneNumber = phoneNumber,
 ApiId = apiId,
@@ -48,7 +49,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Auth.Aut
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.SignUp(){
 PhoneNumber = phoneNumber,
 PhoneCodeHash = phoneCodeHash,
@@ -65,7 +67,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Auth.Aut
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.SignIn(){
 PhoneNumber = phoneNumber,
 PhoneCodeHash = phoneCodeHash,
@@ -81,7 +84,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Auth.Log
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Auth.LoggedOutBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.LogOut(){
 };
 
@@ -94,7 +98,8 @@ public async Task<RpcResponse<bool>> ResetAuthorizationsAsync( CatraProto.Client
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.ResetAuthorizations(){
 };
 
@@ -107,7 +112,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Auth.Expor
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Auth.ExportedAuthorizationBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.ExportAuthorization(){
 DcId = dcId,
 };
@@ -121,7 +127,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Auth.Autho
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.ImportAuthorization(){
 Id = id,
 Bytes = bytes,
@@ -136,7 +143,8 @@ public async Task<RpcResponse<bool>> BindTempAuthKeyAsync(long permAuthKeyId, lo
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.BindTempAuthKey(){
 PermAuthKeyId = permAuthKeyId,
 Nonce = nonce,
@@ -153,7 +161,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Auth.Aut
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.ImportBotAuthorization(){
 Flags = flags,
 ApiId = apiId,
@@ -170,7 +179,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Auth.Aut
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.CheckPassword(){
 Password = password,
 };
@@ -184,7 +194,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Auth.Passw
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Auth.PasswordRecoveryBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.RequestPasswordRecovery(){
 };
 
@@ -197,7 +208,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Auth.Autho
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Auth.AuthorizationBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.RecoverPassword(){
 Code = code,
 NewSettings = newSettings,
@@ -212,7 +224,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Auth.Sen
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.ResendCode(){
 PhoneNumber = phoneNumber,
 PhoneCodeHash = phoneCodeHash,
@@ -227,7 +240,8 @@ public async Task<RpcResponse<bool>> CancelCodeAsync(string phoneNumber, string 
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.CancelCode(){
 PhoneNumber = phoneNumber,
 PhoneCodeHash = phoneCodeHash,
@@ -242,7 +256,8 @@ public async Task<RpcResponse<bool>> DropTempAuthKeysAsync(List<long> exceptAuth
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.DropTempAuthKeys(){
 ExceptAuthKeys = exceptAuthKeys,
 };
@@ -256,7 +271,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Auth.Login
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Auth.LoginTokenBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.ExportLoginToken(){
 ApiId = apiId,
 ApiHash = apiHash,
@@ -272,7 +288,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Auth.Login
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Auth.LoginTokenBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.ImportLoginToken(){
 Token = token,
 };
@@ -286,7 +303,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.Authorizat
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.AuthorizationBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.AcceptLoginToken(){
 Token = token,
 };
@@ -300,7 +318,8 @@ public async Task<RpcResponse<bool>> CheckRecoveryPasswordAsync(string code, Cat
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Auth.CheckRecoveryPassword(){
 Code = code,
 };

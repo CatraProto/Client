@@ -31,7 +31,8 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.DataJSONBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Bots.SendCustomRequest(){
 CustomMethod = customMethod,
 Params = pparams,
@@ -46,7 +47,8 @@ public async Task<RpcResponse<bool>> AnswerWebhookJSONQueryAsync(long queryId, C
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Bots.AnswerWebhookJSONQuery(){
 QueryId = queryId,
 Data = data,
@@ -61,7 +63,8 @@ public async Task<RpcResponse<bool>> SetBotCommandsAsync(CatraProto.Client.TL.Sc
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Bots.SetBotCommands(){
 Scope = scope,
 LangCode = langCode,
@@ -77,7 +80,8 @@ public async Task<RpcResponse<bool>> ResetBotCommandsAsync(CatraProto.Client.TL.
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Bots.ResetBotCommands(){
 Scope = scope,
 LangCode = langCode,
@@ -93,7 +97,8 @@ public async Task<RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<Ca
 var rpcResponse = new RpcResponse<CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.BotCommandBase>>(
 new CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<CatraProto.Client.TL.Schemas.CloudChats.BotCommandBase>()
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Bots.GetBotCommands(){
 Scope = scope,
 LangCode = langCode,
@@ -108,7 +113,8 @@ internal async Task<RpcResponse<bool>> InternalSetBotMenuButtonAsync(CatraProto.
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Bots.SetBotMenuButton(){
 UserId = userId,
 Button = button,
@@ -123,7 +129,8 @@ internal async Task<RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.BotMenuB
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.BotMenuButtonBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Bots.GetBotMenuButton(){
 UserId = userId,
 };
@@ -137,7 +144,8 @@ public async Task<RpcResponse<bool>> SetBotBroadcastDefaultAdminRightsAsync(Catr
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Bots.SetBotBroadcastDefaultAdminRights(){
 AdminRights = adminRights,
 };
@@ -151,7 +159,8 @@ public async Task<RpcResponse<bool>> SetBotGroupDefaultAdminRightsAsync(CatraPro
 
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Bots.SetBotGroupDefaultAdminRights(){
 AdminRights = adminRights,
 };
@@ -170,7 +179,8 @@ return RpcResponse<bool>.FromError(new PeerNotFoundError(userId, CatraProto.Clie
 var userIdResolved = userIdToResolve;
 var rpcResponse = new RpcResponse<bool>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Bots.SetBotMenuButton(){
 UserId = userIdResolved,
 Button = button,
@@ -190,7 +200,8 @@ return RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.BotMenuButtonBase>.Fr
 var userIdResolved = userIdToResolve;
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.CloudChats.BotMenuButtonBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.CloudChats.Bots.GetBotMenuButton(){
 UserId = userIdResolved,
 };

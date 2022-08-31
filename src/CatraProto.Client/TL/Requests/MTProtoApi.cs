@@ -31,7 +31,8 @@ namespace CatraProto.Client.TL.Requests
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.MTProto.ResPQBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: false);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = false;
 var methodBody = new CatraProto.Client.TL.Schemas.MTProto.ReqPq(){
 Nonce = nonce,
 };
@@ -45,7 +46,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.MTProto.ResPQBase>> R
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.MTProto.ResPQBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: false);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = false;
 var methodBody = new CatraProto.Client.TL.Schemas.MTProto.ReqPqMulti(){
 Nonce = nonce,
 };
@@ -59,7 +61,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.MTProto.ServerDHParam
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.MTProto.ServerDHParamsBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: false);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = false;
 var methodBody = new CatraProto.Client.TL.Schemas.MTProto.ReqDHParams(){
 Nonce = nonce,
 ServerNonce = serverNonce,
@@ -78,7 +81,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.MTProto.SetClientDHPa
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.MTProto.SetClientDHParamsAnswerBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: false);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = false;
 var methodBody = new CatraProto.Client.TL.Schemas.MTProto.SetClientDHParams(){
 Nonce = nonce,
 ServerNonce = serverNonce,
@@ -94,7 +98,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.MTProto.RpcDropAnswer
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.MTProto.RpcDropAnswerBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.MTProto.RpcDropAnswer(){
 ReqMsgId = reqMsgId,
 };
@@ -108,7 +113,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.MTProto.FutureSaltsBa
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.MTProto.FutureSaltsBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.MTProto.GetFutureSalts(){
 Num = num,
 };
@@ -122,7 +128,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.MTProto.PongBase>> Pi
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.MTProto.PongBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.MTProto.Ping(){
 PingId = pingId,
 };
@@ -136,7 +143,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.MTProto.PongBase>> Pi
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.MTProto.PongBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.MTProto.PingDelayDisconnect(){
 PingId = pingId,
 DisconnectDelay = disconnectDelay,
@@ -151,7 +159,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.MTProto.DestroySessio
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.MTProto.DestroySessionResBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.MTProto.DestroySession(){
 SessionId = sessionId,
 };
@@ -165,7 +174,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.MTProto.HttpWaitBase>
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.MTProto.HttpWaitBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.MTProto.HttpWait(){
 MaxDelay = maxDelay,
 WaitAfter = waitAfter,
@@ -181,7 +191,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.MTProto.MsgsStateInfo
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.MTProto.MsgsStateInfoBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.MTProto.MsgsStateReq(){
 MsgIds = msgIds,
 };
@@ -195,7 +206,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.MTProto.MsgsStateInfo
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.MTProto.MsgsStateInfoBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.MTProto.MsgResendReq(){
 MsgIds = msgIds,
 };
@@ -209,7 +221,8 @@ public async Task<RpcResponse<CatraProto.Client.TL.Schemas.MTProto.MsgsStateInfo
 
 var rpcResponse = new RpcResponse<CatraProto.Client.TL.Schemas.MTProto.MsgsStateInfoBase>(
 );
-messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: true);
+messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();
+messageSendingOptions.IsEncrypted = true;
 var methodBody = new CatraProto.Client.TL.Schemas.MTProto.MsgResendAnsReq(){
 MsgIds = msgIds,
 };
