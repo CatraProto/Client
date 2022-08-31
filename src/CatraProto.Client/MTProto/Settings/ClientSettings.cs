@@ -24,13 +24,16 @@ namespace CatraProto.Client.MTProto.Settings
         public ConnectionSettings ConnectionSettings { get; }
         public SessionSettings SessionSettings { get; }
         public ApiSettings ApiSettings { get; }
+        public RpcSettings RpcSettings { get; }
 
-        public ClientSettings(SessionSettings sessionSettings, ApiSettings apiSettings, ConnectionSettings connectionSetting, UpdatesSettings? updatesSettings = null)
+
+        public ClientSettings(SessionSettings sessionSettings, ApiSettings apiSettings, ConnectionSettings connectionSetting, UpdatesSettings? updatesSettings = null, RpcSettings? rpcSettings = null)
         {
             ConnectionSettings = connectionSetting;
             SessionSettings = sessionSettings;
             ApiSettings = apiSettings;
             UpdatesSettings = updatesSettings ?? new UpdatesSettings(true);
+            RpcSettings = new RpcSettings(null);
         }
     }
 }

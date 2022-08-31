@@ -17,6 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,6 +25,7 @@ using CatraProto.Client.Connections.MessageScheduling.ConnectionMessages;
 using CatraProto.Client.Connections.MessageScheduling.ConnectionMessages.Interfaces;
 using CatraProto.Client.MTProto.Deserializers;
 using CatraProto.Client.MTProto.Rpc;
+using CatraProto.Client.MTProto.Rpc.RpcErrors;
 using CatraProto.Client.MTProto.Rpc.RpcErrors.Migrations.Interfaces;
 using CatraProto.Client.MTProto.Session;
 using CatraProto.Client.TL;
@@ -99,7 +101,6 @@ namespace CatraProto.Client.Connections.MessageScheduling
 
                     return;
                 }
-
 
                 var tryRead = reader.ReadObject();
                 if (tryRead.IsError)
@@ -381,7 +382,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
         private void HandleRpcResult(IConnectionMessage connectionMessage, IObject obj, Reader reader, RpcResult rpcObject)
         {
             _logger.Information("Handling rpc message in response to id {Id}", rpcObject.ReqMsgId);
-            if (!_messagesHandler.MessagesTrackers.MessageCompletionTracker.GetRpcMethod(rpcObject.ReqMsgId, out var method))
+            if (!_messagesHandler.MessagesTrackers.MessageCompletionTracker.GetRpcMethod(rpcObject.ReqMsgId, out var method, out var sendingOptions))
             {
                 _logger.Error("Not handling RPC message {Id} in reply to {ReplyTo} because it was not found in the list of sent RPC queries", connectionMessage.MessageId, rpcObject.ReqMsgId);
                 return;
@@ -389,33 +390,69 @@ namespace CatraProto.Client.Connections.MessageScheduling
 
             if (rpcObject.Result is MTProto.Rpc.Interfaces.RpcError error)
             {
-                if (error is IMigrateError migrateError)
+                switch (error)
                 {
-                    if (_messagesHandler.MessagesTrackers.MessageCompletionTracker.RemoveCompletion(rpcObject.ReqMsgId, out var item))
-                    {
-                        _logger.Information("Received migrate error, moving request and setting account dc to DC{DcId} ", migrateError.DcId);
-                        Task.Run(async () =>
+                    case FloodWaitError floodWaitError:
                         {
-                            try
+                            if (sendingOptions.RetryWithin is not null && floodWaitError.WaitTime <= sendingOptions.RetryWithin.Value || sendingOptions.RetryWithin is null && _clientSession.Settings.RpcSettings.RetryWithin is not null && floodWaitError.WaitTime <= _clientSession.Settings.RpcSettings.RetryWithin.Value)
                             {
-                                await using var connection = await _clientSession.ConnectionPool.GetConnectionByDcAsync(migrateError.DcId, false, false, item.CancellationToken);
-                                await _clientSession.ConnectionPool.SetAccountConnectionAsync(connection.Connection, true);
-                                item.BindTo(connection.Connection.MessagesHandler, true);
-                                item.SetToSend();
+                                if (!_messagesHandler.MessagesTrackers.MessageCompletionTracker.RemoveCompletion(rpcObject.ReqMsgId, out var item))
+                                {
+                                    return;
+                                }
+                            
+                                _logger.Information("Retrying message {Message} in {Seconds} seconds", item, floodWaitError.WaitTime.TotalSeconds);
+                                Task.Run(async () =>
+                                {
+                                    try
+                                    {
+                                        await Task.Delay(floodWaitError.WaitTime, item.CancellationToken);
+                                        _logger.Information("Now retrying message {Message} after having waited for {Seconds} seconds", item, floodWaitError.WaitTime.TotalSeconds);
+                                        item.SetToSend();
+                                    }
+                                    catch (OperationCanceledException e)
+                                    {
+                                        _logger.Information("Will not try to resend message {MessageId} after flood wait because it was canceled", item);
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        _logger.Error(e, "Failed to resend or wait flood wait for message {Message}", item);
+                                    }
+                                });
+                                return;
                             }
-                            catch (Exception e) when (e is not OperationCanceledException)
+
+                            break;
+                        }
+                    case IMigrateError migrateError:
+                        {
+                            if (_messagesHandler.MessagesTrackers.MessageCompletionTracker.RemoveCompletion(rpcObject.ReqMsgId, out var item))
                             {
-                                _logger.Error("Caught exception while migrating request", e);
+                                _logger.Information("Received migrate error, moving request and setting account dc to DC{DcId}", migrateError.DcId);
+                                Task.Run(async () =>
+                                {
+                                    try
+                                    {
+                                        await using var connection = await _clientSession.ConnectionPool.GetConnectionByDcAsync(migrateError.DcId, false, false, item.CancellationToken);
+                                        await _clientSession.ConnectionPool.SetAccountConnectionAsync(connection.Connection, true);
+                                        item.BindTo(connection.Connection.MessagesHandler, true);
+                                        item.SetToSend();
+                                    }
+                                    catch (Exception e) when (e is not OperationCanceledException)
+                                    {
+                                        _logger.Error("Caught exception while migrating request", e);
+                                    }
+                                });
                             }
-                        });
-                    }
-                    return;
+                            return;
+                        }
                 }
 
                 _mtProtoState.Client.LoginManager.OnErrorReceived(error, method);
             }
             else
             {
+                // TODO: Vector support 
                 if (rpcObject.Result is IObject iObj)
                 {
                     UpdatesTools.ExtractChats(iObj, out var chats, out var users);

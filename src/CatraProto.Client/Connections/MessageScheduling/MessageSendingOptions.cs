@@ -16,16 +16,27 @@ You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+using System;
 using CatraProto.Client.Connections.MessageScheduling.Enums;
 
 namespace CatraProto.Client.Connections.MessageScheduling
 {
     public class MessageSendingOptions
     {
-        public AwaiterType AwaiterType { get; }
-        public long? SendWithMessageId { get; }
-        public bool IsEncrypted { get; }
+        public TimeSpan? RetryWithin { get; }
+        internal AwaiterType AwaiterType { get; set; } = AwaiterType.OnResponse;
+        internal long? SendWithMessageId { get; set; }
+        internal bool IsEncrypted { get; set; }
 
+        internal MessageSendingOptions()
+        {
+        }
+        
+        public MessageSendingOptions(TimeSpan retryWithin)
+        {
+            RetryWithin = retryWithin;
+        }
+        
         internal MessageSendingOptions(bool isEncrypted, long? sendWithMessageId = null, AwaiterType awaiterType = AwaiterType.OnResponse)
         {
             IsEncrypted = isEncrypted;
