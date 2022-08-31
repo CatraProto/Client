@@ -22,7 +22,7 @@ using CatraProto.TL.Interfaces;
 
 namespace CatraProto.Client.MTProto
 {
-    public class IdTools
+    internal class IdTools
     {
         private const long MaxChatId = 999999999999;
         private const long MaxChannelId = 997852516352;
