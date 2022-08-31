@@ -105,8 +105,9 @@ namespace CatraProto.TL.Generator.Objects
             }
 
             builder.AppendLine(");");
-
-            builder.AppendLine($"messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions(isEncrypted: {(MethodCompletionType == MethodCompletionType.ReturnsUnencrypted ? "false" : "true")});");
+            builder.AppendLine($"messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();");
+            builder.AppendLine($"messageSendingOptions.IsEncrypted = {(MethodCompletionType == MethodCompletionType.ReturnsUnencrypted ? "false" : "true")};");
+   
             builder.AppendLine($"var methodBody = new {Namespace.FullNamespace}(){{");
             foreach (var parameter in parametersOrdered)
             {
