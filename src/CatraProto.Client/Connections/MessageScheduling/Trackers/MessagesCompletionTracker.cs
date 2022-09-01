@@ -16,6 +16,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -24,11 +26,14 @@ using System.Net;
 using CatraProto.Client.Connections.MessageScheduling.Enums;
 using CatraProto.Client.Connections.MessageScheduling.Items;
 using CatraProto.Client.MTProto.Rpc;
+using CatraProto.Client.MTProto.Rpc.Interfaces;
 using CatraProto.Client.MTProto.Rpc.RpcErrors;
 using CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors;
 using CatraProto.Client.TL.Schemas.CloudChats.Auth;
 using CatraProto.TL.Interfaces;
 using Serilog;
+
+#endregion
 
 namespace CatraProto.Client.Connections.MessageScheduling.Trackers
 {
@@ -140,7 +145,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
                         var method = x.GetMessageMethod();
                         if (method is not null)
                         {
-                            if (response is MTProto.Rpc.Interfaces.RpcError)
+                            if (response is RpcError)
                             {
                                 return true;
                             }
@@ -167,7 +172,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
 
                 if (GetMessageCompletion(messageId, out var messageItem))
                 {
-                    if (_stopInitAt == -2 && messageItem.GetProtocolInfo().initConn && executionInfo.IsTelegramRpc && response is not MTProto.Rpc.Interfaces.RpcError)
+                    if (_stopInitAt == -2 && messageItem.GetProtocolInfo().initConn && executionInfo.IsTelegramRpc && response is not RpcError)
                     {
                         _stopInitAt = ((int)DateTimeOffset.UtcNow.ToUnixTimeSeconds()) + InitConnTime;
                     }
@@ -178,27 +183,25 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
             }
         }
 
-        public bool GetRpcMethod(long messageId, [MaybeNullWhen(false)] out IMethod method)
+        public bool GetRpcMethod(long messageId, [MaybeNullWhen(false)] out IMethod method, [MaybeNullWhen(false)] out MessageSendingOptions messageSendingOptions)
         {
             lock (_mutex)
             {
+                messageSendingOptions = null;
+                method = null;
+                
                 if (_isClosed)
                 {
-                    method = null;
                     return false;
                 }
 
                 if (GetMessageCompletion(messageId, out var encryptedMessageCompletion, false))
                 {
+                    messageSendingOptions = encryptedMessageCompletion.MessageSendingOptions;
                     method = encryptedMessageCompletion.GetMessageMethod();
-                    if (method is null)
-                    {
-                        return false;
-                    }
-                    return true;
+                    return method is not null;
                 }
 
-                method = null;
                 return false;
             }
         }
@@ -214,15 +217,14 @@ namespace CatraProto.Client.Connections.MessageScheduling.Trackers
 
                 var getUnanswered = _messageCompletions
                     .Where(x => x.Value.GetMessageState() is MessageState.MessageSent or MessageState.Acknowledged)
-                    .Select(x => x.Value);
+                    .Select(x => x.Value)
+                    .ToList();
 
-                var messagesCount = getUnanswered.Count();
-                var iteratedOver = 0;
+                var messagesCount = getUnanswered.Count;
                 foreach (var message in getUnanswered)
                 {
                     _logger.Information("Resending message {Message}", message.Body);
-                    iteratedOver++;
-                    message.SetToSend(true, iteratedOver == messagesCount, true);
+                    message.SetToSend(true, true, true);
                 }
             }
         }

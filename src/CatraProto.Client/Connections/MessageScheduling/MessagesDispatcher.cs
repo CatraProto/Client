@@ -16,10 +16,12 @@ You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#region
+
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.Connections.MessageScheduling.ConnectionMessages;
 using CatraProto.Client.Connections.MessageScheduling.ConnectionMessages.Interfaces;
@@ -38,6 +40,13 @@ using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Interfaces.Deserializers;
 using Serilog;
+using ChatFull = CatraProto.Client.TL.Schemas.CloudChats.Messages.ChatFull;
+using Message = CatraProto.Client.TL.Schemas.CloudChats.Message;
+using RpcError = CatraProto.Client.MTProto.Rpc.Interfaces.RpcError;
+using UserFull = CatraProto.Client.TL.Schemas.CloudChats.Users.UserFull;
+
+#endregion
+
 namespace CatraProto.Client.Connections.MessageScheduling
 {
     internal class MessagesDispatcher
@@ -65,6 +74,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
         private readonly object _mutex = new object();
         private readonly ILogger _logger;
         private bool _startIgnoring;
+
         public MessagesDispatcher(Connection connection, MessagesHandler messagesHandler, MTProtoState mtProtoState, ClientSession clientSession, ILogger logger)
         {
             _parsers = new List<IObjectParser>(2) { new RpcDeserializer(messagesHandler.MessagesTrackers.MessageCompletionTracker, logger), new MsgContainerDeserializer(logger) };
@@ -210,11 +220,12 @@ namespace CatraProto.Client.Connections.MessageScheduling
             if (!_mtProtoState.SaltHandler.IsSaltValid(connectionMessage.Salt))
             {
                 _logger.Information("Skipping message {MessageId} because it was sent using an invalid salt", connectionMessage.MessageId);
-                if(_mtProtoState.SaltHandler.GetSalt() != -1)
+                if (_mtProtoState.SaltHandler.GetSalt() != -1)
                 {
                     _logger.Information("Resetting session due to invalid salt");
                     _ = _connection.ResetSessionAsync(false);
                 }
+
                 return false;
             }
 
@@ -249,6 +260,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
                         _mtProtoState.MessageIdsHandler.SetTimeDifference(MessageIdsHandler.GetSeconds(messageId));
                         _ = _connection.ResetSessionAsync(false);
                     }
+
                     break;
             }
         }
@@ -373,10 +385,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
         private void HandlePing(Ping ping)
         {
             _logger.Information("Replying to ping from server with Id {Id}", ping);
-            _messagesHandler.MessagesQueue.EnqueueMessage(new Pong
-            {
-                PingId = ping.PingId
-            }, new MessageSendingOptions(true), null, out _, default);
+            _messagesHandler.MessagesQueue.EnqueueMessage(new Pong { PingId = ping.PingId }, new MessageSendingOptions(true), null, out _, default);
         }
 
         private void HandleRpcResult(IConnectionMessage connectionMessage, IObject obj, Reader reader, RpcResult rpcObject)
@@ -388,7 +397,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
                 return;
             }
 
-            if (rpcObject.Result is MTProto.Rpc.Interfaces.RpcError error)
+            if (rpcObject.Result is RpcError error)
             {
                 switch (error)
                 {
@@ -396,21 +405,40 @@ namespace CatraProto.Client.Connections.MessageScheduling
                         {
                             if (sendingOptions.RetryWithin is not null && floodWaitError.WaitTime <= sendingOptions.RetryWithin.Value || sendingOptions.RetryWithin is null && _clientSession.Settings.RpcSettings.RetryWithin is not null && floodWaitError.WaitTime <= _clientSession.Settings.RpcSettings.RetryWithin.Value)
                             {
-                                if (!_messagesHandler.MessagesTrackers.MessageCompletionTracker.RemoveCompletion(rpcObject.ReqMsgId, out var item))
+                                if (!_messagesHandler.MessagesTrackers.MessageCompletionTracker.GetMessageCompletion(rpcObject.ReqMsgId, out var item, false))
                                 {
                                     return;
                                 }
-                            
+
                                 _logger.Information("Retrying message {Message} in {Seconds} seconds", item, floodWaitError.WaitTime.TotalSeconds);
+                                item.SetOnHold();
                                 Task.Run(async () =>
                                 {
                                     try
                                     {
-                                        await Task.Delay(floodWaitError.WaitTime, item.CancellationToken);
+                                        // Used to avoid having a Task hanging around when the connection was closed but the Delay is still awaiting
+                                        var getCompletionTask = item.GetMessageTask();
+                                        if (getCompletionTask is not null)
+                                        {
+                                            using var cTokenSource = new CancellationTokenSource();
+                                            using var combinedCancellation = CancellationTokenSource.CreateLinkedTokenSource(item.CancellationToken, cTokenSource.Token);
+                                            var completedTask = await Task.WhenAny(Task.Delay(floodWaitError.WaitTime, combinedCancellation.Token), getCompletionTask);
+                                            if (completedTask == getCompletionTask)
+                                            {
+                                                _logger.Information("Stopping flood wait task for {MessageItem} because message was completed", item);
+                                                cTokenSource.Cancel();
+                                                return;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            await Task.Delay(floodWaitError.WaitTime, item.CancellationToken);
+                                        }
+
                                         _logger.Information("Now retrying message {Message} after having waited for {Seconds} seconds", item, floodWaitError.WaitTime.TotalSeconds);
                                         item.SetToSend();
                                     }
-                                    catch (OperationCanceledException e)
+                                    catch (OperationCanceledException)
                                     {
                                         _logger.Information("Will not try to resend message {MessageId} after flood wait because it was canceled", item);
                                     }
@@ -444,6 +472,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
                                     }
                                 });
                             }
+
                             return;
                         }
                 }
@@ -457,13 +486,13 @@ namespace CatraProto.Client.Connections.MessageScheduling
                 {
                     UpdatesTools.ExtractChats(iObj, out var chats, out var users);
                     _mtProtoState.Client.DatabaseManager.UpdateChats(chats, users);
-                    UpdatesTools.OnFileReceived(iObj, method, method is not GetDifference or GetChannelDifference or Client.TL.Schemas.CloudChats.Message);
+                    UpdatesTools.OnFileReceived(iObj, method, method is not GetDifference or GetChannelDifference or Message);
                     switch (iObj)
                     {
-                        case TL.Schemas.CloudChats.Users.UserFull uFull:
+                        case UserFull uFull:
                             _mtProtoState.Client.DatabaseManager.PeerDatabase.PushChatToDb(uFull.FullUser);
                             break;
-                        case TL.Schemas.CloudChats.Messages.ChatFull cFull:
+                        case ChatFull cFull:
                             _mtProtoState.Client.DatabaseManager.PeerDatabase.PushChatToDb(cFull.FullChat);
                             break;
                         case UpdatesBase update:

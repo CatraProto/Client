@@ -16,14 +16,19 @@ You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#region
+
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using CatraProto.Client.Connections.MessageScheduling.Enums;
 using CatraProto.Client.Crypto;
 using CatraProto.Client.MTProto.Rpc;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.TL.Interfaces;
 using Serilog;
+
+#endregion
 
 namespace CatraProto.Client.Connections.MessageScheduling.Items
 {
@@ -90,10 +95,33 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
             }
         }
 
+        public void SetOnHold(bool resetProtocolInfo = true, bool wakeUpLoop = true, bool canDelete = false)
+        {
+            if (GetMessageState() is MessageState.Completed or MessageState.Failed or MessageState.Canceled)
+            {
+                _logger.Verbose("Tried to send an already completed or failed message (this is not an error)");
+                return;
+            }
+
+            _messageStatus.MessageState = MessageState.NotYetSent;
+        }
+
         public void SetToSend(bool resetProtocolInfo = true, bool wakeUpLoop = true, bool canDelete = false)
         {
             lock (_mutex)
             {
+                if (GetMessageState() is MessageState.Completed or MessageState.Failed)
+                {
+                    _logger.Verbose("Tried to send an already completed or failed message (this is not an error)");
+                    return;
+                }
+
+                if (CancellationToken.IsCancellationRequested)
+                {
+                    _logger.Verbose("Tried to send a canceled message (this is not an error)");
+                    return;
+                }
+
                 if (_messagesHandler is null)
                 {
                     throw new InvalidOperationException("MessageHandler is not set");
@@ -101,12 +129,7 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
 
                 _logger.Information("Setting message with id {MessageId} as to be sent", _messageStatus.MessageProtocolInfo.MessageId);
                 RemoveSelfFromTrackers();
-                if (CancellationToken.IsCancellationRequested)
-                {
-                    _logger.Verbose("Tried to send a canceled message (this is not an error)");
-                    return;
-                }
-
+                
                 if (resetProtocolInfo)
                 {
                     SetProtocolInfo(null, null, false, true);
@@ -279,6 +302,14 @@ namespace CatraProto.Client.Connections.MessageScheduling.Items
             lock (_mutex)
             {
                 return _messageStatus.MessageCompletion.Method;
+            }
+        }
+
+        public Task? GetMessageTask()
+        {
+            lock (_mutex)
+            {
+                return _messageStatus.MessageCompletion.TaskCompletionSource?.Task;
             }
         }
 
