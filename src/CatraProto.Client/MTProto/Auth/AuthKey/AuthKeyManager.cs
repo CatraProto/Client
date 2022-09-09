@@ -27,10 +27,12 @@ using CatraProto.Client.MTProto.Session;
 using Serilog;
 
 namespace CatraProto.Client.MTProto.Auth.AuthKey;
+
 internal class AuthKeyManager : IAsyncDisposable
 {
     public int DcId { get; }
     public Connection Connection { get; }
+
     public TemporaryAuthKey TemporaryAuthKey
     {
         get
@@ -47,6 +49,7 @@ internal class AuthKeyManager : IAsyncDisposable
             }
         }
     }
+
     private readonly TemporaryAuthKey _temporaryAuthKey;
     private (KeyGeneratorLoop? Loop, PeriodicLoopController? Controller) _keyLoop;
     private readonly PermanentAuthKey _permanentAuthKey;
@@ -68,6 +71,7 @@ internal class AuthKeyManager : IAsyncDisposable
 
     public async Task StartAsync()
     {
+        _logger.Verbose("Starting auth key manager");
         _keyLoop.Loop ??= new KeyGeneratorLoop(_temporaryAuthKey, Connection, _logger);
         var pfsSeconds = TimeSpan.FromSeconds(_clientSession.Settings.ConnectionSettings.PfsKeyDuration);
         if (_temporaryAuthKey.Exists())
