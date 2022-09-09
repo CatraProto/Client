@@ -18,6 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using System;
 using Serilog;
+
 namespace CatraProto.Client.Connections.MessageScheduling
 {
     internal class MessageIdsHandler
@@ -78,7 +79,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
         {
             var oldDifference = _timeDifference;
             var newDifference = serverTime - (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            if (oldDifference != newDifference)
+            if (oldDifference != newDifference && Math.Abs(newDifference) > 5)
             {
                 _timeDifference = newDifference;
                 _logger.Information("Time difference with server is now {Seconds} seconds", _timeDifference);
