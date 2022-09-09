@@ -16,7 +16,6 @@ You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 using CatraProto.Client.Crypto;
@@ -153,6 +152,7 @@ namespace CatraProto.Client.ApiManagers
                 {
                     return new BotTokenIncorrectError();
                 }
+
                 return auth.Error;
             }
 
@@ -171,7 +171,7 @@ namespace CatraProto.Client.ApiManagers
             }
 
 
-            SetLoggedIn(castedUser, auth.ExecutionInfo.ExecutedBy.DcId, castedUser.Id);
+            SetLoggedIn(castedUser, ((IRpcResponse)auth).ExecutionInfo.ExecutedBy.DcId, castedUser.Id);
             return null;
         }
 
@@ -206,7 +206,7 @@ namespace CatraProto.Client.ApiManagers
             switch (query.Response)
             {
                 case TL.Schemas.CloudChats.Auth.Authorization authorization when authorization.User is User user:
-                    SetLoggedIn(user, query.ExecutionInfo.ExecutedBy.DcId, authorization.User.Id);
+                    SetLoggedIn(user, ((IRpcResponse)query).ExecutionInfo.ExecutedBy.DcId, authorization.User.Id);
                     return null;
                 case TL.Schemas.CloudChats.Auth.Authorization authorization when authorization.User is not User:
                     _logger.Error("Received invalid user {User} object in authorization constructor", authorization.User);
@@ -290,7 +290,7 @@ namespace CatraProto.Client.ApiManagers
                 return null;
             }
 
-            SetLoggedIn(castedUser, rpcQuery.ExecutionInfo.ExecutedBy.DcId, castedUser.Id);
+            SetLoggedIn(castedUser, ((IRpcResponse)rpcQuery).ExecutionInfo.ExecutedBy.DcId, castedUser.Id);
             return null;
         }
 
@@ -361,7 +361,7 @@ namespace CatraProto.Client.ApiManagers
                 return null;
             }
 
-            SetLoggedIn(castedUser, checkPasswordResult.ExecutionInfo.ExecutedBy.DcId, castedUser.Id);
+            SetLoggedIn(castedUser, ((IRpcResponse)checkPasswordResult).ExecutionInfo.ExecutedBy.DcId, castedUser.Id);
             return null;
         }
 
@@ -511,7 +511,7 @@ namespace CatraProto.Client.ApiManagers
                     _sessionData.Authorization.SetAuthorized(_currentState, null, null);
                 }
 
-                if(_currentState >= LoginState.LoggedIn)
+                if (_currentState >= LoginState.LoggedIn)
                 {
                     _client.UpdatesReceiver.ForceGetDifferenceAllAsync(false);
                     _ = _client.ForceSaveAsync();
