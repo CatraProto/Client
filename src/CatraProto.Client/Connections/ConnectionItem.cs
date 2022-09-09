@@ -30,6 +30,7 @@ namespace CatraProto.Client.Connections
 
         private Connection? _connection;
         private readonly ConnectionPool _connectionPool;
+
         public ConnectionItem(Connection connection, ConnectionPool connectionPool)
         {
             _connection = connection;
@@ -41,6 +42,15 @@ namespace CatraProto.Client.Connections
             if (_connection != null)
             {
                 await _connectionPool.DecreaseReferenceAsync(_connection);
+                _connection = null;
+            }
+        }
+
+        public void ReturnToPool()
+        {
+            if (_connection != null)
+            {
+                _connectionPool.DecreaseReference(_connection);
                 _connection = null;
             }
         }
