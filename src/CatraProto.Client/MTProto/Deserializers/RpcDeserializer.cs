@@ -56,7 +56,7 @@ namespace CatraProto.Client.MTProto.Deserializers
             }
 
             rpcObject.ReqMsgId = reader.ReadInt64().Value;
-            if (_messageCompletionTracker.GetRpcMethod(rpcObject.ReqMsgId, out var method))
+            if (_messageCompletionTracker.GetRpcMethod(rpcObject.ReqMsgId, out var method, out _))
             {
                 var constructorId = reader.ReadInt32().Value;
                 reader.Stream.Seek(-4, SeekOrigin.Current);
@@ -80,6 +80,7 @@ namespace CatraProto.Client.MTProto.Deserializers
                         {
                             return ReadResult<IObject>.Move(getVector);
                         }
+
                         rpcObject.Result = getVector.Value;
                     }
                     else
@@ -89,6 +90,7 @@ namespace CatraProto.Client.MTProto.Deserializers
                         {
                             return ReadResult<IObject>.Move(getResult);
                         }
+
                         rpcObject.Result = getResult.Value;
                     }
                 }
