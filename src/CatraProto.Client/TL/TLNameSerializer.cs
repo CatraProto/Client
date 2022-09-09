@@ -18,7 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
+using CatraProto.Client.ApiManagers.Files;
 using CatraProto.TL.Interfaces;
 using Newtonsoft.Json.Serialization;
 
@@ -27,6 +27,7 @@ namespace CatraProto.Client.TL;
 internal class TLNameSerializer : ISerializationBinder
 {
     private readonly ConcurrentDictionary<Type, IObject?> _tlObjectCache = new ConcurrentDictionary<Type, IObject?>();
+
     public void BindToName(Type serializedType, out string? assemblyName, out string? typeName)
     {
         assemblyName = null;
@@ -41,6 +42,10 @@ internal class TLNameSerializer : ISerializationBinder
         else if (serializedType == typeof(byte[]))
         {
             typeName = "bytes";
+        }
+        else if (serializedType == typeof(FileId))
+        {
+            typeName = "fileId";
         }
     }
 
