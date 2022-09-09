@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using CatraProto.Client.MTProto.Rpc;
 using CatraProto.Client.TL.Schemas.CloudChats;
 
+// ReSharper disable once CheckNamespace
 namespace CatraProto.Client.TL.Requests.CloudChats
 {
     public partial class Help

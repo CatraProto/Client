@@ -26,13 +26,14 @@ using CatraProto.Client.MTProto.Rpc;
 using CatraProto.Client.MTProto.Rpc.Vectors;
 using CatraProto.Client.TL.Schemas.CloudChats;
 
+// ReSharper disable once CheckNamespace
 namespace CatraProto.Client.TL.Requests.CloudChats
 {
     public partial class Channels
     {
         public async Task<RpcResponse<RpcVector<ChatBase>>> GetChannelsAsync(List<long> id, CancellationToken cancellationToken = default)
         {
-            var request = await _client.DatabaseManager.PeerDatabase.GetPeersAsync(id.ConvertAll(x => PeerId.AsChannel(x)), cancellationToken);
+            var request = await _client.DatabaseManager.PeerDatabase.GetPeersAsync(id.ConvertAll(PeerId.AsChannel), cancellationToken);
             if (request.RpcCallFailed)
             {
                 return RpcResponse<RpcVector<ChatBase>>.FromError(request.Error);
@@ -46,7 +47,7 @@ namespace CatraProto.Client.TL.Requests.CloudChats
 
         public Task<RpcResponse<ChannelFull>> GetFullChannelAsync(long id, CancellationToken cancellationToken = default)
         {
-            return _client.DatabaseManager.PeerDatabase.GetFullPeerAsync<ChannelFull>(PeerId.AsChannel(id), PeerDatabase.MaxChannelFullCache, cancellationToken);
+            return _client.DatabaseManager.PeerDatabase.GetFullPeerAsync<ChannelFull>(PeerId.AsChannel(id), PeerDatabase.MaxChannelFullCache, false, cancellationToken);
         }
     }
 }
