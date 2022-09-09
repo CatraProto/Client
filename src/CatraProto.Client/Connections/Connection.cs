@@ -48,6 +48,7 @@ namespace CatraProto.Client.Connections
         private readonly TelegramClient _client;
         private readonly ILogger _logger;
         private bool _isDisposed = false;
+
         public Connection(ConnectionInfo connectionInfo, TelegramClient client)
         {
             ConnectionInfo = connectionInfo;
@@ -177,8 +178,8 @@ namespace CatraProto.Client.Connections
                 var releaser = await DisconnectAndLockAsync();
 
                 MtProtoState.SessionIdHandler.SetSessionId(CryptoTools.CreateRandomLong(), 0);
-                MessagesHandler.MessagesTrackers.MessageCompletionTracker.ResendAll();
                 MessagesHandler.MessagesTrackers.AcknowledgementHandler.Reset();
+                MessagesHandler.MessagesTrackers.MessageCompletionTracker.ResendAll();
                 MtProtoState.SeqnoHandler.ContentRelatedReceived = 0;
                 MtProtoState.SeqnoHandler.ContentRelatedSent = 0;
                 MtProtoState.MessageIdsHandler.MessageDuplicateChecker.Clear();
@@ -201,12 +202,8 @@ namespace CatraProto.Client.Connections
             _logger.Information("Forcefully disconnecting");
             _fullShutdownSource.Cancel();
 
-            //Connect async has already exited after acquiring lock
+            //Connect async has already exited after we acquired the lock
             var lk = await _lock.LockAsync();
-            if (_isDisposed)
-            {
-                return lk;
-            }
 
             //At this point, any call to ConnectAsync will have to wait for the lock to be released
             //So we can safely replace the cancellation token as it will not be used
