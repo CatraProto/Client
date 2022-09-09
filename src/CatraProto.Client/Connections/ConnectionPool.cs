@@ -147,22 +147,29 @@ namespace CatraProto.Client.Connections
         {
             Task.Run(async () =>
             {
-                TimeSpan? waitTime = null;
-                using (await _asyncLock.LockAsync())
+                try
                 {
-                    if (_referenceCounts.TryGetValue(connection, out var rCount) && rCount - 1 == 0)
+                    TimeSpan? waitTime = null;
+                    using (await _asyncLock.LockAsync())
                     {
-                        waitTime = TimeSpan.FromMilliseconds(500);
+                        if (_referenceCounts.TryGetValue(connection, out var rCount) && rCount - 1 == 0)
+                        {
+                            waitTime = TimeSpan.FromMilliseconds(500);
+                        }
                     }
-                }
 
-                if (waitTime is not null)
+                    if (waitTime is not null)
+                    {
+                        _logger.Information("Waiting for {Ms}ms before closing connection {Connection}", waitTime.Value.TotalMilliseconds, connection);
+                        await Task.Delay(waitTime.Value);
+                    }
+
+                    await DecreaseReferenceAsync(connection);
+                }
+                catch (Exception e)
                 {
-                    _logger.Information("Waiting for {Ms}ms before closing connection {Connection}", waitTime.Value.TotalMilliseconds, connection);
-                    await Task.Delay(waitTime.Value);
+                    _logger.Warning(e, "Exception thrown while disposing connection");
                 }
-
-                await DecreaseReferenceAsync(connection);
             });
         }
 
