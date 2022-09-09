@@ -18,7 +18,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -50,17 +49,13 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
             "CatraProto.Client.TL.Schemas.CloudChats.ChatFull",
             "CatraProto.Client.TL.Schemas.CloudChats.ChannelFull",
             "CatraProto.Client.TL.Schemas.CloudChats.UserFull",
-            "CatraProto.Client.TL.Schemas.CloudChats.Help.AppUpdate",
             "CatraProto.Client.TL.Schemas.CloudChats.WebPage",
             "CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSet",
             "CatraProto.Client.TL.Schemas.CloudChats.WallPaper",
             "CatraProto.Client.TL.Schemas.CloudChats.Messages.SavedGifs",
-            "CatraProto.Client.TL.Schemas.CloudChats.Messages.RecentStickers",
             "CatraProto.Client.TL.Schemas.CloudChats.Messages.FeaturedStickers",
             "CatraProto.Client.TL.Schemas.CloudChats.Messages.ArchivedStickers",
             "CatraProto.Client.TL.Schemas.CloudChats.Messages.StickerSetInstallResultArchive",
-            "CatraProto.Client.TL.Schemas.CloudChats.Game",
-            "CatraProto.Client.TL.Schemas.CloudChats.Theme",
             "CatraProto.Client.TL.Schemas.CloudChats.AvailableReaction",
             "CatraProto.Client.TL.Schemas.AttachMenuBots",
             "CatraProto.Client.TL.Schemas.AttachMenuBotsBot",
@@ -70,8 +65,9 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
             "CatraProto.Client.TL.Schemas.CloudChats.UpdateServiceNotification",
             "CatraProto.Client.TL.Schemas.CloudChats.UpdateShortSentMessage",
             "CatraProto.Client.TL.Schemas.CloudChats.Messages.BotResults",
-            
+
             // methods
+            "CatraProto.Client.TL.Schemas.CloudChats.Messages.GetRecentStickers",
             "CatraProto.Client.TL.Schemas.CloudChats.Photos.UpdateProfilePhoto",
             "CatraProto.Client.TL.Schemas.CloudChats.Photos.UploadProfilePhoto",
             "CatraProto.Client.TL.Schemas.CloudChats.Messages.CheckChatInvite",
@@ -80,7 +76,10 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
             "CatraProto.Client.TL.Schemas.CloudChats.Help.GetRecentMeUrls",
             "CatraProto.Client.TL.Schemas.CloudChats.Channels.GetSponsoredMessages",
             "CatraProto.Client.TL.Schemas.CloudChats.Photos.GetUserPhotos",
-            "CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchStickerSets"
+            "CatraProto.Client.TL.Schemas.CloudChats.Messages.SearchStickerSets",
+            "CatraProto.Client.TL.Schemas.CloudChats.Help.GetAppUpdate",
+            "CatraProto.Client.TL.Schemas.CloudChats.Account.GetTheme",
+            "CatraProto.Client.TL.Schemas.CloudChats.Account.UpdateTheme",
         };
 
         public UpdateExtractorsWriter(List<TLObject> objects)
@@ -121,7 +120,7 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
                     }
                 }
 
-                foreach(var method in _objects.Where(x => x is Method && x.Type.Namespace is not null && x.Type.Namespace == obj.Namespace))
+                foreach (var method in _objects.Where(x => x is Method && x.Type.Namespace is not null && x.Type.Namespace == obj.Namespace))
                 {
                     if (!s_knownContexts.TryGetValue(method.Namespace.FullNamespace, out hash) || hash != method.Id)
                     {
@@ -185,17 +184,18 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
                     builder.AppendLine($"{treeName}.Add({propName});");
                     if (s_keepContext.Contains(obj.Namespace.FullNamespace))
                     {
-                        builder.AppendLine($"OnFileReceived({propName}, {getFixedName}, true, {treeName});");
+                        builder.AppendLine($"OnFileReceived({propName}, {getFixedName}, true, {treeName}, callback);");
                     }
                     else
                     {
-                        builder.AppendLine($"OnFileReceived({propName}, preserveContext ? context : {getFixedName}, preserveContext, {treeName});");
+                        builder.AppendLine($"OnFileReceived({propName}, preserveContext ? context : {getFixedName}, preserveContext, {treeName}, callback);");
                     }
 
                     if (param.VectorInfo.IsVector)
                     {
                         builder.AppendLine("}");
                     }
+
                     i++;
                 }
 
@@ -241,6 +241,7 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
                 stringBuilder.Append(' ');
                 stringBuilder.Append(obj.NamingInfo.CamelCaseName);
                 stringBuilder.Append(":\n");
+
                 void WriteParameter(string varName, string typeName, Parameter parameter)
                 {
                     if (parameter is not null)
@@ -406,7 +407,6 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
 
         private (Parameter, MatchType)? FindPeer(TLObject obj)
         {
-
             var findUserId = obj.Parameters.Find(x => x.NamingInfo.OriginalName == "user_id" && x.Type.NamingInfo.OriginalName == "long");
             if (findUserId is not null)
             {

@@ -59,12 +59,12 @@ namespace CatraProto.Client.Updates
             if (tree is null)
             {
                 tree ??= new List<IObject>();
-                if (context is not CatraProto.Client.TL.Schemas.CloudChats.Document or CatraProto.Client.TL.Schemas.CloudChats.Photo)
+                if (context is not CatraProto.Client.TL.Schemas.CloudChats.Document && socketObject is not CatraProto.Client.TL.Schemas.CloudChats.Photo)
                 {
                     tree.Add(context);
                 }
                 
-                if (socketObject is not CatraProto.Client.TL.Schemas.CloudChats.Document or CatraProto.Client.TL.Schemas.CloudChats.Photo)
+                if (socketObject is not CatraProto.Client.TL.Schemas.CloudChats.Document && socketObject is not CatraProto.Client.TL.Schemas.CloudChats.Photo && socketObject != context)
                 {
                     tree.Add(socketObject);
                 }
