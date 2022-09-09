@@ -17,7 +17,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -105,6 +104,7 @@ namespace CatraProto.Client.Crypto
             {
                 return b;
             }
+
             while ((a & 1) == 0)
             {
                 a >>= 1;
@@ -148,13 +148,16 @@ namespace CatraProto.Client.Crypto
                         c -= pq;
                     }
                 }
+
                 a += a;
                 if (a >= pq)
                 {
                     a -= pq;
                 }
+
                 b >>= 1;
             }
+
             return c;
         }
 
@@ -164,10 +167,12 @@ namespace CatraProto.Client.Crypto
             {
                 return 1;
             }
+
             if ((pq & 1) == 0)
             {
                 return 2;
             }
+
             ulong g = 0;
             for (int i = 0, iter = 0; i < 3 || iter < 1000; i++)
             {
@@ -206,6 +211,7 @@ namespace CatraProto.Client.Crypto
                     g = other;
                 }
             }
+
             return g;
         }
 
