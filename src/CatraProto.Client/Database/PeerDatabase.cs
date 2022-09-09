@@ -289,9 +289,14 @@ namespace CatraProto.Client.Database
             return RpcResponse<RpcVector<IObject>>.FromResult(result);
         }
 
-        public async Task<RpcResponse<T>> GetFullPeerAsync<T>(PeerId id, int maxCache, CancellationToken cancellationToken) where T : IObject
+        public async Task<RpcResponse<T>> GetFullPeerAsync<T>(PeerId id, int maxCache, bool force, CancellationToken cancellationToken) where T : IObject
         {
-            var result = _client.DatabaseManager.PeerDatabase.GetPeerObject(id, true);
+            IObject? result = null;
+            if (!force)
+            {
+                result = _client.DatabaseManager.PeerDatabase.GetPeerObject(id, true);
+            }
+
             if (result is null || result is not DbPeerFull peer || peer.Object is null || !FullTypeMatches(result, id.Type) || DateTimeOffset.UtcNow.ToUnixTimeSeconds() - peer.UpdatedAt > maxCache)
             {
                 switch (id.Type)
@@ -302,6 +307,7 @@ namespace CatraProto.Client.Database
                         {
                             return RpcResponse<T>.FromError(getFullUser.Error);
                         }
+
                         result = getFullUser.Response;
                         break;
                     case PeerType.Channel:
@@ -310,6 +316,7 @@ namespace CatraProto.Client.Database
                         {
                             return RpcResponse<T>.FromError(getFullChannel.Error);
                         }
+
                         result = getFullChannel.Response;
                         break;
                     case PeerType.Group:
@@ -318,6 +325,7 @@ namespace CatraProto.Client.Database
                         {
                             return RpcResponse<T>.FromError(getFullChat.Error);
                         }
+
                         result = getFullChat.Response;
                         break;
                     default:
@@ -357,17 +365,9 @@ namespace CatraProto.Client.Database
                 switch (peerId.Type)
                 {
                     case PeerType.Channel:
-                        return new InputPeerChannel()
-                        {
-                            ChannelId = peerId.Id,
-                            AccessHash = accessHash.Value
-                        };
+                        return new InputPeerChannel() { ChannelId = peerId.Id, AccessHash = accessHash.Value };
                     case PeerType.User:
-                        return new InputPeerUser
-                        {
-                            UserId = peerId.Id,
-                            AccessHash = accessHash.Value
-                        };
+                        return new InputPeerUser { UserId = peerId.Id, AccessHash = accessHash.Value };
                     case PeerType.Group:
                         return new InputPeerChat() { ChatId = peerId.Id };
                     default:
@@ -384,11 +384,7 @@ namespace CatraProto.Client.Database
                 var channelHash = GetPeerAccessHash(PeerId.AsChannel(id));
                 if (channelHash.HasValue)
                 {
-                    return new InputChannel()
-                    {
-                        ChannelId = id,
-                        AccessHash = channelHash.Value
-                    };
+                    return new InputChannel() { ChannelId = id, AccessHash = channelHash.Value };
                 }
 
                 return null;
@@ -402,11 +398,7 @@ namespace CatraProto.Client.Database
                 var userHash = GetPeerAccessHash(PeerId.AsUser(id));
                 if (userHash.HasValue)
                 {
-                    return new InputUser()
-                    {
-                        UserId = id,
-                        AccessHash = userHash.Value
-                    };
+                    return new InputUser() { UserId = id, AccessHash = userHash.Value };
                 }
 
                 return null;
