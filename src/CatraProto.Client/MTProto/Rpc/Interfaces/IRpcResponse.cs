@@ -18,8 +18,28 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace CatraProto.Client.MTProto.Rpc.Interfaces
 {
-    internal interface IRpcResponse
+    public interface IRpcResponse
     {
+        public bool RpcCallFailed
+        {
+            get;
+        }
+
+        public RpcError Error
+        {
+            get;
+        }
+
+        public object? Response
+        {
+            get;
+        }
+
+        internal ExecutionInfo ExecutionInfo
+        {
+            get;
+        }
+
         internal void SetResponse(object o, ExecutionInfo executionInfo);
         internal bool CanCast(object o);
     }

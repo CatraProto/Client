@@ -39,7 +39,12 @@ namespace CatraProto.Client.MTProto.Rpc
             get => GetResponse();
         }
 
-        internal ExecutionInfo ExecutionInfo
+        object? IRpcResponse.Response
+        {
+            get => GetResponse();
+        }
+
+        ExecutionInfo IRpcResponse.ExecutionInfo
         {
             get => GetExecutionInformation();
         }
@@ -145,20 +150,12 @@ namespace CatraProto.Client.MTProto.Rpc
 
         internal static RpcResponse<T> FromError(RpcError rpcError)
         {
-            return new RpcResponse<T>
-            {
-                _isSuccessful = false,
-                _rpcError = rpcError
-            };
+            return new RpcResponse<T> { _isSuccessful = false, _rpcError = rpcError };
         }
 
         internal static RpcResponse<T> FromResult(T result)
         {
-            return new RpcResponse<T>
-            {
-                _isSuccessful = true,
-                _response = result
-            };
+            return new RpcResponse<T> { _isSuccessful = true, _response = result };
         }
     }
 }
