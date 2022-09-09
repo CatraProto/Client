@@ -60,9 +60,9 @@ namespace CatraProto.Client.MTProto.Session
 
         public async ValueTask DisposeAsync()
         {
-            await ConnectionPool.DisposeAsync();
             SessionManager.Dispose();
             Settings.SessionSettings.SessionSerializer.Dispose();
+            await ConnectionPool.DisposeAsync();
         }
     }
 }
