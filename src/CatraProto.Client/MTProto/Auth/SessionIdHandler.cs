@@ -41,5 +41,20 @@ namespace CatraProto.Client.MTProto.Auth
                 _sessionId = newSessionId;
             }
         }
+
+        public bool UpdateIfDifferent(long receivedUniqueId, long receivedSessionId)
+        {
+            lock (_mutex)
+            {
+                if (_uniqueId == receivedUniqueId)
+                {
+                    return false;
+                }
+
+                _uniqueId = receivedUniqueId;
+                _sessionId = receivedSessionId;
+                return true;
+            }
+        }
     }
 }
