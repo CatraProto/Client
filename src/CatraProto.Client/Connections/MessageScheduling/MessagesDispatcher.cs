@@ -411,6 +411,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
                                 item.SetOnHold();
                                 Task.Run(async () =>
                                 {
+                                    var waitTime = floodWaitError.WaitTime.Add(TimeSpan.FromMilliseconds(1500));
                                     try
                                     {
                                         // Used to avoid having a Task hanging around when the connection was closed but the Delay is still awaiting
@@ -419,7 +420,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
                                         {
                                             using var cTokenSource = new CancellationTokenSource();
                                             using var combinedCancellation = CancellationTokenSource.CreateLinkedTokenSource(item.CancellationToken, cTokenSource.Token);
-                                            var completedTask = await Task.WhenAny(Task.Delay(floodWaitError.WaitTime, combinedCancellation.Token), getCompletionTask);
+                                            var completedTask = await Task.WhenAny(Task.Delay(waitTime, combinedCancellation.Token), getCompletionTask);
                                             if (completedTask == getCompletionTask)
                                             {
                                                 _logger.Information("Stopping flood wait task for {MessageItem} because message was completed", item);
@@ -429,7 +430,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
                                         }
                                         else
                                         {
-                                            await Task.Delay(floodWaitError.WaitTime, item.CancellationToken);
+                                            await Task.Delay(waitTime, item.CancellationToken);
                                         }
 
                                         _logger.Information("Now retrying message {Message} after having waited for {Seconds} seconds", item, floodWaitError.WaitTime.TotalSeconds);
