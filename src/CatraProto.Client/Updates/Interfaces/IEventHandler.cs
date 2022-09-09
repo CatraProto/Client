@@ -18,6 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using System.Threading.Tasks;
 using CatraProto.Client.ApiManagers;
+using CatraProto.Client.ApiManagers.Files.Updates;
 using CatraProto.Client.TL.Schemas.CloudChats;
 
 namespace CatraProto.Client.Updates.Interfaces
@@ -26,5 +27,10 @@ namespace CatraProto.Client.Updates.Interfaces
     {
         public Task OnSessionUpdateAsync(LoginState loginState);
         public Task OnUpdateAsync(UpdateBase update);
+
+        public Task OnUpdateFileId(UpdateFileId updateFileId)
+        {
+            return Task.CompletedTask;
+        }
     }
 }
