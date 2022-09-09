@@ -267,17 +267,14 @@ namespace CatraProto.Client.Connections.MessageScheduling
 
         private void HandleNewSessionCreation(NewSessionCreated newSessionCreated, long sessionId)
         {
-            _mtProtoState.SessionIdHandler.GetSessionId(out var uniqueId);
-            if (uniqueId == newSessionCreated.UniqueId)
+            if (!_mtProtoState.SessionIdHandler.UpdateIfDifferent(newSessionCreated.UniqueId, sessionId))
             {
                 return;
             }
 
-            _mtProtoState.SessionIdHandler.SetSessionId(sessionId, newSessionCreated.UniqueId);
             _mtProtoState.SaltHandler.SetSalt(newSessionCreated.ServerSalt);
             _mtProtoState.SeqnoHandler.ContentRelatedReceived = 0;
             _logger.Information("New session created, new server salt {Salt}, new SessionId {SessionId}", newSessionCreated.ServerSalt, sessionId);
-
             if (_mtProtoState.ConnectionInfo.Main)
             {
                 //Not awaiting is fine here. 
@@ -486,7 +483,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
                 {
                     UpdatesTools.ExtractChats(iObj, out var chats, out var users);
                     _mtProtoState.Client.DatabaseManager.UpdateChats(chats, users);
-                    UpdatesTools.OnFileReceived(iObj, method, method is not GetDifference or GetChannelDifference or Message);
+                    UpdatesTools.OnFileReceived(iObj, method, method is not GetDifference && method is not GetChannelDifference);
                     switch (iObj)
                     {
                         case UserFull uFull:
