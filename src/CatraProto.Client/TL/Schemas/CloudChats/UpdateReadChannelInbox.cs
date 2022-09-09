@@ -1,25 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -32,11 +17,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             FolderId = 1 << 0
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -1842450928; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -1842450928; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("folder_id")]
         public int? FolderId { get; set; }
@@ -50,8 +33,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("still_unread_count")]
         public int StillUnreadCount { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("pts")]
-        public int Pts { get; set; }
+        [Newtonsoft.Json.JsonProperty("pts")] public int Pts { get; set; }
 
 
 #nullable enable
@@ -61,7 +43,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             MaxId = maxId;
             StillUnreadCount = stillUnreadCount;
             Pts = pts;
-
         }
 #nullable disable
         internal UpdateReadChannelInbox()
@@ -71,7 +52,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override void UpdateFlags()
         {
             Flags = FolderId == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -91,7 +71,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             writer.WriteInt32(Pts);
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -101,6 +80,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
@@ -109,6 +89,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryfolderId);
                 }
+
                 FolderId = tryfolderId.Value;
             }
 
@@ -117,27 +98,30 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(trychannelId);
             }
+
             ChannelId = trychannelId.Value;
             var trymaxId = reader.ReadInt32();
             if (trymaxId.IsError)
             {
                 return ReadResult<IObject>.Move(trymaxId);
             }
+
             MaxId = trymaxId.Value;
             var trystillUnreadCount = reader.ReadInt32();
             if (trystillUnreadCount.IsError)
             {
                 return ReadResult<IObject>.Move(trystillUnreadCount);
             }
+
             StillUnreadCount = trystillUnreadCount.Value;
             var trypts = reader.ReadInt32();
             if (trypts.IsError)
             {
                 return ReadResult<IObject>.Move(trypts);
             }
+
             Pts = trypts.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -153,17 +137,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new UpdateReadChannelInbox
-            {
-                Flags = Flags,
-                FolderId = FolderId,
-                ChannelId = ChannelId,
-                MaxId = MaxId,
-                StillUnreadCount = StillUnreadCount,
-                Pts = Pts
-            };
+            var newClonedObject = new UpdateReadChannelInbox();
+            newClonedObject.Flags = Flags;
+            newClonedObject.FolderId = FolderId;
+            newClonedObject.ChannelId = ChannelId;
+            newClonedObject.MaxId = MaxId;
+            newClonedObject.StillUnreadCount = StillUnreadCount;
+            newClonedObject.Pts = Pts;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -172,32 +153,38 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (FolderId != castedOther.FolderId)
             {
                 return true;
             }
+
             if (ChannelId != castedOther.ChannelId)
             {
                 return true;
             }
+
             if (MaxId != castedOther.MaxId)
             {
                 return true;
             }
+
             if (StillUnreadCount != castedOther.StillUnreadCount)
             {
                 return true;
             }
+
             if (Pts != castedOther.Pts)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
@@ -41,11 +25,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             PendingResetDate = 1 << 5
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 408623183; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 408623183; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("has_recovery")]
         public sealed override bool HasRecovery { get; set; }
@@ -93,7 +75,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             NewAlgo = newAlgo;
             NewSecureAlgo = newSecureAlgo;
             SecureRandom = secureRandom;
-
         }
 #nullable disable
         internal Password()
@@ -111,7 +92,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             Flags = Hint == null ? FlagsHelper.UnsetFlag(Flags, 3) : FlagsHelper.SetFlag(Flags, 3);
             Flags = EmailUnconfirmedPattern == null ? FlagsHelper.UnsetFlag(Flags, 4) : FlagsHelper.SetFlag(Flags, 4);
             Flags = PendingResetDate == null ? FlagsHelper.UnsetFlag(Flags, 5) : FlagsHelper.SetFlag(Flags, 5);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -131,7 +111,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
             if (FlagsHelper.IsFlagSet(Flags, 2))
             {
-
                 writer.WriteBytes(SrpB);
             }
 
@@ -142,13 +121,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
             if (FlagsHelper.IsFlagSet(Flags, 3))
             {
-
                 writer.WriteString(Hint);
             }
 
             if (FlagsHelper.IsFlagSet(Flags, 4))
             {
-
                 writer.WriteString(EmailUnconfirmedPattern);
             }
 
@@ -157,6 +134,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             {
                 return checknewAlgo;
             }
+
             var checknewSecureAlgo = writer.WriteObject(NewSecureAlgo);
             if (checknewSecureAlgo.IsError)
             {
@@ -171,7 +149,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -181,6 +158,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             HasRecovery = FlagsHelper.IsFlagSet(Flags, 0);
             HasSecureValues = FlagsHelper.IsFlagSet(Flags, 1);
@@ -192,6 +170,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return ReadResult<IObject>.Move(trycurrentAlgo);
                 }
+
                 CurrentAlgo = trycurrentAlgo.Value;
             }
 
@@ -202,6 +181,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return ReadResult<IObject>.Move(trysrpB);
                 }
+
                 SrpB = trysrpB.Value;
             }
 
@@ -212,6 +192,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return ReadResult<IObject>.Move(trysrpId);
                 }
+
                 SrpId = trysrpId.Value;
             }
 
@@ -222,6 +203,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return ReadResult<IObject>.Move(tryhint);
                 }
+
                 Hint = tryhint.Value;
             }
 
@@ -232,6 +214,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return ReadResult<IObject>.Move(tryemailUnconfirmedPattern);
                 }
+
                 EmailUnconfirmedPattern = tryemailUnconfirmedPattern.Value;
             }
 
@@ -240,18 +223,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             {
                 return ReadResult<IObject>.Move(trynewAlgo);
             }
+
             NewAlgo = trynewAlgo.Value;
             var trynewSecureAlgo = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.SecurePasswordKdfAlgoBase>();
             if (trynewSecureAlgo.IsError)
             {
                 return ReadResult<IObject>.Move(trynewSecureAlgo);
             }
+
             NewSecureAlgo = trynewSecureAlgo.Value;
             var trysecureRandom = reader.ReadBytes();
             if (trysecureRandom.IsError)
             {
                 return ReadResult<IObject>.Move(trysecureRandom);
             }
+
             SecureRandom = trysecureRandom.Value;
             if (FlagsHelper.IsFlagSet(Flags, 5))
             {
@@ -260,11 +246,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return ReadResult<IObject>.Move(trypendingResetDate);
                 }
+
                 PendingResetDate = trypendingResetDate.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -280,13 +266,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new Password
-            {
-                Flags = Flags,
-                HasRecovery = HasRecovery,
-                HasSecureValues = HasSecureValues,
-                HasPassword = HasPassword
-            };
+            var newClonedObject = new Password();
+            newClonedObject.Flags = Flags;
+            newClonedObject.HasRecovery = HasRecovery;
+            newClonedObject.HasSecureValues = HasSecureValues;
+            newClonedObject.HasPassword = HasPassword;
             if (CurrentAlgo is not null)
             {
                 var cloneCurrentAlgo = (CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase?)CurrentAlgo.Clone();
@@ -294,8 +278,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return null;
                 }
+
                 newClonedObject.CurrentAlgo = cloneCurrentAlgo;
             }
+
             newClonedObject.SrpB = SrpB;
             newClonedObject.SrpId = SrpId;
             newClonedObject.Hint = Hint;
@@ -305,17 +291,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             {
                 return null;
             }
+
             newClonedObject.NewAlgo = cloneNewAlgo;
             var cloneNewSecureAlgo = (CatraProto.Client.TL.Schemas.CloudChats.SecurePasswordKdfAlgoBase?)NewSecureAlgo.Clone();
             if (cloneNewSecureAlgo is null)
             {
                 return null;
             }
+
             newClonedObject.NewSecureAlgo = cloneNewSecureAlgo;
             newClonedObject.SecureRandom = SecureRandom;
             newClonedObject.PendingResetDate = PendingResetDate;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -324,64 +311,78 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (HasRecovery != castedOther.HasRecovery)
             {
                 return true;
             }
+
             if (HasSecureValues != castedOther.HasSecureValues)
             {
                 return true;
             }
+
             if (HasPassword != castedOther.HasPassword)
             {
                 return true;
             }
+
             if (CurrentAlgo is null && castedOther.CurrentAlgo is not null || CurrentAlgo is not null && castedOther.CurrentAlgo is null)
             {
                 return true;
             }
+
             if (CurrentAlgo is not null && castedOther.CurrentAlgo is not null && CurrentAlgo.Compare(castedOther.CurrentAlgo))
             {
                 return true;
             }
+
             if (SrpB != castedOther.SrpB)
             {
                 return true;
             }
+
             if (SrpId != castedOther.SrpId)
             {
                 return true;
             }
+
             if (Hint != castedOther.Hint)
             {
                 return true;
             }
+
             if (EmailUnconfirmedPattern != castedOther.EmailUnconfirmedPattern)
             {
                 return true;
             }
+
             if (NewAlgo.Compare(castedOther.NewAlgo))
             {
                 return true;
             }
+
             if (NewSecureAlgo.Compare(castedOther.NewSecureAlgo))
             {
                 return true;
             }
+
             if (SecureRandom != castedOther.SecureRandom)
             {
                 return true;
             }
+
             if (PendingResetDate != castedOther.PendingResetDate)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

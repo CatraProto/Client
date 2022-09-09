@@ -1,27 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -40,14 +23,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             PlainData = 1 << 5
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 411017418; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 411017418; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("type")]
-        public sealed override CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase Type { get; set; }
+        [Newtonsoft.Json.JsonProperty("type")] public sealed override CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase Type { get; set; }
 
         [MaybeNull]
         [Newtonsoft.Json.JsonProperty("data")]
@@ -77,8 +57,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("plain_data")]
         public sealed override CatraProto.Client.TL.Schemas.CloudChats.SecurePlainDataBase PlainData { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("hash")]
-        public sealed override byte[] Hash { get; set; }
+        [Newtonsoft.Json.JsonProperty("hash")] public sealed override byte[] Hash { get; set; }
 
 
 #nullable enable
@@ -86,7 +65,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             Type = type;
             Hash = hash;
-
         }
 #nullable disable
         internal SecureValue()
@@ -102,7 +80,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = Translation == null ? FlagsHelper.UnsetFlag(Flags, 6) : FlagsHelper.SetFlag(Flags, 6);
             Flags = Files == null ? FlagsHelper.UnsetFlag(Flags, 4) : FlagsHelper.SetFlag(Flags, 4);
             Flags = PlainData == null ? FlagsHelper.UnsetFlag(Flags, 5) : FlagsHelper.SetFlag(Flags, 5);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -116,6 +93,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return checktype;
             }
+
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
                 var checkdata = writer.WriteObject(Data);
@@ -183,7 +161,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             writer.WriteBytes(Hash);
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -193,12 +170,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             var trytype = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase>();
             if (trytype.IsError)
             {
                 return ReadResult<IObject>.Move(trytype);
             }
+
             Type = trytype.Value;
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
@@ -207,6 +186,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trydata);
                 }
+
                 Data = trydata.Value;
             }
 
@@ -217,6 +197,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryfrontSide);
                 }
+
                 FrontSide = tryfrontSide.Value;
             }
 
@@ -227,6 +208,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryreverseSide);
                 }
+
                 ReverseSide = tryreverseSide.Value;
             }
 
@@ -237,6 +219,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryselfie);
                 }
+
                 Selfie = tryselfie.Value;
             }
 
@@ -247,6 +230,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trytranslation);
                 }
+
                 Translation = trytranslation.Value;
             }
 
@@ -257,6 +241,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryfiles);
                 }
+
                 Files = tryfiles.Value;
             }
 
@@ -267,6 +252,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryplainData);
                 }
+
                 PlainData = tryplainData.Value;
             }
 
@@ -275,9 +261,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryhash);
             }
+
             Hash = tryhash.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -293,15 +279,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new SecureValue
-            {
-                Flags = Flags
-            };
+            var newClonedObject = new SecureValue();
+            newClonedObject.Flags = Flags;
             var cloneType = (CatraProto.Client.TL.Schemas.CloudChats.SecureValueTypeBase?)Type.Clone();
             if (cloneType is null)
             {
                 return null;
             }
+
             newClonedObject.Type = cloneType;
             if (Data is not null)
             {
@@ -310,8 +295,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.Data = cloneData;
             }
+
             if (FrontSide is not null)
             {
                 var cloneFrontSide = (CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase?)FrontSide.Clone();
@@ -319,8 +306,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.FrontSide = cloneFrontSide;
             }
+
             if (ReverseSide is not null)
             {
                 var cloneReverseSide = (CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase?)ReverseSide.Clone();
@@ -328,8 +317,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.ReverseSide = cloneReverseSide;
             }
+
             if (Selfie is not null)
             {
                 var cloneSelfie = (CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase?)Selfie.Clone();
@@ -337,8 +328,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.Selfie = cloneSelfie;
             }
+
             if (Translation is not null)
             {
                 newClonedObject.Translation = new List<CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase>();
@@ -349,9 +342,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                     {
                         return null;
                     }
+
                     newClonedObject.Translation.Add(clonetranslation);
                 }
             }
+
             if (Files is not null)
             {
                 newClonedObject.Files = new List<CatraProto.Client.TL.Schemas.CloudChats.SecureFileBase>();
@@ -362,9 +357,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                     {
                         return null;
                     }
+
                     newClonedObject.Files.Add(clonefiles);
                 }
             }
+
             if (PlainData is not null)
             {
                 var clonePlainData = (CatraProto.Client.TL.Schemas.CloudChats.SecurePlainDataBase?)PlainData.Clone();
@@ -372,11 +369,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.PlainData = clonePlainData;
             }
+
             newClonedObject.Hash = Hash;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -385,58 +383,70 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Type.Compare(castedOther.Type))
             {
                 return true;
             }
+
             if (Data is null && castedOther.Data is not null || Data is not null && castedOther.Data is null)
             {
                 return true;
             }
+
             if (Data is not null && castedOther.Data is not null && Data.Compare(castedOther.Data))
             {
                 return true;
             }
+
             if (FrontSide is null && castedOther.FrontSide is not null || FrontSide is not null && castedOther.FrontSide is null)
             {
                 return true;
             }
+
             if (FrontSide is not null && castedOther.FrontSide is not null && FrontSide.Compare(castedOther.FrontSide))
             {
                 return true;
             }
+
             if (ReverseSide is null && castedOther.ReverseSide is not null || ReverseSide is not null && castedOther.ReverseSide is null)
             {
                 return true;
             }
+
             if (ReverseSide is not null && castedOther.ReverseSide is not null && ReverseSide.Compare(castedOther.ReverseSide))
             {
                 return true;
             }
+
             if (Selfie is null && castedOther.Selfie is not null || Selfie is not null && castedOther.Selfie is null)
             {
                 return true;
             }
+
             if (Selfie is not null && castedOther.Selfie is not null && Selfie.Compare(castedOther.Selfie))
             {
                 return true;
             }
+
             if (Translation is null && castedOther.Translation is not null || Translation is not null && castedOther.Translation is null)
             {
                 return true;
             }
+
             if (Translation is not null && castedOther.Translation is not null)
             {
-
                 var translationsize = castedOther.Translation.Count;
                 if (translationsize != Translation.Count)
                 {
                     return true;
                 }
+
                 for (var i = 0; i < translationsize; i++)
                 {
                     if (castedOther.Translation[i].Compare(Translation[i]))
@@ -445,18 +455,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                     }
                 }
             }
+
             if (Files is null && castedOther.Files is not null || Files is not null && castedOther.Files is null)
             {
                 return true;
             }
+
             if (Files is not null && castedOther.Files is not null)
             {
-
                 var filessize = castedOther.Files.Count;
                 if (filessize != Files.Count)
                 {
                     return true;
                 }
+
                 for (var i = 0; i < filessize; i++)
                 {
                     if (castedOther.Files[i].Compare(Files[i]))
@@ -465,20 +477,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                     }
                 }
             }
+
             if (PlainData is null && castedOther.PlainData is not null || PlainData is not null && castedOther.PlainData is null)
             {
                 return true;
             }
+
             if (PlainData is not null && castedOther.PlainData is not null && PlainData.Compare(castedOther.PlainData))
             {
                 return true;
             }
+
             if (Hash != castedOther.Hash)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

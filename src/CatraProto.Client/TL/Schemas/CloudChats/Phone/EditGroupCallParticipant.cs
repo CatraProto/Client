@@ -1,25 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 
@@ -38,17 +23,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
             PresentationPaused = 1 << 5
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -1524155713; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -1524155713; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
+        [Newtonsoft.Json.JsonIgnore] ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("call")]
-        public CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase Call { get; set; }
+        [Newtonsoft.Json.JsonProperty("call")] public CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase Call { get; set; }
 
         [Newtonsoft.Json.JsonProperty("participant")]
         public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Participant { get; set; }
@@ -77,7 +58,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
         {
             Call = call;
             Participant = participant;
-
         }
 #nullable disable
 
@@ -93,7 +73,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
             Flags = VideoStopped == null ? FlagsHelper.UnsetFlag(Flags, 3) : FlagsHelper.SetFlag(Flags, 3);
             Flags = VideoPaused == null ? FlagsHelper.UnsetFlag(Flags, 4) : FlagsHelper.SetFlag(Flags, 4);
             Flags = PresentationPaused == null ? FlagsHelper.UnsetFlag(Flags, 5) : FlagsHelper.SetFlag(Flags, 5);
-
         }
 
         public WriteResult Serialize(Writer writer)
@@ -107,11 +86,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
             {
                 return checkcall;
             }
+
             var checkparticipant = writer.WriteObject(Participant);
             if (checkparticipant.IsError)
             {
                 return checkparticipant;
             }
+
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
                 var checkmuted = writer.WriteBool(Muted.Value);
@@ -164,7 +145,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 
 
             return new WriteResult();
-
         }
 
         public ReadResult<IObject> Deserialize(Reader reader)
@@ -174,18 +154,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             var trycall = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase>();
             if (trycall.IsError)
             {
                 return ReadResult<IObject>.Move(trycall);
             }
+
             Call = trycall.Value;
             var tryparticipant = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
             if (tryparticipant.IsError)
             {
                 return ReadResult<IObject>.Move(tryparticipant);
             }
+
             Participant = tryparticipant.Value;
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
@@ -194,6 +177,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
                 {
                     return ReadResult<IObject>.Move(trymuted);
                 }
+
                 Muted = trymuted.Value;
             }
 
@@ -204,6 +188,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
                 {
                     return ReadResult<IObject>.Move(tryvolume);
                 }
+
                 Volume = tryvolume.Value;
             }
 
@@ -214,6 +199,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
                 {
                     return ReadResult<IObject>.Move(tryraiseHand);
                 }
+
                 RaiseHand = tryraiseHand.Value;
             }
 
@@ -224,6 +210,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
                 {
                     return ReadResult<IObject>.Move(tryvideoStopped);
                 }
+
                 VideoStopped = tryvideoStopped.Value;
             }
 
@@ -234,6 +221,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
                 {
                     return ReadResult<IObject>.Move(tryvideoPaused);
                 }
+
                 VideoPaused = tryvideoPaused.Value;
             }
 
@@ -244,11 +232,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
                 {
                     return ReadResult<IObject>.Move(trypresentationPaused);
                 }
+
                 PresentationPaused = trypresentationPaused.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -263,21 +251,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new EditGroupCallParticipant
-            {
-                Flags = Flags
-            };
+            var newClonedObject = new EditGroupCallParticipant();
+            newClonedObject.Flags = Flags;
             var cloneCall = (CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase?)Call.Clone();
             if (cloneCall is null)
             {
                 return null;
             }
+
             newClonedObject.Call = cloneCall;
             var cloneParticipant = (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase?)Participant.Clone();
             if (cloneParticipant is null)
             {
                 return null;
             }
+
             newClonedObject.Participant = cloneParticipant;
             newClonedObject.Muted = Muted;
             newClonedObject.Volume = Volume;
@@ -286,7 +274,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
             newClonedObject.VideoPaused = VideoPaused;
             newClonedObject.PresentationPaused = PresentationPaused;
             return newClonedObject;
-
         }
 
         public bool Compare(IObject other)
@@ -295,44 +282,53 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Call.Compare(castedOther.Call))
             {
                 return true;
             }
+
             if (Participant.Compare(castedOther.Participant))
             {
                 return true;
             }
+
             if (Muted != castedOther.Muted)
             {
                 return true;
             }
+
             if (Volume != castedOther.Volume)
             {
                 return true;
             }
+
             if (RaiseHand != castedOther.RaiseHand)
             {
                 return true;
             }
+
             if (VideoStopped != castedOther.VideoStopped)
             {
                 return true;
             }
+
             if (VideoPaused != castedOther.VideoPaused)
             {
                 return true;
             }
+
             if (PresentationPaused != castedOther.PresentationPaused)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 #nullable disable
     }

@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -36,11 +20,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             ShippingAddress = 1 << 3
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -1868808300; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -1868808300; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [MaybeNull]
         [Newtonsoft.Json.JsonProperty("name")]
@@ -59,7 +41,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public sealed override CatraProto.Client.TL.Schemas.CloudChats.PostAddressBase ShippingAddress { get; set; }
 
 
-
         public PaymentRequestedInfo()
         {
         }
@@ -70,7 +51,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = Phone == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
             Flags = Email == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
             Flags = ShippingAddress == null ? FlagsHelper.UnsetFlag(Flags, 3) : FlagsHelper.SetFlag(Flags, 3);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -81,19 +61,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             writer.WriteInt32(Flags);
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
-
                 writer.WriteString(Name);
             }
 
             if (FlagsHelper.IsFlagSet(Flags, 1))
             {
-
                 writer.WriteString(Phone);
             }
 
             if (FlagsHelper.IsFlagSet(Flags, 2))
             {
-
                 writer.WriteString(Email);
             }
 
@@ -108,7 +85,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -118,6 +94,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
@@ -126,6 +103,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryname);
                 }
+
                 Name = tryname.Value;
             }
 
@@ -136,6 +114,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryphone);
                 }
+
                 Phone = tryphone.Value;
             }
 
@@ -146,6 +125,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryemail);
                 }
+
                 Email = tryemail.Value;
             }
 
@@ -156,11 +136,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryshippingAddress);
                 }
+
                 ShippingAddress = tryshippingAddress.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -176,13 +156,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new PaymentRequestedInfo
-            {
-                Flags = Flags,
-                Name = Name,
-                Phone = Phone,
-                Email = Email
-            };
+            var newClonedObject = new PaymentRequestedInfo();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Name = Name;
+            newClonedObject.Phone = Phone;
+            newClonedObject.Email = Email;
             if (ShippingAddress is not null)
             {
                 var cloneShippingAddress = (CatraProto.Client.TL.Schemas.CloudChats.PostAddressBase?)ShippingAddress.Clone();
@@ -190,10 +168,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.ShippingAddress = cloneShippingAddress;
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public override bool Compare(IObject other)
@@ -202,32 +181,38 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Name != castedOther.Name)
             {
                 return true;
             }
+
             if (Phone != castedOther.Phone)
             {
                 return true;
             }
+
             if (Email != castedOther.Email)
             {
                 return true;
             }
+
             if (ShippingAddress is null && castedOther.ShippingAddress is not null || ShippingAddress is not null && castedOther.ShippingAddress is null)
             {
                 return true;
             }
+
             if (ShippingAddress is not null && castedOther.ShippingAddress is not null && ShippingAddress.Compare(castedOther.ShippingAddress))
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

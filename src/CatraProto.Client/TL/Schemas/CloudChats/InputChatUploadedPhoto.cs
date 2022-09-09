@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -35,11 +19,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             VideoStartTs = 1 << 2
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -968723890; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -968723890; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [MaybeNull]
         [Newtonsoft.Json.JsonProperty("file")]
@@ -53,7 +35,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public double? VideoStartTs { get; set; }
 
 
-
         public InputChatUploadedPhoto()
         {
         }
@@ -63,7 +44,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = File == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
             Flags = Video == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
             Flags = VideoStartTs == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -92,13 +72,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
             if (FlagsHelper.IsFlagSet(Flags, 2))
             {
-
                 writer.WriteDouble(VideoStartTs.Value);
             }
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -108,6 +86,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
@@ -116,6 +95,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryfile);
                 }
+
                 File = tryfile.Value;
             }
 
@@ -126,6 +106,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryvideo);
                 }
+
                 Video = tryvideo.Value;
             }
 
@@ -136,11 +117,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryvideoStartTs);
                 }
+
                 VideoStartTs = tryvideoStartTs.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -156,10 +137,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new InputChatUploadedPhoto
-            {
-                Flags = Flags
-            };
+            var newClonedObject = new InputChatUploadedPhoto();
+            newClonedObject.Flags = Flags;
             if (File is not null)
             {
                 var cloneFile = (CatraProto.Client.TL.Schemas.CloudChats.InputFileBase?)File.Clone();
@@ -167,8 +146,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.File = cloneFile;
             }
+
             if (Video is not null)
             {
                 var cloneVideo = (CatraProto.Client.TL.Schemas.CloudChats.InputFileBase?)Video.Clone();
@@ -176,11 +157,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.Video = cloneVideo;
             }
+
             newClonedObject.VideoStartTs = VideoStartTs;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -189,32 +171,38 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (File is null && castedOther.File is not null || File is not null && castedOther.File is null)
             {
                 return true;
             }
+
             if (File is not null && castedOther.File is not null && File.Compare(castedOther.File))
             {
                 return true;
             }
+
             if (Video is null && castedOther.Video is not null || Video is not null && castedOther.Video is null)
             {
                 return true;
             }
+
             if (Video is not null && castedOther.Video is not null && Video.Compare(castedOther.Video))
             {
                 return true;
             }
+
             if (VideoStartTs != castedOther.VideoStartTs)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

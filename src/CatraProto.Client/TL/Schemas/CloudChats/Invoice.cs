@@ -1,27 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -45,14 +28,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             RecurringTermsUrl = 1 << 9
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 1048946971; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 1048946971; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("test")]
-        public sealed override bool Test { get; set; }
+        [Newtonsoft.Json.JsonProperty("test")] public sealed override bool Test { get; set; }
 
         [Newtonsoft.Json.JsonProperty("name_requested")]
         public sealed override bool NameRequested { get; set; }
@@ -100,7 +80,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             Currency = currency;
             Prices = prices;
-
         }
 #nullable disable
         internal Invoice()
@@ -121,7 +100,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = MaxTipAmount == null ? FlagsHelper.UnsetFlag(Flags, 8) : FlagsHelper.SetFlag(Flags, 8);
             Flags = SuggestedTipAmounts == null ? FlagsHelper.UnsetFlag(Flags, 8) : FlagsHelper.SetFlag(Flags, 8);
             Flags = RecurringTermsUrl == null ? FlagsHelper.UnsetFlag(Flags, 9) : FlagsHelper.SetFlag(Flags, 9);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -137,6 +115,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return checkprices;
             }
+
             if (FlagsHelper.IsFlagSet(Flags, 8))
             {
                 writer.WriteInt64(MaxTipAmount.Value);
@@ -144,19 +123,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
             if (FlagsHelper.IsFlagSet(Flags, 8))
             {
-
                 writer.WriteVector(SuggestedTipAmounts, false);
             }
 
             if (FlagsHelper.IsFlagSet(Flags, 9))
             {
-
                 writer.WriteString(RecurringTermsUrl);
             }
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -166,6 +142,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             Test = FlagsHelper.IsFlagSet(Flags, 0);
             NameRequested = FlagsHelper.IsFlagSet(Flags, 1);
@@ -181,12 +158,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(trycurrency);
             }
+
             Currency = trycurrency.Value;
             var tryprices = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
             if (tryprices.IsError)
             {
                 return ReadResult<IObject>.Move(tryprices);
             }
+
             Prices = tryprices.Value;
             if (FlagsHelper.IsFlagSet(Flags, 8))
             {
@@ -195,6 +174,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trymaxTipAmount);
                 }
+
                 MaxTipAmount = trymaxTipAmount.Value;
             }
 
@@ -205,6 +185,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trysuggestedTipAmounts);
                 }
+
                 SuggestedTipAmounts = trysuggestedTipAmounts.Value;
             }
 
@@ -215,11 +196,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryrecurringTermsUrl);
                 }
+
                 RecurringTermsUrl = tryrecurringTermsUrl.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -235,21 +216,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new Invoice
-            {
-                Flags = Flags,
-                Test = Test,
-                NameRequested = NameRequested,
-                PhoneRequested = PhoneRequested,
-                EmailRequested = EmailRequested,
-                ShippingAddressRequested = ShippingAddressRequested,
-                Flexible = Flexible,
-                PhoneToProvider = PhoneToProvider,
-                EmailToProvider = EmailToProvider,
-                Recurring = Recurring,
-                Currency = Currency,
-                Prices = new List<CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase>()
-            };
+            var newClonedObject = new Invoice();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Test = Test;
+            newClonedObject.NameRequested = NameRequested;
+            newClonedObject.PhoneRequested = PhoneRequested;
+            newClonedObject.EmailRequested = EmailRequested;
+            newClonedObject.ShippingAddressRequested = ShippingAddressRequested;
+            newClonedObject.Flexible = Flexible;
+            newClonedObject.PhoneToProvider = PhoneToProvider;
+            newClonedObject.EmailToProvider = EmailToProvider;
+            newClonedObject.Recurring = Recurring;
+            newClonedObject.Currency = Currency;
+            newClonedObject.Prices = new List<CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase>();
             foreach (var prices in Prices)
             {
                 var cloneprices = (CatraProto.Client.TL.Schemas.CloudChats.LabeledPriceBase?)prices.Clone();
@@ -257,8 +236,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.Prices.Add(cloneprices);
             }
+
             newClonedObject.MaxTipAmount = MaxTipAmount;
             if (SuggestedTipAmounts is not null)
             {
@@ -268,9 +249,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                     newClonedObject.SuggestedTipAmounts.Add(suggestedTipAmounts);
                 }
             }
+
             newClonedObject.RecurringTermsUrl = RecurringTermsUrl;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -279,55 +260,68 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Test != castedOther.Test)
             {
                 return true;
             }
+
             if (NameRequested != castedOther.NameRequested)
             {
                 return true;
             }
+
             if (PhoneRequested != castedOther.PhoneRequested)
             {
                 return true;
             }
+
             if (EmailRequested != castedOther.EmailRequested)
             {
                 return true;
             }
+
             if (ShippingAddressRequested != castedOther.ShippingAddressRequested)
             {
                 return true;
             }
+
             if (Flexible != castedOther.Flexible)
             {
                 return true;
             }
+
             if (PhoneToProvider != castedOther.PhoneToProvider)
             {
                 return true;
             }
+
             if (EmailToProvider != castedOther.EmailToProvider)
             {
                 return true;
             }
+
             if (Recurring != castedOther.Recurring)
             {
                 return true;
             }
+
             if (Currency != castedOther.Currency)
             {
                 return true;
             }
+
             var pricessize = castedOther.Prices.Count;
             if (pricessize != Prices.Count)
             {
                 return true;
             }
+
             for (var i = 0; i < pricessize; i++)
             {
                 if (castedOther.Prices[i].Compare(Prices[i]))
@@ -335,22 +329,25 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                     return true;
                 }
             }
+
             if (MaxTipAmount != castedOther.MaxTipAmount)
             {
                 return true;
             }
+
             if (SuggestedTipAmounts is null && castedOther.SuggestedTipAmounts is not null || SuggestedTipAmounts is not null && castedOther.SuggestedTipAmounts is null)
             {
                 return true;
             }
+
             if (SuggestedTipAmounts is not null && castedOther.SuggestedTipAmounts is not null)
             {
-
                 var suggestedTipAmountssize = castedOther.SuggestedTipAmounts.Count;
                 if (suggestedTipAmountssize != SuggestedTipAmounts.Count)
                 {
                     return true;
                 }
+
                 for (var i = 0; i < suggestedTipAmountssize; i++)
                 {
                     if (castedOther.SuggestedTipAmounts[i] != SuggestedTipAmounts[i])
@@ -359,12 +356,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                     }
                 }
             }
+
             if (RecurringTermsUrl != castedOther.RecurringTermsUrl)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

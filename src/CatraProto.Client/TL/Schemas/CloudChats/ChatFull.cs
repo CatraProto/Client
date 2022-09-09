@@ -1,27 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -47,11 +30,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             AvailableReactions = 1 << 18
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -779165146; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -779165146; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("can_set_username")]
         public bool CanSetUsername { get; set; }
@@ -59,8 +40,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("has_scheduled")]
         public bool HasScheduled { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("id")]
-        public sealed override long Id { get; set; }
+        [Newtonsoft.Json.JsonProperty("id")] public sealed override long Id { get; set; }
 
         [Newtonsoft.Json.JsonProperty("about")]
         public sealed override string About { get; set; }
@@ -122,7 +102,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             About = about;
             Participants = participants;
             NotifySettings = notifySettings;
-
         }
 #nullable disable
         internal ChatFull()
@@ -145,7 +124,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = RequestsPending == null ? FlagsHelper.UnsetFlag(Flags, 17) : FlagsHelper.SetFlag(Flags, 17);
             Flags = RecentRequesters == null ? FlagsHelper.UnsetFlag(Flags, 17) : FlagsHelper.SetFlag(Flags, 17);
             Flags = AvailableReactions == null ? FlagsHelper.UnsetFlag(Flags, 18) : FlagsHelper.SetFlag(Flags, 18);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -162,6 +140,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return checkparticipants;
             }
+
             if (FlagsHelper.IsFlagSet(Flags, 2))
             {
                 var checkchatPhoto = writer.WriteObject(ChatPhoto);
@@ -176,6 +155,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return checknotifySettings;
             }
+
             if (FlagsHelper.IsFlagSet(Flags, 13))
             {
                 var checkexportedInvite = writer.WriteObject(ExportedInvite);
@@ -229,7 +209,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
             if (FlagsHelper.IsFlagSet(Flags, 16))
             {
-
                 writer.WriteString(ThemeEmoticon);
             }
 
@@ -240,19 +219,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
             if (FlagsHelper.IsFlagSet(Flags, 17))
             {
-
                 writer.WriteVector(RecentRequesters, false);
             }
 
             if (FlagsHelper.IsFlagSet(Flags, 18))
             {
-
                 writer.WriteVector(AvailableReactions, false);
             }
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -262,6 +238,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             CanSetUsername = FlagsHelper.IsFlagSet(Flags, 7);
             HasScheduled = FlagsHelper.IsFlagSet(Flags, 8);
@@ -270,18 +247,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryid);
             }
+
             Id = tryid.Value;
             var tryabout = reader.ReadString();
             if (tryabout.IsError)
             {
                 return ReadResult<IObject>.Move(tryabout);
             }
+
             About = tryabout.Value;
             var tryparticipants = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantsBase>();
             if (tryparticipants.IsError)
             {
                 return ReadResult<IObject>.Move(tryparticipants);
             }
+
             Participants = tryparticipants.Value;
             if (FlagsHelper.IsFlagSet(Flags, 2))
             {
@@ -290,6 +270,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trychatPhoto);
                 }
+
                 ChatPhoto = trychatPhoto.Value;
             }
 
@@ -298,6 +279,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(trynotifySettings);
             }
+
             NotifySettings = trynotifySettings.Value;
             if (FlagsHelper.IsFlagSet(Flags, 13))
             {
@@ -306,6 +288,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryexportedInvite);
                 }
+
                 ExportedInvite = tryexportedInvite.Value;
             }
 
@@ -316,6 +299,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trybotInfo);
                 }
+
                 BotInfo = trybotInfo.Value;
             }
 
@@ -326,6 +310,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trypinnedMsgId);
                 }
+
                 PinnedMsgId = trypinnedMsgId.Value;
             }
 
@@ -336,6 +321,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryfolderId);
                 }
+
                 FolderId = tryfolderId.Value;
             }
 
@@ -346,6 +332,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trycall);
                 }
+
                 Call = trycall.Value;
             }
 
@@ -356,6 +343,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryttlPeriod);
                 }
+
                 TtlPeriod = tryttlPeriod.Value;
             }
 
@@ -366,6 +354,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trygroupcallDefaultJoinAs);
                 }
+
                 GroupcallDefaultJoinAs = trygroupcallDefaultJoinAs.Value;
             }
 
@@ -376,6 +365,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trythemeEmoticon);
                 }
+
                 ThemeEmoticon = trythemeEmoticon.Value;
             }
 
@@ -386,6 +376,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryrequestsPending);
                 }
+
                 RequestsPending = tryrequestsPending.Value;
             }
 
@@ -396,6 +387,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryrecentRequesters);
                 }
+
                 RecentRequesters = tryrecentRequesters.Value;
             }
 
@@ -406,11 +398,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryavailableReactions);
                 }
+
                 AvailableReactions = tryavailableReactions.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -426,19 +418,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new ChatFull
-            {
-                Flags = Flags,
-                CanSetUsername = CanSetUsername,
-                HasScheduled = HasScheduled,
-                Id = Id,
-                About = About
-            };
+            var newClonedObject = new ChatFull();
+            newClonedObject.Flags = Flags;
+            newClonedObject.CanSetUsername = CanSetUsername;
+            newClonedObject.HasScheduled = HasScheduled;
+            newClonedObject.Id = Id;
+            newClonedObject.About = About;
             var cloneParticipants = (CatraProto.Client.TL.Schemas.CloudChats.ChatParticipantsBase?)Participants.Clone();
             if (cloneParticipants is null)
             {
                 return null;
             }
+
             newClonedObject.Participants = cloneParticipants;
             if (ChatPhoto is not null)
             {
@@ -447,13 +438,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.ChatPhoto = cloneChatPhoto;
             }
+
             var cloneNotifySettings = (CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase?)NotifySettings.Clone();
             if (cloneNotifySettings is null)
             {
                 return null;
             }
+
             newClonedObject.NotifySettings = cloneNotifySettings;
             if (ExportedInvite is not null)
             {
@@ -462,8 +456,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.ExportedInvite = cloneExportedInvite;
             }
+
             if (BotInfo is not null)
             {
                 newClonedObject.BotInfo = new List<CatraProto.Client.TL.Schemas.CloudChats.BotInfoBase>();
@@ -474,9 +470,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                     {
                         return null;
                     }
+
                     newClonedObject.BotInfo.Add(clonebotInfo);
                 }
             }
+
             newClonedObject.PinnedMsgId = PinnedMsgId;
             newClonedObject.FolderId = FolderId;
             if (Call is not null)
@@ -486,8 +484,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.Call = cloneCall;
             }
+
             newClonedObject.TtlPeriod = TtlPeriod;
             if (GroupcallDefaultJoinAs is not null)
             {
@@ -496,8 +496,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.GroupcallDefaultJoinAs = cloneGroupcallDefaultJoinAs;
             }
+
             newClonedObject.ThemeEmoticon = ThemeEmoticon;
             newClonedObject.RequestsPending = RequestsPending;
             if (RecentRequesters is not null)
@@ -508,6 +510,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                     newClonedObject.RecentRequesters.Add(recentRequesters);
                 }
             }
+
             if (AvailableReactions is not null)
             {
                 newClonedObject.AvailableReactions = new List<string>();
@@ -516,8 +519,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                     newClonedObject.AvailableReactions.Add(availableReactions);
                 }
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public override bool Compare(IObject other)
@@ -526,62 +529,75 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (CanSetUsername != castedOther.CanSetUsername)
             {
                 return true;
             }
+
             if (HasScheduled != castedOther.HasScheduled)
             {
                 return true;
             }
+
             if (Id != castedOther.Id)
             {
                 return true;
             }
+
             if (About != castedOther.About)
             {
                 return true;
             }
+
             if (Participants.Compare(castedOther.Participants))
             {
                 return true;
             }
+
             if (ChatPhoto is null && castedOther.ChatPhoto is not null || ChatPhoto is not null && castedOther.ChatPhoto is null)
             {
                 return true;
             }
+
             if (ChatPhoto is not null && castedOther.ChatPhoto is not null && ChatPhoto.Compare(castedOther.ChatPhoto))
             {
                 return true;
             }
+
             if (NotifySettings.Compare(castedOther.NotifySettings))
             {
                 return true;
             }
+
             if (ExportedInvite is null && castedOther.ExportedInvite is not null || ExportedInvite is not null && castedOther.ExportedInvite is null)
             {
                 return true;
             }
+
             if (ExportedInvite is not null && castedOther.ExportedInvite is not null && ExportedInvite.Compare(castedOther.ExportedInvite))
             {
                 return true;
             }
+
             if (BotInfo is null && castedOther.BotInfo is not null || BotInfo is not null && castedOther.BotInfo is null)
             {
                 return true;
             }
+
             if (BotInfo is not null && castedOther.BotInfo is not null)
             {
-
                 var botInfosize = castedOther.BotInfo.Count;
                 if (botInfosize != BotInfo.Count)
                 {
                     return true;
                 }
+
                 for (var i = 0; i < botInfosize; i++)
                 {
                     if (castedOther.BotInfo[i].Compare(BotInfo[i]))
@@ -590,54 +606,65 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                     }
                 }
             }
+
             if (PinnedMsgId != castedOther.PinnedMsgId)
             {
                 return true;
             }
+
             if (FolderId != castedOther.FolderId)
             {
                 return true;
             }
+
             if (Call is null && castedOther.Call is not null || Call is not null && castedOther.Call is null)
             {
                 return true;
             }
+
             if (Call is not null && castedOther.Call is not null && Call.Compare(castedOther.Call))
             {
                 return true;
             }
+
             if (TtlPeriod != castedOther.TtlPeriod)
             {
                 return true;
             }
+
             if (GroupcallDefaultJoinAs is null && castedOther.GroupcallDefaultJoinAs is not null || GroupcallDefaultJoinAs is not null && castedOther.GroupcallDefaultJoinAs is null)
             {
                 return true;
             }
+
             if (GroupcallDefaultJoinAs is not null && castedOther.GroupcallDefaultJoinAs is not null && GroupcallDefaultJoinAs.Compare(castedOther.GroupcallDefaultJoinAs))
             {
                 return true;
             }
+
             if (ThemeEmoticon != castedOther.ThemeEmoticon)
             {
                 return true;
             }
+
             if (RequestsPending != castedOther.RequestsPending)
             {
                 return true;
             }
+
             if (RecentRequesters is null && castedOther.RecentRequesters is not null || RecentRequesters is not null && castedOther.RecentRequesters is null)
             {
                 return true;
             }
+
             if (RecentRequesters is not null && castedOther.RecentRequesters is not null)
             {
-
                 var recentRequesterssize = castedOther.RecentRequesters.Count;
                 if (recentRequesterssize != RecentRequesters.Count)
                 {
                     return true;
                 }
+
                 for (var i = 0; i < recentRequesterssize; i++)
                 {
                     if (castedOther.RecentRequesters[i] != RecentRequesters[i])
@@ -646,18 +673,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                     }
                 }
             }
+
             if (AvailableReactions is null && castedOther.AvailableReactions is not null || AvailableReactions is not null && castedOther.AvailableReactions is null)
             {
                 return true;
             }
+
             if (AvailableReactions is not null && castedOther.AvailableReactions is not null)
             {
-
                 var availableReactionssize = castedOther.AvailableReactions.Count;
                 if (availableReactionssize != AvailableReactions.Count)
                 {
                     return true;
                 }
+
                 for (var i = 0; i < availableReactionssize; i++)
                 {
                     if (castedOther.AvailableReactions[i] != AvailableReactions[i])
@@ -666,8 +695,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                     }
                 }
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

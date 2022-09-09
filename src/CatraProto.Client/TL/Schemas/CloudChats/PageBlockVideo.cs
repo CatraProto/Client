@@ -1,25 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -33,17 +18,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Loop = 1 << 1
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 2089805750; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 2089805750; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("autoplay")]
         public bool Autoplay { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("loop")]
-        public bool Loop { get; set; }
+        [Newtonsoft.Json.JsonProperty("loop")] public bool Loop { get; set; }
 
         [Newtonsoft.Json.JsonProperty("video_id")]
         public long VideoId { get; set; }
@@ -57,7 +39,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             VideoId = videoId;
             Caption = caption;
-
         }
 #nullable disable
         internal PageBlockVideo()
@@ -68,7 +49,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             Flags = Autoplay ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
             Flags = Loop ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -85,7 +65,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             }
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -95,6 +74,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             Autoplay = FlagsHelper.IsFlagSet(Flags, 0);
             Loop = FlagsHelper.IsFlagSet(Flags, 1);
@@ -103,15 +83,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryvideoId);
             }
+
             VideoId = tryvideoId.Value;
             var trycaption = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase>();
             if (trycaption.IsError)
             {
                 return ReadResult<IObject>.Move(trycaption);
             }
+
             Caption = trycaption.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -127,21 +108,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new PageBlockVideo
-            {
-                Flags = Flags,
-                Autoplay = Autoplay,
-                Loop = Loop,
-                VideoId = VideoId
-            };
+            var newClonedObject = new PageBlockVideo();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Autoplay = Autoplay;
+            newClonedObject.Loop = Loop;
+            newClonedObject.VideoId = VideoId;
             var cloneCaption = (CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase?)Caption.Clone();
             if (cloneCaption is null)
             {
                 return null;
             }
+
             newClonedObject.Caption = cloneCaption;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -150,28 +129,33 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Autoplay != castedOther.Autoplay)
             {
                 return true;
             }
+
             if (Loop != castedOther.Loop)
             {
                 return true;
             }
+
             if (VideoId != castedOther.VideoId)
             {
                 return true;
             }
+
             if (Caption.Compare(castedOther.Caption))
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

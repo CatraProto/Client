@@ -1,35 +1,17 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 {
     public partial class BlockedSlice : CatraProto.Client.TL.Schemas.CloudChats.Contacts.BlockedBase
     {
-
-
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -513392236; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -513392236; }
 
         [Newtonsoft.Json.JsonProperty("count")]
         public int Count { get; set; }
@@ -51,7 +33,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
             BlockedField = blockedField;
             Chats = chats;
             Users = users;
-
         }
 #nullable disable
         internal BlockedSlice()
@@ -60,7 +41,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 
         public override void UpdateFlags()
         {
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -72,11 +52,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
             {
                 return checkblockedField;
             }
+
             var checkchats = writer.WriteVector(Chats, false);
             if (checkchats.IsError)
             {
                 return checkchats;
             }
+
             var checkusers = writer.WriteVector(Users, false);
             if (checkusers.IsError)
             {
@@ -84,7 +66,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
             }
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -94,27 +75,30 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
             {
                 return ReadResult<IObject>.Move(trycount);
             }
+
             Count = trycount.Value;
             var tryblockedField = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PeerBlockedBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
             if (tryblockedField.IsError)
             {
                 return ReadResult<IObject>.Move(tryblockedField);
             }
+
             BlockedField = tryblockedField.Value;
             var trychats = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
             if (trychats.IsError)
             {
                 return ReadResult<IObject>.Move(trychats);
             }
+
             Chats = trychats.Value;
             var tryusers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
             if (tryusers.IsError)
             {
                 return ReadResult<IObject>.Move(tryusers);
             }
+
             Users = tryusers.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -130,11 +114,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new BlockedSlice
-            {
-                Count = Count,
-                BlockedField = new List<CatraProto.Client.TL.Schemas.CloudChats.PeerBlockedBase>()
-            };
+            var newClonedObject = new BlockedSlice();
+            newClonedObject.Count = Count;
+            newClonedObject.BlockedField = new List<CatraProto.Client.TL.Schemas.CloudChats.PeerBlockedBase>();
             foreach (var blockedField in BlockedField)
             {
                 var cloneblockedField = (CatraProto.Client.TL.Schemas.CloudChats.PeerBlockedBase?)blockedField.Clone();
@@ -142,8 +124,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
                 {
                     return null;
                 }
+
                 newClonedObject.BlockedField.Add(cloneblockedField);
             }
+
             newClonedObject.Chats = new List<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
             foreach (var chats in Chats)
             {
@@ -152,8 +136,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
                 {
                     return null;
                 }
+
                 newClonedObject.Chats.Add(clonechats);
             }
+
             newClonedObject.Users = new List<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
             foreach (var users in Users)
             {
@@ -162,10 +148,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
                 {
                     return null;
                 }
+
                 newClonedObject.Users.Add(cloneusers);
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public override bool Compare(IObject other)
@@ -174,15 +161,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
             {
                 return true;
             }
+
             if (Count != castedOther.Count)
             {
                 return true;
             }
+
             var blockedFieldsize = castedOther.BlockedField.Count;
             if (blockedFieldsize != BlockedField.Count)
             {
                 return true;
             }
+
             for (var i = 0; i < blockedFieldsize; i++)
             {
                 if (castedOther.BlockedField[i].Compare(BlockedField[i]))
@@ -190,11 +180,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
                     return true;
                 }
             }
+
             var chatssize = castedOther.Chats.Count;
             if (chatssize != Chats.Count)
             {
                 return true;
             }
+
             for (var i = 0; i < chatssize; i++)
             {
                 if (castedOther.Chats[i].Compare(Chats[i]))
@@ -202,11 +194,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
                     return true;
                 }
             }
+
             var userssize = castedOther.Users.Count;
             if (userssize != Users.Count)
             {
                 return true;
             }
+
             for (var i = 0; i < userssize; i++)
             {
                 if (castedOther.Users[i].Compare(Users[i]))
@@ -214,8 +208,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
                     return true;
                 }
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

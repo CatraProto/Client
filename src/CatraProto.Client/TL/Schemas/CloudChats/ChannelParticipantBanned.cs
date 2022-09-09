@@ -1,25 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -32,23 +17,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Left = 1 << 0
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 1844969806; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 1844969806; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("left")]
-        public bool Left { get; set; }
+        [Newtonsoft.Json.JsonProperty("left")] public bool Left { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("peer")]
-        public CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
+        [Newtonsoft.Json.JsonProperty("peer")] public CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
 
         [Newtonsoft.Json.JsonProperty("kicked_by")]
         public long KickedBy { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("date")]
-        public int Date { get; set; }
+        [Newtonsoft.Json.JsonProperty("date")] public int Date { get; set; }
 
         [Newtonsoft.Json.JsonProperty("banned_rights")]
         public CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase BannedRights { get; set; }
@@ -61,7 +41,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             KickedBy = kickedBy;
             Date = date;
             BannedRights = bannedRights;
-
         }
 #nullable disable
         internal ChannelParticipantBanned()
@@ -71,7 +50,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override void UpdateFlags()
         {
             Flags = Left ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -85,6 +63,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return checkpeer;
             }
+
             writer.WriteInt64(KickedBy);
             writer.WriteInt32(Date);
             var checkbannedRights = writer.WriteObject(BannedRights);
@@ -94,7 +73,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             }
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -104,6 +82,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             Left = FlagsHelper.IsFlagSet(Flags, 0);
             var trypeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PeerBase>();
@@ -111,27 +90,30 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(trypeer);
             }
+
             Peer = trypeer.Value;
             var trykickedBy = reader.ReadInt64();
             if (trykickedBy.IsError)
             {
                 return ReadResult<IObject>.Move(trykickedBy);
             }
+
             KickedBy = trykickedBy.Value;
             var trydate = reader.ReadInt32();
             if (trydate.IsError)
             {
                 return ReadResult<IObject>.Move(trydate);
             }
+
             Date = trydate.Value;
             var trybannedRights = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ChatBannedRightsBase>();
             if (trybannedRights.IsError)
             {
                 return ReadResult<IObject>.Move(trybannedRights);
             }
+
             BannedRights = trybannedRights.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -147,16 +129,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new ChannelParticipantBanned
-            {
-                Flags = Flags,
-                Left = Left
-            };
+            var newClonedObject = new ChannelParticipantBanned();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Left = Left;
             var clonePeer = (CatraProto.Client.TL.Schemas.CloudChats.PeerBase?)Peer.Clone();
             if (clonePeer is null)
             {
                 return null;
             }
+
             newClonedObject.Peer = clonePeer;
             newClonedObject.KickedBy = KickedBy;
             newClonedObject.Date = Date;
@@ -165,9 +146,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return null;
             }
+
             newClonedObject.BannedRights = cloneBannedRights;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -176,32 +157,38 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Left != castedOther.Left)
             {
                 return true;
             }
+
             if (Peer.Compare(castedOther.Peer))
             {
                 return true;
             }
+
             if (KickedBy != castedOther.KickedBy)
             {
                 return true;
             }
+
             if (Date != castedOther.Date)
             {
                 return true;
             }
+
             if (BannedRights.Compare(castedOther.BannedRights))
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

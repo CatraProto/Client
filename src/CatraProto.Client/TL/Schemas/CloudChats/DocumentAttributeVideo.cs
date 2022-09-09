@@ -1,25 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -33,11 +18,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             SupportsStreaming = 1 << 1
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 250621158; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 250621158; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("round_message")]
         public bool RoundMessage { get; set; }
@@ -48,11 +31,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("duration")]
         public int Duration { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("w")]
-        public int W { get; set; }
+        [Newtonsoft.Json.JsonProperty("w")] public int W { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("h")]
-        public int H { get; set; }
+        [Newtonsoft.Json.JsonProperty("h")] public int H { get; set; }
 
 
 #nullable enable
@@ -61,7 +42,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Duration = duration;
             W = w;
             H = h;
-
         }
 #nullable disable
         internal DocumentAttributeVideo()
@@ -72,7 +52,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             Flags = RoundMessage ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
             Flags = SupportsStreaming ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -86,7 +65,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             writer.WriteInt32(H);
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -96,6 +74,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             RoundMessage = FlagsHelper.IsFlagSet(Flags, 0);
             SupportsStreaming = FlagsHelper.IsFlagSet(Flags, 1);
@@ -104,21 +83,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryduration);
             }
+
             Duration = tryduration.Value;
             var tryw = reader.ReadInt32();
             if (tryw.IsError)
             {
                 return ReadResult<IObject>.Move(tryw);
             }
+
             W = tryw.Value;
             var tryh = reader.ReadInt32();
             if (tryh.IsError)
             {
                 return ReadResult<IObject>.Move(tryh);
             }
+
             H = tryh.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -134,17 +115,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new DocumentAttributeVideo
-            {
-                Flags = Flags,
-                RoundMessage = RoundMessage,
-                SupportsStreaming = SupportsStreaming,
-                Duration = Duration,
-                W = W,
-                H = H
-            };
+            var newClonedObject = new DocumentAttributeVideo();
+            newClonedObject.Flags = Flags;
+            newClonedObject.RoundMessage = RoundMessage;
+            newClonedObject.SupportsStreaming = SupportsStreaming;
+            newClonedObject.Duration = Duration;
+            newClonedObject.W = W;
+            newClonedObject.H = H;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -153,32 +131,38 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (RoundMessage != castedOther.RoundMessage)
             {
                 return true;
             }
+
             if (SupportsStreaming != castedOther.SupportsStreaming)
             {
                 return true;
             }
+
             if (Duration != castedOther.Duration)
             {
                 return true;
             }
+
             if (W != castedOther.W)
             {
                 return true;
             }
+
             if (H != castedOther.H)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

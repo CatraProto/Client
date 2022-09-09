@@ -1,37 +1,19 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class InputPhotoLegacyFileLocation : CatraProto.Client.TL.Schemas.CloudChats.InputFileLocationBase
     {
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -667654413; }
 
-
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -667654413; }
-
-        [Newtonsoft.Json.JsonProperty("id")]
-        public long Id { get; set; }
+        [Newtonsoft.Json.JsonProperty("id")] public long Id { get; set; }
 
         [Newtonsoft.Json.JsonProperty("access_hash")]
         public long AccessHash { get; set; }
@@ -58,7 +40,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             VolumeId = volumeId;
             LocalId = localId;
             Secret = secret;
-
         }
 #nullable disable
         internal InputPhotoLegacyFileLocation()
@@ -67,7 +48,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void UpdateFlags()
         {
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -82,7 +62,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             writer.WriteInt64(Secret);
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -92,39 +71,44 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryid);
             }
+
             Id = tryid.Value;
             var tryaccessHash = reader.ReadInt64();
             if (tryaccessHash.IsError)
             {
                 return ReadResult<IObject>.Move(tryaccessHash);
             }
+
             AccessHash = tryaccessHash.Value;
             var tryfileReference = reader.ReadBytes();
             if (tryfileReference.IsError)
             {
                 return ReadResult<IObject>.Move(tryfileReference);
             }
+
             FileReference = tryfileReference.Value;
             var tryvolumeId = reader.ReadInt64();
             if (tryvolumeId.IsError)
             {
                 return ReadResult<IObject>.Move(tryvolumeId);
             }
+
             VolumeId = tryvolumeId.Value;
             var trylocalId = reader.ReadInt32();
             if (trylocalId.IsError)
             {
                 return ReadResult<IObject>.Move(trylocalId);
             }
+
             LocalId = trylocalId.Value;
             var trysecret = reader.ReadInt64();
             if (trysecret.IsError)
             {
                 return ReadResult<IObject>.Move(trysecret);
             }
+
             Secret = trysecret.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -140,17 +124,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new InputPhotoLegacyFileLocation
-            {
-                Id = Id,
-                AccessHash = AccessHash,
-                FileReference = FileReference,
-                VolumeId = VolumeId,
-                LocalId = LocalId,
-                Secret = Secret
-            };
+            var newClonedObject = new InputPhotoLegacyFileLocation();
+            newClonedObject.Id = Id;
+            newClonedObject.AccessHash = AccessHash;
+            newClonedObject.FileReference = FileReference;
+            newClonedObject.VolumeId = VolumeId;
+            newClonedObject.LocalId = LocalId;
+            newClonedObject.Secret = Secret;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -159,32 +140,38 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Id != castedOther.Id)
             {
                 return true;
             }
+
             if (AccessHash != castedOther.AccessHash)
             {
                 return true;
             }
+
             if (FileReference != castedOther.FileReference)
             {
                 return true;
             }
+
             if (VolumeId != castedOther.VolumeId)
             {
                 return true;
             }
+
             if (LocalId != castedOther.LocalId)
             {
                 return true;
             }
+
             if (Secret != castedOther.Secret)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

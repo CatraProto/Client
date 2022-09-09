@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 
@@ -37,14 +21,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             FromLang = 1 << 2
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 617508334; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 617508334; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
+        [Newtonsoft.Json.JsonIgnore] ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [MaybeNull]
         [Newtonsoft.Json.JsonProperty("peer")]
@@ -69,7 +50,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public TranslateText(string toLang)
         {
             ToLang = toLang;
-
         }
 #nullable disable
 
@@ -83,7 +63,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             Flags = MsgId == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
             Flags = Text == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
             Flags = FromLang == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
-
         }
 
         public WriteResult Serialize(Writer writer)
@@ -108,13 +87,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
             if (FlagsHelper.IsFlagSet(Flags, 1))
             {
-
                 writer.WriteString(Text);
             }
 
             if (FlagsHelper.IsFlagSet(Flags, 2))
             {
-
                 writer.WriteString(FromLang);
             }
 
@@ -122,7 +99,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             writer.WriteString(ToLang);
 
             return new WriteResult();
-
         }
 
         public ReadResult<IObject> Deserialize(Reader reader)
@@ -132,6 +108,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
@@ -140,6 +117,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 {
                     return ReadResult<IObject>.Move(trypeer);
                 }
+
                 Peer = trypeer.Value;
             }
 
@@ -150,6 +128,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 {
                     return ReadResult<IObject>.Move(trymsgId);
                 }
+
                 MsgId = trymsgId.Value;
             }
 
@@ -160,6 +139,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 {
                     return ReadResult<IObject>.Move(trytext);
                 }
+
                 Text = trytext.Value;
             }
 
@@ -170,6 +150,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 {
                     return ReadResult<IObject>.Move(tryfromLang);
                 }
+
                 FromLang = tryfromLang.Value;
             }
 
@@ -178,9 +159,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             {
                 return ReadResult<IObject>.Move(trytoLang);
             }
+
             ToLang = trytoLang.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -195,10 +176,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new TranslateText
-            {
-                Flags = Flags
-            };
+            var newClonedObject = new TranslateText();
+            newClonedObject.Flags = Flags;
             if (Peer is not null)
             {
                 var clonePeer = (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase?)Peer.Clone();
@@ -206,14 +185,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 {
                     return null;
                 }
+
                 newClonedObject.Peer = clonePeer;
             }
+
             newClonedObject.MsgId = MsgId;
             newClonedObject.Text = Text;
             newClonedObject.FromLang = FromLang;
             newClonedObject.ToLang = ToLang;
             return newClonedObject;
-
         }
 
         public bool Compare(IObject other)
@@ -222,36 +202,43 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Peer is null && castedOther.Peer is not null || Peer is not null && castedOther.Peer is null)
             {
                 return true;
             }
+
             if (Peer is not null && castedOther.Peer is not null && Peer.Compare(castedOther.Peer))
             {
                 return true;
             }
+
             if (MsgId != castedOther.MsgId)
             {
                 return true;
             }
+
             if (Text != castedOther.Text)
             {
                 return true;
             }
+
             if (FromLang != castedOther.FromLang)
             {
                 return true;
             }
+
             if (ToLang != castedOther.ToLang)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 #nullable disable
     }

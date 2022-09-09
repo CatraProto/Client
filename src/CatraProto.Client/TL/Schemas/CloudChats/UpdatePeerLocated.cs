@@ -1,35 +1,17 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class UpdatePeerLocated : CatraProto.Client.TL.Schemas.CloudChats.UpdateBase
     {
-
-
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -1263546448; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -1263546448; }
 
         [Newtonsoft.Json.JsonProperty("peers")]
         public List<CatraProto.Client.TL.Schemas.CloudChats.PeerLocatedBase> Peers { get; set; }
@@ -39,7 +21,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public UpdatePeerLocated(List<CatraProto.Client.TL.Schemas.CloudChats.PeerLocatedBase> peers)
         {
             Peers = peers;
-
         }
 #nullable disable
         internal UpdatePeerLocated()
@@ -48,7 +29,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void UpdateFlags()
         {
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -61,7 +41,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             }
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -71,9 +50,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(trypeers);
             }
+
             Peers = trypeers.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -89,10 +68,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new UpdatePeerLocated
-            {
-                Peers = new List<CatraProto.Client.TL.Schemas.CloudChats.PeerLocatedBase>()
-            };
+            var newClonedObject = new UpdatePeerLocated();
+            newClonedObject.Peers = new List<CatraProto.Client.TL.Schemas.CloudChats.PeerLocatedBase>();
             foreach (var peers in Peers)
             {
                 var clonepeers = (CatraProto.Client.TL.Schemas.CloudChats.PeerLocatedBase?)peers.Clone();
@@ -100,10 +77,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.Peers.Add(clonepeers);
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public override bool Compare(IObject other)
@@ -112,11 +90,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             var peerssize = castedOther.Peers.Count;
             if (peerssize != Peers.Count)
             {
                 return true;
             }
+
             for (var i = 0; i < peerssize; i++)
             {
                 if (castedOther.Peers[i].Compare(Peers[i]))
@@ -124,8 +104,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                     return true;
                 }
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

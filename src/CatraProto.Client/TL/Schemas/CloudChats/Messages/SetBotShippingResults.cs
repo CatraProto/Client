@@ -1,27 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 
@@ -36,14 +19,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             ShippingOptions = 1 << 1
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -436833542; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -436833542; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
+        [Newtonsoft.Json.JsonIgnore] ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("query_id")]
         public long QueryId { get; set; }
@@ -61,7 +41,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public SetBotShippingResults(long queryId)
         {
             QueryId = queryId;
-
         }
 #nullable disable
 
@@ -73,7 +52,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         {
             Flags = Error == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
             Flags = ShippingOptions == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
-
         }
 
         public WriteResult Serialize(Writer writer)
@@ -85,7 +63,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             writer.WriteInt64(QueryId);
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
-
                 writer.WriteString(Error);
             }
 
@@ -100,7 +77,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 
             return new WriteResult();
-
         }
 
         public ReadResult<IObject> Deserialize(Reader reader)
@@ -110,12 +86,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             var tryqueryId = reader.ReadInt64();
             if (tryqueryId.IsError)
             {
                 return ReadResult<IObject>.Move(tryqueryId);
             }
+
             QueryId = tryqueryId.Value;
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
@@ -124,6 +102,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 {
                     return ReadResult<IObject>.Move(tryerror);
                 }
+
                 Error = tryerror.Value;
             }
 
@@ -134,11 +113,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 {
                     return ReadResult<IObject>.Move(tryshippingOptions);
                 }
+
                 ShippingOptions = tryshippingOptions.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -153,12 +132,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new SetBotShippingResults
-            {
-                Flags = Flags,
-                QueryId = QueryId,
-                Error = Error
-            };
+            var newClonedObject = new SetBotShippingResults();
+            newClonedObject.Flags = Flags;
+            newClonedObject.QueryId = QueryId;
+            newClonedObject.Error = Error;
             if (ShippingOptions is not null)
             {
                 newClonedObject.ShippingOptions = new List<CatraProto.Client.TL.Schemas.CloudChats.ShippingOptionBase>();
@@ -169,11 +146,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                     {
                         return null;
                     }
+
                     newClonedObject.ShippingOptions.Add(cloneshippingOptions);
                 }
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public bool Compare(IObject other)
@@ -182,30 +160,35 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (QueryId != castedOther.QueryId)
             {
                 return true;
             }
+
             if (Error != castedOther.Error)
             {
                 return true;
             }
+
             if (ShippingOptions is null && castedOther.ShippingOptions is not null || ShippingOptions is not null && castedOther.ShippingOptions is null)
             {
                 return true;
             }
+
             if (ShippingOptions is not null && castedOther.ShippingOptions is not null)
             {
-
                 var shippingOptionssize = castedOther.ShippingOptions.Count;
                 if (shippingOptionssize != ShippingOptions.Count)
                 {
                     return true;
                 }
+
                 for (var i = 0; i < shippingOptionssize; i++)
                 {
                     if (castedOther.ShippingOptions[i].Compare(ShippingOptions[i]))
@@ -214,8 +197,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                     }
                 }
             }
-            return false;
 
+            return false;
         }
 #nullable disable
     }

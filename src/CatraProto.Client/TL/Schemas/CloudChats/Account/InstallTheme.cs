@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 
@@ -37,17 +21,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             BaseTheme = 1 << 3
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -953697477; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -953697477; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
+        [Newtonsoft.Json.JsonIgnore] ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("dark")]
-        public bool Dark { get; set; }
+        [Newtonsoft.Json.JsonProperty("dark")] public bool Dark { get; set; }
 
         [MaybeNull]
         [Newtonsoft.Json.JsonProperty("theme")]
@@ -62,8 +42,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public CatraProto.Client.TL.Schemas.CloudChats.BaseThemeBase BaseTheme { get; set; }
 
 
-
-
         public InstallTheme()
         {
         }
@@ -74,7 +52,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             Flags = Theme == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
             Flags = Format == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
             Flags = BaseTheme == null ? FlagsHelper.UnsetFlag(Flags, 3) : FlagsHelper.SetFlag(Flags, 3);
-
         }
 
         public WriteResult Serialize(Writer writer)
@@ -94,7 +71,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
             if (FlagsHelper.IsFlagSet(Flags, 2))
             {
-
                 writer.WriteString(Format);
             }
 
@@ -109,7 +85,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 
             return new WriteResult();
-
         }
 
         public ReadResult<IObject> Deserialize(Reader reader)
@@ -119,6 +94,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             Dark = FlagsHelper.IsFlagSet(Flags, 0);
             if (FlagsHelper.IsFlagSet(Flags, 1))
@@ -128,6 +104,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return ReadResult<IObject>.Move(trytheme);
                 }
+
                 Theme = trytheme.Value;
             }
 
@@ -138,6 +115,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return ReadResult<IObject>.Move(tryformat);
                 }
+
                 Format = tryformat.Value;
             }
 
@@ -148,11 +126,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return ReadResult<IObject>.Move(trybaseTheme);
                 }
+
                 BaseTheme = trybaseTheme.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -167,11 +145,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new InstallTheme
-            {
-                Flags = Flags,
-                Dark = Dark
-            };
+            var newClonedObject = new InstallTheme();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Dark = Dark;
             if (Theme is not null)
             {
                 var cloneTheme = (CatraProto.Client.TL.Schemas.CloudChats.InputThemeBase?)Theme.Clone();
@@ -179,8 +155,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return null;
                 }
+
                 newClonedObject.Theme = cloneTheme;
             }
+
             newClonedObject.Format = Format;
             if (BaseTheme is not null)
             {
@@ -189,10 +167,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return null;
                 }
+
                 newClonedObject.BaseTheme = cloneBaseTheme;
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public bool Compare(IObject other)
@@ -201,36 +180,43 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Dark != castedOther.Dark)
             {
                 return true;
             }
+
             if (Theme is null && castedOther.Theme is not null || Theme is not null && castedOther.Theme is null)
             {
                 return true;
             }
+
             if (Theme is not null && castedOther.Theme is not null && Theme.Compare(castedOther.Theme))
             {
                 return true;
             }
+
             if (Format != castedOther.Format)
             {
                 return true;
             }
+
             if (BaseTheme is null && castedOther.BaseTheme is not null || BaseTheme is not null && castedOther.BaseTheme is null)
             {
                 return true;
             }
+
             if (BaseTheme is not null && castedOther.BaseTheme is not null && BaseTheme.Compare(castedOther.BaseTheme))
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 #nullable disable
     }

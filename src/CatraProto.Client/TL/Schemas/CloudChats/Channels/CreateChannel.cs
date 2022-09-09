@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 
@@ -38,14 +22,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
             Address = 1 << 2
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 1029681423; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 1029681423; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
+        [Newtonsoft.Json.JsonIgnore] ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("broadcast")]
         public bool Broadcast { get; set; }
@@ -76,7 +57,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
         {
             Title = title;
             About = about;
-
         }
 #nullable disable
 
@@ -91,7 +71,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
             Flags = ForImport ? FlagsHelper.SetFlag(Flags, 3) : FlagsHelper.UnsetFlag(Flags, 3);
             Flags = GeoPoint == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
             Flags = Address == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
-
         }
 
         public WriteResult Serialize(Writer writer)
@@ -115,13 +94,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 
             if (FlagsHelper.IsFlagSet(Flags, 2))
             {
-
                 writer.WriteString(Address);
             }
 
 
             return new WriteResult();
-
         }
 
         public ReadResult<IObject> Deserialize(Reader reader)
@@ -131,6 +108,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             Broadcast = FlagsHelper.IsFlagSet(Flags, 0);
             Megagroup = FlagsHelper.IsFlagSet(Flags, 1);
@@ -140,12 +118,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
             {
                 return ReadResult<IObject>.Move(trytitle);
             }
+
             Title = trytitle.Value;
             var tryabout = reader.ReadString();
             if (tryabout.IsError)
             {
                 return ReadResult<IObject>.Move(tryabout);
             }
+
             About = tryabout.Value;
             if (FlagsHelper.IsFlagSet(Flags, 2))
             {
@@ -154,6 +134,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
                 {
                     return ReadResult<IObject>.Move(trygeoPoint);
                 }
+
                 GeoPoint = trygeoPoint.Value;
             }
 
@@ -164,11 +145,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
                 {
                     return ReadResult<IObject>.Move(tryaddress);
                 }
+
                 Address = tryaddress.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -183,15 +164,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new CreateChannel
-            {
-                Flags = Flags,
-                Broadcast = Broadcast,
-                Megagroup = Megagroup,
-                ForImport = ForImport,
-                Title = Title,
-                About = About
-            };
+            var newClonedObject = new CreateChannel();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Broadcast = Broadcast;
+            newClonedObject.Megagroup = Megagroup;
+            newClonedObject.ForImport = ForImport;
+            newClonedObject.Title = Title;
+            newClonedObject.About = About;
             if (GeoPoint is not null)
             {
                 var cloneGeoPoint = (CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase?)GeoPoint.Clone();
@@ -199,11 +178,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
                 {
                     return null;
                 }
+
                 newClonedObject.GeoPoint = cloneGeoPoint;
             }
+
             newClonedObject.Address = Address;
             return newClonedObject;
-
         }
 
         public bool Compare(IObject other)
@@ -212,44 +192,53 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Broadcast != castedOther.Broadcast)
             {
                 return true;
             }
+
             if (Megagroup != castedOther.Megagroup)
             {
                 return true;
             }
+
             if (ForImport != castedOther.ForImport)
             {
                 return true;
             }
+
             if (Title != castedOther.Title)
             {
                 return true;
             }
+
             if (About != castedOther.About)
             {
                 return true;
             }
+
             if (GeoPoint is null && castedOther.GeoPoint is not null || GeoPoint is not null && castedOther.GeoPoint is null)
             {
                 return true;
             }
+
             if (GeoPoint is not null && castedOther.GeoPoint is not null && GeoPoint.Compare(castedOther.GeoPoint))
             {
                 return true;
             }
+
             if (Address != castedOther.Address)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 #nullable disable
     }

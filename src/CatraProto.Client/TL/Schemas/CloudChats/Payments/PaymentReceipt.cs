@@ -1,27 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
@@ -37,14 +20,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
             TipAmount = 1 << 3
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 1891958275; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 1891958275; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("date")]
-        public sealed override int Date { get; set; }
+        [Newtonsoft.Json.JsonProperty("date")] public sealed override int Date { get; set; }
 
         [Newtonsoft.Json.JsonProperty("bot_id")]
         public sealed override long BotId { get; set; }
@@ -102,7 +82,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
             TotalAmount = totalAmount;
             CredentialsTitle = credentialsTitle;
             Users = users;
-
         }
 #nullable disable
         internal PaymentReceipt()
@@ -115,7 +94,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
             Flags = Info == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
             Flags = Shipping == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
             Flags = TipAmount == null ? FlagsHelper.UnsetFlag(Flags, 3) : FlagsHelper.SetFlag(Flags, 3);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -145,6 +123,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
             {
                 return checkinvoice;
             }
+
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
                 var checkinfo = writer.WriteObject(Info);
@@ -180,7 +159,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
             }
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -190,36 +168,42 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             var trydate = reader.ReadInt32();
             if (trydate.IsError)
             {
                 return ReadResult<IObject>.Move(trydate);
             }
+
             Date = trydate.Value;
             var trybotId = reader.ReadInt64();
             if (trybotId.IsError)
             {
                 return ReadResult<IObject>.Move(trybotId);
             }
+
             BotId = trybotId.Value;
             var tryproviderId = reader.ReadInt64();
             if (tryproviderId.IsError)
             {
                 return ReadResult<IObject>.Move(tryproviderId);
             }
+
             ProviderId = tryproviderId.Value;
             var trytitle = reader.ReadString();
             if (trytitle.IsError)
             {
                 return ReadResult<IObject>.Move(trytitle);
             }
+
             Title = trytitle.Value;
             var trydescription = reader.ReadString();
             if (trydescription.IsError)
             {
                 return ReadResult<IObject>.Move(trydescription);
             }
+
             Description = trydescription.Value;
             if (FlagsHelper.IsFlagSet(Flags, 2))
             {
@@ -228,6 +212,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
                 {
                     return ReadResult<IObject>.Move(tryphoto);
                 }
+
                 Photo = tryphoto.Value;
             }
 
@@ -236,6 +221,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
             {
                 return ReadResult<IObject>.Move(tryinvoice);
             }
+
             Invoice = tryinvoice.Value;
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
@@ -244,6 +230,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
                 {
                     return ReadResult<IObject>.Move(tryinfo);
                 }
+
                 Info = tryinfo.Value;
             }
 
@@ -254,6 +241,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
                 {
                     return ReadResult<IObject>.Move(tryshipping);
                 }
+
                 Shipping = tryshipping.Value;
             }
 
@@ -264,6 +252,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
                 {
                     return ReadResult<IObject>.Move(trytipAmount);
                 }
+
                 TipAmount = trytipAmount.Value;
             }
 
@@ -272,27 +261,30 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
             {
                 return ReadResult<IObject>.Move(trycurrency);
             }
+
             Currency = trycurrency.Value;
             var trytotalAmount = reader.ReadInt64();
             if (trytotalAmount.IsError)
             {
                 return ReadResult<IObject>.Move(trytotalAmount);
             }
+
             TotalAmount = trytotalAmount.Value;
             var trycredentialsTitle = reader.ReadString();
             if (trycredentialsTitle.IsError)
             {
                 return ReadResult<IObject>.Move(trycredentialsTitle);
             }
+
             CredentialsTitle = trycredentialsTitle.Value;
             var tryusers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
             if (tryusers.IsError)
             {
                 return ReadResult<IObject>.Move(tryusers);
             }
+
             Users = tryusers.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -308,15 +300,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new PaymentReceipt
-            {
-                Flags = Flags,
-                Date = Date,
-                BotId = BotId,
-                ProviderId = ProviderId,
-                Title = Title,
-                Description = Description
-            };
+            var newClonedObject = new PaymentReceipt();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Date = Date;
+            newClonedObject.BotId = BotId;
+            newClonedObject.ProviderId = ProviderId;
+            newClonedObject.Title = Title;
+            newClonedObject.Description = Description;
             if (Photo is not null)
             {
                 var clonePhoto = (CatraProto.Client.TL.Schemas.CloudChats.WebDocumentBase?)Photo.Clone();
@@ -324,13 +314,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
                 {
                     return null;
                 }
+
                 newClonedObject.Photo = clonePhoto;
             }
+
             var cloneInvoice = (CatraProto.Client.TL.Schemas.CloudChats.InvoiceBase?)Invoice.Clone();
             if (cloneInvoice is null)
             {
                 return null;
             }
+
             newClonedObject.Invoice = cloneInvoice;
             if (Info is not null)
             {
@@ -339,8 +332,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
                 {
                     return null;
                 }
+
                 newClonedObject.Info = cloneInfo;
             }
+
             if (Shipping is not null)
             {
                 var cloneShipping = (CatraProto.Client.TL.Schemas.CloudChats.ShippingOptionBase?)Shipping.Clone();
@@ -348,8 +343,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
                 {
                     return null;
                 }
+
                 newClonedObject.Shipping = cloneShipping;
             }
+
             newClonedObject.TipAmount = TipAmount;
             newClonedObject.Currency = Currency;
             newClonedObject.TotalAmount = TotalAmount;
@@ -362,10 +359,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
                 {
                     return null;
                 }
+
                 newClonedObject.Users.Add(cloneusers);
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public override bool Compare(IObject other)
@@ -374,79 +372,98 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Date != castedOther.Date)
             {
                 return true;
             }
+
             if (BotId != castedOther.BotId)
             {
                 return true;
             }
+
             if (ProviderId != castedOther.ProviderId)
             {
                 return true;
             }
+
             if (Title != castedOther.Title)
             {
                 return true;
             }
+
             if (Description != castedOther.Description)
             {
                 return true;
             }
+
             if (Photo is null && castedOther.Photo is not null || Photo is not null && castedOther.Photo is null)
             {
                 return true;
             }
+
             if (Photo is not null && castedOther.Photo is not null && Photo.Compare(castedOther.Photo))
             {
                 return true;
             }
+
             if (Invoice.Compare(castedOther.Invoice))
             {
                 return true;
             }
+
             if (Info is null && castedOther.Info is not null || Info is not null && castedOther.Info is null)
             {
                 return true;
             }
+
             if (Info is not null && castedOther.Info is not null && Info.Compare(castedOther.Info))
             {
                 return true;
             }
+
             if (Shipping is null && castedOther.Shipping is not null || Shipping is not null && castedOther.Shipping is null)
             {
                 return true;
             }
+
             if (Shipping is not null && castedOther.Shipping is not null && Shipping.Compare(castedOther.Shipping))
             {
                 return true;
             }
+
             if (TipAmount != castedOther.TipAmount)
             {
                 return true;
             }
+
             if (Currency != castedOther.Currency)
             {
                 return true;
             }
+
             if (TotalAmount != castedOther.TotalAmount)
             {
                 return true;
             }
+
             if (CredentialsTitle != castedOther.CredentialsTitle)
             {
                 return true;
             }
+
             var userssize = castedOther.Users.Count;
             if (userssize != Users.Count)
             {
                 return true;
             }
+
             for (var i = 0; i < userssize; i++)
             {
                 if (castedOther.Users[i].Compare(Users[i]))
@@ -454,8 +471,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
                     return true;
                 }
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

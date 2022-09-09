@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -41,11 +25,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Title = 1 << 8
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 179611673; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 179611673; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("revoked")]
         public bool Revoked { get; set; }
@@ -56,14 +38,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("request_needed")]
         public bool RequestNeeded { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("link")]
-        public string Link { get; set; }
+        [Newtonsoft.Json.JsonProperty("link")] public string Link { get; set; }
 
         [Newtonsoft.Json.JsonProperty("admin_id")]
         public long AdminId { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("date")]
-        public int Date { get; set; }
+        [Newtonsoft.Json.JsonProperty("date")] public int Date { get; set; }
 
         [Newtonsoft.Json.JsonProperty("start_date")]
         public int? StartDate { get; set; }
@@ -91,7 +71,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Link = link;
             AdminId = adminId;
             Date = date;
-
         }
 #nullable disable
         internal ChatInviteExported()
@@ -109,7 +88,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = Usage == null ? FlagsHelper.UnsetFlag(Flags, 3) : FlagsHelper.SetFlag(Flags, 3);
             Flags = Requested == null ? FlagsHelper.UnsetFlag(Flags, 7) : FlagsHelper.SetFlag(Flags, 7);
             Flags = Title == null ? FlagsHelper.UnsetFlag(Flags, 8) : FlagsHelper.SetFlag(Flags, 8);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -149,13 +127,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
             if (FlagsHelper.IsFlagSet(Flags, 8))
             {
-
                 writer.WriteString(Title);
             }
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -165,6 +141,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             Revoked = FlagsHelper.IsFlagSet(Flags, 0);
             Permanent = FlagsHelper.IsFlagSet(Flags, 5);
@@ -174,18 +151,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(trylink);
             }
+
             Link = trylink.Value;
             var tryadminId = reader.ReadInt64();
             if (tryadminId.IsError)
             {
                 return ReadResult<IObject>.Move(tryadminId);
             }
+
             AdminId = tryadminId.Value;
             var trydate = reader.ReadInt32();
             if (trydate.IsError)
             {
                 return ReadResult<IObject>.Move(trydate);
             }
+
             Date = trydate.Value;
             if (FlagsHelper.IsFlagSet(Flags, 4))
             {
@@ -194,6 +174,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trystartDate);
                 }
+
                 StartDate = trystartDate.Value;
             }
 
@@ -204,6 +185,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryexpireDate);
                 }
+
                 ExpireDate = tryexpireDate.Value;
             }
 
@@ -214,6 +196,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryusageLimit);
                 }
+
                 UsageLimit = tryusageLimit.Value;
             }
 
@@ -224,6 +207,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryusage);
                 }
+
                 Usage = tryusage.Value;
             }
 
@@ -234,6 +218,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryrequested);
                 }
+
                 Requested = tryrequested.Value;
             }
 
@@ -244,11 +229,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trytitle);
                 }
+
                 Title = trytitle.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -264,24 +249,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new ChatInviteExported
-            {
-                Flags = Flags,
-                Revoked = Revoked,
-                Permanent = Permanent,
-                RequestNeeded = RequestNeeded,
-                Link = Link,
-                AdminId = AdminId,
-                Date = Date,
-                StartDate = StartDate,
-                ExpireDate = ExpireDate,
-                UsageLimit = UsageLimit,
-                Usage = Usage,
-                Requested = Requested,
-                Title = Title
-            };
+            var newClonedObject = new ChatInviteExported();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Revoked = Revoked;
+            newClonedObject.Permanent = Permanent;
+            newClonedObject.RequestNeeded = RequestNeeded;
+            newClonedObject.Link = Link;
+            newClonedObject.AdminId = AdminId;
+            newClonedObject.Date = Date;
+            newClonedObject.StartDate = StartDate;
+            newClonedObject.ExpireDate = ExpireDate;
+            newClonedObject.UsageLimit = UsageLimit;
+            newClonedObject.Usage = Usage;
+            newClonedObject.Requested = Requested;
+            newClonedObject.Title = Title;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -290,60 +272,73 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Revoked != castedOther.Revoked)
             {
                 return true;
             }
+
             if (Permanent != castedOther.Permanent)
             {
                 return true;
             }
+
             if (RequestNeeded != castedOther.RequestNeeded)
             {
                 return true;
             }
+
             if (Link != castedOther.Link)
             {
                 return true;
             }
+
             if (AdminId != castedOther.AdminId)
             {
                 return true;
             }
+
             if (Date != castedOther.Date)
             {
                 return true;
             }
+
             if (StartDate != castedOther.StartDate)
             {
                 return true;
             }
+
             if (ExpireDate != castedOther.ExpireDate)
             {
                 return true;
             }
+
             if (UsageLimit != castedOther.UsageLimit)
             {
                 return true;
             }
+
             if (Usage != castedOther.Usage)
             {
                 return true;
             }
+
             if (Requested != castedOther.Requested)
             {
                 return true;
             }
+
             if (Title != castedOther.Title)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

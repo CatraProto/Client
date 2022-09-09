@@ -1,35 +1,17 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 {
     public partial class FileCdnRedirect : CatraProto.Client.TL.Schemas.CloudChats.Upload.FileBase
     {
-
-
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -242427324; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -242427324; }
 
         [Newtonsoft.Json.JsonProperty("dc_id")]
         public int DcId { get; set; }
@@ -55,7 +37,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
             EncryptionKey = encryptionKey;
             EncryptionIv = encryptionIv;
             FileHashes = fileHashes;
-
         }
 #nullable disable
         internal FileCdnRedirect()
@@ -64,7 +45,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 
         public override void UpdateFlags()
         {
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -84,7 +64,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
             }
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -94,33 +73,37 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
             {
                 return ReadResult<IObject>.Move(trydcId);
             }
+
             DcId = trydcId.Value;
             var tryfileToken = reader.ReadBytes();
             if (tryfileToken.IsError)
             {
                 return ReadResult<IObject>.Move(tryfileToken);
             }
+
             FileToken = tryfileToken.Value;
             var tryencryptionKey = reader.ReadBytes();
             if (tryencryptionKey.IsError)
             {
                 return ReadResult<IObject>.Move(tryencryptionKey);
             }
+
             EncryptionKey = tryencryptionKey.Value;
             var tryencryptionIv = reader.ReadBytes();
             if (tryencryptionIv.IsError)
             {
                 return ReadResult<IObject>.Move(tryencryptionIv);
             }
+
             EncryptionIv = tryencryptionIv.Value;
             var tryfileHashes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
             if (tryfileHashes.IsError)
             {
                 return ReadResult<IObject>.Move(tryfileHashes);
             }
+
             FileHashes = tryfileHashes.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -136,14 +119,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new FileCdnRedirect
-            {
-                DcId = DcId,
-                FileToken = FileToken,
-                EncryptionKey = EncryptionKey,
-                EncryptionIv = EncryptionIv,
-                FileHashes = new List<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>()
-            };
+            var newClonedObject = new FileCdnRedirect();
+            newClonedObject.DcId = DcId;
+            newClonedObject.FileToken = FileToken;
+            newClonedObject.EncryptionKey = EncryptionKey;
+            newClonedObject.EncryptionIv = EncryptionIv;
+            newClonedObject.FileHashes = new List<CatraProto.Client.TL.Schemas.CloudChats.FileHashBase>();
             foreach (var fileHashes in FileHashes)
             {
                 var clonefileHashes = (CatraProto.Client.TL.Schemas.CloudChats.FileHashBase?)fileHashes.Clone();
@@ -151,10 +132,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
                 {
                     return null;
                 }
+
                 newClonedObject.FileHashes.Add(clonefileHashes);
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public override bool Compare(IObject other)
@@ -163,27 +145,33 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
             {
                 return true;
             }
+
             if (DcId != castedOther.DcId)
             {
                 return true;
             }
+
             if (FileToken != castedOther.FileToken)
             {
                 return true;
             }
+
             if (EncryptionKey != castedOther.EncryptionKey)
             {
                 return true;
             }
+
             if (EncryptionIv != castedOther.EncryptionIv)
             {
                 return true;
             }
+
             var fileHashessize = castedOther.FileHashes.Count;
             if (fileHashessize != FileHashes.Count)
             {
                 return true;
             }
+
             for (var i = 0; i < fileHashessize; i++)
             {
                 if (castedOther.FileHashes[i].Compare(FileHashes[i]))
@@ -191,8 +179,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
                     return true;
                 }
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

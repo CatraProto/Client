@@ -1,34 +1,17 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class PostAddress : CatraProto.Client.TL.Schemas.CloudChats.PostAddressBase
     {
-
-
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 512535275; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 512535275; }
 
         [Newtonsoft.Json.JsonProperty("street_line1")]
         public sealed override string StreetLine1 { get; set; }
@@ -36,8 +19,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("street_line2")]
         public sealed override string StreetLine2 { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("city")]
-        public sealed override string City { get; set; }
+        [Newtonsoft.Json.JsonProperty("city")] public sealed override string City { get; set; }
 
         [Newtonsoft.Json.JsonProperty("state")]
         public sealed override string State { get; set; }
@@ -58,7 +40,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             State = state;
             CountryIso2 = countryIso2;
             PostCode = postCode;
-
         }
 #nullable disable
         internal PostAddress()
@@ -67,7 +48,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void UpdateFlags()
         {
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -87,7 +67,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             writer.WriteString(PostCode);
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -97,39 +76,44 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(trystreetLine1);
             }
+
             StreetLine1 = trystreetLine1.Value;
             var trystreetLine2 = reader.ReadString();
             if (trystreetLine2.IsError)
             {
                 return ReadResult<IObject>.Move(trystreetLine2);
             }
+
             StreetLine2 = trystreetLine2.Value;
             var trycity = reader.ReadString();
             if (trycity.IsError)
             {
                 return ReadResult<IObject>.Move(trycity);
             }
+
             City = trycity.Value;
             var trystate = reader.ReadString();
             if (trystate.IsError)
             {
                 return ReadResult<IObject>.Move(trystate);
             }
+
             State = trystate.Value;
             var trycountryIso2 = reader.ReadString();
             if (trycountryIso2.IsError)
             {
                 return ReadResult<IObject>.Move(trycountryIso2);
             }
+
             CountryIso2 = trycountryIso2.Value;
             var trypostCode = reader.ReadString();
             if (trypostCode.IsError)
             {
                 return ReadResult<IObject>.Move(trypostCode);
             }
+
             PostCode = trypostCode.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -145,17 +129,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new PostAddress
-            {
-                StreetLine1 = StreetLine1,
-                StreetLine2 = StreetLine2,
-                City = City,
-                State = State,
-                CountryIso2 = CountryIso2,
-                PostCode = PostCode
-            };
+            var newClonedObject = new PostAddress();
+            newClonedObject.StreetLine1 = StreetLine1;
+            newClonedObject.StreetLine2 = StreetLine2;
+            newClonedObject.City = City;
+            newClonedObject.State = State;
+            newClonedObject.CountryIso2 = CountryIso2;
+            newClonedObject.PostCode = PostCode;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -164,32 +145,38 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (StreetLine1 != castedOther.StreetLine1)
             {
                 return true;
             }
+
             if (StreetLine2 != castedOther.StreetLine2)
             {
                 return true;
             }
+
             if (City != castedOther.City)
             {
                 return true;
             }
+
             if (State != castedOther.State)
             {
                 return true;
             }
+
             if (CountryIso2 != castedOther.CountryIso2)
             {
                 return true;
             }
+
             if (PostCode != castedOther.PostCode)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

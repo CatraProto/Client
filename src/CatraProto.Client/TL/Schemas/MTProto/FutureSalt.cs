@@ -1,34 +1,17 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
     public partial class FutureSalt : CatraProto.Client.TL.Schemas.MTProto.FutureSaltBase
     {
-
-
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 155834844; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 155834844; }
 
         [Newtonsoft.Json.JsonProperty("valid_since")]
         public sealed override int ValidSince { get; set; }
@@ -36,8 +19,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
         [Newtonsoft.Json.JsonProperty("valid_until")]
         public sealed override int ValidUntil { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("salt")]
-        public sealed override long Salt { get; set; }
+        [Newtonsoft.Json.JsonProperty("salt")] public sealed override long Salt { get; set; }
 
 
 #nullable enable
@@ -46,7 +28,6 @@ namespace CatraProto.Client.TL.Schemas.MTProto
             ValidSince = validSince;
             ValidUntil = validUntil;
             Salt = salt;
-
         }
 #nullable disable
         internal FutureSalt()
@@ -55,7 +36,6 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
         public override void UpdateFlags()
         {
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -66,7 +46,6 @@ namespace CatraProto.Client.TL.Schemas.MTProto
             writer.WriteInt64(Salt);
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -76,21 +55,23 @@ namespace CatraProto.Client.TL.Schemas.MTProto
             {
                 return ReadResult<IObject>.Move(tryvalidSince);
             }
+
             ValidSince = tryvalidSince.Value;
             var tryvalidUntil = reader.ReadInt32();
             if (tryvalidUntil.IsError)
             {
                 return ReadResult<IObject>.Move(tryvalidUntil);
             }
+
             ValidUntil = tryvalidUntil.Value;
             var trysalt = reader.ReadInt64();
             if (trysalt.IsError)
             {
                 return ReadResult<IObject>.Move(trysalt);
             }
+
             Salt = trysalt.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -106,14 +87,11 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new FutureSalt
-            {
-                ValidSince = ValidSince,
-                ValidUntil = ValidUntil,
-                Salt = Salt
-            };
+            var newClonedObject = new FutureSalt();
+            newClonedObject.ValidSince = ValidSince;
+            newClonedObject.ValidUntil = ValidUntil;
+            newClonedObject.Salt = Salt;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -122,20 +100,23 @@ namespace CatraProto.Client.TL.Schemas.MTProto
             {
                 return true;
             }
+
             if (ValidSince != castedOther.ValidSince)
             {
                 return true;
             }
+
             if (ValidUntil != castedOther.ValidUntil)
             {
                 return true;
             }
+
             if (Salt != castedOther.Salt)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

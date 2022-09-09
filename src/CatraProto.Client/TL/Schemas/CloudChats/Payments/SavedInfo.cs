@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
@@ -34,11 +18,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
             SavedInfoField = 1 << 0
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -74456004; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -74456004; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("has_saved_credentials")]
         public sealed override bool HasSavedCredentials { get; set; }
@@ -46,7 +28,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
         [MaybeNull]
         [Newtonsoft.Json.JsonProperty("saved_info")]
         public sealed override CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase SavedInfoField { get; set; }
-
 
 
         public SavedInfo()
@@ -57,7 +38,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
         {
             Flags = HasSavedCredentials ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
             Flags = SavedInfoField == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -77,7 +57,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -87,6 +66,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             HasSavedCredentials = FlagsHelper.IsFlagSet(Flags, 1);
             if (FlagsHelper.IsFlagSet(Flags, 0))
@@ -96,11 +76,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
                 {
                     return ReadResult<IObject>.Move(trysavedInfoField);
                 }
+
                 SavedInfoField = trysavedInfoField.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -116,11 +96,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new SavedInfo
-            {
-                Flags = Flags,
-                HasSavedCredentials = HasSavedCredentials
-            };
+            var newClonedObject = new SavedInfo();
+            newClonedObject.Flags = Flags;
+            newClonedObject.HasSavedCredentials = HasSavedCredentials;
             if (SavedInfoField is not null)
             {
                 var cloneSavedInfoField = (CatraProto.Client.TL.Schemas.CloudChats.PaymentRequestedInfoBase?)SavedInfoField.Clone();
@@ -128,10 +106,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
                 {
                     return null;
                 }
+
                 newClonedObject.SavedInfoField = cloneSavedInfoField;
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public override bool Compare(IObject other)
@@ -140,24 +119,28 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (HasSavedCredentials != castedOther.HasSavedCredentials)
             {
                 return true;
             }
+
             if (SavedInfoField is null && castedOther.SavedInfoField is not null || SavedInfoField is not null && castedOther.SavedInfoField is null)
             {
                 return true;
             }
+
             if (SavedInfoField is not null && castedOther.SavedInfoField is not null && SavedInfoField.Compare(castedOther.SavedInfoField))
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
@@ -37,11 +21,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             Url = 1 << 2
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 911761060; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 911761060; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("alert")]
         public sealed override bool Alert { get; set; }
@@ -68,7 +50,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public BotCallbackAnswer(int cacheTime)
         {
             CacheTime = cacheTime;
-
         }
 #nullable disable
         internal BotCallbackAnswer()
@@ -82,7 +63,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             Flags = NativeUi ? FlagsHelper.SetFlag(Flags, 4) : FlagsHelper.UnsetFlag(Flags, 4);
             Flags = Message == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
             Flags = Url == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -93,20 +73,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             writer.WriteInt32(Flags);
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
-
                 writer.WriteString(Message);
             }
 
             if (FlagsHelper.IsFlagSet(Flags, 2))
             {
-
                 writer.WriteString(Url);
             }
 
             writer.WriteInt32(CacheTime);
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -116,6 +93,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             Alert = FlagsHelper.IsFlagSet(Flags, 1);
             HasUrl = FlagsHelper.IsFlagSet(Flags, 3);
@@ -127,6 +105,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 {
                     return ReadResult<IObject>.Move(trymessage);
                 }
+
                 Message = trymessage.Value;
             }
 
@@ -137,6 +116,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 {
                     return ReadResult<IObject>.Move(tryurl);
                 }
+
                 Url = tryurl.Value;
             }
 
@@ -145,9 +125,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             {
                 return ReadResult<IObject>.Move(trycacheTime);
             }
+
             CacheTime = trycacheTime.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -163,18 +143,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new BotCallbackAnswer
-            {
-                Flags = Flags,
-                Alert = Alert,
-                HasUrl = HasUrl,
-                NativeUi = NativeUi,
-                Message = Message,
-                Url = Url,
-                CacheTime = CacheTime
-            };
+            var newClonedObject = new BotCallbackAnswer();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Alert = Alert;
+            newClonedObject.HasUrl = HasUrl;
+            newClonedObject.NativeUi = NativeUi;
+            newClonedObject.Message = Message;
+            newClonedObject.Url = Url;
+            newClonedObject.CacheTime = CacheTime;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -183,36 +160,43 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Alert != castedOther.Alert)
             {
                 return true;
             }
+
             if (HasUrl != castedOther.HasUrl)
             {
                 return true;
             }
+
             if (NativeUi != castedOther.NativeUi)
             {
                 return true;
             }
+
             if (Message != castedOther.Message)
             {
                 return true;
             }
+
             if (Url != castedOther.Url)
             {
                 return true;
             }
+
             if (CacheTime != castedOther.CacheTime)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

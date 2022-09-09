@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 
@@ -34,17 +18,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             Thumb = 1 << 0
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 473805619; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 473805619; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
+        [Newtonsoft.Json.JsonIgnore] ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("file")]
-        public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase File { get; set; }
+        [Newtonsoft.Json.JsonProperty("file")] public CatraProto.Client.TL.Schemas.CloudChats.InputFileBase File { get; set; }
 
         [MaybeNull]
         [Newtonsoft.Json.JsonProperty("thumb")]
@@ -63,7 +43,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             File = file;
             FileName = fileName;
             MimeType = mimeType;
-
         }
 #nullable disable
 
@@ -74,7 +53,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public void UpdateFlags()
         {
             Flags = Thumb == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
-
         }
 
         public WriteResult Serialize(Writer writer)
@@ -88,6 +66,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             {
                 return checkfile;
             }
+
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
                 var checkthumb = writer.WriteObject(Thumb);
@@ -103,7 +82,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             writer.WriteString(MimeType);
 
             return new WriteResult();
-
         }
 
         public ReadResult<IObject> Deserialize(Reader reader)
@@ -113,12 +91,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             var tryfile = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputFileBase>();
             if (tryfile.IsError)
             {
                 return ReadResult<IObject>.Move(tryfile);
             }
+
             File = tryfile.Value;
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
@@ -127,6 +107,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return ReadResult<IObject>.Move(trythumb);
                 }
+
                 Thumb = trythumb.Value;
             }
 
@@ -135,15 +116,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             {
                 return ReadResult<IObject>.Move(tryfileName);
             }
+
             FileName = tryfileName.Value;
             var trymimeType = reader.ReadString();
             if (trymimeType.IsError)
             {
                 return ReadResult<IObject>.Move(trymimeType);
             }
+
             MimeType = trymimeType.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -158,15 +140,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new UploadTheme
-            {
-                Flags = Flags
-            };
+            var newClonedObject = new UploadTheme();
+            newClonedObject.Flags = Flags;
             var cloneFile = (CatraProto.Client.TL.Schemas.CloudChats.InputFileBase?)File.Clone();
             if (cloneFile is null)
             {
                 return null;
             }
+
             newClonedObject.File = cloneFile;
             if (Thumb is not null)
             {
@@ -175,12 +156,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return null;
                 }
+
                 newClonedObject.Thumb = cloneThumb;
             }
+
             newClonedObject.FileName = FileName;
             newClonedObject.MimeType = MimeType;
             return newClonedObject;
-
         }
 
         public bool Compare(IObject other)
@@ -189,32 +171,38 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (File.Compare(castedOther.File))
             {
                 return true;
             }
+
             if (Thumb is null && castedOther.Thumb is not null || Thumb is not null && castedOther.Thumb is null)
             {
                 return true;
             }
+
             if (Thumb is not null && castedOther.Thumb is not null && Thumb.Compare(castedOther.Thumb))
             {
                 return true;
             }
+
             if (FileName != castedOther.FileName)
             {
                 return true;
             }
+
             if (MimeType != castedOther.MimeType)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 #nullable disable
     }

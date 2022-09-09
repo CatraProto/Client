@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -35,11 +19,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             ReplyToTopId = 1 << 1
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -1495959709; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -1495959709; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("reply_to_scheduled")]
         public sealed override bool ReplyToScheduled { get; set; }
@@ -59,7 +41,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public MessageReplyHeader(int replyToMsgId)
         {
             ReplyToMsgId = replyToMsgId;
-
         }
 #nullable disable
         internal MessageReplyHeader()
@@ -71,7 +52,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = ReplyToScheduled ? FlagsHelper.SetFlag(Flags, 2) : FlagsHelper.UnsetFlag(Flags, 2);
             Flags = ReplyToPeerId == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
             Flags = ReplyToTopId == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -97,7 +77,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -107,6 +86,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             ReplyToScheduled = FlagsHelper.IsFlagSet(Flags, 2);
             var tryreplyToMsgId = reader.ReadInt32();
@@ -114,6 +94,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryreplyToMsgId);
             }
+
             ReplyToMsgId = tryreplyToMsgId.Value;
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
@@ -122,6 +103,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryreplyToPeerId);
                 }
+
                 ReplyToPeerId = tryreplyToPeerId.Value;
             }
 
@@ -132,11 +114,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryreplyToTopId);
                 }
+
                 ReplyToTopId = tryreplyToTopId.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -152,12 +134,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new MessageReplyHeader
-            {
-                Flags = Flags,
-                ReplyToScheduled = ReplyToScheduled,
-                ReplyToMsgId = ReplyToMsgId
-            };
+            var newClonedObject = new MessageReplyHeader();
+            newClonedObject.Flags = Flags;
+            newClonedObject.ReplyToScheduled = ReplyToScheduled;
+            newClonedObject.ReplyToMsgId = ReplyToMsgId;
             if (ReplyToPeerId is not null)
             {
                 var cloneReplyToPeerId = (CatraProto.Client.TL.Schemas.CloudChats.PeerBase?)ReplyToPeerId.Clone();
@@ -165,11 +145,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.ReplyToPeerId = cloneReplyToPeerId;
             }
+
             newClonedObject.ReplyToTopId = ReplyToTopId;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -178,32 +159,38 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (ReplyToScheduled != castedOther.ReplyToScheduled)
             {
                 return true;
             }
+
             if (ReplyToMsgId != castedOther.ReplyToMsgId)
             {
                 return true;
             }
+
             if (ReplyToPeerId is null && castedOther.ReplyToPeerId is not null || ReplyToPeerId is not null && castedOther.ReplyToPeerId is null)
             {
                 return true;
             }
+
             if (ReplyToPeerId is not null && castedOther.ReplyToPeerId is not null && ReplyToPeerId.Compare(castedOther.ReplyToPeerId))
             {
                 return true;
             }
+
             if (ReplyToTopId != castedOther.ReplyToTopId)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

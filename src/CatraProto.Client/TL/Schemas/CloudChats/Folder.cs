@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -36,11 +20,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Photo = 1 << 3
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -11252123; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -11252123; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("autofill_new_broadcasts")]
         public sealed override bool AutofillNewBroadcasts { get; set; }
@@ -51,8 +33,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("autofill_new_correspondents")]
         public sealed override bool AutofillNewCorrespondents { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("id")]
-        public sealed override int Id { get; set; }
+        [Newtonsoft.Json.JsonProperty("id")] public sealed override int Id { get; set; }
 
         [Newtonsoft.Json.JsonProperty("title")]
         public sealed override string Title { get; set; }
@@ -67,7 +48,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             Id = id;
             Title = title;
-
         }
 #nullable disable
         internal Folder()
@@ -80,7 +60,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = AutofillPublicGroups ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
             Flags = AutofillNewCorrespondents ? FlagsHelper.SetFlag(Flags, 2) : FlagsHelper.UnsetFlag(Flags, 2);
             Flags = Photo == null ? FlagsHelper.UnsetFlag(Flags, 3) : FlagsHelper.SetFlag(Flags, 3);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -103,7 +82,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -113,6 +91,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             AutofillNewBroadcasts = FlagsHelper.IsFlagSet(Flags, 0);
             AutofillPublicGroups = FlagsHelper.IsFlagSet(Flags, 1);
@@ -122,12 +101,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryid);
             }
+
             Id = tryid.Value;
             var trytitle = reader.ReadString();
             if (trytitle.IsError)
             {
                 return ReadResult<IObject>.Move(trytitle);
             }
+
             Title = trytitle.Value;
             if (FlagsHelper.IsFlagSet(Flags, 3))
             {
@@ -136,11 +117,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryphoto);
                 }
+
                 Photo = tryphoto.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -156,15 +137,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new Folder
-            {
-                Flags = Flags,
-                AutofillNewBroadcasts = AutofillNewBroadcasts,
-                AutofillPublicGroups = AutofillPublicGroups,
-                AutofillNewCorrespondents = AutofillNewCorrespondents,
-                Id = Id,
-                Title = Title
-            };
+            var newClonedObject = new Folder();
+            newClonedObject.Flags = Flags;
+            newClonedObject.AutofillNewBroadcasts = AutofillNewBroadcasts;
+            newClonedObject.AutofillPublicGroups = AutofillPublicGroups;
+            newClonedObject.AutofillNewCorrespondents = AutofillNewCorrespondents;
+            newClonedObject.Id = Id;
+            newClonedObject.Title = Title;
             if (Photo is not null)
             {
                 var clonePhoto = (CatraProto.Client.TL.Schemas.CloudChats.ChatPhotoBase?)Photo.Clone();
@@ -172,10 +151,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.Photo = clonePhoto;
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public override bool Compare(IObject other)
@@ -184,40 +164,48 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (AutofillNewBroadcasts != castedOther.AutofillNewBroadcasts)
             {
                 return true;
             }
+
             if (AutofillPublicGroups != castedOther.AutofillPublicGroups)
             {
                 return true;
             }
+
             if (AutofillNewCorrespondents != castedOther.AutofillNewCorrespondents)
             {
                 return true;
             }
+
             if (Id != castedOther.Id)
             {
                 return true;
             }
+
             if (Title != castedOther.Title)
             {
                 return true;
             }
+
             if (Photo is null && castedOther.Photo is not null || Photo is not null && castedOther.Photo is null)
             {
                 return true;
             }
+
             if (Photo is not null && castedOther.Photo is not null && Photo.Compare(castedOther.Photo))
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

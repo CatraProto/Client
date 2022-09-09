@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
@@ -34,11 +18,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             SecureSettings = 1 << 1
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -1705233435; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -1705233435; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [MaybeNull]
         [Newtonsoft.Json.JsonProperty("email")]
@@ -49,7 +31,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public sealed override CatraProto.Client.TL.Schemas.CloudChats.SecureSecretSettingsBase SecureSettings { get; set; }
 
 
-
         public PasswordSettings()
         {
         }
@@ -58,7 +39,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         {
             Flags = Email == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
             Flags = SecureSettings == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -69,7 +49,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             writer.WriteInt32(Flags);
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
-
                 writer.WriteString(Email);
             }
 
@@ -84,7 +63,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -94,6 +72,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
@@ -102,6 +81,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return ReadResult<IObject>.Move(tryemail);
                 }
+
                 Email = tryemail.Value;
             }
 
@@ -112,11 +92,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return ReadResult<IObject>.Move(trysecureSettings);
                 }
+
                 SecureSettings = trysecureSettings.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -132,11 +112,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new PasswordSettings
-            {
-                Flags = Flags,
-                Email = Email
-            };
+            var newClonedObject = new PasswordSettings();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Email = Email;
             if (SecureSettings is not null)
             {
                 var cloneSecureSettings = (CatraProto.Client.TL.Schemas.CloudChats.SecureSecretSettingsBase?)SecureSettings.Clone();
@@ -144,10 +122,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return null;
                 }
+
                 newClonedObject.SecureSettings = cloneSecureSettings;
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public override bool Compare(IObject other)
@@ -156,24 +135,28 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Email != castedOther.Email)
             {
                 return true;
             }
+
             if (SecureSettings is null && castedOther.SecureSettings is not null || SecureSettings is not null && castedOther.SecureSettings is null)
             {
                 return true;
             }
+
             if (SecureSettings is not null && castedOther.SecureSettings is not null && SecureSettings.Compare(castedOther.SecureSettings))
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -36,11 +20,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Sound = 1 << 3
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -551616469; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -551616469; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("show_previews")]
         public sealed override bool? ShowPreviews { get; set; }
@@ -56,7 +38,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public sealed override CatraProto.Client.TL.Schemas.CloudChats.NotificationSoundBase Sound { get; set; }
 
 
-
         public InputPeerNotifySettings()
         {
         }
@@ -67,7 +48,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = Silent == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
             Flags = MuteUntil == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
             Flags = Sound == null ? FlagsHelper.UnsetFlag(Flags, 3) : FlagsHelper.SetFlag(Flags, 3);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -110,7 +90,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -120,6 +99,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
@@ -128,6 +108,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryshowPreviews);
                 }
+
                 ShowPreviews = tryshowPreviews.Value;
             }
 
@@ -138,6 +119,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trysilent);
                 }
+
                 Silent = trysilent.Value;
             }
 
@@ -148,6 +130,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trymuteUntil);
                 }
+
                 MuteUntil = trymuteUntil.Value;
             }
 
@@ -158,11 +141,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trysound);
                 }
+
                 Sound = trysound.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -178,13 +161,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new InputPeerNotifySettings
-            {
-                Flags = Flags,
-                ShowPreviews = ShowPreviews,
-                Silent = Silent,
-                MuteUntil = MuteUntil
-            };
+            var newClonedObject = new InputPeerNotifySettings();
+            newClonedObject.Flags = Flags;
+            newClonedObject.ShowPreviews = ShowPreviews;
+            newClonedObject.Silent = Silent;
+            newClonedObject.MuteUntil = MuteUntil;
             if (Sound is not null)
             {
                 var cloneSound = (CatraProto.Client.TL.Schemas.CloudChats.NotificationSoundBase?)Sound.Clone();
@@ -192,10 +173,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.Sound = cloneSound;
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public override bool Compare(IObject other)
@@ -204,32 +186,38 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (ShowPreviews != castedOther.ShowPreviews)
             {
                 return true;
             }
+
             if (Silent != castedOther.Silent)
             {
                 return true;
             }
+
             if (MuteUntil != castedOther.MuteUntil)
             {
                 return true;
             }
+
             if (Sound is null && castedOther.Sound is not null || Sound is not null && castedOther.Sound is null)
             {
                 return true;
             }
+
             if (Sound is not null && castedOther.Sound is not null && Sound.Compare(castedOther.Sound))
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

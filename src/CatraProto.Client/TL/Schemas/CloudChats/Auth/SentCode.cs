@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
@@ -34,14 +18,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
             Timeout = 1 << 2
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 1577067778; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 1577067778; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("type")]
-        public sealed override CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeTypeBase Type { get; set; }
+        [Newtonsoft.Json.JsonProperty("type")] public sealed override CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeTypeBase Type { get; set; }
 
         [Newtonsoft.Json.JsonProperty("phone_code_hash")]
         public sealed override string PhoneCodeHash { get; set; }
@@ -59,7 +40,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
         {
             Type = type;
             PhoneCodeHash = phoneCodeHash;
-
         }
 #nullable disable
         internal SentCode()
@@ -70,7 +50,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
         {
             Flags = NextType == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
             Flags = Timeout == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -102,7 +81,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -112,18 +90,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             var trytype = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeTypeBase>();
             if (trytype.IsError)
             {
                 return ReadResult<IObject>.Move(trytype);
             }
+
             Type = trytype.Value;
             var tryphoneCodeHash = reader.ReadString();
             if (tryphoneCodeHash.IsError)
             {
                 return ReadResult<IObject>.Move(tryphoneCodeHash);
             }
+
             PhoneCodeHash = tryphoneCodeHash.Value;
             if (FlagsHelper.IsFlagSet(Flags, 1))
             {
@@ -132,6 +113,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
                 {
                     return ReadResult<IObject>.Move(trynextType);
                 }
+
                 NextType = trynextType.Value;
             }
 
@@ -142,11 +124,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
                 {
                     return ReadResult<IObject>.Move(trytimeout);
                 }
+
                 Timeout = trytimeout.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -162,15 +144,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new SentCode
-            {
-                Flags = Flags
-            };
+            var newClonedObject = new SentCode();
+            newClonedObject.Flags = Flags;
             var cloneType = (CatraProto.Client.TL.Schemas.CloudChats.Auth.SentCodeTypeBase?)Type.Clone();
             if (cloneType is null)
             {
                 return null;
             }
+
             newClonedObject.Type = cloneType;
             newClonedObject.PhoneCodeHash = PhoneCodeHash;
             if (NextType is not null)
@@ -180,11 +161,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
                 {
                     return null;
                 }
+
                 newClonedObject.NextType = cloneNextType;
             }
+
             newClonedObject.Timeout = Timeout;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -193,32 +175,38 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Type.Compare(castedOther.Type))
             {
                 return true;
             }
+
             if (PhoneCodeHash != castedOther.PhoneCodeHash)
             {
                 return true;
             }
+
             if (NextType is null && castedOther.NextType is not null || NextType is not null && castedOther.NextType is null)
             {
                 return true;
             }
+
             if (NextType is not null && castedOther.NextType is not null && NextType.Compare(castedOther.NextType))
             {
                 return true;
             }
+
             if (Timeout != castedOther.Timeout)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

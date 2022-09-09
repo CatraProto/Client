@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 
@@ -37,14 +21,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
             VideoPortrait = 1 << 2
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -248985848; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -248985848; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
+        [Newtonsoft.Json.JsonIgnore] ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("start")]
         public bool Start { get; set; }
@@ -52,8 +33,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
         [Newtonsoft.Json.JsonProperty("video")]
         public bool Video { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("call")]
-        public CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase Call { get; set; }
+        [Newtonsoft.Json.JsonProperty("call")] public CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase Call { get; set; }
 
         [MaybeNull]
         [Newtonsoft.Json.JsonProperty("title")]
@@ -67,7 +47,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
         public ToggleGroupCallRecord(CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase call)
         {
             Call = call;
-
         }
 #nullable disable
 
@@ -81,7 +60,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
             Flags = Video ? FlagsHelper.SetFlag(Flags, 2) : FlagsHelper.UnsetFlag(Flags, 2);
             Flags = Title == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
             Flags = VideoPortrait == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
-
         }
 
         public WriteResult Serialize(Writer writer)
@@ -95,9 +73,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
             {
                 return checkcall;
             }
+
             if (FlagsHelper.IsFlagSet(Flags, 1))
             {
-
                 writer.WriteString(Title);
             }
 
@@ -112,7 +90,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 
 
             return new WriteResult();
-
         }
 
         public ReadResult<IObject> Deserialize(Reader reader)
@@ -122,6 +99,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             Start = FlagsHelper.IsFlagSet(Flags, 0);
             Video = FlagsHelper.IsFlagSet(Flags, 2);
@@ -130,6 +108,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
             {
                 return ReadResult<IObject>.Move(trycall);
             }
+
             Call = trycall.Value;
             if (FlagsHelper.IsFlagSet(Flags, 1))
             {
@@ -138,6 +117,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
                 {
                     return ReadResult<IObject>.Move(trytitle);
                 }
+
                 Title = trytitle.Value;
             }
 
@@ -148,11 +128,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
                 {
                     return ReadResult<IObject>.Move(tryvideoPortrait);
                 }
+
                 VideoPortrait = tryvideoPortrait.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -167,22 +147,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new ToggleGroupCallRecord
-            {
-                Flags = Flags,
-                Start = Start,
-                Video = Video
-            };
+            var newClonedObject = new ToggleGroupCallRecord();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Start = Start;
+            newClonedObject.Video = Video;
             var cloneCall = (CatraProto.Client.TL.Schemas.CloudChats.InputGroupCallBase?)Call.Clone();
             if (cloneCall is null)
             {
                 return null;
             }
+
             newClonedObject.Call = cloneCall;
             newClonedObject.Title = Title;
             newClonedObject.VideoPortrait = VideoPortrait;
             return newClonedObject;
-
         }
 
         public bool Compare(IObject other)
@@ -191,32 +169,38 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Phone
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Start != castedOther.Start)
             {
                 return true;
             }
+
             if (Video != castedOther.Video)
             {
                 return true;
             }
+
             if (Call.Compare(castedOther.Call))
             {
                 return true;
             }
+
             if (Title != castedOther.Title)
             {
                 return true;
             }
+
             if (VideoPortrait != castedOther.VideoPortrait)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 #nullable disable
     }

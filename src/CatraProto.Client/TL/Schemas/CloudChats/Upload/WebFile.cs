@@ -1,37 +1,19 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 {
     public partial class WebFile : CatraProto.Client.TL.Schemas.CloudChats.Upload.WebFileBase
     {
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 568808380; }
 
-
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 568808380; }
-
-        [Newtonsoft.Json.JsonProperty("size")]
-        public sealed override int Size { get; set; }
+        [Newtonsoft.Json.JsonProperty("size")] public sealed override int Size { get; set; }
 
         [Newtonsoft.Json.JsonProperty("mime_type")]
         public sealed override string MimeType { get; set; }
@@ -54,7 +36,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
             FileType = fileType;
             Mtime = mtime;
             Bytes = bytes;
-
         }
 #nullable disable
         internal WebFile()
@@ -63,7 +44,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 
         public override void UpdateFlags()
         {
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -77,12 +57,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
             {
                 return checkfileType;
             }
+
             writer.WriteInt32(Mtime);
 
             writer.WriteBytes(Bytes);
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -92,33 +72,37 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
             {
                 return ReadResult<IObject>.Move(trysize);
             }
+
             Size = trysize.Value;
             var trymimeType = reader.ReadString();
             if (trymimeType.IsError)
             {
                 return ReadResult<IObject>.Move(trymimeType);
             }
+
             MimeType = trymimeType.Value;
             var tryfileType = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.Storage.FileTypeBase>();
             if (tryfileType.IsError)
             {
                 return ReadResult<IObject>.Move(tryfileType);
             }
+
             FileType = tryfileType.Value;
             var trymtime = reader.ReadInt32();
             if (trymtime.IsError)
             {
                 return ReadResult<IObject>.Move(trymtime);
             }
+
             Mtime = trymtime.Value;
             var trybytes = reader.ReadBytes();
             if (trybytes.IsError)
             {
                 return ReadResult<IObject>.Move(trybytes);
             }
+
             Bytes = trybytes.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -134,21 +118,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new WebFile
-            {
-                Size = Size,
-                MimeType = MimeType
-            };
+            var newClonedObject = new WebFile();
+            newClonedObject.Size = Size;
+            newClonedObject.MimeType = MimeType;
             var cloneFileType = (CatraProto.Client.TL.Schemas.CloudChats.Storage.FileTypeBase?)FileType.Clone();
             if (cloneFileType is null)
             {
                 return null;
             }
+
             newClonedObject.FileType = cloneFileType;
             newClonedObject.Mtime = Mtime;
             newClonedObject.Bytes = Bytes;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -157,28 +139,33 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Upload
             {
                 return true;
             }
+
             if (Size != castedOther.Size)
             {
                 return true;
             }
+
             if (MimeType != castedOther.MimeType)
             {
                 return true;
             }
+
             if (FileType.Compare(castedOther.FileType))
             {
                 return true;
             }
+
             if (Mtime != castedOther.Mtime)
             {
                 return true;
             }
+
             if (Bytes != castedOther.Bytes)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

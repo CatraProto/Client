@@ -1,35 +1,17 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class TopPeerCategoryPeers : CatraProto.Client.TL.Schemas.CloudChats.TopPeerCategoryPeersBase
     {
-
-
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -75283823; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -75283823; }
 
         [Newtonsoft.Json.JsonProperty("category")]
         public sealed override CatraProto.Client.TL.Schemas.CloudChats.TopPeerCategoryBase Category { get; set; }
@@ -47,7 +29,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Category = category;
             Count = count;
             Peers = peers;
-
         }
 #nullable disable
         internal TopPeerCategoryPeers()
@@ -56,7 +37,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void UpdateFlags()
         {
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -67,6 +47,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return checkcategory;
             }
+
             writer.WriteInt32(Count);
             var checkpeers = writer.WriteVector(Peers, false);
             if (checkpeers.IsError)
@@ -75,7 +56,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             }
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -85,21 +65,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(trycategory);
             }
+
             Category = trycategory.Value;
             var trycount = reader.ReadInt32();
             if (trycount.IsError)
             {
                 return ReadResult<IObject>.Move(trycount);
             }
+
             Count = trycount.Value;
             var trypeers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.TopPeerBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
             if (trypeers.IsError)
             {
                 return ReadResult<IObject>.Move(trypeers);
             }
+
             Peers = trypeers.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -121,6 +103,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return null;
             }
+
             newClonedObject.Category = cloneCategory;
             newClonedObject.Count = Count;
             newClonedObject.Peers = new List<CatraProto.Client.TL.Schemas.CloudChats.TopPeerBase>();
@@ -131,10 +114,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.Peers.Add(clonepeers);
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public override bool Compare(IObject other)
@@ -143,19 +127,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Category.Compare(castedOther.Category))
             {
                 return true;
             }
+
             if (Count != castedOther.Count)
             {
                 return true;
             }
+
             var peerssize = castedOther.Peers.Count;
             if (peerssize != Peers.Count)
             {
                 return true;
             }
+
             for (var i = 0; i < peerssize; i++)
             {
                 if (castedOther.Peers[i].Compare(Peers[i]))
@@ -163,8 +151,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                     return true;
                 }
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

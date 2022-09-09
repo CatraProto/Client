@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -45,11 +29,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             UnmutedVideoCount = 1 << 10
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -711498484; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -711498484; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("join_muted")]
         public bool JoinMuted { get; set; }
@@ -75,8 +57,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("listeners_hidden")]
         public bool ListenersHidden { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("id")]
-        public sealed override long Id { get; set; }
+        [Newtonsoft.Json.JsonProperty("id")] public sealed override long Id { get; set; }
 
         [Newtonsoft.Json.JsonProperty("access_hash")]
         public sealed override long AccessHash { get; set; }
@@ -115,7 +96,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             ParticipantsCount = participantsCount;
             UnmutedVideoLimit = unmutedVideoLimit;
             Version = version;
-
         }
 #nullable disable
         internal GroupCall()
@@ -137,7 +117,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = RecordStartDate == null ? FlagsHelper.UnsetFlag(Flags, 5) : FlagsHelper.SetFlag(Flags, 5);
             Flags = ScheduleDate == null ? FlagsHelper.UnsetFlag(Flags, 7) : FlagsHelper.SetFlag(Flags, 7);
             Flags = UnmutedVideoCount == null ? FlagsHelper.UnsetFlag(Flags, 10) : FlagsHelper.SetFlag(Flags, 10);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -151,7 +130,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             writer.WriteInt32(ParticipantsCount);
             if (FlagsHelper.IsFlagSet(Flags, 3))
             {
-
                 writer.WriteString(Title);
             }
 
@@ -179,7 +157,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             writer.WriteInt32(Version);
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -189,6 +166,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             JoinMuted = FlagsHelper.IsFlagSet(Flags, 1);
             CanChangeJoinMuted = FlagsHelper.IsFlagSet(Flags, 2);
@@ -203,18 +181,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryid);
             }
+
             Id = tryid.Value;
             var tryaccessHash = reader.ReadInt64();
             if (tryaccessHash.IsError)
             {
                 return ReadResult<IObject>.Move(tryaccessHash);
             }
+
             AccessHash = tryaccessHash.Value;
             var tryparticipantsCount = reader.ReadInt32();
             if (tryparticipantsCount.IsError)
             {
                 return ReadResult<IObject>.Move(tryparticipantsCount);
             }
+
             ParticipantsCount = tryparticipantsCount.Value;
             if (FlagsHelper.IsFlagSet(Flags, 3))
             {
@@ -223,6 +204,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trytitle);
                 }
+
                 Title = trytitle.Value;
             }
 
@@ -233,6 +215,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trystreamDcId);
                 }
+
                 StreamDcId = trystreamDcId.Value;
             }
 
@@ -243,6 +226,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryrecordStartDate);
                 }
+
                 RecordStartDate = tryrecordStartDate.Value;
             }
 
@@ -253,6 +237,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryscheduleDate);
                 }
+
                 ScheduleDate = tryscheduleDate.Value;
             }
 
@@ -263,6 +248,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryunmutedVideoCount);
                 }
+
                 UnmutedVideoCount = tryunmutedVideoCount.Value;
             }
 
@@ -271,15 +257,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryunmutedVideoLimit);
             }
+
             UnmutedVideoLimit = tryunmutedVideoLimit.Value;
             var tryversion = reader.ReadInt32();
             if (tryversion.IsError)
             {
                 return ReadResult<IObject>.Move(tryversion);
             }
+
             Version = tryversion.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -295,30 +282,27 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new GroupCall
-            {
-                Flags = Flags,
-                JoinMuted = JoinMuted,
-                CanChangeJoinMuted = CanChangeJoinMuted,
-                JoinDateAsc = JoinDateAsc,
-                ScheduleStartSubscribed = ScheduleStartSubscribed,
-                CanStartVideo = CanStartVideo,
-                RecordVideoActive = RecordVideoActive,
-                RtmpStream = RtmpStream,
-                ListenersHidden = ListenersHidden,
-                Id = Id,
-                AccessHash = AccessHash,
-                ParticipantsCount = ParticipantsCount,
-                Title = Title,
-                StreamDcId = StreamDcId,
-                RecordStartDate = RecordStartDate,
-                ScheduleDate = ScheduleDate,
-                UnmutedVideoCount = UnmutedVideoCount,
-                UnmutedVideoLimit = UnmutedVideoLimit,
-                Version = Version
-            };
+            var newClonedObject = new GroupCall();
+            newClonedObject.Flags = Flags;
+            newClonedObject.JoinMuted = JoinMuted;
+            newClonedObject.CanChangeJoinMuted = CanChangeJoinMuted;
+            newClonedObject.JoinDateAsc = JoinDateAsc;
+            newClonedObject.ScheduleStartSubscribed = ScheduleStartSubscribed;
+            newClonedObject.CanStartVideo = CanStartVideo;
+            newClonedObject.RecordVideoActive = RecordVideoActive;
+            newClonedObject.RtmpStream = RtmpStream;
+            newClonedObject.ListenersHidden = ListenersHidden;
+            newClonedObject.Id = Id;
+            newClonedObject.AccessHash = AccessHash;
+            newClonedObject.ParticipantsCount = ParticipantsCount;
+            newClonedObject.Title = Title;
+            newClonedObject.StreamDcId = StreamDcId;
+            newClonedObject.RecordStartDate = RecordStartDate;
+            newClonedObject.ScheduleDate = ScheduleDate;
+            newClonedObject.UnmutedVideoCount = UnmutedVideoCount;
+            newClonedObject.UnmutedVideoLimit = UnmutedVideoLimit;
+            newClonedObject.Version = Version;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -327,84 +311,103 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (JoinMuted != castedOther.JoinMuted)
             {
                 return true;
             }
+
             if (CanChangeJoinMuted != castedOther.CanChangeJoinMuted)
             {
                 return true;
             }
+
             if (JoinDateAsc != castedOther.JoinDateAsc)
             {
                 return true;
             }
+
             if (ScheduleStartSubscribed != castedOther.ScheduleStartSubscribed)
             {
                 return true;
             }
+
             if (CanStartVideo != castedOther.CanStartVideo)
             {
                 return true;
             }
+
             if (RecordVideoActive != castedOther.RecordVideoActive)
             {
                 return true;
             }
+
             if (RtmpStream != castedOther.RtmpStream)
             {
                 return true;
             }
+
             if (ListenersHidden != castedOther.ListenersHidden)
             {
                 return true;
             }
+
             if (Id != castedOther.Id)
             {
                 return true;
             }
+
             if (AccessHash != castedOther.AccessHash)
             {
                 return true;
             }
+
             if (ParticipantsCount != castedOther.ParticipantsCount)
             {
                 return true;
             }
+
             if (Title != castedOther.Title)
             {
                 return true;
             }
+
             if (StreamDcId != castedOther.StreamDcId)
             {
                 return true;
             }
+
             if (RecordStartDate != castedOther.RecordStartDate)
             {
                 return true;
             }
+
             if (ScheduleDate != castedOther.ScheduleDate)
             {
                 return true;
             }
+
             if (UnmutedVideoCount != castedOther.UnmutedVideoCount)
             {
                 return true;
             }
+
             if (UnmutedVideoLimit != castedOther.UnmutedVideoLimit)
             {
                 return true;
             }
+
             if (Version != castedOther.Version)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

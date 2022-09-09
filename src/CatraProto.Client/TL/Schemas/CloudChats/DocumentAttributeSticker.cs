@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -34,17 +18,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             MaskCoords = 1 << 0
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 1662637586; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 1662637586; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("mask")]
-        public bool Mask { get; set; }
+        [Newtonsoft.Json.JsonProperty("mask")] public bool Mask { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("alt")]
-        public string Alt { get; set; }
+        [Newtonsoft.Json.JsonProperty("alt")] public string Alt { get; set; }
 
         [Newtonsoft.Json.JsonProperty("stickerset")]
         public CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase Stickerset { get; set; }
@@ -59,7 +39,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             Alt = alt;
             Stickerset = stickerset;
-
         }
 #nullable disable
         internal DocumentAttributeSticker()
@@ -70,7 +49,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             Flags = Mask ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
             Flags = MaskCoords == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -86,6 +64,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return checkstickerset;
             }
+
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
                 var checkmaskCoords = writer.WriteObject(MaskCoords);
@@ -97,7 +76,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -107,6 +85,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             Mask = FlagsHelper.IsFlagSet(Flags, 1);
             var tryalt = reader.ReadString();
@@ -114,12 +93,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryalt);
             }
+
             Alt = tryalt.Value;
             var trystickerset = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase>();
             if (trystickerset.IsError)
             {
                 return ReadResult<IObject>.Move(trystickerset);
             }
+
             Stickerset = trystickerset.Value;
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
@@ -128,11 +109,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trymaskCoords);
                 }
+
                 MaskCoords = trymaskCoords.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -148,17 +129,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new DocumentAttributeSticker
-            {
-                Flags = Flags,
-                Mask = Mask,
-                Alt = Alt
-            };
+            var newClonedObject = new DocumentAttributeSticker();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Mask = Mask;
+            newClonedObject.Alt = Alt;
             var cloneStickerset = (CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetBase?)Stickerset.Clone();
             if (cloneStickerset is null)
             {
                 return null;
             }
+
             newClonedObject.Stickerset = cloneStickerset;
             if (MaskCoords is not null)
             {
@@ -167,10 +147,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.MaskCoords = cloneMaskCoords;
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public override bool Compare(IObject other)
@@ -179,32 +160,38 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Mask != castedOther.Mask)
             {
                 return true;
             }
+
             if (Alt != castedOther.Alt)
             {
                 return true;
             }
+
             if (Stickerset.Compare(castedOther.Stickerset))
             {
                 return true;
             }
+
             if (MaskCoords is null && castedOther.MaskCoords is not null || MaskCoords is not null && castedOther.MaskCoords is null)
             {
                 return true;
             }
+
             if (MaskCoords is not null && castedOther.MaskCoords is not null && MaskCoords.Compare(castedOther.MaskCoords))
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

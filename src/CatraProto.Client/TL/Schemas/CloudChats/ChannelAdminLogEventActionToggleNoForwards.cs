@@ -1,34 +1,17 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class ChannelAdminLogEventActionToggleNoForwards : CatraProto.Client.TL.Schemas.CloudChats.ChannelAdminLogEventActionBase
     {
-
-
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -886388890; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -886388890; }
 
         [Newtonsoft.Json.JsonProperty("new_value")]
         public bool NewValue { get; set; }
@@ -38,7 +21,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public ChannelAdminLogEventActionToggleNoForwards(bool newValue)
         {
             NewValue = newValue;
-
         }
 #nullable disable
         internal ChannelAdminLogEventActionToggleNoForwards()
@@ -47,7 +29,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void UpdateFlags()
         {
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -60,7 +41,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             }
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -70,9 +50,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(trynewValue);
             }
+
             NewValue = trynewValue.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -88,12 +68,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new ChannelAdminLogEventActionToggleNoForwards
-            {
-                NewValue = NewValue
-            };
+            var newClonedObject = new ChannelAdminLogEventActionToggleNoForwards();
+            newClonedObject.NewValue = NewValue;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -102,12 +79,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (NewValue != castedOther.NewValue)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

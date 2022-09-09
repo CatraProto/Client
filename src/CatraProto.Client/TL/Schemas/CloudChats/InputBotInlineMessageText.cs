@@ -1,27 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -36,11 +19,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             ReplyMarkup = 1 << 2
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 1036876423; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 1036876423; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("no_webpage")]
         public bool NoWebpage { get; set; }
@@ -61,7 +42,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public InputBotInlineMessageText(string message)
         {
             Message = message;
-
         }
 #nullable disable
         internal InputBotInlineMessageText()
@@ -73,7 +53,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = NoWebpage ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
             Flags = Entities == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
             Flags = ReplyMarkup == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -104,7 +83,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -114,6 +92,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             NoWebpage = FlagsHelper.IsFlagSet(Flags, 0);
             var trymessage = reader.ReadString();
@@ -121,6 +100,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(trymessage);
             }
+
             Message = trymessage.Value;
             if (FlagsHelper.IsFlagSet(Flags, 1))
             {
@@ -129,6 +109,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryentities);
                 }
+
                 Entities = tryentities.Value;
             }
 
@@ -139,11 +120,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryreplyMarkup);
                 }
+
                 ReplyMarkup = tryreplyMarkup.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -159,12 +140,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new InputBotInlineMessageText
-            {
-                Flags = Flags,
-                NoWebpage = NoWebpage,
-                Message = Message
-            };
+            var newClonedObject = new InputBotInlineMessageText();
+            newClonedObject.Flags = Flags;
+            newClonedObject.NoWebpage = NoWebpage;
+            newClonedObject.Message = Message;
             if (Entities is not null)
             {
                 newClonedObject.Entities = new List<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
@@ -175,9 +154,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                     {
                         return null;
                     }
+
                     newClonedObject.Entities.Add(cloneentities);
                 }
             }
+
             if (ReplyMarkup is not null)
             {
                 var cloneReplyMarkup = (CatraProto.Client.TL.Schemas.CloudChats.ReplyMarkupBase?)ReplyMarkup.Clone();
@@ -185,10 +166,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.ReplyMarkup = cloneReplyMarkup;
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public override bool Compare(IObject other)
@@ -197,30 +179,35 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (NoWebpage != castedOther.NoWebpage)
             {
                 return true;
             }
+
             if (Message != castedOther.Message)
             {
                 return true;
             }
+
             if (Entities is null && castedOther.Entities is not null || Entities is not null && castedOther.Entities is null)
             {
                 return true;
             }
+
             if (Entities is not null && castedOther.Entities is not null)
             {
-
                 var entitiessize = castedOther.Entities.Count;
                 if (entitiessize != Entities.Count)
                 {
                     return true;
                 }
+
                 for (var i = 0; i < entitiessize; i++)
                 {
                     if (castedOther.Entities[i].Compare(Entities[i]))
@@ -229,16 +216,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                     }
                 }
             }
+
             if (ReplyMarkup is null && castedOther.ReplyMarkup is not null || ReplyMarkup is not null && castedOther.ReplyMarkup is null)
             {
                 return true;
             }
+
             if (ReplyMarkup is not null && castedOther.ReplyMarkup is not null && ReplyMarkup.Compare(castedOther.ReplyMarkup))
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

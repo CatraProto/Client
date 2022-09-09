@@ -1,25 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
@@ -34,11 +19,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
             TmpSessions = 1 << 0
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 872119224; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 872119224; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("setup_password_required")]
         public bool SetupPasswordRequired { get; set; }
@@ -49,15 +32,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
         [Newtonsoft.Json.JsonProperty("tmp_sessions")]
         public int? TmpSessions { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("user")]
-        public CatraProto.Client.TL.Schemas.CloudChats.UserBase User { get; set; }
+        [Newtonsoft.Json.JsonProperty("user")] public CatraProto.Client.TL.Schemas.CloudChats.UserBase User { get; set; }
 
 
 #nullable enable
         public Authorization(CatraProto.Client.TL.Schemas.CloudChats.UserBase user)
         {
             User = user;
-
         }
 #nullable disable
         internal Authorization()
@@ -69,7 +50,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
             Flags = SetupPasswordRequired ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
             Flags = OtherwiseReloginDays == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
             Flags = TmpSessions == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -95,7 +75,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
             }
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -105,6 +84,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             SetupPasswordRequired = FlagsHelper.IsFlagSet(Flags, 1);
             if (FlagsHelper.IsFlagSet(Flags, 1))
@@ -114,6 +94,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
                 {
                     return ReadResult<IObject>.Move(tryotherwiseReloginDays);
                 }
+
                 OtherwiseReloginDays = tryotherwiseReloginDays.Value;
             }
 
@@ -124,6 +105,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
                 {
                     return ReadResult<IObject>.Move(trytmpSessions);
                 }
+
                 TmpSessions = trytmpSessions.Value;
             }
 
@@ -132,9 +114,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
             {
                 return ReadResult<IObject>.Move(tryuser);
             }
+
             User = tryuser.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -150,21 +132,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new Authorization
-            {
-                Flags = Flags,
-                SetupPasswordRequired = SetupPasswordRequired,
-                OtherwiseReloginDays = OtherwiseReloginDays,
-                TmpSessions = TmpSessions
-            };
+            var newClonedObject = new Authorization();
+            newClonedObject.Flags = Flags;
+            newClonedObject.SetupPasswordRequired = SetupPasswordRequired;
+            newClonedObject.OtherwiseReloginDays = OtherwiseReloginDays;
+            newClonedObject.TmpSessions = TmpSessions;
             var cloneUser = (CatraProto.Client.TL.Schemas.CloudChats.UserBase?)User.Clone();
             if (cloneUser is null)
             {
                 return null;
             }
+
             newClonedObject.User = cloneUser;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -173,28 +153,33 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (SetupPasswordRequired != castedOther.SetupPasswordRequired)
             {
                 return true;
             }
+
             if (OtherwiseReloginDays != castedOther.OtherwiseReloginDays)
             {
                 return true;
             }
+
             if (TmpSessions != castedOther.TmpSessions)
             {
                 return true;
             }
+
             if (User.Compare(castedOther.User))
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

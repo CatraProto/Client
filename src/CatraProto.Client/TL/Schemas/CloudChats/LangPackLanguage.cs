@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -36,23 +20,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             BaseLangCode = 1 << 1
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -288727837; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -288727837; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("official")]
         public sealed override bool Official { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("rtl")]
-        public sealed override bool Rtl { get; set; }
+        [Newtonsoft.Json.JsonProperty("rtl")] public sealed override bool Rtl { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("beta")]
-        public sealed override bool Beta { get; set; }
+        [Newtonsoft.Json.JsonProperty("beta")] public sealed override bool Beta { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("name")]
-        public sealed override string Name { get; set; }
+        [Newtonsoft.Json.JsonProperty("name")] public sealed override string Name { get; set; }
 
         [Newtonsoft.Json.JsonProperty("native_name")]
         public sealed override string NativeName { get; set; }
@@ -87,7 +66,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             StringsCount = stringsCount;
             TranslatedCount = translatedCount;
             TranslationsUrl = translationsUrl;
-
         }
 #nullable disable
         internal LangPackLanguage()
@@ -100,7 +78,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = Rtl ? FlagsHelper.SetFlag(Flags, 2) : FlagsHelper.UnsetFlag(Flags, 2);
             Flags = Beta ? FlagsHelper.SetFlag(Flags, 3) : FlagsHelper.UnsetFlag(Flags, 3);
             Flags = BaseLangCode == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -117,7 +94,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             writer.WriteString(LangCode);
             if (FlagsHelper.IsFlagSet(Flags, 1))
             {
-
                 writer.WriteString(BaseLangCode);
             }
 
@@ -129,7 +105,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             writer.WriteString(TranslationsUrl);
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -139,6 +114,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             Official = FlagsHelper.IsFlagSet(Flags, 0);
             Rtl = FlagsHelper.IsFlagSet(Flags, 2);
@@ -148,18 +124,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryname);
             }
+
             Name = tryname.Value;
             var trynativeName = reader.ReadString();
             if (trynativeName.IsError)
             {
                 return ReadResult<IObject>.Move(trynativeName);
             }
+
             NativeName = trynativeName.Value;
             var trylangCode = reader.ReadString();
             if (trylangCode.IsError)
             {
                 return ReadResult<IObject>.Move(trylangCode);
             }
+
             LangCode = trylangCode.Value;
             if (FlagsHelper.IsFlagSet(Flags, 1))
             {
@@ -168,6 +147,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trybaseLangCode);
                 }
+
                 BaseLangCode = trybaseLangCode.Value;
             }
 
@@ -176,27 +156,30 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(trypluralCode);
             }
+
             PluralCode = trypluralCode.Value;
             var trystringsCount = reader.ReadInt32();
             if (trystringsCount.IsError)
             {
                 return ReadResult<IObject>.Move(trystringsCount);
             }
+
             StringsCount = trystringsCount.Value;
             var trytranslatedCount = reader.ReadInt32();
             if (trytranslatedCount.IsError)
             {
                 return ReadResult<IObject>.Move(trytranslatedCount);
             }
+
             TranslatedCount = trytranslatedCount.Value;
             var trytranslationsUrl = reader.ReadString();
             if (trytranslationsUrl.IsError)
             {
                 return ReadResult<IObject>.Move(trytranslationsUrl);
             }
+
             TranslationsUrl = trytranslationsUrl.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -212,23 +195,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new LangPackLanguage
-            {
-                Flags = Flags,
-                Official = Official,
-                Rtl = Rtl,
-                Beta = Beta,
-                Name = Name,
-                NativeName = NativeName,
-                LangCode = LangCode,
-                BaseLangCode = BaseLangCode,
-                PluralCode = PluralCode,
-                StringsCount = StringsCount,
-                TranslatedCount = TranslatedCount,
-                TranslationsUrl = TranslationsUrl
-            };
+            var newClonedObject = new LangPackLanguage();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Official = Official;
+            newClonedObject.Rtl = Rtl;
+            newClonedObject.Beta = Beta;
+            newClonedObject.Name = Name;
+            newClonedObject.NativeName = NativeName;
+            newClonedObject.LangCode = LangCode;
+            newClonedObject.BaseLangCode = BaseLangCode;
+            newClonedObject.PluralCode = PluralCode;
+            newClonedObject.StringsCount = StringsCount;
+            newClonedObject.TranslatedCount = TranslatedCount;
+            newClonedObject.TranslationsUrl = TranslationsUrl;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -237,56 +217,68 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Official != castedOther.Official)
             {
                 return true;
             }
+
             if (Rtl != castedOther.Rtl)
             {
                 return true;
             }
+
             if (Beta != castedOther.Beta)
             {
                 return true;
             }
+
             if (Name != castedOther.Name)
             {
                 return true;
             }
+
             if (NativeName != castedOther.NativeName)
             {
                 return true;
             }
+
             if (LangCode != castedOther.LangCode)
             {
                 return true;
             }
+
             if (BaseLangCode != castedOther.BaseLangCode)
             {
                 return true;
             }
+
             if (PluralCode != castedOther.PluralCode)
             {
                 return true;
             }
+
             if (StringsCount != castedOther.StringsCount)
             {
                 return true;
             }
+
             if (TranslatedCount != castedOther.TranslatedCount)
             {
                 return true;
             }
+
             if (TranslationsUrl != castedOther.TranslationsUrl)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

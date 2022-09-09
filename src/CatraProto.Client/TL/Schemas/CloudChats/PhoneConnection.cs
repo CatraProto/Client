@@ -1,25 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -32,26 +17,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Tcp = 1 << 0
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -1665063993; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -1665063993; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("tcp")]
-        public bool Tcp { get; set; }
+        [Newtonsoft.Json.JsonProperty("tcp")] public bool Tcp { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("id")]
-        public sealed override long Id { get; set; }
+        [Newtonsoft.Json.JsonProperty("id")] public sealed override long Id { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("ip")]
-        public sealed override string Ip { get; set; }
+        [Newtonsoft.Json.JsonProperty("ip")] public sealed override string Ip { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("ipv6")]
-        public sealed override string Ipv6 { get; set; }
+        [Newtonsoft.Json.JsonProperty("ipv6")] public sealed override string Ipv6 { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("port")]
-        public sealed override int Port { get; set; }
+        [Newtonsoft.Json.JsonProperty("port")] public sealed override int Port { get; set; }
 
         [Newtonsoft.Json.JsonProperty("peer_tag")]
         public byte[] PeerTag { get; set; }
@@ -65,7 +43,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Ipv6 = ipv6;
             Port = port;
             PeerTag = peerTag;
-
         }
 #nullable disable
         internal PhoneConnection()
@@ -75,7 +52,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override void UpdateFlags()
         {
             Flags = Tcp ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -94,7 +70,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             writer.WriteBytes(PeerTag);
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -104,6 +79,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             Tcp = FlagsHelper.IsFlagSet(Flags, 0);
             var tryid = reader.ReadInt64();
@@ -111,33 +87,37 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryid);
             }
+
             Id = tryid.Value;
             var tryip = reader.ReadString();
             if (tryip.IsError)
             {
                 return ReadResult<IObject>.Move(tryip);
             }
+
             Ip = tryip.Value;
             var tryipv6 = reader.ReadString();
             if (tryipv6.IsError)
             {
                 return ReadResult<IObject>.Move(tryipv6);
             }
+
             Ipv6 = tryipv6.Value;
             var tryport = reader.ReadInt32();
             if (tryport.IsError)
             {
                 return ReadResult<IObject>.Move(tryport);
             }
+
             Port = tryport.Value;
             var trypeerTag = reader.ReadBytes();
             if (trypeerTag.IsError)
             {
                 return ReadResult<IObject>.Move(trypeerTag);
             }
+
             PeerTag = trypeerTag.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -153,18 +133,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new PhoneConnection
-            {
-                Flags = Flags,
-                Tcp = Tcp,
-                Id = Id,
-                Ip = Ip,
-                Ipv6 = Ipv6,
-                Port = Port,
-                PeerTag = PeerTag
-            };
+            var newClonedObject = new PhoneConnection();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Tcp = Tcp;
+            newClonedObject.Id = Id;
+            newClonedObject.Ip = Ip;
+            newClonedObject.Ipv6 = Ipv6;
+            newClonedObject.Port = Port;
+            newClonedObject.PeerTag = PeerTag;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -173,36 +150,43 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Tcp != castedOther.Tcp)
             {
                 return true;
             }
+
             if (Id != castedOther.Id)
             {
                 return true;
             }
+
             if (Ip != castedOther.Ip)
             {
                 return true;
             }
+
             if (Ipv6 != castedOther.Ipv6)
             {
                 return true;
             }
+
             if (Port != castedOther.Port)
             {
                 return true;
             }
+
             if (PeerTag != castedOther.PeerTag)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 
@@ -36,14 +20,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
             TipAmount = 1 << 2
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 755192367; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 755192367; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
+        [Newtonsoft.Json.JsonIgnore] ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("form_id")]
         public long FormId { get; set; }
@@ -72,7 +53,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
             FormId = formId;
             Invoice = invoice;
             Credentials = credentials;
-
         }
 #nullable disable
 
@@ -85,7 +65,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
             Flags = RequestedInfoId == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
             Flags = ShippingOptionId == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
             Flags = TipAmount == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
-
         }
 
         public WriteResult Serialize(Writer writer)
@@ -100,15 +79,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
             {
                 return checkinvoice;
             }
+
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
-
                 writer.WriteString(RequestedInfoId);
             }
 
             if (FlagsHelper.IsFlagSet(Flags, 1))
             {
-
                 writer.WriteString(ShippingOptionId);
             }
 
@@ -117,6 +95,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
             {
                 return checkcredentials;
             }
+
             if (FlagsHelper.IsFlagSet(Flags, 2))
             {
                 writer.WriteInt64(TipAmount.Value);
@@ -124,7 +103,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 
 
             return new WriteResult();
-
         }
 
         public ReadResult<IObject> Deserialize(Reader reader)
@@ -134,18 +112,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             var tryformId = reader.ReadInt64();
             if (tryformId.IsError)
             {
                 return ReadResult<IObject>.Move(tryformId);
             }
+
             FormId = tryformId.Value;
             var tryinvoice = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputInvoiceBase>();
             if (tryinvoice.IsError)
             {
                 return ReadResult<IObject>.Move(tryinvoice);
             }
+
             Invoice = tryinvoice.Value;
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
@@ -154,6 +135,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
                 {
                     return ReadResult<IObject>.Move(tryrequestedInfoId);
                 }
+
                 RequestedInfoId = tryrequestedInfoId.Value;
             }
 
@@ -164,6 +146,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
                 {
                     return ReadResult<IObject>.Move(tryshippingOptionId);
                 }
+
                 ShippingOptionId = tryshippingOptionId.Value;
             }
 
@@ -172,6 +155,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
             {
                 return ReadResult<IObject>.Move(trycredentials);
             }
+
             Credentials = trycredentials.Value;
             if (FlagsHelper.IsFlagSet(Flags, 2))
             {
@@ -180,11 +164,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
                 {
                     return ReadResult<IObject>.Move(trytipAmount);
                 }
+
                 TipAmount = trytipAmount.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -199,16 +183,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new SendPaymentForm
-            {
-                Flags = Flags,
-                FormId = FormId
-            };
+            var newClonedObject = new SendPaymentForm();
+            newClonedObject.Flags = Flags;
+            newClonedObject.FormId = FormId;
             var cloneInvoice = (CatraProto.Client.TL.Schemas.CloudChats.InputInvoiceBase?)Invoice.Clone();
             if (cloneInvoice is null)
             {
                 return null;
             }
+
             newClonedObject.Invoice = cloneInvoice;
             newClonedObject.RequestedInfoId = RequestedInfoId;
             newClonedObject.ShippingOptionId = ShippingOptionId;
@@ -217,10 +200,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
             {
                 return null;
             }
+
             newClonedObject.Credentials = cloneCredentials;
             newClonedObject.TipAmount = TipAmount;
             return newClonedObject;
-
         }
 
         public bool Compare(IObject other)
@@ -229,36 +212,43 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Payments
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (FormId != castedOther.FormId)
             {
                 return true;
             }
+
             if (Invoice.Compare(castedOther.Invoice))
             {
                 return true;
             }
+
             if (RequestedInfoId != castedOther.RequestedInfoId)
             {
                 return true;
             }
+
             if (ShippingOptionId != castedOther.ShippingOptionId)
             {
                 return true;
             }
+
             if (Credentials.Compare(castedOther.Credentials))
             {
                 return true;
             }
+
             if (TipAmount != castedOther.TipAmount)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 #nullable disable
     }

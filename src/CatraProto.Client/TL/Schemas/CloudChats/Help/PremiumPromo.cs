@@ -1,35 +1,17 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
     public partial class PremiumPromo : CatraProto.Client.TL.Schemas.CloudChats.Help.PremiumPromoBase
     {
-
-
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -1974518743; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -1974518743; }
 
         [Newtonsoft.Json.JsonProperty("status_text")]
         public sealed override string StatusText { get; set; }
@@ -63,7 +45,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
             Currency = currency;
             MonthlyAmount = monthlyAmount;
             Users = users;
-
         }
 #nullable disable
         internal PremiumPromo()
@@ -72,7 +53,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 
         public override void UpdateFlags()
         {
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -102,7 +82,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
             }
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -112,45 +91,51 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
             {
                 return ReadResult<IObject>.Move(trystatusText);
             }
+
             StatusText = trystatusText.Value;
             var trystatusEntities = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
             if (trystatusEntities.IsError)
             {
                 return ReadResult<IObject>.Move(trystatusEntities);
             }
+
             StatusEntities = trystatusEntities.Value;
             var tryvideoSections = reader.ReadVector<string>(ParserTypes.String, nakedVector: false, nakedObjects: false);
             if (tryvideoSections.IsError)
             {
                 return ReadResult<IObject>.Move(tryvideoSections);
             }
+
             VideoSections = tryvideoSections.Value;
             var tryvideos = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
             if (tryvideos.IsError)
             {
                 return ReadResult<IObject>.Move(tryvideos);
             }
+
             Videos = tryvideos.Value;
             var trycurrency = reader.ReadString();
             if (trycurrency.IsError)
             {
                 return ReadResult<IObject>.Move(trycurrency);
             }
+
             Currency = trycurrency.Value;
             var trymonthlyAmount = reader.ReadInt64();
             if (trymonthlyAmount.IsError)
             {
                 return ReadResult<IObject>.Move(trymonthlyAmount);
             }
+
             MonthlyAmount = trymonthlyAmount.Value;
             var tryusers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
             if (tryusers.IsError)
             {
                 return ReadResult<IObject>.Move(tryusers);
             }
+
             Users = tryusers.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -166,11 +151,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new PremiumPromo
-            {
-                StatusText = StatusText,
-                StatusEntities = new List<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>()
-            };
+            var newClonedObject = new PremiumPromo();
+            newClonedObject.StatusText = StatusText;
+            newClonedObject.StatusEntities = new List<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
             foreach (var statusEntities in StatusEntities)
             {
                 var clonestatusEntities = (CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase?)statusEntities.Clone();
@@ -178,13 +161,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
                 {
                     return null;
                 }
+
                 newClonedObject.StatusEntities.Add(clonestatusEntities);
             }
+
             newClonedObject.VideoSections = new List<string>();
             foreach (var videoSections in VideoSections)
             {
                 newClonedObject.VideoSections.Add(videoSections);
             }
+
             newClonedObject.Videos = new List<CatraProto.Client.TL.Schemas.CloudChats.DocumentBase>();
             foreach (var videos in Videos)
             {
@@ -193,8 +179,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
                 {
                     return null;
                 }
+
                 newClonedObject.Videos.Add(clonevideos);
             }
+
             newClonedObject.Currency = Currency;
             newClonedObject.MonthlyAmount = MonthlyAmount;
             newClonedObject.Users = new List<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
@@ -205,10 +193,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
                 {
                     return null;
                 }
+
                 newClonedObject.Users.Add(cloneusers);
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public override bool Compare(IObject other)
@@ -217,15 +206,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
             {
                 return true;
             }
+
             if (StatusText != castedOther.StatusText)
             {
                 return true;
             }
+
             var statusEntitiessize = castedOther.StatusEntities.Count;
             if (statusEntitiessize != StatusEntities.Count)
             {
                 return true;
             }
+
             for (var i = 0; i < statusEntitiessize; i++)
             {
                 if (castedOther.StatusEntities[i].Compare(StatusEntities[i]))
@@ -233,11 +225,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
                     return true;
                 }
             }
+
             var videoSectionssize = castedOther.VideoSections.Count;
             if (videoSectionssize != VideoSections.Count)
             {
                 return true;
             }
+
             for (var i = 0; i < videoSectionssize; i++)
             {
                 if (castedOther.VideoSections[i] != VideoSections[i])
@@ -245,11 +239,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
                     return true;
                 }
             }
+
             var videossize = castedOther.Videos.Count;
             if (videossize != Videos.Count)
             {
                 return true;
             }
+
             for (var i = 0; i < videossize; i++)
             {
                 if (castedOther.Videos[i].Compare(Videos[i]))
@@ -257,19 +253,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
                     return true;
                 }
             }
+
             if (Currency != castedOther.Currency)
             {
                 return true;
             }
+
             if (MonthlyAmount != castedOther.MonthlyAmount)
             {
                 return true;
             }
+
             var userssize = castedOther.Users.Count;
             if (userssize != Users.Count)
             {
                 return true;
             }
+
             for (var i = 0; i < userssize; i++)
             {
                 if (castedOther.Users[i].Compare(Users[i]))
@@ -277,8 +277,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
                     return true;
                 }
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

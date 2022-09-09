@@ -1,24 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 
@@ -26,13 +12,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 {
     public partial class SignIn : IMethod
     {
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -1126886015; }
 
-
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -1126886015; }
-
-        [Newtonsoft.Json.JsonIgnore]
-        ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
+        [Newtonsoft.Json.JsonIgnore] ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
         [Newtonsoft.Json.JsonProperty("phone_number")]
         public string PhoneNumber { get; set; }
@@ -50,7 +32,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
             PhoneNumber = phoneNumber;
             PhoneCodeHash = phoneCodeHash;
             PhoneCode = phoneCode;
-
         }
 #nullable disable
 
@@ -60,7 +41,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 
         public void UpdateFlags()
         {
-
         }
 
         public WriteResult Serialize(Writer writer)
@@ -74,7 +54,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
             writer.WriteString(PhoneCode);
 
             return new WriteResult();
-
         }
 
         public ReadResult<IObject> Deserialize(Reader reader)
@@ -84,21 +63,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
             {
                 return ReadResult<IObject>.Move(tryphoneNumber);
             }
+
             PhoneNumber = tryphoneNumber.Value;
             var tryphoneCodeHash = reader.ReadString();
             if (tryphoneCodeHash.IsError)
             {
                 return ReadResult<IObject>.Move(tryphoneCodeHash);
             }
+
             PhoneCodeHash = tryphoneCodeHash.Value;
             var tryphoneCode = reader.ReadString();
             if (tryphoneCode.IsError)
             {
                 return ReadResult<IObject>.Move(tryphoneCode);
             }
+
             PhoneCode = tryphoneCode.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -113,14 +94,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new SignIn
-            {
-                PhoneNumber = PhoneNumber,
-                PhoneCodeHash = PhoneCodeHash,
-                PhoneCode = PhoneCode
-            };
+            var newClonedObject = new SignIn();
+            newClonedObject.PhoneNumber = PhoneNumber;
+            newClonedObject.PhoneCodeHash = PhoneCodeHash;
+            newClonedObject.PhoneCode = PhoneCode;
             return newClonedObject;
-
         }
 
         public bool Compare(IObject other)
@@ -129,20 +107,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Auth
             {
                 return true;
             }
+
             if (PhoneNumber != castedOther.PhoneNumber)
             {
                 return true;
             }
+
             if (PhoneCodeHash != castedOther.PhoneCodeHash)
             {
                 return true;
             }
+
             if (PhoneCode != castedOther.PhoneCode)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 #nullable disable
     }

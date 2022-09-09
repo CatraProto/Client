@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -48,17 +32,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Presentation = 1 << 14
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -341428482; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -341428482; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("muted")]
         public sealed override bool Muted { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("left")]
-        public sealed override bool Left { get; set; }
+        [Newtonsoft.Json.JsonProperty("left")] public sealed override bool Left { get; set; }
 
         [Newtonsoft.Json.JsonProperty("can_self_unmute")]
         public sealed override bool CanSelfUnmute { get; set; }
@@ -69,8 +50,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("versioned")]
         public sealed override bool Versioned { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("min")]
-        public sealed override bool Min { get; set; }
+        [Newtonsoft.Json.JsonProperty("min")] public sealed override bool Min { get; set; }
 
         [Newtonsoft.Json.JsonProperty("muted_by_you")]
         public sealed override bool MutedByYou { get; set; }
@@ -78,17 +58,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("volume_by_admin")]
         public sealed override bool VolumeByAdmin { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("self")]
-        public sealed override bool Self { get; set; }
+        [Newtonsoft.Json.JsonProperty("self")] public sealed override bool Self { get; set; }
 
         [Newtonsoft.Json.JsonProperty("video_joined")]
         public sealed override bool VideoJoined { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("peer")]
-        public sealed override CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
+        [Newtonsoft.Json.JsonProperty("peer")] public sealed override CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("date")]
-        public sealed override int Date { get; set; }
+        [Newtonsoft.Json.JsonProperty("date")] public sealed override int Date { get; set; }
 
         [Newtonsoft.Json.JsonProperty("active_date")]
         public sealed override int? ActiveDate { get; set; }
@@ -121,7 +98,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Peer = peer;
             Date = date;
             Source = source;
-
         }
 #nullable disable
         internal GroupCallParticipant()
@@ -146,7 +122,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = RaiseHandRating == null ? FlagsHelper.UnsetFlag(Flags, 13) : FlagsHelper.SetFlag(Flags, 13);
             Flags = Video == null ? FlagsHelper.UnsetFlag(Flags, 6) : FlagsHelper.SetFlag(Flags, 6);
             Flags = Presentation == null ? FlagsHelper.UnsetFlag(Flags, 14) : FlagsHelper.SetFlag(Flags, 14);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -160,6 +135,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return checkpeer;
             }
+
             writer.WriteInt32(Date);
             if (FlagsHelper.IsFlagSet(Flags, 3))
             {
@@ -174,7 +150,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
             if (FlagsHelper.IsFlagSet(Flags, 11))
             {
-
                 writer.WriteString(About);
             }
 
@@ -203,7 +178,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -213,6 +187,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             Muted = FlagsHelper.IsFlagSet(Flags, 0);
             Left = FlagsHelper.IsFlagSet(Flags, 1);
@@ -229,12 +204,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(trypeer);
             }
+
             Peer = trypeer.Value;
             var trydate = reader.ReadInt32();
             if (trydate.IsError)
             {
                 return ReadResult<IObject>.Move(trydate);
             }
+
             Date = trydate.Value;
             if (FlagsHelper.IsFlagSet(Flags, 3))
             {
@@ -243,6 +220,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryactiveDate);
                 }
+
                 ActiveDate = tryactiveDate.Value;
             }
 
@@ -251,6 +229,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(trysource);
             }
+
             Source = trysource.Value;
             if (FlagsHelper.IsFlagSet(Flags, 7))
             {
@@ -259,6 +238,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryvolume);
                 }
+
                 Volume = tryvolume.Value;
             }
 
@@ -269,6 +249,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryabout);
                 }
+
                 About = tryabout.Value;
             }
 
@@ -279,6 +260,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryraiseHandRating);
                 }
+
                 RaiseHandRating = tryraiseHandRating.Value;
             }
 
@@ -289,6 +271,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryvideo);
                 }
+
                 Video = tryvideo.Value;
             }
 
@@ -299,11 +282,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trypresentation);
                 }
+
                 Presentation = trypresentation.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -319,25 +302,24 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new GroupCallParticipant
-            {
-                Flags = Flags,
-                Muted = Muted,
-                Left = Left,
-                CanSelfUnmute = CanSelfUnmute,
-                JustJoined = JustJoined,
-                Versioned = Versioned,
-                Min = Min,
-                MutedByYou = MutedByYou,
-                VolumeByAdmin = VolumeByAdmin,
-                Self = Self,
-                VideoJoined = VideoJoined
-            };
+            var newClonedObject = new GroupCallParticipant();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Muted = Muted;
+            newClonedObject.Left = Left;
+            newClonedObject.CanSelfUnmute = CanSelfUnmute;
+            newClonedObject.JustJoined = JustJoined;
+            newClonedObject.Versioned = Versioned;
+            newClonedObject.Min = Min;
+            newClonedObject.MutedByYou = MutedByYou;
+            newClonedObject.VolumeByAdmin = VolumeByAdmin;
+            newClonedObject.Self = Self;
+            newClonedObject.VideoJoined = VideoJoined;
             var clonePeer = (CatraProto.Client.TL.Schemas.CloudChats.PeerBase?)Peer.Clone();
             if (clonePeer is null)
             {
                 return null;
             }
+
             newClonedObject.Peer = clonePeer;
             newClonedObject.Date = Date;
             newClonedObject.ActiveDate = ActiveDate;
@@ -352,8 +334,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.Video = cloneVideo;
             }
+
             if (Presentation is not null)
             {
                 var clonePresentation = (CatraProto.Client.TL.Schemas.CloudChats.GroupCallParticipantVideoBase?)Presentation.Clone();
@@ -361,10 +345,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.Presentation = clonePresentation;
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public override bool Compare(IObject other)
@@ -373,96 +358,118 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Muted != castedOther.Muted)
             {
                 return true;
             }
+
             if (Left != castedOther.Left)
             {
                 return true;
             }
+
             if (CanSelfUnmute != castedOther.CanSelfUnmute)
             {
                 return true;
             }
+
             if (JustJoined != castedOther.JustJoined)
             {
                 return true;
             }
+
             if (Versioned != castedOther.Versioned)
             {
                 return true;
             }
+
             if (Min != castedOther.Min)
             {
                 return true;
             }
+
             if (MutedByYou != castedOther.MutedByYou)
             {
                 return true;
             }
+
             if (VolumeByAdmin != castedOther.VolumeByAdmin)
             {
                 return true;
             }
+
             if (Self != castedOther.Self)
             {
                 return true;
             }
+
             if (VideoJoined != castedOther.VideoJoined)
             {
                 return true;
             }
+
             if (Peer.Compare(castedOther.Peer))
             {
                 return true;
             }
+
             if (Date != castedOther.Date)
             {
                 return true;
             }
+
             if (ActiveDate != castedOther.ActiveDate)
             {
                 return true;
             }
+
             if (Source != castedOther.Source)
             {
                 return true;
             }
+
             if (Volume != castedOther.Volume)
             {
                 return true;
             }
+
             if (About != castedOther.About)
             {
                 return true;
             }
+
             if (RaiseHandRating != castedOther.RaiseHandRating)
             {
                 return true;
             }
+
             if (Video is null && castedOther.Video is not null || Video is not null && castedOther.Video is null)
             {
                 return true;
             }
+
             if (Video is not null && castedOther.Video is not null && Video.Compare(castedOther.Video))
             {
                 return true;
             }
+
             if (Presentation is null && castedOther.Presentation is not null || Presentation is not null && castedOther.Presentation is null)
             {
                 return true;
             }
+
             if (Presentation is not null && castedOther.Presentation is not null && Presentation.Compare(castedOther.Presentation))
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

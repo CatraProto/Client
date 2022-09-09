@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -33,11 +17,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             MaskCoords = 1 << 0
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -6249322; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -6249322; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("document")]
         public sealed override CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase Document { get; set; }
@@ -55,7 +37,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             Document = document;
             Emoji = emoji;
-
         }
 #nullable disable
         internal InputStickerSetItem()
@@ -65,7 +46,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override void UpdateFlags()
         {
             Flags = MaskCoords == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -92,7 +72,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -102,18 +81,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             var trydocument = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase>();
             if (trydocument.IsError)
             {
                 return ReadResult<IObject>.Move(trydocument);
             }
+
             Document = trydocument.Value;
             var tryemoji = reader.ReadString();
             if (tryemoji.IsError)
             {
                 return ReadResult<IObject>.Move(tryemoji);
             }
+
             Emoji = tryemoji.Value;
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
@@ -122,11 +104,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trymaskCoords);
                 }
+
                 MaskCoords = trymaskCoords.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -142,15 +124,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new InputStickerSetItem
-            {
-                Flags = Flags
-            };
+            var newClonedObject = new InputStickerSetItem();
+            newClonedObject.Flags = Flags;
             var cloneDocument = (CatraProto.Client.TL.Schemas.CloudChats.InputDocumentBase?)Document.Clone();
             if (cloneDocument is null)
             {
                 return null;
             }
+
             newClonedObject.Document = cloneDocument;
             newClonedObject.Emoji = Emoji;
             if (MaskCoords is not null)
@@ -160,10 +141,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.MaskCoords = cloneMaskCoords;
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public override bool Compare(IObject other)
@@ -172,28 +154,33 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Document.Compare(castedOther.Document))
             {
                 return true;
             }
+
             if (Emoji != castedOther.Emoji)
             {
                 return true;
             }
+
             if (MaskCoords is null && castedOther.MaskCoords is not null || MaskCoords is not null && castedOther.MaskCoords is null)
             {
                 return true;
             }
+
             if (MaskCoords is not null && castedOther.MaskCoords is not null && MaskCoords.Compare(castedOther.MaskCoords))
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

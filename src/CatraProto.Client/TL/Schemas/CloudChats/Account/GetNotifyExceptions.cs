@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 
@@ -35,14 +19,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             Peer = 1 << 0
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 1398240377; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 1398240377; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
+        [Newtonsoft.Json.JsonIgnore] ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("compare_sound")]
         public bool CompareSound { get; set; }
@@ -50,8 +31,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         [MaybeNull]
         [Newtonsoft.Json.JsonProperty("peer")]
         public CatraProto.Client.TL.Schemas.CloudChats.InputNotifyPeerBase Peer { get; set; }
-
-
 
 
         public GetNotifyExceptions()
@@ -62,7 +41,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         {
             Flags = CompareSound ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
             Flags = Peer == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
-
         }
 
         public WriteResult Serialize(Writer writer)
@@ -82,7 +60,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 
             return new WriteResult();
-
         }
 
         public ReadResult<IObject> Deserialize(Reader reader)
@@ -92,6 +69,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             CompareSound = FlagsHelper.IsFlagSet(Flags, 1);
             if (FlagsHelper.IsFlagSet(Flags, 0))
@@ -101,11 +79,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return ReadResult<IObject>.Move(trypeer);
                 }
+
                 Peer = trypeer.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -120,11 +98,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new GetNotifyExceptions
-            {
-                Flags = Flags,
-                CompareSound = CompareSound
-            };
+            var newClonedObject = new GetNotifyExceptions();
+            newClonedObject.Flags = Flags;
+            newClonedObject.CompareSound = CompareSound;
             if (Peer is not null)
             {
                 var clonePeer = (CatraProto.Client.TL.Schemas.CloudChats.InputNotifyPeerBase?)Peer.Clone();
@@ -132,10 +108,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return null;
                 }
+
                 newClonedObject.Peer = clonePeer;
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public bool Compare(IObject other)
@@ -144,24 +121,28 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (CompareSound != castedOther.CompareSound)
             {
                 return true;
             }
+
             if (Peer is null && castedOther.Peer is not null || Peer is not null && castedOther.Peer is null)
             {
                 return true;
             }
+
             if (Peer is not null && castedOther.Peer is not null && Peer.Compare(castedOther.Peer))
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 #nullable disable
     }

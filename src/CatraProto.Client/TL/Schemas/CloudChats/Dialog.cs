@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -37,11 +21,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             FolderId = 1 << 4
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -1460809483; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -1460809483; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("pinned")]
         public sealed override bool Pinned { get; set; }
@@ -49,8 +31,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("unread_mark")]
         public bool UnreadMark { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("peer")]
-        public sealed override CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
+        [Newtonsoft.Json.JsonProperty("peer")] public sealed override CatraProto.Client.TL.Schemas.CloudChats.PeerBase Peer { get; set; }
 
         [Newtonsoft.Json.JsonProperty("top_message")]
         public sealed override int TopMessage { get; set; }
@@ -73,8 +54,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("notify_settings")]
         public CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase NotifySettings { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("pts")]
-        public int? Pts { get; set; }
+        [Newtonsoft.Json.JsonProperty("pts")] public int? Pts { get; set; }
 
         [MaybeNull]
         [Newtonsoft.Json.JsonProperty("draft")]
@@ -95,7 +75,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             UnreadMentionsCount = unreadMentionsCount;
             UnreadReactionsCount = unreadReactionsCount;
             NotifySettings = notifySettings;
-
         }
 #nullable disable
         internal Dialog()
@@ -109,7 +88,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = Pts == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
             Flags = Draft == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
             Flags = FolderId == null ? FlagsHelper.UnsetFlag(Flags, 4) : FlagsHelper.SetFlag(Flags, 4);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -123,6 +101,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return checkpeer;
             }
+
             writer.WriteInt32(TopMessage);
             writer.WriteInt32(ReadInboxMaxId);
             writer.WriteInt32(ReadOutboxMaxId);
@@ -134,6 +113,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return checknotifySettings;
             }
+
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
                 writer.WriteInt32(Pts.Value);
@@ -155,7 +135,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -165,6 +144,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             Pinned = FlagsHelper.IsFlagSet(Flags, 2);
             UnreadMark = FlagsHelper.IsFlagSet(Flags, 3);
@@ -173,48 +153,56 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(trypeer);
             }
+
             Peer = trypeer.Value;
             var trytopMessage = reader.ReadInt32();
             if (trytopMessage.IsError)
             {
                 return ReadResult<IObject>.Move(trytopMessage);
             }
+
             TopMessage = trytopMessage.Value;
             var tryreadInboxMaxId = reader.ReadInt32();
             if (tryreadInboxMaxId.IsError)
             {
                 return ReadResult<IObject>.Move(tryreadInboxMaxId);
             }
+
             ReadInboxMaxId = tryreadInboxMaxId.Value;
             var tryreadOutboxMaxId = reader.ReadInt32();
             if (tryreadOutboxMaxId.IsError)
             {
                 return ReadResult<IObject>.Move(tryreadOutboxMaxId);
             }
+
             ReadOutboxMaxId = tryreadOutboxMaxId.Value;
             var tryunreadCount = reader.ReadInt32();
             if (tryunreadCount.IsError)
             {
                 return ReadResult<IObject>.Move(tryunreadCount);
             }
+
             UnreadCount = tryunreadCount.Value;
             var tryunreadMentionsCount = reader.ReadInt32();
             if (tryunreadMentionsCount.IsError)
             {
                 return ReadResult<IObject>.Move(tryunreadMentionsCount);
             }
+
             UnreadMentionsCount = tryunreadMentionsCount.Value;
             var tryunreadReactionsCount = reader.ReadInt32();
             if (tryunreadReactionsCount.IsError)
             {
                 return ReadResult<IObject>.Move(tryunreadReactionsCount);
             }
+
             UnreadReactionsCount = tryunreadReactionsCount.Value;
             var trynotifySettings = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.PeerNotifySettingsBase>();
             if (trynotifySettings.IsError)
             {
                 return ReadResult<IObject>.Move(trynotifySettings);
             }
+
             NotifySettings = trynotifySettings.Value;
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
@@ -223,6 +211,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trypts);
                 }
+
                 Pts = trypts.Value;
             }
 
@@ -233,6 +222,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trydraft);
                 }
+
                 Draft = trydraft.Value;
             }
 
@@ -243,11 +233,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryfolderId);
                 }
+
                 FolderId = tryfolderId.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -263,17 +253,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new Dialog
-            {
-                Flags = Flags,
-                Pinned = Pinned,
-                UnreadMark = UnreadMark
-            };
+            var newClonedObject = new Dialog();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Pinned = Pinned;
+            newClonedObject.UnreadMark = UnreadMark;
             var clonePeer = (CatraProto.Client.TL.Schemas.CloudChats.PeerBase?)Peer.Clone();
             if (clonePeer is null)
             {
                 return null;
             }
+
             newClonedObject.Peer = clonePeer;
             newClonedObject.TopMessage = TopMessage;
             newClonedObject.ReadInboxMaxId = ReadInboxMaxId;
@@ -286,6 +275,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return null;
             }
+
             newClonedObject.NotifySettings = cloneNotifySettings;
             newClonedObject.Pts = Pts;
             if (Draft is not null)
@@ -295,11 +285,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.Draft = cloneDraft;
             }
+
             newClonedObject.FolderId = FolderId;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -308,68 +299,83 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Pinned != castedOther.Pinned)
             {
                 return true;
             }
+
             if (UnreadMark != castedOther.UnreadMark)
             {
                 return true;
             }
+
             if (Peer.Compare(castedOther.Peer))
             {
                 return true;
             }
+
             if (TopMessage != castedOther.TopMessage)
             {
                 return true;
             }
+
             if (ReadInboxMaxId != castedOther.ReadInboxMaxId)
             {
                 return true;
             }
+
             if (ReadOutboxMaxId != castedOther.ReadOutboxMaxId)
             {
                 return true;
             }
+
             if (UnreadCount != castedOther.UnreadCount)
             {
                 return true;
             }
+
             if (UnreadMentionsCount != castedOther.UnreadMentionsCount)
             {
                 return true;
             }
+
             if (UnreadReactionsCount != castedOther.UnreadReactionsCount)
             {
                 return true;
             }
+
             if (NotifySettings.Compare(castedOther.NotifySettings))
             {
                 return true;
             }
+
             if (Pts != castedOther.Pts)
             {
                 return true;
             }
+
             if (Draft is null && castedOther.Draft is not null || Draft is not null && castedOther.Draft is null)
             {
                 return true;
             }
+
             if (Draft is not null && castedOther.Draft is not null && Draft.Compare(castedOther.Draft))
             {
                 return true;
             }
+
             if (FolderId != castedOther.FolderId)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

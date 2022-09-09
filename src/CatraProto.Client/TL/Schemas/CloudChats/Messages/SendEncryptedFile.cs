@@ -1,25 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 
@@ -33,29 +18,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             Silent = 1 << 0
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 1431914525; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 1431914525; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
+        [Newtonsoft.Json.JsonIgnore] ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("silent")]
         public bool Silent { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("peer")]
-        public CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedChatBase Peer { get; set; }
+        [Newtonsoft.Json.JsonProperty("peer")] public CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedChatBase Peer { get; set; }
 
         [Newtonsoft.Json.JsonProperty("random_id")]
         public long RandomId { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("data")]
-        public byte[] Data { get; set; }
+        [Newtonsoft.Json.JsonProperty("data")] public byte[] Data { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("file")]
-        public CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedFileBase File { get; set; }
+        [Newtonsoft.Json.JsonProperty("file")] public CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedFileBase File { get; set; }
 
 
 #nullable enable
@@ -65,7 +44,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             RandomId = randomId;
             Data = data;
             File = file;
-
         }
 #nullable disable
 
@@ -76,7 +54,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         public void UpdateFlags()
         {
             Flags = Silent ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
-
         }
 
         public WriteResult Serialize(Writer writer)
@@ -90,6 +67,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             {
                 return checkpeer;
             }
+
             writer.WriteInt64(RandomId);
 
             writer.WriteBytes(Data);
@@ -100,7 +78,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             }
 
             return new WriteResult();
-
         }
 
         public ReadResult<IObject> Deserialize(Reader reader)
@@ -110,6 +87,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             Silent = FlagsHelper.IsFlagSet(Flags, 0);
             var trypeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedChatBase>();
@@ -117,27 +95,30 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             {
                 return ReadResult<IObject>.Move(trypeer);
             }
+
             Peer = trypeer.Value;
             var tryrandomId = reader.ReadInt64();
             if (tryrandomId.IsError)
             {
                 return ReadResult<IObject>.Move(tryrandomId);
             }
+
             RandomId = tryrandomId.Value;
             var trydata = reader.ReadBytes();
             if (trydata.IsError)
             {
                 return ReadResult<IObject>.Move(trydata);
             }
+
             Data = trydata.Value;
             var tryfile = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedFileBase>();
             if (tryfile.IsError)
             {
                 return ReadResult<IObject>.Move(tryfile);
             }
+
             File = tryfile.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -152,16 +133,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new SendEncryptedFile
-            {
-                Flags = Flags,
-                Silent = Silent
-            };
+            var newClonedObject = new SendEncryptedFile();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Silent = Silent;
             var clonePeer = (CatraProto.Client.TL.Schemas.CloudChats.InputEncryptedChatBase?)Peer.Clone();
             if (clonePeer is null)
             {
                 return null;
             }
+
             newClonedObject.Peer = clonePeer;
             newClonedObject.RandomId = RandomId;
             newClonedObject.Data = Data;
@@ -170,9 +150,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             {
                 return null;
             }
+
             newClonedObject.File = cloneFile;
             return newClonedObject;
-
         }
 
         public bool Compare(IObject other)
@@ -181,32 +161,38 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Silent != castedOther.Silent)
             {
                 return true;
             }
+
             if (Peer.Compare(castedOther.Peer))
             {
                 return true;
             }
+
             if (RandomId != castedOther.RandomId)
             {
                 return true;
             }
+
             if (Data != castedOther.Data)
             {
                 return true;
             }
+
             if (File.Compare(castedOther.File))
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 #nullable disable
     }

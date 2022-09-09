@@ -1,38 +1,19 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public partial class AvailableReactions : CatraProto.Client.TL.Schemas.CloudChats.Messages.AvailableReactionsBase
     {
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 1989032621; }
 
-
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 1989032621; }
-
-        [Newtonsoft.Json.JsonProperty("hash")]
-        public int Hash { get; set; }
+        [Newtonsoft.Json.JsonProperty("hash")] public int Hash { get; set; }
 
         [Newtonsoft.Json.JsonProperty("reactions")]
         public List<CatraProto.Client.TL.Schemas.CloudChats.AvailableReactionBase> Reactions { get; set; }
@@ -43,7 +24,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
         {
             Hash = hash;
             Reactions = reactions;
-
         }
 #nullable disable
         internal AvailableReactions()
@@ -52,7 +32,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public override void UpdateFlags()
         {
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -66,7 +45,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             }
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -76,15 +54,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             {
                 return ReadResult<IObject>.Move(tryhash);
             }
+
             Hash = tryhash.Value;
             var tryreactions = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.AvailableReactionBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
             if (tryreactions.IsError)
             {
                 return ReadResult<IObject>.Move(tryreactions);
             }
+
             Reactions = tryreactions.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -100,11 +79,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new AvailableReactions
-            {
-                Hash = Hash,
-                Reactions = new List<CatraProto.Client.TL.Schemas.CloudChats.AvailableReactionBase>()
-            };
+            var newClonedObject = new AvailableReactions();
+            newClonedObject.Hash = Hash;
+            newClonedObject.Reactions = new List<CatraProto.Client.TL.Schemas.CloudChats.AvailableReactionBase>();
             foreach (var reactions in Reactions)
             {
                 var clonereactions = (CatraProto.Client.TL.Schemas.CloudChats.AvailableReactionBase?)reactions.Clone();
@@ -112,10 +89,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 {
                     return null;
                 }
+
                 newClonedObject.Reactions.Add(clonereactions);
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public override bool Compare(IObject other)
@@ -124,15 +102,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             {
                 return true;
             }
+
             if (Hash != castedOther.Hash)
             {
                 return true;
             }
+
             var reactionssize = castedOther.Reactions.Count;
             if (reactionssize != Reactions.Count)
             {
                 return true;
             }
+
             for (var i = 0; i < reactionssize; i++)
             {
                 if (castedOther.Reactions[i].Compare(Reactions[i]))
@@ -140,8 +121,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                     return true;
                 }
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

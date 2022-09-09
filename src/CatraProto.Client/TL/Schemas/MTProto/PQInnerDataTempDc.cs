@@ -1,43 +1,23 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
     public partial class PQInnerDataTempDc : CatraProto.Client.TL.Schemas.MTProto.PQInnerDataBase
     {
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 1459478408; }
 
+        [Newtonsoft.Json.JsonProperty("pq")] public sealed override byte[] Pq { get; set; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 1459478408; }
+        [Newtonsoft.Json.JsonProperty("p")] public sealed override byte[] P { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("pq")]
-        public sealed override byte[] Pq { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("p")]
-        public sealed override byte[] P { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("q")]
-        public sealed override byte[] Q { get; set; }
+        [Newtonsoft.Json.JsonProperty("q")] public sealed override byte[] Q { get; set; }
 
         [Newtonsoft.Json.JsonProperty("nonce")]
         public sealed override System.Numerics.BigInteger Nonce { get; set; }
@@ -48,8 +28,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
         [Newtonsoft.Json.JsonProperty("new_nonce")]
         public sealed override System.Numerics.BigInteger NewNonce { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("dc")]
-        public sealed override int Dc { get; set; }
+        [Newtonsoft.Json.JsonProperty("dc")] public sealed override int Dc { get; set; }
 
         [Newtonsoft.Json.JsonProperty("expires_in")]
         public int ExpiresIn { get; set; }
@@ -66,7 +45,6 @@ namespace CatraProto.Client.TL.Schemas.MTProto
             NewNonce = newNonce;
             Dc = dc;
             ExpiresIn = expiresIn;
-
         }
 #nullable disable
         internal PQInnerDataTempDc()
@@ -75,7 +53,6 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
         public override void UpdateFlags()
         {
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -89,15 +66,17 @@ namespace CatraProto.Client.TL.Schemas.MTProto
             writer.WriteBytes(Q);
             var checkNonce = writer.WriteBigInteger(Nonce);
             if (checkNonce.IsError) { return checkNonce; }
+
             var checkServerNonce = writer.WriteBigInteger(ServerNonce);
             if (checkServerNonce.IsError) { return checkServerNonce; }
+
             var checkNewNonce = writer.WriteBigInteger(NewNonce);
             if (checkNewNonce.IsError) { return checkNewNonce; }
+
             writer.WriteInt32(Dc);
             writer.WriteInt32(ExpiresIn);
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -107,51 +86,58 @@ namespace CatraProto.Client.TL.Schemas.MTProto
             {
                 return ReadResult<IObject>.Move(trypq);
             }
+
             Pq = trypq.Value;
             var tryp = reader.ReadBytes();
             if (tryp.IsError)
             {
                 return ReadResult<IObject>.Move(tryp);
             }
+
             P = tryp.Value;
             var tryq = reader.ReadBytes();
             if (tryq.IsError)
             {
                 return ReadResult<IObject>.Move(tryq);
             }
+
             Q = tryq.Value;
             var trynonce = reader.ReadBigInteger(128);
             if (trynonce.IsError)
             {
                 return ReadResult<IObject>.Move(trynonce);
             }
+
             Nonce = trynonce.Value;
             var tryserverNonce = reader.ReadBigInteger(128);
             if (tryserverNonce.IsError)
             {
                 return ReadResult<IObject>.Move(tryserverNonce);
             }
+
             ServerNonce = tryserverNonce.Value;
             var trynewNonce = reader.ReadBigInteger(256);
             if (trynewNonce.IsError)
             {
                 return ReadResult<IObject>.Move(trynewNonce);
             }
+
             NewNonce = trynewNonce.Value;
             var trydc = reader.ReadInt32();
             if (trydc.IsError)
             {
                 return ReadResult<IObject>.Move(trydc);
             }
+
             Dc = trydc.Value;
             var tryexpiresIn = reader.ReadInt32();
             if (tryexpiresIn.IsError)
             {
                 return ReadResult<IObject>.Move(tryexpiresIn);
             }
+
             ExpiresIn = tryexpiresIn.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -167,19 +153,16 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new PQInnerDataTempDc
-            {
-                Pq = Pq,
-                P = P,
-                Q = Q,
-                Nonce = Nonce,
-                ServerNonce = ServerNonce,
-                NewNonce = NewNonce,
-                Dc = Dc,
-                ExpiresIn = ExpiresIn
-            };
+            var newClonedObject = new PQInnerDataTempDc();
+            newClonedObject.Pq = Pq;
+            newClonedObject.P = P;
+            newClonedObject.Q = Q;
+            newClonedObject.Nonce = Nonce;
+            newClonedObject.ServerNonce = ServerNonce;
+            newClonedObject.NewNonce = NewNonce;
+            newClonedObject.Dc = Dc;
+            newClonedObject.ExpiresIn = ExpiresIn;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -188,40 +171,48 @@ namespace CatraProto.Client.TL.Schemas.MTProto
             {
                 return true;
             }
+
             if (Pq != castedOther.Pq)
             {
                 return true;
             }
+
             if (P != castedOther.P)
             {
                 return true;
             }
+
             if (Q != castedOther.Q)
             {
                 return true;
             }
+
             if (Nonce != castedOther.Nonce)
             {
                 return true;
             }
+
             if (ServerNonce != castedOther.ServerNonce)
             {
                 return true;
             }
+
             if (NewNonce != castedOther.NewNonce)
             {
                 return true;
             }
+
             if (Dc != castedOther.Dc)
             {
                 return true;
             }
+
             if (ExpiresIn != castedOther.ExpiresIn)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

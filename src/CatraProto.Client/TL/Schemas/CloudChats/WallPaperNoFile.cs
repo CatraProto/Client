@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -35,20 +19,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Settings = 1 << 2
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -528465642; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -528465642; }
 
-        [Newtonsoft.Json.JsonProperty("id")]
-        public sealed override long Id { get; set; }
+        [Newtonsoft.Json.JsonProperty("id")] public sealed override long Id { get; set; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("default")]
         public sealed override bool Default { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("dark")]
-        public sealed override bool Dark { get; set; }
+        [Newtonsoft.Json.JsonProperty("dark")] public sealed override bool Dark { get; set; }
 
         [MaybeNull]
         [Newtonsoft.Json.JsonProperty("settings")]
@@ -59,7 +39,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public WallPaperNoFile(long id)
         {
             Id = id;
-
         }
 #nullable disable
         internal WallPaperNoFile()
@@ -71,7 +50,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = Default ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
             Flags = Dark ? FlagsHelper.SetFlag(Flags, 4) : FlagsHelper.UnsetFlag(Flags, 4);
             Flags = Settings == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -92,7 +70,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -102,12 +79,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryid);
             }
+
             Id = tryid.Value;
             var tryflags = reader.ReadInt32();
             if (tryflags.IsError)
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             Default = FlagsHelper.IsFlagSet(Flags, 1);
             Dark = FlagsHelper.IsFlagSet(Flags, 4);
@@ -118,11 +97,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trysettings);
                 }
+
                 Settings = trysettings.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -138,13 +117,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new WallPaperNoFile
-            {
-                Id = Id,
-                Flags = Flags,
-                Default = Default,
-                Dark = Dark
-            };
+            var newClonedObject = new WallPaperNoFile();
+            newClonedObject.Id = Id;
+            newClonedObject.Flags = Flags;
+            newClonedObject.Default = Default;
+            newClonedObject.Dark = Dark;
             if (Settings is not null)
             {
                 var cloneSettings = (CatraProto.Client.TL.Schemas.CloudChats.WallPaperSettingsBase?)Settings.Clone();
@@ -152,10 +129,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.Settings = cloneSettings;
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public override bool Compare(IObject other)
@@ -164,32 +142,38 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Id != castedOther.Id)
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Default != castedOther.Default)
             {
                 return true;
             }
+
             if (Dark != castedOther.Dark)
             {
                 return true;
             }
+
             if (Settings is null && castedOther.Settings is not null || Settings is not null && castedOther.Settings is null)
             {
                 return true;
             }
+
             if (Settings is not null && castedOther.Settings is not null && Settings.Compare(castedOther.Settings))
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

@@ -1,34 +1,17 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
     public partial class BadServerSalt : CatraProto.Client.TL.Schemas.MTProto.BadMsgNotificationBase
     {
-
-
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -307542917; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -307542917; }
 
         [Newtonsoft.Json.JsonProperty("bad_msg_id")]
         public sealed override long BadMsgId { get; set; }
@@ -50,7 +33,6 @@ namespace CatraProto.Client.TL.Schemas.MTProto
             BadMsgSeqno = badMsgSeqno;
             ErrorCode = errorCode;
             NewServerSalt = newServerSalt;
-
         }
 #nullable disable
         internal BadServerSalt()
@@ -59,7 +41,6 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
         public override void UpdateFlags()
         {
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -71,7 +52,6 @@ namespace CatraProto.Client.TL.Schemas.MTProto
             writer.WriteInt64(NewServerSalt);
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -81,27 +61,30 @@ namespace CatraProto.Client.TL.Schemas.MTProto
             {
                 return ReadResult<IObject>.Move(trybadMsgId);
             }
+
             BadMsgId = trybadMsgId.Value;
             var trybadMsgSeqno = reader.ReadInt32();
             if (trybadMsgSeqno.IsError)
             {
                 return ReadResult<IObject>.Move(trybadMsgSeqno);
             }
+
             BadMsgSeqno = trybadMsgSeqno.Value;
             var tryerrorCode = reader.ReadInt32();
             if (tryerrorCode.IsError)
             {
                 return ReadResult<IObject>.Move(tryerrorCode);
             }
+
             ErrorCode = tryerrorCode.Value;
             var trynewServerSalt = reader.ReadInt64();
             if (trynewServerSalt.IsError)
             {
                 return ReadResult<IObject>.Move(trynewServerSalt);
             }
+
             NewServerSalt = trynewServerSalt.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -117,15 +100,12 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new BadServerSalt
-            {
-                BadMsgId = BadMsgId,
-                BadMsgSeqno = BadMsgSeqno,
-                ErrorCode = ErrorCode,
-                NewServerSalt = NewServerSalt
-            };
+            var newClonedObject = new BadServerSalt();
+            newClonedObject.BadMsgId = BadMsgId;
+            newClonedObject.BadMsgSeqno = BadMsgSeqno;
+            newClonedObject.ErrorCode = ErrorCode;
+            newClonedObject.NewServerSalt = NewServerSalt;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -134,24 +114,28 @@ namespace CatraProto.Client.TL.Schemas.MTProto
             {
                 return true;
             }
+
             if (BadMsgId != castedOther.BadMsgId)
             {
                 return true;
             }
+
             if (BadMsgSeqno != castedOther.BadMsgSeqno)
             {
                 return true;
             }
+
             if (ErrorCode != castedOther.ErrorCode)
             {
                 return true;
             }
+
             if (NewServerSalt != castedOther.NewServerSalt)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

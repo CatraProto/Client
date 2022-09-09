@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -38,11 +22,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             OtherSound = 1 << 5
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -1472527322; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -1472527322; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("show_previews")]
         public sealed override bool? ShowPreviews { get; set; }
@@ -66,7 +48,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public sealed override CatraProto.Client.TL.Schemas.CloudChats.NotificationSoundBase OtherSound { get; set; }
 
 
-
         public PeerNotifySettings()
         {
         }
@@ -79,7 +60,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = IosSound == null ? FlagsHelper.UnsetFlag(Flags, 3) : FlagsHelper.SetFlag(Flags, 3);
             Flags = AndroidSound == null ? FlagsHelper.UnsetFlag(Flags, 4) : FlagsHelper.SetFlag(Flags, 4);
             Flags = OtherSound == null ? FlagsHelper.UnsetFlag(Flags, 5) : FlagsHelper.SetFlag(Flags, 5);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -140,7 +120,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -150,6 +129,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
@@ -158,6 +138,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryshowPreviews);
                 }
+
                 ShowPreviews = tryshowPreviews.Value;
             }
 
@@ -168,6 +149,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trysilent);
                 }
+
                 Silent = trysilent.Value;
             }
 
@@ -178,6 +160,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trymuteUntil);
                 }
+
                 MuteUntil = trymuteUntil.Value;
             }
 
@@ -188,6 +171,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryiosSound);
                 }
+
                 IosSound = tryiosSound.Value;
             }
 
@@ -198,6 +182,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryandroidSound);
                 }
+
                 AndroidSound = tryandroidSound.Value;
             }
 
@@ -208,11 +193,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryotherSound);
                 }
+
                 OtherSound = tryotherSound.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -228,13 +213,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new PeerNotifySettings
-            {
-                Flags = Flags,
-                ShowPreviews = ShowPreviews,
-                Silent = Silent,
-                MuteUntil = MuteUntil
-            };
+            var newClonedObject = new PeerNotifySettings();
+            newClonedObject.Flags = Flags;
+            newClonedObject.ShowPreviews = ShowPreviews;
+            newClonedObject.Silent = Silent;
+            newClonedObject.MuteUntil = MuteUntil;
             if (IosSound is not null)
             {
                 var cloneIosSound = (CatraProto.Client.TL.Schemas.CloudChats.NotificationSoundBase?)IosSound.Clone();
@@ -242,8 +225,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.IosSound = cloneIosSound;
             }
+
             if (AndroidSound is not null)
             {
                 var cloneAndroidSound = (CatraProto.Client.TL.Schemas.CloudChats.NotificationSoundBase?)AndroidSound.Clone();
@@ -251,8 +236,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.AndroidSound = cloneAndroidSound;
             }
+
             if (OtherSound is not null)
             {
                 var cloneOtherSound = (CatraProto.Client.TL.Schemas.CloudChats.NotificationSoundBase?)OtherSound.Clone();
@@ -260,10 +247,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.OtherSound = cloneOtherSound;
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public override bool Compare(IObject other)
@@ -272,48 +260,58 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (ShowPreviews != castedOther.ShowPreviews)
             {
                 return true;
             }
+
             if (Silent != castedOther.Silent)
             {
                 return true;
             }
+
             if (MuteUntil != castedOther.MuteUntil)
             {
                 return true;
             }
+
             if (IosSound is null && castedOther.IosSound is not null || IosSound is not null && castedOther.IosSound is null)
             {
                 return true;
             }
+
             if (IosSound is not null && castedOther.IosSound is not null && IosSound.Compare(castedOther.IosSound))
             {
                 return true;
             }
+
             if (AndroidSound is null && castedOther.AndroidSound is not null || AndroidSound is not null && castedOther.AndroidSound is null)
             {
                 return true;
             }
+
             if (AndroidSound is not null && castedOther.AndroidSound is not null && AndroidSound.Compare(castedOther.AndroidSound))
             {
                 return true;
             }
+
             if (OtherSound is null && castedOther.OtherSound is not null || OtherSound is not null && castedOther.OtherSound is null)
             {
                 return true;
             }
+
             if (OtherSound is not null && castedOther.OtherSound is not null && OtherSound.Compare(castedOther.OtherSound))
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

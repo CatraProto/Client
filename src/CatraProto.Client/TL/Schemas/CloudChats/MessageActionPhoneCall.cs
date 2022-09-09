@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -35,11 +19,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Duration = 1 << 1
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -2132731265; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -2132731265; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("video")]
         public bool Video { get; set; }
@@ -59,7 +41,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public MessageActionPhoneCall(long callId)
         {
             CallId = callId;
-
         }
 #nullable disable
         internal MessageActionPhoneCall()
@@ -71,7 +52,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = Video ? FlagsHelper.SetFlag(Flags, 2) : FlagsHelper.UnsetFlag(Flags, 2);
             Flags = Reason == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
             Flags = Duration == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -97,7 +77,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -107,6 +86,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             Video = FlagsHelper.IsFlagSet(Flags, 2);
             var trycallId = reader.ReadInt64();
@@ -114,6 +94,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(trycallId);
             }
+
             CallId = trycallId.Value;
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
@@ -122,6 +103,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryreason);
                 }
+
                 Reason = tryreason.Value;
             }
 
@@ -132,11 +114,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryduration);
                 }
+
                 Duration = tryduration.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -152,12 +134,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new MessageActionPhoneCall
-            {
-                Flags = Flags,
-                Video = Video,
-                CallId = CallId
-            };
+            var newClonedObject = new MessageActionPhoneCall();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Video = Video;
+            newClonedObject.CallId = CallId;
             if (Reason is not null)
             {
                 var cloneReason = (CatraProto.Client.TL.Schemas.CloudChats.PhoneCallDiscardReasonBase?)Reason.Clone();
@@ -165,11 +145,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.Reason = cloneReason;
             }
+
             newClonedObject.Duration = Duration;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -178,32 +159,38 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Video != castedOther.Video)
             {
                 return true;
             }
+
             if (CallId != castedOther.CallId)
             {
                 return true;
             }
+
             if (Reason is null && castedOther.Reason is not null || Reason is not null && castedOther.Reason is null)
             {
                 return true;
             }
+
             if (Reason is not null && castedOther.Reason is not null && Reason.Compare(castedOther.Reason))
             {
                 return true;
             }
+
             if (Duration != castedOther.Duration)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

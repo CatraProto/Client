@@ -1,27 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -37,11 +20,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Wallpaper = 1 << 1
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -94849324; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -94849324; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("message_colors_animated")]
         public sealed override bool MessageColorsAnimated { get; set; }
@@ -68,7 +49,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             BaseTheme = baseTheme;
             AccentColor = accentColor;
-
         }
 #nullable disable
         internal ThemeSettings()
@@ -81,7 +61,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = OutboxAccentColor == null ? FlagsHelper.UnsetFlag(Flags, 3) : FlagsHelper.SetFlag(Flags, 3);
             Flags = MessageColors == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
             Flags = Wallpaper == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -95,6 +74,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return checkbaseTheme;
             }
+
             writer.WriteInt32(AccentColor);
             if (FlagsHelper.IsFlagSet(Flags, 3))
             {
@@ -103,7 +83,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
-
                 writer.WriteVector(MessageColors, false);
             }
 
@@ -118,7 +97,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -128,6 +106,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             MessageColorsAnimated = FlagsHelper.IsFlagSet(Flags, 2);
             var trybaseTheme = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.BaseThemeBase>();
@@ -135,12 +114,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(trybaseTheme);
             }
+
             BaseTheme = trybaseTheme.Value;
             var tryaccentColor = reader.ReadInt32();
             if (tryaccentColor.IsError)
             {
                 return ReadResult<IObject>.Move(tryaccentColor);
             }
+
             AccentColor = tryaccentColor.Value;
             if (FlagsHelper.IsFlagSet(Flags, 3))
             {
@@ -149,6 +130,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryoutboxAccentColor);
                 }
+
                 OutboxAccentColor = tryoutboxAccentColor.Value;
             }
 
@@ -159,6 +141,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trymessageColors);
                 }
+
                 MessageColors = trymessageColors.Value;
             }
 
@@ -169,11 +152,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trywallpaper);
                 }
+
                 Wallpaper = trywallpaper.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -189,16 +172,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new ThemeSettings
-            {
-                Flags = Flags,
-                MessageColorsAnimated = MessageColorsAnimated
-            };
+            var newClonedObject = new ThemeSettings();
+            newClonedObject.Flags = Flags;
+            newClonedObject.MessageColorsAnimated = MessageColorsAnimated;
             var cloneBaseTheme = (CatraProto.Client.TL.Schemas.CloudChats.BaseThemeBase?)BaseTheme.Clone();
             if (cloneBaseTheme is null)
             {
                 return null;
             }
+
             newClonedObject.BaseTheme = cloneBaseTheme;
             newClonedObject.AccentColor = AccentColor;
             newClonedObject.OutboxAccentColor = OutboxAccentColor;
@@ -210,6 +192,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                     newClonedObject.MessageColors.Add(messageColors);
                 }
             }
+
             if (Wallpaper is not null)
             {
                 var cloneWallpaper = (CatraProto.Client.TL.Schemas.CloudChats.WallPaperBase?)Wallpaper.Clone();
@@ -217,10 +200,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.Wallpaper = cloneWallpaper;
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public override bool Compare(IObject other)
@@ -229,38 +213,45 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (MessageColorsAnimated != castedOther.MessageColorsAnimated)
             {
                 return true;
             }
+
             if (BaseTheme.Compare(castedOther.BaseTheme))
             {
                 return true;
             }
+
             if (AccentColor != castedOther.AccentColor)
             {
                 return true;
             }
+
             if (OutboxAccentColor != castedOther.OutboxAccentColor)
             {
                 return true;
             }
+
             if (MessageColors is null && castedOther.MessageColors is not null || MessageColors is not null && castedOther.MessageColors is null)
             {
                 return true;
             }
+
             if (MessageColors is not null && castedOther.MessageColors is not null)
             {
-
                 var messageColorssize = castedOther.MessageColors.Count;
                 if (messageColorssize != MessageColors.Count)
                 {
                     return true;
                 }
+
                 for (var i = 0; i < messageColorssize; i++)
                 {
                     if (castedOther.MessageColors[i] != MessageColors[i])
@@ -269,16 +260,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                     }
                 }
             }
+
             if (Wallpaper is null && castedOther.Wallpaper is not null || Wallpaper is not null && castedOther.Wallpaper is null)
             {
                 return true;
             }
+
             if (Wallpaper is not null && castedOther.Wallpaper is not null && Wallpaper.Compare(castedOther.Wallpaper))
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

@@ -1,34 +1,17 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class StatsGroupTopAdmin : CatraProto.Client.TL.Schemas.CloudChats.StatsGroupTopAdminBase
     {
-
-
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -682079097; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -682079097; }
 
         [Newtonsoft.Json.JsonProperty("user_id")]
         public sealed override long UserId { get; set; }
@@ -50,7 +33,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Deleted = deleted;
             Kicked = kicked;
             Banned = banned;
-
         }
 #nullable disable
         internal StatsGroupTopAdmin()
@@ -59,7 +41,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void UpdateFlags()
         {
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -71,7 +52,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             writer.WriteInt32(Banned);
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -81,27 +61,30 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryuserId);
             }
+
             UserId = tryuserId.Value;
             var trydeleted = reader.ReadInt32();
             if (trydeleted.IsError)
             {
                 return ReadResult<IObject>.Move(trydeleted);
             }
+
             Deleted = trydeleted.Value;
             var trykicked = reader.ReadInt32();
             if (trykicked.IsError)
             {
                 return ReadResult<IObject>.Move(trykicked);
             }
+
             Kicked = trykicked.Value;
             var trybanned = reader.ReadInt32();
             if (trybanned.IsError)
             {
                 return ReadResult<IObject>.Move(trybanned);
             }
+
             Banned = trybanned.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -117,15 +100,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new StatsGroupTopAdmin
-            {
-                UserId = UserId,
-                Deleted = Deleted,
-                Kicked = Kicked,
-                Banned = Banned
-            };
+            var newClonedObject = new StatsGroupTopAdmin();
+            newClonedObject.UserId = UserId;
+            newClonedObject.Deleted = Deleted;
+            newClonedObject.Kicked = Kicked;
+            newClonedObject.Banned = Banned;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -134,24 +114,28 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (UserId != castedOther.UserId)
             {
                 return true;
             }
+
             if (Deleted != castedOther.Deleted)
             {
                 return true;
             }
+
             if (Kicked != castedOther.Kicked)
             {
                 return true;
             }
+
             if (Banned != castedOther.Banned)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

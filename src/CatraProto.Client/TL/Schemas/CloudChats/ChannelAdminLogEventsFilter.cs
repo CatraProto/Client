@@ -1,25 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -48,14 +33,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Send = 1 << 16
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -368018716; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -368018716; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("join")]
-        public sealed override bool Join { get; set; }
+        [Newtonsoft.Json.JsonProperty("join")] public sealed override bool Join { get; set; }
 
         [Newtonsoft.Json.JsonProperty("leave")]
         public sealed override bool Leave { get; set; }
@@ -63,14 +45,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("invite")]
         public sealed override bool Invite { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("ban")]
-        public sealed override bool Ban { get; set; }
+        [Newtonsoft.Json.JsonProperty("ban")] public sealed override bool Ban { get; set; }
 
         [Newtonsoft.Json.JsonProperty("unban")]
         public sealed override bool Unban { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("kick")]
-        public sealed override bool Kick { get; set; }
+        [Newtonsoft.Json.JsonProperty("kick")] public sealed override bool Kick { get; set; }
 
         [Newtonsoft.Json.JsonProperty("unkick")]
         public sealed override bool Unkick { get; set; }
@@ -81,8 +61,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("demote")]
         public sealed override bool Demote { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("info")]
-        public sealed override bool Info { get; set; }
+        [Newtonsoft.Json.JsonProperty("info")] public sealed override bool Info { get; set; }
 
         [Newtonsoft.Json.JsonProperty("settings")]
         public sealed override bool Settings { get; set; }
@@ -90,8 +69,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("pinned")]
         public sealed override bool Pinned { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("edit")]
-        public sealed override bool Edit { get; set; }
+        [Newtonsoft.Json.JsonProperty("edit")] public sealed override bool Edit { get; set; }
 
         [Newtonsoft.Json.JsonProperty("delete")]
         public sealed override bool Delete { get; set; }
@@ -102,9 +80,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("invites")]
         public sealed override bool Invites { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("send")]
-        public sealed override bool Send { get; set; }
-
+        [Newtonsoft.Json.JsonProperty("send")] public sealed override bool Send { get; set; }
 
 
         public ChannelAdminLogEventsFilter()
@@ -130,7 +106,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = GroupCall ? FlagsHelper.SetFlag(Flags, 14) : FlagsHelper.UnsetFlag(Flags, 14);
             Flags = Invites ? FlagsHelper.SetFlag(Flags, 15) : FlagsHelper.UnsetFlag(Flags, 15);
             Flags = Send ? FlagsHelper.SetFlag(Flags, 16) : FlagsHelper.UnsetFlag(Flags, 16);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -141,7 +116,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             writer.WriteInt32(Flags);
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -151,6 +125,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             Join = FlagsHelper.IsFlagSet(Flags, 0);
             Leave = FlagsHelper.IsFlagSet(Flags, 1);
@@ -170,7 +145,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Invites = FlagsHelper.IsFlagSet(Flags, 15);
             Send = FlagsHelper.IsFlagSet(Flags, 16);
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -186,29 +160,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new ChannelAdminLogEventsFilter
-            {
-                Flags = Flags,
-                Join = Join,
-                Leave = Leave,
-                Invite = Invite,
-                Ban = Ban,
-                Unban = Unban,
-                Kick = Kick,
-                Unkick = Unkick,
-                Promote = Promote,
-                Demote = Demote,
-                Info = Info,
-                Settings = Settings,
-                Pinned = Pinned,
-                Edit = Edit,
-                Delete = Delete,
-                GroupCall = GroupCall,
-                Invites = Invites,
-                Send = Send
-            };
+            var newClonedObject = new ChannelAdminLogEventsFilter();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Join = Join;
+            newClonedObject.Leave = Leave;
+            newClonedObject.Invite = Invite;
+            newClonedObject.Ban = Ban;
+            newClonedObject.Unban = Unban;
+            newClonedObject.Kick = Kick;
+            newClonedObject.Unkick = Unkick;
+            newClonedObject.Promote = Promote;
+            newClonedObject.Demote = Demote;
+            newClonedObject.Info = Info;
+            newClonedObject.Settings = Settings;
+            newClonedObject.Pinned = Pinned;
+            newClonedObject.Edit = Edit;
+            newClonedObject.Delete = Delete;
+            newClonedObject.GroupCall = GroupCall;
+            newClonedObject.Invites = Invites;
+            newClonedObject.Send = Send;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -217,80 +188,98 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Join != castedOther.Join)
             {
                 return true;
             }
+
             if (Leave != castedOther.Leave)
             {
                 return true;
             }
+
             if (Invite != castedOther.Invite)
             {
                 return true;
             }
+
             if (Ban != castedOther.Ban)
             {
                 return true;
             }
+
             if (Unban != castedOther.Unban)
             {
                 return true;
             }
+
             if (Kick != castedOther.Kick)
             {
                 return true;
             }
+
             if (Unkick != castedOther.Unkick)
             {
                 return true;
             }
+
             if (Promote != castedOther.Promote)
             {
                 return true;
             }
+
             if (Demote != castedOther.Demote)
             {
                 return true;
             }
+
             if (Info != castedOther.Info)
             {
                 return true;
             }
+
             if (Settings != castedOther.Settings)
             {
                 return true;
             }
+
             if (Pinned != castedOther.Pinned)
             {
                 return true;
             }
+
             if (Edit != castedOther.Edit)
             {
                 return true;
             }
+
             if (Delete != castedOther.Delete)
             {
                 return true;
             }
+
             if (GroupCall != castedOther.GroupCall)
             {
                 return true;
             }
+
             if (Invites != castedOther.Invites)
             {
                 return true;
             }
+
             if (Send != castedOther.Send)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

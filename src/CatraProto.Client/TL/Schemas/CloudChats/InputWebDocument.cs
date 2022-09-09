@@ -1,41 +1,21 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class InputWebDocument : CatraProto.Client.TL.Schemas.CloudChats.InputWebDocumentBase
     {
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -1678949555; }
 
+        [Newtonsoft.Json.JsonProperty("url")] public sealed override string Url { get; set; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -1678949555; }
-
-        [Newtonsoft.Json.JsonProperty("url")]
-        public sealed override string Url { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("size")]
-        public sealed override int Size { get; set; }
+        [Newtonsoft.Json.JsonProperty("size")] public sealed override int Size { get; set; }
 
         [Newtonsoft.Json.JsonProperty("mime_type")]
         public sealed override string MimeType { get; set; }
@@ -51,7 +31,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Size = size;
             MimeType = mimeType;
             Attributes = attributes;
-
         }
 #nullable disable
         internal InputWebDocument()
@@ -60,7 +39,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void UpdateFlags()
         {
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -78,7 +56,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             }
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -88,27 +65,30 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryurl);
             }
+
             Url = tryurl.Value;
             var trysize = reader.ReadInt32();
             if (trysize.IsError)
             {
                 return ReadResult<IObject>.Move(trysize);
             }
+
             Size = trysize.Value;
             var trymimeType = reader.ReadString();
             if (trymimeType.IsError)
             {
                 return ReadResult<IObject>.Move(trymimeType);
             }
+
             MimeType = trymimeType.Value;
             var tryattributes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
             if (tryattributes.IsError)
             {
                 return ReadResult<IObject>.Move(tryattributes);
             }
+
             Attributes = tryattributes.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -124,13 +104,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new InputWebDocument
-            {
-                Url = Url,
-                Size = Size,
-                MimeType = MimeType,
-                Attributes = new List<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase>()
-            };
+            var newClonedObject = new InputWebDocument();
+            newClonedObject.Url = Url;
+            newClonedObject.Size = Size;
+            newClonedObject.MimeType = MimeType;
+            newClonedObject.Attributes = new List<CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase>();
             foreach (var attributes in Attributes)
             {
                 var cloneattributes = (CatraProto.Client.TL.Schemas.CloudChats.DocumentAttributeBase?)attributes.Clone();
@@ -138,10 +116,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.Attributes.Add(cloneattributes);
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public override bool Compare(IObject other)
@@ -150,23 +129,28 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Url != castedOther.Url)
             {
                 return true;
             }
+
             if (Size != castedOther.Size)
             {
                 return true;
             }
+
             if (MimeType != castedOther.MimeType)
             {
                 return true;
             }
+
             var attributessize = castedOther.Attributes.Count;
             if (attributessize != Attributes.Count)
             {
                 return true;
             }
+
             for (var i = 0; i < attributessize; i++)
             {
                 if (castedOther.Attributes[i].Compare(Attributes[i]))
@@ -174,8 +158,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                     return true;
                 }
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

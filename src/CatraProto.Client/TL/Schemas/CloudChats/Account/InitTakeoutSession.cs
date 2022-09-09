@@ -1,25 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 
@@ -39,14 +24,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             FileMaxSize = 1 << 5
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -1896617296; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -1896617296; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
+        [Newtonsoft.Json.JsonIgnore] ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("contacts")]
         public bool Contacts { get; set; }
@@ -70,8 +52,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public long? FileMaxSize { get; set; }
 
 
-
-
         public InitTakeoutSession()
         {
         }
@@ -85,7 +65,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             Flags = MessageChannels ? FlagsHelper.SetFlag(Flags, 4) : FlagsHelper.UnsetFlag(Flags, 4);
             Flags = Files ? FlagsHelper.SetFlag(Flags, 5) : FlagsHelper.UnsetFlag(Flags, 5);
             Flags = FileMaxSize == null ? FlagsHelper.UnsetFlag(Flags, 5) : FlagsHelper.SetFlag(Flags, 5);
-
         }
 
         public WriteResult Serialize(Writer writer)
@@ -101,7 +80,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 
             return new WriteResult();
-
         }
 
         public ReadResult<IObject> Deserialize(Reader reader)
@@ -111,6 +89,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             Contacts = FlagsHelper.IsFlagSet(Flags, 0);
             MessageUsers = FlagsHelper.IsFlagSet(Flags, 1);
@@ -125,11 +104,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return ReadResult<IObject>.Move(tryfileMaxSize);
                 }
+
                 FileMaxSize = tryfileMaxSize.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -144,19 +123,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new InitTakeoutSession
-            {
-                Flags = Flags,
-                Contacts = Contacts,
-                MessageUsers = MessageUsers,
-                MessageChats = MessageChats,
-                MessageMegagroups = MessageMegagroups,
-                MessageChannels = MessageChannels,
-                Files = Files,
-                FileMaxSize = FileMaxSize
-            };
+            var newClonedObject = new InitTakeoutSession();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Contacts = Contacts;
+            newClonedObject.MessageUsers = MessageUsers;
+            newClonedObject.MessageChats = MessageChats;
+            newClonedObject.MessageMegagroups = MessageMegagroups;
+            newClonedObject.MessageChannels = MessageChannels;
+            newClonedObject.Files = Files;
+            newClonedObject.FileMaxSize = FileMaxSize;
             return newClonedObject;
-
         }
 
         public bool Compare(IObject other)
@@ -165,40 +141,48 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Contacts != castedOther.Contacts)
             {
                 return true;
             }
+
             if (MessageUsers != castedOther.MessageUsers)
             {
                 return true;
             }
+
             if (MessageChats != castedOther.MessageChats)
             {
                 return true;
             }
+
             if (MessageMegagroups != castedOther.MessageMegagroups)
             {
                 return true;
             }
+
             if (MessageChannels != castedOther.MessageChannels)
             {
                 return true;
             }
+
             if (Files != castedOther.Files)
             {
                 return true;
             }
+
             if (FileMaxSize != castedOther.FileMaxSize)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 #nullable disable
     }

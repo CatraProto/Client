@@ -1,25 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -36,11 +21,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             CallRequestsDisabled = 1 << 4
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -1392388579; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -1392388579; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("current")]
         public sealed override bool Current { get; set; }
@@ -57,8 +40,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("call_requests_disabled")]
         public sealed override bool CallRequestsDisabled { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("hash")]
-        public sealed override long Hash { get; set; }
+        [Newtonsoft.Json.JsonProperty("hash")] public sealed override long Hash { get; set; }
 
         [Newtonsoft.Json.JsonProperty("device_model")]
         public sealed override string DeviceModel { get; set; }
@@ -84,8 +66,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("date_active")]
         public sealed override int DateActive { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("ip")]
-        public sealed override string Ip { get; set; }
+        [Newtonsoft.Json.JsonProperty("ip")] public sealed override string Ip { get; set; }
 
         [Newtonsoft.Json.JsonProperty("country")]
         public sealed override string Country { get; set; }
@@ -109,7 +90,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Ip = ip;
             Country = country;
             Region = region;
-
         }
 #nullable disable
         internal Authorization()
@@ -123,7 +103,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = PasswordPending ? FlagsHelper.SetFlag(Flags, 2) : FlagsHelper.UnsetFlag(Flags, 2);
             Flags = EncryptedRequestsDisabled ? FlagsHelper.SetFlag(Flags, 3) : FlagsHelper.UnsetFlag(Flags, 3);
             Flags = CallRequestsDisabled ? FlagsHelper.SetFlag(Flags, 4) : FlagsHelper.UnsetFlag(Flags, 4);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -154,7 +133,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             writer.WriteString(Region);
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -164,6 +142,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             Current = FlagsHelper.IsFlagSet(Flags, 0);
             OfficialApp = FlagsHelper.IsFlagSet(Flags, 1);
@@ -175,75 +154,86 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryhash);
             }
+
             Hash = tryhash.Value;
             var trydeviceModel = reader.ReadString();
             if (trydeviceModel.IsError)
             {
                 return ReadResult<IObject>.Move(trydeviceModel);
             }
+
             DeviceModel = trydeviceModel.Value;
             var tryplatform = reader.ReadString();
             if (tryplatform.IsError)
             {
                 return ReadResult<IObject>.Move(tryplatform);
             }
+
             Platform = tryplatform.Value;
             var trysystemVersion = reader.ReadString();
             if (trysystemVersion.IsError)
             {
                 return ReadResult<IObject>.Move(trysystemVersion);
             }
+
             SystemVersion = trysystemVersion.Value;
             var tryapiId = reader.ReadInt32();
             if (tryapiId.IsError)
             {
                 return ReadResult<IObject>.Move(tryapiId);
             }
+
             ApiId = tryapiId.Value;
             var tryappName = reader.ReadString();
             if (tryappName.IsError)
             {
                 return ReadResult<IObject>.Move(tryappName);
             }
+
             AppName = tryappName.Value;
             var tryappVersion = reader.ReadString();
             if (tryappVersion.IsError)
             {
                 return ReadResult<IObject>.Move(tryappVersion);
             }
+
             AppVersion = tryappVersion.Value;
             var trydateCreated = reader.ReadInt32();
             if (trydateCreated.IsError)
             {
                 return ReadResult<IObject>.Move(trydateCreated);
             }
+
             DateCreated = trydateCreated.Value;
             var trydateActive = reader.ReadInt32();
             if (trydateActive.IsError)
             {
                 return ReadResult<IObject>.Move(trydateActive);
             }
+
             DateActive = trydateActive.Value;
             var tryip = reader.ReadString();
             if (tryip.IsError)
             {
                 return ReadResult<IObject>.Move(tryip);
             }
+
             Ip = tryip.Value;
             var trycountry = reader.ReadString();
             if (trycountry.IsError)
             {
                 return ReadResult<IObject>.Move(trycountry);
             }
+
             Country = trycountry.Value;
             var tryregion = reader.ReadString();
             if (tryregion.IsError)
             {
                 return ReadResult<IObject>.Move(tryregion);
             }
+
             Region = tryregion.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -259,29 +249,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new Authorization
-            {
-                Flags = Flags,
-                Current = Current,
-                OfficialApp = OfficialApp,
-                PasswordPending = PasswordPending,
-                EncryptedRequestsDisabled = EncryptedRequestsDisabled,
-                CallRequestsDisabled = CallRequestsDisabled,
-                Hash = Hash,
-                DeviceModel = DeviceModel,
-                Platform = Platform,
-                SystemVersion = SystemVersion,
-                ApiId = ApiId,
-                AppName = AppName,
-                AppVersion = AppVersion,
-                DateCreated = DateCreated,
-                DateActive = DateActive,
-                Ip = Ip,
-                Country = Country,
-                Region = Region
-            };
+            var newClonedObject = new Authorization();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Current = Current;
+            newClonedObject.OfficialApp = OfficialApp;
+            newClonedObject.PasswordPending = PasswordPending;
+            newClonedObject.EncryptedRequestsDisabled = EncryptedRequestsDisabled;
+            newClonedObject.CallRequestsDisabled = CallRequestsDisabled;
+            newClonedObject.Hash = Hash;
+            newClonedObject.DeviceModel = DeviceModel;
+            newClonedObject.Platform = Platform;
+            newClonedObject.SystemVersion = SystemVersion;
+            newClonedObject.ApiId = ApiId;
+            newClonedObject.AppName = AppName;
+            newClonedObject.AppVersion = AppVersion;
+            newClonedObject.DateCreated = DateCreated;
+            newClonedObject.DateActive = DateActive;
+            newClonedObject.Ip = Ip;
+            newClonedObject.Country = Country;
+            newClonedObject.Region = Region;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -290,80 +277,98 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Current != castedOther.Current)
             {
                 return true;
             }
+
             if (OfficialApp != castedOther.OfficialApp)
             {
                 return true;
             }
+
             if (PasswordPending != castedOther.PasswordPending)
             {
                 return true;
             }
+
             if (EncryptedRequestsDisabled != castedOther.EncryptedRequestsDisabled)
             {
                 return true;
             }
+
             if (CallRequestsDisabled != castedOther.CallRequestsDisabled)
             {
                 return true;
             }
+
             if (Hash != castedOther.Hash)
             {
                 return true;
             }
+
             if (DeviceModel != castedOther.DeviceModel)
             {
                 return true;
             }
+
             if (Platform != castedOther.Platform)
             {
                 return true;
             }
+
             if (SystemVersion != castedOther.SystemVersion)
             {
                 return true;
             }
+
             if (ApiId != castedOther.ApiId)
             {
                 return true;
             }
+
             if (AppName != castedOther.AppName)
             {
                 return true;
             }
+
             if (AppVersion != castedOther.AppVersion)
             {
                 return true;
             }
+
             if (DateCreated != castedOther.DateCreated)
             {
                 return true;
             }
+
             if (DateActive != castedOther.DateActive)
             {
                 return true;
             }
+
             if (Ip != castedOther.Ip)
             {
                 return true;
             }
+
             if (Country != castedOther.Country)
             {
                 return true;
             }
+
             if (Region != castedOther.Region)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

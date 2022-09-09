@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -41,14 +25,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             TtlPeriod = 1 << 25
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 721967202; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 721967202; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("out")]
-        public bool Out { get; set; }
+        [Newtonsoft.Json.JsonProperty("out")] public bool Out { get; set; }
 
         [Newtonsoft.Json.JsonProperty("mentioned")]
         public bool Mentioned { get; set; }
@@ -59,14 +40,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("silent")]
         public bool Silent { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("post")]
-        public bool Post { get; set; }
+        [Newtonsoft.Json.JsonProperty("post")] public bool Post { get; set; }
 
         [Newtonsoft.Json.JsonProperty("legacy")]
         public bool Legacy { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("id")]
-        public sealed override int Id { get; set; }
+        [Newtonsoft.Json.JsonProperty("id")] public sealed override int Id { get; set; }
 
         [MaybeNull]
         [Newtonsoft.Json.JsonProperty("from_id")]
@@ -79,8 +58,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("reply_to")]
         public CatraProto.Client.TL.Schemas.CloudChats.MessageReplyHeaderBase ReplyTo { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("date")]
-        public int Date { get; set; }
+        [Newtonsoft.Json.JsonProperty("date")] public int Date { get; set; }
 
         [Newtonsoft.Json.JsonProperty("action")]
         public CatraProto.Client.TL.Schemas.CloudChats.MessageActionBase Action { get; set; }
@@ -96,7 +74,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             PeerId = peerId;
             Date = date;
             Action = action;
-
         }
 #nullable disable
         internal MessageService()
@@ -114,7 +91,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = FromId == null ? FlagsHelper.UnsetFlag(Flags, 8) : FlagsHelper.SetFlag(Flags, 8);
             Flags = ReplyTo == null ? FlagsHelper.UnsetFlag(Flags, 3) : FlagsHelper.SetFlag(Flags, 3);
             Flags = TtlPeriod == null ? FlagsHelper.UnsetFlag(Flags, 25) : FlagsHelper.SetFlag(Flags, 25);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -138,6 +114,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return checkpeerId;
             }
+
             if (FlagsHelper.IsFlagSet(Flags, 3))
             {
                 var checkreplyTo = writer.WriteObject(ReplyTo);
@@ -153,6 +130,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return checkaction;
             }
+
             if (FlagsHelper.IsFlagSet(Flags, 25))
             {
                 writer.WriteInt32(TtlPeriod.Value);
@@ -160,7 +138,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -170,6 +147,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             Out = FlagsHelper.IsFlagSet(Flags, 1);
             Mentioned = FlagsHelper.IsFlagSet(Flags, 4);
@@ -182,6 +160,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryid);
             }
+
             Id = tryid.Value;
             if (FlagsHelper.IsFlagSet(Flags, 8))
             {
@@ -190,6 +169,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryfromId);
                 }
+
                 FromId = tryfromId.Value;
             }
 
@@ -198,6 +178,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(trypeerId);
             }
+
             PeerId = trypeerId.Value;
             if (FlagsHelper.IsFlagSet(Flags, 3))
             {
@@ -206,6 +187,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryreplyTo);
                 }
+
                 ReplyTo = tryreplyTo.Value;
             }
 
@@ -214,12 +196,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(trydate);
             }
+
             Date = trydate.Value;
             var tryaction = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.MessageActionBase>();
             if (tryaction.IsError)
             {
                 return ReadResult<IObject>.Move(tryaction);
             }
+
             Action = tryaction.Value;
             if (FlagsHelper.IsFlagSet(Flags, 25))
             {
@@ -228,11 +212,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryttlPeriod);
                 }
+
                 TtlPeriod = tryttlPeriod.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -248,17 +232,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new MessageService
-            {
-                Flags = Flags,
-                Out = Out,
-                Mentioned = Mentioned,
-                MediaUnread = MediaUnread,
-                Silent = Silent,
-                Post = Post,
-                Legacy = Legacy,
-                Id = Id
-            };
+            var newClonedObject = new MessageService();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Out = Out;
+            newClonedObject.Mentioned = Mentioned;
+            newClonedObject.MediaUnread = MediaUnread;
+            newClonedObject.Silent = Silent;
+            newClonedObject.Post = Post;
+            newClonedObject.Legacy = Legacy;
+            newClonedObject.Id = Id;
             if (FromId is not null)
             {
                 var cloneFromId = (CatraProto.Client.TL.Schemas.CloudChats.PeerBase?)FromId.Clone();
@@ -266,13 +248,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.FromId = cloneFromId;
             }
+
             var clonePeerId = (CatraProto.Client.TL.Schemas.CloudChats.PeerBase?)PeerId.Clone();
             if (clonePeerId is null)
             {
                 return null;
             }
+
             newClonedObject.PeerId = clonePeerId;
             if (ReplyTo is not null)
             {
@@ -281,18 +266,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.ReplyTo = cloneReplyTo;
             }
+
             newClonedObject.Date = Date;
             var cloneAction = (CatraProto.Client.TL.Schemas.CloudChats.MessageActionBase?)Action.Clone();
             if (cloneAction is null)
             {
                 return null;
             }
+
             newClonedObject.Action = cloneAction;
             newClonedObject.TtlPeriod = TtlPeriod;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -301,72 +288,88 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Out != castedOther.Out)
             {
                 return true;
             }
+
             if (Mentioned != castedOther.Mentioned)
             {
                 return true;
             }
+
             if (MediaUnread != castedOther.MediaUnread)
             {
                 return true;
             }
+
             if (Silent != castedOther.Silent)
             {
                 return true;
             }
+
             if (Post != castedOther.Post)
             {
                 return true;
             }
+
             if (Legacy != castedOther.Legacy)
             {
                 return true;
             }
+
             if (Id != castedOther.Id)
             {
                 return true;
             }
+
             if (FromId is null && castedOther.FromId is not null || FromId is not null && castedOther.FromId is null)
             {
                 return true;
             }
+
             if (FromId is not null && castedOther.FromId is not null && FromId.Compare(castedOther.FromId))
             {
                 return true;
             }
+
             if (PeerId.Compare(castedOther.PeerId))
             {
                 return true;
             }
+
             if (ReplyTo is null && castedOther.ReplyTo is not null || ReplyTo is not null && castedOther.ReplyTo is null)
             {
                 return true;
             }
+
             if (ReplyTo is not null && castedOther.ReplyTo is not null && ReplyTo.Compare(castedOther.ReplyTo))
             {
                 return true;
             }
+
             if (Date != castedOther.Date)
             {
                 return true;
             }
+
             if (Action.Compare(castedOther.Action))
             {
                 return true;
             }
+
             if (TtlPeriod != castedOther.TtlPeriod)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

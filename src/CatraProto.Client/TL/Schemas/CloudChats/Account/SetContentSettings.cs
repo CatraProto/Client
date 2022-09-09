@@ -1,25 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 
@@ -33,19 +18,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             SensitiveEnabled = 1 << 0
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -1250643605; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -1250643605; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
+        [Newtonsoft.Json.JsonIgnore] ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("sensitive_enabled")]
         public bool SensitiveEnabled { get; set; }
-
-
 
 
         public SetContentSettings()
@@ -55,7 +35,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public void UpdateFlags()
         {
             Flags = SensitiveEnabled ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
-
         }
 
         public WriteResult Serialize(Writer writer)
@@ -66,7 +45,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             writer.WriteInt32(Flags);
 
             return new WriteResult();
-
         }
 
         public ReadResult<IObject> Deserialize(Reader reader)
@@ -76,10 +54,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             SensitiveEnabled = FlagsHelper.IsFlagSet(Flags, 0);
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -94,13 +72,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new SetContentSettings
-            {
-                Flags = Flags,
-                SensitiveEnabled = SensitiveEnabled
-            };
+            var newClonedObject = new SetContentSettings();
+            newClonedObject.Flags = Flags;
+            newClonedObject.SensitiveEnabled = SensitiveEnabled;
             return newClonedObject;
-
         }
 
         public bool Compare(IObject other)
@@ -109,16 +84,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (SensitiveEnabled != castedOther.SensitiveEnabled)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 #nullable disable
     }

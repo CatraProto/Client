@@ -1,34 +1,17 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class MessageActionGameScore : CatraProto.Client.TL.Schemas.CloudChats.MessageActionBase
     {
-
-
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -1834538890; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -1834538890; }
 
         [Newtonsoft.Json.JsonProperty("game_id")]
         public long GameId { get; set; }
@@ -42,7 +25,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             GameId = gameId;
             Score = score;
-
         }
 #nullable disable
         internal MessageActionGameScore()
@@ -51,7 +33,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void UpdateFlags()
         {
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -61,7 +42,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             writer.WriteInt32(Score);
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -71,15 +51,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(trygameId);
             }
+
             GameId = trygameId.Value;
             var tryscore = reader.ReadInt32();
             if (tryscore.IsError)
             {
                 return ReadResult<IObject>.Move(tryscore);
             }
+
             Score = tryscore.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -95,13 +76,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new MessageActionGameScore
-            {
-                GameId = GameId,
-                Score = Score
-            };
+            var newClonedObject = new MessageActionGameScore();
+            newClonedObject.GameId = GameId;
+            newClonedObject.Score = Score;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -110,16 +88,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (GameId != castedOther.GameId)
             {
                 return true;
             }
+
             if (Score != castedOther.Score)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

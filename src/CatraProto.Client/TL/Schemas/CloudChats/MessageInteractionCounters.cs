@@ -1,34 +1,17 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class MessageInteractionCounters : CatraProto.Client.TL.Schemas.CloudChats.MessageInteractionCountersBase
     {
-
-
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -1387279939; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -1387279939; }
 
         [Newtonsoft.Json.JsonProperty("msg_id")]
         public sealed override int MsgId { get; set; }
@@ -46,7 +29,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             MsgId = msgId;
             Views = views;
             Forwards = forwards;
-
         }
 #nullable disable
         internal MessageInteractionCounters()
@@ -55,7 +37,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void UpdateFlags()
         {
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -66,7 +47,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             writer.WriteInt32(Forwards);
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -76,21 +56,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(trymsgId);
             }
+
             MsgId = trymsgId.Value;
             var tryviews = reader.ReadInt32();
             if (tryviews.IsError)
             {
                 return ReadResult<IObject>.Move(tryviews);
             }
+
             Views = tryviews.Value;
             var tryforwards = reader.ReadInt32();
             if (tryforwards.IsError)
             {
                 return ReadResult<IObject>.Move(tryforwards);
             }
+
             Forwards = tryforwards.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -106,14 +88,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new MessageInteractionCounters
-            {
-                MsgId = MsgId,
-                Views = Views,
-                Forwards = Forwards
-            };
+            var newClonedObject = new MessageInteractionCounters();
+            newClonedObject.MsgId = MsgId;
+            newClonedObject.Views = Views;
+            newClonedObject.Forwards = Forwards;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -122,20 +101,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (MsgId != castedOther.MsgId)
             {
                 return true;
             }
+
             if (Views != castedOther.Views)
             {
                 return true;
             }
+
             if (Forwards != castedOther.Forwards)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

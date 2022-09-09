@@ -1,27 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -42,11 +25,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             ThumbVersion = 1 << 4
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -673242758; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -673242758; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("archived")]
         public sealed override bool Archived { get; set; }
@@ -66,8 +47,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("installed_date")]
         public sealed override int? InstalledDate { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("id")]
-        public sealed override long Id { get; set; }
+        [Newtonsoft.Json.JsonProperty("id")] public sealed override long Id { get; set; }
 
         [Newtonsoft.Json.JsonProperty("access_hash")]
         public sealed override long AccessHash { get; set; }
@@ -91,8 +71,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("count")]
         public sealed override int Count { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("hash")]
-        public sealed override int Hash { get; set; }
+        [Newtonsoft.Json.JsonProperty("hash")] public sealed override int Hash { get; set; }
 
 
 #nullable enable
@@ -104,7 +83,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             ShortName = shortName;
             Count = count;
             Hash = hash;
-
         }
 #nullable disable
         internal StickerSet()
@@ -122,7 +100,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = Thumbs == null ? FlagsHelper.UnsetFlag(Flags, 4) : FlagsHelper.SetFlag(Flags, 4);
             Flags = ThumbDcId == null ? FlagsHelper.UnsetFlag(Flags, 4) : FlagsHelper.SetFlag(Flags, 4);
             Flags = ThumbVersion == null ? FlagsHelper.UnsetFlag(Flags, 4) : FlagsHelper.SetFlag(Flags, 4);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -165,7 +142,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             writer.WriteInt32(Hash);
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -175,6 +151,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             Archived = FlagsHelper.IsFlagSet(Flags, 1);
             Official = FlagsHelper.IsFlagSet(Flags, 2);
@@ -188,6 +165,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryinstalledDate);
                 }
+
                 InstalledDate = tryinstalledDate.Value;
             }
 
@@ -196,24 +174,28 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryid);
             }
+
             Id = tryid.Value;
             var tryaccessHash = reader.ReadInt64();
             if (tryaccessHash.IsError)
             {
                 return ReadResult<IObject>.Move(tryaccessHash);
             }
+
             AccessHash = tryaccessHash.Value;
             var trytitle = reader.ReadString();
             if (trytitle.IsError)
             {
                 return ReadResult<IObject>.Move(trytitle);
             }
+
             Title = trytitle.Value;
             var tryshortName = reader.ReadString();
             if (tryshortName.IsError)
             {
                 return ReadResult<IObject>.Move(tryshortName);
             }
+
             ShortName = tryshortName.Value;
             if (FlagsHelper.IsFlagSet(Flags, 4))
             {
@@ -222,6 +204,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trythumbs);
                 }
+
                 Thumbs = trythumbs.Value;
             }
 
@@ -232,6 +215,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trythumbDcId);
                 }
+
                 ThumbDcId = trythumbDcId.Value;
             }
 
@@ -242,6 +226,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trythumbVersion);
                 }
+
                 ThumbVersion = trythumbVersion.Value;
             }
 
@@ -250,15 +235,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(trycount);
             }
+
             Count = trycount.Value;
             var tryhash = reader.ReadInt32();
             if (tryhash.IsError)
             {
                 return ReadResult<IObject>.Move(tryhash);
             }
+
             Hash = tryhash.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -274,20 +260,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new StickerSet
-            {
-                Flags = Flags,
-                Archived = Archived,
-                Official = Official,
-                Masks = Masks,
-                Animated = Animated,
-                Videos = Videos,
-                InstalledDate = InstalledDate,
-                Id = Id,
-                AccessHash = AccessHash,
-                Title = Title,
-                ShortName = ShortName
-            };
+            var newClonedObject = new StickerSet();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Archived = Archived;
+            newClonedObject.Official = Official;
+            newClonedObject.Masks = Masks;
+            newClonedObject.Animated = Animated;
+            newClonedObject.Videos = Videos;
+            newClonedObject.InstalledDate = InstalledDate;
+            newClonedObject.Id = Id;
+            newClonedObject.AccessHash = AccessHash;
+            newClonedObject.Title = Title;
+            newClonedObject.ShortName = ShortName;
             if (Thumbs is not null)
             {
                 newClonedObject.Thumbs = new List<CatraProto.Client.TL.Schemas.CloudChats.PhotoSizeBase>();
@@ -298,15 +282,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                     {
                         return null;
                     }
+
                     newClonedObject.Thumbs.Add(clonethumbs);
                 }
             }
+
             newClonedObject.ThumbDcId = ThumbDcId;
             newClonedObject.ThumbVersion = ThumbVersion;
             newClonedObject.Count = Count;
             newClonedObject.Hash = Hash;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -315,62 +300,75 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Archived != castedOther.Archived)
             {
                 return true;
             }
+
             if (Official != castedOther.Official)
             {
                 return true;
             }
+
             if (Masks != castedOther.Masks)
             {
                 return true;
             }
+
             if (Animated != castedOther.Animated)
             {
                 return true;
             }
+
             if (Videos != castedOther.Videos)
             {
                 return true;
             }
+
             if (InstalledDate != castedOther.InstalledDate)
             {
                 return true;
             }
+
             if (Id != castedOther.Id)
             {
                 return true;
             }
+
             if (AccessHash != castedOther.AccessHash)
             {
                 return true;
             }
+
             if (Title != castedOther.Title)
             {
                 return true;
             }
+
             if (ShortName != castedOther.ShortName)
             {
                 return true;
             }
+
             if (Thumbs is null && castedOther.Thumbs is not null || Thumbs is not null && castedOther.Thumbs is null)
             {
                 return true;
             }
+
             if (Thumbs is not null && castedOther.Thumbs is not null)
             {
-
                 var thumbssize = castedOther.Thumbs.Count;
                 if (thumbssize != Thumbs.Count)
                 {
                     return true;
                 }
+
                 for (var i = 0; i < thumbssize; i++)
                 {
                     if (castedOther.Thumbs[i].Compare(Thumbs[i]))
@@ -379,24 +377,28 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                     }
                 }
             }
+
             if (ThumbDcId != castedOther.ThumbDcId)
             {
                 return true;
             }
+
             if (ThumbVersion != castedOther.ThumbVersion)
             {
                 return true;
             }
+
             if (Count != castedOther.Count)
             {
                 return true;
             }
+
             if (Hash != castedOther.Hash)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

@@ -1,25 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 
@@ -27,13 +12,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 {
     public partial class UnregisterDevice : IMethod
     {
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 1779249670; }
 
-
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 1779249670; }
-
-        [Newtonsoft.Json.JsonIgnore]
-        ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
+        [Newtonsoft.Json.JsonIgnore] ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
 
         [Newtonsoft.Json.JsonProperty("token_type")]
         public int TokenType { get; set; }
@@ -51,7 +32,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             TokenType = tokenType;
             Token = token;
             OtherUids = otherUids;
-
         }
 #nullable disable
 
@@ -61,7 +41,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
         public void UpdateFlags()
         {
-
         }
 
         public WriteResult Serialize(Writer writer)
@@ -74,7 +53,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             writer.WriteVector(OtherUids, false);
 
             return new WriteResult();
-
         }
 
         public ReadResult<IObject> Deserialize(Reader reader)
@@ -84,21 +62,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             {
                 return ReadResult<IObject>.Move(trytokenType);
             }
+
             TokenType = trytokenType.Value;
             var trytoken = reader.ReadString();
             if (trytoken.IsError)
             {
                 return ReadResult<IObject>.Move(trytoken);
             }
+
             Token = trytoken.Value;
             var tryotherUids = reader.ReadVector<long>(ParserTypes.Int64);
             if (tryotherUids.IsError)
             {
                 return ReadResult<IObject>.Move(tryotherUids);
             }
+
             OtherUids = tryotherUids.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -113,18 +93,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new UnregisterDevice
-            {
-                TokenType = TokenType,
-                Token = Token,
-                OtherUids = new List<long>()
-            };
+            var newClonedObject = new UnregisterDevice();
+            newClonedObject.TokenType = TokenType;
+            newClonedObject.Token = Token;
+            newClonedObject.OtherUids = new List<long>();
             foreach (var otherUids in OtherUids)
             {
                 newClonedObject.OtherUids.Add(otherUids);
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public bool Compare(IObject other)
@@ -133,19 +111,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             {
                 return true;
             }
+
             if (TokenType != castedOther.TokenType)
             {
                 return true;
             }
+
             if (Token != castedOther.Token)
             {
                 return true;
             }
+
             var otherUidssize = castedOther.OtherUids.Count;
             if (otherUidssize != OtherUids.Count)
             {
                 return true;
             }
+
             for (var i = 0; i < otherUidssize; i++)
             {
                 if (castedOther.OtherUids[i] != OtherUids[i])
@@ -153,8 +135,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                     return true;
                 }
             }
-            return false;
 
+            return false;
         }
 #nullable disable
     }

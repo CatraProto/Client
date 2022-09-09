@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -33,14 +17,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             ReplyMarkup = 1 << 2
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -1970903652; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -1970903652; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("geo")]
-        public CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase Geo { get; set; }
+        [Newtonsoft.Json.JsonProperty("geo")] public CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase Geo { get; set; }
 
         [Newtonsoft.Json.JsonProperty("title")]
         public string Title { get; set; }
@@ -71,7 +52,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Provider = provider;
             VenueId = venueId;
             VenueType = venueType;
-
         }
 #nullable disable
         internal BotInlineMessageMediaVenue()
@@ -81,7 +61,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override void UpdateFlags()
         {
             Flags = ReplyMarkup == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -116,7 +95,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -126,42 +104,49 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             var trygeo = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase>();
             if (trygeo.IsError)
             {
                 return ReadResult<IObject>.Move(trygeo);
             }
+
             Geo = trygeo.Value;
             var trytitle = reader.ReadString();
             if (trytitle.IsError)
             {
                 return ReadResult<IObject>.Move(trytitle);
             }
+
             Title = trytitle.Value;
             var tryaddress = reader.ReadString();
             if (tryaddress.IsError)
             {
                 return ReadResult<IObject>.Move(tryaddress);
             }
+
             Address = tryaddress.Value;
             var tryprovider = reader.ReadString();
             if (tryprovider.IsError)
             {
                 return ReadResult<IObject>.Move(tryprovider);
             }
+
             Provider = tryprovider.Value;
             var tryvenueId = reader.ReadString();
             if (tryvenueId.IsError)
             {
                 return ReadResult<IObject>.Move(tryvenueId);
             }
+
             VenueId = tryvenueId.Value;
             var tryvenueType = reader.ReadString();
             if (tryvenueType.IsError)
             {
                 return ReadResult<IObject>.Move(tryvenueType);
             }
+
             VenueType = tryvenueType.Value;
             if (FlagsHelper.IsFlagSet(Flags, 2))
             {
@@ -170,11 +155,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryreplyMarkup);
                 }
+
                 ReplyMarkup = tryreplyMarkup.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -190,15 +175,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new BotInlineMessageMediaVenue
-            {
-                Flags = Flags
-            };
+            var newClonedObject = new BotInlineMessageMediaVenue();
+            newClonedObject.Flags = Flags;
             var cloneGeo = (CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase?)Geo.Clone();
             if (cloneGeo is null)
             {
                 return null;
             }
+
             newClonedObject.Geo = cloneGeo;
             newClonedObject.Title = Title;
             newClonedObject.Address = Address;
@@ -212,10 +196,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.ReplyMarkup = cloneReplyMarkup;
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public override bool Compare(IObject other)
@@ -224,44 +209,53 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Geo.Compare(castedOther.Geo))
             {
                 return true;
             }
+
             if (Title != castedOther.Title)
             {
                 return true;
             }
+
             if (Address != castedOther.Address)
             {
                 return true;
             }
+
             if (Provider != castedOther.Provider)
             {
                 return true;
             }
+
             if (VenueId != castedOther.VenueId)
             {
                 return true;
             }
+
             if (VenueType != castedOther.VenueType)
             {
                 return true;
             }
+
             if (ReplyMarkup is null && castedOther.ReplyMarkup is not null || ReplyMarkup is not null && castedOther.ReplyMarkup is null)
             {
                 return true;
             }
+
             if (ReplyMarkup is not null && castedOther.ReplyMarkup is not null && ReplyMarkup.Compare(castedOther.ReplyMarkup))
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

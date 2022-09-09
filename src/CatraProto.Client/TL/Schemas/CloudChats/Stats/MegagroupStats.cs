@@ -1,35 +1,17 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 {
     public partial class MegagroupStats : CatraProto.Client.TL.Schemas.CloudChats.Stats.MegagroupStatsBase
     {
-
-
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -276825834; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -276825834; }
 
         [Newtonsoft.Json.JsonProperty("period")]
         public sealed override CatraProto.Client.TL.Schemas.CloudChats.StatsDateRangeDaysBase Period { get; set; }
@@ -103,7 +85,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
             TopAdmins = topAdmins;
             TopInviters = topInviters;
             Users = users;
-
         }
 #nullable disable
         internal MegagroupStats()
@@ -112,7 +93,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 
         public override void UpdateFlags()
         {
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -123,81 +103,97 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
             {
                 return checkperiod;
             }
+
             var checkmembers = writer.WriteObject(Members);
             if (checkmembers.IsError)
             {
                 return checkmembers;
             }
+
             var checkmessages = writer.WriteObject(Messages);
             if (checkmessages.IsError)
             {
                 return checkmessages;
             }
+
             var checkviewers = writer.WriteObject(Viewers);
             if (checkviewers.IsError)
             {
                 return checkviewers;
             }
+
             var checkposters = writer.WriteObject(Posters);
             if (checkposters.IsError)
             {
                 return checkposters;
             }
+
             var checkgrowthGraph = writer.WriteObject(GrowthGraph);
             if (checkgrowthGraph.IsError)
             {
                 return checkgrowthGraph;
             }
+
             var checkmembersGraph = writer.WriteObject(MembersGraph);
             if (checkmembersGraph.IsError)
             {
                 return checkmembersGraph;
             }
+
             var checknewMembersBySourceGraph = writer.WriteObject(NewMembersBySourceGraph);
             if (checknewMembersBySourceGraph.IsError)
             {
                 return checknewMembersBySourceGraph;
             }
+
             var checklanguagesGraph = writer.WriteObject(LanguagesGraph);
             if (checklanguagesGraph.IsError)
             {
                 return checklanguagesGraph;
             }
+
             var checkmessagesGraph = writer.WriteObject(MessagesGraph);
             if (checkmessagesGraph.IsError)
             {
                 return checkmessagesGraph;
             }
+
             var checkactionsGraph = writer.WriteObject(ActionsGraph);
             if (checkactionsGraph.IsError)
             {
                 return checkactionsGraph;
             }
+
             var checktopHoursGraph = writer.WriteObject(TopHoursGraph);
             if (checktopHoursGraph.IsError)
             {
                 return checktopHoursGraph;
             }
+
             var checkweekdaysGraph = writer.WriteObject(WeekdaysGraph);
             if (checkweekdaysGraph.IsError)
             {
                 return checkweekdaysGraph;
             }
+
             var checktopPosters = writer.WriteVector(TopPosters, false);
             if (checktopPosters.IsError)
             {
                 return checktopPosters;
             }
+
             var checktopAdmins = writer.WriteVector(TopAdmins, false);
             if (checktopAdmins.IsError)
             {
                 return checktopAdmins;
             }
+
             var checktopInviters = writer.WriteVector(TopInviters, false);
             if (checktopInviters.IsError)
             {
                 return checktopInviters;
             }
+
             var checkusers = writer.WriteVector(Users, false);
             if (checkusers.IsError)
             {
@@ -205,7 +201,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
             }
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -215,105 +210,121 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
             {
                 return ReadResult<IObject>.Move(tryperiod);
             }
+
             Period = tryperiod.Value;
             var trymembers = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase>();
             if (trymembers.IsError)
             {
                 return ReadResult<IObject>.Move(trymembers);
             }
+
             Members = trymembers.Value;
             var trymessages = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase>();
             if (trymessages.IsError)
             {
                 return ReadResult<IObject>.Move(trymessages);
             }
+
             Messages = trymessages.Value;
             var tryviewers = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase>();
             if (tryviewers.IsError)
             {
                 return ReadResult<IObject>.Move(tryviewers);
             }
+
             Viewers = tryviewers.Value;
             var tryposters = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase>();
             if (tryposters.IsError)
             {
                 return ReadResult<IObject>.Move(tryposters);
             }
+
             Posters = tryposters.Value;
             var trygrowthGraph = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
             if (trygrowthGraph.IsError)
             {
                 return ReadResult<IObject>.Move(trygrowthGraph);
             }
+
             GrowthGraph = trygrowthGraph.Value;
             var trymembersGraph = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
             if (trymembersGraph.IsError)
             {
                 return ReadResult<IObject>.Move(trymembersGraph);
             }
+
             MembersGraph = trymembersGraph.Value;
             var trynewMembersBySourceGraph = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
             if (trynewMembersBySourceGraph.IsError)
             {
                 return ReadResult<IObject>.Move(trynewMembersBySourceGraph);
             }
+
             NewMembersBySourceGraph = trynewMembersBySourceGraph.Value;
             var trylanguagesGraph = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
             if (trylanguagesGraph.IsError)
             {
                 return ReadResult<IObject>.Move(trylanguagesGraph);
             }
+
             LanguagesGraph = trylanguagesGraph.Value;
             var trymessagesGraph = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
             if (trymessagesGraph.IsError)
             {
                 return ReadResult<IObject>.Move(trymessagesGraph);
             }
+
             MessagesGraph = trymessagesGraph.Value;
             var tryactionsGraph = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
             if (tryactionsGraph.IsError)
             {
                 return ReadResult<IObject>.Move(tryactionsGraph);
             }
+
             ActionsGraph = tryactionsGraph.Value;
             var trytopHoursGraph = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
             if (trytopHoursGraph.IsError)
             {
                 return ReadResult<IObject>.Move(trytopHoursGraph);
             }
+
             TopHoursGraph = trytopHoursGraph.Value;
             var tryweekdaysGraph = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase>();
             if (tryweekdaysGraph.IsError)
             {
                 return ReadResult<IObject>.Move(tryweekdaysGraph);
             }
+
             WeekdaysGraph = tryweekdaysGraph.Value;
             var trytopPosters = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.StatsGroupTopPosterBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
             if (trytopPosters.IsError)
             {
                 return ReadResult<IObject>.Move(trytopPosters);
             }
+
             TopPosters = trytopPosters.Value;
             var trytopAdmins = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.StatsGroupTopAdminBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
             if (trytopAdmins.IsError)
             {
                 return ReadResult<IObject>.Move(trytopAdmins);
             }
+
             TopAdmins = trytopAdmins.Value;
             var trytopInviters = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.StatsGroupTopInviterBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
             if (trytopInviters.IsError)
             {
                 return ReadResult<IObject>.Move(trytopInviters);
             }
+
             TopInviters = trytopInviters.Value;
             var tryusers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
             if (tryusers.IsError)
             {
                 return ReadResult<IObject>.Move(tryusers);
             }
+
             Users = tryusers.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -335,78 +346,91 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
             {
                 return null;
             }
+
             newClonedObject.Period = clonePeriod;
             var cloneMembers = (CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase?)Members.Clone();
             if (cloneMembers is null)
             {
                 return null;
             }
+
             newClonedObject.Members = cloneMembers;
             var cloneMessages = (CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase?)Messages.Clone();
             if (cloneMessages is null)
             {
                 return null;
             }
+
             newClonedObject.Messages = cloneMessages;
             var cloneViewers = (CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase?)Viewers.Clone();
             if (cloneViewers is null)
             {
                 return null;
             }
+
             newClonedObject.Viewers = cloneViewers;
             var clonePosters = (CatraProto.Client.TL.Schemas.CloudChats.StatsAbsValueAndPrevBase?)Posters.Clone();
             if (clonePosters is null)
             {
                 return null;
             }
+
             newClonedObject.Posters = clonePosters;
             var cloneGrowthGraph = (CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase?)GrowthGraph.Clone();
             if (cloneGrowthGraph is null)
             {
                 return null;
             }
+
             newClonedObject.GrowthGraph = cloneGrowthGraph;
             var cloneMembersGraph = (CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase?)MembersGraph.Clone();
             if (cloneMembersGraph is null)
             {
                 return null;
             }
+
             newClonedObject.MembersGraph = cloneMembersGraph;
             var cloneNewMembersBySourceGraph = (CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase?)NewMembersBySourceGraph.Clone();
             if (cloneNewMembersBySourceGraph is null)
             {
                 return null;
             }
+
             newClonedObject.NewMembersBySourceGraph = cloneNewMembersBySourceGraph;
             var cloneLanguagesGraph = (CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase?)LanguagesGraph.Clone();
             if (cloneLanguagesGraph is null)
             {
                 return null;
             }
+
             newClonedObject.LanguagesGraph = cloneLanguagesGraph;
             var cloneMessagesGraph = (CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase?)MessagesGraph.Clone();
             if (cloneMessagesGraph is null)
             {
                 return null;
             }
+
             newClonedObject.MessagesGraph = cloneMessagesGraph;
             var cloneActionsGraph = (CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase?)ActionsGraph.Clone();
             if (cloneActionsGraph is null)
             {
                 return null;
             }
+
             newClonedObject.ActionsGraph = cloneActionsGraph;
             var cloneTopHoursGraph = (CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase?)TopHoursGraph.Clone();
             if (cloneTopHoursGraph is null)
             {
                 return null;
             }
+
             newClonedObject.TopHoursGraph = cloneTopHoursGraph;
             var cloneWeekdaysGraph = (CatraProto.Client.TL.Schemas.CloudChats.StatsGraphBase?)WeekdaysGraph.Clone();
             if (cloneWeekdaysGraph is null)
             {
                 return null;
             }
+
             newClonedObject.WeekdaysGraph = cloneWeekdaysGraph;
             newClonedObject.TopPosters = new List<CatraProto.Client.TL.Schemas.CloudChats.StatsGroupTopPosterBase>();
             foreach (var topPosters in TopPosters)
@@ -416,8 +440,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
                 {
                     return null;
                 }
+
                 newClonedObject.TopPosters.Add(clonetopPosters);
             }
+
             newClonedObject.TopAdmins = new List<CatraProto.Client.TL.Schemas.CloudChats.StatsGroupTopAdminBase>();
             foreach (var topAdmins in TopAdmins)
             {
@@ -426,8 +452,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
                 {
                     return null;
                 }
+
                 newClonedObject.TopAdmins.Add(clonetopAdmins);
             }
+
             newClonedObject.TopInviters = new List<CatraProto.Client.TL.Schemas.CloudChats.StatsGroupTopInviterBase>();
             foreach (var topInviters in TopInviters)
             {
@@ -436,8 +464,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
                 {
                     return null;
                 }
+
                 newClonedObject.TopInviters.Add(clonetopInviters);
             }
+
             newClonedObject.Users = new List<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
             foreach (var users in Users)
             {
@@ -446,10 +476,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
                 {
                     return null;
                 }
+
                 newClonedObject.Users.Add(cloneusers);
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public override bool Compare(IObject other)
@@ -458,63 +489,78 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
             {
                 return true;
             }
+
             if (Period.Compare(castedOther.Period))
             {
                 return true;
             }
+
             if (Members.Compare(castedOther.Members))
             {
                 return true;
             }
+
             if (Messages.Compare(castedOther.Messages))
             {
                 return true;
             }
+
             if (Viewers.Compare(castedOther.Viewers))
             {
                 return true;
             }
+
             if (Posters.Compare(castedOther.Posters))
             {
                 return true;
             }
+
             if (GrowthGraph.Compare(castedOther.GrowthGraph))
             {
                 return true;
             }
+
             if (MembersGraph.Compare(castedOther.MembersGraph))
             {
                 return true;
             }
+
             if (NewMembersBySourceGraph.Compare(castedOther.NewMembersBySourceGraph))
             {
                 return true;
             }
+
             if (LanguagesGraph.Compare(castedOther.LanguagesGraph))
             {
                 return true;
             }
+
             if (MessagesGraph.Compare(castedOther.MessagesGraph))
             {
                 return true;
             }
+
             if (ActionsGraph.Compare(castedOther.ActionsGraph))
             {
                 return true;
             }
+
             if (TopHoursGraph.Compare(castedOther.TopHoursGraph))
             {
                 return true;
             }
+
             if (WeekdaysGraph.Compare(castedOther.WeekdaysGraph))
             {
                 return true;
             }
+
             var topPosterssize = castedOther.TopPosters.Count;
             if (topPosterssize != TopPosters.Count)
             {
                 return true;
             }
+
             for (var i = 0; i < topPosterssize; i++)
             {
                 if (castedOther.TopPosters[i].Compare(TopPosters[i]))
@@ -522,11 +568,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
                     return true;
                 }
             }
+
             var topAdminssize = castedOther.TopAdmins.Count;
             if (topAdminssize != TopAdmins.Count)
             {
                 return true;
             }
+
             for (var i = 0; i < topAdminssize; i++)
             {
                 if (castedOther.TopAdmins[i].Compare(TopAdmins[i]))
@@ -534,11 +582,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
                     return true;
                 }
             }
+
             var topInviterssize = castedOther.TopInviters.Count;
             if (topInviterssize != TopInviters.Count)
             {
                 return true;
             }
+
             for (var i = 0; i < topInviterssize; i++)
             {
                 if (castedOther.TopInviters[i].Compare(TopInviters[i]))
@@ -546,11 +596,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
                     return true;
                 }
             }
+
             var userssize = castedOther.Users.Count;
             if (userssize != Users.Count)
             {
                 return true;
             }
+
             for (var i = 0; i < userssize; i++)
             {
                 if (castedOther.Users[i].Compare(Users[i]))
@@ -558,8 +610,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
                     return true;
                 }
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

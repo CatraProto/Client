@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -37,11 +21,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             LogoutTokens = 1 << 6
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -1973130814; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -1973130814; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("allow_flashcall")]
         public sealed override bool AllowFlashcall { get; set; }
@@ -59,7 +41,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public sealed override List<byte[]> LogoutTokens { get; set; }
 
 
-
         public CodeSettings()
         {
         }
@@ -71,7 +52,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = AllowAppHash ? FlagsHelper.SetFlag(Flags, 4) : FlagsHelper.UnsetFlag(Flags, 4);
             Flags = AllowMissedCall ? FlagsHelper.SetFlag(Flags, 5) : FlagsHelper.UnsetFlag(Flags, 5);
             Flags = LogoutTokens == null ? FlagsHelper.UnsetFlag(Flags, 6) : FlagsHelper.SetFlag(Flags, 6);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -82,13 +62,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             writer.WriteInt32(Flags);
             if (FlagsHelper.IsFlagSet(Flags, 6))
             {
-
                 writer.WriteVector(LogoutTokens, false);
             }
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -98,6 +76,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             AllowFlashcall = FlagsHelper.IsFlagSet(Flags, 0);
             CurrentNumber = FlagsHelper.IsFlagSet(Flags, 1);
@@ -110,11 +89,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trylogoutTokens);
                 }
+
                 LogoutTokens = trylogoutTokens.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -130,14 +109,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new CodeSettings
-            {
-                Flags = Flags,
-                AllowFlashcall = AllowFlashcall,
-                CurrentNumber = CurrentNumber,
-                AllowAppHash = AllowAppHash,
-                AllowMissedCall = AllowMissedCall
-            };
+            var newClonedObject = new CodeSettings();
+            newClonedObject.Flags = Flags;
+            newClonedObject.AllowFlashcall = AllowFlashcall;
+            newClonedObject.CurrentNumber = CurrentNumber;
+            newClonedObject.AllowAppHash = AllowAppHash;
+            newClonedObject.AllowMissedCall = AllowMissedCall;
             if (LogoutTokens is not null)
             {
                 newClonedObject.LogoutTokens = new List<byte[]>();
@@ -146,8 +123,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                     newClonedObject.LogoutTokens.Add(logoutTokens);
                 }
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public override bool Compare(IObject other)
@@ -156,38 +133,45 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (AllowFlashcall != castedOther.AllowFlashcall)
             {
                 return true;
             }
+
             if (CurrentNumber != castedOther.CurrentNumber)
             {
                 return true;
             }
+
             if (AllowAppHash != castedOther.AllowAppHash)
             {
                 return true;
             }
+
             if (AllowMissedCall != castedOther.AllowMissedCall)
             {
                 return true;
             }
+
             if (LogoutTokens is null && castedOther.LogoutTokens is not null || LogoutTokens is not null && castedOther.LogoutTokens is null)
             {
                 return true;
             }
+
             if (LogoutTokens is not null && castedOther.LogoutTokens is not null)
             {
-
                 var logoutTokenssize = castedOther.LogoutTokens.Count;
                 if (logoutTokenssize != LogoutTokens.Count)
                 {
                     return true;
                 }
+
                 for (var i = 0; i < logoutTokenssize; i++)
                 {
                     if (castedOther.LogoutTokens[i] != LogoutTokens[i])
@@ -196,8 +180,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                     }
                 }
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

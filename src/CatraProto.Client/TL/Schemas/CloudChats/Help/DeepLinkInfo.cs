@@ -1,27 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
@@ -35,11 +18,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
             Entities = 1 << 1
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 1783556146; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 1783556146; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("update_app")]
         public bool UpdateApp { get; set; }
@@ -56,7 +37,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
         public DeepLinkInfo(string message)
         {
             Message = message;
-
         }
 #nullable disable
         internal DeepLinkInfo()
@@ -67,7 +47,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
         {
             Flags = UpdateApp ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
             Flags = Entities == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -89,7 +68,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -99,6 +77,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             UpdateApp = FlagsHelper.IsFlagSet(Flags, 0);
             var trymessage = reader.ReadString();
@@ -106,6 +85,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
             {
                 return ReadResult<IObject>.Move(trymessage);
             }
+
             Message = trymessage.Value;
             if (FlagsHelper.IsFlagSet(Flags, 1))
             {
@@ -114,11 +94,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
                 {
                     return ReadResult<IObject>.Move(tryentities);
                 }
+
                 Entities = tryentities.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -134,12 +114,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new DeepLinkInfo
-            {
-                Flags = Flags,
-                UpdateApp = UpdateApp,
-                Message = Message
-            };
+            var newClonedObject = new DeepLinkInfo();
+            newClonedObject.Flags = Flags;
+            newClonedObject.UpdateApp = UpdateApp;
+            newClonedObject.Message = Message;
             if (Entities is not null)
             {
                 newClonedObject.Entities = new List<CatraProto.Client.TL.Schemas.CloudChats.MessageEntityBase>();
@@ -150,11 +128,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
                     {
                         return null;
                     }
+
                     newClonedObject.Entities.Add(cloneentities);
                 }
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public override bool Compare(IObject other)
@@ -163,30 +142,35 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (UpdateApp != castedOther.UpdateApp)
             {
                 return true;
             }
+
             if (Message != castedOther.Message)
             {
                 return true;
             }
+
             if (Entities is null && castedOther.Entities is not null || Entities is not null && castedOther.Entities is null)
             {
                 return true;
             }
+
             if (Entities is not null && castedOther.Entities is not null)
             {
-
                 var entitiessize = castedOther.Entities.Count;
                 if (entitiessize != Entities.Count)
                 {
                     return true;
                 }
+
                 for (var i = 0; i < entitiessize; i++)
                 {
                     if (castedOther.Entities[i].Compare(Entities[i]))
@@ -195,8 +179,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
                     }
                 }
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

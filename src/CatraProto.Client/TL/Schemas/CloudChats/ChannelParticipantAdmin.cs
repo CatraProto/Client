@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -36,17 +20,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Rank = 1 << 2
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 885242707; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 885242707; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("can_edit")]
         public bool CanEdit { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("self")]
-        public bool Self { get; set; }
+        [Newtonsoft.Json.JsonProperty("self")] public bool Self { get; set; }
 
         [Newtonsoft.Json.JsonProperty("user_id")]
         public long UserId { get; set; }
@@ -57,8 +38,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("promoted_by")]
         public long PromotedBy { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("date")]
-        public int Date { get; set; }
+        [Newtonsoft.Json.JsonProperty("date")] public int Date { get; set; }
 
         [Newtonsoft.Json.JsonProperty("admin_rights")]
         public CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase AdminRights { get; set; }
@@ -75,7 +55,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             PromotedBy = promotedBy;
             Date = date;
             AdminRights = adminRights;
-
         }
 #nullable disable
         internal ChannelParticipantAdmin()
@@ -88,7 +67,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = Self ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
             Flags = InviterId == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
             Flags = Rank == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -110,15 +88,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return checkadminRights;
             }
+
             if (FlagsHelper.IsFlagSet(Flags, 2))
             {
-
                 writer.WriteString(Rank);
             }
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -128,6 +105,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             CanEdit = FlagsHelper.IsFlagSet(Flags, 0);
             Self = FlagsHelper.IsFlagSet(Flags, 1);
@@ -136,6 +114,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryuserId);
             }
+
             UserId = tryuserId.Value;
             if (FlagsHelper.IsFlagSet(Flags, 1))
             {
@@ -144,6 +123,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryinviterId);
                 }
+
                 InviterId = tryinviterId.Value;
             }
 
@@ -152,18 +132,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(trypromotedBy);
             }
+
             PromotedBy = trypromotedBy.Value;
             var trydate = reader.ReadInt32();
             if (trydate.IsError)
             {
                 return ReadResult<IObject>.Move(trydate);
             }
+
             Date = trydate.Value;
             var tryadminRights = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase>();
             if (tryadminRights.IsError)
             {
                 return ReadResult<IObject>.Move(tryadminRights);
             }
+
             AdminRights = tryadminRights.Value;
             if (FlagsHelper.IsFlagSet(Flags, 2))
             {
@@ -172,11 +155,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryrank);
                 }
+
                 Rank = tryrank.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -192,25 +175,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new ChannelParticipantAdmin
-            {
-                Flags = Flags,
-                CanEdit = CanEdit,
-                Self = Self,
-                UserId = UserId,
-                InviterId = InviterId,
-                PromotedBy = PromotedBy,
-                Date = Date
-            };
+            var newClonedObject = new ChannelParticipantAdmin();
+            newClonedObject.Flags = Flags;
+            newClonedObject.CanEdit = CanEdit;
+            newClonedObject.Self = Self;
+            newClonedObject.UserId = UserId;
+            newClonedObject.InviterId = InviterId;
+            newClonedObject.PromotedBy = PromotedBy;
+            newClonedObject.Date = Date;
             var cloneAdminRights = (CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase?)AdminRights.Clone();
             if (cloneAdminRights is null)
             {
                 return null;
             }
+
             newClonedObject.AdminRights = cloneAdminRights;
             newClonedObject.Rank = Rank;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -219,44 +200,53 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (CanEdit != castedOther.CanEdit)
             {
                 return true;
             }
+
             if (Self != castedOther.Self)
             {
                 return true;
             }
+
             if (UserId != castedOther.UserId)
             {
                 return true;
             }
+
             if (InviterId != castedOther.InviterId)
             {
                 return true;
             }
+
             if (PromotedBy != castedOther.PromotedBy)
             {
                 return true;
             }
+
             if (Date != castedOther.Date)
             {
                 return true;
             }
+
             if (AdminRights.Compare(castedOther.AdminRights))
             {
                 return true;
             }
+
             if (Rank != castedOther.Rank)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

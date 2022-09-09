@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -33,11 +17,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             ExcludeNewMessages = 1 << 1
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -847783593; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -847783593; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("exclude_new_messages")]
         public bool ExcludeNewMessages { get; set; }
@@ -50,7 +32,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public ChannelMessagesFilter(List<CatraProto.Client.TL.Schemas.CloudChats.MessageRangeBase> ranges)
         {
             Ranges = ranges;
-
         }
 #nullable disable
         internal ChannelMessagesFilter()
@@ -60,7 +41,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override void UpdateFlags()
         {
             Flags = ExcludeNewMessages ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -76,7 +56,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             }
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -86,6 +65,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             ExcludeNewMessages = FlagsHelper.IsFlagSet(Flags, 1);
             var tryranges = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.MessageRangeBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
@@ -93,9 +73,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryranges);
             }
+
             Ranges = tryranges.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -111,12 +91,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new ChannelMessagesFilter
-            {
-                Flags = Flags,
-                ExcludeNewMessages = ExcludeNewMessages,
-                Ranges = new List<CatraProto.Client.TL.Schemas.CloudChats.MessageRangeBase>()
-            };
+            var newClonedObject = new ChannelMessagesFilter();
+            newClonedObject.Flags = Flags;
+            newClonedObject.ExcludeNewMessages = ExcludeNewMessages;
+            newClonedObject.Ranges = new List<CatraProto.Client.TL.Schemas.CloudChats.MessageRangeBase>();
             foreach (var ranges in Ranges)
             {
                 var cloneranges = (CatraProto.Client.TL.Schemas.CloudChats.MessageRangeBase?)ranges.Clone();
@@ -124,10 +102,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.Ranges.Add(cloneranges);
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public override bool Compare(IObject other)
@@ -136,19 +115,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (ExcludeNewMessages != castedOther.ExcludeNewMessages)
             {
                 return true;
             }
+
             var rangessize = castedOther.Ranges.Count;
             if (rangessize != Ranges.Count)
             {
                 return true;
             }
+
             for (var i = 0; i < rangessize; i++)
             {
                 if (castedOther.Ranges[i].Compare(Ranges[i]))
@@ -156,8 +139,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                     return true;
                 }
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

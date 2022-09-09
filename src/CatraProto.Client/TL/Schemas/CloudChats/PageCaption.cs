@@ -1,37 +1,19 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class PageCaption : CatraProto.Client.TL.Schemas.CloudChats.PageCaptionBase
     {
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 1869903447; }
 
-
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 1869903447; }
-
-        [Newtonsoft.Json.JsonProperty("text")]
-        public sealed override CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Text { get; set; }
+        [Newtonsoft.Json.JsonProperty("text")] public sealed override CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Text { get; set; }
 
         [Newtonsoft.Json.JsonProperty("credit")]
         public sealed override CatraProto.Client.TL.Schemas.CloudChats.RichTextBase Credit { get; set; }
@@ -42,7 +24,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             Text = text;
             Credit = credit;
-
         }
 #nullable disable
         internal PageCaption()
@@ -51,7 +32,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void UpdateFlags()
         {
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -62,6 +42,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return checktext;
             }
+
             var checkcredit = writer.WriteObject(Credit);
             if (checkcredit.IsError)
             {
@@ -69,7 +50,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             }
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -79,15 +59,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(trytext);
             }
+
             Text = trytext.Value;
             var trycredit = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
             if (trycredit.IsError)
             {
                 return ReadResult<IObject>.Move(trycredit);
             }
+
             Credit = trycredit.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -109,15 +90,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return null;
             }
+
             newClonedObject.Text = cloneText;
             var cloneCredit = (CatraProto.Client.TL.Schemas.CloudChats.RichTextBase?)Credit.Clone();
             if (cloneCredit is null)
             {
                 return null;
             }
+
             newClonedObject.Credit = cloneCredit;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -126,16 +108,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Text.Compare(castedOther.Text))
             {
                 return true;
             }
+
             if (Credit.Compare(castedOther.Credit))
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -34,11 +18,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             PeerType = 1 << 1
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 1232025500; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 1232025500; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("query_id")]
         public long QueryId { get; set; }
@@ -68,7 +50,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             UserId = userId;
             Query = query;
             Offset = offset;
-
         }
 #nullable disable
         internal UpdateBotInlineQuery()
@@ -79,7 +60,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             Flags = Geo == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
             Flags = PeerType == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -114,7 +94,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             writer.WriteString(Offset);
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -124,24 +103,28 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             var tryqueryId = reader.ReadInt64();
             if (tryqueryId.IsError)
             {
                 return ReadResult<IObject>.Move(tryqueryId);
             }
+
             QueryId = tryqueryId.Value;
             var tryuserId = reader.ReadInt64();
             if (tryuserId.IsError)
             {
                 return ReadResult<IObject>.Move(tryuserId);
             }
+
             UserId = tryuserId.Value;
             var tryquery = reader.ReadString();
             if (tryquery.IsError)
             {
                 return ReadResult<IObject>.Move(tryquery);
             }
+
             Query = tryquery.Value;
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
@@ -150,6 +133,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trygeo);
                 }
+
                 Geo = trygeo.Value;
             }
 
@@ -160,6 +144,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trypeerType);
                 }
+
                 PeerType = trypeerType.Value;
             }
 
@@ -168,9 +153,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryoffset);
             }
+
             Offset = tryoffset.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -186,13 +171,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new UpdateBotInlineQuery
-            {
-                Flags = Flags,
-                QueryId = QueryId,
-                UserId = UserId,
-                Query = Query
-            };
+            var newClonedObject = new UpdateBotInlineQuery();
+            newClonedObject.Flags = Flags;
+            newClonedObject.QueryId = QueryId;
+            newClonedObject.UserId = UserId;
+            newClonedObject.Query = Query;
             if (Geo is not null)
             {
                 var cloneGeo = (CatraProto.Client.TL.Schemas.CloudChats.GeoPointBase?)Geo.Clone();
@@ -200,8 +183,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.Geo = cloneGeo;
             }
+
             if (PeerType is not null)
             {
                 var clonePeerType = (CatraProto.Client.TL.Schemas.CloudChats.InlineQueryPeerTypeBase?)PeerType.Clone();
@@ -209,11 +194,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.PeerType = clonePeerType;
             }
+
             newClonedObject.Offset = Offset;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -222,44 +208,53 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (QueryId != castedOther.QueryId)
             {
                 return true;
             }
+
             if (UserId != castedOther.UserId)
             {
                 return true;
             }
+
             if (Query != castedOther.Query)
             {
                 return true;
             }
+
             if (Geo is null && castedOther.Geo is not null || Geo is not null && castedOther.Geo is null)
             {
                 return true;
             }
+
             if (Geo is not null && castedOther.Geo is not null && Geo.Compare(castedOther.Geo))
             {
                 return true;
             }
+
             if (PeerType is null && castedOther.PeerType is not null || PeerType is not null && castedOther.PeerType is null)
             {
                 return true;
             }
+
             if (PeerType is not null && castedOther.PeerType is not null && PeerType.Compare(castedOther.PeerType))
             {
                 return true;
             }
+
             if (Offset != castedOther.Offset)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

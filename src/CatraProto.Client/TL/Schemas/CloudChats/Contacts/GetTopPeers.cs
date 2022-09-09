@@ -1,25 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 
@@ -40,14 +25,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
             Channels = 1 << 15
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -1758168906; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -1758168906; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
+        [Newtonsoft.Json.JsonIgnore] ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("correspondents")]
         public bool Correspondents { get; set; }
@@ -79,8 +61,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
         [Newtonsoft.Json.JsonProperty("limit")]
         public int Limit { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("hash")]
-        public long Hash { get; set; }
+        [Newtonsoft.Json.JsonProperty("hash")] public long Hash { get; set; }
 
 
 #nullable enable
@@ -89,7 +70,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
             Offset = offset;
             Limit = limit;
             Hash = hash;
-
         }
 #nullable disable
 
@@ -107,7 +87,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
             Flags = ForwardChats ? FlagsHelper.SetFlag(Flags, 5) : FlagsHelper.UnsetFlag(Flags, 5);
             Flags = Groups ? FlagsHelper.SetFlag(Flags, 10) : FlagsHelper.UnsetFlag(Flags, 10);
             Flags = Channels ? FlagsHelper.SetFlag(Flags, 15) : FlagsHelper.UnsetFlag(Flags, 15);
-
         }
 
         public WriteResult Serialize(Writer writer)
@@ -121,7 +100,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
             writer.WriteInt64(Hash);
 
             return new WriteResult();
-
         }
 
         public ReadResult<IObject> Deserialize(Reader reader)
@@ -131,6 +109,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             Correspondents = FlagsHelper.IsFlagSet(Flags, 0);
             BotsPm = FlagsHelper.IsFlagSet(Flags, 1);
@@ -145,21 +124,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
             {
                 return ReadResult<IObject>.Move(tryoffset);
             }
+
             Offset = tryoffset.Value;
             var trylimit = reader.ReadInt32();
             if (trylimit.IsError)
             {
                 return ReadResult<IObject>.Move(trylimit);
             }
+
             Limit = trylimit.Value;
             var tryhash = reader.ReadInt64();
             if (tryhash.IsError)
             {
                 return ReadResult<IObject>.Move(tryhash);
             }
+
             Hash = tryhash.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -174,23 +155,20 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new GetTopPeers
-            {
-                Flags = Flags,
-                Correspondents = Correspondents,
-                BotsPm = BotsPm,
-                BotsInline = BotsInline,
-                PhoneCalls = PhoneCalls,
-                ForwardUsers = ForwardUsers,
-                ForwardChats = ForwardChats,
-                Groups = Groups,
-                Channels = Channels,
-                Offset = Offset,
-                Limit = Limit,
-                Hash = Hash
-            };
+            var newClonedObject = new GetTopPeers();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Correspondents = Correspondents;
+            newClonedObject.BotsPm = BotsPm;
+            newClonedObject.BotsInline = BotsInline;
+            newClonedObject.PhoneCalls = PhoneCalls;
+            newClonedObject.ForwardUsers = ForwardUsers;
+            newClonedObject.ForwardChats = ForwardChats;
+            newClonedObject.Groups = Groups;
+            newClonedObject.Channels = Channels;
+            newClonedObject.Offset = Offset;
+            newClonedObject.Limit = Limit;
+            newClonedObject.Hash = Hash;
             return newClonedObject;
-
         }
 
         public bool Compare(IObject other)
@@ -199,56 +177,68 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Contacts
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Correspondents != castedOther.Correspondents)
             {
                 return true;
             }
+
             if (BotsPm != castedOther.BotsPm)
             {
                 return true;
             }
+
             if (BotsInline != castedOther.BotsInline)
             {
                 return true;
             }
+
             if (PhoneCalls != castedOther.PhoneCalls)
             {
                 return true;
             }
+
             if (ForwardUsers != castedOther.ForwardUsers)
             {
                 return true;
             }
+
             if (ForwardChats != castedOther.ForwardChats)
             {
                 return true;
             }
+
             if (Groups != castedOther.Groups)
             {
                 return true;
             }
+
             if (Channels != castedOther.Channels)
             {
                 return true;
             }
+
             if (Offset != castedOther.Offset)
             {
                 return true;
             }
+
             if (Limit != castedOther.Limit)
             {
                 return true;
             }
+
             if (Hash != castedOther.Hash)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 #nullable disable
     }

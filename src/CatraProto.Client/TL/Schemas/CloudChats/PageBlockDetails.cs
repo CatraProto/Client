@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -33,14 +17,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Open = 1 << 0
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 1987480557; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 1987480557; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("open")]
-        public bool Open { get; set; }
+        [Newtonsoft.Json.JsonProperty("open")] public bool Open { get; set; }
 
         [Newtonsoft.Json.JsonProperty("blocks")]
         public List<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase> Blocks { get; set; }
@@ -54,7 +35,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             Blocks = blocks;
             Title = title;
-
         }
 #nullable disable
         internal PageBlockDetails()
@@ -64,7 +44,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override void UpdateFlags()
         {
             Flags = Open ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -78,6 +57,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return checkblocks;
             }
+
             var checktitle = writer.WriteObject(Title);
             if (checktitle.IsError)
             {
@@ -85,7 +65,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             }
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -95,6 +74,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             Open = FlagsHelper.IsFlagSet(Flags, 0);
             var tryblocks = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
@@ -102,15 +82,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryblocks);
             }
+
             Blocks = tryblocks.Value;
             var trytitle = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.RichTextBase>();
             if (trytitle.IsError)
             {
                 return ReadResult<IObject>.Move(trytitle);
             }
+
             Title = trytitle.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -126,12 +107,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new PageBlockDetails
-            {
-                Flags = Flags,
-                Open = Open,
-                Blocks = new List<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase>()
-            };
+            var newClonedObject = new PageBlockDetails();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Open = Open;
+            newClonedObject.Blocks = new List<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase>();
             foreach (var blocks in Blocks)
             {
                 var cloneblocks = (CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase?)blocks.Clone();
@@ -139,16 +118,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.Blocks.Add(cloneblocks);
             }
+
             var cloneTitle = (CatraProto.Client.TL.Schemas.CloudChats.RichTextBase?)Title.Clone();
             if (cloneTitle is null)
             {
                 return null;
             }
+
             newClonedObject.Title = cloneTitle;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -157,19 +138,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Open != castedOther.Open)
             {
                 return true;
             }
+
             var blockssize = castedOther.Blocks.Count;
             if (blockssize != Blocks.Count)
             {
                 return true;
             }
+
             for (var i = 0; i < blockssize; i++)
             {
                 if (castedOther.Blocks[i].Compare(Blocks[i]))
@@ -177,12 +162,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                     return true;
                 }
             }
+
             if (Title.Compare(castedOther.Title))
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

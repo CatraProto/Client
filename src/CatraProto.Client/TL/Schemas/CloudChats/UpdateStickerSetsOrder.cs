@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -33,11 +17,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Masks = 1 << 0
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 196268545; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 196268545; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("masks")]
         public bool Masks { get; set; }
@@ -50,7 +32,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public UpdateStickerSetsOrder(List<long> order)
         {
             Order = order;
-
         }
 #nullable disable
         internal UpdateStickerSetsOrder()
@@ -60,7 +41,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public override void UpdateFlags()
         {
             Flags = Masks ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -73,7 +53,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             writer.WriteVector(Order, false);
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -83,6 +62,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             Masks = FlagsHelper.IsFlagSet(Flags, 0);
             var tryorder = reader.ReadVector<long>(ParserTypes.Int64);
@@ -90,9 +70,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryorder);
             }
+
             Order = tryorder.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -108,18 +88,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new UpdateStickerSetsOrder
-            {
-                Flags = Flags,
-                Masks = Masks,
-                Order = new List<long>()
-            };
+            var newClonedObject = new UpdateStickerSetsOrder();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Masks = Masks;
+            newClonedObject.Order = new List<long>();
             foreach (var order in Order)
             {
                 newClonedObject.Order.Add(order);
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public override bool Compare(IObject other)
@@ -128,19 +106,23 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Masks != castedOther.Masks)
             {
                 return true;
             }
+
             var ordersize = castedOther.Order.Count;
             if (ordersize != Order.Count)
             {
                 return true;
             }
+
             for (var i = 0; i < ordersize; i++)
             {
                 if (castedOther.Order[i] != Order[i])
@@ -148,8 +130,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                     return true;
                 }
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

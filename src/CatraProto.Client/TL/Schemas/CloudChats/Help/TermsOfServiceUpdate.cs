@@ -1,34 +1,17 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 {
     public partial class TermsOfServiceUpdate : CatraProto.Client.TL.Schemas.CloudChats.Help.TermsOfServiceUpdateBase
     {
-
-
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 686618977; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 686618977; }
 
         [Newtonsoft.Json.JsonProperty("expires")]
         public sealed override int Expires { get; set; }
@@ -42,7 +25,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
         {
             Expires = expires;
             TermsOfService = termsOfService;
-
         }
 #nullable disable
         internal TermsOfServiceUpdate()
@@ -51,7 +33,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 
         public override void UpdateFlags()
         {
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -65,7 +46,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
             }
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -75,15 +55,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
             {
                 return ReadResult<IObject>.Move(tryexpires);
             }
+
             Expires = tryexpires.Value;
             var trytermsOfService = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.Help.TermsOfServiceBase>();
             if (trytermsOfService.IsError)
             {
                 return ReadResult<IObject>.Move(trytermsOfService);
             }
+
             TermsOfService = trytermsOfService.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -99,18 +80,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new TermsOfServiceUpdate
-            {
-                Expires = Expires
-            };
+            var newClonedObject = new TermsOfServiceUpdate();
+            newClonedObject.Expires = Expires;
             var cloneTermsOfService = (CatraProto.Client.TL.Schemas.CloudChats.Help.TermsOfServiceBase?)TermsOfService.Clone();
             if (cloneTermsOfService is null)
             {
                 return null;
             }
+
             newClonedObject.TermsOfService = cloneTermsOfService;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -119,16 +98,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Help
             {
                 return true;
             }
+
             if (Expires != castedOther.Expires)
             {
                 return true;
             }
+
             if (TermsOfService.Compare(castedOther.TermsOfService))
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

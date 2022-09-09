@@ -1,25 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -38,14 +23,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Secret = 1 << 10
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 414687501; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 414687501; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("ipv6")]
-        public sealed override bool Ipv6 { get; set; }
+        [Newtonsoft.Json.JsonProperty("ipv6")] public sealed override bool Ipv6 { get; set; }
 
         [Newtonsoft.Json.JsonProperty("media_only")]
         public sealed override bool MediaOnly { get; set; }
@@ -53,8 +35,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("tcpo_only")]
         public sealed override bool TcpoOnly { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("cdn")]
-        public sealed override bool Cdn { get; set; }
+        [Newtonsoft.Json.JsonProperty("cdn")] public sealed override bool Cdn { get; set; }
 
         [Newtonsoft.Json.JsonProperty("static")]
         public sealed override bool Static { get; set; }
@@ -62,14 +43,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("this_port_only")]
         public sealed override bool ThisPortOnly { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("id")]
-        public sealed override int Id { get; set; }
+        [Newtonsoft.Json.JsonProperty("id")] public sealed override int Id { get; set; }
 
         [Newtonsoft.Json.JsonProperty("ip_address")]
         public sealed override string IpAddress { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("port")]
-        public sealed override int Port { get; set; }
+        [Newtonsoft.Json.JsonProperty("port")] public sealed override int Port { get; set; }
 
         [Newtonsoft.Json.JsonProperty("secret")]
         public sealed override byte[] Secret { get; set; }
@@ -81,7 +60,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Id = id;
             IpAddress = ipAddress;
             Port = port;
-
         }
 #nullable disable
         internal DcOption()
@@ -97,7 +75,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = Static ? FlagsHelper.SetFlag(Flags, 4) : FlagsHelper.UnsetFlag(Flags, 4);
             Flags = ThisPortOnly ? FlagsHelper.SetFlag(Flags, 5) : FlagsHelper.UnsetFlag(Flags, 5);
             Flags = Secret == null ? FlagsHelper.UnsetFlag(Flags, 10) : FlagsHelper.SetFlag(Flags, 10);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -112,13 +89,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             writer.WriteInt32(Port);
             if (FlagsHelper.IsFlagSet(Flags, 10))
             {
-
                 writer.WriteBytes(Secret);
             }
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -128,6 +103,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             Ipv6 = FlagsHelper.IsFlagSet(Flags, 0);
             MediaOnly = FlagsHelper.IsFlagSet(Flags, 1);
@@ -140,18 +116,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryid);
             }
+
             Id = tryid.Value;
             var tryipAddress = reader.ReadString();
             if (tryipAddress.IsError)
             {
                 return ReadResult<IObject>.Move(tryipAddress);
             }
+
             IpAddress = tryipAddress.Value;
             var tryport = reader.ReadInt32();
             if (tryport.IsError)
             {
                 return ReadResult<IObject>.Move(tryport);
             }
+
             Port = tryport.Value;
             if (FlagsHelper.IsFlagSet(Flags, 10))
             {
@@ -160,11 +139,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trysecret);
                 }
+
                 Secret = trysecret.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -180,22 +159,19 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new DcOption
-            {
-                Flags = Flags,
-                Ipv6 = Ipv6,
-                MediaOnly = MediaOnly,
-                TcpoOnly = TcpoOnly,
-                Cdn = Cdn,
-                Static = Static,
-                ThisPortOnly = ThisPortOnly,
-                Id = Id,
-                IpAddress = IpAddress,
-                Port = Port,
-                Secret = Secret
-            };
+            var newClonedObject = new DcOption();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Ipv6 = Ipv6;
+            newClonedObject.MediaOnly = MediaOnly;
+            newClonedObject.TcpoOnly = TcpoOnly;
+            newClonedObject.Cdn = Cdn;
+            newClonedObject.Static = Static;
+            newClonedObject.ThisPortOnly = ThisPortOnly;
+            newClonedObject.Id = Id;
+            newClonedObject.IpAddress = IpAddress;
+            newClonedObject.Port = Port;
+            newClonedObject.Secret = Secret;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -204,52 +180,63 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Ipv6 != castedOther.Ipv6)
             {
                 return true;
             }
+
             if (MediaOnly != castedOther.MediaOnly)
             {
                 return true;
             }
+
             if (TcpoOnly != castedOther.TcpoOnly)
             {
                 return true;
             }
+
             if (Cdn != castedOther.Cdn)
             {
                 return true;
             }
+
             if (Static != castedOther.Static)
             {
                 return true;
             }
+
             if (ThisPortOnly != castedOther.ThisPortOnly)
             {
                 return true;
             }
+
             if (Id != castedOther.Id)
             {
                 return true;
             }
+
             if (IpAddress != castedOther.IpAddress)
             {
                 return true;
             }
+
             if (Port != castedOther.Port)
             {
                 return true;
             }
+
             if (Secret != castedOther.Secret)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

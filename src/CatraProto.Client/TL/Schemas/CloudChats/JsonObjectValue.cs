@@ -1,37 +1,19 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class JsonObjectValue : CatraProto.Client.TL.Schemas.CloudChats.JSONObjectValueBase
     {
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -1059185703; }
 
-
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -1059185703; }
-
-        [Newtonsoft.Json.JsonProperty("key")]
-        public sealed override string Key { get; set; }
+        [Newtonsoft.Json.JsonProperty("key")] public sealed override string Key { get; set; }
 
         [Newtonsoft.Json.JsonProperty("value")]
         public sealed override CatraProto.Client.TL.Schemas.CloudChats.JSONValueBase Value { get; set; }
@@ -42,7 +24,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             Key = key;
             Value = value;
-
         }
 #nullable disable
         internal JsonObjectValue()
@@ -51,7 +32,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void UpdateFlags()
         {
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -66,7 +46,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             }
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -76,15 +55,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(trykey);
             }
+
             Key = trykey.Value;
             var tryvalue = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.JSONValueBase>();
             if (tryvalue.IsError)
             {
                 return ReadResult<IObject>.Move(tryvalue);
             }
+
             Value = tryvalue.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -100,18 +80,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new JsonObjectValue
-            {
-                Key = Key
-            };
+            var newClonedObject = new JsonObjectValue();
+            newClonedObject.Key = Key;
             var cloneValue = (CatraProto.Client.TL.Schemas.CloudChats.JSONValueBase?)Value.Clone();
             if (cloneValue is null)
             {
                 return null;
             }
+
             newClonedObject.Value = cloneValue;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -120,16 +98,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Key != castedOther.Key)
             {
                 return true;
             }
+
             if (Value.Compare(castedOther.Value))
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

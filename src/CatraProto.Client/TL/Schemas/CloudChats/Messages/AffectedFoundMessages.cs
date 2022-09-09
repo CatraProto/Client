@@ -1,38 +1,19 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 {
     public partial class AffectedFoundMessages : CatraProto.Client.TL.Schemas.CloudChats.Messages.AffectedFoundMessagesBase
     {
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -275956116; }
 
-
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -275956116; }
-
-        [Newtonsoft.Json.JsonProperty("pts")]
-        public sealed override int Pts { get; set; }
+        [Newtonsoft.Json.JsonProperty("pts")] public sealed override int Pts { get; set; }
 
         [Newtonsoft.Json.JsonProperty("pts_count")]
         public sealed override int PtsCount { get; set; }
@@ -51,7 +32,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             PtsCount = ptsCount;
             Offset = offset;
             Messages = messages;
-
         }
 #nullable disable
         internal AffectedFoundMessages()
@@ -60,7 +40,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
         public override void UpdateFlags()
         {
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -73,7 +52,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             writer.WriteVector(Messages, false);
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -83,27 +61,30 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             {
                 return ReadResult<IObject>.Move(trypts);
             }
+
             Pts = trypts.Value;
             var tryptsCount = reader.ReadInt32();
             if (tryptsCount.IsError)
             {
                 return ReadResult<IObject>.Move(tryptsCount);
             }
+
             PtsCount = tryptsCount.Value;
             var tryoffset = reader.ReadInt32();
             if (tryoffset.IsError)
             {
                 return ReadResult<IObject>.Move(tryoffset);
             }
+
             Offset = tryoffset.Value;
             var trymessages = reader.ReadVector<int>(ParserTypes.Int);
             if (trymessages.IsError)
             {
                 return ReadResult<IObject>.Move(trymessages);
             }
+
             Messages = trymessages.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -119,19 +100,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new AffectedFoundMessages
-            {
-                Pts = Pts,
-                PtsCount = PtsCount,
-                Offset = Offset,
-                Messages = new List<int>()
-            };
+            var newClonedObject = new AffectedFoundMessages();
+            newClonedObject.Pts = Pts;
+            newClonedObject.PtsCount = PtsCount;
+            newClonedObject.Offset = Offset;
+            newClonedObject.Messages = new List<int>();
             foreach (var messages in Messages)
             {
                 newClonedObject.Messages.Add(messages);
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public override bool Compare(IObject other)
@@ -140,23 +119,28 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             {
                 return true;
             }
+
             if (Pts != castedOther.Pts)
             {
                 return true;
             }
+
             if (PtsCount != castedOther.PtsCount)
             {
                 return true;
             }
+
             if (Offset != castedOther.Offset)
             {
                 return true;
             }
+
             var messagessize = castedOther.Messages.Count;
             if (messagessize != Messages.Count)
             {
                 return true;
             }
+
             for (var i = 0; i < messagessize; i++)
             {
                 if (castedOther.Messages[i] != Messages[i])
@@ -164,8 +148,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                     return true;
                 }
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

@@ -1,25 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -35,11 +20,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             PhonecallsLessData = 1 << 3
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -1896171181; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -1896171181; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("disabled")]
         public sealed override bool Disabled { get; set; }
@@ -73,7 +56,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             VideoSizeMax = videoSizeMax;
             FileSizeMax = fileSizeMax;
             VideoUploadMaxbitrate = videoUploadMaxbitrate;
-
         }
 #nullable disable
         internal AutoDownloadSettings()
@@ -86,7 +68,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = VideoPreloadLarge ? FlagsHelper.SetFlag(Flags, 1) : FlagsHelper.UnsetFlag(Flags, 1);
             Flags = AudioPreloadNext ? FlagsHelper.SetFlag(Flags, 2) : FlagsHelper.UnsetFlag(Flags, 2);
             Flags = PhonecallsLessData ? FlagsHelper.SetFlag(Flags, 3) : FlagsHelper.UnsetFlag(Flags, 3);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -101,7 +82,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             writer.WriteInt32(VideoUploadMaxbitrate);
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -111,6 +91,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             Disabled = FlagsHelper.IsFlagSet(Flags, 0);
             VideoPreloadLarge = FlagsHelper.IsFlagSet(Flags, 1);
@@ -121,27 +102,30 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryphotoSizeMax);
             }
+
             PhotoSizeMax = tryphotoSizeMax.Value;
             var tryvideoSizeMax = reader.ReadInt64();
             if (tryvideoSizeMax.IsError)
             {
                 return ReadResult<IObject>.Move(tryvideoSizeMax);
             }
+
             VideoSizeMax = tryvideoSizeMax.Value;
             var tryfileSizeMax = reader.ReadInt64();
             if (tryfileSizeMax.IsError)
             {
                 return ReadResult<IObject>.Move(tryfileSizeMax);
             }
+
             FileSizeMax = tryfileSizeMax.Value;
             var tryvideoUploadMaxbitrate = reader.ReadInt32();
             if (tryvideoUploadMaxbitrate.IsError)
             {
                 return ReadResult<IObject>.Move(tryvideoUploadMaxbitrate);
             }
+
             VideoUploadMaxbitrate = tryvideoUploadMaxbitrate.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -157,20 +141,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new AutoDownloadSettings
-            {
-                Flags = Flags,
-                Disabled = Disabled,
-                VideoPreloadLarge = VideoPreloadLarge,
-                AudioPreloadNext = AudioPreloadNext,
-                PhonecallsLessData = PhonecallsLessData,
-                PhotoSizeMax = PhotoSizeMax,
-                VideoSizeMax = VideoSizeMax,
-                FileSizeMax = FileSizeMax,
-                VideoUploadMaxbitrate = VideoUploadMaxbitrate
-            };
+            var newClonedObject = new AutoDownloadSettings();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Disabled = Disabled;
+            newClonedObject.VideoPreloadLarge = VideoPreloadLarge;
+            newClonedObject.AudioPreloadNext = AudioPreloadNext;
+            newClonedObject.PhonecallsLessData = PhonecallsLessData;
+            newClonedObject.PhotoSizeMax = PhotoSizeMax;
+            newClonedObject.VideoSizeMax = VideoSizeMax;
+            newClonedObject.FileSizeMax = FileSizeMax;
+            newClonedObject.VideoUploadMaxbitrate = VideoUploadMaxbitrate;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -179,44 +160,53 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Disabled != castedOther.Disabled)
             {
                 return true;
             }
+
             if (VideoPreloadLarge != castedOther.VideoPreloadLarge)
             {
                 return true;
             }
+
             if (AudioPreloadNext != castedOther.AudioPreloadNext)
             {
                 return true;
             }
+
             if (PhonecallsLessData != castedOther.PhonecallsLessData)
             {
                 return true;
             }
+
             if (PhotoSizeMax != castedOther.PhotoSizeMax)
             {
                 return true;
             }
+
             if (VideoSizeMax != castedOther.VideoSizeMax)
             {
                 return true;
             }
+
             if (FileSizeMax != castedOther.FileSizeMax)
             {
                 return true;
             }
+
             if (VideoUploadMaxbitrate != castedOther.VideoUploadMaxbitrate)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

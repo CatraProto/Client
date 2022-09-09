@@ -1,38 +1,19 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class PageListOrderedItemBlocks : CatraProto.Client.TL.Schemas.CloudChats.PageListOrderedItemBase
     {
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -1730311882; }
 
-
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -1730311882; }
-
-        [Newtonsoft.Json.JsonProperty("num")]
-        public sealed override string Num { get; set; }
+        [Newtonsoft.Json.JsonProperty("num")] public sealed override string Num { get; set; }
 
         [Newtonsoft.Json.JsonProperty("blocks")]
         public List<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase> Blocks { get; set; }
@@ -43,7 +24,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             Num = num;
             Blocks = blocks;
-
         }
 #nullable disable
         internal PageListOrderedItemBlocks()
@@ -52,7 +32,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void UpdateFlags()
         {
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -67,7 +46,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             }
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -77,15 +55,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(trynum);
             }
+
             Num = trynum.Value;
             var tryblocks = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
             if (tryblocks.IsError)
             {
                 return ReadResult<IObject>.Move(tryblocks);
             }
+
             Blocks = tryblocks.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -101,11 +80,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new PageListOrderedItemBlocks
-            {
-                Num = Num,
-                Blocks = new List<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase>()
-            };
+            var newClonedObject = new PageListOrderedItemBlocks();
+            newClonedObject.Num = Num;
+            newClonedObject.Blocks = new List<CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase>();
             foreach (var blocks in Blocks)
             {
                 var cloneblocks = (CatraProto.Client.TL.Schemas.CloudChats.PageBlockBase?)blocks.Clone();
@@ -113,10 +90,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.Blocks.Add(cloneblocks);
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public override bool Compare(IObject other)
@@ -125,15 +103,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Num != castedOther.Num)
             {
                 return true;
             }
+
             var blockssize = castedOther.Blocks.Count;
             if (blockssize != Blocks.Count)
             {
                 return true;
             }
+
             for (var i = 0; i < blockssize; i++)
             {
                 if (castedOther.Blocks[i].Compare(Blocks[i]))
@@ -141,8 +122,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                     return true;
                 }
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

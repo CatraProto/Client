@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 
@@ -36,23 +20,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             SendAs = 1 << 13
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -362824498; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -362824498; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
+        [Newtonsoft.Json.JsonIgnore] ParserTypes IMethod.Type { get; init; } = ParserTypes.Bool;
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("silent")]
         public bool Silent { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("peer")]
-        public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
+        [Newtonsoft.Json.JsonProperty("peer")] public CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase Peer { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("bot")]
-        public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase Bot { get; set; }
+        [Newtonsoft.Json.JsonProperty("bot")] public CatraProto.Client.TL.Schemas.CloudChats.InputUserBase Bot { get; set; }
 
         [Newtonsoft.Json.JsonProperty("query_id")]
         public long QueryId { get; set; }
@@ -71,7 +50,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             Peer = peer;
             Bot = bot;
             QueryId = queryId;
-
         }
 #nullable disable
 
@@ -84,7 +62,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             Flags = Silent ? FlagsHelper.SetFlag(Flags, 5) : FlagsHelper.UnsetFlag(Flags, 5);
             Flags = ReplyToMsgId == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
             Flags = SendAs == null ? FlagsHelper.UnsetFlag(Flags, 13) : FlagsHelper.SetFlag(Flags, 13);
-
         }
 
         public WriteResult Serialize(Writer writer)
@@ -98,11 +75,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             {
                 return checkpeer;
             }
+
             var checkbot = writer.WriteObject(Bot);
             if (checkbot.IsError)
             {
                 return checkbot;
             }
+
             writer.WriteInt64(QueryId);
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
@@ -120,7 +99,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 
 
             return new WriteResult();
-
         }
 
         public ReadResult<IObject> Deserialize(Reader reader)
@@ -130,6 +108,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             Silent = FlagsHelper.IsFlagSet(Flags, 5);
             var trypeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
@@ -137,18 +116,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             {
                 return ReadResult<IObject>.Move(trypeer);
             }
+
             Peer = trypeer.Value;
             var trybot = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
             if (trybot.IsError)
             {
                 return ReadResult<IObject>.Move(trybot);
             }
+
             Bot = trybot.Value;
             var tryqueryId = reader.ReadInt64();
             if (tryqueryId.IsError)
             {
                 return ReadResult<IObject>.Move(tryqueryId);
             }
+
             QueryId = tryqueryId.Value;
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
@@ -157,6 +139,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 {
                     return ReadResult<IObject>.Move(tryreplyToMsgId);
                 }
+
                 ReplyToMsgId = tryreplyToMsgId.Value;
             }
 
@@ -167,11 +150,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 {
                     return ReadResult<IObject>.Move(trysendAs);
                 }
+
                 SendAs = trysendAs.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -186,22 +169,22 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new ProlongWebView
-            {
-                Flags = Flags,
-                Silent = Silent
-            };
+            var newClonedObject = new ProlongWebView();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Silent = Silent;
             var clonePeer = (CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase?)Peer.Clone();
             if (clonePeer is null)
             {
                 return null;
             }
+
             newClonedObject.Peer = clonePeer;
             var cloneBot = (CatraProto.Client.TL.Schemas.CloudChats.InputUserBase?)Bot.Clone();
             if (cloneBot is null)
             {
                 return null;
             }
+
             newClonedObject.Bot = cloneBot;
             newClonedObject.QueryId = QueryId;
             newClonedObject.ReplyToMsgId = ReplyToMsgId;
@@ -212,10 +195,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
                 {
                     return null;
                 }
+
                 newClonedObject.SendAs = cloneSendAs;
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public bool Compare(IObject other)
@@ -224,40 +208,48 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Messages
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Silent != castedOther.Silent)
             {
                 return true;
             }
+
             if (Peer.Compare(castedOther.Peer))
             {
                 return true;
             }
+
             if (Bot.Compare(castedOther.Bot))
             {
                 return true;
             }
+
             if (QueryId != castedOther.QueryId)
             {
                 return true;
             }
+
             if (ReplyToMsgId != castedOther.ReplyToMsgId)
             {
                 return true;
             }
+
             if (SendAs is null && castedOther.SendAs is not null || SendAs is not null && castedOther.SendAs is null)
             {
                 return true;
             }
+
             if (SendAs is not null && castedOther.SendAs is not null && SendAs.Compare(castedOther.SendAs))
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 #nullable disable
     }

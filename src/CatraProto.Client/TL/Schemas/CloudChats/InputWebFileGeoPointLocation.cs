@@ -1,34 +1,17 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
 {
     public partial class InputWebFileGeoPointLocation : CatraProto.Client.TL.Schemas.CloudChats.InputWebFileLocationBase
     {
-
-
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -1625153079; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -1625153079; }
 
         [Newtonsoft.Json.JsonProperty("geo_point")]
         public CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase GeoPoint { get; set; }
@@ -36,14 +19,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("access_hash")]
         public sealed override long AccessHash { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("w")]
-        public int W { get; set; }
+        [Newtonsoft.Json.JsonProperty("w")] public int W { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("h")]
-        public int H { get; set; }
+        [Newtonsoft.Json.JsonProperty("h")] public int H { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("zoom")]
-        public int Zoom { get; set; }
+        [Newtonsoft.Json.JsonProperty("zoom")] public int Zoom { get; set; }
 
         [Newtonsoft.Json.JsonProperty("scale")]
         public int Scale { get; set; }
@@ -58,7 +38,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             H = h;
             Zoom = zoom;
             Scale = scale;
-
         }
 #nullable disable
         internal InputWebFileGeoPointLocation()
@@ -67,7 +46,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
         public override void UpdateFlags()
         {
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -78,6 +56,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return checkgeoPoint;
             }
+
             writer.WriteInt64(AccessHash);
             writer.WriteInt32(W);
             writer.WriteInt32(H);
@@ -85,7 +64,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             writer.WriteInt32(Scale);
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -95,39 +73,44 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(trygeoPoint);
             }
+
             GeoPoint = trygeoPoint.Value;
             var tryaccessHash = reader.ReadInt64();
             if (tryaccessHash.IsError)
             {
                 return ReadResult<IObject>.Move(tryaccessHash);
             }
+
             AccessHash = tryaccessHash.Value;
             var tryw = reader.ReadInt32();
             if (tryw.IsError)
             {
                 return ReadResult<IObject>.Move(tryw);
             }
+
             W = tryw.Value;
             var tryh = reader.ReadInt32();
             if (tryh.IsError)
             {
                 return ReadResult<IObject>.Move(tryh);
             }
+
             H = tryh.Value;
             var tryzoom = reader.ReadInt32();
             if (tryzoom.IsError)
             {
                 return ReadResult<IObject>.Move(tryzoom);
             }
+
             Zoom = tryzoom.Value;
             var tryscale = reader.ReadInt32();
             if (tryscale.IsError)
             {
                 return ReadResult<IObject>.Move(tryscale);
             }
+
             Scale = tryscale.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -149,6 +132,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return null;
             }
+
             newClonedObject.GeoPoint = cloneGeoPoint;
             newClonedObject.AccessHash = AccessHash;
             newClonedObject.W = W;
@@ -156,7 +140,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             newClonedObject.Zoom = Zoom;
             newClonedObject.Scale = Scale;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -165,32 +148,38 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (GeoPoint.Compare(castedOther.GeoPoint))
             {
                 return true;
             }
+
             if (AccessHash != castedOther.AccessHash)
             {
                 return true;
             }
+
             if (W != castedOther.W)
             {
                 return true;
             }
+
             if (H != castedOther.H)
             {
                 return true;
             }
+
             if (Zoom != castedOther.Zoom)
             {
                 return true;
             }
+
             if (Scale != castedOther.Scale)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

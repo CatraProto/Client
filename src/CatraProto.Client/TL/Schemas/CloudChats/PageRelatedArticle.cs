@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -37,14 +21,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             PublishedDate = 1 << 4
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -1282352120; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -1282352120; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("url")]
-        public sealed override string Url { get; set; }
+        [Newtonsoft.Json.JsonProperty("url")] public sealed override string Url { get; set; }
 
         [Newtonsoft.Json.JsonProperty("webpage_id")]
         public sealed override long WebpageId { get; set; }
@@ -73,7 +54,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             Url = url;
             WebpageId = webpageId;
-
         }
 #nullable disable
         internal PageRelatedArticle()
@@ -87,7 +67,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = PhotoId == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
             Flags = Author == null ? FlagsHelper.UnsetFlag(Flags, 3) : FlagsHelper.SetFlag(Flags, 3);
             Flags = PublishedDate == null ? FlagsHelper.UnsetFlag(Flags, 4) : FlagsHelper.SetFlag(Flags, 4);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -101,13 +80,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             writer.WriteInt64(WebpageId);
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
-
                 writer.WriteString(Title);
             }
 
             if (FlagsHelper.IsFlagSet(Flags, 1))
             {
-
                 writer.WriteString(Description);
             }
 
@@ -118,7 +95,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
             if (FlagsHelper.IsFlagSet(Flags, 3))
             {
-
                 writer.WriteString(Author);
             }
 
@@ -129,7 +105,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -139,18 +114,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             var tryurl = reader.ReadString();
             if (tryurl.IsError)
             {
                 return ReadResult<IObject>.Move(tryurl);
             }
+
             Url = tryurl.Value;
             var trywebpageId = reader.ReadInt64();
             if (trywebpageId.IsError)
             {
                 return ReadResult<IObject>.Move(trywebpageId);
             }
+
             WebpageId = trywebpageId.Value;
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
@@ -159,6 +137,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trytitle);
                 }
+
                 Title = trytitle.Value;
             }
 
@@ -169,6 +148,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trydescription);
                 }
+
                 Description = trydescription.Value;
             }
 
@@ -179,6 +159,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryphotoId);
                 }
+
                 PhotoId = tryphotoId.Value;
             }
 
@@ -189,6 +170,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryauthor);
                 }
+
                 Author = tryauthor.Value;
             }
 
@@ -199,11 +181,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trypublishedDate);
                 }
+
                 PublishedDate = trypublishedDate.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -219,19 +201,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new PageRelatedArticle
-            {
-                Flags = Flags,
-                Url = Url,
-                WebpageId = WebpageId,
-                Title = Title,
-                Description = Description,
-                PhotoId = PhotoId,
-                Author = Author,
-                PublishedDate = PublishedDate
-            };
+            var newClonedObject = new PageRelatedArticle();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Url = Url;
+            newClonedObject.WebpageId = WebpageId;
+            newClonedObject.Title = Title;
+            newClonedObject.Description = Description;
+            newClonedObject.PhotoId = PhotoId;
+            newClonedObject.Author = Author;
+            newClonedObject.PublishedDate = PublishedDate;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -240,40 +219,48 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Url != castedOther.Url)
             {
                 return true;
             }
+
             if (WebpageId != castedOther.WebpageId)
             {
                 return true;
             }
+
             if (Title != castedOther.Title)
             {
                 return true;
             }
+
             if (Description != castedOther.Description)
             {
                 return true;
             }
+
             if (PhotoId != castedOther.PhotoId)
             {
                 return true;
             }
+
             if (Author != castedOther.Author)
             {
                 return true;
             }
+
             if (PublishedDate != castedOther.PublishedDate)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

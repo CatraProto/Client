@@ -1,25 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -34,11 +19,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             UntilDate = 1 << 16
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 399807445; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 399807445; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("broadcast")]
         public bool Broadcast { get; set; }
@@ -46,8 +29,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("megagroup")]
         public bool Megagroup { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("id")]
-        public sealed override long Id { get; set; }
+        [Newtonsoft.Json.JsonProperty("id")] public sealed override long Id { get; set; }
 
         [Newtonsoft.Json.JsonProperty("access_hash")]
         public long AccessHash { get; set; }
@@ -65,7 +47,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Id = id;
             AccessHash = accessHash;
             Title = title;
-
         }
 #nullable disable
         internal ChannelForbidden()
@@ -77,7 +58,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = Broadcast ? FlagsHelper.SetFlag(Flags, 5) : FlagsHelper.UnsetFlag(Flags, 5);
             Flags = Megagroup ? FlagsHelper.SetFlag(Flags, 8) : FlagsHelper.UnsetFlag(Flags, 8);
             Flags = UntilDate == null ? FlagsHelper.UnsetFlag(Flags, 16) : FlagsHelper.SetFlag(Flags, 16);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -97,7 +77,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -107,6 +86,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             Broadcast = FlagsHelper.IsFlagSet(Flags, 5);
             Megagroup = FlagsHelper.IsFlagSet(Flags, 8);
@@ -115,18 +95,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryid);
             }
+
             Id = tryid.Value;
             var tryaccessHash = reader.ReadInt64();
             if (tryaccessHash.IsError)
             {
                 return ReadResult<IObject>.Move(tryaccessHash);
             }
+
             AccessHash = tryaccessHash.Value;
             var trytitle = reader.ReadString();
             if (trytitle.IsError)
             {
                 return ReadResult<IObject>.Move(trytitle);
             }
+
             Title = trytitle.Value;
             if (FlagsHelper.IsFlagSet(Flags, 16))
             {
@@ -135,11 +118,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryuntilDate);
                 }
+
                 UntilDate = tryuntilDate.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -155,18 +138,15 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new ChannelForbidden
-            {
-                Flags = Flags,
-                Broadcast = Broadcast,
-                Megagroup = Megagroup,
-                Id = Id,
-                AccessHash = AccessHash,
-                Title = Title,
-                UntilDate = UntilDate
-            };
+            var newClonedObject = new ChannelForbidden();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Broadcast = Broadcast;
+            newClonedObject.Megagroup = Megagroup;
+            newClonedObject.Id = Id;
+            newClonedObject.AccessHash = AccessHash;
+            newClonedObject.Title = Title;
+            newClonedObject.UntilDate = UntilDate;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -175,36 +155,43 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Broadcast != castedOther.Broadcast)
             {
                 return true;
             }
+
             if (Megagroup != castedOther.Megagroup)
             {
                 return true;
             }
+
             if (Id != castedOther.Id)
             {
                 return true;
             }
+
             if (AccessHash != castedOther.AccessHash)
             {
                 return true;
             }
+
             if (Title != castedOther.Title)
             {
                 return true;
             }
+
             if (UntilDate != castedOther.UntilDate)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

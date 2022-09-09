@@ -1,34 +1,17 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
     public partial class ServerDHParamsFail : CatraProto.Client.TL.Schemas.MTProto.ServerDHParamsBase
     {
-
-
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 2043348061; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 2043348061; }
 
         [Newtonsoft.Json.JsonProperty("nonce")]
         public sealed override System.Numerics.BigInteger Nonce { get; set; }
@@ -46,7 +29,6 @@ namespace CatraProto.Client.TL.Schemas.MTProto
             Nonce = nonce;
             ServerNonce = serverNonce;
             NewNonceHash = newNonceHash;
-
         }
 #nullable disable
         internal ServerDHParamsFail()
@@ -55,7 +37,6 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
         public override void UpdateFlags()
         {
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -63,13 +44,14 @@ namespace CatraProto.Client.TL.Schemas.MTProto
             writer.WriteInt32(ConstructorId);
             var checkNonce = writer.WriteBigInteger(Nonce);
             if (checkNonce.IsError) { return checkNonce; }
+
             var checkServerNonce = writer.WriteBigInteger(ServerNonce);
             if (checkServerNonce.IsError) { return checkServerNonce; }
+
             var checkNewNonceHash = writer.WriteBigInteger(NewNonceHash);
             if (checkNewNonceHash.IsError) { return checkNewNonceHash; }
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -79,21 +61,23 @@ namespace CatraProto.Client.TL.Schemas.MTProto
             {
                 return ReadResult<IObject>.Move(trynonce);
             }
+
             Nonce = trynonce.Value;
             var tryserverNonce = reader.ReadBigInteger(128);
             if (tryserverNonce.IsError)
             {
                 return ReadResult<IObject>.Move(tryserverNonce);
             }
+
             ServerNonce = tryserverNonce.Value;
             var trynewNonceHash = reader.ReadBigInteger(128);
             if (trynewNonceHash.IsError)
             {
                 return ReadResult<IObject>.Move(trynewNonceHash);
             }
+
             NewNonceHash = trynewNonceHash.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -109,14 +93,11 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new ServerDHParamsFail
-            {
-                Nonce = Nonce,
-                ServerNonce = ServerNonce,
-                NewNonceHash = NewNonceHash
-            };
+            var newClonedObject = new ServerDHParamsFail();
+            newClonedObject.Nonce = Nonce;
+            newClonedObject.ServerNonce = ServerNonce;
+            newClonedObject.NewNonceHash = NewNonceHash;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -125,20 +106,23 @@ namespace CatraProto.Client.TL.Schemas.MTProto
             {
                 return true;
             }
+
             if (Nonce != castedOther.Nonce)
             {
                 return true;
             }
+
             if (ServerNonce != castedOther.ServerNonce)
             {
                 return true;
             }
+
             if (NewNonceHash != castedOther.NewNonceHash)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

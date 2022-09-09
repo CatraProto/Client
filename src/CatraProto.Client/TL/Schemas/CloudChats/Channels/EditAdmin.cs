@@ -1,24 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 
@@ -26,13 +12,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 {
     public partial class EditAdmin : IMethod
     {
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -751007486; }
 
-
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -751007486; }
-
-        [Newtonsoft.Json.JsonIgnore]
-        ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
+        [Newtonsoft.Json.JsonIgnore] ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
         [Newtonsoft.Json.JsonProperty("channel")]
         public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase Channel { get; set; }
@@ -43,8 +25,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
         [Newtonsoft.Json.JsonProperty("admin_rights")]
         public CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase AdminRights { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("rank")]
-        public string Rank { get; set; }
+        [Newtonsoft.Json.JsonProperty("rank")] public string Rank { get; set; }
 
 
 #nullable enable
@@ -54,7 +35,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
             UserId = userId;
             AdminRights = adminRights;
             Rank = rank;
-
         }
 #nullable disable
 
@@ -64,7 +44,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 
         public void UpdateFlags()
         {
-
         }
 
         public WriteResult Serialize(Writer writer)
@@ -75,11 +54,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
             {
                 return checkchannel;
             }
+
             var checkuserId = writer.WriteObject(UserId);
             if (checkuserId.IsError)
             {
                 return checkuserId;
             }
+
             var checkadminRights = writer.WriteObject(AdminRights);
             if (checkadminRights.IsError)
             {
@@ -89,7 +70,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
             writer.WriteString(Rank);
 
             return new WriteResult();
-
         }
 
         public ReadResult<IObject> Deserialize(Reader reader)
@@ -99,27 +79,30 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
             {
                 return ReadResult<IObject>.Move(trychannel);
             }
+
             Channel = trychannel.Value;
             var tryuserId = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputUserBase>();
             if (tryuserId.IsError)
             {
                 return ReadResult<IObject>.Move(tryuserId);
             }
+
             UserId = tryuserId.Value;
             var tryadminRights = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase>();
             if (tryadminRights.IsError)
             {
                 return ReadResult<IObject>.Move(tryadminRights);
             }
+
             AdminRights = tryadminRights.Value;
             var tryrank = reader.ReadString();
             if (tryrank.IsError)
             {
                 return ReadResult<IObject>.Move(tryrank);
             }
+
             Rank = tryrank.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -140,22 +123,24 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
             {
                 return null;
             }
+
             newClonedObject.Channel = cloneChannel;
             var cloneUserId = (CatraProto.Client.TL.Schemas.CloudChats.InputUserBase?)UserId.Clone();
             if (cloneUserId is null)
             {
                 return null;
             }
+
             newClonedObject.UserId = cloneUserId;
             var cloneAdminRights = (CatraProto.Client.TL.Schemas.CloudChats.ChatAdminRightsBase?)AdminRights.Clone();
             if (cloneAdminRights is null)
             {
                 return null;
             }
+
             newClonedObject.AdminRights = cloneAdminRights;
             newClonedObject.Rank = Rank;
             return newClonedObject;
-
         }
 
         public bool Compare(IObject other)
@@ -164,24 +149,28 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
             {
                 return true;
             }
+
             if (Channel.Compare(castedOther.Channel))
             {
                 return true;
             }
+
             if (UserId.Compare(castedOther.UserId))
             {
                 return true;
             }
+
             if (AdminRights.Compare(castedOther.AdminRights))
             {
                 return true;
             }
+
             if (Rank != castedOther.Rank)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 #nullable disable
     }

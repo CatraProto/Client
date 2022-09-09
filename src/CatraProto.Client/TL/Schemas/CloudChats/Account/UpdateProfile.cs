@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 
@@ -36,14 +20,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             About = 1 << 2
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 2018596725; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 2018596725; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
+        [Newtonsoft.Json.JsonIgnore] ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [MaybeNull]
         [Newtonsoft.Json.JsonProperty("first_name")]
@@ -58,8 +39,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public string About { get; set; }
 
 
-
-
         public UpdateProfile()
         {
         }
@@ -69,7 +48,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             Flags = FirstName == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
             Flags = LastName == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
             Flags = About == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
-
         }
 
         public WriteResult Serialize(Writer writer)
@@ -80,25 +58,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             writer.WriteInt32(Flags);
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
-
                 writer.WriteString(FirstName);
             }
 
             if (FlagsHelper.IsFlagSet(Flags, 1))
             {
-
                 writer.WriteString(LastName);
             }
 
             if (FlagsHelper.IsFlagSet(Flags, 2))
             {
-
                 writer.WriteString(About);
             }
 
 
             return new WriteResult();
-
         }
 
         public ReadResult<IObject> Deserialize(Reader reader)
@@ -108,6 +82,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
@@ -116,6 +91,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return ReadResult<IObject>.Move(tryfirstName);
                 }
+
                 FirstName = tryfirstName.Value;
             }
 
@@ -126,6 +102,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return ReadResult<IObject>.Move(trylastName);
                 }
+
                 LastName = trylastName.Value;
             }
 
@@ -136,11 +113,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return ReadResult<IObject>.Move(tryabout);
                 }
+
                 About = tryabout.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -155,15 +132,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new UpdateProfile
-            {
-                Flags = Flags,
-                FirstName = FirstName,
-                LastName = LastName,
-                About = About
-            };
+            var newClonedObject = new UpdateProfile();
+            newClonedObject.Flags = Flags;
+            newClonedObject.FirstName = FirstName;
+            newClonedObject.LastName = LastName;
+            newClonedObject.About = About;
             return newClonedObject;
-
         }
 
         public bool Compare(IObject other)
@@ -172,24 +146,28 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (FirstName != castedOther.FirstName)
             {
                 return true;
             }
+
             if (LastName != castedOther.LastName)
             {
                 return true;
             }
+
             if (About != castedOther.About)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 #nullable disable
     }

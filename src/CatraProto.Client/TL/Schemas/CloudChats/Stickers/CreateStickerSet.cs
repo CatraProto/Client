@@ -1,27 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 
@@ -39,14 +22,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
             Software = 1 << 3
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -1876841625; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -1876841625; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
+        [Newtonsoft.Json.JsonIgnore] ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("masks")]
         public bool Masks { get; set; }
@@ -85,7 +65,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
             Title = title;
             ShortName = shortName;
             Stickers = stickers;
-
         }
 #nullable disable
 
@@ -100,7 +79,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
             Flags = Videos ? FlagsHelper.SetFlag(Flags, 4) : FlagsHelper.UnsetFlag(Flags, 4);
             Flags = Thumb == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
             Flags = Software == null ? FlagsHelper.UnsetFlag(Flags, 3) : FlagsHelper.SetFlag(Flags, 3);
-
         }
 
         public WriteResult Serialize(Writer writer)
@@ -132,15 +110,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
             {
                 return checkstickers;
             }
+
             if (FlagsHelper.IsFlagSet(Flags, 3))
             {
-
                 writer.WriteString(Software);
             }
 
 
             return new WriteResult();
-
         }
 
         public ReadResult<IObject> Deserialize(Reader reader)
@@ -150,6 +127,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             Masks = FlagsHelper.IsFlagSet(Flags, 0);
             Animated = FlagsHelper.IsFlagSet(Flags, 1);
@@ -159,18 +137,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
             {
                 return ReadResult<IObject>.Move(tryuserId);
             }
+
             UserId = tryuserId.Value;
             var trytitle = reader.ReadString();
             if (trytitle.IsError)
             {
                 return ReadResult<IObject>.Move(trytitle);
             }
+
             Title = trytitle.Value;
             var tryshortName = reader.ReadString();
             if (tryshortName.IsError)
             {
                 return ReadResult<IObject>.Move(tryshortName);
             }
+
             ShortName = tryshortName.Value;
             if (FlagsHelper.IsFlagSet(Flags, 2))
             {
@@ -179,6 +160,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
                 {
                     return ReadResult<IObject>.Move(trythumb);
                 }
+
                 Thumb = trythumb.Value;
             }
 
@@ -187,6 +169,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
             {
                 return ReadResult<IObject>.Move(trystickers);
             }
+
             Stickers = trystickers.Value;
             if (FlagsHelper.IsFlagSet(Flags, 3))
             {
@@ -195,11 +178,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
                 {
                     return ReadResult<IObject>.Move(trysoftware);
                 }
+
                 Software = trysoftware.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -214,18 +197,17 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
 #nullable enable
         public IObject? Clone()
         {
-            var newClonedObject = new CreateStickerSet
-            {
-                Flags = Flags,
-                Masks = Masks,
-                Animated = Animated,
-                Videos = Videos
-            };
+            var newClonedObject = new CreateStickerSet();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Masks = Masks;
+            newClonedObject.Animated = Animated;
+            newClonedObject.Videos = Videos;
             var cloneUserId = (CatraProto.Client.TL.Schemas.CloudChats.InputUserBase?)UserId.Clone();
             if (cloneUserId is null)
             {
                 return null;
             }
+
             newClonedObject.UserId = cloneUserId;
             newClonedObject.Title = Title;
             newClonedObject.ShortName = ShortName;
@@ -236,8 +218,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
                 {
                     return null;
                 }
+
                 newClonedObject.Thumb = cloneThumb;
             }
+
             newClonedObject.Stickers = new List<CatraProto.Client.TL.Schemas.CloudChats.InputStickerSetItemBase>();
             foreach (var stickers in Stickers)
             {
@@ -246,11 +230,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
                 {
                     return null;
                 }
+
                 newClonedObject.Stickers.Add(clonestickers);
             }
+
             newClonedObject.Software = Software;
             return newClonedObject;
-
         }
 
         public bool Compare(IObject other)
@@ -259,47 +244,58 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Masks != castedOther.Masks)
             {
                 return true;
             }
+
             if (Animated != castedOther.Animated)
             {
                 return true;
             }
+
             if (Videos != castedOther.Videos)
             {
                 return true;
             }
+
             if (UserId.Compare(castedOther.UserId))
             {
                 return true;
             }
+
             if (Title != castedOther.Title)
             {
                 return true;
             }
+
             if (ShortName != castedOther.ShortName)
             {
                 return true;
             }
+
             if (Thumb is null && castedOther.Thumb is not null || Thumb is not null && castedOther.Thumb is null)
             {
                 return true;
             }
+
             if (Thumb is not null && castedOther.Thumb is not null && Thumb.Compare(castedOther.Thumb))
             {
                 return true;
             }
+
             var stickerssize = castedOther.Stickers.Count;
             if (stickerssize != Stickers.Count)
             {
                 return true;
             }
+
             for (var i = 0; i < stickerssize; i++)
             {
                 if (castedOther.Stickers[i].Compare(Stickers[i]))
@@ -307,12 +303,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stickers
                     return true;
                 }
             }
+
             if (Software != castedOther.Software)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 #nullable disable
     }

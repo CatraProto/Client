@@ -1,35 +1,17 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 {
     public partial class ChannelParticipants : CatraProto.Client.TL.Schemas.CloudChats.Channels.ChannelParticipantsBase
     {
-
-
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -1699676497; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -1699676497; }
 
         [Newtonsoft.Json.JsonProperty("count")]
         public int Count { get; set; }
@@ -51,7 +33,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
             Participants = participants;
             Chats = chats;
             Users = users;
-
         }
 #nullable disable
         internal ChannelParticipants()
@@ -60,7 +41,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 
         public override void UpdateFlags()
         {
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -72,11 +52,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
             {
                 return checkparticipants;
             }
+
             var checkchats = writer.WriteVector(Chats, false);
             if (checkchats.IsError)
             {
                 return checkchats;
             }
+
             var checkusers = writer.WriteVector(Users, false);
             if (checkusers.IsError)
             {
@@ -84,7 +66,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
             }
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -94,27 +75,30 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
             {
                 return ReadResult<IObject>.Move(trycount);
             }
+
             Count = trycount.Value;
             var tryparticipants = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
             if (tryparticipants.IsError)
             {
                 return ReadResult<IObject>.Move(tryparticipants);
             }
+
             Participants = tryparticipants.Value;
             var trychats = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
             if (trychats.IsError)
             {
                 return ReadResult<IObject>.Move(trychats);
             }
+
             Chats = trychats.Value;
             var tryusers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
             if (tryusers.IsError)
             {
                 return ReadResult<IObject>.Move(tryusers);
             }
+
             Users = tryusers.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -130,11 +114,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new ChannelParticipants
-            {
-                Count = Count,
-                Participants = new List<CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantBase>()
-            };
+            var newClonedObject = new ChannelParticipants();
+            newClonedObject.Count = Count;
+            newClonedObject.Participants = new List<CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantBase>();
             foreach (var participants in Participants)
             {
                 var cloneparticipants = (CatraProto.Client.TL.Schemas.CloudChats.ChannelParticipantBase?)participants.Clone();
@@ -142,8 +124,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
                 {
                     return null;
                 }
+
                 newClonedObject.Participants.Add(cloneparticipants);
             }
+
             newClonedObject.Chats = new List<CatraProto.Client.TL.Schemas.CloudChats.ChatBase>();
             foreach (var chats in Chats)
             {
@@ -152,8 +136,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
                 {
                     return null;
                 }
+
                 newClonedObject.Chats.Add(clonechats);
             }
+
             newClonedObject.Users = new List<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
             foreach (var users in Users)
             {
@@ -162,10 +148,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
                 {
                     return null;
                 }
+
                 newClonedObject.Users.Add(cloneusers);
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public override bool Compare(IObject other)
@@ -174,15 +161,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
             {
                 return true;
             }
+
             if (Count != castedOther.Count)
             {
                 return true;
             }
+
             var participantssize = castedOther.Participants.Count;
             if (participantssize != Participants.Count)
             {
                 return true;
             }
+
             for (var i = 0; i < participantssize; i++)
             {
                 if (castedOther.Participants[i].Compare(Participants[i]))
@@ -190,11 +180,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
                     return true;
                 }
             }
+
             var chatssize = castedOther.Chats.Count;
             if (chatssize != Chats.Count)
             {
                 return true;
             }
+
             for (var i = 0; i < chatssize; i++)
             {
                 if (castedOther.Chats[i].Compare(Chats[i]))
@@ -202,11 +194,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
                     return true;
                 }
             }
+
             var userssize = castedOther.Users.Count;
             if (userssize != Users.Count)
             {
                 return true;
             }
+
             for (var i = 0; i < userssize; i++)
             {
                 if (castedOther.Users[i].Compare(Users[i]))
@@ -214,8 +208,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Channels
                     return true;
                 }
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

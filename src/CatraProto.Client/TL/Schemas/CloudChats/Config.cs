@@ -1,27 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -50,11 +33,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             BaseLangPackVersion = 1 << 2
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 856375399; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 856375399; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("phonecalls_enabled")]
         public sealed override bool PhonecallsEnabled { get; set; }
@@ -80,8 +61,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         [Newtonsoft.Json.JsonProperty("force_try_ipv6")]
         public sealed override bool ForceTryIpv6 { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("date")]
-        public sealed override int Date { get; set; }
+        [Newtonsoft.Json.JsonProperty("date")] public sealed override int Date { get; set; }
 
         [Newtonsoft.Json.JsonProperty("expires")]
         public sealed override int Expires { get; set; }
@@ -257,7 +237,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             CaptionLengthMax = captionLengthMax;
             MessageLengthMax = messageLengthMax;
             WebfileDcId = webfileDcId;
-
         }
 #nullable disable
         internal Config()
@@ -283,7 +262,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = SuggestedLangCode == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
             Flags = LangPackVersion == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
             Flags = BaseLangPackVersion == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -299,6 +277,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return checktestMode;
             }
+
             writer.WriteInt32(ThisDc);
             var checkdcOptions = writer.WriteVector(DcOptions, false);
             if (checkdcOptions.IsError)
@@ -341,31 +320,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             writer.WriteString(MeUrlPrefix);
             if (FlagsHelper.IsFlagSet(Flags, 7))
             {
-
                 writer.WriteString(AutoupdateUrlPrefix);
             }
 
             if (FlagsHelper.IsFlagSet(Flags, 9))
             {
-
                 writer.WriteString(GifSearchUsername);
             }
 
             if (FlagsHelper.IsFlagSet(Flags, 10))
             {
-
                 writer.WriteString(VenueSearchUsername);
             }
 
             if (FlagsHelper.IsFlagSet(Flags, 11))
             {
-
                 writer.WriteString(ImgSearchUsername);
             }
 
             if (FlagsHelper.IsFlagSet(Flags, 12))
             {
-
                 writer.WriteString(StaticMapsProvider);
             }
 
@@ -374,7 +348,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             writer.WriteInt32(WebfileDcId);
             if (FlagsHelper.IsFlagSet(Flags, 2))
             {
-
                 writer.WriteString(SuggestedLangCode);
             }
 
@@ -390,7 +363,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -400,6 +372,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             PhonecallsEnabled = FlagsHelper.IsFlagSet(Flags, 1);
             DefaultP2pContacts = FlagsHelper.IsFlagSet(Flags, 3);
@@ -414,150 +387,175 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(trydate);
             }
+
             Date = trydate.Value;
             var tryexpires = reader.ReadInt32();
             if (tryexpires.IsError)
             {
                 return ReadResult<IObject>.Move(tryexpires);
             }
+
             Expires = tryexpires.Value;
             var trytestMode = reader.ReadBool();
             if (trytestMode.IsError)
             {
                 return ReadResult<IObject>.Move(trytestMode);
             }
+
             TestMode = trytestMode.Value;
             var trythisDc = reader.ReadInt32();
             if (trythisDc.IsError)
             {
                 return ReadResult<IObject>.Move(trythisDc);
             }
+
             ThisDc = trythisDc.Value;
             var trydcOptions = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
             if (trydcOptions.IsError)
             {
                 return ReadResult<IObject>.Move(trydcOptions);
             }
+
             DcOptions = trydcOptions.Value;
             var trydcTxtDomainName = reader.ReadString();
             if (trydcTxtDomainName.IsError)
             {
                 return ReadResult<IObject>.Move(trydcTxtDomainName);
             }
+
             DcTxtDomainName = trydcTxtDomainName.Value;
             var trychatSizeMax = reader.ReadInt32();
             if (trychatSizeMax.IsError)
             {
                 return ReadResult<IObject>.Move(trychatSizeMax);
             }
+
             ChatSizeMax = trychatSizeMax.Value;
             var trymegagroupSizeMax = reader.ReadInt32();
             if (trymegagroupSizeMax.IsError)
             {
                 return ReadResult<IObject>.Move(trymegagroupSizeMax);
             }
+
             MegagroupSizeMax = trymegagroupSizeMax.Value;
             var tryforwardedCountMax = reader.ReadInt32();
             if (tryforwardedCountMax.IsError)
             {
                 return ReadResult<IObject>.Move(tryforwardedCountMax);
             }
+
             ForwardedCountMax = tryforwardedCountMax.Value;
             var tryonlineUpdatePeriodMs = reader.ReadInt32();
             if (tryonlineUpdatePeriodMs.IsError)
             {
                 return ReadResult<IObject>.Move(tryonlineUpdatePeriodMs);
             }
+
             OnlineUpdatePeriodMs = tryonlineUpdatePeriodMs.Value;
             var tryofflineBlurTimeoutMs = reader.ReadInt32();
             if (tryofflineBlurTimeoutMs.IsError)
             {
                 return ReadResult<IObject>.Move(tryofflineBlurTimeoutMs);
             }
+
             OfflineBlurTimeoutMs = tryofflineBlurTimeoutMs.Value;
             var tryofflineIdleTimeoutMs = reader.ReadInt32();
             if (tryofflineIdleTimeoutMs.IsError)
             {
                 return ReadResult<IObject>.Move(tryofflineIdleTimeoutMs);
             }
+
             OfflineIdleTimeoutMs = tryofflineIdleTimeoutMs.Value;
             var tryonlineCloudTimeoutMs = reader.ReadInt32();
             if (tryonlineCloudTimeoutMs.IsError)
             {
                 return ReadResult<IObject>.Move(tryonlineCloudTimeoutMs);
             }
+
             OnlineCloudTimeoutMs = tryonlineCloudTimeoutMs.Value;
             var trynotifyCloudDelayMs = reader.ReadInt32();
             if (trynotifyCloudDelayMs.IsError)
             {
                 return ReadResult<IObject>.Move(trynotifyCloudDelayMs);
             }
+
             NotifyCloudDelayMs = trynotifyCloudDelayMs.Value;
             var trynotifyDefaultDelayMs = reader.ReadInt32();
             if (trynotifyDefaultDelayMs.IsError)
             {
                 return ReadResult<IObject>.Move(trynotifyDefaultDelayMs);
             }
+
             NotifyDefaultDelayMs = trynotifyDefaultDelayMs.Value;
             var trypushChatPeriodMs = reader.ReadInt32();
             if (trypushChatPeriodMs.IsError)
             {
                 return ReadResult<IObject>.Move(trypushChatPeriodMs);
             }
+
             PushChatPeriodMs = trypushChatPeriodMs.Value;
             var trypushChatLimit = reader.ReadInt32();
             if (trypushChatLimit.IsError)
             {
                 return ReadResult<IObject>.Move(trypushChatLimit);
             }
+
             PushChatLimit = trypushChatLimit.Value;
             var trysavedGifsLimit = reader.ReadInt32();
             if (trysavedGifsLimit.IsError)
             {
                 return ReadResult<IObject>.Move(trysavedGifsLimit);
             }
+
             SavedGifsLimit = trysavedGifsLimit.Value;
             var tryeditTimeLimit = reader.ReadInt32();
             if (tryeditTimeLimit.IsError)
             {
                 return ReadResult<IObject>.Move(tryeditTimeLimit);
             }
+
             EditTimeLimit = tryeditTimeLimit.Value;
             var tryrevokeTimeLimit = reader.ReadInt32();
             if (tryrevokeTimeLimit.IsError)
             {
                 return ReadResult<IObject>.Move(tryrevokeTimeLimit);
             }
+
             RevokeTimeLimit = tryrevokeTimeLimit.Value;
             var tryrevokePmTimeLimit = reader.ReadInt32();
             if (tryrevokePmTimeLimit.IsError)
             {
                 return ReadResult<IObject>.Move(tryrevokePmTimeLimit);
             }
+
             RevokePmTimeLimit = tryrevokePmTimeLimit.Value;
             var tryratingEDecay = reader.ReadInt32();
             if (tryratingEDecay.IsError)
             {
                 return ReadResult<IObject>.Move(tryratingEDecay);
             }
+
             RatingEDecay = tryratingEDecay.Value;
             var trystickersRecentLimit = reader.ReadInt32();
             if (trystickersRecentLimit.IsError)
             {
                 return ReadResult<IObject>.Move(trystickersRecentLimit);
             }
+
             StickersRecentLimit = trystickersRecentLimit.Value;
             var trystickersFavedLimit = reader.ReadInt32();
             if (trystickersFavedLimit.IsError)
             {
                 return ReadResult<IObject>.Move(trystickersFavedLimit);
             }
+
             StickersFavedLimit = trystickersFavedLimit.Value;
             var trychannelsReadMediaPeriod = reader.ReadInt32();
             if (trychannelsReadMediaPeriod.IsError)
             {
                 return ReadResult<IObject>.Move(trychannelsReadMediaPeriod);
             }
+
             ChannelsReadMediaPeriod = trychannelsReadMediaPeriod.Value;
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
@@ -566,6 +564,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trytmpSessions);
                 }
+
                 TmpSessions = trytmpSessions.Value;
             }
 
@@ -574,42 +573,49 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(trypinnedDialogsCountMax);
             }
+
             PinnedDialogsCountMax = trypinnedDialogsCountMax.Value;
             var trypinnedInfolderCountMax = reader.ReadInt32();
             if (trypinnedInfolderCountMax.IsError)
             {
                 return ReadResult<IObject>.Move(trypinnedInfolderCountMax);
             }
+
             PinnedInfolderCountMax = trypinnedInfolderCountMax.Value;
             var trycallReceiveTimeoutMs = reader.ReadInt32();
             if (trycallReceiveTimeoutMs.IsError)
             {
                 return ReadResult<IObject>.Move(trycallReceiveTimeoutMs);
             }
+
             CallReceiveTimeoutMs = trycallReceiveTimeoutMs.Value;
             var trycallRingTimeoutMs = reader.ReadInt32();
             if (trycallRingTimeoutMs.IsError)
             {
                 return ReadResult<IObject>.Move(trycallRingTimeoutMs);
             }
+
             CallRingTimeoutMs = trycallRingTimeoutMs.Value;
             var trycallConnectTimeoutMs = reader.ReadInt32();
             if (trycallConnectTimeoutMs.IsError)
             {
                 return ReadResult<IObject>.Move(trycallConnectTimeoutMs);
             }
+
             CallConnectTimeoutMs = trycallConnectTimeoutMs.Value;
             var trycallPacketTimeoutMs = reader.ReadInt32();
             if (trycallPacketTimeoutMs.IsError)
             {
                 return ReadResult<IObject>.Move(trycallPacketTimeoutMs);
             }
+
             CallPacketTimeoutMs = trycallPacketTimeoutMs.Value;
             var trymeUrlPrefix = reader.ReadString();
             if (trymeUrlPrefix.IsError)
             {
                 return ReadResult<IObject>.Move(trymeUrlPrefix);
             }
+
             MeUrlPrefix = trymeUrlPrefix.Value;
             if (FlagsHelper.IsFlagSet(Flags, 7))
             {
@@ -618,6 +624,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryautoupdateUrlPrefix);
                 }
+
                 AutoupdateUrlPrefix = tryautoupdateUrlPrefix.Value;
             }
 
@@ -628,6 +635,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trygifSearchUsername);
                 }
+
                 GifSearchUsername = trygifSearchUsername.Value;
             }
 
@@ -638,6 +646,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryvenueSearchUsername);
                 }
+
                 VenueSearchUsername = tryvenueSearchUsername.Value;
             }
 
@@ -648,6 +657,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryimgSearchUsername);
                 }
+
                 ImgSearchUsername = tryimgSearchUsername.Value;
             }
 
@@ -658,6 +668,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trystaticMapsProvider);
                 }
+
                 StaticMapsProvider = trystaticMapsProvider.Value;
             }
 
@@ -666,18 +677,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(trycaptionLengthMax);
             }
+
             CaptionLengthMax = trycaptionLengthMax.Value;
             var trymessageLengthMax = reader.ReadInt32();
             if (trymessageLengthMax.IsError)
             {
                 return ReadResult<IObject>.Move(trymessageLengthMax);
             }
+
             MessageLengthMax = trymessageLengthMax.Value;
             var trywebfileDcId = reader.ReadInt32();
             if (trywebfileDcId.IsError)
             {
                 return ReadResult<IObject>.Move(trywebfileDcId);
             }
+
             WebfileDcId = trywebfileDcId.Value;
             if (FlagsHelper.IsFlagSet(Flags, 2))
             {
@@ -686,6 +700,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trysuggestedLangCode);
                 }
+
                 SuggestedLangCode = trysuggestedLangCode.Value;
             }
 
@@ -696,6 +711,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trylangPackVersion);
                 }
+
                 LangPackVersion = trylangPackVersion.Value;
             }
 
@@ -706,11 +722,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trybaseLangPackVersion);
                 }
+
                 BaseLangPackVersion = trybaseLangPackVersion.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -726,23 +742,21 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new Config
-            {
-                Flags = Flags,
-                PhonecallsEnabled = PhonecallsEnabled,
-                DefaultP2pContacts = DefaultP2pContacts,
-                PreloadFeaturedStickers = PreloadFeaturedStickers,
-                IgnorePhoneEntities = IgnorePhoneEntities,
-                RevokePmInbox = RevokePmInbox,
-                BlockedMode = BlockedMode,
-                PfsEnabled = PfsEnabled,
-                ForceTryIpv6 = ForceTryIpv6,
-                Date = Date,
-                Expires = Expires,
-                TestMode = TestMode,
-                ThisDc = ThisDc,
-                DcOptions = new List<CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase>()
-            };
+            var newClonedObject = new Config();
+            newClonedObject.Flags = Flags;
+            newClonedObject.PhonecallsEnabled = PhonecallsEnabled;
+            newClonedObject.DefaultP2pContacts = DefaultP2pContacts;
+            newClonedObject.PreloadFeaturedStickers = PreloadFeaturedStickers;
+            newClonedObject.IgnorePhoneEntities = IgnorePhoneEntities;
+            newClonedObject.RevokePmInbox = RevokePmInbox;
+            newClonedObject.BlockedMode = BlockedMode;
+            newClonedObject.PfsEnabled = PfsEnabled;
+            newClonedObject.ForceTryIpv6 = ForceTryIpv6;
+            newClonedObject.Date = Date;
+            newClonedObject.Expires = Expires;
+            newClonedObject.TestMode = TestMode;
+            newClonedObject.ThisDc = ThisDc;
+            newClonedObject.DcOptions = new List<CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase>();
             foreach (var dcOptions in DcOptions)
             {
                 var clonedcOptions = (CatraProto.Client.TL.Schemas.CloudChats.DcOptionBase?)dcOptions.Clone();
@@ -750,8 +764,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.DcOptions.Add(clonedcOptions);
             }
+
             newClonedObject.DcTxtDomainName = DcTxtDomainName;
             newClonedObject.ChatSizeMax = ChatSizeMax;
             newClonedObject.MegagroupSizeMax = MegagroupSizeMax;
@@ -792,7 +808,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             newClonedObject.LangPackVersion = LangPackVersion;
             newClonedObject.BaseLangPackVersion = BaseLangPackVersion;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -801,63 +816,78 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (PhonecallsEnabled != castedOther.PhonecallsEnabled)
             {
                 return true;
             }
+
             if (DefaultP2pContacts != castedOther.DefaultP2pContacts)
             {
                 return true;
             }
+
             if (PreloadFeaturedStickers != castedOther.PreloadFeaturedStickers)
             {
                 return true;
             }
+
             if (IgnorePhoneEntities != castedOther.IgnorePhoneEntities)
             {
                 return true;
             }
+
             if (RevokePmInbox != castedOther.RevokePmInbox)
             {
                 return true;
             }
+
             if (BlockedMode != castedOther.BlockedMode)
             {
                 return true;
             }
+
             if (PfsEnabled != castedOther.PfsEnabled)
             {
                 return true;
             }
+
             if (ForceTryIpv6 != castedOther.ForceTryIpv6)
             {
                 return true;
             }
+
             if (Date != castedOther.Date)
             {
                 return true;
             }
+
             if (Expires != castedOther.Expires)
             {
                 return true;
             }
+
             if (TestMode != castedOther.TestMode)
             {
                 return true;
             }
+
             if (ThisDc != castedOther.ThisDc)
             {
                 return true;
             }
+
             var dcOptionssize = castedOther.DcOptions.Count;
             if (dcOptionssize != DcOptions.Count)
             {
                 return true;
             }
+
             for (var i = 0; i < dcOptionssize; i++)
             {
                 if (castedOther.DcOptions[i].Compare(DcOptions[i]))
@@ -865,164 +895,203 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                     return true;
                 }
             }
+
             if (DcTxtDomainName != castedOther.DcTxtDomainName)
             {
                 return true;
             }
+
             if (ChatSizeMax != castedOther.ChatSizeMax)
             {
                 return true;
             }
+
             if (MegagroupSizeMax != castedOther.MegagroupSizeMax)
             {
                 return true;
             }
+
             if (ForwardedCountMax != castedOther.ForwardedCountMax)
             {
                 return true;
             }
+
             if (OnlineUpdatePeriodMs != castedOther.OnlineUpdatePeriodMs)
             {
                 return true;
             }
+
             if (OfflineBlurTimeoutMs != castedOther.OfflineBlurTimeoutMs)
             {
                 return true;
             }
+
             if (OfflineIdleTimeoutMs != castedOther.OfflineIdleTimeoutMs)
             {
                 return true;
             }
+
             if (OnlineCloudTimeoutMs != castedOther.OnlineCloudTimeoutMs)
             {
                 return true;
             }
+
             if (NotifyCloudDelayMs != castedOther.NotifyCloudDelayMs)
             {
                 return true;
             }
+
             if (NotifyDefaultDelayMs != castedOther.NotifyDefaultDelayMs)
             {
                 return true;
             }
+
             if (PushChatPeriodMs != castedOther.PushChatPeriodMs)
             {
                 return true;
             }
+
             if (PushChatLimit != castedOther.PushChatLimit)
             {
                 return true;
             }
+
             if (SavedGifsLimit != castedOther.SavedGifsLimit)
             {
                 return true;
             }
+
             if (EditTimeLimit != castedOther.EditTimeLimit)
             {
                 return true;
             }
+
             if (RevokeTimeLimit != castedOther.RevokeTimeLimit)
             {
                 return true;
             }
+
             if (RevokePmTimeLimit != castedOther.RevokePmTimeLimit)
             {
                 return true;
             }
+
             if (RatingEDecay != castedOther.RatingEDecay)
             {
                 return true;
             }
+
             if (StickersRecentLimit != castedOther.StickersRecentLimit)
             {
                 return true;
             }
+
             if (StickersFavedLimit != castedOther.StickersFavedLimit)
             {
                 return true;
             }
+
             if (ChannelsReadMediaPeriod != castedOther.ChannelsReadMediaPeriod)
             {
                 return true;
             }
+
             if (TmpSessions != castedOther.TmpSessions)
             {
                 return true;
             }
+
             if (PinnedDialogsCountMax != castedOther.PinnedDialogsCountMax)
             {
                 return true;
             }
+
             if (PinnedInfolderCountMax != castedOther.PinnedInfolderCountMax)
             {
                 return true;
             }
+
             if (CallReceiveTimeoutMs != castedOther.CallReceiveTimeoutMs)
             {
                 return true;
             }
+
             if (CallRingTimeoutMs != castedOther.CallRingTimeoutMs)
             {
                 return true;
             }
+
             if (CallConnectTimeoutMs != castedOther.CallConnectTimeoutMs)
             {
                 return true;
             }
+
             if (CallPacketTimeoutMs != castedOther.CallPacketTimeoutMs)
             {
                 return true;
             }
+
             if (MeUrlPrefix != castedOther.MeUrlPrefix)
             {
                 return true;
             }
+
             if (AutoupdateUrlPrefix != castedOther.AutoupdateUrlPrefix)
             {
                 return true;
             }
+
             if (GifSearchUsername != castedOther.GifSearchUsername)
             {
                 return true;
             }
+
             if (VenueSearchUsername != castedOther.VenueSearchUsername)
             {
                 return true;
             }
+
             if (ImgSearchUsername != castedOther.ImgSearchUsername)
             {
                 return true;
             }
+
             if (StaticMapsProvider != castedOther.StaticMapsProvider)
             {
                 return true;
             }
+
             if (CaptionLengthMax != castedOther.CaptionLengthMax)
             {
                 return true;
             }
+
             if (MessageLengthMax != castedOther.MessageLengthMax)
             {
                 return true;
             }
+
             if (WebfileDcId != castedOther.WebfileDcId)
             {
                 return true;
             }
+
             if (SuggestedLangCode != castedOther.SuggestedLangCode)
             {
                 return true;
             }
+
             if (LangPackVersion != castedOther.LangPackVersion)
             {
                 return true;
             }
+
             if (BaseLangPackVersion != castedOther.BaseLangPackVersion)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

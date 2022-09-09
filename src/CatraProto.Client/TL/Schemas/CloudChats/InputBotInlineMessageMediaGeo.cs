@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -36,11 +20,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             ReplyMarkup = 1 << 2
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -1768777083; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -1768777083; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("geo_point")]
         public CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase GeoPoint { get; set; }
@@ -63,7 +45,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public InputBotInlineMessageMediaGeo(CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase geoPoint)
         {
             GeoPoint = geoPoint;
-
         }
 #nullable disable
         internal InputBotInlineMessageMediaGeo()
@@ -76,7 +57,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = Period == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
             Flags = ProximityNotificationRadius == null ? FlagsHelper.UnsetFlag(Flags, 3) : FlagsHelper.SetFlag(Flags, 3);
             Flags = ReplyMarkup == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -90,6 +70,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return checkgeoPoint;
             }
+
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
                 writer.WriteInt32(Heading.Value);
@@ -116,7 +97,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -126,12 +106,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             var trygeoPoint = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase>();
             if (trygeoPoint.IsError)
             {
                 return ReadResult<IObject>.Move(trygeoPoint);
             }
+
             GeoPoint = trygeoPoint.Value;
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
@@ -140,6 +122,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryheading);
                 }
+
                 Heading = tryheading.Value;
             }
 
@@ -150,6 +133,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryperiod);
                 }
+
                 Period = tryperiod.Value;
             }
 
@@ -160,6 +144,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryproximityNotificationRadius);
                 }
+
                 ProximityNotificationRadius = tryproximityNotificationRadius.Value;
             }
 
@@ -170,11 +155,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryreplyMarkup);
                 }
+
                 ReplyMarkup = tryreplyMarkup.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -190,15 +175,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new InputBotInlineMessageMediaGeo
-            {
-                Flags = Flags
-            };
+            var newClonedObject = new InputBotInlineMessageMediaGeo();
+            newClonedObject.Flags = Flags;
             var cloneGeoPoint = (CatraProto.Client.TL.Schemas.CloudChats.InputGeoPointBase?)GeoPoint.Clone();
             if (cloneGeoPoint is null)
             {
                 return null;
             }
+
             newClonedObject.GeoPoint = cloneGeoPoint;
             newClonedObject.Heading = Heading;
             newClonedObject.Period = Period;
@@ -210,10 +194,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.ReplyMarkup = cloneReplyMarkup;
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public override bool Compare(IObject other)
@@ -222,36 +207,43 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (GeoPoint.Compare(castedOther.GeoPoint))
             {
                 return true;
             }
+
             if (Heading != castedOther.Heading)
             {
                 return true;
             }
+
             if (Period != castedOther.Period)
             {
                 return true;
             }
+
             if (ProximityNotificationRadius != castedOther.ProximityNotificationRadius)
             {
                 return true;
             }
+
             if (ReplyMarkup is null && castedOther.ReplyMarkup is not null || ReplyMarkup is not null && castedOther.ReplyMarkup is null)
             {
                 return true;
             }
+
             if (ReplyMarkup is not null && castedOther.ReplyMarkup is not null && ReplyMarkup.Compare(castedOther.ReplyMarkup))
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

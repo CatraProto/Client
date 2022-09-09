@@ -1,27 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
@@ -34,11 +17,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             PrivacyPolicyUrl = 1 << 0
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -1389486888; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -1389486888; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("required_types")]
         public sealed override List<CatraProto.Client.TL.Schemas.CloudChats.SecureRequiredTypeBase> RequiredTypes { get; set; }
@@ -64,7 +45,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             Values = values;
             Errors = errors;
             Users = users;
-
         }
 #nullable disable
         internal AuthorizationForm()
@@ -74,7 +54,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public override void UpdateFlags()
         {
             Flags = PrivacyPolicyUrl == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -88,30 +67,32 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             {
                 return checkrequiredTypes;
             }
+
             var checkvalues = writer.WriteVector(Values, false);
             if (checkvalues.IsError)
             {
                 return checkvalues;
             }
+
             var checkerrors = writer.WriteVector(Errors, false);
             if (checkerrors.IsError)
             {
                 return checkerrors;
             }
+
             var checkusers = writer.WriteVector(Users, false);
             if (checkusers.IsError)
             {
                 return checkusers;
             }
+
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
-
                 writer.WriteString(PrivacyPolicyUrl);
             }
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -121,30 +102,35 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             var tryrequiredTypes = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SecureRequiredTypeBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
             if (tryrequiredTypes.IsError)
             {
                 return ReadResult<IObject>.Move(tryrequiredTypes);
             }
+
             RequiredTypes = tryrequiredTypes.Value;
             var tryvalues = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
             if (tryvalues.IsError)
             {
                 return ReadResult<IObject>.Move(tryvalues);
             }
+
             Values = tryvalues.Value;
             var tryerrors = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
             if (tryerrors.IsError)
             {
                 return ReadResult<IObject>.Move(tryerrors);
             }
+
             Errors = tryerrors.Value;
             var tryusers = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.UserBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
             if (tryusers.IsError)
             {
                 return ReadResult<IObject>.Move(tryusers);
             }
+
             Users = tryusers.Value;
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
@@ -153,11 +139,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return ReadResult<IObject>.Move(tryprivacyPolicyUrl);
                 }
+
                 PrivacyPolicyUrl = tryprivacyPolicyUrl.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -173,11 +159,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new AuthorizationForm
-            {
-                Flags = Flags,
-                RequiredTypes = new List<CatraProto.Client.TL.Schemas.CloudChats.SecureRequiredTypeBase>()
-            };
+            var newClonedObject = new AuthorizationForm();
+            newClonedObject.Flags = Flags;
+            newClonedObject.RequiredTypes = new List<CatraProto.Client.TL.Schemas.CloudChats.SecureRequiredTypeBase>();
             foreach (var requiredTypes in RequiredTypes)
             {
                 var clonerequiredTypes = (CatraProto.Client.TL.Schemas.CloudChats.SecureRequiredTypeBase?)requiredTypes.Clone();
@@ -185,8 +169,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return null;
                 }
+
                 newClonedObject.RequiredTypes.Add(clonerequiredTypes);
             }
+
             newClonedObject.Values = new List<CatraProto.Client.TL.Schemas.CloudChats.SecureValueBase>();
             foreach (var values in Values)
             {
@@ -195,8 +181,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return null;
                 }
+
                 newClonedObject.Values.Add(clonevalues);
             }
+
             newClonedObject.Errors = new List<CatraProto.Client.TL.Schemas.CloudChats.SecureValueErrorBase>();
             foreach (var errors in Errors)
             {
@@ -205,8 +193,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return null;
                 }
+
                 newClonedObject.Errors.Add(cloneerrors);
             }
+
             newClonedObject.Users = new List<CatraProto.Client.TL.Schemas.CloudChats.UserBase>();
             foreach (var users in Users)
             {
@@ -215,11 +205,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return null;
                 }
+
                 newClonedObject.Users.Add(cloneusers);
             }
+
             newClonedObject.PrivacyPolicyUrl = PrivacyPolicyUrl;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -228,15 +219,18 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             var requiredTypessize = castedOther.RequiredTypes.Count;
             if (requiredTypessize != RequiredTypes.Count)
             {
                 return true;
             }
+
             for (var i = 0; i < requiredTypessize; i++)
             {
                 if (castedOther.RequiredTypes[i].Compare(RequiredTypes[i]))
@@ -244,11 +238,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                     return true;
                 }
             }
+
             var valuessize = castedOther.Values.Count;
             if (valuessize != Values.Count)
             {
                 return true;
             }
+
             for (var i = 0; i < valuessize; i++)
             {
                 if (castedOther.Values[i].Compare(Values[i]))
@@ -256,11 +252,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                     return true;
                 }
             }
+
             var errorssize = castedOther.Errors.Count;
             if (errorssize != Errors.Count)
             {
                 return true;
             }
+
             for (var i = 0; i < errorssize; i++)
             {
                 if (castedOther.Errors[i].Compare(Errors[i]))
@@ -268,11 +266,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                     return true;
                 }
             }
+
             var userssize = castedOther.Users.Count;
             if (userssize != Users.Count)
             {
                 return true;
             }
+
             for (var i = 0; i < userssize; i++)
             {
                 if (castedOther.Users[i].Compare(Users[i]))
@@ -280,12 +280,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                     return true;
                 }
             }
+
             if (PrivacyPolicyUrl != castedOther.PrivacyPolicyUrl)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

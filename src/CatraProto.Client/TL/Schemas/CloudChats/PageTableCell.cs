@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -40,11 +24,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Rowspan = 1 << 2
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 878078826; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 878078826; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("header")]
         public sealed override bool Header { get; set; }
@@ -72,7 +54,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         public sealed override int? Rowspan { get; set; }
 
 
-
         public PageTableCell()
         {
         }
@@ -87,7 +68,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = Text == null ? FlagsHelper.UnsetFlag(Flags, 7) : FlagsHelper.SetFlag(Flags, 7);
             Flags = Colspan == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
             Flags = Rowspan == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -117,7 +97,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -127,6 +106,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             Header = FlagsHelper.IsFlagSet(Flags, 0);
             AlignCenter = FlagsHelper.IsFlagSet(Flags, 3);
@@ -140,6 +120,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trytext);
                 }
+
                 Text = trytext.Value;
             }
 
@@ -150,6 +131,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trycolspan);
                 }
+
                 Colspan = trycolspan.Value;
             }
 
@@ -160,11 +142,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryrowspan);
                 }
+
                 Rowspan = tryrowspan.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -180,15 +162,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new PageTableCell
-            {
-                Flags = Flags,
-                Header = Header,
-                AlignCenter = AlignCenter,
-                AlignRight = AlignRight,
-                ValignMiddle = ValignMiddle,
-                ValignBottom = ValignBottom
-            };
+            var newClonedObject = new PageTableCell();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Header = Header;
+            newClonedObject.AlignCenter = AlignCenter;
+            newClonedObject.AlignRight = AlignRight;
+            newClonedObject.ValignMiddle = ValignMiddle;
+            newClonedObject.ValignBottom = ValignBottom;
             if (Text is not null)
             {
                 var cloneText = (CatraProto.Client.TL.Schemas.CloudChats.RichTextBase?)Text.Clone();
@@ -196,12 +176,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.Text = cloneText;
             }
+
             newClonedObject.Colspan = Colspan;
             newClonedObject.Rowspan = Rowspan;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -210,48 +191,58 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Header != castedOther.Header)
             {
                 return true;
             }
+
             if (AlignCenter != castedOther.AlignCenter)
             {
                 return true;
             }
+
             if (AlignRight != castedOther.AlignRight)
             {
                 return true;
             }
+
             if (ValignMiddle != castedOther.ValignMiddle)
             {
                 return true;
             }
+
             if (ValignBottom != castedOther.ValignBottom)
             {
                 return true;
             }
+
             if (Text is null && castedOther.Text is not null || Text is not null && castedOther.Text is null)
             {
                 return true;
             }
+
             if (Text is not null && castedOther.Text is not null && Text.Compare(castedOther.Text))
             {
                 return true;
             }
+
             if (Colspan != castedOther.Colspan)
             {
                 return true;
             }
+
             if (Rowspan != castedOther.Rowspan)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

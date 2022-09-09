@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
 using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -34,11 +18,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             AudioSource = 1 << 1
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 1735736008; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 1735736008; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [Newtonsoft.Json.JsonProperty("paused")]
         public sealed override bool Paused { get; set; }
@@ -58,7 +40,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             Endpoint = endpoint;
             SourceGroups = sourceGroups;
-
         }
 #nullable disable
         internal GroupCallParticipantVideo()
@@ -69,7 +50,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             Flags = Paused ? FlagsHelper.SetFlag(Flags, 0) : FlagsHelper.UnsetFlag(Flags, 0);
             Flags = AudioSource == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -85,6 +65,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return checksourceGroups;
             }
+
             if (FlagsHelper.IsFlagSet(Flags, 1))
             {
                 writer.WriteInt32(AudioSource.Value);
@@ -92,7 +73,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -102,6 +82,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             Paused = FlagsHelper.IsFlagSet(Flags, 0);
             var tryendpoint = reader.ReadString();
@@ -109,12 +90,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryendpoint);
             }
+
             Endpoint = tryendpoint.Value;
             var trysourceGroups = reader.ReadVector<CatraProto.Client.TL.Schemas.CloudChats.GroupCallParticipantVideoSourceGroupBase>(ParserTypes.Object, nakedVector: false, nakedObjects: false);
             if (trysourceGroups.IsError)
             {
                 return ReadResult<IObject>.Move(trysourceGroups);
             }
+
             SourceGroups = trysourceGroups.Value;
             if (FlagsHelper.IsFlagSet(Flags, 1))
             {
@@ -123,11 +106,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryaudioSource);
                 }
+
                 AudioSource = tryaudioSource.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -143,13 +126,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new GroupCallParticipantVideo
-            {
-                Flags = Flags,
-                Paused = Paused,
-                Endpoint = Endpoint,
-                SourceGroups = new List<CatraProto.Client.TL.Schemas.CloudChats.GroupCallParticipantVideoSourceGroupBase>()
-            };
+            var newClonedObject = new GroupCallParticipantVideo();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Paused = Paused;
+            newClonedObject.Endpoint = Endpoint;
+            newClonedObject.SourceGroups = new List<CatraProto.Client.TL.Schemas.CloudChats.GroupCallParticipantVideoSourceGroupBase>();
             foreach (var sourceGroups in SourceGroups)
             {
                 var clonesourceGroups = (CatraProto.Client.TL.Schemas.CloudChats.GroupCallParticipantVideoSourceGroupBase?)sourceGroups.Clone();
@@ -157,11 +138,12 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return null;
                 }
+
                 newClonedObject.SourceGroups.Add(clonesourceGroups);
             }
+
             newClonedObject.AudioSource = AudioSource;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -170,23 +152,28 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Paused != castedOther.Paused)
             {
                 return true;
             }
+
             if (Endpoint != castedOther.Endpoint)
             {
                 return true;
             }
+
             var sourceGroupssize = castedOther.SourceGroups.Count;
             if (sourceGroupssize != SourceGroups.Count)
             {
                 return true;
             }
+
             for (var i = 0; i < sourceGroupssize; i++)
             {
                 if (castedOther.SourceGroups[i].Compare(SourceGroups[i]))
@@ -194,12 +181,13 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                     return true;
                 }
             }
+
             if (AudioSource != castedOther.AudioSource)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

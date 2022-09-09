@@ -1,34 +1,17 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.MTProto
 {
     public partial class Message : CatraProto.Client.TL.Schemas.MTProto.MessageBase
     {
-
-
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 0; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 0; }
 
         [Newtonsoft.Json.JsonProperty("msg_id")]
         public sealed override long MsgId { get; set; }
@@ -39,8 +22,7 @@ namespace CatraProto.Client.TL.Schemas.MTProto
         [Newtonsoft.Json.JsonProperty("bytes")]
         public sealed override int Bytes { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("body")]
-        public sealed override IObject Body { get; set; }
+        [Newtonsoft.Json.JsonProperty("body")] public sealed override IObject Body { get; set; }
 
 
 #nullable enable
@@ -50,7 +32,6 @@ namespace CatraProto.Client.TL.Schemas.MTProto
             Seqno = seqno;
             Bytes = bytes;
             Body = body;
-
         }
 #nullable disable
         internal Message()
@@ -59,7 +40,6 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 
         public override void UpdateFlags()
         {
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -74,7 +54,6 @@ namespace CatraProto.Client.TL.Schemas.MTProto
             }
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -84,27 +63,30 @@ namespace CatraProto.Client.TL.Schemas.MTProto
             {
                 return ReadResult<IObject>.Move(trymsgId);
             }
+
             MsgId = trymsgId.Value;
             var tryseqno = reader.ReadInt32();
             if (tryseqno.IsError)
             {
                 return ReadResult<IObject>.Move(tryseqno);
             }
+
             Seqno = tryseqno.Value;
             var trybytes = reader.ReadInt32();
             if (trybytes.IsError)
             {
                 return ReadResult<IObject>.Move(trybytes);
             }
+
             Bytes = trybytes.Value;
             var trybody = reader.ReadObject<IObject>();
             if (trybody.IsError)
             {
                 return ReadResult<IObject>.Move(trybody);
             }
+
             Body = trybody.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -120,15 +102,12 @@ namespace CatraProto.Client.TL.Schemas.MTProto
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new Message
-            {
-                MsgId = MsgId,
-                Seqno = Seqno,
-                Bytes = Bytes,
-                Body = Body
-            };
+            var newClonedObject = new Message();
+            newClonedObject.MsgId = MsgId;
+            newClonedObject.Seqno = Seqno;
+            newClonedObject.Bytes = Bytes;
+            newClonedObject.Body = Body;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -137,24 +116,28 @@ namespace CatraProto.Client.TL.Schemas.MTProto
             {
                 return true;
             }
+
             if (MsgId != castedOther.MsgId)
             {
                 return true;
             }
+
             if (Seqno != castedOther.Seqno)
             {
                 return true;
             }
+
             if (Bytes != castedOther.Bytes)
             {
                 return true;
             }
+
             if (Body != castedOther.Body)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats
@@ -37,14 +21,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             ManyValue = 1 << 4
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 1816636575; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 1816636575; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("key")]
-        public sealed override string Key { get; set; }
+        [Newtonsoft.Json.JsonProperty("key")] public sealed override string Key { get; set; }
 
         [MaybeNull]
         [Newtonsoft.Json.JsonProperty("zero_value")]
@@ -75,7 +56,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
         {
             Key = key;
             OtherValue = otherValue;
-
         }
 #nullable disable
         internal LangPackStringPluralized()
@@ -89,7 +69,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             Flags = TwoValue == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
             Flags = FewValue == null ? FlagsHelper.UnsetFlag(Flags, 3) : FlagsHelper.SetFlag(Flags, 3);
             Flags = ManyValue == null ? FlagsHelper.UnsetFlag(Flags, 4) : FlagsHelper.SetFlag(Flags, 4);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -102,31 +81,26 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             writer.WriteString(Key);
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
-
                 writer.WriteString(ZeroValue);
             }
 
             if (FlagsHelper.IsFlagSet(Flags, 1))
             {
-
                 writer.WriteString(OneValue);
             }
 
             if (FlagsHelper.IsFlagSet(Flags, 2))
             {
-
                 writer.WriteString(TwoValue);
             }
 
             if (FlagsHelper.IsFlagSet(Flags, 3))
             {
-
                 writer.WriteString(FewValue);
             }
 
             if (FlagsHelper.IsFlagSet(Flags, 4))
             {
-
                 writer.WriteString(ManyValue);
             }
 
@@ -134,7 +108,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             writer.WriteString(OtherValue);
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -144,12 +117,14 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             var trykey = reader.ReadString();
             if (trykey.IsError)
             {
                 return ReadResult<IObject>.Move(trykey);
             }
+
             Key = trykey.Value;
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
@@ -158,6 +133,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryzeroValue);
                 }
+
                 ZeroValue = tryzeroValue.Value;
             }
 
@@ -168,6 +144,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryoneValue);
                 }
+
                 OneValue = tryoneValue.Value;
             }
 
@@ -178,6 +155,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trytwoValue);
                 }
+
                 TwoValue = trytwoValue.Value;
             }
 
@@ -188,6 +166,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(tryfewValue);
                 }
+
                 FewValue = tryfewValue.Value;
             }
 
@@ -198,6 +177,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
                 {
                     return ReadResult<IObject>.Move(trymanyValue);
                 }
+
                 ManyValue = trymanyValue.Value;
             }
 
@@ -206,9 +186,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return ReadResult<IObject>.Move(tryotherValue);
             }
+
             OtherValue = tryotherValue.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -224,19 +204,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new LangPackStringPluralized
-            {
-                Flags = Flags,
-                Key = Key,
-                ZeroValue = ZeroValue,
-                OneValue = OneValue,
-                TwoValue = TwoValue,
-                FewValue = FewValue,
-                ManyValue = ManyValue,
-                OtherValue = OtherValue
-            };
+            var newClonedObject = new LangPackStringPluralized();
+            newClonedObject.Flags = Flags;
+            newClonedObject.Key = Key;
+            newClonedObject.ZeroValue = ZeroValue;
+            newClonedObject.OneValue = OneValue;
+            newClonedObject.TwoValue = TwoValue;
+            newClonedObject.FewValue = FewValue;
+            newClonedObject.ManyValue = ManyValue;
+            newClonedObject.OtherValue = OtherValue;
             return newClonedObject;
-
         }
 
         public override bool Compare(IObject other)
@@ -245,40 +222,48 @@ namespace CatraProto.Client.TL.Schemas.CloudChats
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (Key != castedOther.Key)
             {
                 return true;
             }
+
             if (ZeroValue != castedOther.ZeroValue)
             {
                 return true;
             }
+
             if (OneValue != castedOther.OneValue)
             {
                 return true;
             }
+
             if (TwoValue != castedOther.TwoValue)
             {
                 return true;
             }
+
             if (FewValue != castedOther.FewValue)
             {
                 return true;
             }
+
             if (ManyValue != castedOther.ManyValue)
             {
                 return true;
             }
+
             if (OtherValue != castedOther.OtherValue)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable

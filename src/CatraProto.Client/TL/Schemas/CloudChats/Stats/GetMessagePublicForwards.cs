@@ -1,24 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+using System;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 
@@ -26,13 +12,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 {
     public partial class GetMessagePublicForwards : IMethod
     {
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => 1445996571; }
 
-
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => 1445996571; }
-
-        [Newtonsoft.Json.JsonIgnore]
-        ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
+        [Newtonsoft.Json.JsonIgnore] ParserTypes IMethod.Type { get; init; } = ParserTypes.Object;
 
         [Newtonsoft.Json.JsonProperty("channel")]
         public CatraProto.Client.TL.Schemas.CloudChats.InputChannelBase Channel { get; set; }
@@ -62,7 +44,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
             OffsetPeer = offsetPeer;
             OffsetId = offsetId;
             Limit = limit;
-
         }
 #nullable disable
 
@@ -72,7 +53,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
 
         public void UpdateFlags()
         {
-
         }
 
         public WriteResult Serialize(Writer writer)
@@ -83,6 +63,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
             {
                 return checkchannel;
             }
+
             writer.WriteInt32(MsgId);
             writer.WriteInt32(OffsetRate);
             var checkoffsetPeer = writer.WriteObject(OffsetPeer);
@@ -90,11 +71,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
             {
                 return checkoffsetPeer;
             }
+
             writer.WriteInt32(OffsetId);
             writer.WriteInt32(Limit);
 
             return new WriteResult();
-
         }
 
         public ReadResult<IObject> Deserialize(Reader reader)
@@ -104,39 +85,44 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
             {
                 return ReadResult<IObject>.Move(trychannel);
             }
+
             Channel = trychannel.Value;
             var trymsgId = reader.ReadInt32();
             if (trymsgId.IsError)
             {
                 return ReadResult<IObject>.Move(trymsgId);
             }
+
             MsgId = trymsgId.Value;
             var tryoffsetRate = reader.ReadInt32();
             if (tryoffsetRate.IsError)
             {
                 return ReadResult<IObject>.Move(tryoffsetRate);
             }
+
             OffsetRate = tryoffsetRate.Value;
             var tryoffsetPeer = reader.ReadObject<CatraProto.Client.TL.Schemas.CloudChats.InputPeerBase>();
             if (tryoffsetPeer.IsError)
             {
                 return ReadResult<IObject>.Move(tryoffsetPeer);
             }
+
             OffsetPeer = tryoffsetPeer.Value;
             var tryoffsetId = reader.ReadInt32();
             if (tryoffsetId.IsError)
             {
                 return ReadResult<IObject>.Move(tryoffsetId);
             }
+
             OffsetId = tryoffsetId.Value;
             var trylimit = reader.ReadInt32();
             if (trylimit.IsError)
             {
                 return ReadResult<IObject>.Move(trylimit);
             }
+
             Limit = trylimit.Value;
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -157,6 +143,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
             {
                 return null;
             }
+
             newClonedObject.Channel = cloneChannel;
             newClonedObject.MsgId = MsgId;
             newClonedObject.OffsetRate = OffsetRate;
@@ -165,11 +152,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
             {
                 return null;
             }
+
             newClonedObject.OffsetPeer = cloneOffsetPeer;
             newClonedObject.OffsetId = OffsetId;
             newClonedObject.Limit = Limit;
             return newClonedObject;
-
         }
 
         public bool Compare(IObject other)
@@ -178,32 +165,38 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Stats
             {
                 return true;
             }
+
             if (Channel.Compare(castedOther.Channel))
             {
                 return true;
             }
+
             if (MsgId != castedOther.MsgId)
             {
                 return true;
             }
+
             if (OffsetRate != castedOther.OffsetRate)
             {
                 return true;
             }
+
             if (OffsetPeer.Compare(castedOther.OffsetPeer))
             {
                 return true;
             }
+
             if (OffsetId != castedOther.OffsetId)
             {
                 return true;
             }
+
             if (Limit != castedOther.Limit)
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 #nullable disable
     }

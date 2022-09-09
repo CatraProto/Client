@@ -1,26 +1,10 @@
-/*
-CatraProto, a C# library that implements the MTProto protocol and the Telegram API.
-Copyright (C) 2022 Aquatica <aquathing@protonmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using CatraProto.TL;
 using CatraProto.TL.Interfaces;
 using CatraProto.TL.Results;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable disable
 namespace CatraProto.Client.TL.Schemas.CloudChats.Account
@@ -37,11 +21,9 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             NewSecureSettings = 1 << 2
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public static int ConstructorId { get => -1036572727; }
+        [Newtonsoft.Json.JsonIgnore] public static int ConstructorId { get => -1036572727; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public int Flags { get; set; }
+        [Newtonsoft.Json.JsonIgnore] public int Flags { get; set; }
 
         [MaybeNull]
         [Newtonsoft.Json.JsonProperty("new_algo")]
@@ -63,7 +45,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
         public sealed override CatraProto.Client.TL.Schemas.CloudChats.SecureSecretSettingsBase NewSecureSettings { get; set; }
 
 
-
         public PasswordInputSettings()
         {
         }
@@ -75,7 +56,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             Flags = Hint == null ? FlagsHelper.UnsetFlag(Flags, 0) : FlagsHelper.SetFlag(Flags, 0);
             Flags = Email == null ? FlagsHelper.UnsetFlag(Flags, 1) : FlagsHelper.SetFlag(Flags, 1);
             Flags = NewSecureSettings == null ? FlagsHelper.UnsetFlag(Flags, 2) : FlagsHelper.SetFlag(Flags, 2);
-
         }
 
         public override WriteResult Serialize(Writer writer)
@@ -95,19 +75,16 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
-
                 writer.WriteBytes(NewPasswordHash);
             }
 
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
-
                 writer.WriteString(Hint);
             }
 
             if (FlagsHelper.IsFlagSet(Flags, 1))
             {
-
                 writer.WriteString(Email);
             }
 
@@ -122,7 +99,6 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 
 
             return new WriteResult();
-
         }
 
         public override ReadResult<IObject> Deserialize(Reader reader)
@@ -132,6 +108,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             {
                 return ReadResult<IObject>.Move(tryflags);
             }
+
             Flags = tryflags.Value;
             if (FlagsHelper.IsFlagSet(Flags, 0))
             {
@@ -140,6 +117,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return ReadResult<IObject>.Move(trynewAlgo);
                 }
+
                 NewAlgo = trynewAlgo.Value;
             }
 
@@ -150,6 +128,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return ReadResult<IObject>.Move(trynewPasswordHash);
                 }
+
                 NewPasswordHash = trynewPasswordHash.Value;
             }
 
@@ -160,6 +139,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return ReadResult<IObject>.Move(tryhint);
                 }
+
                 Hint = tryhint.Value;
             }
 
@@ -170,6 +150,7 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return ReadResult<IObject>.Move(tryemail);
                 }
+
                 Email = tryemail.Value;
             }
 
@@ -180,11 +161,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return ReadResult<IObject>.Move(trynewSecureSettings);
                 }
+
                 NewSecureSettings = trynewSecureSettings.Value;
             }
 
             return new ReadResult<IObject>(this);
-
         }
 
         public override string ToString()
@@ -200,10 +181,8 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
 #nullable enable
         public override IObject? Clone()
         {
-            var newClonedObject = new PasswordInputSettings
-            {
-                Flags = Flags
-            };
+            var newClonedObject = new PasswordInputSettings();
+            newClonedObject.Flags = Flags;
             if (NewAlgo is not null)
             {
                 var cloneNewAlgo = (CatraProto.Client.TL.Schemas.CloudChats.PasswordKdfAlgoBase?)NewAlgo.Clone();
@@ -211,8 +190,10 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return null;
                 }
+
                 newClonedObject.NewAlgo = cloneNewAlgo;
             }
+
             newClonedObject.NewPasswordHash = NewPasswordHash;
             newClonedObject.Hint = Hint;
             newClonedObject.Email = Email;
@@ -223,10 +204,11 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
                 {
                     return null;
                 }
+
                 newClonedObject.NewSecureSettings = cloneNewSecureSettings;
             }
-            return newClonedObject;
 
+            return newClonedObject;
         }
 
         public override bool Compare(IObject other)
@@ -235,40 +217,48 @@ namespace CatraProto.Client.TL.Schemas.CloudChats.Account
             {
                 return true;
             }
+
             if (Flags != castedOther.Flags)
             {
                 return true;
             }
+
             if (NewAlgo is null && castedOther.NewAlgo is not null || NewAlgo is not null && castedOther.NewAlgo is null)
             {
                 return true;
             }
+
             if (NewAlgo is not null && castedOther.NewAlgo is not null && NewAlgo.Compare(castedOther.NewAlgo))
             {
                 return true;
             }
+
             if (NewPasswordHash != castedOther.NewPasswordHash)
             {
                 return true;
             }
+
             if (Hint != castedOther.Hint)
             {
                 return true;
             }
+
             if (Email != castedOther.Email)
             {
                 return true;
             }
+
             if (NewSecureSettings is null && castedOther.NewSecureSettings is not null || NewSecureSettings is not null && castedOther.NewSecureSettings is null)
             {
                 return true;
             }
+
             if (NewSecureSettings is not null && castedOther.NewSecureSettings is not null && NewSecureSettings.Compare(castedOther.NewSecureSettings))
             {
                 return true;
             }
-            return false;
 
+            return false;
         }
 
 #nullable disable
