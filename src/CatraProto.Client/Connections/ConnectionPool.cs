@@ -26,6 +26,7 @@ using System.Threading.Tasks;
 using CatraProto.Client.ApiManagers;
 using CatraProto.Client.Async.Locks;
 using CatraProto.Client.MTProto.Auth.AuthKey;
+using CatraProto.Client.TL.Schemas.CloudChats;
 using CatraProto.Client.Updates;
 using Serilog;
 
@@ -61,31 +62,45 @@ namespace CatraProto.Client.Connections
 
         public async Task<ConnectionItem> GetConnectionByDcAsync(int dcId, bool forceNew, bool isMediaPreferred, CancellationToken token)
         {
-            if (_mainConnection is null)
-            {
-                throw new InvalidOperationException("InitMainConnection not called");
-            }
-            
             ConnectionItem connectionItem;
             ConnectionItem? mainConnectionItem = null;
+            _logger.Information("Retrieving config");
             var config = await _client.ConfigManager.GetConfigAsync(token);
+
+            _logger.Verbose("Waiting for lock");
             using (await _asyncLock.LockAsync(token))
             {
+                _logger.Verbose("Lock acquired");
+                if (_mainConnection is null)
+                {
+                    throw new InvalidOperationException("InitMainConnection not called");
+                }
+
+                if (dcId == -1)
+                {
+                    dcId = _mainConnection.ConnectionInfo.DcId;
+                }
+
                 if (!forceNew && TryFindLocal(dcId, isMediaPreferred, out var connection))
                 {
+                    _logger.Verbose("Found matching existing connection");
                     return CreateConnectionItem(connection);
                 }
 
                 var isTestDc = _client.ClientSession.Settings.ConnectionSettings.DefaultDatacenter.Test;
-                var matches = config.DcOptions.Where(x => Matches(ConnectionInfo.FromDcOption(x, isTestDc), dcId, isMediaPreferred)).OrderBy(x => x.MediaOnly).ToList();
+                var matches = config.DcOptions
+                    .Select(x => new Tuple<DcOptionBase, ConnectionInfo>(x, ConnectionInfo.FromDcOption(x, isTestDc)))
+                    .Where(x => Matches(x.Item2, dcId, isMediaPreferred))
+                    .OrderBy(x => x.Item1.MediaOnly)
+                    .Select(x => x.Item2)
+                    .ToList();
+
                 if (matches.Count == 0)
                 {
                     throw new Exception("Couldn't find matching dcOption");
                 }
 
-                var datacenter = matches[0];
-                var connectionInfo = new ConnectionInfo(IPAddress.Parse(datacenter.IpAddress), datacenter.Port, dcId, isTestDc);
-                var createdConnection = new Connection(connectionInfo, _client);
+                var createdConnection = new Connection(matches[0], _client);
                 createdConnection.MtProtoState.KeyManager = CreateOrGetKey(createdConnection, dcId, out var justCreated);
                 if (justCreated)
                 {
@@ -111,7 +126,7 @@ namespace CatraProto.Client.Connections
             }
             finally
             {
-                if(mainConnectionItem is not null)
+                if (mainConnectionItem is not null)
                 {
                     await mainConnectionItem.DisposeAsync();
                 }
@@ -128,7 +143,30 @@ namespace CatraProto.Client.Connections
             return connItem;
         }
 
-        public async ValueTask DecreaseReferenceAsync(Connection connection)
+        public void DecreaseReference(Connection connection)
+        {
+            Task.Run(async () =>
+            {
+                TimeSpan? waitTime = null;
+                using (await _asyncLock.LockAsync())
+                {
+                    if (_referenceCounts.TryGetValue(connection, out var rCount) && rCount - 1 == 0)
+                    {
+                        waitTime = TimeSpan.FromMilliseconds(500);
+                    }
+                }
+
+                if (waitTime is not null)
+                {
+                    _logger.Information("Waiting for {Ms}ms before closing connection {Connection}", waitTime.Value.TotalMilliseconds, connection);
+                    await Task.Delay(waitTime.Value);
+                }
+
+                await DecreaseReferenceAsync(connection);
+            });
+        }
+
+        public async Task DecreaseReferenceAsync(Connection connection)
         {
             using (await _asyncLock.LockAsync())
             {
@@ -182,7 +220,7 @@ namespace CatraProto.Client.Connections
                         else
                         {
                             _logger.Information("Disposing connection {Connection} because no one holds a reference to it", connection);
-                            await connection.DisposeAsync();    
+                            await connection.DisposeAsync();
                         }
                     }
                     else
@@ -260,7 +298,7 @@ namespace CatraProto.Client.Connections
 
         public async Task SetUpdatesHandlerAsync(UpdatesReceiver updatesReceiver)
         {
-            using(await _asyncLock.LockAsync())
+            using (await _asyncLock.LockAsync())
             {
                 _updatesHandler = updatesReceiver;
                 if (_mainConnection != null)
@@ -305,7 +343,7 @@ namespace CatraProto.Client.Connections
         {
             foreach (var (conn, _) in _referenceCounts)
             {
-                if (Matches(conn.ConnectionInfo, dc, isMediaPreferred))
+                if (Matches(conn.ConnectionInfo, dc, isMediaPreferred) && !conn.ConnectionInfo.Main)
                 {
                     connection = conn;
                     return true;
@@ -331,7 +369,7 @@ namespace CatraProto.Client.Connections
                     await conn.DisposeAsync();
                 }
 
-                if(_mainConnection is not null)
+                if (_mainConnection is not null)
                 {
                     _logger.Information("Disposing main connection {Conn}", _mainConnection);
                     await _mainConnection.DisposeAsync();
