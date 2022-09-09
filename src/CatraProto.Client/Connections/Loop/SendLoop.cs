@@ -53,6 +53,7 @@ namespace CatraProto.Client.Connections.Loop
         private readonly MTProtoState _mtProtoState;
         private readonly Connection _connection;
         private readonly ILogger _logger;
+
         public SendLoop(Connection connection, ILogger logger)
         {
             _connection = connection;
@@ -96,7 +97,7 @@ namespace CatraProto.Client.Connections.Loop
                     }
                 }
 
-                if (stoppingToken.IsCancellationRequested) 
+                if (stoppingToken.IsCancellationRequested)
                 {
                     _logger.Information("Send loop stopped");
                     SetSignalHandled(ResumableLoopState.Stopped, currentState);
@@ -116,7 +117,7 @@ namespace CatraProto.Client.Connections.Loop
             }
         }
 
-        private async Task EncryptedTickAsync(CancellationToken stoppingToken)
+        private async ValueTask EncryptedTickAsync(CancellationToken stoppingToken)
         {
             var addBack = new Lazy<List<MessageItem>>(() => new List<MessageItem>(1));
             var encryptedList = new Lazy<List<MessageItem>>(() => new List<MessageItem>(1));
@@ -200,6 +201,7 @@ namespace CatraProto.Client.Connections.Loop
                         item.SetToSend(wakeUpLoop: false, canDelete: true);
                     }
                 }
+
                 return;
             }
 
@@ -266,7 +268,7 @@ namespace CatraProto.Client.Connections.Loop
                             return;
                         }
                     }
-                    
+
                     if (!_mtProtoState.KeyManager!.TemporaryAuthKey.CanBeUsed() && message.Body is not BindTempAuthKey && message.Body is not MsgsAck)
                     {
                         _logger.Verbose("Postponing {Message} because the authorization key is not ready", message);
@@ -280,7 +282,7 @@ namespace CatraProto.Client.Connections.Loop
                     totalSent++;
                 }
 
-                if(msgSerialization is null)
+                if (msgSerialization is null)
                 {
                     return;
                 }
@@ -292,7 +294,7 @@ namespace CatraProto.Client.Connections.Loop
             _logger.Information("Sent {Count} messages", totalSent);
         }
 
-        public async Task UnencryptedTickAsync(CancellationToken stoppingToken)
+        public async ValueTask UnencryptedTickAsync(CancellationToken stoppingToken)
         {
             var count = _messagesHandler.MessagesQueue.GetCount(false);
             var totalSent = 0;
@@ -343,7 +345,7 @@ namespace CatraProto.Client.Connections.Loop
             await _connection.Protocol.Writer.SendAsync(exportedMessage);
         }
 
-        public async Task SendUnencryptedAsync(MessageItem messageItem, CancellationToken token)
+        public async ValueTask SendUnencryptedAsync(MessageItem messageItem, CancellationToken token)
         {
             if (TrySerialize(messageItem, false, out var serializedBody))
             {
@@ -393,7 +395,7 @@ namespace CatraProto.Client.Connections.Loop
                 return false;
             }
 
-            if(serialized is null)
+            if (serialized is null)
             {
                 //Not necessary as we already check for the result of tryRes, but it's here to suppress the warning
                 return false;
