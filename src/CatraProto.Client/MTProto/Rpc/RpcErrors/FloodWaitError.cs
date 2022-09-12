@@ -29,7 +29,7 @@ namespace CatraProto.Client.MTProto.Rpc.RpcErrors
         public FloodWaitError(string errorMessage, int errorCode, TimeSpan time) : base(errorMessage, errorCode)
         {
             WaitTime = time;
-            ErrorDescription = $"This error is returned whenever you call a method too many times. To use this method again, wait {time.TotalSeconds} seconds";
+            ErrorDescription = $"A wait of {time.TotalSeconds} seconds is required to continue using this method. This could be caused by too many API calls or internal server issues";
         }
     }
 }
