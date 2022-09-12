@@ -155,17 +155,23 @@ namespace CatraProto.Client.Updates
 
                     if (updateShortMessage.Out)
                     {
-                        message.FromId = new PeerUser() { UserId = updateShortMessage.UserId };
-                    }
-                    else
-                    {
                         _client.ClientSession.SessionManager.SessionData.Authorization.GetAuthorization(out _, out var currentId);
                         if (currentId is null)
                         {
                             return null;
                         }
 
-                        message.FromId = new PeerUser() { UserId = currentId.Value };
+                        message.FromId = new PeerUser()
+                        {
+                            UserId = currentId.Value
+                        };
+                    }
+                    else
+                    {
+                        message.FromId = new PeerUser()
+                        {
+                            UserId = updateShortMessage.UserId
+                        };
                     }
 
                     message.Date = updateShortMessage.Date;
@@ -174,7 +180,10 @@ namespace CatraProto.Client.Updates
                     message.MediaUnread = updateShortMessage.MediaUnread;
                     message.Silent = updateShortMessage.Silent;
                     message.Id = updateShortMessage.Id;
-                    message.PeerId = new PeerUser { UserId = updateShortMessage.UserId };
+                    message.PeerId = new PeerUser
+                    {
+                        UserId = updateShortMessage.UserId
+                    };
                     message.MessageField = updateShortMessage.Message;
                     message.FwdFrom = updateShortMessage.FwdFrom;
                     message.ViaBotId = updateShortMessage.ViaBotId;
@@ -208,7 +217,10 @@ namespace CatraProto.Client.Updates
                             return null;
                         }
 
-                        fromId = new PeerUser() { UserId = currentId.Value };
+                        fromId = new PeerUser()
+                        {
+                            UserId = currentId.Value
+                        };
                     }
                     else
                     {
@@ -236,8 +248,18 @@ namespace CatraProto.Client.Updates
 
                     converted = sendMessage.Peer switch
                     {
-                        InputPeerChannel => new UpdateNewChannelMessage() { Message = messageObj, Pts = updateShortSentMessage.Pts, PtsCount = updateShortSentMessage.PtsCount },
-                        _ => new UpdateNewMessage { Message = messageObj, Pts = updateShortSentMessage.Pts, PtsCount = updateShortSentMessage.PtsCount }
+                        InputPeerChannel => new UpdateNewChannelMessage()
+                        {
+                            Message = messageObj,
+                            Pts = updateShortSentMessage.Pts,
+                            PtsCount = updateShortSentMessage.PtsCount
+                        },
+                        _ => new UpdateNewMessage
+                        {
+                            Message = messageObj,
+                            Pts = updateShortSentMessage.Pts,
+                            PtsCount = updateShortSentMessage.PtsCount
+                        }
                     };
                     messageObj.UpdateFlags();
                     break;
@@ -247,14 +269,20 @@ namespace CatraProto.Client.Updates
                     toChatMessage.Pts = updateShortChatMessage.Pts;
                     toChatMessage.PtsCount = updateShortChatMessage.PtsCount;
 
-                    originalMessage.FromId = new PeerUser() { UserId = updateShortChatMessage.FromId };
+                    originalMessage.FromId = new PeerUser()
+                    {
+                        UserId = updateShortChatMessage.FromId
+                    };
                     originalMessage.Date = updateShortChatMessage.Date;
                     originalMessage.Out = updateShortChatMessage.Out;
                     originalMessage.Mentioned = updateShortChatMessage.Mentioned;
                     originalMessage.MediaUnread = updateShortChatMessage.MediaUnread;
                     originalMessage.Silent = updateShortChatMessage.Silent;
                     originalMessage.Id = updateShortChatMessage.Id;
-                    originalMessage.PeerId = new PeerChat() { ChatId = updateShortChatMessage.ChatId };
+                    originalMessage.PeerId = new PeerChat()
+                    {
+                        ChatId = updateShortChatMessage.ChatId
+                    };
                     originalMessage.MessageField = updateShortChatMessage.Message;
                     originalMessage.FwdFrom = updateShortChatMessage.FwdFrom;
                     originalMessage.ViaBotId = updateShortChatMessage.ViaBotId;
@@ -331,6 +359,7 @@ namespace CatraProto.Client.Updates
                         tuple.Processor.AddUpdateToQueue(new UpdateChannelTooLong());
                         tuple.Controller.ResumeAndSuspendAsync();
                     }
+
                     _processors.TryAdd(channelId, tuple);
                 }
 
