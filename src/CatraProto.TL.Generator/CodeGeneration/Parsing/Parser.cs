@@ -30,7 +30,7 @@ using TLObject = CatraProto.TL.Generator.Objects.Interfaces.TLObject;
 
 namespace CatraProto.TL.Generator.CodeGeneration.Parsing
 {
-    class Parser
+    struct Parser
     {
         private string _line;
 
@@ -66,15 +66,15 @@ namespace CatraProto.TL.Generator.CodeGeneration.Parsing
                 switch (line)
                 {
                     case "-/-namespace-/-":
-                    {
-                        if (index + 1 >= 0 && schema.Length > index + 1)
                         {
-                            Configuration.Namespace = schema[index + 1];
-                            index++;
-                        }
+                            if (index + 1 >= 0 && schema.Length > index + 1)
+                            {
+                                Configuration.Namespace = schema[index + 1];
+                                index++;
+                            }
 
-                        continue;
-                    }
+                            continue;
+                        }
                     case "-/-returnsRPCEncrypted-/-":
                         methodType = MethodCompletionType.ReturnsEncryptedRPCResult;
                         continue;
@@ -96,7 +96,7 @@ namespace CatraProto.TL.Generator.CodeGeneration.Parsing
                     _ => throw new Exception("Unrecognized type")
                 };
 
-                constructor.TLDeclaration = line; 
+                constructor.TLDeclaration = line;
 
                 var analyzer = new Parser(line);
                 var id = analyzer.FindId();
@@ -133,7 +133,12 @@ namespace CatraProto.TL.Generator.CodeGeneration.Parsing
 
         public static bool FindVector(string type, out string vectorType)
         {
-            var found = Regex.IsMatch(type, @"\w+<.+>") ? type.Split("<") : new[] { type };
+            var found = Regex.IsMatch(type, @"\w+<.+>")
+                ? type.Split("<")
+                : new[]
+                {
+                    type
+                };
             if (found.Length == 2)
             {
                 found[^1] = found[^1].TrimEnd('>');
