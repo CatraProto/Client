@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace ^Namespace^
 {
-	public partial class ^Class^ : IMethod
+	^ClassAccess^ partial class ^Class^ : IMethod
 	{
 ^FlagsEnums^
 

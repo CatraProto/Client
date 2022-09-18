@@ -9,7 +9,7 @@ using System.Linq;
 #nullable disable
 namespace ^Namespace^
 {
-	public partial class ^Class^ : ^Type^
+	^ClassAccess^ partial class ^Class^ : ^Type^
 	{
 ^FlagsEnums^
 

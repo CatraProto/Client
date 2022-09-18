@@ -31,6 +31,11 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
 {
     sealed class Writer
     {
+        private string[] _internalClasses = new[]
+        {
+            "inputMediaUploadedPhoto", "inputMediaUploadedDocument"
+        };
+
         private static readonly string _publicConstructor = "#nullable enable\n public ^Class^ (^ConstructorValues^)\n{\n ^ConstructorBody^ \n}\n#nullable disable";
         private string _apiTemplated;
         private string _constructorTemplate;
@@ -66,8 +71,7 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
                     await WriteType(obj.Type);
                 }
 
-                await WriteObject(obj)
-                    ;
+                await WriteObject(obj);
             }
 
             await Task.WhenAll(tasks);
@@ -98,7 +102,10 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
                 }
                 else
                 {
-                    files.Add(fixedNamespace.PartialNamespace, new[] { "", stringBuilder.ToString(), "" });
+                    files.Add(fixedNamespace.PartialNamespace, new[]
+                    {
+                        "", stringBuilder.ToString(), ""
+                    });
                 }
 
                 if (fixedNamespace.PartialNamespaceArray.Length > 5)
@@ -118,7 +125,10 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
                     }
                     else
                     {
-                        files.Add(Namespace.ArrayToString(fixedNamespace.PartialNamespaceArray[..5]) + "Api", new[] { writtenProp, "", writtenInit });
+                        files.Add(Namespace.ArrayToString(fixedNamespace.PartialNamespaceArray[..5]) + "Api", new[]
+                        {
+                            writtenProp, "", writtenInit
+                        });
                     }
 
                     writtenNamespaces.Add(ns);
@@ -175,7 +185,9 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
             }
 
             var template = obj is Method ? _methodTemplate : _constructorTemplate;
-            var copy = template.Replace("^Class^", obj.NamingInfo.PascalCaseName)
+            var copy = template
+                .Replace("^ClassAccess^", _internalClasses.Contains(obj.NamingInfo.OriginalNamespacedName) ? "internal" : "public")
+                .Replace("^Class^", obj.NamingInfo.PascalCaseName)
                 .Replace("^Namespace^", obj.Namespace.PartialNamespace)
                 .Replace("^Properties^", parameters.ToString())
                 .Replace("^Deserialization^", deserializer.ToString())
