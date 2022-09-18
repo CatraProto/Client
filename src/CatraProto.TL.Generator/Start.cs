@@ -18,6 +18,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using System;
 using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using CatraProto.TL.Generator.CodeGeneration.Optimization;
 using CatraProto.TL.Generator.CodeGeneration.Parsing;
@@ -36,6 +39,23 @@ namespace CatraProto.TL.Generator
             Console.WriteLine("[Analyzer] Analyzing the schema, this shouldn't take long.");
 
             var analyzed = await Parser.StartAnalyzing();
+            if (File.Exists("watchFor.catrawatch"))
+            {
+                var lines = await File.ReadAllLinesAsync("watchFor.catrawatch");
+                foreach (var line in lines)
+                {
+                    var split = line.Split('#', StringSplitOptions.RemoveEmptyEntries);
+                    if (split.Length == 2)
+                    {
+                        var num = int.Parse(split[1], NumberStyles.HexNumber);
+                        var findDifferent = analyzed.FirstOrDefault(x => x.NamingInfo.OriginalNamespacedName == split[0] && num != x.Id);
+                        if (findDifferent is not null)
+                        {
+                            Console.WriteLine($"Constructor {split[0]} changed from previous version. New ID {findDifferent.Id} is different from ID {num}");
+                        }
+                    }
+                }
+            }
 
             Console.WriteLine("[Optimizer] Optimizing schema, this shouldn't take long.");
 
