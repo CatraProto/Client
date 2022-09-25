@@ -24,6 +24,9 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Content Include="Resources\schema.tl">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
         <Content Include="Templates\Dictionary.template">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
@@ -41,16 +44,18 @@
         <Content Include="Templates\UpdatesTools.template">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-    </ItemGroup>
-
-    <ItemGroup>
-        <Content Include="Templates\Constructor.template">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <None Remove="Resources\knownContexts.json"/>
+        <Content Include="Resources\knownContexts.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Resources\watchFor.catrawatch"/>
+        <Content Include="Resources\watchFor.catrawatch">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="schema.tl">
+        <Content Include="Templates\Constructor.template">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
     </ItemGroup>

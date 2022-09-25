@@ -39,9 +39,9 @@ namespace CatraProto.TL.Generator
             Console.WriteLine("[Analyzer] Analyzing the schema, this shouldn't take long.");
 
             var analyzed = await Parser.StartAnalyzing();
-            if (File.Exists("watchFor.catrawatch"))
+            if (File.Exists("Resources/watchFor.catrawatch"))
             {
-                var lines = await File.ReadAllLinesAsync("watchFor.catrawatch");
+                var lines = await File.ReadAllLinesAsync("Resources/watchFor.catrawatch");
                 foreach (var line in lines)
                 {
                     var split = line.Split('#', StringSplitOptions.RemoveEmptyEntries);

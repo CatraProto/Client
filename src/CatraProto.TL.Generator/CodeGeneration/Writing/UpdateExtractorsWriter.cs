@@ -214,8 +214,12 @@ namespace CatraProto.TL.Generator.CodeGeneration.Writing
         private async Task<string> GetDocumentsWalker()
         {
             var strinbBud = new StringBuilder();
-            s_knownContexts = (Dictionary<string, int>)JsonSerializer.Deserialize(await File.ReadAllTextAsync("knownContexts.json"), typeof(Dictionary<string, int>));
-            await FindAndGenWhereContext(new List<string> { "CatraProto.Client.TL.Schemas.CloudChats.Document", "CatraProto.Client.TL.Schemas.CloudChats.Photo" }, new List<string>(), strinbBud, true);
+            s_knownContexts = (Dictionary<string, int>)JsonSerializer.Deserialize(await File.ReadAllTextAsync("Resources/knownContexts.json"), typeof(Dictionary<string, int>));
+            await FindAndGenWhereContext(new List<string>
+            {
+                "CatraProto.Client.TL.Schemas.CloudChats.Document",
+                "CatraProto.Client.TL.Schemas.CloudChats.Photo"
+            }, new List<string>(), strinbBud, true);
 
             strinbBud.AppendLine("case CatraProto.Client.TL.Schemas.CloudChats.Photo:");
             strinbBud.AppendLine("case CatraProto.Client.TL.Schemas.CloudChats.Document:");
