@@ -27,8 +27,18 @@ namespace CatraProto.Client.MTProto.Rpc.RpcErrors
             get => "Bots can't use this method";
         }
 
-        public BotMethodInvalidError(string errorMessage, int errorCode) : base(errorMessage, errorCode)
+        public BotMethodInvalidError(string errorMessage, int errorCode) : base(errorMessage, errorCode, 18)
         {
+        }
+
+        internal override RpcError? ParseError(TL.Schemas.MTProto.RpcError error)
+        {
+            if (!CheckPrerequisites(error.ErrorMessage))
+            {
+                return null;
+            }
+
+            return error.ErrorMessage == "BOT_METHOD_INVALID" ? new BotMethodInvalidError(error.ErrorMessage, error.ErrorCode) : null;
         }
     }
 }

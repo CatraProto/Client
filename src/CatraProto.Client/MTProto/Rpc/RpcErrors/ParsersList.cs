@@ -16,35 +16,35 @@ You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using CatraProto.Client.MTProto.Rpc.Interfaces;
-using CatraProto.Client.MTProto.Rpc.Parsers.Migrations;
-using CatraProto.Client.MTProto.Rpc.RpcErrors;
+using CatraProto.Client.MTProto.Rpc.RpcErrors.Migrations;
 
-namespace CatraProto.Client.MTProto.Rpc.Parsers
+namespace CatraProto.Client.MTProto.Rpc.RpcErrors
 {
     internal static class ParsersList
     {
-        private static readonly ReadOnlyCollection<RpcErrorParser> _errorParsers;
+        private static readonly ReadOnlyCollection<RpcError> ErrorParsers;
 
         static ParsersList()
         {
-            _errorParsers = new List<RpcErrorParser>()
+            ErrorParsers = new List<RpcError>()
             {
-                new FloodWaitParser(),
-                new NetworkMigrateParser(),
-                new PhoneMigrateParser(),
-                new UserMigrateParser(),
-                new BotMethodInvalidParser()
+                new FloodWaitError(string.Empty, 0, TimeSpan.Zero),
+                new NetworkMigrateError(string.Empty, 0, 0),
+                new PhoneMigrateError(string.Empty, 0, 0),
+                new UserMigrateError(string.Empty, 0, 0),
+                new BotMethodInvalidError(string.Empty, 0)
             }.AsReadOnly();
         }
 
         public static RpcError GetError(TL.Schemas.MTProto.RpcError error)
         {
-            for (var i = 0; i < _errorParsers.Count; i++)
+            for (var i = 0; i < ErrorParsers.Count; i++)
             {
-                var getError = _errorParsers[i].GetError(error);
+                var getError = ErrorParsers[i].ParseError(error);
                 if (getError is not null)
                 {
                     return getError;

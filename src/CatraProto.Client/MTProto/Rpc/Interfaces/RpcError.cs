@@ -23,11 +23,23 @@ namespace CatraProto.Client.MTProto.Rpc.Interfaces
         public int ErrorCode { get; }
         public string ErrorMessage { get; }
         public abstract string ErrorDescription { get; }
+        protected int MinimumLength { get; }
 
-        protected RpcError(string errorMessage, int errorCode)
+        protected RpcError(string errorMessage, int errorCode, int minimumLength = 0)
         {
             ErrorMessage = errorMessage;
             ErrorCode = errorCode;
+            MinimumLength = minimumLength;
+        }
+
+        protected bool CheckPrerequisites(string error)
+        {
+            return error.Length >= MinimumLength;
+        }
+
+        internal virtual RpcError? ParseError(TL.Schemas.MTProto.RpcError error)
+        {
+            return null;
         }
 
         public override string ToString()

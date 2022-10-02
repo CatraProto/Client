@@ -16,6 +16,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+using System.Text.RegularExpressions;
 using CatraProto.Client.MTProto.Rpc.Interfaces;
 using CatraProto.Client.MTProto.Rpc.RpcErrors.Migrations.Interfaces;
 
@@ -23,13 +24,25 @@ namespace CatraProto.Client.MTProto.Rpc.RpcErrors.Migrations
 {
     public class UserMigrateError : RpcError, IMigrateError
     {
+        private static readonly Regex CompiledRegex = new Regex("^USER_MIGRATE_([0-9]+)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         public override string ErrorDescription { get; }
         public int DcId { get; }
 
-        public UserMigrateError(string errorMessage, int errorCode, int dcId) : base(errorMessage, errorCode)
+        public UserMigrateError(string errorMessage, int errorCode, int dcId) : base(errorMessage, errorCode, 14)
         {
             DcId = dcId;
             ErrorDescription = $"User's data is located in datacenter {dcId}";
+        }
+
+        internal override RpcError? ParseError(TL.Schemas.MTProto.RpcError error)
+        {
+            if (!CheckPrerequisites(error.ErrorMessage))
+            {
+                return null;
+            }
+
+            var match = CompiledRegex.Match(error.ErrorMessage);
+            return match.Success ? new UserMigrateError(error.ErrorMessage, error.ErrorCode, int.Parse(match.Groups[1].Captures[0].Value)) : null;
         }
     }
 }

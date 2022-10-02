@@ -17,19 +17,32 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 using System;
+using System.Text.RegularExpressions;
 using CatraProto.Client.MTProto.Rpc.Interfaces;
 
 namespace CatraProto.Client.MTProto.Rpc.RpcErrors
 {
     public class FloodWaitError : RpcError
     {
+        private static readonly Regex CompiledRegex = new Regex("^FLOOD_WAIT_([0-9]+)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         public override string ErrorDescription { get; }
         public TimeSpan WaitTime { get; }
 
-        public FloodWaitError(string errorMessage, int errorCode, TimeSpan time) : base(errorMessage, errorCode)
+        public FloodWaitError(string errorMessage, int errorCode, TimeSpan time) : base(errorMessage, errorCode, 12)
         {
             WaitTime = time;
             ErrorDescription = $"A wait of {time.TotalSeconds} seconds is required to continue using this method. This could be caused by too many API calls or internal server issues";
+        }
+
+        internal override RpcError? ParseError(TL.Schemas.MTProto.RpcError error)
+        {
+            if (!CheckPrerequisites(error.ErrorMessage))
+            {
+                return null;
+            }
+
+            var match = CompiledRegex.Match(error.ErrorMessage);
+            return match.Success ? new FloodWaitError(error.ErrorMessage, error.ErrorCode, TimeSpan.FromSeconds(int.Parse(match.Groups[1].Captures[0].Value))) : null;
         }
     }
 }
