@@ -23,16 +23,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CatraProto.Client.ApiManagers.Files;
 using CatraProto.Client.Connections.MessageScheduling.ConnectionMessages;
 using CatraProto.Client.Connections.MessageScheduling.ConnectionMessages.Interfaces;
+using CatraProto.Client.Connections.MessageScheduling.Items;
 using CatraProto.Client.MTProto.Deserializers;
 using CatraProto.Client.MTProto.Rpc;
 using CatraProto.Client.MTProto.Rpc.RpcErrors;
+using CatraProto.Client.MTProto.Rpc.RpcErrors.Files;
 using CatraProto.Client.MTProto.Rpc.RpcErrors.Migrations.Interfaces;
 using CatraProto.Client.MTProto.Session;
 using CatraProto.Client.TL;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.Client.TL.Schemas.CloudChats;
+using CatraProto.Client.TL.Schemas.CloudChats.Messages;
 using CatraProto.Client.TL.Schemas.CloudChats.Updates;
 using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.Client.Updates;
@@ -41,7 +45,6 @@ using CatraProto.TL.Interfaces;
 using CatraProto.TL.Interfaces.Deserializers;
 using Serilog;
 using ChatFull = CatraProto.Client.TL.Schemas.CloudChats.Messages.ChatFull;
-using Message = CatraProto.Client.TL.Schemas.CloudChats.Message;
 using RpcError = CatraProto.Client.MTProto.Rpc.Interfaces.RpcError;
 using UserFull = CatraProto.Client.TL.Schemas.CloudChats.Users.UserFull;
 
@@ -77,7 +80,11 @@ namespace CatraProto.Client.Connections.MessageScheduling
 
         public MessagesDispatcher(Connection connection, MessagesHandler messagesHandler, MTProtoState mtProtoState, ClientSession clientSession, ILogger logger)
         {
-            _parsers = new List<IObjectParser>(2) { new RpcDeserializer(messagesHandler.MessagesTrackers.MessageCompletionTracker, logger), new MsgContainerDeserializer(logger) };
+            _parsers = new List<IObjectParser>(2)
+            {
+                new RpcDeserializer(messagesHandler.MessagesTrackers.MessageCompletionTracker, logger),
+                new MsgContainerDeserializer(logger)
+            };
             _logger = logger.ForContext<MessagesDispatcher>();
             _connection = connection;
             _messagesHandler = messagesHandler;
@@ -382,7 +389,10 @@ namespace CatraProto.Client.Connections.MessageScheduling
         private void HandlePing(Ping ping)
         {
             _logger.Information("Replying to ping from server with Id {Id}", ping);
-            _messagesHandler.MessagesQueue.EnqueueMessage(new Pong { PingId = ping.PingId }, new MessageSendingOptions(true), null, out _, default);
+            _messagesHandler.MessagesQueue.EnqueueMessage(new Pong
+            {
+                PingId = ping.PingId
+            }, new MessageSendingOptions(true), null, out _, default);
         }
 
         private void HandleRpcResult(IConnectionMessage connectionMessage, IObject obj, Reader reader, RpcResult rpcObject)
@@ -398,6 +408,30 @@ namespace CatraProto.Client.Connections.MessageScheduling
             {
                 switch (error)
                 {
+                    case FileReferenceExpiredError referenceExpiredError when method is SendMultiMedia multiMedia && referenceExpiredError.Index.HasValue && multiMedia.MultiMedia.Count >= referenceExpiredError.Index.Value && multiMedia.MultiMedia[referenceExpiredError.Index.Value].Media is InputMediaDocument { Id: InputDocument inputDocument }:
+                        if (inputDocument.FileId is not null)
+                        {
+                            Task.Run(async () =>
+                            {
+                                var refreshed = await FileLocation.RefreshFileReferenceAsync(_mtProtoState.Client, inputDocument.FileId.BackingFileLocation);
+                                if (refreshed.RpcCallFailed)
+                                {
+                                    return;
+                                }
+
+                                if (!_messagesHandler.MessagesTrackers.MessageCompletionTracker.GetMessageCompletion(rpcObject.ReqMsgId, out var item, false))
+                                {
+                                    return;
+                                }
+
+                                var response = refreshed.Response;
+                                inputDocument.AccessHash = response.AccessHash;
+                                inputDocument.FileReference = response.FileReference;
+                                item.SetToSend();
+                            });
+                        }
+
+                        return;
                     case FloodWaitError floodWaitError:
                         {
                             if (sendingOptions.RetryWithin is not null && floodWaitError.WaitTime <= sendingOptions.RetryWithin.Value || sendingOptions.RetryWithin is null && _clientSession.Settings.RpcSettings.RetryWithin is not null && floodWaitError.WaitTime <= _clientSession.Settings.RpcSettings.RetryWithin.Value)
@@ -407,44 +441,11 @@ namespace CatraProto.Client.Connections.MessageScheduling
                                     return;
                                 }
 
-                                _logger.Information("Retrying message {Message} in {Seconds} seconds", item, floodWaitError.WaitTime.TotalSeconds);
-                                item.SetOnHold();
-                                Task.Run(async () =>
-                                {
-                                    var waitTime = floodWaitError.WaitTime.Add(TimeSpan.FromMilliseconds(1500));
-                                    try
-                                    {
-                                        // Used to avoid having a Task hanging around when the connection was closed but the Delay is still awaiting
-                                        var getCompletionTask = item.GetMessageTask();
-                                        if (getCompletionTask is not null)
-                                        {
-                                            using var cTokenSource = new CancellationTokenSource();
-                                            using var combinedCancellation = CancellationTokenSource.CreateLinkedTokenSource(item.CancellationToken, cTokenSource.Token);
-                                            var completedTask = await Task.WhenAny(Task.Delay(waitTime, combinedCancellation.Token), getCompletionTask);
-                                            if (completedTask == getCompletionTask)
-                                            {
-                                                _logger.Information("Stopping flood wait task for {MessageItem} because message was completed", item);
-                                                cTokenSource.Cancel();
-                                                return;
-                                            }
-                                        }
-                                        else
-                                        {
-                                            await Task.Delay(waitTime, item.CancellationToken);
-                                        }
+                                var waitTime = floodWaitError.WaitTime.Add(TimeSpan.FromMilliseconds(Random.Shared.Next(700, 1500)));
+                                _logger.Information("Retrying message {Message} in {Milliseconds} seconds. Actual flood wait time {Actual}", item, waitTime.TotalMilliseconds, floodWaitError.WaitTime);
 
-                                        _logger.Information("Now retrying message {Message} after having waited for {Seconds} seconds", item, floodWaitError.WaitTime.TotalSeconds);
-                                        item.SetToSend();
-                                    }
-                                    catch (OperationCanceledException)
-                                    {
-                                        _logger.Information("Will not try to resend message {MessageId} after flood wait because it was canceled", item);
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        _logger.Error(e, "Failed to resend or wait flood wait for message {Message}", item);
-                                    }
-                                });
+                                item.SetOnHold();
+                                Task.Run(async () => await RetryFloodWaitAsync(item, waitTime));
                                 return;
                             }
 
@@ -466,7 +467,7 @@ namespace CatraProto.Client.Connections.MessageScheduling
                                     }
                                     catch (Exception e) when (e is not OperationCanceledException)
                                     {
-                                        _logger.Error("Caught exception while migrating request", e);
+                                        _logger.Error(e, "Caught exception while migrating request");
                                     }
                                 });
                             }
@@ -501,6 +502,42 @@ namespace CatraProto.Client.Connections.MessageScheduling
             }
 
             _messagesHandler.MessagesTrackers.MessageCompletionTracker.SetCompletion(rpcObject.ReqMsgId, rpcObject.Result, GetExecInfo(true));
+        }
+
+        private async Task RetryFloodWaitAsync(MessageItem? item, TimeSpan waitTime)
+        {
+            try
+            {
+                // Used to avoid having a Task hanging around when the connection was closed but the Delay is still awaiting
+                var getCompletionTask = item.GetMessageTask();
+                if (getCompletionTask is not null)
+                {
+                    using var cTokenSource = new CancellationTokenSource();
+                    using var combinedCancellation = CancellationTokenSource.CreateLinkedTokenSource(item.CancellationToken, cTokenSource.Token);
+                    var completedTask = await Task.WhenAny(Task.Delay(waitTime, combinedCancellation.Token), getCompletionTask);
+                    if (completedTask == getCompletionTask)
+                    {
+                        _logger.Information("Stopping flood wait task for {MessageItem} because message was completed", item);
+                        cTokenSource.Cancel();
+                        return;
+                    }
+                }
+                else
+                {
+                    await Task.Delay(waitTime, item.CancellationToken);
+                }
+
+                _logger.Information("Now retrying message {Message} after having waited for {Milliseconds}ms", item, waitTime.TotalMilliseconds);
+                item.SetToSend();
+            }
+            catch (OperationCanceledException)
+            {
+                _logger.Information("Will not try to resend message {MessageId} after flood wait because it was canceled", item);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "Failed to resend or wait flood wait for message {Message}", item);
+            }
         }
 
         public void IgnoreMessages(bool ignore)
