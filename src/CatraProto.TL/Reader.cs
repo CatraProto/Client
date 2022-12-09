@@ -57,6 +57,17 @@ namespace CatraProto.TL
             return new ReadResult<short>(_reader.ReadInt16());
         }
 
+        public ReadResult<ushort> ReadUInt16()
+        {
+            var checkLength = CheckLength<ushort>(sizeof(ushort));
+            if (checkLength.IsError)
+            {
+                return checkLength;
+            }
+
+            return new ReadResult<ushort>(_reader.ReadUInt16());
+        }
+
         public ReadResult<int> ReadInt32()
         {
             var checkLength = CheckLength<int>(sizeof(int));
@@ -176,6 +187,7 @@ namespace CatraProto.TL
             {
                 return ReadResult<string>.Move(readBytes);
             }
+
             try
             {
                 return new ReadResult<string>(_utf8Encoder.GetString(readBytes.Value));
