@@ -213,7 +213,10 @@ namespace CatraProto.Client.Connections.Loop
                     _logger.Information("Sending acknowledgment of {Total} messages", ((MsgsAck)acks.Body).MsgIds.Count);
                     if (TrySerialize(acks, false, out var serialized))
                     {
-                        await SendEncryptedAsync(acks.Body, new List<MessageItem>(1) { acks }, serialized);
+                        await SendEncryptedAsync(acks.Body, new List<MessageItem>(1)
+                        {
+                            acks
+                        }, serialized);
                         serialized.Dispose();
                         totalSent++;
                     }
@@ -256,7 +259,10 @@ namespace CatraProto.Client.Connections.Loop
                     if (containerizedItems is not null && msgSerialization is not null)
                     {
                         message = containerizedItems[0];
-                        finalItems = new List<MessageItem>(1) { message };
+                        finalItems = new List<MessageItem>(1)
+                        {
+                            message
+                        };
                     }
                     else
                     {
@@ -294,7 +300,7 @@ namespace CatraProto.Client.Connections.Loop
             _logger.Information("Sent {Count} messages", totalSent);
         }
 
-        public async ValueTask UnencryptedTickAsync(CancellationToken stoppingToken)
+        private async ValueTask UnencryptedTickAsync(CancellationToken stoppingToken)
         {
             var count = _messagesHandler.MessagesQueue.GetCount(false);
             var totalSent = 0;
@@ -326,7 +332,7 @@ namespace CatraProto.Client.Connections.Loop
             }
         }
 
-        public async ValueTask SendEncryptedAsync(IObject upperMost, IList<MessageItem> messages, MemoryStream payload)
+        private async ValueTask SendEncryptedAsync(IObject upperMost, IList<MessageItem> messages, MemoryStream payload)
         {
             var authKey = _mtProtoState.KeyManager!.TemporaryAuthKey.GetCachedKey();
             var sessionId = _mtProtoState.SessionIdHandler.GetSessionId(out _);
@@ -345,7 +351,7 @@ namespace CatraProto.Client.Connections.Loop
             await _connection.Protocol.Writer.SendAsync(exportedMessage);
         }
 
-        public async ValueTask SendUnencryptedAsync(MessageItem messageItem, CancellationToken token)
+        private async ValueTask SendUnencryptedAsync(MessageItem messageItem, CancellationToken token)
         {
             if (TrySerialize(messageItem, false, out var serializedBody))
             {
@@ -359,7 +365,7 @@ namespace CatraProto.Client.Connections.Loop
             }
         }
 
-        public bool TrySerialize(MessageItem item, bool mustWrap, [MaybeNullWhen(false)] out MemoryStream serialized)
+        private bool TrySerialize(MessageItem item, bool mustWrap, [MaybeNullWhen(false)] out MemoryStream serialized)
         {
             WriteResult trySer;
             var body = item.Body;
@@ -404,7 +410,7 @@ namespace CatraProto.Client.Connections.Loop
             return true;
         }
 
-        public bool GetContainer(List<MessageItem> messageItems, bool mustWrap, out List<MessageItem>? containerizedItems, out MemoryStream? payload)
+        private bool GetContainer(List<MessageItem> messageItems, bool mustWrap, out List<MessageItem>? containerizedItems, out MemoryStream? payload)
         {
             var currentBytes = 0;
             var currentMessagesCount = 0;
@@ -442,7 +448,10 @@ namespace CatraProto.Client.Connections.Loop
             if (fineList.Count == 1)
             {
                 _logger.Information("Only one message {Message }out of {Count} made it into the container", fineList[0].Item1, messageItems.Count);
-                containerizedItems = new List<MessageItem>(1) { fineList[0].Item1 };
+                containerizedItems = new List<MessageItem>(1)
+                {
+                    fineList[0].Item1
+                };
                 payload = fineList[0].Item2;
                 return false;
             }

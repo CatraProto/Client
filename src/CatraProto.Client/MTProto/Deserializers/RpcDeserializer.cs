@@ -18,7 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using System.IO;
 using CatraProto.Client.Connections.MessageScheduling.Trackers;
-using CatraProto.Client.MTProto.Rpc.Parsers;
+using CatraProto.Client.MTProto.Rpc.RpcErrors;
 using CatraProto.Client.TL;
 using CatraProto.Client.TL.Schemas;
 using CatraProto.Client.TL.Schemas.MTProto;

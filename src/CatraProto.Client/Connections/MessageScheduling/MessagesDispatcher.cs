@@ -425,8 +425,9 @@ namespace CatraProto.Client.Connections.MessageScheduling
                                 }
 
                                 var response = refreshed.Response;
-                                inputDocument.AccessHash = response.AccessHash;
-                                inputDocument.FileReference = response.FileReference;
+
+                                // It's important to create a new object because we don't want to modify the object provided by the user
+                                ((InputMediaDocument)multiMedia.MultiMedia[referenceExpiredError.Index.Value].Media).Id = new InputDocument(response.Id, response.AccessHash, response.FileReference);
                                 item.SetToSend();
                             });
                         }
