@@ -45,7 +45,7 @@ namespace CatraProto.Client.MTProto
         {
             return IdTools.FromApiToTd(Id, Type);
         }
-        
+
         public static PeerId AsUser(long id)
         {
             return new PeerId(id, PeerType.User);
@@ -68,6 +68,11 @@ namespace CatraProto.Client.MTProto
 
         public static PeerId FromPeer(PeerBase peer)
         {
+            if (peer == null)
+            {
+                throw new ArgumentNullException(nameof(peer));
+            }
+
             return peer switch
             {
                 PeerChat peerChat => AsGroup(peerChat.ChatId),
@@ -76,7 +81,7 @@ namespace CatraProto.Client.MTProto
                 _ => throw new InvalidOperationException("Unreachable")
             };
         }
-        
+
         public static PeerId FromDatabase(long id)
         {
             return IdTools.FromTdToApi(id);
@@ -113,7 +118,7 @@ namespace CatraProto.Client.MTProto
         {
             return !(left == right);
         }
-        
+
         public override int GetHashCode()
         {
             return HashCode.Combine((int)Type, Id);
