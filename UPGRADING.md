@@ -1,6 +1,6 @@
 ﻿# How to upgrade to a newer layer
 ### Context
-CatraProto provides a simplified API for some Telegram features. This simplified API (eg. File Handling) needs to be maintained and to be update when necessary to keep everything working correctly.
+CatraProto provides a simplified API for some Telegram features. This simplified API (eg. File Handling) needs to be maintained and to be updated when necessary to keep everything working correctly.
 The CatraProto.TL.Generator (which requires some refactoring, so PRs are welcome) provides some tools to easily track changes across the entire schema and help make the right adjustments:
 
 - _schema.tl_ is where all TL schemas are defined, including the ones internally used by CatraProto.
@@ -67,7 +67,7 @@ To bring to life the changes we've written in __schema.tl__ you must follow thes
 - Navigate to _src/CatraProto.Client/TL/Requests_
 - Delete everything **except** the _Overrides_ folder
 - Navigate to _src/CatraProto.Client/TL/Schemas_
-- Delete everything **except** the _Overrides_ folder and _MergedProvider.cs_
+- Delete everything **except** the _Overrides_ folder and _MergedProviderDefaults.cs_
 - Delete _src/CatraProto.Client/Updates/UpdateTools.cs_
 - Navigate to __src/CatraProto.TL.Generator/bin/Build_Config_/dotnet_version/_
 - Delete the _CatraProto_ folder
