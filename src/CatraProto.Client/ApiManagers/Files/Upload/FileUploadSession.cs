@@ -16,12 +16,12 @@ namespace CatraProto.Client.ApiManagers.Files.Upload;
 
 public class FileUploadSession : IDisposable
 {
-    private const int MaxConnectionsCount = 8;
+    private const int MaxConnectionsCount = 4;
     private const int MaxChunks = 8000;
     private const long MaxUploadSize = (long)MaxChunks * 1024 * 1024;
     private const int BigFileLength = 10 * 1024 * 1024;
 
-    private readonly FileProgressInvoker _fileProgressInvoker;
+    private readonly FileProgressInvoker? _fileProgressInvoker;
     private readonly object _mutex = new object();
     private readonly ArrayPool<byte> _arrayPool;
     private readonly TelegramClient _client;
@@ -33,35 +33,40 @@ public class FileUploadSession : IDisposable
     private readonly ILogger _logger;
     private readonly long _fileId;
     private readonly bool _isBig;
+    private readonly bool _isPhoto;
     private int _currentAt;
 
-    private FileUploadSession(TelegramClient client, Stream stream, long fileLength, FileProgressCallback callback, ILogger logger)
+    private FileUploadSession(TelegramClient client, Stream stream, long fileLength, FileProgressCallback? callback, bool isPhoto = false)
     {
         _client = client;
         _fileLength = fileLength;
         _fileId = CryptoTools.CreateRandomLong();
-        _logger = logger.ForContext<FileUploadSession>().ForContext("FileId", _fileId);
+        _logger = client.GetLogger<FileUploadSession>().ForContext<FileUploadSession>().ForContext("FileId", _fileId);
         _sourceStream = new UploadProxyStream(stream, fileLength);
-
+        _isPhoto = isPhoto;
         _isBig = fileLength > BigFileLength;
         _chunkSize = GetChunkSize(stream.Length);
         _arrayPool = ArrayPool<byte>.Create((int)_chunkSize, (int)_chunkSize / 1024);
-        _fileProgressInvoker = new FileProgressInvoker(callback, _logger);
         _numberOfChunks = (int)(fileLength / (int)_chunkSize);
         _numberOfChunks += fileLength % (int)_chunkSize > 0 ? 1 : 0;
+
+        if (callback is not null)
+        {
+            _fileProgressInvoker = new FileProgressInvoker(callback, _logger);
+        }
     }
 
-    public static RpcResponse<FileUploadSession> Create(TelegramClient client, Stream stream, long fileLength, FileProgressCallback callback, ILogger logger)
+    public static RpcResponse<FileUploadSession> Create(TelegramClient client, Stream stream, long fileLength, FileProgressCallback? callback, bool isPhoto)
     {
         if (stream.Length > MaxUploadSize)
         {
             return RpcResponse<FileUploadSession>.FromError(new FileTooBigError());
         }
 
-        return RpcResponse<FileUploadSession>.FromResult(new FileUploadSession(client, stream, fileLength, callback, logger));
+        return RpcResponse<FileUploadSession>.FromResult(new FileUploadSession(client, stream, fileLength, callback, isPhoto));
     }
 
-    public async Task<RpcResponse<InputFileBase>> UploadFileAsync(CancellationToken cancellationToken = default, int maxDegreeOfParallelism = -1)
+    public async Task<RpcResponse<bool>> UploadFileAsync(CancellationToken cancellationToken = default)
     {
         var connectionsCount = _fileLength > BigFileLength ? MaxConnectionsCount : 1;
         _connectionItem ??= new ConnectionItem[connectionsCount];
@@ -77,7 +82,11 @@ public class FileUploadSession : IDisposable
             _connectionItem[i] = await tasks[i];
         }
 
-        var parallelOptions = new ParallelOptions { CancellationToken = cancellationToken, MaxDegreeOfParallelism = connectionsCount * (2 << 15 / (int)_chunkSize) * 2 };
+        var parallelOptions = new ParallelOptions
+        {
+            CancellationToken = cancellationToken,
+            MaxDegreeOfParallelism = connectionsCount * (2 << 15 / (int)_chunkSize) * 2
+        };
 
         try
         {
@@ -94,17 +103,16 @@ public class FileUploadSession : IDisposable
             // When an operation inside Parallel throws an exception, the cancellationToken passed to the lambda gets canceled as well.
             // Another possibility would be to create a linked cancellation token that gets canceled when something goes wrong, but we'd achieve the exact same behavior
             // with the exact same tools (exceptions) but with added complexity and overhead
-            return RpcResponse<InputFileBase>.FromError(e.RpcError);
+            return RpcResponse<bool>.FromError(e.RpcError);
         }
 
-        if (_isBig)
-        {
-            return RpcResponse<InputFileBase>.FromResult(new InputFileBig(_fileId, _numberOfChunks, _fileId.ToString()));
-        }
-        else
-        {
-            return RpcResponse<InputFileBase>.FromResult(new InputFile(_fileId, _numberOfChunks, _fileId.ToString(), string.Empty));
-        }
+        return RpcResponse<bool>.FromResult(true);
+    }
+
+    public InputFileBase GetInputFile()
+    {
+        var fileName = _isPhoto ? _fileId + ".jpg" : _fileId.ToString();
+        return _isBig ? new InputFileBig(_fileId, _numberOfChunks, fileName) : new InputFile(_fileId, _numberOfChunks, fileName, string.Empty);
     }
 
     public Task<RpcResponse<bool>> SendChunkAsync(int chunkNumber, CancellationToken cancellationToken = default)
@@ -161,7 +169,7 @@ public class FileUploadSession : IDisposable
             }
 
             _logger.Information("Successfully uploaded file chunk {Chunk}", chunkNumber);
-            _fileProgressInvoker.Invoke(chunkLength);
+            _fileProgressInvoker?.Invoke(chunkLength);
             return response;
         }
         catch (RpcException)
