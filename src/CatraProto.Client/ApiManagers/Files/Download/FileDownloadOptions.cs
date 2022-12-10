@@ -16,11 +16,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using CatraProto.Client.TL.Schemas.CloudChats;
 
 namespace CatraProto.Client.ApiManagers.Files.Download;
 
@@ -30,10 +26,21 @@ public class FileDownloadOptions
     /// Used for profile pictures, true if the photo has to be downloaded in full size, false otherwise.
     /// Ignored when the file is not a profile picture 
     /// </summary>
-    public bool BigPhoto { get; }
+    public PhotoSize? PhotoSize { get; }
 
-    public FileDownloadOptions(bool bigPhoto)
+    public VideoSize? VideoSize { get; }
+
+    public FileDownloadOptions()
     {
-        BigPhoto = bigPhoto;
+    }
+
+    public FileDownloadOptions(PhotoSize photoSize)
+    {
+        PhotoSize = photoSize;
+    }
+
+    public FileDownloadOptions(VideoSize videoSize)
+    {
+        VideoSize = videoSize;
     }
 }
