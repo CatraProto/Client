@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using CatraProto.Client.MTProto.Rpc.Interfaces;
+using CatraProto.Client.MTProto.Rpc.RpcErrors.Files;
 using CatraProto.Client.MTProto.Rpc.RpcErrors.Migrations;
 
 namespace CatraProto.Client.MTProto.Rpc.RpcErrors
@@ -36,7 +37,9 @@ namespace CatraProto.Client.MTProto.Rpc.RpcErrors
                 new NetworkMigrateError(string.Empty, 0, 0),
                 new PhoneMigrateError(string.Empty, 0, 0),
                 new UserMigrateError(string.Empty, 0, 0),
-                new BotMethodInvalidError(string.Empty, 0)
+                new BotMethodInvalidError(string.Empty, 0),
+                new FileReferenceExpiredError(string.Empty, 0),
+                new FilePartMissing(String.Empty, 0, 0)
             }.AsReadOnly();
         }
 
