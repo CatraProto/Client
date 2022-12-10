@@ -7,7 +7,7 @@ using CatraProto.Client.Async.Locks;
 using CatraProto.Client.Connections;
 using CatraProto.Client.Connections.MessageScheduling;
 using CatraProto.Client.MTProto.Rpc;
-using CatraProto.Client.MTProto.Rpc.RpcErrors;
+using CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors.Files;
 using CatraProto.Client.TL.Schemas.CloudChats;
 using CatraProto.Client.TL.Schemas.CloudChats.Upload;
 using Serilog;
@@ -17,11 +17,11 @@ namespace CatraProto.Client.ApiManagers.Files.Download;
 
 internal class FileDownloadSession : IDisposable
 {
-    private const int MaxConnectionsCount = 8;
+    private const int MaxConnectionsCount = 4;
     private const int OneMB = 1024 * 1024;
 
     private readonly DownloadProxyStream _destinationStream;
-    private readonly FileProgressInvoker _fileProgressInvoker;
+    private readonly FileProgressInvoker? _fileProgressInvoker;
     private readonly ConnectionItem[] _connectionItems;
     private readonly int _numberOfChunks;
 
@@ -35,36 +35,62 @@ internal class FileDownloadSession : IDisposable
     private readonly AsyncLock _fileReferenceLock = new AsyncLock();
     private int _currentAt;
 
-    public FileDownloadSession(TelegramClient client, Stream destinationStream, FileDownloadOptions options, FileLocation fileLocation, FileProgressCallback callback)
+    private FileDownloadSession(TelegramClient client, Stream destinationStream, long size, FileDownloadOptions options, FileLocation fileLocation, FileProgressCallback? callback)
     {
         _client = client;
         _options = options;
         _logger = client.GetLogger<FileDownloadSession>().ForContext("FileId", _fileLocation.Id);
         _destinationStream = new DownloadProxyStream(destinationStream);
         _fileLocation = fileLocation;
-        _numberOfChunks = (int)(_fileLocation.Size / OneMB);
-        _numberOfChunks += _fileLocation.Size % OneMB > 0 ? 1 : 0;
-        _connectionItems = new ConnectionItem[_fileLocation.Size > OneMB * 10 ? MaxConnectionsCount : 1];
-        _fileProgressInvoker = new FileProgressInvoker(callback, _logger);
+        _numberOfChunks = (int)(size / OneMB);
+        _numberOfChunks += size % OneMB > 0 ? 1 : 0;
+        _connectionItems = new ConnectionItem[size > OneMB * 10 ? MaxConnectionsCount : 1];
+        if (callback is not null)
+        {
+            _fileProgressInvoker = new FileProgressInvoker(callback, _logger);
+        }
+    }
+
+    public static RpcResponse<FileDownloadSession> Create(TelegramClient client, Stream destinationStream, FileDownloadOptions options, FileLocation fileLocation, FileProgressCallback? callback)
+    {
+        if (options.PhotoSize is not null)
+        {
+            if (fileLocation.StaticSizes?.Where(x => x.Compare(options.PhotoSize)).FirstOrDefault() is null)
+            {
+                return RpcResponse<FileDownloadSession>.FromError(new InvalidStaticSizeError());
+            }
+
+            return RpcResponse<FileDownloadSession>.FromResult(new FileDownloadSession(client, destinationStream, options.PhotoSize.Size, options, fileLocation, callback));
+        }
+
+        if (options.VideoSize is not null)
+        {
+            if (fileLocation.VideoSizes?.Where(x => x.Compare(options.VideoSize)).FirstOrDefault() is null)
+            {
+                return RpcResponse<FileDownloadSession>.FromError(new InvalidVideoSizeError());
+            }
+
+            return RpcResponse<FileDownloadSession>.FromResult(new FileDownloadSession(client, destinationStream, options.VideoSize.Size, options, fileLocation, callback));
+        }
+
+        return RpcResponse<FileDownloadSession>.FromResult(new FileDownloadSession(client, destinationStream, fileLocation.Size, options, fileLocation, callback));
     }
 
     public async Task<RpcResponse<bool>> DownloadFileAsync(CancellationToken cancellationToken = default)
     {
         _logger.Information("Creating {Count} connections to DC {DcId}", _connectionItems.Length, _fileLocation.DcId);
-        var tasks = new Task<ConnectionItem>[_connectionItems.Length];
         for (int i = 0; i < _connectionItems.Length; i++)
         {
-            tasks[i] = _client.ClientSession.ConnectionPool.GetConnectionByDcAsync(_fileLocation.DcId, _connectionItems.Length > 1, true, cancellationToken);
+            _connectionItems[i] = await _client.ClientSession.ConnectionPool.GetConnectionByDcAsync(_fileLocation.DcId, _connectionItems.Length > 1, true, cancellationToken);
         }
 
-        for (int i = 0; i < _connectionItems.Length; i++)
+        var parallelOptions = new ParallelOptions
         {
-            _connectionItems[i] = await tasks[i];
-        }
+            CancellationToken = cancellationToken,
+            MaxDegreeOfParallelism = _connectionItems.Length
+        };
 
-        var parallelOptions = new ParallelOptions { CancellationToken = cancellationToken, MaxDegreeOfParallelism = _connectionItems.Length * 2 };
-
-        var getInput = _fileLocation.GetInputFile(_client, _options);
+        var getInput = _fileLocation.GetInputFile(_options);
         if (getInput.RpcCallFailed)
         {
             return RpcResponse<bool>.FromError(getInput.Error);
@@ -117,15 +143,10 @@ internal class FileDownloadSession : IDisposable
             }
 
             var bytes = ((File)getFile.Response).Bytes;
-            _fileProgressInvoker.Invoke(bytes.Length);
-            await WriteToStreamAsync(bytes, part, token);
+            await _destinationStream.WriteChunkAsync(part, bytes, token);
+            _fileProgressInvoker?.Invoke(bytes.Length);
             return;
         }
-    }
-
-    private ValueTask WriteToStreamAsync(byte[] filePart, int position, CancellationToken token)
-    {
-        return _destinationStream.WriteChunkAsync(position, filePart, token);
     }
 
     private async Task<RpcResponse<bool>> RestoreContextAsync(CancellationToken cancellationToken, byte[] usedFileReference)
@@ -146,7 +167,7 @@ internal class FileDownloadSession : IDisposable
             }
 
             _fileLocation = response.Response;
-            var tryGetFileLoc = _fileLocation.GetInputFile(_client, _options);
+            var tryGetFileLoc = _fileLocation.GetInputFile(_options);
             if (tryGetFileLoc.RpcCallFailed)
             {
                 return RpcResponse<bool>.FromError(tryGetFileLoc.Error);
