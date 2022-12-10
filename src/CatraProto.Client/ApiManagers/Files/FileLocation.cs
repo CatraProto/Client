@@ -53,20 +53,19 @@ using UpdateTheme = CatraProto.Client.TL.Schemas.CloudChats.Account.UpdateTheme;
 
 namespace CatraProto.Client.ApiManagers.Files;
 
-// TODO: MAKE INTERNAL
-public struct FileLocation
+internal readonly struct FileLocation
 {
     public long Id { get; }
     public long AccessHash { get; }
     public int DcId { get; }
     public long Size { get; }
-    public List<PhotoSizeBase>? StaticSizes { get; }
-    public List<VideoSizeBase>? VideoSizes { get; }
+    public List<PhotoSize>? StaticSizes { get; }
+    public List<VideoSize>? VideoSizes { get; }
     public byte[] FileReference { get; }
     public FileType Type { get; }
     public ContextBase Context { get; }
 
-    internal FileLocation(long id, long accessHash, int dcId, long size, List<PhotoSizeBase>? staticSizes, List<VideoSizeBase>? videoSizes, byte[] fileReference, FileType type, ContextBase context)
+    internal FileLocation(long id, long accessHash, int dcId, long size, List<PhotoSize>? staticSizes, List<VideoSize>? videoSizes, byte[] fileReference, FileType type, ContextBase context)
     {
         FileReference = fileReference;
         DcId = dcId;
@@ -75,7 +74,7 @@ public struct FileLocation
         Type = type;
         Context = context;
         Size = size;
-        StaticSizes = staticSizes ?? new List<PhotoSizeBase>();
+        StaticSizes = staticSizes ?? new List<PhotoSize>();
         VideoSizes = videoSizes;
     }
 
@@ -83,20 +82,20 @@ public struct FileLocation
     {
         var stream = MemoryHelper.RecyclableMemoryStreamManager.GetStream();
         using var writer = new Writer(MergedProvider.Singleton, stream);
-        writer.WriteInt16((short)FileIdVersion.BaseVersion);
-        writer.WriteInt16((short)Type);
+        writer.WriteUInt16((ushort)UniqueIdVersion.BaseVersion);
+        writer.WriteUInt16((ushort)Type);
         writer.WriteInt64(Id);
         writer.WriteInt64(AccessHash);
         writer.WriteInt32(DcId);
         writer.WriteInt64(Size);
         writer.WriteInt32(StaticSizes?.Count ?? 0);
-        foreach (var size in StaticSizes ?? Enumerable.Empty<PhotoSizeBase>())
+        foreach (var size in StaticSizes ?? Enumerable.Empty<PhotoSize>())
         {
             size.Serialize(writer);
         }
 
         writer.WriteInt32(VideoSizes?.Count ?? 0);
-        foreach (var size in VideoSizes ?? Enumerable.Empty<VideoSizeBase>())
+        foreach (var size in VideoSizes ?? Enumerable.Empty<VideoSize>())
         {
             size.Serialize(writer);
         }
@@ -110,37 +109,21 @@ public struct FileLocation
     {
         var stream = MemoryHelper.RecyclableMemoryStreamManager.GetStream();
         using var writer = new Writer(MergedProvider.Singleton, stream);
-        writer.WriteInt16((short)UniqueIdVersion.BaseVersion);
-        writer.WriteInt16((short)Type);
+        writer.WriteUInt16((ushort)UniqueIdVersion.BaseVersion);
+        writer.WriteUInt16((ushort)Type);
         writer.WriteInt64(Id);
         writer.WriteInt32(DcId);
         return stream.ToArray();
     }
 
-    public RpcResponse<InputFileLocationBase> GetInputFile(TelegramClient client, FileDownloadOptions options)
+    public RpcResponse<InputFileLocationBase> GetInputFile(FileDownloadOptions options)
     {
-        if (Context is ContextFromPeerPhotos fromPhotos && Type is FileType.Photo)
-        {
-            var peerId = IdTools.FromTdToApi(fromPhotos.Peer);
-            var inputPeer = client.DatabaseManager.PeerDatabase.ResolvePeer(peerId);
-            if (inputPeer is null)
-            {
-                return RpcResponse<InputFileLocationBase>.FromError(new PeerNotFoundError(peerId.Id, peerId.Type));
-            }
-
-            return RpcResponse<InputFileLocationBase>.FromResult(new InputPeerPhotoFileLocation(inputPeer, Id) { Big = options.BigPhoto });
-        }
-
-        if (Context is ContextFromOwnPhotos)
-        {
-            return RpcResponse<InputFileLocationBase>.FromResult(new InputPeerPhotoFileLocation(new InputPeerSelf(), Id) { Big = options.BigPhoto });
-        }
-
+        var thumbSize = options.PhotoSize?.Type ?? options.VideoSize?.Type ?? string.Empty;
         return Type switch
         {
-            FileType.Document => RpcResponse<InputFileLocationBase>.FromResult(new InputDocumentFileLocation(Id, AccessHash, FileReference, "")),
-            FileType.Photo => RpcResponse<InputFileLocationBase>.FromResult(new InputPhotoFileLocation(Id, AccessHash, FileReference, "")),
-            _ => RpcResponse<InputFileLocationBase>.FromError(new UnknownError("UNKNOWN_CONTEXT", 404))
+            FileType.Document => RpcResponse<InputFileLocationBase>.FromResult(new InputDocumentFileLocation(Id, AccessHash, FileReference, thumbSize)),
+            FileType.Photo => RpcResponse<InputFileLocationBase>.FromResult(new InputPhotoFileLocation(Id, AccessHash, FileReference, thumbSize)),
+            _ => RpcResponse<InputFileLocationBase>.FromError(new InternalClientError("INPUT_FILE_UNKNOWN_CONTEXT"))
         };
     }
 
@@ -153,17 +136,17 @@ public struct FileLocation
             return checkSize;
         }
 
-        var getVersion = reader.ReadInt16();
-        var version = getVersion.Value;
-        if (version > (short)FileIdVersion.BaseVersion)
+        var getVersion = reader.ReadUInt16();
+        var version = (FileIdVersion)getVersion.Value;
+        if (version > FileIdVersion.BaseVersion)
         {
             return new ReadResult<FileLocation>($"Unsupported fileId version {getVersion.Value}", ParserErrors.ExternalError);
         }
 
-        var getFileType = reader.ReadInt16();
+        var getFileType = reader.ReadUInt16();
 
-        var fileType = getFileType.Value;
-        if (fileType != (short)FileType.Document && fileType != (short)FileType.Photo)
+        var fileType = (FileType)getFileType.Value;
+        if (fileType != FileType.Document && fileType != FileType.Photo)
         {
             return new ReadResult<FileLocation>($"Unsupported fileType {fileType}", ParserErrors.ExternalError);
         }
@@ -173,11 +156,11 @@ public struct FileLocation
         var getDcId = reader.ReadInt32();
         var getSize = reader.ReadInt64();
 
-        List<PhotoSizeBase>? photoSizeBases = null;
+        List<PhotoSize>? photoSizeBases = null;
         if (reader.ReadInt32().Value > 0)
         {
             reader.Stream.Seek(-4, SeekOrigin.Current);
-            var getVideoSizes = reader.ReadVector<PhotoSizeBase>(ParserTypes.Object, true);
+            var getVideoSizes = reader.ReadVector<PhotoSize>(ParserTypes.Object, true);
             if (getVideoSizes.IsError)
             {
                 return ReadResult<FileLocation>.Move(getVideoSizes);
@@ -186,11 +169,11 @@ public struct FileLocation
             photoSizeBases = getVideoSizes.Value;
         }
 
-        List<VideoSizeBase>? videoSizeBases = null;
+        List<VideoSize>? videoSizeBases = null;
         if (reader.ReadInt32().Value > 0)
         {
             reader.Stream.Seek(-4, SeekOrigin.Current);
-            var getVideoSizes = reader.ReadVector<VideoSizeBase>(ParserTypes.Object, true);
+            var getVideoSizes = reader.ReadVector<VideoSize>(ParserTypes.Object, true);
             if (getVideoSizes.IsError)
             {
                 return ReadResult<FileLocation>.Move(getVideoSizes);
@@ -206,12 +189,24 @@ public struct FileLocation
         }
 
         var getContext = reader.ReadObject<ContextBase>();
+        ContextBase context;
         if (getContext.IsError)
         {
-            return ReadResult<FileLocation>.Move(getContext);
+            if (getContext.GetError().ParserError is ParserErrors.InvalidConstructor)
+            {
+                context = new ContextUnknown();
+            }
+            else
+            {
+                return ReadResult<FileLocation>.Move(getContext);
+            }
+        }
+        else
+        {
+            context = getContext.Value;
         }
 
-        return new ReadResult<FileLocation>(new FileLocation(getId.Value, getAccessHash.Value, getDcId.Value, getSize.Value, photoSizeBases, videoSizeBases, getFileReference.Value, (FileType)getFileType.Value, getContext.Value));
+        return new ReadResult<FileLocation>(new FileLocation(getId.Value, getAccessHash.Value, getDcId.Value, getSize.Value, photoSizeBases, videoSizeBases, getFileReference.Value, (FileType)getFileType.Value, context));
     }
 
     private static ContextBase FromSendMessage(IObject context, List<IObject> tree)
@@ -259,6 +254,7 @@ public struct FileLocation
 
         serContext ??= context switch
         {
+            ContextBase contextBase => contextBase,
             SearchStickerSets => new ContextUnrecoverable((int)UnrecoverableContext.SearchedStickers),
             StickerSetInstallResultArchive => new ContextFromArchivedStickers(),
             ArchivedStickers => new ContextFromArchivedStickers(),
@@ -306,24 +302,23 @@ public struct FileLocation
         {
             case Document doc:
                 {
-                    var newSizes = doc.Thumbs?.Where(x => x is not PhotoPathSize && x is not PhotoCachedSize && x is not PhotoStrippedSize).ToList();
-                    return new FileLocation(doc.Id, doc.AccessHash, doc.DcId, doc.Size, newSizes, doc.VideoThumbs, doc.FileReference, FileType.Document, serContext);
+                    var newSizes = doc.Thumbs?
+                        .OfType<PhotoSize>()
+                        .ToList();
+                    return new FileLocation(doc.Id, doc.AccessHash, doc.DcId, doc.Size, newSizes, doc.VideoThumbs?.OfType<VideoSize>().ToList(), doc.FileReference, FileType.Document, serContext);
                 }
             case Photo photo:
                 {
-                    var newSizes = photo.Sizes.Where(x => x is not PhotoPathSize && x is not PhotoCachedSize && x is not PhotoStrippedSize).ToList();
-                    var biggestSize = newSizes.Select(x =>
-                        {
-                            return x switch
-                            {
-                                PhotoSize photoSize => photoSize.Size,
-                                PhotoSizeProgressive progressive => progressive.Sizes.OrderBy(y => y).FirstOrDefault(0),
-                                _ => 0
-                            };
-                        })
-                        .OrderBy(x => x)
+                    var newSizes = photo.Sizes
+                        .OfType<PhotoSize>()
+                        .ToList();
+
+                    var biggestSize = newSizes
+                        .OrderByDescending(x => x.Size)
+                        .Select(x => x.Size)
                         .FirstOrDefault(0);
-                    return new FileLocation(photo.Id, photo.AccessHash, photo.DcId, biggestSize, newSizes, null, photo.FileReference, FileType.Photo, serContext);
+
+                    return new FileLocation(photo.Id, photo.AccessHash, photo.DcId, biggestSize, newSizes, photo.VideoSizes?.OfType<VideoSize>().ToList(), photo.FileReference, FileType.Photo, serContext);
                 }
         }
 
@@ -341,10 +336,10 @@ public struct FileLocation
         switch (obj)
         {
             case Document document:
-                document.FileId = new FileId(getLoc.Value.GetFileId(), getLoc.Value.GetUniqueId(), getLoc.Value.Size, getLoc.Value.StaticSizes, getLoc.Value.VideoSizes);
+                document.FileId = new FileId(getLoc.Value);
                 break;
             case Photo photo:
-                photo.FileId = new FileId(getLoc.Value.GetFileId(), getLoc.Value.GetUniqueId(), getLoc.Value.Size, getLoc.Value.StaticSizes, null);
+                photo.FileId = new FileId(getLoc.Value);
                 break;
         }
     }
@@ -417,7 +412,10 @@ public struct FileLocation
                 break;
             case ContextFromMessage message:
                 var getPeer = PeerId.FromDatabase(message.Peer);
-                var messagesToGet = new List<InputMessageBase>(1) { new InputMessageID(message.MsgId) };
+                var messagesToGet = new List<InputMessageBase>(1)
+                {
+                    new InputMessageID(message.MsgId)
+                };
                 if (getPeer.Type is PeerType.Channel)
                 {
                     response = await client.Api.CloudChatsApi.Channels.GetMessagesAsync(getPeer.Id, messagesToGet, messageSendingOptions: new MessageSendingOptions(TimeSpan.FromSeconds(30)), cancellationToken: cancellationToken);
