@@ -17,21 +17,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 using System;
-using System.Buffers;
-using System.Collections.Generic;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using CatraProto.Client.ApiManagers;
 using CatraProto.Client.ApiManagers.Files;
-using CatraProto.Client.ApiManagers.Files.Upload;
 using CatraProto.Client.Database;
-using CatraProto.Client.MTProto.Rpc;
 using CatraProto.Client.MTProto.Session;
 using CatraProto.Client.MTProto.Session.Models;
 using CatraProto.Client.MTProto.Settings;
-using CatraProto.Client.TL.Schemas.CloudChats;
-using CatraProto.Client.TL.Schemas.MTProto;
 using CatraProto.Client.Updates;
 using CatraProto.Client.Updates.Interfaces;
 using CatraProto.Client.Utilities;
@@ -40,32 +33,18 @@ using Serilog.Core;
 
 namespace CatraProto.Client
 {
-    public class CurrentPart
-    {
-        public int Part { get; }
-        public long Start { get; }
-        public long End { get; }
-
-        public CurrentPart(int part, long start, long end)
-        {
-            Part = part;
-            Start = start;
-            End = end;
-        }
-    }
     public class TelegramClient : IAsyncDisposable
     {
         public Api Api
         {
             get
             {
-                var accountConn = ClientSession.ConnectionPool.GetMainConnection();
-                if (accountConn is not null)
+                if (_api is null)
                 {
-                    return accountConn.MtProtoState.Api;
+                    throw new InvalidOperationException("Please call InitClientAsync first");
                 }
 
-                throw new InvalidOperationException("Please call InitClientAsync first");
+                return _api;
             }
         }
 
@@ -79,11 +58,13 @@ namespace CatraProto.Client
         internal DatabaseManager DatabaseManager { get; }
         internal UpdatesReceiver UpdatesReceiver { get; }
         internal ClientSession ClientSession { get; }
+        public FileManager FileManager { get; }
         internal UpdatesDispatcher UpdatesDispatcher { get; }
         internal IEventHandler? EventHandler { get; private set; }
 
         private RandomId? _randomIdHandler;
         private readonly ILogger _logger;
+        private Api? _api;
 
         public TelegramClient(ClientSettings clientSettings, ILogger logger)
         {
@@ -94,6 +75,7 @@ namespace CatraProto.Client
             UpdatesDispatcher = new UpdatesDispatcher(this, ClientSession.Logger);
             ConfigManager = new ConfigManager(this, ClientSession.Logger);
             LoginManager = new LoginManager(this);
+            FileManager = new FileManager(this);
         }
 
         public async Task<ClientState> InitClientAsync(CancellationToken token = default)
@@ -106,7 +88,8 @@ namespace CatraProto.Client
             _randomIdHandler = ClientSession.SessionManager.SessionData.RandomId;
             DatabaseManager.InitDb();
             var sessionData = ClientSession.SessionManager.SessionData;
-            ClientSession.ConnectionPool.SetUpdatesHandler(UpdatesReceiver);
+            _api = new Api(this, ClientSession.ConnectionPool.MessagesQueue);
+            await ClientSession.ConnectionPool.SetUpdatesHandlerAsync(UpdatesReceiver);
 
             _logger.Information("Initializing connection pool. Using test DCs: {IsTest}", ClientSession.Settings.ConnectionSettings.DefaultDatacenter.Test);
             await ClientSession.ConnectionPool.InitMainConnectionAsync(token);
@@ -117,9 +100,9 @@ namespace CatraProto.Client
                 return ClientState.Working;
             }
 
-            if (ClientSession.ConnectionPool.GetMainConnection()!.ConnectionInfo.DcId == dcId)
+            if ((await ClientSession.ConnectionPool.GetMainConnectionAsync(token))!.ConnectionInfo.DcId == dcId)
             {
-                ClientSession.ConnectionPool.ConfirmMain();
+                await ClientSession.ConnectionPool.ConfirmMainAsync(token);
             }
             else
             {
@@ -151,7 +134,7 @@ namespace CatraProto.Client
             }
             catch (Exception e) when (e is not OperationCanceledException)
             {
-                _logger.Error(e, "Could not save session file");
+                _logger.Error(e, "Could not save session");
             }
         }
 
@@ -171,24 +154,12 @@ namespace CatraProto.Client
             return _logger.ForContext(Constants.SourceContextPropertyName, contextName);
         }
 
-        public async Task<RpcResponse<InputFileBase>> UploadFileAsync(Stream stream, FileProgressCallback callback, CancellationToken token = default)
-        {
-            var tryCreate = FileUploadSession.Create(this, stream, callback, _logger);
-            if (tryCreate.RpcCallFailed)
-            {
-                return RpcResponse<InputFileBase>.FromError(tryCreate.Error);
-            }
-
-            using var session = tryCreate.Response;
-            return await session.UploadFileAsync(token);
-        }
-
         public async ValueTask DisposeAsync()
         {
-            await ClientSession.DisposeAsync();
             await UpdatesReceiver.CloseAllAsync();
-            DatabaseManager.Dispose();
             ConfigManager.Dispose();
+            await ClientSession.DisposeAsync();
+            DatabaseManager.Dispose();
         }
     }
 }
