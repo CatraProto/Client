@@ -93,11 +93,6 @@ public class FileUploadSession : IDisposable
             _logger.Information("Starting upload. Number of chunks {NumberOfChunks}", _numberOfChunks);
             await Parallel.ForEachAsync(Enumerable.Range(0, _numberOfChunks), parallelOptions, async (chunk, parallelToken) =>
             {
-                if (chunk == 0)
-                {
-                    return;
-                }
-
                 await SendChunkAsync(chunk, true, parallelToken);
             });
             _logger.Information("Finished upload. Number of chunks {NumberOfChunks}", _numberOfChunks);
