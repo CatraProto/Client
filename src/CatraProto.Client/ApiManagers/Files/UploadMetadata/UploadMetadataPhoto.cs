@@ -28,7 +28,7 @@ public class UploadMetadataPhoto : UploadMetadataBase
         TtlSeconds = ttlSeconds;
     }
 
-    internal override InputMediaBase GetInputMedia(InputFile inputFile)
+    internal override InputMediaBase GetInputMedia(InputFileBase inputFile)
     {
         return new InputMediaUploadedPhoto(inputFile)
         {
