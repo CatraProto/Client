@@ -21,6 +21,7 @@ public class FileUploadSession : IDisposable
     private const long MaxUploadSize = (long)MaxChunks * 1024 * 1024;
     private const int BigFileLength = 10 * 1024 * 1024;
 
+    public long UploadId { get; }
     private readonly FileProgressInvoker? _fileProgressInvoker;
     private readonly object _mutex = new object();
     private readonly ArrayPool<byte> _arrayPool;
@@ -31,7 +32,6 @@ public class FileUploadSession : IDisposable
     private readonly ChunkSize _chunkSize;
     private readonly int _numberOfChunks;
     private readonly ILogger _logger;
-    private readonly long _fileId;
     private readonly bool _isBig;
     private readonly bool _isPhoto;
     private int _currentAt;
@@ -40,8 +40,8 @@ public class FileUploadSession : IDisposable
     {
         _client = client;
         _fileLength = fileLength;
-        _fileId = CryptoTools.CreateRandomLong();
-        _logger = client.GetLogger<FileUploadSession>().ForContext<FileUploadSession>().ForContext("FileId", _fileId);
+        UploadId = CryptoTools.CreateRandomLong();
+        _logger = client.GetLogger<FileUploadSession>().ForContext<FileUploadSession>().ForContext("FileId", UploadId);
         _sourceStream = new UploadProxyStream(stream, fileLength);
         _isPhoto = isPhoto;
         _isBig = fileLength > BigFileLength;
@@ -93,6 +93,11 @@ public class FileUploadSession : IDisposable
             _logger.Information("Starting upload. Number of chunks {NumberOfChunks}", _numberOfChunks);
             await Parallel.ForEachAsync(Enumerable.Range(0, _numberOfChunks), parallelOptions, async (chunk, parallelToken) =>
             {
+                if (chunk == 0)
+                {
+                    return;
+                }
+
                 await SendChunkAsync(chunk, true, parallelToken);
             });
             _logger.Information("Finished upload. Number of chunks {NumberOfChunks}", _numberOfChunks);
@@ -111,8 +116,8 @@ public class FileUploadSession : IDisposable
 
     public InputFileBase GetInputFile()
     {
-        var fileName = _isPhoto ? _fileId + ".jpg" : _fileId.ToString();
-        return _isBig ? new InputFileBig(_fileId, _numberOfChunks, fileName) : new InputFile(_fileId, _numberOfChunks, fileName, string.Empty);
+        var fileName = _isPhoto ? UploadId + ".jpg" : UploadId.ToString();
+        return _isBig ? new InputFileBig(UploadId, _numberOfChunks, fileName) : new InputFile(UploadId, _numberOfChunks, fileName, string.Empty);
     }
 
     public Task<RpcResponse<bool>> SendChunkAsync(int chunkNumber, CancellationToken cancellationToken = default)
@@ -150,11 +155,11 @@ public class FileUploadSession : IDisposable
             RpcResponse<bool> response;
             if (_isBig)
             {
-                response = await api.CloudChatsApi.Upload.SaveBigFilePartAsync(_fileId, chunkNumber, _numberOfChunks, buffer, cancellationToken: cancellationToken);
+                response = await api.CloudChatsApi.Upload.SaveBigFilePartAsync(UploadId, chunkNumber, _numberOfChunks, buffer, cancellationToken: cancellationToken);
             }
             else
             {
-                response = await api.CloudChatsApi.Upload.SaveFilePartAsync(_fileId, chunkNumber, buffer, cancellationToken: cancellationToken);
+                response = await api.CloudChatsApi.Upload.SaveFilePartAsync(UploadId, chunkNumber, buffer, cancellationToken: cancellationToken);
             }
 
             if (response.RpcCallFailed)

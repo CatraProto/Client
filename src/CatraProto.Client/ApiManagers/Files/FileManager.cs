@@ -27,6 +27,7 @@ using CatraProto.Client.MTProto.Rpc.RpcErrors.ClientErrors;
 using CatraProto.Client.MTProto.Rpc.RpcErrors.Files;
 using CatraProto.Client.TL.Schemas.CloudChats;
 using CatraProto.Client.Tools;
+using Serilog;
 
 namespace CatraProto.Client.ApiManagers.Files;
 
@@ -38,10 +39,12 @@ public class FileManager
     private readonly AsyncLock _uploadLock = new AsyncLock();
     private readonly SequentialInvoker _sequentialInvoker;
     private readonly TelegramClient _client;
+    private readonly ILogger _logger;
 
     public FileManager(TelegramClient client)
     {
         _sequentialInvoker = new SequentialInvoker(client.GetLogger<FileManager>());
+        _logger = client.GetLogger<FileManager>();
         _client = client;
     }
 
@@ -109,14 +112,14 @@ public class FileManager
         }
     }
 
-    public async Task<RpcResponse<Document>> UploadDocumentAsync(PeerId targetChat, Stream documentStream, UploadOptions uploadOptions, CancellationToken cancellationToken = default)
+    public async Task<RpcResponse<Document>> UploadDocumentAsync(PeerId targetChat, Stream documentStream, FileUploadOptions fileUploadOptions, CancellationToken cancellationToken = default)
     {
-        if (uploadOptions.UploadMetadata is not UploadMetadataDocument metadataDocument)
+        if (fileUploadOptions.UploadMetadata is not UploadMetadataDocument metadataDocument)
         {
             throw new InvalidOperationException("A metadata object of type UploadMetadataDocument is required");
         }
 
-        var tryUploadFile = await UploadFileAsync(documentStream, uploadOptions.ReadUntil, uploadOptions.Callback, false, cancellationToken);
+        var tryUploadFile = await UploadFileAsync(documentStream, fileUploadOptions.ReadUntil, fileUploadOptions.Callback, false, cancellationToken);
         if (tryUploadFile.RpcCallFailed)
         {
             return RpcResponse<Document>.FromError(tryUploadFile.Error);
@@ -125,7 +128,7 @@ public class FileManager
         InputFileBase? thumb = null;
         if (metadataDocument.Thumb is not null)
         {
-            var tryUploadThumb = await UploadFileAsync(metadataDocument.Thumb, uploadOptions.ReadUntil, uploadOptions.Callback, false, cancellationToken);
+            var tryUploadThumb = await UploadFileAsync(metadataDocument.Thumb, fileUploadOptions.ReadUntil, fileUploadOptions.Callback, false, cancellationToken);
             if (tryUploadThumb.RpcCallFailed)
             {
                 return RpcResponse<Document>.FromError(tryUploadThumb.Error);
@@ -152,14 +155,14 @@ public class FileManager
         return RpcResponse<Document>.FromError(new InvalidTypeError());
     }
 
-    public async Task<RpcResponse<Photo>> UploadPhotoAsync(PeerId targetChat, Stream documentStream, UploadOptions uploadOptions, CancellationToken cancellationToken = default)
+    public async Task<RpcResponse<Photo>> UploadPhotoAsync(PeerId targetChat, Stream documentStream, FileUploadOptions fileUploadOptions, CancellationToken cancellationToken = default)
     {
-        if (uploadOptions.UploadMetadata is not UploadMetadataPhoto metadataPhoto)
+        if (fileUploadOptions.UploadMetadata is not UploadMetadataPhoto metadataPhoto)
         {
             throw new InvalidOperationException("A metadata object of type UploadMetadataPhoto is required");
         }
 
-        var tryUploadFile = await UploadFileAsync(documentStream, uploadOptions.ReadUntil, uploadOptions.Callback, true, cancellationToken);
+        var tryUploadFile = await UploadFileAsync(documentStream, fileUploadOptions.ReadUntil, fileUploadOptions.Callback, true, cancellationToken);
         if (tryUploadFile.RpcCallFailed)
         {
             return RpcResponse<Photo>.FromError(tryUploadFile.Error);
@@ -182,8 +185,10 @@ public class FileManager
 
     private async Task<RpcResponse<MessageMediaBase>> UploadMediaAsync(FileUploadSession uploadSession, PeerId targetChat, InputMediaBase inputMediaBase, CancellationToken cancellationToken)
     {
+        var logger = _logger.ForContext("FileId", uploadSession.UploadId);
         while (true)
         {
+            logger.Information("Uploading media");
             var uploadMedia = await _client.Api.CloudChatsApi.Messages.UploadMediaAsync(targetChat, inputMediaBase, cancellationToken: cancellationToken);
             if (!uploadMedia.RpcCallFailed)
             {
@@ -192,14 +197,19 @@ public class FileManager
 
             if (uploadMedia.Error is FilePartMissing part)
             {
+                logger.Information("Server does not have part {Part}, re-uploading it...", part.ChunkNumber);
                 var tryReupload = await uploadSession.SendChunkAsync(part.ChunkNumber, cancellationToken);
                 if (tryReupload.RpcCallFailed)
                 {
+                    logger.Information("Failed to re-upload part {Part} due to error {Error}", part.ChunkNumber, tryReupload.Error);
                     return RpcResponse<MessageMediaBase>.FromError(tryReupload.Error);
                 }
+
+                logger.Information("Part {Part} re-uploaded to the server, retrying upload_media query", part.ChunkNumber);
             }
             else
             {
+                logger.Information("Failed to UploadMedia due to error {Error}", uploadMedia.Error);
                 return RpcResponse<MessageMediaBase>.FromError(uploadMedia.Error);
             }
         }
