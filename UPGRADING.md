@@ -60,7 +60,7 @@ In this case, it is important to create new objects in order not to lose backwar
 Obviously, the code must be updated to convert (while deserializing) the old object to the newest one.
 
 ### - inputMediaUploadedDocument and/or inputMediaUploadedPhoto have changed:
-// TODO: Write documentation when alternatives to these two methods are created
+In this case, the classes _UploadMetadataDocument_ and _UploadMetadataPhoto_ must accomodate the changes made by Telegram.
 
 ## Move the new objects to the right directories
 To bring to life the changes we've written in __schema.tl__ you must follow these steps:
