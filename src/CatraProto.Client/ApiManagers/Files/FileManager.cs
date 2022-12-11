@@ -85,7 +85,6 @@ public class FileManager
         }
     }
 
-    // TODO: Create alternatives to inputMediaUploadedDocument and inputMediaUploadedPhoto 
     internal async Task<RpcResponse<FileUploadSession>> UploadFileAsync(Stream fileStream, long? readUntil = null, FileProgressCallback? fileProgressCallback = null, bool isPhoto = false, CancellationToken cancellationToken = default)
     {
         IDisposable? lockHandle = null;
@@ -137,16 +136,9 @@ public class FileManager
             thumb = tryUploadThumb.Response.GetInputFile();
         }
 
-        var inputUploadDoc = new InputMediaUploadedDocument(tryUploadFile.Response.GetInputFile(), metadataDocument.MimeType, metadataDocument.Attributes)
-        {
-            Thumb = thumb,
-            NosoundVideo = metadataDocument.NoSound,
-            TtlSeconds = metadataDocument.TtlSeconds,
-            ForceFile = metadataDocument.ForceFile,
-            Stickers = metadataDocument.Stickers,
-        };
-
-        var uploadMedia = await UploadMediaAsync(tryUploadFile.Response, targetChat, inputUploadDoc, cancellationToken);
+        var inputDoc = metadataDocument.GetInputMedia(tryUploadFile.Response.GetInputFile());
+        ((InputMediaUploadedDocument)inputDoc).Thumb = thumb;
+        var uploadMedia = await UploadMediaAsync(tryUploadFile.Response, targetChat, inputDoc, cancellationToken);
         if (uploadMedia.Response is MessageMediaDocument { Document: Document document })
         {
             return RpcResponse<Document>.FromResult(document);
@@ -168,13 +160,7 @@ public class FileManager
             return RpcResponse<Photo>.FromError(tryUploadFile.Error);
         }
 
-        var inputUploadDoc = new InputMediaUploadedPhoto(tryUploadFile.Response.GetInputFile())
-        {
-            TtlSeconds = metadataPhoto.TtlSeconds,
-            Stickers = metadataPhoto.Stickers,
-        };
-
-        var uploadMedia = await UploadMediaAsync(tryUploadFile.Response, targetChat, inputUploadDoc, cancellationToken);
+        var uploadMedia = await UploadMediaAsync(tryUploadFile.Response, targetChat, metadataPhoto.GetInputMedia(tryUploadFile.Response.GetInputFile()), cancellationToken);
         if (uploadMedia.Response is MessageMediaPhoto { Photo: Photo photo })
         {
             return RpcResponse<Photo>.FromResult(photo);

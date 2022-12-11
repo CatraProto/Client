@@ -38,4 +38,16 @@ public class UploadMetadataDocument : UploadMetadataBase
         Stickers = stickers;
         TtlSeconds = ttlSeconds;
     }
+
+    internal override InputMediaBase GetInputMedia(InputFileBase inputFile)
+    {
+        return new InputMediaUploadedDocument(inputFile, MimeType, Attributes)
+        {
+            Stickers = Stickers,
+            NosoundVideo = NoSound,
+            TtlSeconds = TtlSeconds,
+            ForceFile = ForceFile,
+            // Thumb is set by caller
+        };
+    }
 }

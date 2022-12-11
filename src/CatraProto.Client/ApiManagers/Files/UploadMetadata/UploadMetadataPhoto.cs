@@ -27,4 +27,13 @@ public class UploadMetadataPhoto : UploadMetadataBase
         Stickers = stickers ?? new List<InputDocumentBase>(0);
         TtlSeconds = ttlSeconds;
     }
+
+    internal override InputMediaBase GetInputMedia(InputFile inputFile)
+    {
+        return new InputMediaUploadedPhoto(inputFile)
+        {
+            Stickers = Stickers,
+            TtlSeconds = TtlSeconds
+        };
+    }
 }

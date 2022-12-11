@@ -12,8 +12,11 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
+using CatraProto.Client.TL.Schemas.CloudChats;
+
 namespace CatraProto.Client.ApiManagers.Files.UploadMetadata;
 
 public abstract class UploadMetadataBase
 {
+    internal abstract InputMediaBase GetInputMedia(InputFileBase inputFile);
 }
