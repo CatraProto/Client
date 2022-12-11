@@ -12,18 +12,17 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-using CatraProto.Client.ApiManagers.Files;
 using CatraProto.Client.ApiManagers.Files.UploadMetadata;
 
-namespace CatraProto.Client.ApiManagers;
+namespace CatraProto.Client.ApiManagers.Files.Upload;
 
-public class UploadOptions
+public class FileUploadOptions
 {
     public long? ReadUntil { get; }
     public FileProgressCallback? Callback { get; }
     public UploadMetadataBase UploadMetadata { get; }
 
-    public UploadOptions(UploadMetadataBase? uploadMetadata = null, long? readUntil = null, FileProgressCallback? callback = null)
+    public FileUploadOptions(UploadMetadataBase? uploadMetadata = null, long? readUntil = null, FileProgressCallback? callback = null)
     {
         UploadMetadata = uploadMetadata ?? new UploadMetadataDocument();
         ReadUntil = readUntil;
