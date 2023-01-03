@@ -31,6 +31,7 @@ namespace CatraProto.TL.Generator.Objects
     {
         public static readonly List<string> HiddenMethods = new List<string>()
         {
+            // Overridden for general better usage
             "help.getConfig",
             "users.getUsers",
             "users.getFullUser",
@@ -38,14 +39,28 @@ namespace CatraProto.TL.Generator.Objects
             "messages.getFullChat",
             "channels.getChannels",
             "channels.getFullChannel",
-            "auth.signIn", 
-            "auth.signUp", 
-            "auth.resendCode", 
-            "auth.sendCode", 
+
+            // Hidden because of better library APIs
+            "messages.uploadMedia",
+            "auth.signIn",
+            "auth.signUp",
+            "auth.resendCode",
+            "auth.sendCode",
             "auth.checkPassword",
             "auth.logOut",
             "auth.importBotAuthorization",
-            "auth.bindTempAuthkey"
+
+            // Hidden because of internal usage
+            "auth.bindTempAuthkey",
+
+            // Overridden for better file support
+            "messages.editInlineBotMessage",
+            "messages.editMessage",
+            "messages.sendMedia",
+            "messages.sendMultiMedia",
+            "messages.uploadImportedMedia",
+            "payments.exportInvoice",
+            "payments.requestRecurringPayment"
         };
 
         public bool ReturnsVector { get; set; }
@@ -61,7 +76,8 @@ namespace CatraProto.TL.Generator.Objects
         public override void WriteParameters(StringBuilder builder)
         {
             var type = Type.GetTypeName(NamingType.FullNamespace, null, false, false, NameContext.TypeExtends);
-            builder.AppendLine($"\n[Newtonsoft.Json.JsonIgnore]\n{StringTools.TwoTabs}ParserTypes IMethod.Type {{ get; init; }} = ParserTypes.{Tools.GetEnumValue(Type)};");
+            builder.AppendLine(
+                $"\n[Newtonsoft.Json.JsonIgnore]\n{StringTools.TwoTabs}ParserTypes IMethod.Type {{ get; init; }} = ParserTypes.{Tools.GetEnumValue(Type)};");
             base.WriteParameters(builder);
         }
 
@@ -74,7 +90,8 @@ namespace CatraProto.TL.Generator.Objects
                 returnType = $"CatraProto.Client.MTProto.Rpc.Vectors.RpcVector<{returnType}>";
             }
 
-            var parametersOrdered = Parameters.Where(x => x.Type is not FlagType).Where(x => !x.HasFlag).Concat(Parameters.Where(x => x.HasFlag)).ToList();
+            var parametersOrdered = Parameters.Where(x => x.Type is not FlagType).Where(x => !x.HasFlag)
+                .Concat(Parameters.Where(x => x.HasFlag)).ToList();
 
             var nullPolicies = new StringBuilder();
             for (var index = 0; index < parametersOrdered.Count; index++)
@@ -91,7 +108,8 @@ namespace CatraProto.TL.Generator.Objects
             var isInternal = HiddenMethods.Contains(NamingInfo.OriginalNamespacedName) || IsHidden;
             var acc = isInternal ? "internal" : "public";
             var name = isInternal ? "Internal" + NamingInfo.PascalCaseName : NamingInfo.PascalCaseName;
-            builder.AppendLine($"{acc} async Task<RpcResponse<{returnType}>> {name}Async({args}{comma} CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)\n{StringTools.TwoTabs}{{");
+            builder.AppendLine(
+                $"{acc} async Task<RpcResponse<{returnType}>> {name}Async({args}{comma} CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions? messageSendingOptions = null, CancellationToken cancellationToken = default)\n{StringTools.TwoTabs}{{");
             builder.AppendLine(nullPolicies.ToString());
             foreach (var parameter in parametersOrdered)
             {
@@ -105,18 +123,22 @@ namespace CatraProto.TL.Generator.Objects
             }
 
             builder.AppendLine(");");
-            builder.AppendLine($"messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();");
-            builder.AppendLine($"messageSendingOptions.IsEncrypted = {(MethodCompletionType == MethodCompletionType.ReturnsUnencrypted ? "false" : "true")};");
-   
+            builder.AppendLine(
+                $"messageSendingOptions ??= new CatraProto.Client.Connections.MessageScheduling.MessageSendingOptions();");
+            builder.AppendLine(
+                $"messageSendingOptions.IsEncrypted = {(MethodCompletionType == MethodCompletionType.ReturnsUnencrypted ? "false" : "true")};");
+
             builder.AppendLine($"var methodBody = new {Namespace.FullNamespace}(){{");
             foreach (var parameter in parametersOrdered)
             {
-                builder.AppendLine($"{parameter.NamingInfo.PascalCaseName} = {parameter.Type.GetFinalParameterName(parameter).CamelCaseName},");
+                builder.AppendLine(
+                    $"{parameter.NamingInfo.PascalCaseName} = {parameter.Type.GetFinalParameterName(parameter).CamelCaseName},");
             }
 
             builder.AppendLine("};");
             builder.AppendLine();
-            builder.AppendLine($"_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);");
+            builder.AppendLine(
+                $"_messagesQueue.EnqueueMessage(methodBody, messageSendingOptions, rpcResponse, out var taskCompletionSource, cancellationToken);");
             builder.AppendLine("await taskCompletionSource!;");
             builder.AppendLine($"return rpcResponse;");
             builder.AppendLine("}");
